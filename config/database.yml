@@ -1,0 +1,15 @@
+development:
+  adapter: mysql2
+  database: mercury_development
+  user: root
+  password:
+  encoding: utf8
+  host: localhost
+
+test:
+  adapter: mysql2
+  database: mercury_test
+  user: root
+  password:
+  encoding: utf8
+  host: localhost

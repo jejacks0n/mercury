@@ -1,0 +1,267 @@
+/* Toolbar
+ *----------------------------------------------------------------------------*/
+.carmenta-toolbar-container {
+  position: absolute;
+  z-index: 10010;
+  top: 0;
+  width: 100%;
+  border-bottom: 1px solid #E2E1E2;
+  .carmenta-toolbar {
+    background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0, rgb(198,198,198)), color-stop(1, rgb(226,225,226)));
+    background-image: -moz-linear-gradient(center bottom, rgb(198,198,198) 0%, rgb(226,225,226) 100%);
+    border-bottom: 1px solid #727272;
+    cursor: default;
+  }
+  .carmenta-toolbar-button-container {
+    float: left;
+  }
+  .carmenta-toolbar-expander {
+    position: absolute;
+    display: none;
+    right: 0;
+    border-left: 1px solid #727272;
+  }
+  .carmenta-button,
+  .carmenta-button-group,
+  .carmenta-separator,
+  .carmenta-line-separator {
+    display: block;
+    float: left;
+  }
+  .carmenta-separator,
+  .carmenta-line-separator {
+    width: 1px;
+    border: 0;
+    margin: 0;
+  }
+  .carmenta-line-separator {
+    width: 1px;
+    background: #727272;
+  }
+  .carmenta-button em {
+    display: block;
+    font-style: normal;
+  }
+  .carmenta-expander {
+    padding: 5px 0;
+    border-radius: 4px;
+    -moz-border-radius: 4px;
+    .carmenta-expander-button {
+      cursor: default;
+      white-space: nowrap;
+      padding: 0 20px 0 10px;
+      &:hover {
+        background: #CCC;
+      }
+      em {
+        display: inline-block;
+        float: left;
+        width: 20px;
+        height: 20px;
+        margin-right: 10px;
+        -webkit-background-size: 100% 100%;
+        -moz-background-size: 100% 100%;
+        background-size: 100% 100%;
+      }
+      span {
+        display: inline-block;
+        line-height: 20px;
+      }
+    }
+  }
+  .disabled .carmenta-button,
+  .carmenta-button.disabled {
+    opacity: 0.33;
+  }
+}
+
+
+/* Toolbar: Primary Toolbar
+ *----------------------------------------------------------------------------*/
+.carmenta-primary-toolbar {
+  position: relative;
+  height: 58px;
+  overflow: hidden;
+  text-shadow: #EEE 0 1px 0;
+  .carmenta-button {
+    display: inline-block;
+    height: 58px;
+    margin-bottom: 20px;
+    min-width: 50px;
+    text-align: center;
+    white-space: nowrap;
+    text-decoration: none;
+    font-family: Helvetica, Tahoma, Arial, sans-serif;
+    &.pressed {
+      background-image: url(/assets/carmenta/toolbar/primary/_pressed.png)
+    }
+    em {
+      margin: 0 -5px;
+      height: 15px;
+      padding-top: 41px;
+      background-repeat: no-repeat;
+      background-position: 50% 7px;
+      font-size: 8.5pt;
+      line-height: 15px;
+      color: #222;
+    }
+  }
+  .carmenta-separator,
+  .carmenta-line-separator {
+    display: inline-block;
+    width: 1px;
+    height: 50px;
+    margin: 5px 25px 28px;
+  }
+  .carmenta-toolbar-button-container {
+    white-space: nowrap;
+    padding-right: 10px;
+  }
+  .carmenta-toolbar-expander {
+    width: 12px;
+    height: 58px;
+    background: rgba(0, 0, 0, .2) url(/assets/carmenta/toolbar/primary/_expander.png) no-repeat center 90%;
+  }
+}
+/* default buttons */
+.carmenta-primary-toolbar .carmenta-save-button em,
+.carmenta-expander-button[data-button=save] em             { background-image: url(/assets/carmenta/toolbar/primary/save.png) }
+.carmenta-primary-toolbar .carmenta-preview-button em,
+.carmenta-expander-button[data-button=preview] em          { background-image: url(/assets/carmenta/toolbar/primary/preview.png) }
+.carmenta-primary-toolbar .carmenta-undo-button em,
+.carmenta-expander-button[data-button=undo] em             { background-image: url(/assets/carmenta/toolbar/primary/undo.png) }
+.carmenta-primary-toolbar .carmenta-redo-button em,
+.carmenta-expander-button[data-button=redo] em             { background-image: url(/assets/carmenta/toolbar/primary/redo.png) }
+.carmenta-primary-toolbar .carmenta-insertlink-button em,
+.carmenta-expander-button[data-button=insertlink] em       { background-image: url(/assets/carmenta/toolbar/primary/insertlink.png) }
+.carmenta-primary-toolbar .carmenta-insertmedia-button em,
+.carmenta-expander-button[data-button=insertmedia] em      { background-image: url(/assets/carmenta/toolbar/primary/insertmedia.png) }
+.carmenta-primary-toolbar .carmenta-inserttable-button em,
+.carmenta-expander-button[data-button=inserttable] em      { background-image: url(/assets/carmenta/toolbar/primary/inserttable.png) }
+.carmenta-primary-toolbar .carmenta-insertcharacter-button em,
+.carmenta-expander-button[data-button=insertcharacter] em  { background-image: url(/assets/carmenta/toolbar/primary/insertcharacter.png) }
+.carmenta-primary-toolbar .carmenta-objectspanel-button em,
+.carmenta-expander-button[data-button=objectspanel] em     { background-image: url(/assets/carmenta/toolbar/primary/objectspanel.png) }
+.carmenta-primary-toolbar .carmenta-historypanel-button em,
+.carmenta-expander-button[data-button=historypanel] em     { background-image: url(/assets/carmenta/toolbar/primary/historypanel.png) }
+.carmenta-primary-toolbar .carmenta-notespanel-button em,
+.carmenta-expander-button[data-button=notespanel] em       { background-image: url(/assets/carmenta/toolbar/primary/notespanel.png) }
+.carmenta-primary-toolbar .carmenta-todospanel-button em,
+.carmenta-expander-button[data-button=todospanel] em       { background-image: url(/assets/carmenta/toolbar/primary/todospanel.png) }
+.carmenta-primary-toolbar .carmenta-notespanel-button em,
+.carmenta-expander-button[data-button=notespanel] em       { background-image: url(/assets/carmenta/toolbar/primary/notespanel.png) }
+.carmenta-primary-toolbar .carmenta-todospanel-button em,
+.carmenta-expander-button[data-button=todospanel] em       { background-image: url(/assets/carmenta/toolbar/primary/todospanel.png) }
+
+
+/* Toolbar: Editable Region Toolbar
+ *----------------------------------------------------------------------------*/
+.carmenta-editable-toolbar {
+  padding: 3px 13px 1px 10px;
+  border-top: 1px solid #E2E1E2;
+  background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0, rgb(198,198,198)), color-stop(1, rgb(210,210,209)));
+  background-image: -moz-linear-gradient(center bottom, rgb(198,198,198) 0%, rgb(210,210,209) 100%);
+  &:after {
+    content: '\00a0';
+    display: block;
+    visibility: hidden;
+    clear: both;
+    height: 0;
+  }
+  .carmenta-separator,
+  .carmenta-line-separator {
+    height: 18px;
+    padding: 0;
+    margin: 0 7px 2px;
+  }
+  .carmenta-separator {
+    margin: 0 3px 2px;
+  }
+  .carmenta-button-group {
+    white-space: nowrap;
+    .carmenta-button:first-child {
+      width: 23px;
+    }
+  }
+  .carmenta-button {
+    width: 22px;
+    height: 18px;
+    margin: 0 0 2px;
+    background-image: url(/assets/carmenta/toolbar/editable/buttons.png);
+    em {
+      background-image: url(/assets/carmenta/toolbar/editable/buttons.png);
+      display: none;
+    }
+  }
+  .carmenta-button-palette {
+    width: 23px;
+    background-position: 0 -36px;
+  }
+  .carmenta-button-select {
+    width: auto !important;
+    overflow: hidden;
+    padding-left: 6px;
+    background-position: -24px -36px;
+    em {
+      display: block;
+      padding-right: 15px;
+      background-position: right -36px;
+      cursor: pointer;
+      white-space: nowrap;
+      font-style: normal;
+      font-family: Helvetica, Tahoma, Arial, sans-serif;
+      font-size: 8.5pt;
+      line-height: 19px;
+      color: #222;
+    }
+  }
+  /* default buttons */
+  .carmenta-bold-button                       { background-position: -68px 0 }
+  .carmenta-bold-button.active                { background-position: -68px -18px }
+  .carmenta-italic-button                     { background-position: -91px 0 }
+  .carmenta-italic-button.active              { background-position: -91px -18px }
+  .carmenta-overline-button                   { background-position: -113px 0 }
+  .carmenta-overline-button.active            { background-position: -113px -18px }
+  .carmenta-strikethrough-button              { background-position: -135px 0 }
+  .carmenta-strikethrough-button.active       { background-position: -135px -18px }
+  .carmenta-underline-button                  { background-position: -157px 0 }
+  .carmenta-underline-button.active           { background-position: -157px -18px }
+  .carmenta-subscript-button                  { background-position: -180px 0 }
+  .carmenta-subscript-button.active           { background-position: -180px -18px }
+  .carmenta-superscript-button                { background-position: -203px 0 }
+  .carmenta-superscript-button.active         { background-position: -203px -18px }
+  .carmenta-justifyleft-button                { background-position: -226px 0 }
+  .carmenta-justifyleft-button.active         { background-position: -226px -18px }
+  .carmenta-justifycenter-button              { background-position: -249px 0 }
+  .carmenta-justifycenter-button.active       { background-position: -249px -18px }
+  .carmenta-justifyright-button               { background-position: -271px 0 }
+  .carmenta-justifyright-button.active        { background-position: -271px -18px }
+  .carmenta-justifyfull-button                { background-position: -293px 0 }
+  .carmenta-justifyfull-button.active         { background-position: -293px -18px }
+  .carmenta-insertunorderedlist-button        { background-position: -316px 0 }
+  .carmenta-insertunorderedlist-button.active { background-position: -316px -18px }
+  .carmenta-insertorderedlist-button          { background-position: -339px 0 }
+  .carmenta-insertorderedlist-button.active   { background-position: -339px -18px }
+  .carmenta-outdent-button                    { background-position: -362px 0 }
+  .carmenta-outdent-button.active             { background-position: -362px -18px }
+  .carmenta-indent-button                     { background-position: -385px 0 }
+  .carmenta-indent-button.active              { background-position: -385px -18px }
+  .carmenta-insertrowbefore-button            { background-position: -408px 0 }
+  .carmenta-insertrowbefore-button.active     { background-position: -408px -18px }
+  .carmenta-insertrowafter-button             { background-position: -431px 0 }
+  .carmenta-insertrowafter-button.active      { background-position: -431px -18px }
+  .carmenta-deleterow-button                  { background-position: -453px 0 }
+  .carmenta-deleterow-button.active           { background-position: -453px -18px }
+  .carmenta-insertcolumnbefore-button         { background-position: -475px 0 }
+  .carmenta-insertcolumnbefore-button.active  { background-position: -475px -18px }
+  .carmenta-insertcolumnafter-button          { background-position: -497px 0 }
+  .carmenta-insertcolumnafter-button.active   { background-position: -497px -18px }
+  .carmenta-deletecolumn-button               { background-position: -519px 0 }
+  .carmenta-deletecolumn-button.active        { background-position: -519px -18px }
+  .carmenta-horizontalrule-button             { background-position: -542px 0 }
+  .carmenta-horizontalrule-button.active      { background-position: -542px -18px }
+  .carmenta-removeformatting-button           { background-position: -566px 0 }
+  .carmenta-removeformatting-button.active    { background-position: -566px -18px }
+  .carmenta-htmleditor-button                 { background-position: -590px 0 }
+  .carmenta-htmleditor-button.active          { background-position: -590px -18px }
+}

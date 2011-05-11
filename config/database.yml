@@ -1,14 +1,25 @@
 development:
   adapter: mysql2
-  database: mercury_development
+  database: carmenta_development
   user: root
   password:
   encoding: utf8
   host: localhost
 
-test:
+test: &test
   adapter: mysql2
-  database: mercury_test
+  database: carmenta_test
+  user: root
+  password:
+  encoding: utf8
+  host: localhost
+
+cucumber:
+  <<: *test
+
+production:
+  adapter: mysql2
+  database: carmenta_production
   user: root
   password:
   encoding: utf8

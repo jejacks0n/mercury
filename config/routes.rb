@@ -1,4 +1,4 @@
-Mercury::Application.routes.draw do
+Carmenta::Application.routes.draw do
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
@@ -54,5 +54,15 @@ Mercury::Application.routes.draw do
 
   # This is a legacy wild controller route that's not recommended for RESTful applications.
   # Note: This route will make all actions in every controller accessible via GET requests.
-  # match ':controller(/:action(/:id(.:format)))'
+
+  root :to => 'carmenta#show'
+  match '/edit(/*requested_uri)' => "carmenta#edit", :as => :edit
+
+  namespace :carmenta do
+    match 'palettes/(:palette)' => "carmenta#palette"
+    match 'selects/(:select)' => "carmenta#select"
+    match 'panels/(:panel)' => "carmenta#panel"
+    match 'modals/(:modal)' => "carmenta#modal"
+  end
+
 end

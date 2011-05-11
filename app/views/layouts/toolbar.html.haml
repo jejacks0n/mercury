@@ -1,0 +1,11 @@
+!!!
+%html
+  %head
+    %title CarmentaEditor
+    = csrf_meta_tags
+    = stylesheet_link_tag "application"
+    = javascript_include_tag "application"
+    = javascript_tag "$(document).ready(function() { carmentaEditor = new CarmentaEditor() });"
+  %body
+
+    = yield

@@ -1,11 +1,18 @@
 source 'http://rubygems.org'
 
-gem 'rails', :git => 'git://github.com/rails/rails.git'
+gem 'rails', '3.1.0.beta1'
 
 gem 'mysql2'
 gem 'sass'
 gem 'coffee-script'
 gem 'uglifier'
+gem 'haml'
+gem 'haml-rails'
+
+gem "redis"
+gem 'eventmachine', :git => 'git://github.com/eventmachine/eventmachine.git'
+gem "em-hiredis"
+gem "em-websocket"
 
 group :development do
 end
@@ -13,9 +20,12 @@ end
 group :development, :test do
   gem 'thin'
   gem 'ruby-debug19', :require => 'ruby-debug'
+  gem 'evergreen', :git => 'git://github.com/jnicklas/evergreen.git', :submodules => true, :require => 'evergreen/rails'
 end
 
 group :test do
-  # Pretty printed test output
-  gem 'turn', :require => false
+  gem 'cucumber-rails'
+  gem 'capybara-firebug'
+  gem 'capybara'
+  gem 'database_cleaner'
 end

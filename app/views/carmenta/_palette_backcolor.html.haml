@@ -1,0 +1,98 @@
+-#<script type="text/javascript">
+-#  window['midas_setup_backcolor'] = function() {
+-#    var lastPicked = $('midas_backcolor_last_picked');
+-#    $('midas_backcolor_selector').select('div').each(function(div) {
+-#      Event.observe(div, 'click', function(event) {
+-#        event.stop();
+-#
+-#        var color = div.getStyle('background-color');
+-#        if (color == 'transparent' || color == '') return;
+-#
+-#        lastPicked.setStyle('background-color:' + color);
+-#
+-#        this.button.setStyle('background-color:' + color);
+-#        this.execute('backcolor', {value: color.toHex()}, event);
+-#      }.bind(this));
+-#    }.bind(this));
+-#  }
+-#</script>
+
+.carmenta-color-picker
+	.picker{ :style => "background:#FFFFFF" }
+	.picker{ :style => "background:#FFCCCC" }
+	.picker{ :style => "background:#FFCC99" }
+	.picker{ :style => "background:#FFFF99" }
+	.picker{ :style => "background:#FFFFCC" }
+	.picker{ :style => "background:#99FF99" }
+	.picker{ :style => "background:#99FFFF" }
+	.picker{ :style => "background:#CCFFFF" }
+	.picker{ :style => "background:#CCCCFF" }
+	.picker{ :style => "background:#FFCCFF" }
+
+	.picker{ :style => "background:#CCCCCC" }
+	.picker{ :style => "background:#FF6666" }
+	.picker{ :style => "background:#FF9966" }
+	.picker{ :style => "background:#FFFF66" }
+	.picker{ :style => "background:#FFFF33" }
+	.picker{ :style => "background:#66FF99" }
+	.picker{ :style => "background:#33FFFF" }
+	.picker{ :style => "background:#66FFFF" }
+	.picker{ :style => "background:#9999FF" }
+	.picker{ :style => "background:#FF99FF" }
+
+	.picker{ :style => "background:#C0C0C0" }
+	.picker{ :style => "background:#FF0000" }
+	.picker{ :style => "background:#FF9900" }
+	.picker{ :style => "background:#FFCC66" }
+	.picker{ :style => "background:#FFFF00" }
+	.picker{ :style => "background:#33FF33" }
+	.picker{ :style => "background:#66CCCC" }
+	.picker{ :style => "background:#33CCFF" }
+	.picker{ :style => "background:#6666CC" }
+	.picker{ :style => "background:#CC66CC" }
+
+	.picker{ :style => "background:#999999" }
+	.picker{ :style => "background:#CC0000" }
+	.picker{ :style => "background:#FF6600" }
+	.picker{ :style => "background:#FFCC33" }
+	.picker{ :style => "background:#FFCC00" }
+	.picker{ :style => "background:#33CC00" }
+	.picker{ :style => "background:#00CCCC" }
+	.picker{ :style => "background:#3366FF" }
+	.picker{ :style => "background:#6633FF" }
+	.picker{ :style => "background:#CC33CC" }
+
+	.picker{ :style => "background:#666666" }
+	.picker{ :style => "background:#990000" }
+	.picker{ :style => "background:#CC6600" }
+	.picker{ :style => "background:#CC9933" }
+	.picker{ :style => "background:#999900" }
+	.picker{ :style => "background:#009900" }
+	.picker{ :style => "background:#339999" }
+	.picker{ :style => "background:#3333FF" }
+	.picker{ :style => "background:#6600CC" }
+	.picker{ :style => "background:#993399" }
+
+	.picker{ :style => "background:#333333" }
+	.picker{ :style => "background:#660000" }
+	.picker{ :style => "background:#993300" }
+	.picker{ :style => "background:#996633" }
+	.picker{ :style => "background:#666600" }
+	.picker{ :style => "background:#006600" }
+	.picker{ :style => "background:#336666" }
+	.picker{ :style => "background:#000099" }
+	.picker{ :style => "background:#333399" }
+	.picker{ :style => "background:#663366" }
+
+	.picker{ :style => "background:#000000" }
+	.picker{ :style => "background:#330000" }
+	.picker{ :style => "background:#663300" }
+	.picker{ :style => "background:#663333" }
+	.picker{ :style => "background:#333300" }
+	.picker{ :style => "background:#003300" }
+	.picker{ :style => "background:#003333" }
+	.picker{ :style => "background:#000066" }
+	.picker{ :style => "background:#330099" }
+	.picker{ :style => "background:#330033" }
+
+	.last-picked Last Color Picked

@@ -1,0 +1,17 @@
+/* Statusbar
+ *----------------------------------------------------------------------------*/
+.carmenta-statusbar {
+  position: absolute;
+  z-index: 10020;
+  bottom: 0;
+  width: 100%;
+  height: 12px;
+  cursor: default;
+  padding: 5px 10px 4px 10px;
+  background: #E2E1E2;
+  border-top: 1px solid #727272;
+  font-family: Helvetica, Tahoma, Arial, sans-serif;
+  font-size: 8.5pt;
+  line-height: 12px;
+  color: #222;
+}

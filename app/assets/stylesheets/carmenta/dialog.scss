@@ -1,0 +1,136 @@
+/* Dialog
+ *----------------------------------------------------------------------------*/
+.carmenta-dialog,
+.carmenta-select,
+.carmenta-palette {
+  position: absolute;
+  z-index: 10012;
+  width: 30px;
+  height: 30px;
+  border: 1px solid #727272;
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  margin-top: -1px;
+  background-color: #E2E1E2;
+	box-shadow: 1px 1px 4px rgba(0,0,0, .5);
+	-moz-box-shadow: 1px 1px 4px rgba(0,0,0, .5);
+  font-family: Helvetica, Tahoma, Arial, sans-serif;
+  font-size: 8.5pt;
+  &.loading {
+    background-image: url(/assets/carmenta/loading-light.gif);
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+}
+
+
+/* Select
+ *----------------------------------------------------------------------------*/
+.carmenta-select {
+  border-radius: 4px;
+  -moz-border-radius: 4px;
+  overflow: auto;
+  background-color: #FFF;
+}
+
+
+/* Panel
+ *----------------------------------------------------------------------------*/
+.carmenta-panel {
+  position: absolute;
+  z-index: 10011;
+  background-color: #111;
+  opacity: .9;
+  box-shadow: 1px 1px 4px rgba(0,0,0, .5);
+  -moz-box-shadow: 1px 1px 4px rgba(0,0,0, .5);
+  border-radius: 4px;
+  -moz-border-radius: 4px;
+  color: #FFF;
+  font-family: Helvetica, Tahoma, Arial, sans-serif;
+  font-size: 9.5pt;
+  max-width: 500px;
+  &.loading {
+    background-image: url(/assets/carmenta/loading-dark.gif);
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+  h1,
+  h3 {
+    font-size: 9pt;
+    padding: 10px 15px 8px;
+    margin: 0;
+    background: #333;
+    white-space: nowrap;
+  }
+  h1 {
+    font-size: 10pt;
+    -moz-border-radius-topleft: 4px;
+    -moz-border-radius-topright: 4px;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    height: 15px;
+    cursor: move;
+    text-shadow: 1px 1px 2px rgba(0,0,0, .9);
+  }
+  .carmenta-panel-pane {
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    padding: 15px;
+    overflow: auto;
+    width: 100%;
+    h3 {
+      margin: 10px -15px;
+      font-size: 9.5pt;
+      font-weight: normal;
+      padding: 8px 14px;
+    }
+  }
+}
+
+
+/* Specific dialogs (eg. color palettes, selects)
+ *----------------------------------------------------------------------------*/
+.carmenta-color-picker {
+  width: 170px;
+  height: auto;
+  padding: 1px;
+  .picker {
+    float: left;
+    width: 15px;
+    height: 15px;
+    margin: 1px;
+    cursor: default;
+    &:hover {
+      outline: 1px solid #333;
+    }
+  }
+  .last-picked {
+    position: relative;
+    top: 1px;
+    width: 166px;
+    border: 1px solid #333;
+    border-radius: 2px;
+    margin: 1px 1px 2px 1px;
+    -moz-border-radius: 2px;
+    clear: left;
+    text-align: center;
+  }
+}
+
+.carmenta-select-options {
+  margin: 10px 0;
+  white-space: nowrap;
+  * {
+    cursor: default;
+    padding: 0 10px;
+    margin: 0;
+    line-height: 1.6em;
+  }
+  *:hover {
+    background-color: #E2E1E2 !important;
+    color: #000 !important;
+  }
+  div[data-tag=pre] {
+    font-family: monospace;
+  }
+}

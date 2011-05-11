@@ -1,5 +1,7 @@
 /*
- * FIXME: Introduce SCSS & Sprockets
+ * This file includes other files.  To add styles please create new .css or
+ * .scss files and require them here, do not add styles to this file.
+ *
  *= require_self
- *= require_tree . 
-*/
+ *= require_tree .
+ */

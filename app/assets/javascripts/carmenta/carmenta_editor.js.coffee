@@ -13,7 +13,15 @@
 #= require_tree ./regions
 #= require ./config
 
-String::titleize = -> @[0].toUpperCase() + this.slice(1)
+String::titleize = -> @[0].toUpperCase() + @slice(1)
+String::toHex = ->
+  # todo: we should handle rgba as well
+  return @ if @[0] == '#'
+  @replace /rgb\((\d+)[\s|\,]?\s(\d+)[\s|\,]?\s(\d+)\)/gi, (a, r, g, b) ->
+    "##{parseInt(r).toHex()}#{parseInt(g).toHex()}#{parseInt(b).toHex()}"
+Number::toHex = ->
+  result = @toString(16).toUpperCase()
+  return if result[1] then result else "0#{result}"
 
 class CarmentaEditor
 
@@ -55,7 +63,7 @@ class CarmentaEditor
   buildRegion: (region) ->
 #    try
       type = region.data('type').titleize()
-      new Carmenta.Regions[type](region)
+      new Carmenta.Regions[type](region, {window: @iframe.get(0).contentWindow})
 #    catch error
 #      alert(error)
 #      alert("Region type is malformed, no data-type provided, or \"#{type}\" is unknown.")

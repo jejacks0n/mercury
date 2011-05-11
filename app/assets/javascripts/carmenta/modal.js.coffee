@@ -20,7 +20,7 @@ $.extend Carmenta.modal, {
 
   build: ->
     @element = $('<div>', {class: 'carmenta-modal loading'})
-    @element.html('<h1 class="carmenta-modal-title"><span></span><a>&times;</a></h1><div class="carmenta-modal-content-container"><div class="carmenta-modal-content"></div></div>');
+    @element.html('<h1 class="carmenta-modal-title"><span></span><a>&times;</a></h1><div class="carmenta-modal-content-container"><div class="carmenta-modal-content"></div></div>')
 
     @overlay = $('<div>', {class: 'carmenta-modal-overlay'})
 

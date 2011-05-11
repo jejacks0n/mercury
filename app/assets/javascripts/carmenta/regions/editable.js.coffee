@@ -1,12 +1,14 @@
 class Carmenta.Regions.Editable
-#  type = 'editable'
+  type = 'editable'
 
   constructor: (@element, @options = {}) ->
     Carmenta.log('making editable', @element, @options)
 
-    @document = @options
+    @window = @options.window
+    @document = @window.document
     @history = new HistoryBuffer()
     @build()
+    @bindEvents()
 
 
   build: ->
@@ -24,8 +26,88 @@ class Carmenta.Regions.Editable
 
     @element.get(0).contentEditable = true
 
-#    this.doc.execCommand('styleWithCSS', false, false);
-#    this.doc.execCommand('enableInlineTableEditing', false, false);
+    @document.execCommand('insertbronreturn', false, false)
+    @document.execCommand('styleWithCSS', false, false)
+    @document.execCommand('enableInlineTableEditing', false, false)
+
+
+  bindEvents: ->
+    @element.focus
+
+    Carmenta.bind 'button', (event, options) =>
+      action = options['action']
+      return unless action
+
+      # use a custom handler if there's one, otherwise use execCommand
+      if handler = Carmenta.config.behaviors[action] || Carmenta.Regions.Editable.actions[action]
+        handler.call(@, @selection(), options)
+      else
+        Carmenta.log('execCommand', action, options.value)
+        try
+          @document.execCommand(action, null, options.value)
+        catch error
+          alert(error)
+
 
   html: (value = null) ->
     if value then @element.html(value) else @element.html().replace(/^\s+|\s+$/g, '')
+
+
+  selection: ->
+    return new Selection(@window.getSelection(), @document)
+
+
+Carmenta.Regions.Editable.actions =
+
+  removeformatting: (selection) ->
+    selection.insertTextNode(selection.textContent())
+
+  backcolor: (selection, options) ->
+    selection.wrap("<span style=\"background-color:#{options.value.toHex()}\">", true)
+
+
+## TODO
+#
+# Custom Implementation
+#inserthorizontalrule
+#inserthtml
+#insertimage
+#undo
+#redo
+#overline
+#
+# Using execCommand
+#formatblock
+#indent
+#outdent
+#
+# Unhandled
+#decreasefontsize
+#increasefontsize
+#unlink
+#createlink
+#insertparagraph
+
+## PARTIALLY DONE
+#backcolor
+#forecolor
+
+
+## DONE
+#
+# Custom Implementation
+#removeformatting
+#
+# Using execCommand
+#bold
+#italic
+#justifycenter
+#justifyfull
+#justifyleft
+#justifyright
+#subscript
+#superscript
+#insertorderedlist
+#insertunorderedlist
+#strikethrough
+#underline

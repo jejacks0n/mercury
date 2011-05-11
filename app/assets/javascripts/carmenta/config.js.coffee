@@ -145,27 +145,17 @@ Carmenta.config =
   #
   # You can see how the behavior matches up directly with the button name.
   # It's also important to note that the callback functions are executed within
-  # the scope of the given region (so you can access private methods).
-  #
-  # You can add complex functionality to the html region for instance by adding
-  # a new button, called buynowbutton, and providing a behavior something like
-  # the following:
-  #
-  # New Button
-  #   buynowbutton: ['Buy Now', 'Insert Buy Now Button']
-  #
-  # New Behavior
-  #   buynowbutton: {insertHTML: '<a href="/buy-now" class="buy-now">Buy Now!</a>'}
+  # the scope of the given region.
   #
   behaviors:
-    horizontalrule: {insertHTML: '<hr/>'}
-    htmleditor:
-      call: ->
-        Carmenta.modal '/carmenta/modals/htmleditor.html', {
-          title: 'HTML Editor',
-          fullHeight: true,
-          afterLoad: => $('midas_html_editor_content').value = this.getContents();
-        }
+    horizontalrule: (selection) -> selection.replace('<hr/>')
+
+    htmleditor: ->
+      Carmenta.modal '/carmenta/modals/htmleditor', {
+        title: 'HTML Editor',
+        fullHeight: true,
+        afterLoad: => $('midas_html_editor_content').value = @html()
+      }
 
   # Contexts
   #

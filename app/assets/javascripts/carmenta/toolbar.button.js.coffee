@@ -49,6 +49,20 @@ class Carmenta.Toolbar.Button
 
 
   bindEvents: ->
+    Carmenta.bind 'region:update', (event, options) =>
+      context = Carmenta.Toolbar.Button.contexts[@name]
+      if context
+        if options.region && $.type(options.region.currentElement) == 'function'
+          if context.call(@, options.region.currentElement(), options.region.element)
+            @element.addClass('active')
+          else
+            @element.removeClass('active')
+      else
+        @element.removeClass('active')
+
+    @element.mousedown (event) =>
+      @element.addClass('active')
+
     @element.click (event) =>
       if @element.closest('.disabled').length then return
 
@@ -65,14 +79,15 @@ class Carmenta.Toolbar.Button
 
           when 'modal'
             handled = true
-            Carmenta.modal(@handled['modal'], {title: @summary || @title})
+            Carmenta.modal(@handled['modal'], {title: @summary || @title, handler: @name})
 
           when 'palette', 'select', 'panel'
             event.stopPropagation()
             handled = true
             @handled[type].toggle()
 
-      Carmenta.trigger('button', {action: @name}) unless handled
+      Carmenta.trigger('action', {action: @name}) unless handled
+      Carmenta.trigger('focus:frame')
 
 
   togglePressed: ->
@@ -82,45 +97,38 @@ class Carmenta.Toolbar.Button
 
 # Button contexts
 Carmenta.Toolbar.Button.contexts =
-  backcolor: (node) ->
-    @element.css('background-color', node.css('background-color'))
 
-  forecolor: (node) ->
-    @element.css('background-color', node.css('color'))
+  backcolor: (node) -> @element.css('background-color', node.css('background-color'))
+
+  forecolor: (node) -> @element.css('background-color', node.css('color'))
 
   bold: (node) ->
     weight = node.css('font-weight')
     weight == 'bold' || weight > 400
 
-  italic: (node) ->
-    node.css('font-style') == 'italic'
+  italic: (node) -> node.css('font-style') == 'italic'
 
-  strikethrough: (node) ->
-    node.css('text-decoration') == 'line-through'
+  # todo: overline is a bit weird because <u> and <strike> override text-decoration, so we can't always tell
+  # todo: maybe walk up the tree if it's not too expensive?
+  overline: (node) -> node.css('text-decoration') == 'overline'
 
-  underline: (node) ->
-    node.css('text-decoration') == 'underline'
+  # todo: this should never check for tags, because they could be styled differently
+  strikethrough: (node, region) -> node.css('text-decoration') == 'line-through' || node.closest('strike', region).length
 
-  subscript: (node) ->
-    node.closest('sub').length > 0
+  underline: (node, region) -> node.css('text-decoration') == 'underline' || node.closest('u', region).length
 
-  superscript: (node) ->
-    node.closest('sup').length > 0
+  subscript: (node, region) -> node.closest('sub', region).length
 
-  justifyleft: (node) ->
-    node.css('text-align').indexOf('left') > -1
+  superscript: (node, region) -> node.closest('sup', region).length
 
-  justifycenter: (node) ->
-    node.css('text-align').indexOf('center') > -1
+  justifyleft: (node) -> node.css('text-align').indexOf('left') > -1
 
-  justifyright: (node) ->
-    node.css('text-align').indexOf('right') > -1
+  justifycenter: (node) -> node.css('text-align').indexOf('center') > -1
 
-  justifyfull: (node) ->
-    node.css('text-align').indexOf('justify') > -1
+  justifyright: (node) -> node.css('text-align').indexOf('right') > -1
 
-  insertorderedlist: (node, region) ->
-    node.closest('ol', region.element).length > 0
+  justifyfull: (node) -> node.css('text-align').indexOf('justify') > -1
 
-  insertunorderedlist: (node, region) ->
-    node.closest('ul', region.element).length > 0
+  insertorderedlist: (node, region) -> node.closest('ol', region.element).length
+
+  insertunorderedlist: (node, region) -> node.closest('ul', region.element).length

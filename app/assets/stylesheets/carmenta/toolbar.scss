@@ -1,12 +1,16 @@
 /* Toolbar
  *----------------------------------------------------------------------------*/
 .carmenta-toolbar-container {
+  user-select: none;
   position: absolute;
   z-index: 10010;
   top: 0;
   width: 100%;
   border-bottom: 1px solid #E2E1E2;
   .carmenta-toolbar {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
     background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0, rgb(198,198,198)), color-stop(1, rgb(226,225,226)));
     background-image: -moz-linear-gradient(center bottom, rgb(198,198,198) 0%, rgb(226,225,226) 100%);
     border-bottom: 1px solid #727272;
@@ -87,13 +91,13 @@
     display: inline-block;
     height: 58px;
     margin-bottom: 20px;
-    min-width: 50px;
+    min-width: 55px;
     text-align: center;
     white-space: nowrap;
     text-decoration: none;
     font-family: Helvetica, Tahoma, Arial, sans-serif;
     &.pressed {
-      background-image: url(/assets/carmenta/toolbar/primary/_pressed.png)
+      background: url(/assets/carmenta/toolbar/primary/_pressed.png) no-repeat top center;
     }
     em {
       margin: 0 -5px;
@@ -111,7 +115,7 @@
     display: inline-block;
     width: 1px;
     height: 50px;
-    margin: 5px 25px 28px;
+    margin: 5px 20px 28px;
   }
   .carmenta-toolbar-button-container {
     white-space: nowrap;

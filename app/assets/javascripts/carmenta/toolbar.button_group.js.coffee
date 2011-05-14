@@ -14,5 +14,5 @@ class Carmenta.Toolbar.ButtonGroup
 
 # ButtonGroup contexts
 Carmenta.Toolbar.ButtonGroup.contexts =
-  table: (node, region) ->
-    node.closest('table', region).length > 0
+
+  table: (node, region) -> node.closest('table', region).length > 0

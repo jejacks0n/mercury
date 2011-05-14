@@ -13,14 +13,13 @@ class Carmenta.Panel extends Carmenta.Dialog
 
 
   bindEvents: ->
-    $(window).resize => @position(@visible)
-
-    @element.mousedown (event) -> event.stopPropagation()
-
+    Carmenta.bind 'resize', => @position(@visible)
     Carmenta.bind 'hide:panels', (event, panel) =>
       unless panel == @
         @button.removeClass('pressed')
         @hide()
+
+    @element.mousedown (event) -> event.stopPropagation()
 
     super
 
@@ -53,7 +52,7 @@ class Carmenta.Panel extends Carmenta.Dialog
     height = Carmenta.displayRect.height - 16
 
     paneHeight = height - @titleElement.outerHeight()
-    @paneElement.css({height: paneHeight, overflow: if paneHeight < 30 then 'hidden' else 'auto'})
+    @paneElement.css({height: paneHeight, overflowY: if paneHeight < 30 then 'hidden' else 'auto'})
 
     left = Carmenta.displayRect.width - elementWidth - 20 unless @moved
     left = 8 if left <= 8

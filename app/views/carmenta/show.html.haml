@@ -1,6 +1,7 @@
 Content outside the regions
 
 .carmenta-region{ 'data-type' => 'editable' }
+  %meta{}/
   editable content
   = link_to '/something_else'
   %table
@@ -10,7 +11,9 @@ Content outside the regions
     %tr
       %td Column1
       %td Column2
-
+  %p this is a <u>pa<span style="text-decoration:overline">rag</span>raph</u>
+  %p this is a <span style="text-decoration:overline">pa<u>rag</u>raph</span>
+  %style table { background: red; }
 
 .carmenta-region{ 'data-type' => 'snippet' }
   snippet content

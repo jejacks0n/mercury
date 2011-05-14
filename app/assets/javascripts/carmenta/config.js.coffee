@@ -12,6 +12,7 @@ Carmenta.config =
   #
   ignoredLinks: ['lightview'],
 
+
   # Toolbars
   #
   # This is where you can customize the toolbar by adding new ones, and add or
@@ -136,6 +137,7 @@ Carmenta.config =
       editors:
         htmleditor:          ['Edit HTML', 'Edit the HTML content'] # example behavior below
 
+
   # Behaviors
   #
   # Behaviors are used to change the default behaviors of a given region type
@@ -154,8 +156,10 @@ Carmenta.config =
       Carmenta.modal '/carmenta/modals/htmleditor', {
         title: 'HTML Editor',
         fullHeight: true,
-        afterLoad: => $('midas_html_editor_content').value = @html()
+        handler: 'htmleditor'
+        afterLoad: => $('.carmenta-modal-pane').val(@html())
       }
+
 
   # Contexts
   #

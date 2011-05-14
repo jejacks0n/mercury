@@ -10,7 +10,7 @@ class Carmenta.Select extends Carmenta.Dialog
 
 
   bindEvents: ->
-    Carmenta.bind('hide:dialogs', (event, dialog) => @hide() unless dialog == @)
+    Carmenta.bind 'hide:dialogs', (event, dialog) => @hide() unless dialog == @
     super
 
 

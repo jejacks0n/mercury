@@ -1,4 +1,5 @@
 #= require_self
+#= require ./utility
 #= require ./history_buffer
 #= require ./dialog
 #= require ./statusbar
@@ -10,18 +11,9 @@
 #= require ./toolbar.button
 #= require ./toolbar.button_group
 #= require ./toolbar.expander
-#= require_tree ./regions
+#= require ./regions/editable
+#= require ./regions/snippet
 #= require ./config
-
-String::titleize = -> @[0].toUpperCase() + @slice(1)
-String::toHex = ->
-  # todo: we should handle rgba as well
-  return @ if @[0] == '#'
-  @replace /rgb\((\d+)[\s|\,]?\s(\d+)[\s|\,]?\s(\d+)\)/gi, (a, r, g, b) ->
-    "##{parseInt(r).toHex()}#{parseInt(g).toHex()}#{parseInt(b).toHex()}"
-Number::toHex = ->
-  result = @toString(16).toUpperCase()
-  return if result[1] then result else "0#{result}"
 
 class CarmentaEditor
 
@@ -31,12 +23,11 @@ class CarmentaEditor
 
 
   initializeInterface: ->
+    @focusableElement = $('<input>', {type: 'text', style: 'position:absolute'}).appendTo('body')
     @iframe = $('<iframe>', {class: 'carmenta-iframe', seamless: 'true', frameborder: '0', src: 'about:blank'})
     @iframe.load => @initializeFrame()
     @iframe.attr('src', @iframeSrc())
     @iframe.appendTo('body')
-
-    @bindEvents()
 
     @toolbar = new Carmenta.Toolbar(@options)
     @statusbar = new Carmenta.Statusbar(@options)
@@ -46,8 +37,9 @@ class CarmentaEditor
     try
       return if @iframe.data('loaded')
       @iframe.data('loaded', true)
-      @document = @iframe.get(0).contentWindow.document
+      @document = $(@iframe.get(0).contentWindow.document)
 
+      @bindEvents()
       @regions = @initializeRegions()
       @finalizeInterface()
 
@@ -61,12 +53,12 @@ class CarmentaEditor
 
 
   buildRegion: (region) ->
-#    try
+    try
       type = region.data('type').titleize()
       new Carmenta.Regions[type](region, {window: @iframe.get(0).contentWindow})
-#    catch error
-#      alert(error)
-#      alert("Region type is malformed, no data-type provided, or \"#{type}\" is unknown.")
+    catch error
+      alert(error)
+      alert("Region type is malformed, no data-type provided, or \"#{type}\" is unknown.")
 
 
   finalizeInterface: ->
@@ -75,7 +67,11 @@ class CarmentaEditor
 
 
   bindEvents: ->
-    Carmenta.bind('initialize:frame', => setTimeout(@initializeFrame, 200))
+    Carmenta.bind 'initialize:frame', => setTimeout(@initializeFrame, 100)
+    Carmenta.bind 'focus:frame', => @iframe.focus()
+    Carmenta.bind 'focus:window', => setTimeout((=> @focusableElement.focus()), 10)
+
+    @document.mousedown -> Carmenta.trigger('hide:dialogs')
 
     $(window).resize => @resize()
     window.onbeforeunload = Carmenta.beforeUnload
@@ -94,6 +90,8 @@ class CarmentaEditor
       width: width,
       height: height - statusbarHeight - toolbarHeight
     }
+
+    Carmenta.trigger('resize')
 
 
   iframeSrc: ->
@@ -133,14 +131,10 @@ Carmenta =
 
 
   trigger: (eventName, arguments...) ->
-    $(document).trigger("carmenta:#{eventName}", arguments)
     Carmenta.log(eventName, arguments)
+    $(document).trigger("carmenta:#{eventName}", arguments)
 
 
   log: ->
     if Carmenta.debug && console
       try console.debug(arguments) catch e
-
-
-  preventer: (event) ->
-    event.preventDefault()

@@ -4,7 +4,6 @@ class Carmenta.Toolbar.Expander extends Carmenta.Palette
     @container = @options.for
     @containerWidth = @container.outerWidth()
     super(null, @name, @options)
-
     return @element
 
 
@@ -16,11 +15,10 @@ class Carmenta.Toolbar.Expander extends Carmenta.Palette
 
 
   bindEvents: ->
-    Carmenta.bind('hide:dialogs', (event, dialog) => @hide() unless dialog == @)
+    Carmenta.bind 'hide:dialogs', (event, dialog) => @hide() unless dialog == @
+    Carmenta.bind 'resize', => @windowResize()
 
     super
-
-    $(window).resize => @windowResize()
 
     @trigger.click (event) =>
       event.stopPropagation()

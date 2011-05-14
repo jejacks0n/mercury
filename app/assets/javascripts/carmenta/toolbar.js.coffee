@@ -3,7 +3,6 @@ class Carmenta.Toolbar
   constructor: (@options = {}) ->
     @build()
     @bindEvents()
-    @resize()
 
 
   build: ->
@@ -20,7 +19,10 @@ class Carmenta.Toolbar
         expander = new Carmenta.Toolbar.Expander(toolbarName, {appendTo: toolbar, for: container})
         expander.appendTo(@element)
 
+      toolbar.addClass('disabled') unless toolbarName == 'primary'
+
     @element.css({width: '100%'})
+
 
   buildButton: (name, options) ->
     switch $.type(options)
@@ -42,16 +44,14 @@ class Carmenta.Toolbar
 
 
   bindEvents: ->
-    $(window).resize => @resize()
+    Carmenta.bind 'region:update', (event, options) =>
+      @element.find(".carmenta-#{options.region.type}-toolbar").removeClass('disabled')
 
-    @element.mousedown(Carmenta.preventer)
+    Carmenta.bind 'region:blur', (event, options) =>
+      @element.find(".carmenta-#{options.region.type}-toolbar").addClass('disabled')
 
-    @element.click ->
-      Carmenta.trigger('hide:dialogs')
-
-
-
-  resize: ->
+    @element.click -> Carmenta.trigger('hide:dialogs')
+    @element.mousedown (event) -> event.preventDefault()
 
 
   height: ->

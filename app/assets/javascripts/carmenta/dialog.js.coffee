@@ -60,13 +60,8 @@ class Carmenta.Dialog
     $.ajax @url, {
       success: (data) =>
         @loadContent(data)
+        Carmenta.dialogHandlers[@name].call(@) if Carmenta.dialogHandlers[@name]
         callback() if callback
-
-# todo: this needs a better structure so it can be coffeescript
-#        this.setupFunction = window['midas_setup_' + this.name];
-#        if (this.setupFunction) this.setupFunction.call(this);
-
-
       error: =>
         @hide()
         @button.removeClass('pressed')
@@ -79,7 +74,7 @@ class Carmenta.Dialog
     @element.removeClass('loading')
     @element.html(data)
 
-# todo: this needs a better architecture -- listening to events should be considered, part of the above todo
+# todo: this needs a better architecture
 #  show: function() {
 #    if (this.toolbar.activeRegion) {
 #      this.contextClass = this.toolbar.activeRegion.name;
@@ -91,7 +86,4 @@ class Carmenta.Dialog
 #      this.element.removeClassName(this.contextClass);
 #      this.contextClass = null;
 #    }
-#  },
-#  execute: function(action, options, event) {
-#    Midas.fire('button', {action: this.name, event: event, toolbar: this.toolbar, options: options});
 #  },

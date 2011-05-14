@@ -1,0 +1,22 @@
+Carmenta.modalHandlers =
+
+  htmleditor: (region) ->
+    @element.find('form').submit (event) =>
+      event.preventDefault()
+      value = @element.find('textarea').val().replace(/\n/g, '')
+      Carmenta.trigger('action', {action: 'replaceHTML', value: value})
+      @hide()
+
+
+  insertmedia: ->
+    @element.find('#test').click =>
+      display = @element.find('#display')
+      display.html(display.html() + 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.')
+      @resize(true)
+
+
+  insertcharacter: ->
+    @element.find('.character').click ->
+      Carmenta.trigger('action', {action: 'insertHTML', value: "&#{$(@).attr('data-entity')};"})
+      Carmenta.trigger('focus:frame')
+      Carmenta.modal.hide()

@@ -3,6 +3,9 @@
 .carmenta-dialog,
 .carmenta-select,
 .carmenta-palette {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
   position: absolute;
   z-index: 10012;
   width: 30px;
@@ -63,6 +66,9 @@
     white-space: nowrap;
   }
   h1 {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
     font-size: 10pt;
     -moz-border-radius-topleft: 4px;
     -moz-border-radius-topright: 4px;
@@ -73,10 +79,11 @@
     text-shadow: 1px 1px 2px rgba(0,0,0, .9);
   }
   .carmenta-panel-pane {
-    -moz-box-sizing: border-box;
     box-sizing: border-box;
+    -moz-box-sizing: border-box;
     padding: 15px;
-    overflow: auto;
+    overflow-y: auto;
+    overflow-x: hidden;
     width: 100%;
     h3 {
       margin: 10px -15px;
@@ -94,12 +101,12 @@
   width: 170px;
   height: auto;
   padding: 1px;
+  cursor: default;
   .picker {
     float: left;
     width: 15px;
     height: 15px;
     margin: 1px;
-    cursor: default;
     &:hover {
       outline: 1px solid #333;
     }

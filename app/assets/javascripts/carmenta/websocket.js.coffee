@@ -1,17 +1,17 @@
-Carmenta.websocket =
-
-  websocket: $.websocket("ws://#{$.uri(window.location.href).host}:8081")
-
-
-  send: (eventName, options) ->
-    package = {}
-    package[eventName] = options
-    @websocket.send(package)
-
-
-  bind: (eventName, callback) ->
-    # todo: this will override any that are already set -- callbacks should be an array that we can push onto
-    $.websocketSettings[eventName] = callback
+#Carmenta.websocket =
+#
+#  websocket: $.websocket("ws://#{$.uri(window.location.href).host}:8081")
+#
+#
+#  send: (eventName, options) ->
+#    package = {}
+#    package[eventName] = options
+#    @websocket.send(package)
+#
+#
+#  bind: (eventName, callback) ->
+#    # todo: this will override any that are already set -- callbacks should be an array that we can push onto
+#    $.websocketSettings[eventName] = callback
 
 #window.socket = $.websocket(, {
 #  lock: (element) ->

@@ -57,12 +57,12 @@ Carmenta::Application.routes.draw do
 
   root :to => 'carmenta#show'
   match '/edit(/*requested_uri)' => "carmenta#edit", :as => :edit
-
   namespace :carmenta do
-    match 'palettes/(:palette)' => "carmenta#palette"
-    match 'selects/(:select)' => "carmenta#select"
-    match 'panels/(:panel)' => "carmenta#panel"
-    match 'modals/(:modal)' => "carmenta#modal"
+    match ':type/:resource' => "carmenta#resource"
   end
+
+
+#  match '(/*requested_uri)' => "carmenta#show"
+
 
 end

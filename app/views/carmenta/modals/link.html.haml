@@ -2,8 +2,8 @@
 
   .carmenta-modal-pane-container
     .carmenta-modal-pane
-      %fieldset
-        %label{ :for => 'link_text' } Add New Link
+      %fieldset#link_text_container
+        %label{ :for => 'link_text' } Link Content
         %input#link_text{ :type => 'text' }/
 
       .legend Standard Links
@@ -11,8 +11,8 @@
         %p
           %label{ :for => 'external_url' }
             %input{ :name => 'link_type', :type => 'radio', :value => 'external_url', :checked => true }/
-            External URL
-          %input#external_url{ :type => 'text', :value => 'http://' }/
+            URL
+          %input#external_url.selectable{ :type => 'text', :value => 'http://' }/
 
       .legend Bookmarks
       %fieldset
@@ -20,12 +20,12 @@
           %label{ :for => 'existing_bookmark' }
             %input{ :name => 'link_type', :type => 'radio', :value => 'existing_bookmark' }/
             Existing Bookmarks
-          %select#existing_bookmark
+          %select#existing_bookmark.selectable
         %p
           %label{ :for => 'new_bookmark' }
             %input{ :name => 'link_type', :type => 'radio', :value => 'new_bookmark' }/
-            New Bookmark
-          %input#new_bookmark{ :type => 'text', :value => '' }/
+            Bookmark
+          %input#new_bookmark.selectable{ :type => 'text', :value => '' }/
 
       .legend Options
       %fieldset
@@ -36,117 +36,13 @@
             %option{ :value => '_blank' } Blank (a new window or tab)
             %option{ :value => '_top' } Top (removes any frames)
             %option{ :value => 'popup' } Popup Window (javascript new window popup)
-        %p
-          %label{ :for => 'popup_width' } Popup Width
-          %input#popup_width{ :type => 'text', :value => '', :disabled => true }/
-        %p
-          %label{ :for => 'popup_height' } Popup Height
-          %input#popup_height{ :type => 'text', :value => '', :disabled => true }/
+        #popup_options.link-target-options{ :style => 'display:none' }
+          %p
+            %label{ :for => 'popup_width' } Popup Width
+            %input#popup_width{ :type => 'text', :value => '' }/
+          %p
+            %label{ :for => 'popup_height' } Popup Height
+            %input#popup_height{ :type => 'text', :value => '' }/
 
   .carmenta-modal-controls
     %input{ :type => 'submit', :value => 'Insert Link' }
-
--#
--#:javascript
--#  //:onfocus => "this.previousSiblings()[0].down('input').checked=true"
--#  //:onfocus => "this.previousSiblings()[0].down('input').checked=true"
--#  //:onfocus => "this.previousSiblings()[0].down('input').checked=true",
--#  //TODO: existing bookmarks should prefill
--#  //TODO: doesn't support multiple selections
--#  //TODO: if the user selects the new bookmark radio, the next page button should be disabled
--#  var selection = $('midas_iframe_window').contentWindow.getSelection();
--#
--#  if (selection.rangeCount) {
--#    var range = selection.getRangeAt(0),
--#        anchor,
--#        selectedContent,
--#        commonAncestorCont = range.commonAncestorContainer,
--#        selectedContentDiv = new Element('div');
--#
--#    window.midasSelectedAnchor = null;
--#    window.selectContentDivHTML= null;
--#
--#    selectedContent = range.cloneContents();
--#    selectedContentDiv.appendChild(selectedContent);
--#    //TODO: Necessary for now - clean up cross anchor/text node selections, check range endcontainer/startcontainer for anchor parents
--#    window.selectedContentHTML = selectedContentDiv.innerHTML.replace(/<\/?a.*?>/g, '');
--#
--#    //We have to do this here when common ancestor could be anchor element itself, i.e., when selecting text and image node inside anchor, not just text node
--#    anchor = (commonAncestorCont.nodeName === 'A') ? commonAncestorCont : Element.up(commonAncestorCont, 'a');
--#
--#    if (anchor) {
--#      window.midasSelectedAnchor = anchor;
--#      // TODO: how do we handle internal links?
--#      $('midas_link_external_url').value = anchor.href;
--#      range.selectNode(anchor);
--#      selection.addRange(range);
--#      //Swap selected content HTML when we are inside an anchor
--#      window.selectedContentHTML = anchor.innerHTML;
--#    }
--#
--#    if (window.selectedContentHTML !== '') {
--#      //TODO: Not transparent enough
--#      $('midas_link_text').style.display = 'none';
--#      $('midas_link_text_label').innerHTML = 'New Selection Link';
--#    }
--#  }
--#
--#  $('midas_link_target').observe('change', function(e) {
--#    var element = $('midas_link_target');
--#    var selection = element.options[element.selectedIndex].value;
--#    $('midas_link_popup_options').select('input').each(function(input) {
--#      input.disabled = !(selection == 'popup' || selection == 'lightview');
--#    });
--#  });
--#
--#  window['midas_modal_submit'] = function(e) {
--#    e.stop();
--#
--#    var contents = window.selectedContentHTML || $('midas_link_text').value;
--#    var target = $('midas_link_target').value;
--#    var type = $('midas_modal_form').getInputs('radio', 'midas_link_type').find(function(radio) {
--#      return radio.checked;
--#    }).value;
--#
--#    var attrs = {};
--#    switch (type) {
--#      case 'existing_bookmark':
--#        attrs['href'] = '#' + $('midas_link_existing_bookmark').value;
--#        break;
--#      case 'new_bookmark':
--#        attrs['name'] = $('midas_link_new_bookmark').value;
--#        break;
--#      case 'internal_url':
--#        attrs['href'] = $('midas_link_internal_url').options[$('midas_link_internal_url').selectedIndex].value;
--#        break;
--#      default:
--#        attrs['href'] = $('midas_link_external_url').value;
--#    }
--#
--#    switch (target) {
--#      case 'popup':
--#        var args = {
--#          width: parseInt($('midas_link_popup_width').value) || 500,
--#          height: parseInt($('midas_link_popup_height').value) || 500,
--#          menubar: 'no',
--#          toolbar: 'no'
--#        };
--#        attrs['href'] = "javascript:void(window.open('" + attrs['href'] + "', 'window_" + Math.random() + "', '" + Object.toQueryString(args).replace('&', ',') + "'))";
--#        break;
--#      case 'lightview':
--#        var width = parseInt($('midas_link_popup_width').value) || 500;
--#        var height = parseInt($('midas_link_popup_height').value) || 500;
--#        attrs['class'] = 'lightview';
--#        attrs['title'] = ':: :: width: ' + width + ', height: ' + height;
--#        break;
--#      default:
--#        attrs['target'] = target;
--#    }
--#
--#    var element = new Element('a', attrs).update(contents);
--#    var container = new Element('div').update(element);
--#
--#    Midas.fire('action', {action: 'replaceNode', options: {value: container.innerHTML, node: window.midasSelectedAnchor}});
--#    Midas.modal.hide();
--#    e.stop();
--#  };

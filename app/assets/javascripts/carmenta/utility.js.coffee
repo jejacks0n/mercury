@@ -1,4 +1,5 @@
-String::titleize = -> @[0].toUpperCase() + @slice(1)
+String::titleize = ->
+  @[0].toUpperCase() + @slice(1)
 
 
 String::toHex = ->
@@ -10,10 +11,10 @@ String::toHex = ->
 
 String::singleDiff = (that) ->
   diff = ''
-  for char in that
-    if char != @[_i] # using _i is lame!
-      re = new RegExp(@substr(_i).regExpEscape().replace(/^\s+|^(&nbsp;)+/g, '') + '$', 'm')
-      diff = that.substr(_i).replace(re, '')
+  for char, index in that
+    if char != @[index]
+      re = new RegExp(@substr(index).regExpEscape().replace(/^\s+|^(&nbsp;)+/g, '') + '$', 'm')
+      diff = that.substr(index).replace(re, '')
       break
   return diff
 

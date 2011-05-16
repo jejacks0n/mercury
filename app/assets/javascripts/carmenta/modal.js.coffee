@@ -58,13 +58,17 @@ $.extend Carmenta.modal, {
 
 
   resize: (keepVisible) ->
+    # TODO: resizing is a bit shitty when the modal has panes and is scrollable
     visibility = if keepVisible then 'visible' else 'hidden'
-    @contentElement.css({height: 'auto', visibility: visibility, display: 'block'})
 
     viewportHeight = $(window).height()
     titleHeight = @titleElement.outerHeight()
 
     width = @contentElement.outerWidth()
+
+    @contentPane.css({height: 'auto'}) if @contentPane
+    @contentElement.css({height: 'auto', visibility: visibility, display: 'block'})
+
     height = @contentElement.outerHeight() + titleHeight
 
     width = @minWidth if width < @minWidth
@@ -75,11 +79,10 @@ $.extend Carmenta.modal, {
       if @contentPane.length
         @contentElement.css({height: height - titleHeight, overflow: 'visible'})
         controlHeight = if @contentControl.length then @contentControl.outerHeight() else 0
-        @contentPane.css({height: height - titleHeight - controlHeight - 20})
+        @contentPane.css({height: height - titleHeight - controlHeight - 40})
         @contentPane.find('.carmenta-modal-pane').css({width: width - 40})
       else
         @contentElement.css({height: height - titleHeight, overflow: 'auto'})
-
 
   position: ->
     viewportWidth = $(window).width()
@@ -99,7 +102,8 @@ $.extend Carmenta.modal, {
     if @contentPane && @contentPane.length
       @contentElement.css({height: height - titleHeight, overflow: 'visible'})
       controlHeight = if @contentControl.length then @contentControl.outerHeight() else 0
-      @contentPane.css({height: height - titleHeight - controlHeight - 20})
+      @contentPane.css({height: height - titleHeight - controlHeight - 40})
+      @contentPane.find('.carmenta-modal-pane').css({width: width - 40})
     else
       @contentElement.css({height: height - titleHeight, overflow: 'auto'})
 
@@ -158,6 +162,7 @@ $.extend Carmenta.modal, {
 
 
   hide: ->
+    Carmenta.trigger('focus:frame')
     @element.hide()
     @overlay.hide()
     @reset()

@@ -3,6 +3,33 @@ Content outside the regions
 .carmenta-region{ 'data-type' => 'editable' }
   %meta{}/
   editable content
+  = link_to 'link', '/something_else'
+
+  = link_to image_tag('carmenta/clippy.png'), '/something_else'
+  %table
+    %tr
+      %th Head1
+      %th Head2
+    %tr
+      %td Column1
+      %td Column2
+  %p this is a <u>pa<span style="text-decoration:overline">rag</span>raph</u>
+  %p this is a <span style="text-decoration:overline">pa<u>rag</u>raph</span>
+  %style table { background: red; }
+
+  = image_tag('carmenta/clippy.png')
+  = link_to 'link', '#link2'
+
+  %p
+    %a{ :name => 'inner_link1' } Bookmark
+
+  more content here
+
+  %iframe{ :width => "560", :height => "349", :src => "http://www.youtube.com/embed/QGJuMBdaqIw?wmode=transparent", :frameborder => "0", :allowfullscreen => 'true' }
+
+.carmenta-region{ 'data-type' => 'editable', :style => 'width:200px;height:90px;' }
+  %meta{}/
+  editable contentaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
   = link_to '/something_else'
   %table
     %tr
@@ -19,3 +46,23 @@ Content outside the regions
   snippet content
 
 = link_to '/something'
+
+%p
+  %h3
+    %a{ :name => 'link1' } Title 1
+  Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+%p
+  %h3
+    %a{ :name => 'link2' } Title 2
+  Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+%p
+  %h3
+    %a{ :name => 'link3' } Title 3
+  Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+:plain
+  <style>
+  .carmenta-region { border: 1px dotted red }
+  </style>

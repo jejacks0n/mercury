@@ -20,8 +20,9 @@ Carmenta.config =
   # create a new toolbar.  Buttons are nested inside the toolbars.
   #
   # Buttons can be grouped.  A button group is simply a way to wrap buttons
-  # for styling.  For instance, if you want to have them wrap as a group in the
-  # toolbar.
+  # for styling, and can also handle enabling or disabling all the buttons
+  # within it by using a context.  The table button group is a good example of
+  # this.
   #
   # It's important to note that each of the names (keys), in this object must
   # be unique, regardless of if it's in a button group, or nested, etc.
@@ -123,10 +124,10 @@ Carmenta.config =
         _context:            true
         insertrowbefore:     ['Insert Table Row', 'Insert a table row before the cursor']
         insertrowafter:      ['Insert Table Row', 'Insert a table row after the cursor']
-        deleterow:           ['Delete Table Row', 'Delete this table row the cursor']
+        deleterow:           ['Delete Table Row', 'Delete this table row']
         insertcolumnbefore:  ['Insert Table Column', 'Insert a table column before the cursor']
         insertcolumnafter:   ['Insert Table Column', 'Insert a table column after the cursor']
-        deletecolumn:        ['Delete Table Column', 'Delete this table column the cursor']
+        deletecolumn:        ['Delete Table Column', 'Delete this table column']
         sep:                 '-'
       rules:
         horizontalrule:      ['Horizontal Rule', 'Insert a horizontal rule']
@@ -157,7 +158,6 @@ Carmenta.config =
         title: 'HTML Editor',
         fullHeight: true,
         handler: 'htmleditor'
-        afterLoad: => $('.carmenta-modal-pane').val(@html())
       }
 
 

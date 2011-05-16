@@ -7,8 +7,10 @@ class Carmenta.Regions.Editable.Selection
     @clone = @range.cloneRange()
 
 
-  commonAncestor: ->
-    return $(@range.commonAncestorContainer)
+  commonAncestor: (onlyTag = false) ->
+    ancestor = @range.commonAncestorContainer
+    ancestor = ancestor.parentNode if ancestor.nodeType == 3 && onlyTag
+    return $(ancestor)
 
 
   wrap: (element, replace = false) ->
@@ -18,13 +20,33 @@ class Carmenta.Regions.Editable.Selection
 
 
   textContent: ->
-    return @range.extractContents().textContent
+    return @range.cloneContents().textContent
+
+
+  content: ->
+    return @range.cloneContents()
 
 
   insertTextNode: (string) ->
     node = @context.createTextNode(string)
+    @range.extractContents()
     @range.insertNode(node)
     @range.selectNodeContents(node)
+    @selection.addRange(@range)
+
+
+  insertNode: (element) ->
+    element = element.get(0) if element.get
+    element = $(element, @context).get(0) if $.type(element) == 'string'
+
+    @range.deleteContents()
+    @range.insertNode(element)
+    @range.selectNodeContents(element)
+    @selection.addRange(@range)
+
+
+  selectNode: (node) ->
+    @range.selectNode(node)
     @selection.addRange(@range)
 
 
@@ -36,3 +58,4 @@ class Carmenta.Regions.Editable.Selection
     @range.insertNode(element)
     @range.selectNodeContents(element)
     @selection.addRange(@range)
+

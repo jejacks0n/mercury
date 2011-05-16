@@ -1,12 +1,13 @@
 #= require_self
 #= require ./utility
 #= require ./history_buffer
+#= require ./table
 #= require ./dialog
-#= require ./statusbar
 #= require ./palette
 #= require ./select
 #= require ./panel
 #= require ./modal
+#= require ./statusbar
 #= require ./toolbar
 #= require ./toolbar.button
 #= require ./toolbar.button_group
@@ -19,6 +20,8 @@ class CarmentaEditor
 
   constructor: (@options = {}) ->
     throw "CarmentaEditor is unsupported in this client. Supported browsers are chrome 10+, firefix 4+, and safari 5+." unless Carmenta.supported
+
+    @regions = []
     @initializeInterface()
 
 
@@ -50,18 +53,23 @@ class CarmentaEditor
 
   initializeRegions: ->
     @buildRegion($(region)) for region in $('.carmenta-region', @document)
+    for region in @regions
+      if region.focus
+        region.focus()
+        break
 
 
   buildRegion: (region) ->
     try
       type = region.data('type').titleize()
-      new Carmenta.Regions[type](region, {window: @iframe.get(0).contentWindow})
+      @regions.push(new Carmenta.Regions[type](region, {window: @iframe.get(0).contentWindow}))
     catch error
       alert(error)
       alert("Region type is malformed, no data-type provided, or \"#{type}\" is unknown.")
 
 
   finalizeInterface: ->
+    Carmenta.editor = @
     Carmenta.hijackLinks(@document)
     @resize()
 
@@ -104,10 +112,13 @@ Carmenta =
   Regions: {}
 
   version: 1.0
+
   # No IE because it doesn't follow the w3c standards for designMode
   # TODO: using client detection, but should use feature detection
   supported: document.getElementById && document.designMode && !$.browser.konqueror && !$.browser.msie
+
   silent: false
+
   debug: true
 
 

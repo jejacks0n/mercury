@@ -73,17 +73,3 @@ class Carmenta.Dialog
     @loaded = true
     @element.removeClass('loading')
     @element.html(data)
-
-# todo: this needs a better architecture
-#  show: function() {
-#    if (this.toolbar.activeRegion) {
-#      this.contextClass = this.toolbar.activeRegion.name;
-#      this.element.addClassName(this.contextClass);
-#    }
-#  },
-#  hide: function() {
-#    if (this.contextClass) {
-#      this.element.removeClassName(this.contextClass);
-#      this.contextClass = null;
-#    }
-#  },

@@ -78,7 +78,6 @@ class Carmenta.Toolbar.Button
             Carmenta.trigger('mode', {mode: mixed})
 
           when 'modal'
-            handled = true
             Carmenta.modal(@handled['modal'], {title: @summary || @title, handler: @name})
 
           when 'palette', 'select', 'panel'

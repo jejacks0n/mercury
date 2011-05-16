@@ -1,5 +1,39 @@
-%div{ :style => 'width:800px' }
+%form#carmenta_media{ :style => 'width:600px' }
 
-  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis justo tellus, scelerisque id placerat et, blandit lacinia ante. Sed vestibulum est quis urna pharetra scelerisque dictum erat tristique. Praesent semper neque ac augue fringilla in tempor orci fermentum. Aliquam elementum, lacus sed porttitor tempus, velit magna consectetur libero, eu mattis diam magna in libero. Sed volutpat arcu nulla, quis sollicitudin tortor. Vestibulum lobortis, purus id auctor tempor, massa odio auctor elit, porttitor scelerisque nulla lacus sed nulla. Praesent consectetur eros velit, eu facilisis tortor. Phasellus fringilla condimentum eros, eu viverra risus tristique eu. Curabitur dolor odio, sodales quis viverra nec, mollis a sapien.
-  #test something
-  #display
+  .carmenta-modal-pane-container
+    .carmenta-modal-pane
+      .legend Image
+      %fieldset
+        %p
+          %label{ :for => 'image_url' }
+            %input{ :name => 'media_type', :type => 'radio', :value => 'image_url', :checked => true }/
+            URL
+          %input#image_url.selectable{ :type => 'text', :value => 'http://' }/
+
+      .legend YouTube
+      %fieldset
+        %p
+          %label{ :for => 'youtube_url' }
+            %input{ :name => 'media_type', :type => 'radio', :value => 'youtube_url' }/
+            YouTube Share Url
+          %input#youtube_url.selectable{ :type => 'text', :value => '' }/
+
+      .legend Options
+      %fieldset
+        #image_url_options.media-options
+          %p
+            %label{ :for => 'image_alignment' } Alignment
+            %select#image_alignment{ :name => 'image_alignment' }
+              %option{ :value => '', :selected => true } None
+              %option{ :value => 'left' } Left
+              %option{ :value => 'right' } Right
+              %option{ :value => 'top' } Top
+              %option{ :value => 'middle' } Middle
+              %option{ :value => 'bottom' } Bottom
+              %option{ :value => 'absmiddle' } Absolute Middle
+              %option{ :value => 'absbottom' } Absolute Bottom
+        #youtube_url_options.media-options{ :style => 'display:none' }
+          No options available for youtube.
+
+  .carmenta-modal-controls
+    %input{ :type => 'submit', :value => 'Insert Media' }

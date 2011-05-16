@@ -56,12 +56,3 @@ class Carmenta.Toolbar
 
   height: ->
     @element.outerHeight()
-
-
-  disable: ->
-    # disable the entire toolbar
-    # disable a specific toolbar
-    # disable specific buttons or button groups
-
-
-  enable: ->

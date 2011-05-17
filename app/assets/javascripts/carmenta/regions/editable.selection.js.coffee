@@ -27,6 +27,46 @@ class Carmenta.Regions.Editable.Selection
     return @range.cloneContents()
 
 
+  selectMarker: (context) ->
+    markers = context.find('em.carmenta-marker')
+    return unless markers.length
+
+    range = @context.createRange()
+    range.setStartBefore(markers.get(0))
+    range.setEndBefore(markers.get(1)) if markers.length >= 2
+
+    markers.remove()
+
+    @selection.removeAllRanges()
+    @selection.addRange(range)
+
+
+  placeMarker: ->
+    return unless @range
+
+    @startMarker = $('<em class="carmenta-marker"/>', @context).get(0)
+    @endMarker = $('<em class="carmenta-marker"/>', @context).get(0)
+
+    # put a single marker (the end)
+    rangeEnd = @range.cloneRange()
+    rangeEnd.collapse(false)
+    rangeEnd.insertNode(@endMarker)
+
+    unless @range.collapsed
+      # put a start marker
+      rangeStart = @range.cloneRange()
+      rangeStart.collapse(true)
+      rangeStart.insertNode(@startMarker)
+
+    @selection.removeAllRanges()
+    @selection.addRange(@range)
+
+
+  removeMarker: ->
+    $(@startMarker).remove()
+    $(@endMarker).remove()
+
+
   insertTextNode: (string) ->
     node = @context.createTextNode(string)
     @range.extractContents()

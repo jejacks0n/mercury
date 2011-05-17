@@ -44,10 +44,10 @@ class Carmenta.Toolbar
 
 
   bindEvents: ->
-    Carmenta.bind 'region:update', (event, options) =>
+    Carmenta.bind 'region:focused', (event, options) =>
       @element.find(".carmenta-#{options.region.type}-toolbar").removeClass('disabled')
 
-    Carmenta.bind 'region:blur', (event, options) =>
+    Carmenta.bind 'region:blurred', (event, options) =>
       @element.find(".carmenta-#{options.region.type}-toolbar").addClass('disabled')
 
     @element.click -> Carmenta.trigger('hide:dialogs')

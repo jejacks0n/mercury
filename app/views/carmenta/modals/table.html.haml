@@ -1,0 +1,31 @@
+%form#carmenta_table{ :style => 'width:700px' }
+
+  .carmenta-modal-pane-container
+    .carmenta-modal-pane
+      #table_display
+        %table{ :style => 'width:100%;height:300px;', :border => '1', :cellpadding => '1' }
+          %tr
+            %td
+            %td
+          %tr
+            %td
+            %td
+
+      #table_options
+        .legend Structure Options
+        %fieldset
+          %p
+            %input{ :type => 'button', :value => '+' }/
+            %input{ :type => 'button', :value => '-' }/
+
+        .legend Display Options
+        %fieldset
+          %p
+            %label{ :for => 'alignment' } Alignment
+            %select#alignment{ :name => 'alignment' }
+              %option{ :value => '', :selected => true } None
+              %option{ :value => 'left' } Left
+              %option{ :value => 'right' } Right
+
+  .carmenta-modal-controls
+    %input{ :type => 'submit', :value => 'Insert Table' }

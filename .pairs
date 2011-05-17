@@ -1,0 +1,16 @@
+pairs:
+  aw: Alex Welch; alex.welch
+  an: Anthony Navarre; anthony.navarre
+  jz: Jay Zeschin; jay.zeschin
+  br: Brian Rose; brian.rose
+  dp: Don Petersen; don.petersen
+  jj: Jeremy Jackson; jeremy.jackson
+  aj: Andrew Jaswa; andrew.jaswa
+  jg: Justin Gitlin; justin.gitlin
+  gv: Gabe Varela; gabe.varela
+  mk: Matt Kitt; matt.kitt
+  cw: Craig Williams; craig.williams
+  tl: Terrence Lee; terrence.lee
+email:
+  prefix: pair
+  domain: factorylabs.com

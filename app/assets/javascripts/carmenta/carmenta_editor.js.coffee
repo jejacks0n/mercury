@@ -64,7 +64,7 @@ class CarmentaEditor
       type = region.data('type').titleize()
       @regions.push(new Carmenta.Regions[type](region, {window: @iframe.get(0).contentWindow}))
     catch error
-      alert(error)
+      alert(error) if Carmenta.debug
       alert("Region type is malformed, no data-type provided, or \"#{type}\" is unknown.")
 
 

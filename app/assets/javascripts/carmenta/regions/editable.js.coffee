@@ -10,9 +10,10 @@ class Carmenta.Regions.Editable
     @window = @options.window
     @document = @window.document
     @type = @element.data('type')
-    @history = new HistoryBuffer()
+    @history = new Carmenta.HistoryBuffer()
     @build()
     @bindEvents()
+    @pushHistory()
 
 
   build: ->
@@ -29,19 +30,22 @@ class Carmenta.Regions.Editable
     # mozilla: there's some weird behavior when the element isn't a div
     @specialContainer = $.browser.mozilla && @element.get(0).tagName != 'DIV'
 
-    # make it editable and add the basic editor settings
+    # make it editable
     @element.get(0).contentEditable = true
-    @execCommand('styleWithCSS', {value: false})
-    @execCommand('insertBROnReturn', {value: true})
-    @execCommand('enableInlineTableEditing', {value: false})
-    @execCommand('enableObjectResizing', {value: false})
+
+    # add the basic editor settings to the document (only once)
+    unless @document.carmentaEditing
+      @document.execCommand('styleWithCSS', false, false)
+      @document.execCommand('insertBROnReturn', false, true)
+      @document.execCommand('enableInlineTableEditing', false, false)
+      @document.execCommand('enableObjectResizing', false, false)
+      @document.carmentaEditing = true
 
 
   bindEvents: ->
     Carmenta.bind 'focus:frame', =>
       return unless Carmenta.region == @
       @focus()
-      Carmenta.trigger('region:update', {region: @})
 
     Carmenta.bind 'action', (event, options) =>
       return unless Carmenta.region == @
@@ -59,25 +63,38 @@ class Carmenta.Regions.Editable
 
     @element.focus =>
       Carmenta.region = @
+      Carmenta.trigger('region:focused', {region: @})
 
     @element.blur =>
-      Carmenta.trigger('region:blur', {region: @})
+      Carmenta.trigger('region:blurred', {region: @})
 
     @element.mouseup =>
+      @pushHistory()
       Carmenta.trigger('region:update', {region: @})
 
     @element.keydown (event) =>
       Carmenta.changes = true
       switch event.keyCode
 
+        when 90 # undo / redo
+          return unless event.metaKey
+          event.preventDefault()
+          if event.shiftKey
+            @execCommand('redo')
+          else
+            @pushHistory()
+            @execCommand('undo')
+
+          return
+
         when 13 # enter
           if $.browser.webkit
             event.preventDefault()
-            @execCommand('insertlinebreak')
+            @document.execCommand('insertlinebreak', false, null)
           else if @specialContainer
             # mozilla: pressing enter in any elemeny besides a div handles strangely
-            @execCommand('insertHTML', {value: '<br/>'})
             event.preventDefault()
+            @document.execCommand('insertHTML', false, '<br/>')
 
         when 90 # undo and redo
           break unless event.metaKey
@@ -111,17 +128,29 @@ class Carmenta.Regions.Editable
             @execCommand('underline')
             event.preventDefault()
 
+      @pushHistory(event.keyCode)
 
     @element.keyup =>
-      Carmenta.trigger('region:update', {region: @})
+#      Carmenta.trigger('region:update', {region: @})
 
 
-  html: (value = null) ->
+  html: (value = null, includeMarker = false) ->
     if value
       @element.html(value)
+      @selection().selectMarker(@element)
     else
       @element.find('meta').remove()
-      @element.html().replace(/^\s+|\s+$/g, '')
+      if includeMarker
+        selection = @selection()
+        selection.placeMarker()
+
+      # sanitizes the html before we return it
+      container = $('<div>').appendTo(@document.createDocumentFragment())
+      container.html(@element.html().replace(/^\s+|\s+$/g, ''))
+      html = container.html()
+
+      selection.removeMarker() if includeMarker
+      return html
 
 
   selection: ->
@@ -130,6 +159,7 @@ class Carmenta.Regions.Editable
 
   focus: ->
     @element.focus()
+    Carmenta.trigger('region:update', {region: @})
 
 
   path: ->
@@ -165,7 +195,10 @@ class Carmenta.Regions.Editable
 
 
   execCommand: (action, options = {}) ->
-    @element.focus
+    @element.focus()
+    @pushHistory() unless action == 'undo' || action == 'redo'
+
+    Carmenta.log('execCommand', action, options.value)
 
     # use a custom handler if there's one, otherwise use execCommand
     if handler = Carmenta.config.behaviors[action] || Carmenta.Regions.Editable.actions[action]
@@ -173,7 +206,6 @@ class Carmenta.Regions.Editable
     else
       sibling = @element.get(0).previousSibling if action == 'indent'
       options.value = $('<div>').html(options.value).html() if action == 'insertHTML' && options.value && options.value.get
-      Carmenta.log('execCommand', action, options.value)
       try
         @document.execCommand(action, false, options.value)
       catch error
@@ -181,9 +213,36 @@ class Carmenta.Regions.Editable
         @element.prev().remove() if action == 'indent' && @element.prev() != sibling
 
 
+  pushHistory: (keyCode) ->
+    # when pressing return, delete or backspace it should push to the history
+    # all other times it should store if there's a 1 second pause
+    keyCodes = [13, 46, 8]
+    waitTime = 2.5
+    knownKeyCode = keyCodes.indexOf(keyCode) if keyCode
+
+    # clear any pushes to the history
+    clearTimeout(@historyTimeout)
+
+    # if the key code was return, delete, or backspace store now -- unless it was the same as last time
+    if knownKeyCode >= 0 && knownKeyCode != @lastKnownKeyCode # || !keyCode
+      @history.push(@html(null, true))
+    else if keyCode
+      # set a timeout for pushing to the history
+      @historyTimeout = setTimeout((=> @history.push(@html(null, true))), waitTime * 1000)
+    else
+      # push to the history immediately
+      @history.push(@html(null, true))
+
+    @lastKnownKeyCode = knownKeyCode
+
+
 
 # Custom handled actions (eg. things that execCommand doesn't do, or doesn't do well)
 Carmenta.Regions.Editable.actions =
+
+  undo: -> @html(@history.undo())
+
+  redo: -> @html(@history.redo())
 
   removeformatting: (selection) -> selection.insertTextNode(selection.textContent())
 

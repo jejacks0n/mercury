@@ -4,4 +4,4 @@ class Carmenta.Regions.Snippet
   constructor: (@element) ->
     Carmenta.log('making snippetable', @element)
 
-    @history = new HistoryBuffer()
+    @history = new Carmenta.HistoryBuffer()

@@ -13,9 +13,6 @@ class Carmenta.HistoryBuffer
     @stack.shift() if @stack.length > @maxLength
     @index = @stack.length - 1
 
-    console.debug('----------------------------------------------------------------', @stack.length)
-    console.debug(@stack[0...@stack.length])
-
 
   undo: ->
     return null if @index < 1

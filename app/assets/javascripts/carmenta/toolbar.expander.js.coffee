@@ -1,6 +1,6 @@
 class Carmenta.Toolbar.Expander extends Carmenta.Palette
 
-  constructor: (@name, @options = {}) ->
+  constructor: (@name, @options) ->
     @container = @options.for
     @containerWidth = @container.outerWidth()
     super(null, @name, @options)
@@ -9,7 +9,7 @@ class Carmenta.Toolbar.Expander extends Carmenta.Palette
 
   build: ->
     @container.css({whiteSpace: 'normal'})
-    @trigger = $('<div>', {class: 'carmenta-toolbar-expander'}).appendTo(@options.appendTo)
+    @trigger = $('<div>', {class: 'carmenta-toolbar-expander'}).appendTo($(@options.appendTo).get(0) ? 'body')
     @element = $('<div>', {class: "carmenta-palette carmenta-expander carmenta-#{@name}-expander", style: 'display:none'})
     @windowResize()
 
@@ -25,7 +25,7 @@ class Carmenta.Toolbar.Expander extends Carmenta.Palette
       hiddenButtons = []
       for button in @container.find('.carmenta-button')
         button = $(button)
-        hiddenButtons.push(button.data('expander')) if button.offset().top > 5
+        hiddenButtons.push(button.data('expander')) if button.position().top > 5
 
       @loadContent(hiddenButtons.join(''))
       @toggle()

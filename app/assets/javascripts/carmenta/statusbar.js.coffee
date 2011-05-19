@@ -1,12 +1,12 @@
 class Carmenta.Statusbar
 
-  constructor: (@options) ->
+  constructor: (@options = {}) ->
     @build()
     @bindEvents()
 
 
   build: ->
-    @element = $('<div>', {class: 'carmenta-statusbar'}).appendTo('body')
+    @element = $('<div>', {class: 'carmenta-statusbar'}).appendTo($(@options.appendTo).get(0) ? 'body')
 
 
   bindEvents: ->

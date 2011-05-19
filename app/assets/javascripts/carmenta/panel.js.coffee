@@ -9,7 +9,7 @@ class Carmenta.Panel extends Carmenta.Dialog
     @titleElement = $("<h1>#{@options.title}</h1>").appendTo(@element)
     @paneElement = $('<div>', {class: 'carmenta-panel-pane'}).appendTo(@element)
 
-    @element.appendTo(@options.appendTo || 'body');
+    @element.appendTo($(@options.appendTo).get(0) ? 'body');
 
 
   bindEvents: ->

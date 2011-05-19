@@ -29,7 +29,7 @@ class Carmenta.Toolbar
 
       when 'array' # button
         [title, summary, handled] = options
-        new Carmenta.Toolbar.Button(name, title, summary, handled, @)
+        new Carmenta.Toolbar.Button(name, title, summary, handled, {appendDialogsTo: @element})
 
       when 'object' # button group
         group = new Carmenta.Toolbar.ButtonGroup(name, options)

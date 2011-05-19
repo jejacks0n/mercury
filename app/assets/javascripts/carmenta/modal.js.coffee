@@ -29,8 +29,8 @@ $.extend Carmenta.modal, {
     @contentContainerElement = @element.find('.carmenta-modal-content-container')
     @contentElement = @element.find('.carmenta-modal-content')
 
-    @element.appendTo(@options.appendTo || 'body')
-    @overlay.appendTo(@options.appendTo || 'body')
+    @element.appendTo($(@options.appendTo).get(0) ? 'body')
+    @overlay.appendTo($(@options.appendTo).get(0) ? 'body')
 
     @titleElement.find('span').html(@options.title)
 

@@ -1,6 +1,6 @@
 class Carmenta.Toolbar.ButtonGroup
 
-  constructor: (@name, @options) ->
+  constructor: (@name, @options = {}) ->
     @build()
     @bindEvents()
     return @element
@@ -27,4 +27,4 @@ class Carmenta.Toolbar.ButtonGroup
 # ButtonGroup contexts
 Carmenta.Toolbar.ButtonGroup.contexts =
 
-  table: (node, region) -> node.closest('table', region).length
+  table: (node, region) -> !!node.closest('table', region).length

@@ -1,18 +1,18 @@
 class Carmenta.Toolbar.Button
 
-  constructor: (@name, @title, @summary = null, @handled = [], @toolbar) ->
+  constructor: (@name, @title, @summary = null, @types = [], @options = {}) ->
     @build()
     @bindEvents()
     return @element
 
 
   build: ->
-    @element = $('<div>', {title: @summary ? @title, class: "carmenta-button carmenta-#{@name}-button"})
-    @element.html("<em>#{@title}</em>")
+    @element = $('<div>', {title: @summary ? @title, class: "carmenta-button carmenta-#{@name}-button"}).html("<em>#{@title}</em>")
     @element.data('expander', "<div class=\"carmenta-expander-button\" data-button=\"#{@name}\"><em></em><span>#{@title}</span></div>")
 
-    dialogOptions = {title: @summary || @title, preload: @handled.preload, appendTo: @toolbar.element, for: @element}
-    for type, mixed of @handled
+    @handled = []
+    dialogOptions = {title: @summary || @title, preload: @types.preload, appendTo: @options.appendDialogsTo || 'body', for: @element}
+    for type, mixed of @types
       switch type
 
         when 'preload' then true
@@ -45,7 +45,7 @@ class Carmenta.Toolbar.Button
         when 'modal'
           @handled[type] = if $.isFunction(mixed) then mixed.apply(@, @name) else mixed
 
-        else throw "Unknown button type #{type} used for the #{@name} button"
+        else throw "Unknown button type #{type} used for the #{@name} button."
 
 
   bindEvents: ->
@@ -112,13 +112,13 @@ Carmenta.Toolbar.Button.contexts =
   overline: (node) -> node.css('text-decoration') == 'overline'
 
   # todo: this should never check for tags, because they could be styled differently
-  strikethrough: (node, region) -> node.css('text-decoration') == 'line-through' || node.closest('strike', region).length
+  strikethrough: (node, region) -> node.css('text-decoration') == 'line-through' || !!node.closest('strike', region).length
 
-  underline: (node, region) -> node.css('text-decoration') == 'underline' || node.closest('u', region).length
+  underline: (node, region) -> node.css('text-decoration') == 'underline' || !!node.closest('u', region).length
 
-  subscript: (node, region) -> node.closest('sub', region).length
+  subscript: (node, region) -> !!node.closest('sub', region).length
 
-  superscript: (node, region) -> node.closest('sup', region).length
+  superscript: (node, region) -> !!node.closest('sup', region).length
 
   justifyleft: (node) -> node.css('text-align').indexOf('left') > -1
 
@@ -128,6 +128,6 @@ Carmenta.Toolbar.Button.contexts =
 
   justifyfull: (node) -> node.css('text-align').indexOf('justify') > -1
 
-  insertorderedlist: (node, region) -> node.closest('ol', region.element).length
+  insertorderedlist: (node, region) -> !!node.closest('ol', region.element).length
 
-  insertunorderedlist: (node, region) -> node.closest('ul', region.element).length
+  insertunorderedlist: (node, region) -> !!node.closest('ul', region.element).length

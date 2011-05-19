@@ -131,7 +131,7 @@ class Carmenta.Regions.Editable
       @pushHistory(event.keyCode)
 
     @element.keyup =>
-#      Carmenta.trigger('region:update', {region: @})
+      Carmenta.trigger('region:update', {region: @})
 
 
   html: (value = null, includeMarker = false) ->

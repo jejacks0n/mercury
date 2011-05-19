@@ -12,8 +12,9 @@
 #= require ./toolbar.button
 #= require ./toolbar.button_group
 #= require ./toolbar.expander
-#= require ./regions/editable
-#= require ./regions/snippet
+#= require_tree ./regions
+#= require_tree ./dialogs
+#= require_tree ./modals
 #= require ./config
 
 class CarmentaEditor

@@ -1,5 +1,8 @@
-class Carmenta.Regions.Snippet
-  type = 'snippet'
+#= require_self
+#= require ./snippetable.snippet
+
+class Carmenta.Regions.Snippetable
+  type = 'snippetable'
 
   constructor: (@element) ->
     Carmenta.log('making snippetable', @element)

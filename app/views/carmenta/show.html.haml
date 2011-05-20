@@ -3,7 +3,7 @@ Content outside the regions
 .carmenta-region{ 'data-type' => 'editable' }
   %meta{}/
   editable content
-  = link_to 'link', '/something_else'
+  = link_to 'l<span>in</span>k'.html_safe, '/something_else'
 
   = link_to image_tag('carmenta/clippy.png'), '/something_else'
   %table
@@ -64,5 +64,6 @@ Content outside the regions
 
 :plain
   <style>
-  .carmenta-region { border: 1px dotted red }
+  .carmenta-region { outline: 1px dotted #09F }
+  .carmenta-region:focus { outline: 0; box-shadow: 0 0 10px #09F, 0 0 1px #045 }
   </style>

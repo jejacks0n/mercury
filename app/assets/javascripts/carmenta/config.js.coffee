@@ -17,7 +17,9 @@ Carmenta.config =
   #
   # This is where you can customize the toolbar by adding new ones, and add or
   # change buttons and their behaviors.  Any top level object put here will
-  # create a new toolbar.  Buttons are nested inside the toolbars.
+  # create a new toolbar.  Buttons are nested inside the toolbars.  Some
+  # toolbars are custom (the snippetable one for instance), and to denote that
+  # a custom toolbar, use _custom: true.
   #
   # Buttons can be grouped.  A button group is simply a way to wrap buttons
   # for styling, and can also handle enabling or disabling all the buttons
@@ -141,6 +143,16 @@ Carmenta.config =
         sep:                 ' '
       editors:
         htmleditor:          ['Edit HTML', 'Edit the HTML content'] # example behavior below
+
+    snippetable:
+      _custom:               true
+      actions:
+        editsnippet:         ['Edit Snippet Settings', null]
+        sep1:                ' '
+        removesnippet:       ['Remove Snippet', null]
+        sep2:                '-'
+      movement:
+        dragsnippet:         ['Reorder Snippets by Dragging', null]
 
 
   # Behaviors

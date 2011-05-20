@@ -5,7 +5,7 @@ class Carmenta.Regions.Editable
   type = 'editable'
 
   constructor: (@element, @options = {}) ->
-    Carmenta.log('making editable', @element, @options)
+    Carmenta.log('building editable', @element, @options)
 
     @window = @options.window
     @document = @window.document
@@ -194,7 +194,7 @@ class Carmenta.Regions.Editable
 
   path: ->
     container = @selection().commonAncestor()
-    container.parentsUntil(@element)
+    return if container.get(0) == @element.get(0) then [] else container.parentsUntil(@element)
 
 
   currentElement: ->

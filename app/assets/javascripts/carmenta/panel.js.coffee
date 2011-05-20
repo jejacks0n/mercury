@@ -1,6 +1,6 @@
 class Carmenta.Panel extends Carmenta.Dialog
 
-  constructor: (@url, @name, @options) ->
+  constructor: (@url, @name, @options = {}) ->
     super
 
 

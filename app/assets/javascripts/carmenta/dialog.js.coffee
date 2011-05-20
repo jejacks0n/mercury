@@ -10,7 +10,7 @@ class Carmenta.Dialog
 
   build: ->
     @element = $('<div>', {class: "carmenta-dialog carmenta-#{@name}-dialog loading", style: 'display:none'})
-    @element.appendTo(@options.appendTo)
+    @element.appendTo($(@options.appendTo).get(0) ? 'body')
 
 
   bindEvents: ->
@@ -64,7 +64,7 @@ class Carmenta.Dialog
         callback() if callback
       error: =>
         @hide()
-        @button.removeClass('pressed')
+        @button.removeClass('pressed') if @button
         alert("Carmenta was unable to load #{@url} for the #{@name} dialog.")
     }
 

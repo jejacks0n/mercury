@@ -116,4 +116,3 @@ describe "Carmenta.Toolbar.Expander", ->
       jasmine.simulate.click($('.carmenta-toolbar-expander').get(0))
 
       expect(@expander.offset()).toEqual({top: 42, left: 42})
-

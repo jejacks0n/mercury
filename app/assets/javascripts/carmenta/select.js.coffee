@@ -1,12 +1,12 @@
 class Carmenta.Select extends Carmenta.Dialog
 
-  constructor: (@url, @name, @options) ->
+  constructor: (@url, @name, @options = {}) ->
     super
 
 
   build: ->
     @element = $('<div>', {class: "carmenta-select carmenta-#{@name}-select loading", style: 'display:none'})
-    @element.appendTo(@options.appendTo)
+    @element.appendTo($(@options.appendTo).get(0) ? 'body')
 
 
   bindEvents: ->

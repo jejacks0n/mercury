@@ -6,7 +6,7 @@ class Carmenta.Palette extends Carmenta.Dialog
 
   build: ->
     @element = $('<div>', {class: "carmenta-palette carmenta-#{@name}-palette loading", style: 'display:none'})
-    @element.appendTo(@options.appendTo)
+    @element.appendTo($(@options.appendTo).get(0) ? 'body')
 
 
   bindEvents: ->

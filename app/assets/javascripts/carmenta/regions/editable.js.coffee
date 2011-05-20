@@ -22,10 +22,9 @@ class Carmenta.Regions.Editable
     # mozilla: set some initial content so everything works correctly
     @html('&nbsp;') if $.browser.mozilla && @html() == ''
 
-    # set overflow and width just in case
-    width = @element.scrollWidth
-    @element.css({overflow: 'auto'}) unless @element.css('overflow') == 'hidden'
-    @element.css({maxWidth: width}) if width
+    # set overflow just in case
+    @element.data({originalOverflow: @element.css('overflow')})
+    @element.css({overflow: 'auto'})
 
     # mozilla: there's some weird behavior when the element isn't a div
     @specialContainer = $.browser.mozilla && @element.get(0).tagName != 'DIV'
@@ -43,15 +42,21 @@ class Carmenta.Regions.Editable
 
 
   bindEvents: ->
+    Carmenta.bind 'mode', (event, options) =>
+      @togglePreview() if options.mode == 'preview'
+
     Carmenta.bind 'focus:frame', =>
+      return if @previewing
       return unless Carmenta.region == @
       @focus()
 
     Carmenta.bind 'action', (event, options) =>
+      return if @previewing
       return unless Carmenta.region == @
       @execCommand(options.action, options) if options.action
 
     @element.bind 'paste', =>
+      return if @previewing
       return unless Carmenta.region == @
       Carmenta.changes = true
       html = @html()
@@ -59,20 +64,28 @@ class Carmenta.Regions.Editable
       setTimeout((=> @handlePaste(html)), 1)
 
     @element.bind 'drop', =>
+      return if @previewing
       console.debug('dropped')
 
     @element.focus =>
+      return if @previewing
       Carmenta.region = @
       Carmenta.trigger('region:focused', {region: @})
 
     @element.blur =>
+      return if @previewing
       Carmenta.trigger('region:blurred', {region: @})
 
+    @element.click (event) =>
+      $(event.target).closest('a').attr('target', '_top') if @previewing
+
     @element.mouseup =>
+      return if @previewing
       @pushHistory()
       Carmenta.trigger('region:update', {region: @})
 
     @element.keydown (event) =>
+      return if @previewing
       Carmenta.changes = true
       switch event.keyCode
 
@@ -131,6 +144,7 @@ class Carmenta.Regions.Editable
       @pushHistory(event.keyCode)
 
     @element.keyup =>
+      return if @previewing
       Carmenta.trigger('region:update', {region: @})
 
 
@@ -155,6 +169,22 @@ class Carmenta.Regions.Editable
 
   selection: ->
     return new Carmenta.Regions.Editable.Selection(@window.getSelection(), @document)
+
+
+  togglePreview: ->
+    if @previewing
+      @previewing = false
+      @element.get(0).contentEditable = true
+      @element.addClass('carmenta-region').removeClass('carmenta-region-preview')
+      @element.css({overflow: 'auto'})
+      @element.focus() if Carmenta.region == @
+    else
+      @previewing = true
+      @element.get(0).contentEditable = false
+      @element.addClass('carmenta-region-preview').removeClass('carmenta-region')
+      @element.css({overflow: @element.data('originalOverflow')})
+      @element.blur()
+      Carmenta.trigger('region:blurred', {region: @})
 
 
   focus: ->

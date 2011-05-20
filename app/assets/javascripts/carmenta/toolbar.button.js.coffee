@@ -17,6 +17,10 @@ class Carmenta.Toolbar.Button
 
         when 'preload' then true
 
+        when 'regions'
+          @element.addClass('disabled')
+          @handled[type] = if $.isFunction(mixed) then mixed.call(@, @name) else mixed
+
         when 'toggle'
           @handled[type] = true
 
@@ -50,15 +54,27 @@ class Carmenta.Toolbar.Button
 
   bindEvents: ->
     Carmenta.bind 'region:update', (event, options) =>
-      context = Carmenta.Toolbar.Button.contexts[@name]
-      if context
-        if options.region && $.type(options.region.currentElement) == 'function'
-          if context.call(@, options.region.currentElement(), options.region.element)
-            @element.addClass('active')
-          else
-            @element.removeClass('active')
+      if @handled.context && options.region && $.type(options.region.currentElement) == 'function'
+        if @handled.context.call(@, options.region.currentElement(), options.region.element)
+          @element.addClass('active')
+        else
+          @element.removeClass('active')
       else
         @element.removeClass('active')
+
+    Carmenta.bind 'region:focused', (event, options) =>
+      if @handled.regions && options.region && options.region.type
+        if @handled.regions.indexOf(options.region.type) > -1
+          @element.removeClass('disabled')
+        else
+          @element.addClass('disabled')
+
+    Carmenta.bind 'region:blurred', (event, options) =>
+      if @handled.regions && options.region && options.region.type
+        if @handled.regions.indexOf(options.region.type) > -1
+          @element.addClass('disabled')
+        else
+          @element.removeClass('disabled')
 
     @element.mousedown (event) =>
       @element.addClass('active')
@@ -78,7 +94,7 @@ class Carmenta.Toolbar.Button
             Carmenta.trigger('mode', {mode: mixed})
 
           when 'modal'
-            Carmenta.modal(@handled['modal'], {title: @summary || @title, handler: @name})
+            Carmenta.modal(@handled.modal, {title: @summary || @title, handler: @name})
 
           when 'palette', 'select', 'panel'
             event.stopPropagation()

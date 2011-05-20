@@ -56,11 +56,15 @@ Carmenta.config =
   #            note: it's assumed that when a specific mode is turned on, all
   #                  other modes will be turned off which happens automatically,
   #                  thus putting the editor into a specific "state"
+  # regions: allows buttons to be enabled/disabled based on what region type
+  #          has focus, expects the action to be.
+  #            an array of region types (eg. ['editable', 'snippetable']
+  #            a function that returns an array
   # preload: preloads views when the editor is loaded instead of on first open
   #          (only used for panels, selects, and palettes, otherwise ignored)
   #
-  # Separators are any "button" that's not an array, and are expected to be a string.  You can use
-  # two different separator styles: line, and spacer.
+  # Separators are any "button" that's not an array, and are expected to be a
+  # string.  You can use two different separator styles: line, and spacer.
   # '-' = line
   # ' ' = spacer
   #
@@ -73,10 +77,10 @@ Carmenta.config =
         undo:                ['Undo', 'Undo your last action']
         redo:                ['Redo', 'Redo your last action']
         sep:                 ' '
-      insertlink:            ['Link', 'Insert Link', {modal: '/carmenta/modals/link'}]
-      insertmedia:           ['Media', 'Insert Media (images and videos)', {modal: '/carmenta/modals/media'}]
-      inserttable:           ['Table', 'Insert Table', {modal: '/carmenta/modals/table'}]
-      insertcharacter:       ['Character', 'Special Characters', {modal: '/carmenta/modals/character'}]
+      insertlink:            ['Link', 'Insert Link', {modal: '/carmenta/modals/link', regions: ['editable']}]
+      insertmedia:           ['Media', 'Insert Media (images and videos)', {modal: '/carmenta/modals/media', regions: ['editable']}]
+      inserttable:           ['Table', 'Insert Table', {modal: '/carmenta/modals/table', regions: ['editable']}]
+      insertcharacter:       ['Character', 'Special Characters', {modal: '/carmenta/modals/character', regions: ['editable']}]
       objectspanel:          ['Snippet', 'Snippet Panel', {panel: -> "/carmenta/panels/snippets"}]
       sep2:                  ' '
       historypanel:          ['History', 'Page Version History', {panel: -> "/carmenta/panels/history"}]

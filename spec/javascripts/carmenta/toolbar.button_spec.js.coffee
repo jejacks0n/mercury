@@ -8,6 +8,7 @@ describe "Carmenta.Toolbar.Button", ->
     Carmenta.displayRect = {0, 0, 500, 200}
     Carmenta.Toolbar.Button.contexts.foo = -> false
     @region = {
+      type: 'editable'
       element: $('<div class="carmenta-region">')
       currentElement: -> $('<div>')
     }
@@ -117,6 +118,18 @@ describe "Carmenta.Toolbar.Button", ->
         Carmenta.trigger('region:update', {region: @region})
         expect(contextSpy.callCount).toEqual(1)
         expect(@button.hasClass('active')).toEqual(true)
+
+    describe "custom event: region:focused", ->
+
+      it "disables if the region type isn't supported", ->
+        @button = new Carmenta.Toolbar.Button('foo', 'title', 'summary', {context: true, regions: ['editable']})
+        Carmenta.trigger('region:focused', {region: @region})
+
+    describe "custom event: region:blurred", ->
+
+      it "enables if the region type is supported", ->
+        @button = new Carmenta.Toolbar.Button('foo', 'title', 'summary', {context: true, regions: ['editable']})
+        Carmenta.trigger('region:blurred', {region: @region})
 
     describe "mousedown", ->
 

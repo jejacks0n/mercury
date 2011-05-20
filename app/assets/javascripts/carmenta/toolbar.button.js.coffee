@@ -79,6 +79,9 @@ class Carmenta.Toolbar.Button
     @element.mousedown (event) =>
       @element.addClass('active')
 
+    @element.mouseup (event) =>
+      @element.removeClass('active')
+
     @element.click (event) =>
       if @element.closest('.disabled').length then return
 

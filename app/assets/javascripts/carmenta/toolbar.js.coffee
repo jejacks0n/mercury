@@ -6,9 +6,11 @@ class Carmenta.Toolbar
 
 
   build: ->
-    @element = $('<div>', {class: 'carmenta-toolbar-container', style: 'width:10000px'}).appendTo($(@options.appendTo).get(0) ? 'body')
+    @element = $('<div>', {class: 'carmenta-toolbar-container', style: 'width:10000px'})
+    @element.appendTo($(@options.appendTo).get(0) ? 'body')
 
     for toolbarName, buttons of Carmenta.config.toolbars
+      continue if buttons._custom
       toolbar = $('<div>', {class: "carmenta-toolbar carmenta-#{toolbarName}-toolbar"}).appendTo(@element)
       container = $('<div>', {class: 'carmenta-toolbar-button-container'}).appendTo(toolbar)
 
@@ -25,6 +27,7 @@ class Carmenta.Toolbar
 
 
   buildButton: (name, options) ->
+    return $('<span>') if name == '_custom'
     switch $.type(options)
 
       when 'array' # button

@@ -6,7 +6,7 @@ describe "Carmenta.Toolbar.Button", ->
 
   beforeEach ->
     Carmenta.displayRect = {0, 0, 500, 200}
-    Carmenta.Toolbar.Button.contexts.foo = -> false
+    Carmenta.Toolbar.Button.contexts.foo = -> true
     @region = {
       type: 'editable'
       element: $('<div class="carmenta-region">')
@@ -69,12 +69,8 @@ describe "Carmenta.Toolbar.Button", ->
     it "builds buttons that understand context", ->
       @button = new Carmenta.Toolbar.Button('foo', 'title', 'summary', {context: true})
 
-      contextSpy = spyOn(Carmenta.Toolbar.Button.contexts, 'foo').andCallFake(-> true)
-
       expect(@button.hasClass('active')).toEqual(false)
-
       Carmenta.trigger('region:update', {region: @region})
-      expect(contextSpy.callCount).toEqual(1)
       expect(@button.hasClass('active')).toEqual(true)
 
     it "builds panel buttons (and assigns toggle)", ->
@@ -139,6 +135,15 @@ describe "Carmenta.Toolbar.Button", ->
         expect(@button.hasClass('active')).toEqual(false)
         jasmine.simulate.mousedown(@button.get(0))
         expect(@button.hasClass('active')).toEqual(true)
+
+    describe "mouseup", ->
+
+      it "removes the active state", ->
+        @button = new Carmenta.Toolbar.Button('foo', 'title')
+        @button.addClass('active')
+
+        jasmine.simulate.mouseup(@button.get(0))
+        expect(@button.hasClass('active')).toEqual(false)
 
     describe "click for various button types", ->
 

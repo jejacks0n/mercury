@@ -1,24 +1,33 @@
-class Carmenta.Regions.Snippetable.Toolbar
+class Carmenta.Regions.Snippetable.Toolbar extends Carmenta.Toolbar
 
   constructor: (@region, @document, @options = {}) ->
-    @build()
+    super(@options)
+
 
   build: ->
-    @element = $('<div>', {class: 'carmenta-toolbar carmenta-snippet-toolbar', style: 'display:none'})
+    @element = $('<div>', {class: 'carmenta-toolbar carmenta-snippetable-toolbar', style: 'display:none'})
     @element.appendTo($(@options.appendTo).get(0) ? 'body')
 
+    for buttonName, options of Carmenta.config.toolbars.snippetable
+      @buildButton(buttonName, options).appendTo(@element)
 
-  show: (snippet) ->
-    @position(snippet, !@visible)
+
+  bindEvents: ->
+    $(@document).scroll => @position() if @visible
+
+    @element.mousemove => clearInterval(@hideTimeout)
+    @element.mouseout => @hide()
+
+
+  show: (@snippet) ->
+    @position()
     @appear()
 
 
-  position: (snippet, instant = false) ->
-    height = @element.height()
-    width = @element.width()
-    offset = snippet.offset()
+  position: ->
+    offset = @snippet.offset()
 
-    top = offset.top + Carmenta.displayRect.top - $(@document).scrollTop() - height - 5
+    top = offset.top + Carmenta.displayRect.top - $(@document).scrollTop() - @height() - 5
     left = offset.left - $(@document).scrollLeft()
 
     @element.css {
@@ -26,17 +35,23 @@ class Carmenta.Regions.Snippetable.Toolbar
       left: left
     }
 
+
   appear: ->
+    clearInterval(@hideTimeout)
     return if @visible
     @visible = true
     @element.css({display: 'block', opacity: 0})
     @element.stop().animate({opacity: 1}, 200, 'easeInOutSine')
 
 
-  hide: ->
+  hide: (immediately = false) ->
     clearInterval(@hideTimeout)
-    @hideTimeout = setTimeout((=>
+    if immediately
+      @element.hide()
       @visible = false
-      @element.stop().animate({opacity: 0}, 300, 'easeInOutSine')
-    ), 500)
+    else
+      @hideTimeout = setTimeout((=>
+        @visible = false
+        @element.stop().animate({opacity: 0}, 300, 'easeInOutSine')
+      ), 500)
 

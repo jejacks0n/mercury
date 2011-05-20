@@ -18,6 +18,7 @@ class Carmenta.Regions.Snippetable
 
 
   build: ->
+    @element.css({minHeight: 20}) if @element.css('minHeight') == '0px'
 
 
   bindEvents: ->
@@ -26,21 +27,54 @@ class Carmenta.Regions.Snippetable
 
     Carmenta.bind 'unfocus:regions', (event) =>
       @element.removeClass('focus')
+      Carmenta.trigger('region:blurred', {region: @})
+
+    Carmenta.bind 'focus:window', (event) =>
+      @element.removeClass('focus')
+      Carmenta.trigger('region:blurred', {region: @})
+
+    Carmenta.bind 'focus:frame', =>
+      return if @previewing
+      return unless Carmenta.region == @
+      @focus()
 
     Carmenta.bind 'action', (event, options) =>
       return if @previewing
       return unless Carmenta.region == @
       @execCommand(options.action, options) if options.action
 
+    $(@document).keydown (event) =>
+      return if @previewing
+      return unless Carmenta.region == @
+      Carmenta.changes = true
+      switch event.keyCode
+
+        when 90 # undo / redo
+          return unless event.metaKey
+          event.preventDefault()
+          if event.shiftKey
+            @execCommand('redo')
+          else
+            @execCommand('undo')
+
+          return
+
+
     @element.mouseup =>
+      return if @previewing
       Carmenta.trigger('region:focused', {region: @})
       @focus()
 
     @element.mousemove (event) =>
-      snippet = $(event.target).closest('.carmenta-snippet')
-      @toolbar.show(snippet) if snippet.length
+      return if @previewing
+      return unless Carmenta.region == @
+      @snippet = $(event.target).closest('.carmenta-snippet')
+      if @snippet.length
+        @snippet.mouseout => @toolbar.hide()
+        @toolbar.show(@snippet)
 
     @element.mouseout (event) =>
+      @toolbar.hide()
 
 
   togglePreview: ->
@@ -68,17 +102,17 @@ class Carmenta.Regions.Snippetable
 
 
   pushHistory: ->
-    @history.push('frist!!!!') # !remove
     @history.push(@html())
 
 
-  execCommand: (action, options) ->
+  execCommand: (action, options = {}) ->
     @focus()
-    @pushHistory() unless action == 'undo' || action == 'redo'
-
     Carmenta.log('execCommand', action, options.value)
 
-    handler.call(@, options) if handler = Carmenta.Regions.Snippetable.actions[action]
+    if handler = Carmenta.Regions.Snippetable.actions[action]
+      Carmenta.changes = true
+      handler.call(@, options)
+      @pushHistory() unless action == 'undo' || action == 'redo'
 
 
 
@@ -87,3 +121,7 @@ Carmenta.Regions.Snippetable.actions =
   undo: -> @html(@history.undo())
 
   redo: -> @html(@history.redo())
+
+  removesnippet: ->
+    @snippet.remove() if @snippet
+    @toolbar.hide(true)

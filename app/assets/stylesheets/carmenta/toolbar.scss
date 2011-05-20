@@ -7,76 +7,76 @@
   top: 0;
   width: 100%;
   border-bottom: 1px solid #E2E1E2;
-  .carmenta-toolbar {
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    user-select: none;
-    background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0, rgb(198,198,198)), color-stop(1, rgb(226,225,226)));
-    background-image: -moz-linear-gradient(center bottom, rgb(198,198,198) 0%, rgb(226,225,226) 100%);
-    border-bottom: 1px solid #727272;
+}
+.carmenta-toolbar {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0, rgb(198,198,198)), color-stop(1, rgb(226,225,226)));
+  background-image: -moz-linear-gradient(center bottom, rgb(198,198,198) 0%, rgb(226,225,226) 100%);
+  border-bottom: 1px solid #727272;
+  cursor: default;
+}
+.carmenta-toolbar-button-container {
+  float: left;
+}
+.carmenta-toolbar-expander {
+  position: absolute;
+  display: none;
+  right: 0;
+  border-left: 1px solid #727272;
+}
+.carmenta-button,
+.carmenta-button-group,
+.carmenta-separator,
+.carmenta-line-separator {
+  display: block;
+  float: left;
+}
+.carmenta-separator,
+.carmenta-line-separator {
+  width: 1px;
+  border: 0;
+  margin: 0;
+}
+.carmenta-line-separator {
+  width: 1px;
+  background: #727272;
+}
+.carmenta-button em {
+  display: block;
+  font-style: normal;
+}
+.carmenta-expander {
+  padding: 5px 0;
+  border-radius: 4px;
+  -moz-border-radius: 4px;
+  .carmenta-expander-button {
     cursor: default;
-  }
-  .carmenta-toolbar-button-container {
-    float: left;
-  }
-  .carmenta-toolbar-expander {
-    position: absolute;
-    display: none;
-    right: 0;
-    border-left: 1px solid #727272;
-  }
-  .carmenta-button,
-  .carmenta-button-group,
-  .carmenta-separator,
-  .carmenta-line-separator {
-    display: block;
-    float: left;
-  }
-  .carmenta-separator,
-  .carmenta-line-separator {
-    width: 1px;
-    border: 0;
-    margin: 0;
-  }
-  .carmenta-line-separator {
-    width: 1px;
-    background: #727272;
-  }
-  .carmenta-button em {
-    display: block;
-    font-style: normal;
-  }
-  .carmenta-expander {
-    padding: 5px 0;
-    border-radius: 4px;
-    -moz-border-radius: 4px;
-    .carmenta-expander-button {
-      cursor: default;
-      white-space: nowrap;
-      padding: 0 20px 0 10px;
-      &:hover {
-        background: #CCC;
-      }
-      em {
-        display: inline-block;
-        float: left;
-        width: 20px;
-        height: 20px;
-        margin-right: 10px;
-        -webkit-background-size: 100% 100%;
-        -moz-background-size: 100% 100%;
-        background-size: 100% 100%;
-      }
-      span {
-        display: inline-block;
-        line-height: 20px;
-      }
+    white-space: nowrap;
+    padding: 0 20px 0 10px;
+    &:hover {
+      background: #CCC;
+    }
+    em {
+      display: inline-block;
+      float: left;
+      width: 20px;
+      height: 20px;
+      margin-right: 10px;
+      -webkit-background-size: 100% 100%;
+      -moz-background-size: 100% 100%;
+      background-size: 100% 100%;
+    }
+    span {
+      display: inline-block;
+      line-height: 20px;
     }
   }
-  .disabled .carmenta-button,
-  .carmenta-button.disabled {
-    opacity: 0.33;
-  }
+}
+.disabled .carmenta-button,
+.carmenta-button.disabled {
+  opacity: 0.33;
 }
 
 
@@ -268,4 +268,19 @@
   .carmenta-removeformatting-button.active    { background-position: -566px -18px }
   .carmenta-htmleditor-button                 { background-position: -590px 0 }
   .carmenta-htmleditor-button.active          { background-position: -590px -18px }
+}
+
+
+/* Custom Toolbars: Snippetable Toolbar
+ *----------------------------------------------------------------------------*/
+.carmenta-snippet-toolbar {
+  position: absolute;
+  top: 100px;
+  left: 200px;
+  width: 100px;
+  height: 25px;
+  border: 1px solid #727272;
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  box-shadow: 1px 1px 2px rgba(0, 0, 0, .5);
 }

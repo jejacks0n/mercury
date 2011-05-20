@@ -27,7 +27,7 @@ class CarmentaEditor
 
 
   initializeInterface: ->
-    @focusableElement = $('<input>', {type: 'text', style: 'position:absolute'}).appendTo('body')
+    @focusableElement = $('<input>', {type: 'text', style: 'position:absolute;opacity:0'}).appendTo('body')
     @iframe = $('<iframe>', {class: 'carmenta-iframe', seamless: 'true', frameborder: '0', src: 'about:blank'})
     @iframe.load => @initializeFrame()
     @iframe.attr('src', @iframeSrc())
@@ -80,7 +80,9 @@ class CarmentaEditor
     Carmenta.bind 'focus:frame', => @iframe.focus()
     Carmenta.bind 'focus:window', => setTimeout((=> @focusableElement.focus()), 10)
 
-    @document.mousedown -> Carmenta.trigger('hide:dialogs')
+    @document.mousedown ->
+      Carmenta.trigger('hide:dialogs')
+      Carmenta.trigger('unfocus:regions')
 
     $(window).resize => @resize()
     window.onbeforeunload = Carmenta.beforeUnload

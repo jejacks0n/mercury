@@ -128,7 +128,6 @@ Carmenta.modalHandlers =
             allowfullscreen: 'true'
           }
           value = $('<iframe>', attrs)
-          console.debug(value)
 
       Carmenta.trigger('action', {action: 'insertHTML', value: value})
       Carmenta.modal.hide()

@@ -13,6 +13,9 @@ class Carmenta.HistoryBuffer
     @stack.shift() if @stack.length > @maxLength
     @index = @stack.length - 1
 
+    #Carmenta.log(@stack.length, '------------------------------------------------------------')
+    #Carmenta.log(@stack)
+
 
   undo: ->
     return null if @index < 1
@@ -21,6 +24,6 @@ class Carmenta.HistoryBuffer
 
 
   redo: ->
-    return null if @index > @stack.length - 2
+    return null if @index >= @stack.length - 1
     @index += 1
     return @stack[@index]

@@ -43,11 +43,13 @@ Content outside the regions
   %style table { background: red; }
 
 .carmenta-region{ 'data-type' => 'snippetable' }
-  snippet content1
+  .carmenta-snippet snippet1
+  .carmenta-snippet snippet2
 
 .carmenta-region{ 'data-type' => 'snippetable' }
   .carmenta-snippet snippet1
   .carmenta-snippet snippet2
+  %iframe.carmenta-snippet{ :width => "560", :height => "349", :src => "http://www.youtube.com/embed/QGJuMBdaqIw?wmode=transparent", :frameborder => "0", :allowfullscreen => 'true' }
 
 = link_to '/something'
 
@@ -74,5 +76,5 @@ Content outside the regions
   .carmenta-region { outline: 1px dotted #09F }
   .carmenta-region:focus, .carmenta-region.focus { outline: 0; box-shadow: 0 0 10px #09F, 0 0 1px #045 }
   .carmenta-region:after { content: '\00a0'; display: block; visibility: hidden; clear: both; height: 0; overflow: hidden; }
-  .carmenta-snippet { border: 1px solid red; float: left;}
+  .carmenta-snippet { width:200px; height:100px; border: 1px solid red; }
   </style>

@@ -32,6 +32,9 @@ class Carmenta.Regions.Editable
     # make it editable
     @element.get(0).contentEditable = true
 
+    # make all snippets not editable
+    element.contentEditable = false for element in @element.find('.carmenta-snippet')
+
     # add the basic editor settings to the document (only once)
     unless @document.carmentaEditing
       @document.execCommand('styleWithCSS', false, false)

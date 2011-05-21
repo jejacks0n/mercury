@@ -66,11 +66,11 @@ class Carmenta.Regions.Snippetable
 
     @element.mouseup =>
       return if @previewing
-      Carmenta.trigger('region:focused', {region: @})
       @focus()
+      Carmenta.trigger('region:focused', {region: @})
 
     @element.mousemove (event) =>
-      return if @previewing || @sorting
+      return if @previewing
       return unless Carmenta.region == @
       @snippet = $(event.target).closest('.carmenta-snippet')
       if @snippet.length
@@ -92,12 +92,11 @@ class Carmenta.Regions.Snippetable
       revert: 100,
       tolerance: 'pointer',
       connectWith: '.carmenta-region[data-type=snippetable]',
-      start: =>
+      beforeStop: =>
         @toolbar.hide(true)
-        @sorting = true
+        return true
       stop: =>
-        @pushHistory()
-        @sorting = false
+        setTimeout((=> @pushHistory()), 100)
         return true
     }
 

@@ -70,11 +70,7 @@ class Carmenta.Toolbar.Button
           @element.addClass('disabled')
 
     Carmenta.bind 'region:blurred', (event, options) =>
-      if @handled.regions && options.region && options.region.type
-        if @handled.regions.indexOf(options.region.type) > -1
-          @element.addClass('disabled')
-        else
-          @element.removeClass('disabled')
+      @element.addClass('disabled') if @handled.regions
 
     @element.mousedown (event) =>
       @element.addClass('active')

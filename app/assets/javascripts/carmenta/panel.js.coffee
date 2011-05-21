@@ -81,7 +81,7 @@ class Carmenta.Panel extends Carmenta.Dialog
 
   makeDraggable: ->
     elementWidth = @element.width()
-    @draggable = @element.draggable {
+    @element.draggable {
       handle: 'h1',
       axis: 'x',
       opacity: 0.70

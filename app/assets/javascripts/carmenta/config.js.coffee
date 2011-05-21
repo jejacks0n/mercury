@@ -150,9 +150,9 @@ Carmenta.config =
         editsnippet:         ['Edit Snippet Settings', null]
         sep1:                ' '
         removesnippet:       ['Remove Snippet', null]
-        sep2:                '-'
-      movement:
-        dragsnippet:         ['Reorder Snippets by Dragging', null]
+      #  sep2:                '-'
+      #movement:
+      #  dragsnippet:         ['Reorder Snippets by Dragging', null]
 
 
   # Behaviors

@@ -27,7 +27,7 @@ class Carmenta.Regions.Snippetable.Toolbar extends Carmenta.Toolbar
   position: ->
     offset = @snippet.offset()
 
-    top = offset.top + Carmenta.displayRect.top - $(@document).scrollTop() - @height() - 5
+    top = offset.top + Carmenta.displayRect.top - $(@document).scrollTop() - @height() + 5
     left = offset.left - $(@document).scrollLeft()
 
     @element.css {

@@ -149,7 +149,7 @@ class Carmenta.Regions.Editable
 
 
   html: (value = null, includeMarker = false) ->
-    if value
+    if value != null
       @element.html(value)
       @selection().selectMarker(@element)
     else

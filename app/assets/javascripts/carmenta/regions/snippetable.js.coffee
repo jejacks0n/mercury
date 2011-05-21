@@ -15,6 +15,7 @@ class Carmenta.Regions.Snippetable
     @build()
     @bindEvents()
     @pushHistory()
+    @makeSortable()
 
 
   build: ->
@@ -26,12 +27,16 @@ class Carmenta.Regions.Snippetable
       @togglePreview() if options.mode == 'preview'
 
     Carmenta.bind 'unfocus:regions', (event) =>
-      @element.removeClass('focus')
-      Carmenta.trigger('region:blurred', {region: @})
+      if Carmenta.region == @
+        @element.removeClass('focus')
+        @element.sortable('destroy')
+        Carmenta.trigger('region:blurred', {region: @})
 
     Carmenta.bind 'focus:window', (event) =>
-      @element.removeClass('focus')
-      Carmenta.trigger('region:blurred', {region: @})
+      if Carmenta.region == @
+        @element.removeClass('focus')
+        @element.sortable('destroy')
+        Carmenta.trigger('region:blurred', {region: @})
 
     Carmenta.bind 'focus:frame', =>
       return if @previewing
@@ -59,14 +64,13 @@ class Carmenta.Regions.Snippetable
 
           return
 
-
     @element.mouseup =>
       return if @previewing
       Carmenta.trigger('region:focused', {region: @})
       @focus()
 
     @element.mousemove (event) =>
-      return if @previewing
+      return if @previewing || @sorting
       return unless Carmenta.region == @
       @snippet = $(event.target).closest('.carmenta-snippet')
       if @snippet.length
@@ -77,27 +81,56 @@ class Carmenta.Regions.Snippetable
       @toolbar.hide()
 
 
+  makeSortable: ->
+    @element.sortable('destroy').sortable {
+      document: @document,
+      #handle: @toolbar.element,
+      scroll: false, #scrolling is buggy
+      containment: 'parent',
+      items: '.carmenta-snippet',
+      opacity: .4,
+      revert: 100,
+      tolerance: 'pointer',
+      connectWith: '.carmenta-region[data-type=snippetable]',
+      start: =>
+        @toolbar.hide(true)
+        @sorting = true
+      stop: =>
+        @pushHistory()
+        @sorting = false
+        return true
+    }
+
+
   togglePreview: ->
     if @previewing
       @previewing = false
+      @makeSortable()
       @element.addClass('carmenta-region').removeClass('carmenta-region-preview')
       @element.focus() if Carmenta.region == @
     else
       @previewing = true
+      @element.sortable('destroy')
       @element.addClass('carmenta-region-preview').removeClass('carmenta-region')
       @element.blur()
       Carmenta.trigger('region:blurred', {region: @})
 
 
   html: (value = null) ->
-    if value
+    if value != null
       @element.html(value)
     else
-      return @element.html()
+      # sanitizes the html before we return it
+      container = $('<div>').appendTo(@document.createDocumentFragment())
+      container.html(@element.html().replace(/^\s+|\s+$/g, ''))
+      html = container.html()
+
+      return html
 
 
   focus: ->
     Carmenta.region = @
+    @makeSortable()
     @element.addClass('focus')
 
 

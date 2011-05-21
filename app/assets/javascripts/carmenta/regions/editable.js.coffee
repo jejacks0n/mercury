@@ -197,12 +197,16 @@ class Carmenta.Regions.Editable
 
   path: ->
     container = @selection().commonAncestor()
+    return [] unless container
     return if container.get(0) == @element.get(0) then [] else container.parentsUntil(@element)
 
 
   currentElement: ->
-    element = @selection().commonAncestor()
-    element = element.parent() if element.get(0).nodeType == 3
+    element = []
+    selection = @selection()
+    if selection.range
+      element = selection.commonAncestor()
+      element = element.parent() if element.get(0).nodeType == 3
     return element
 
 

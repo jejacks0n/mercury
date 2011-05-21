@@ -8,6 +8,7 @@ class Carmenta.Regions.Editable.Selection
 
 
   commonAncestor: (onlyTag = false) ->
+    return null unless @range
     ancestor = @range.commonAncestorContainer
     ancestor = ancestor.parentNode if ancestor.nodeType == 3 && onlyTag
     return $(ancestor)

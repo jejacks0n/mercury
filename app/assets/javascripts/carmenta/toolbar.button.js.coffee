@@ -55,7 +55,8 @@ class Carmenta.Toolbar.Button
   bindEvents: ->
     Carmenta.bind 'region:update', (event, options) =>
       if @handled.context && options.region && $.type(options.region.currentElement) == 'function'
-        if @handled.context.call(@, options.region.currentElement(), options.region.element)
+        element = options.region.currentElement()
+        if element.length && @handled.context.call(@, element, options.region.element)
           @element.addClass('active')
         else
           @element.removeClass('active')

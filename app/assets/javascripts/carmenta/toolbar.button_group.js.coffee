@@ -17,7 +17,8 @@ class Carmenta.Toolbar.ButtonGroup
       context = Carmenta.Toolbar.ButtonGroup.contexts[@name]
       if context
         if options.region && $.type(options.region.currentElement) == 'function'
-          if context.call(@, options.region.currentElement(), options.region.element)
+          element = options.region.currentElement()
+          if element.length && context.call(@, element, options.region.element)
             @element.removeClass('disabled')
           else
             @element.addClass('disabled')

@@ -1,0 +1,39 @@
+%form#mercury_media{ :style => 'width:600px' }
+
+  .mercury-modal-pane-container
+    .mercury-modal-pane
+      .legend Image
+      %fieldset
+        %p
+          %label{ :for => 'image_url' }
+            %input{ :name => 'media_type', :type => 'radio', :value => 'image_url', :checked => true }/
+            URL
+          %input#image_url.selectable{ :type => 'text', :value => 'http://' }/
+
+      .legend YouTube
+      %fieldset
+        %p
+          %label{ :for => 'youtube_url' }
+            %input{ :name => 'media_type', :type => 'radio', :value => 'youtube_url' }/
+            YouTube Share Url
+          %input#youtube_url.selectable{ :type => 'text', :value => '' }/
+
+      .legend Options
+      %fieldset
+        #image_url_options.media-options
+          %p
+            %label{ :for => 'image_alignment' } Alignment
+            %select#image_alignment{ :name => 'image_alignment' }
+              %option{ :value => '', :selected => true } None
+              %option{ :value => 'left' } Left
+              %option{ :value => 'right' } Right
+              %option{ :value => 'top' } Top
+              %option{ :value => 'middle' } Middle
+              %option{ :value => 'bottom' } Bottom
+              %option{ :value => 'absmiddle' } Absolute Middle
+              %option{ :value => 'absbottom' } Absolute Bottom
+        #youtube_url_options.media-options{ :style => 'display:none' }
+          No options available for youtube.
+
+  .mercury-modal-controls
+    %input{ :type => 'submit', :value => 'Insert Media' }

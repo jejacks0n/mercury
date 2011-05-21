@@ -1,0 +1,48 @@
+%form#mercury_link{ :style => 'width:600px' }
+
+  .mercury-modal-pane-container
+    .mercury-modal-pane
+      %fieldset#link_text_container
+        %label{ :for => 'link_text' } Link Content
+        %input#link_text{ :type => 'text' }/
+
+      .legend Standard Links
+      %fieldset
+        %p
+          %label{ :for => 'external_url' }
+            %input{ :name => 'link_type', :type => 'radio', :value => 'external_url', :checked => true }/
+            URL
+          %input#external_url.selectable{ :type => 'text', :value => 'http://' }/
+
+      .legend Bookmarks
+      %fieldset
+        %p
+          %label{ :for => 'existing_bookmark' }
+            %input{ :name => 'link_type', :type => 'radio', :value => 'existing_bookmark' }/
+            Existing Bookmarks
+          %select#existing_bookmark.selectable
+        %p
+          %label{ :for => 'new_bookmark' }
+            %input{ :name => 'link_type', :type => 'radio', :value => 'new_bookmark' }/
+            Bookmark
+          %input#new_bookmark.selectable{ :type => 'text', :value => '' }/
+
+      .legend Options
+      %fieldset
+        %p
+          %label{ :for => 'link_target' } Link Target
+          %select#link_target{ :name => 'link_target' }
+            %option{ :selected => 'selected', :value => '' } Self (the same window or tab)
+            %option{ :value => '_blank' } Blank (a new window or tab)
+            %option{ :value => '_top' } Top (removes any frames)
+            %option{ :value => 'popup' } Popup Window (javascript new window popup)
+        #popup_options.link-target-options{ :style => 'display:none' }
+          %p
+            %label{ :for => 'popup_width' } Popup Width
+            %input#popup_width{ :type => 'text', :value => '' }/
+          %p
+            %label{ :for => 'popup_height' } Popup Height
+            %input#popup_height{ :type => 'text', :value => '' }/
+
+  .mercury-modal-controls
+    %input{ :type => 'submit', :value => 'Insert Link' }

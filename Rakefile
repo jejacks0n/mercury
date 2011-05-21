@@ -4,4 +4,4 @@
 
 require File.expand_path('../config/application', __FILE__)
 
-Carmenta::Application.load_tasks
+Mercury::Application.load_tasks

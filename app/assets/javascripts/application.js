@@ -4,6 +4,6 @@
  *
  *= require_self
  *= require vendor
- *= require carmenta/carmenta_editor
+ *= require mercury/mercury_editor
  *= require_tree .
  *---------------------------------------------------------------------------*/

@@ -1,0 +1,12 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.mercury-iframe {
+  visibility: hidden;
+  width: 100%;
+  position: absolute;
+  top: 100px;
+}

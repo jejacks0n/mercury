@@ -1,6 +1,6 @@
 development:
   adapter: mysql2
-  database: carmenta_development
+  database: mercury_development
   user: root
   password:
   encoding: utf8
@@ -8,7 +8,7 @@ development:
 
 test: &test
   adapter: mysql2
-  database: carmenta_test
+  database: mercury_test
   user: root
   password:
   encoding: utf8
@@ -19,7 +19,7 @@ cucumber:
 
 production:
   adapter: mysql2
-  database: carmenta_production
+  database: mercury_production
   user: root
   password:
   encoding: utf8

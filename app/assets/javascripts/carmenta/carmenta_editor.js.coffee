@@ -80,9 +80,9 @@ class CarmentaEditor
     Carmenta.bind 'focus:frame', => @iframe.focus()
     Carmenta.bind 'focus:window', => setTimeout((=> @focusableElement.focus()), 10)
 
-    @document.mousedown ->
+    @document.mousedown (event) ->
       Carmenta.trigger('hide:dialogs')
-      Carmenta.trigger('unfocus:regions')
+      Carmenta.trigger('unfocus:regions') unless $(event.target).closest('.carmenta-region').get(0) == Carmenta.region.element.get(0)
 
     $(window).resize => @resize()
     window.onbeforeunload = Carmenta.beforeUnload

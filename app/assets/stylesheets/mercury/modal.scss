@@ -1,4 +1,5 @@
-/* Modal
+/*
+ * Modal
  *----------------------------------------------------------------------------*/
 .mercury-modal-overlay {
   position: absolute;
@@ -11,7 +12,6 @@
   display: none;
   background: rgba(0,0,0, .65);
 }
-
 .mercury-modal {
   position: absolute;
   z-index: 10050;
@@ -108,9 +108,8 @@
     -moz-box-sizing: border-box;
   }
 }
-
-
-/* Specific modals (eg. htmleditor)
+/*
+ * Specific Modals (eg. htmleditor)
  *----------------------------------------------------------------------------*/
 /* htmleditor */
 #mercury_htmleditor {
@@ -125,7 +124,7 @@
     margin-top: -2px;
   }
 }
-
+/* html sanitizer (when pasting from msword) */
 #mercury_sanitizer {
   .information {
     background: url(/assets/mercury/clippy.png) no-repeat top left;
@@ -139,7 +138,6 @@
     white-space: pre;
   }
 }
-
 /* insertcharacter */
 #mercury_insertcharacter {
   .character {

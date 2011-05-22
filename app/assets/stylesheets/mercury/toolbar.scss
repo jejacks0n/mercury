@@ -1,4 +1,5 @@
-/* Toolbar
+/*
+ * Toolbar
  *----------------------------------------------------------------------------*/
 .mercury-toolbar-container {
   user-select: none;
@@ -78,9 +79,8 @@
 .mercury-button.disabled {
   opacity: 0.33;
 }
-
-
-/* Toolbar: Primary Toolbar
+/*
+ * Toolbar: Primary Toolbar
  *----------------------------------------------------------------------------*/
 .mercury-primary-toolbar {
   position: relative;
@@ -156,9 +156,8 @@
 .mercury-expander-button[data-button=notespanel] em       { background-image: url(/assets/mercury/toolbar/primary/notespanel.png) }
 .mercury-primary-toolbar .mercury-todospanel-button em,
 .mercury-expander-button[data-button=todospanel] em       { background-image: url(/assets/mercury/toolbar/primary/todospanel.png) }
-
-
-/* Toolbar: Editable Region Toolbar
+/*
+ * Toolbar: Editable Region Toolbar
  *----------------------------------------------------------------------------*/
 .mercury-editable-toolbar {
   padding: 3px 13px 1px 10px;
@@ -269,9 +268,8 @@
   .mercury-htmleditor-button                 { background-position: -590px 0 }
   .mercury-htmleditor-button.active          { background-position: -590px -18px }
 }
-
-
-/* Toolbar: Snippetable Region Toolbar
+/*
+ * Toolbar: Snippetable Region Toolbar
  *----------------------------------------------------------------------------*/
 .mercury-snippetable-toolbar {
   position: absolute;

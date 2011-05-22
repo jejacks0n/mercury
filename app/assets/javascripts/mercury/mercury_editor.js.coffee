@@ -1,3 +1,17 @@
+# Mercury Editor is a Rails and Coffeescript based WYSIWYG editor.  Mercury
+# Editor utilizes the HTML 5 ContentEditable HTML 5 spec to allow editing
+# sections of a given page (instead of using iframes) and provides an editing
+# experience that's as realistic as possible.  By not using iframes for the
+# editable regions it allows CSS to behave naturally.
+#
+# Mercury Editor was written for the future, and doesn't attempt to support
+# legacy implementations of document editing.
+#
+# Currently supported browsers are
+#   - Firefox 4+
+#   - Chrome 10+
+#   - Safari 5+#= require_self
+#
 #= require_self
 #= require ./utility
 #= require ./history_buffer

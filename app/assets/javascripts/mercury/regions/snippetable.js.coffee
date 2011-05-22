@@ -1,5 +1,6 @@
 #= require_self
 #= require ./snippetable.snippet
+#= require ./snippetable.toolbar
 
 class Mercury.Regions.Snippetable
   type = 'snippetable'
@@ -84,7 +85,6 @@ class Mercury.Regions.Snippetable
   makeSortable: ->
     @element.sortable('destroy').sortable {
       document: @document,
-      #handle: @toolbar.element,
       scroll: false, #scrolling is buggy
       containment: 'parent',
       items: '.mercury-snippet',

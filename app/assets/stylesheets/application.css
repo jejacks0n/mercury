@@ -1,7 +1,4 @@
-/*
- * This file includes other files.  To add styles please create new .css or
- * .scss files and require them here, do not add styles to this file.
- *
+/* Application CSS
+ *= require mercury/mercury_editor
  *= require_self
- *= require_tree .
  */

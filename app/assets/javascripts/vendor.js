@@ -1,4 +1,5 @@
-/*
+/* Vendor Javascript
+ *= require_self
  *= require jquery-1.6
  *= require jquery-ui-1.8.13.custom.min
  *= require jquery-ui-1.8.13.sortable.custom

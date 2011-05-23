@@ -43,7 +43,7 @@ $.widget("ui.sortable", $.ui.mouse, {
 	_create: function() {
 
 		var o = this.options;
-    this.document = o.document
+    this.document = o.document;
 
 		this.containerCache = {};
 		this.element.addClass("ui-sortable");

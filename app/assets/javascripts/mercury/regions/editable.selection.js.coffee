@@ -28,14 +28,26 @@ class Mercury.Regions.Editable.Selection
     return @range.cloneContents()
 
 
-#  forceSelection: (element) ->
-#    range = @context.createRange()
-#    element.lastChild.textContent = '\00' if element.lastChild && element.lastChild.textContent.replace(/^[\s+|\n+]|[\s+|\n+]$/, '') == ''
-#
-#    range.setStartBefore(element.lastChild)
-#    range.setEndBefore(element.lastChild)
-#
-#    @selection.addRange(range)
+  forceSelection: (element) ->
+    return unless $.browser.webkit
+    range = @context.createRange()
+
+    if @range
+      if @commonAncestor(true).closest('.mercury-snippet')
+         lastChild = @context.createTextNode('\00')
+        element.appendChild(lastChild)
+    else
+      if element.lastChild && element.lastChild.nodeType == 3 && element.lastChild.textContent.replace(/^[\s+|\n+]|[\s+|\n+]$/, '') == ''
+        lastChild = element.lastChild
+        element.lastChild.textContent = '\00'
+      else
+        lastChild = @context.createTextNode('\00')
+        element.appendChild(lastChild)
+
+    if lastChild
+      range.setStartBefore(lastChild)
+      range.setEndBefore(lastChild)
+      @selection.addRange(range)
 
 
   selectMarker: (context) ->

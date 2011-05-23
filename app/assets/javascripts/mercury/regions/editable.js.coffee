@@ -57,13 +57,10 @@ class Mercury.Regions.Editable
       return unless Mercury.region == @
       @focus()
 
-#    Mercury.bind 'region:update', =>
-#      return if @previewing
-#      return unless Mercury.region == @
-#      setTimeout((=>
-#        console.debug(@selection().range)
-#        @selection().forceSelection(@element.get(0)) unless @selection().range
-#      ), 1)
+    Mercury.bind 'region:update', =>
+      return if @previewing
+      return unless Mercury.region == @
+      setTimeout((=> @selection().forceSelection(@element.get(0))), 1)
 
     Mercury.bind 'action', (event, options) =>
       return if @previewing
@@ -85,6 +82,7 @@ class Mercury.Regions.Editable
     @element.focus =>
       return if @previewing
       Mercury.region = @
+      setTimeout((=> @selection().forceSelection(@element.get(0))), 1)
       Mercury.trigger('region:focused', {region: @})
 
     @element.blur =>
@@ -115,7 +113,7 @@ class Mercury.Regions.Editable
           return
 
         when 13 # enter
-          if $.browser.webkit
+          if $.browser.webkit && @selection().commonAncestor().closest('li, ul', @element).length == 0
             event.preventDefault()
             @document.execCommand('insertlinebreak', false, null)
           else if @specialContainer
@@ -162,23 +160,55 @@ class Mercury.Regions.Editable
       Mercury.trigger('region:update', {region: @})
 
 
-  html: (value = null, includeMarker = false) ->
+  html: (value = null, includeMarker = false, filterSnippets = true) ->
     if value != null
-      @element.html(value)
+      # get the snippet contents out of the region
+      snippets = {}
+      for snippet, index in @element.find('.mercury-snippet')
+        snippets["[snippet#{index}]"] = $(snippet).html()
+
+      console.debug(snippets)
+
+      # sanitize the html before we insert it
+      container = $('<div>').appendTo(@document.createDocumentFragment())
+      container.html(value)
+
+      # fill in the snippet contents
+      for snippet in container.find('.mercury-snippet')
+        snippet.contentEditable = false
+        snippet = $(snippet)
+        content = snippets[snippet.html()]
+        snippet.html(content) if content
+
+      # set the html
+      @element.html(container.html())
+
+      # create a selection if there's markers
       @selection().selectMarker(@element)
-#      @selection().forceSelection(@element.get(0))
     else
+      # remove any meta tags
       @element.find('meta').remove()
+
+      # place markers for the selection
       if includeMarker
         selection = @selection()
         selection.placeMarker()
 
-      # sanitizes the html before we return it
+      # sanitize the html before we return it
       container = $('<div>').appendTo(@document.createDocumentFragment())
       container.html(@element.html().replace(/^\s+|\s+$/g, ''))
+
+      # replace snippet contents to be an identifier
+      if filterSnippets then for snippet, index in container.find('.mercury-snippet')
+        snippet = $(snippet)
+        snippet.attr({contenteditable: null}).html("[snippet#{index}]")
+
+      # get the html before removing the markers
       html = container.html()
 
+      # remove the markers from the dom
       selection.removeMarker() if includeMarker
+
       return html
 
 
@@ -195,6 +225,7 @@ class Mercury.Regions.Editable
       @element.focus() if Mercury.region == @
     else
       @previewing = true
+      @html(@html())
       @element.get(0).contentEditable = false
       @element.addClass('mercury-region-preview').removeClass('mercury-region')
       @element.css({overflow: @element.data('originalOverflow')})
@@ -204,6 +235,7 @@ class Mercury.Regions.Editable
 
   focus: ->
     @element.focus()
+    setTimeout((=> @selection().forceSelection(@element.get(0))), 1)
     Mercury.trigger('region:update', {region: @})
 
 
@@ -231,11 +263,14 @@ class Mercury.Regions.Editable
     # handle pasting from ms office etc
     html = @html()
     if html.indexOf('<!--StartFragment-->') > -1 || html.indexOf('="mso-') > -1 || html.indexOf('<o:') > -1 || html.indexOf('="Mso') > -1
+      # clean out all the tags from the pasted contents
       cleaned = prePasteHTML.singleDiff(@html()).sanitizeHTML()
       try
+        # try to undo and put the cleaned html where the selection was
         @document.execCommand('undo', false, null)
         @execCommand('insertHTML', {value: cleaned})
       catch error
+        # remove the pasted html and load up the cleaned contents into a modal
         @html(prePasteHTML)
         Mercury.modal '/mercury/modals/sanitizer', {
           title: 'HTML Sanitizer (Starring Clippy)',

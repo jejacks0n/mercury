@@ -29,11 +29,7 @@ class Mercury.Regions.Editable
     # mozilla: there's some weird behavior when the element isn't a div
     @specialContainer = $.browser.mozilla && @element.get(0).tagName != 'DIV'
 
-    # make it editable
-    @element.get(0).contentEditable = true
-
-    # make all snippets not editable
-    element.contentEditable = false for element in @element.find('.mercury-snippet')
+    @makeEditable()
 
     # add the basic editor settings to the document (only once)
     unless @document.mercuryEditing
@@ -44,6 +40,14 @@ class Mercury.Regions.Editable
       @document.mercuryEditing = true
 
 
+  makeEditable: ->
+    # make it editable
+    @element.get(0).contentEditable = true
+
+    # make all snippets not editable
+    element.contentEditable = false for element in @element.find('.mercury-snippet')
+
+
   bindEvents: ->
     Mercury.bind 'mode', (event, options) =>
       @togglePreview() if options.mode == 'preview'
@@ -52,6 +56,14 @@ class Mercury.Regions.Editable
       return if @previewing
       return unless Mercury.region == @
       @focus()
+
+#    Mercury.bind 'region:update', =>
+#      return if @previewing
+#      return unless Mercury.region == @
+#      setTimeout((=>
+#        console.debug(@selection().range)
+#        @selection().forceSelection(@element.get(0)) unless @selection().range
+#      ), 1)
 
     Mercury.bind 'action', (event, options) =>
       return if @previewing
@@ -98,7 +110,6 @@ class Mercury.Regions.Editable
           if event.shiftKey
             @execCommand('redo')
           else
-            @pushHistory()
             @execCommand('undo')
 
           return
@@ -155,6 +166,7 @@ class Mercury.Regions.Editable
     if value != null
       @element.html(value)
       @selection().selectMarker(@element)
+#      @selection().forceSelection(@element.get(0))
     else
       @element.find('meta').remove()
       if includeMarker
@@ -233,7 +245,7 @@ class Mercury.Regions.Editable
 
   execCommand: (action, options = {}) ->
     @element.focus()
-    @pushHistory() unless action == 'undo' || action == 'redo'
+    @pushHistory() unless action == 'redo'
 
     Mercury.log('execCommand', action, options.value)
 

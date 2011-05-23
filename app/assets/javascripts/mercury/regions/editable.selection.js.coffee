@@ -28,6 +28,16 @@ class Mercury.Regions.Editable.Selection
     return @range.cloneContents()
 
 
+#  forceSelection: (element) ->
+#    range = @context.createRange()
+#    element.lastChild.textContent = '\00' if element.lastChild && element.lastChild.textContent.replace(/^[\s+|\n+]|[\s+|\n+]$/, '') == ''
+#
+#    range.setStartBefore(element.lastChild)
+#    range.setEndBefore(element.lastChild)
+#
+#    @selection.addRange(range)
+
+
   selectMarker: (context) ->
     markers = context.find('em.mercury-marker')
     return unless markers.length

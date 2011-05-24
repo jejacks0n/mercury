@@ -1,24 +1,15 @@
 #= require_self
 #= require ./editable.selection
 
-class Mercury.Regions.Editable
+class Mercury.Regions.Editable extends Mercury.Region
   type = 'editable'
 
-  constructor: (@element, @options = {}) ->
-    Mercury.log('building editable', @element, @options)
-
-    @window = @options.window
-    @document = @window.document
-    @type = @element.data('type')
-    @history = new Mercury.HistoryBuffer()
-    @build()
-    @bindEvents()
-    @pushHistory()
+  constructor: (@element, @window, @options = {}) ->
+    @type = 'editable'
+    super
 
 
   build: ->
-    @element.addClass('mercury-region')
-
     # mozilla: set some initial content so everything works correctly
     @html('&nbsp;') if $.browser.mozilla && @html() == ''
 
@@ -29,7 +20,11 @@ class Mercury.Regions.Editable
     # mozilla: there's some weird behavior when the element isn't a div
     @specialContainer = $.browser.mozilla && @element.get(0).tagName != 'DIV'
 
-    @makeEditable()
+    # make it editable
+    @element.get(0).contentEditable = true
+
+    # make all snippets not editable
+    element.contentEditable = false for element in @element.find('.mercury-snippet')
 
     # add the basic editor settings to the document (only once)
     unless @document.mercuryEditing
@@ -40,32 +35,13 @@ class Mercury.Regions.Editable
       @document.mercuryEditing = true
 
 
-  makeEditable: ->
-    # make it editable
-    @element.get(0).contentEditable = true
-
-    # make all snippets not editable
-    element.contentEditable = false for element in @element.find('.mercury-snippet')
-
-
   bindEvents: ->
-    Mercury.bind 'mode', (event, options) =>
-      @togglePreview() if options.mode == 'preview'
-
-    Mercury.bind 'focus:frame', =>
-      return if @previewing
-      return unless Mercury.region == @
-      @focus()
+    super
 
     Mercury.bind 'region:update', =>
       return if @previewing
       return unless Mercury.region == @
       setTimeout((=> @selection().forceSelection(@element.get(0))), 1)
-
-    Mercury.bind 'action', (event, options) =>
-      return if @previewing
-      return unless Mercury.region == @
-      @execCommand(options.action, options) if options.action
 
     @element.bind 'paste', =>
       return if @previewing
@@ -166,7 +142,13 @@ class Mercury.Regions.Editable
       Mercury.trigger('region:update', {region: @})
 
 
-  html: (value = null, includeMarker = false, filterSnippets = true) ->
+  focus: ->
+    @element.focus()
+    setTimeout((=> @selection().forceSelection(@element.get(0))), 1)
+    Mercury.trigger('region:update', {region: @})
+
+
+  html: (value = null, filterSnippets = true, includeMarker = false) ->
     if value != null
       # get the snippet contents out of the region
       snippets = {}
@@ -218,31 +200,59 @@ class Mercury.Regions.Editable
       return html
 
 
-  selection: ->
-    return new Mercury.Regions.Editable.Selection(@window.getSelection(), @document)
-
-
   togglePreview: ->
     if @previewing
-      @previewing = false
       @element.get(0).contentEditable = true
-      @element.addClass('mercury-region').removeClass('mercury-region-preview')
       @element.css({overflow: 'auto'})
-      @element.focus() if Mercury.region == @
     else
-      @previewing = true
       @html(@html())
       @element.get(0).contentEditable = false
-      @element.addClass('mercury-region-preview').removeClass('mercury-region')
       @element.css({overflow: @element.data('originalOverflow')})
       @element.blur()
-      Mercury.trigger('region:blurred', {region: @})
+    super
 
 
-  focus: ->
-    @element.focus()
-    setTimeout((=> @selection().forceSelection(@element.get(0))), 1)
-    Mercury.trigger('region:update', {region: @})
+  execCommand: (action, options = {}) ->
+    super
+
+    # use a custom handler if there's one, otherwise use execCommand
+    if handler = Mercury.config.behaviors[action] || Mercury.Regions.Editable.actions[action]
+      handler.call(@, @selection(), options)
+    else
+      sibling = @element.get(0).previousSibling if action == 'indent'
+      options.value = $('<div>').html(options.value).html() if action == 'insertHTML' && options.value && options.value.get
+      try
+        @document.execCommand(action, false, options.value)
+      catch error
+        # mozilla: indenting when there's no br tag handles strangely
+        @element.prev().remove() if action == 'indent' && @element.prev() != sibling
+
+
+  pushHistory: (keyCode) ->
+    # when pressing return, delete or backspace it should push to the history
+    # all other times it should store if there's a 1 second pause
+    keyCodes = [13, 46, 8]
+    waitTime = 2.5
+    knownKeyCode = keyCodes.indexOf(keyCode) if keyCode
+
+    # clear any pushes to the history
+    clearTimeout(@historyTimeout)
+
+    # if the key code was return, delete, or backspace store now -- unless it was the same as last time
+    if knownKeyCode >= 0 && knownKeyCode != @lastKnownKeyCode # || !keyCode
+      @history.push(@html(null, false, true))
+    else if keyCode
+      # set a timeout for pushing to the history
+      @historyTimeout = setTimeout((=> @history.push(@html(null, false, true))), waitTime * 1000)
+    else
+      # push to the history immediately
+      @history.push(@html(null, false, true))
+
+    @lastKnownKeyCode = knownKeyCode
+
+
+  selection: ->
+    return new Mercury.Regions.Editable.Selection(@window.getSelection(), @document)
 
 
   path: ->
@@ -282,48 +292,6 @@ class Mercury.Regions.Editable
           title: 'HTML Sanitizer (Starring Clippy)',
           afterLoad: -> @element.find('textarea').val(cleaned.replace(/<br\/>/g, '\n'))
         }
-
-
-  execCommand: (action, options = {}) ->
-    @element.focus()
-    @pushHistory() unless action == 'redo'
-
-    Mercury.log('execCommand', action, options.value)
-
-    # use a custom handler if there's one, otherwise use execCommand
-    if handler = Mercury.config.behaviors[action] || Mercury.Regions.Editable.actions[action]
-      handler.call(@, @selection(), options)
-    else
-      sibling = @element.get(0).previousSibling if action == 'indent'
-      options.value = $('<div>').html(options.value).html() if action == 'insertHTML' && options.value && options.value.get
-      try
-        @document.execCommand(action, false, options.value)
-      catch error
-        # mozilla: indenting when there's no br tag handles strangely
-        @element.prev().remove() if action == 'indent' && @element.prev() != sibling
-
-
-  pushHistory: (keyCode) ->
-    # when pressing return, delete or backspace it should push to the history
-    # all other times it should store if there's a 1 second pause
-    keyCodes = [13, 46, 8]
-    waitTime = 2.5
-    knownKeyCode = keyCodes.indexOf(keyCode) if keyCode
-
-    # clear any pushes to the history
-    clearTimeout(@historyTimeout)
-
-    # if the key code was return, delete, or backspace store now -- unless it was the same as last time
-    if knownKeyCode >= 0 && knownKeyCode != @lastKnownKeyCode # || !keyCode
-      @history.push(@html(null, true))
-    else if keyCode
-      # set a timeout for pushing to the history
-      @historyTimeout = setTimeout((=> @history.push(@html(null, true))), waitTime * 1000)
-    else
-      # push to the history immediately
-      @history.push(@html(null, true))
-
-    @lastKnownKeyCode = knownKeyCode
 
 
 

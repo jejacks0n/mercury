@@ -26,6 +26,8 @@
 #= require ./toolbar.button
 #= require ./toolbar.button_group
 #= require ./toolbar.expander
+#= require ./snippet
+#= require ./region
 #= require_tree ./regions
 #= require_tree ./dialogs
 #= require_tree ./modals
@@ -35,7 +37,10 @@ class MercuryEditor
 
   constructor: (@options = {}) ->
     throw "MercuryEditor is unsupported in this client. Supported browsers are chrome 10+, firefix 4+, and safari 5+." unless Mercury.supported
+    throw "MercuryEditor can only be instantiated once" if Mercury.instance
 
+    Mercury.instance = @
+    @saveUrl = @options.saveUrl
     @regions = []
     @initializeInterface()
 
@@ -58,7 +63,7 @@ class MercuryEditor
       @document = $(@iframe.get(0).contentWindow.document)
 
       @bindEvents()
-      @regions = @initializeRegions()
+      @initializeRegions()
       @finalizeInterface()
 
       @iframe.css({visibility: 'visible'})
@@ -77,7 +82,7 @@ class MercuryEditor
   buildRegion: (region) ->
     try
       type = region.data('type').titleize()
-      @regions.push(new Mercury.Regions[type](region, {window: @iframe.get(0).contentWindow}))
+      @regions.push(new Mercury.Regions[type](region, @iframe.get(0).contentWindow))
     catch error
       alert(error) if Mercury.debug
       alert("Region type is malformed, no data-type provided, or \"#{type}\" is unknown.")
@@ -93,6 +98,9 @@ class MercuryEditor
     Mercury.bind 'initialize:frame', => setTimeout(@initializeFrame, 100)
     Mercury.bind 'focus:frame', => @iframe.focus()
     Mercury.bind 'focus:window', => setTimeout((=> @focusableElement.focus()), 10)
+
+    Mercury.bind 'action', (event, options) =>
+      @save() if options.action == 'save'
 
     @document.mousedown (event) ->
       Mercury.trigger('hide:dialogs')
@@ -121,6 +129,25 @@ class MercuryEditor
 
   iframeSrc: ->
     window.location.href.replace(/([http|https]:\/\/.[^\/]*)\/edit\/?(.*)/i, "$1/$2")
+
+
+  save: ->
+    url = @saveUrl ? @iframeSrc()
+    data = @serialize()
+    $.ajax url, {
+      type: 'POST'
+      data: {content: $.toJSON(data)}
+      success: =>
+        Mercury.changes = false
+      error: =>
+        alert("Mercury was unable to save to the url: #{url}")
+    }
+
+
+  serialize: ->
+    serialized = {}
+    serialized[region.name] = region.serialize() for region in @regions
+    return serialized
 
 
 

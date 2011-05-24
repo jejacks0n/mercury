@@ -1,21 +1,13 @@
 #= require_self
-#= require ./snippetable.snippet
 #= require ./snippetable.toolbar
 
-class Mercury.Regions.Snippetable
+class Mercury.Regions.Snippetable extends Mercury.Region
   type = 'snippetable'
 
-  constructor: (@element, @options = {}) ->
-    Mercury.log('building snippetable', @element)
-
-    @window = @options.window
-    @document = @window.document
-    @type = @element.data('type')
-    @history = new Mercury.HistoryBuffer()
+  constructor: (@element, @window, @options = {}) ->
+    @type = 'snippetable'
+    super
     @toolbar = new Mercury.Regions.Snippetable.Toolbar(@element, @document)
-    @build()
-    @bindEvents()
-    @pushHistory()
     @makeSortable()
 
 
@@ -24,30 +16,21 @@ class Mercury.Regions.Snippetable
 
 
   bindEvents: ->
-    Mercury.bind 'mode', (event, options) =>
-      @togglePreview() if options.mode == 'preview'
+    super
 
     Mercury.bind 'unfocus:regions', (event) =>
+      return if @previewing
       if Mercury.region == @
         @element.removeClass('focus')
         @element.sortable('destroy')
         Mercury.trigger('region:blurred', {region: @})
 
     Mercury.bind 'focus:window', (event) =>
+      return if @previewing
       if Mercury.region == @
         @element.removeClass('focus')
         @element.sortable('destroy')
         Mercury.trigger('region:blurred', {region: @})
-
-    Mercury.bind 'focus:frame', =>
-      return if @previewing
-      return unless Mercury.region == @
-      @focus()
-
-    Mercury.bind 'action', (event, options) =>
-      return if @previewing
-      return unless Mercury.region == @
-      @execCommand(options.action, options) if options.action
 
     $(@document).keydown (event) =>
       return if @previewing
@@ -82,6 +65,27 @@ class Mercury.Regions.Snippetable
       @toolbar.hide()
 
 
+  focus: ->
+    Mercury.region = @
+    @makeSortable()
+    @element.addClass('focus')
+
+
+  togglePreview: ->
+    if @previewing
+      @makeSortable()
+    else
+      @element.sortable('destroy')
+      @element.removeClass('focus')
+    super
+
+
+  execCommand: (action, options = {}) ->
+    super
+
+    handler.call(@, options) if handler = Mercury.Regions.Snippetable.actions[action]
+
+
   makeSortable: ->
     @element.sortable('destroy').sortable {
       document: @document,
@@ -99,52 +103,6 @@ class Mercury.Regions.Snippetable
         setTimeout((=> @pushHistory()), 100)
         return true
     }
-
-
-  togglePreview: ->
-    if @previewing
-      @previewing = false
-      @makeSortable()
-      @element.addClass('mercury-region').removeClass('mercury-region-preview')
-      @element.focus() if Mercury.region == @
-    else
-      @previewing = true
-      @element.sortable('destroy')
-      @element.addClass('mercury-region-preview').removeClass('mercury-region')
-      @element.blur()
-      Mercury.trigger('region:blurred', {region: @})
-
-
-  html: (value = null) ->
-    if value != null
-      @element.html(value)
-    else
-      # sanitizes the html before we return it
-      container = $('<div>').appendTo(@document.createDocumentFragment())
-      container.html(@element.html().replace(/^\s+|\s+$/g, ''))
-      html = container.html()
-
-      return html
-
-
-  focus: ->
-    Mercury.region = @
-    @makeSortable()
-    @element.addClass('focus')
-
-
-  pushHistory: ->
-    @history.push(@html())
-
-
-  execCommand: (action, options = {}) ->
-    @focus()
-    Mercury.log('execCommand', action, options.value)
-
-    if handler = Mercury.Regions.Snippetable.actions[action]
-      Mercury.changes = true
-      handler.call(@, options)
-      @pushHistory() unless action == 'undo' || action == 'redo'
 
 
 

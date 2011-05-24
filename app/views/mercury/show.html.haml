@@ -1,6 +1,6 @@
 Content outside the regions
 
-.mercury-region{ 'data-type' => 'editable' }
+#primary.mercury-region{ 'data-type' => 'editable' }
   123
   %meta{}/
   editable content
@@ -29,10 +29,10 @@ Content outside the regions
 
   %iframe{ :width => "560", :height => "349", :src => "http://www.youtube.com/embed/QGJuMBdaqIw?wmode=transparent", :frameborder => "0", :allowfullscreen => 'true' }
 
-.mercury-region{ 'data-type' => 'editable' }
+#region2.mercury-region{ 'data-type' => 'editable' }
   .mercury-snippet snippet1
 
-.mercury-region{ 'data-type' => 'editable', :style => 'width:200px;height:90px;' }
+#region3.mercury-region{ 'data-type' => 'editable', :style => 'width:200px;height:90px;' }
   %meta{}/
   editable contentaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
   = link_to '/something_else'
@@ -47,11 +47,11 @@ Content outside the regions
   %p this is a <span style="text-decoration:overline">pa<u>rag</u>raph</span>
   %style table { background: red; }
 
-.mercury-region{ 'data-type' => 'snippetable' }
+#snippet_region1.mercury-region{ 'data-type' => 'snippetable' }
   .mercury-snippet snippet1
   .mercury-snippet snippet2
 
-.mercury-region{ 'data-type' => 'snippetable' }
+#snippet_region2.mercury-region{ 'data-type' => 'snippetable' }
   .mercury-snippet snippet1
   .mercury-snippet snippet2
   %iframe.mercury-snippet{ :width => "560", :height => "349", :src => "http://www.youtube.com/embed/QGJuMBdaqIw?wmode=transparent", :frameborder => "0", :allowfullscreen => 'true' }

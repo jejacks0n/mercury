@@ -1,6 +1,7 @@
 Content outside the regions
 
 .mercury-region{ 'data-type' => 'editable' }
+  123
   %meta{}/
   editable content
   = link_to 'l<span>in</span>k'.html_safe, '/something_else'
@@ -27,6 +28,9 @@ Content outside the regions
   more content here
 
   %iframe{ :width => "560", :height => "349", :src => "http://www.youtube.com/embed/QGJuMBdaqIw?wmode=transparent", :frameborder => "0", :allowfullscreen => 'true' }
+
+.mercury-region{ 'data-type' => 'editable' }
+  .mercury-snippet snippet1
 
 .mercury-region{ 'data-type' => 'editable', :style => 'width:200px;height:90px;' }
   %meta{}/

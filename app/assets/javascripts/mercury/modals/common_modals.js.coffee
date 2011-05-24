@@ -107,6 +107,15 @@ Mercury.modalHandlers =
       @element.find("##{element.attr('id')}_options").show()
       @resize(true)
 
+    # get the selection and initialize its information into the form
+    if Mercury.region && Mercury.region.selection
+      selection = Mercury.region.selection()
+
+      # if we're editing an image prefill the information
+      if image = selection.is('img')
+        @element.find('#image_url').val(image.attr('src'))
+        @element.find('#image_alignment').val(image.attr('align'))
+
     # build the image or youtube embed on form submission
     @element.find('form').submit (event) =>
       event.preventDefault()

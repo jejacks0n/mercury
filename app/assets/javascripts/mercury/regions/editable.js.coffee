@@ -92,6 +92,12 @@ class Mercury.Regions.Editable
     @element.click (event) =>
       $(event.target).closest('a').attr('target', '_top') if @previewing
 
+    @element.dblclick (event) =>
+      return if @previewing
+      if image = $(event.target).closest('img')
+        @selection().selectNode(image.get(0), true)
+        Mercury.trigger('button', {action: 'insertmedia'})
+
     @element.mouseup =>
       return if @previewing
       @pushHistory()
@@ -167,8 +173,6 @@ class Mercury.Regions.Editable
       for snippet, index in @element.find('.mercury-snippet')
         snippets["[snippet#{index}]"] = $(snippet).html()
 
-      console.debug(snippets)
-
       # sanitize the html before we insert it
       container = $('<div>').appendTo(@document.createDocumentFragment())
       container.html(value)
@@ -178,7 +182,9 @@ class Mercury.Regions.Editable
         snippet.contentEditable = false
         snippet = $(snippet)
         content = snippets[snippet.html()]
-        snippet.html(content) if content
+        if content
+          delete(snippets[snippet.html()])
+          snippet.html(content) if content
 
       # set the html
       @element.html(container.html())

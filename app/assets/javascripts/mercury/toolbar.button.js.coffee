@@ -53,6 +53,9 @@ class Mercury.Toolbar.Button
 
 
   bindEvents: ->
+    Mercury.bind 'button', (event, options) =>
+      @element.click() if options.action == @name
+
     Mercury.bind 'region:update', (event, options) =>
       if @handled.context && options.region && $.type(options.region.currentElement) == 'function'
         element = options.region.currentElement()

@@ -28,6 +28,12 @@ class Mercury.Regions.Editable.Selection
     return @range.cloneContents()
 
 
+  is: (elementType) ->
+    content = @content()
+    return $(content.firstChild) if content.childNodes.length == 1 && $(content.firstChild).is(elementType)
+    return false
+
+
   forceSelection: (element) ->
     return unless $.browser.webkit
     range = @context.createRange()
@@ -108,8 +114,9 @@ class Mercury.Regions.Editable.Selection
     @selection.addRange(@range)
 
 
-  selectNode: (node) ->
+  selectNode: (node, removeExisting = false) ->
     @range.selectNode(node)
+    @selection.removeAllRanges() if removeExisting
     @selection.addRange(@range)
 
 

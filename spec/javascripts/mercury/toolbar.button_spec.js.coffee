@@ -17,6 +17,7 @@ describe "Mercury.Toolbar.Button", ->
     @button = null
     delete(@button)
     $(document).unbind('mercury:region:update')
+    $(document).unbind('mercury:button')
 
   describe "constructor", ->
 
@@ -102,6 +103,15 @@ describe "Mercury.Toolbar.Button", ->
 
 
   describe "observed events", ->
+
+    describe "custom event: button", ->
+
+      it "calls click on the button itself", ->
+        @button = new Mercury.Toolbar.Button('foo', 'title', 'summary', {context: true})
+        spy = spyOn(@button, 'click').andCallFake(=>)
+
+        Mercury.trigger('button', {action: 'foo'})
+        expect(spy.callCount).toEqual(1)
 
     describe "custom event: region:update", ->
 

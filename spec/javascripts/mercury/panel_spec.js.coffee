@@ -19,7 +19,9 @@ describe "Mercury.Panel", ->
     it "builds an element", ->
       @panel = new Mercury.Panel('/evergreen/resources/panel.html', 'foo', {appendTo: '#test', title: 'foo panel'})
       html = $('<div>').html(@panel.element).html()
-      expect(html).toEqual('<div class="mercury-panel loading" style="display:none;"><h1>foo panel</h1><div class="mercury-panel-pane"></div></div>')
+      expect(html).toContain('class="mercury-panel loading"')
+      expect(html).toContain('style="display:none;"')
+      expect(html).toContain('<h1>foo panel</h1><div class="mercury-panel-pane"></div>')
 
     it "appends to any element", ->
       @panel = new Mercury.Panel('/evergreen/resources/panel.html', 'foo', {appendTo: '#panel_container', title: 'foo panel'})
@@ -127,7 +129,11 @@ describe "Mercury.Panel", ->
 
     it "sets the element html to be the data passed to it", ->
       @panel.loadContent('hello world!')
-      expect(@panel.element.html()).toEqual('<h1>foo panel</h1><div class="mercury-panel-pane" style="visibility: hidden; ">hello world!</div>')
+      html = @panel.element.html()
+      expect(html).toContain('<h1>foo panel</h1>')
+      expect(html).toContain('class="mercury-panel-pane"')
+      expect(html).toContain('style="visibility: hidden;"')
+      expect(html).toContain('hello world')
 
 
   describe "#makesDraggable", ->

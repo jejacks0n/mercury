@@ -47,9 +47,10 @@ describe "Mercury.Dialog", ->
       @preloadSpy = spyOn(Mercury.Dialog.prototype, 'preload').andCallFake(=>)
 
     it "builds an element", ->
-      @dialog = new Mercury.Dialog('/evergreen/responses/blank.html', 'foo')
+      @dialog = new Mercury.Dialog('/evergreen/responses/blank.html', 'foo', {appendTo: '#test'})
       html = $('<div>').html(@dialog.element).html()
-      expect(html).toEqual('<div class="mercury-dialog mercury-foo-dialog loading" style="display:none"></div>', {appendTo: '#test'})
+      expect(html).toContain('class="mercury-dialog mercury-foo-dialog loading"')
+      expect(html).toContain('style="display:none"')
 
     it "appends to any element", ->
       @dialog = new Mercury.Dialog('/evergreen/responses/blank.html', 'foo', {appendTo: '#dialog_container'})

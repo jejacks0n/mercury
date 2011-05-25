@@ -4,6 +4,11 @@ describe "Mercury.Toolbar", ->
 
   template 'mercury/toolbar.html'
 
+  beforeEach ->
+    ajaxSpy = spyOn($, 'ajax').andCallFake (url, options) =>
+      options.success('data') if options.success
+
+
   afterEach ->
     @toolbar = null
     delete(@toolbar)
@@ -76,11 +81,16 @@ describe "Mercury.Toolbar", ->
 
     it "builds buttons", ->
       html = $('<div>').html(@toolbar.buildButton('foobutton', ['title', 'summary', {}])).html()
-      expect(html).toEqual('<div title="summary" class="mercury-button mercury-foobutton-button"><em>title</em></div>')
+      expect(html).toContain('title="summary"')
+      expect(html).toContain('class="mercury-button mercury-foobutton-button"')
+      expect(html).toContain('<em>title</em>')
 
     it "builds button groups", ->
       html = $('<div>').html(@toolbar.buildButton('foogroup', {foobutton: ['title', 'summary', {}]})).html()
-      expect(html).toEqual('<div class="mercury-button-group mercury-foogroup-group"><div title="summary" class="mercury-button mercury-foobutton-button"><em>title</em></div></div>')
+      expect(html).toContain('class="mercury-button-group mercury-foogroup-group"')
+      expect(html).toContain('title="summary"')
+      expect(html).toContain('class="mercury-button mercury-foobutton-button"')
+      expect(html).toContain('<em>title</em>')
 
     it "builds separators", ->
       html = $('<div>').html(@toolbar.buildButton('foosep1', ' ')).html()

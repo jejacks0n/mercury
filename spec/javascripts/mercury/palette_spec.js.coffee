@@ -16,7 +16,8 @@ describe "Mercury.Palette", ->
     it "builds an element", ->
       @palette = new Mercury.Palette('/evergreen/responses/blank.html', 'foo', {appendTo: '#test', for: $('#button')})
       html = $('<div>').html(@palette.element).html()
-      expect(html).toEqual('<div class="mercury-palette mercury-foo-palette loading" style="display:none"></div>')
+      expect(html).toContain('class="mercury-palette mercury-foo-palette loading"')
+      expect(html).toContain('style="display:none"')
 
     it "appends to any element", ->
       @palette = new Mercury.Palette('/evergreen/responses/blank.html', 'foo', {appendTo: '#palette_container', for: $('#button')})

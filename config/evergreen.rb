@@ -1,3 +1,5 @@
+require ::File.expand_path('../application',  __FILE__)
+
 Evergreen.configure do |config|
 end
 
@@ -9,11 +11,28 @@ module Evergreen
     def application_with_additions(suite)
       app = application_without_additions(suite)
 
+      app.map "/evergreen/responses" do
+        use Rack::Static, :urls => ["/"], :root => File.join(suite.root, '/spec/javascripts/responses')
+        run lambda { |env| [404, {}, "No such file"]}
+      end
+
       app.map "/responses" do
         use Rack::Static, :urls => ["/"], :root => File.join(suite.root, '/spec/javascripts/responses')
         run lambda { |env| [404, {}, "No such file"]}
       end
 
+      app.map "/assets" do
+        assets = Rails.application.config.assets
+        paths = %W{app/assets/javascripts lib/assets/javascripts vendor/assets/javascripts}.map{ |p| File.join(suite.root, p) }
+        if assets.enabled
+          require 'sprockets'
+          sprockets = Sprockets::Environment.new(suite.root)
+          sprockets.static_root = File.join(suite.root, 'public', assets.prefix)
+          sprockets.paths.concat paths
+          sprockets.js_compressor = nil
+          run sprockets
+        end
+      end
       app
     end
 

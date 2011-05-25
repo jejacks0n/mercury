@@ -2,6 +2,7 @@ class Mercury.Region
   type = 'region'
 
   constructor: (@element, @window, @options = {}) ->
+    @type = 'unknown' unless @type
     Mercury.log("building #{@type}", @element, @options)
 
     @document = @window.document
@@ -13,6 +14,9 @@ class Mercury.Region
 
 
   build: ->
+
+
+  focus: ->
 
 
   bindEvents: ->
@@ -28,9 +32,6 @@ class Mercury.Region
       return if @previewing
       return unless Mercury.region == @
       @execCommand(options.action, options) if options.action
-
-
-  focus: ->
 
 
   html: (value = null, filterSnippets = false) ->

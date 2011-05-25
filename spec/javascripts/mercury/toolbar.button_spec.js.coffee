@@ -24,12 +24,16 @@ describe "Mercury.Toolbar.Button", ->
     it "expects name and title values", ->
       @button = new Mercury.Toolbar.Button('foo', 'title')
       html = $('<div>').html(@button).html()
-      expect(html).toEqual('<div title="title" class="mercury-button mercury-foo-button"><em>title</em></div>')
+      expect(html).toContain('title="title"')
+      expect(html).toContain('class="mercury-button mercury-foo-button"')
+      expect(html).toContain('<em>title</em>')
 
     it "accepts summary, types and options", ->
       @button = new Mercury.Toolbar.Button('foo', 'title', 'summary', {palette: '/nothing'}, {appendDialogsTo: $('#test')})
       html = $('<div>').html(@button).html()
-      expect(html).toEqual('<div title="summary" class="mercury-button mercury-foo-button mercury-button-palette"><em>title</em></div>')
+      expect(html).toContain('title="summary"')
+      expect(html).toContain('class="mercury-button mercury-foo-button mercury-button-palette"')
+      expect(html).toContain('<em>title</em>')
 
     it "calls build", ->
       spy = spyOn(Mercury.Toolbar.Button.prototype, 'build').andCallFake(=>)
@@ -250,7 +254,10 @@ describe "Mercury.Toolbar.Button.contexts", ->
     expect(@element.css('background-color')).toEqual('rgb(255, 0, 0)')
 
     @contexts.backcolor.call(@, $('#context_none'), @region)
-    expect(@element.css('background-color')).toEqual('rgba(0, 0, 0, 0)')
+    if $.browser.mozilla
+      expect(@element.css('background-color')).toEqual('transparent')
+    else
+      expect(@element.css('background-color')).toEqual('rgba(0, 0, 0, 0)')
 
   it "handles foreground color", ->
     @contexts.forecolor.call(@, $('#context_forecolor'), @region)

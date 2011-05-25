@@ -19,7 +19,8 @@ describe "Mercury.Toolbar.Expander", ->
 
     it "expects a name, and options", ->
       html = $('<div>').html(@expander).html()
-      expect(html).toEqual('<div class="mercury-palette mercury-expander mercury-foo-expander" style="display: none; "></div>')
+      expect(html).toContain('class="mercury-palette mercury-expander mercury-foo-expander"')
+      expect(html).toMatch(/style="display:\s?none/)
       expect($('#test .mercury-toolbar-expander').length).toEqual(1)
 
 
@@ -34,7 +35,8 @@ describe "Mercury.Toolbar.Expander", ->
 
     it "builds an element", ->
       html = $('<div>').html(@expander).html()
-      expect(html).toEqual('<div class="mercury-palette mercury-expander mercury-foo-expander" style="display:none"></div>')
+      expect(html).toContain('class="mercury-palette mercury-expander mercury-foo-expander"')
+      expect(html).toMatch(/style="display:\s?none/)
 
     it "builds a trigger button", ->
       expect($('#test .mercury-toolbar-expander').length).toEqual(1)

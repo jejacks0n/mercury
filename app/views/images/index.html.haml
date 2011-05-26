@@ -1,0 +1,8 @@
+%h1 Listing images
+
+- @images.each do |image|
+  = image_tag image.image.url(:thumb)
+
+%br
+
+= link_to 'New Image', new_image_path

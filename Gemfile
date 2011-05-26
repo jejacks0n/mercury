@@ -9,10 +9,7 @@ gem 'uglifier'
 gem 'haml'
 gem 'haml-rails'
 
-gem "redis"
-gem 'eventmachine', :git => 'git://github.com/eventmachine/eventmachine.git'
-gem "em-hiredis"
-gem "em-websocket"
+gem 'paperclip', :git => 'git://github.com/thoughtbot/paperclip.git'
 
 group :development do
 end

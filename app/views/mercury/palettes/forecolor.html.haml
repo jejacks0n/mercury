@@ -1,22 +1,3 @@
--#<script type="text/javascript">
--#  window['midas_setup_backcolor'] = function() {
--#    var lastPicked = $('midas_backcolor_last_picked');
--#    $('midas_backcolor_selector').select('div').each(function(div) {
--#      Event.observe(div, 'click', function(event) {
--#        event.stop();
--#
--#        var color = div.getStyle('background-color');
--#        if (color == 'transparent' || color == '') return;
--#
--#        lastPicked.setStyle('background-color:' + color);
--#
--#        this.button.setStyle('background-color:' + color);
--#        this.execute('backcolor', {value: color.toHex()}, event);
--#      }.bind(this));
--#    }.bind(this));
--#  }
--#</script>
-
 .mercury-color-picker
 	.picker{ :style => "background:#FFFFFF" }
 	.picker{ :style => "background:#FFCCCC" }

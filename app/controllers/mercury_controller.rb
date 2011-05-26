@@ -6,7 +6,7 @@ class MercuryController < ActionController::Base
   end
 
   def show
-
+    # TODO: this should eventually go away, and is only here to simplify
   end
 
   def resource

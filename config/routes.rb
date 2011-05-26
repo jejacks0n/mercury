@@ -1,5 +1,4 @@
 Mercury::Application.routes.draw do
-  resources :images
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
@@ -57,14 +56,12 @@ Mercury::Application.routes.draw do
   # This is a legacy wild controller route that's not recommended for RESTful applications.
   # Note: This route will make all actions in every controller accessible via GET requests.
 
+  resources :images
+
   root :to => 'mercury#show'
   match '/edit(/*requested_uri)' => "mercury#edit", :as => :edit
   namespace :mercury do
     match ':type/:resource' => "mercury#resource"
   end
-
-
-#  match '(/*requested_uri)' => "mercury#show"
-
 
 end

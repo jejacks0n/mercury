@@ -1,0 +1,109 @@
+/*
+ * Uploader
+ *----------------------------------------------------------------------------*/
+.mercury-uploader-overlay {
+  position: absolute;
+  z-index: 10040;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: .95;
+  /*display: none;*/
+  background: rgba(0,0,0, .65);
+}
+.mercury-uploader {
+  position: absolute;
+  z-index: 10050;
+  top: 300px;
+  left: 400px;
+  width: 500px;
+  height: 150px;
+  overflow: hidden;
+  padding: 15px;
+  background: rgba(0,0,0, .70);
+  border-radius: 10px;
+  -moz-border-radius: 10px;
+  font: normal normal normal 12px/normal Helvetica, Tahoma, Arial, sans-serif;
+  color: #CCC;
+  .mercury-uploader-preview {
+    float: left;
+    width: 150px;
+    height: 150px;
+    border: 1px solid #CCC;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    b {
+      display: table-cell;
+      width: 150px;
+      height: 150px;
+      text-align: center;
+      vertical-align: middle;
+    }
+    img {
+      margin: 5px;
+      max-width: 140px;
+      max-height: 140px;
+    }
+  }
+  .mercury-uploader-details {
+    width: 333px;
+    overflow: hidden;
+    float: left;
+    padding-left: 15px;
+    span {
+      color: #F00;
+    }
+  }
+  .mercury-uploader-progress {
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+    width: 333px;
+    div.mercury-uploader-indicator {
+      width: 100%;
+      height: 30px;
+      margin: 5px 0 0;
+      position: relative;
+      background-color: #BABABA;
+      border-radius: 35px;
+      -moz-border-radius: 35px;
+      background: -webkit-gradient(linear, left bottom, left top, color-stop(0, #C7C7C7), color-stop(1, #B0B0B0));
+      background: -moz-linear-gradient(#B0B0B0 0%, #C7C7C7 100%);
+      -webkit-box-shadow: inset 0px 1px 2px 0px rgba(0,0,0, 0.5), 0px 1px 0px 0px rgba(255,255,255, 0.3);
+      -moz-box-shadow: inset 0px 1px 2px 0px rgba(0,0,0, 0.5), 0px 1px 0px 0px rgba(255,255,255, 0.3);
+      box-shadow: inset 0px 1px 2px 0px rgba(0,0,0, 0.5), 0px 1px 0px 0px rgba(255,255,255, 0.3);
+      div {
+        min-width: 28px;
+        position: relative;
+        overflow: hidden;
+        height: 28px;
+        border-radius: 35px;
+        width: 0;
+        -moz-border-radius: 35px;
+        -webkit-animation: animate-stripes 2s linear infinite;
+        -webkit-background-size: 44px 44px;
+        background: -webkit-gradient(linear, 0 0, 44 44, color-stop(0.00, rgba(255,255,255, 0.17)), color-stop(0.25, rgba(255,255,255, 0.17)), color-stop(0.26, rgba(255,255,255, 0)), color-stop(0.50, rgba(255,255,255, 0)), color-stop(0.51, rgba(255,255,255, 0.17)), color-stop(0.75, rgba(255,255,255, 0.17)), color-stop(0.76, rgba(255,255,255, 0)), color-stop(1.00, rgba(255,255,255, 0))),
+                    -webkit-gradient(linear, left bottom, left top, color-stop(0, rgba(255,255,255, 0.1)), color-stop(1, rgba(255,255,255, 0.37)));
+        background: -moz-repeating-linear-gradient(top left -30deg, rgba(255,255,255, 0.17), rgba(255,255,255, 0.17) 15px, rgba(255,255,255, 0) 15px, rgba(255,255,255, 0) 30px),
+                    -moz-linear-gradient(rgba(255,255,255, 0.1) 0%, rgba(255,255,255, 0.37) 100%);
+        background-color: #09F;
+        box-shadow: inset 0px 1px 0px 0px rgba(255,255,255, 0.4),
+                    inset 0px -1px 1px rgba(0,0,0, 0.2);
+        -moz-box-shadow: inset 0px 1px 0px 0px rgba(255,255,255, 0.4),
+                         inset 0px -1px 1px rgba(0,0,0, 0.2);
+        border: 1px solid #0083DA;
+        b {
+          display: none;
+          position: absolute;
+          right: 0;
+          line-height: 28px;
+          padding-right: 12px;
+          color: rgba(0, 0, 0, .6);
+          text-shadow: rgba(255, 255, 255, 0.45) 0 1px 0px;
+          white-space: nowrap;
+        }
+      }
+    }
+  }
+}

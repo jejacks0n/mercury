@@ -43,6 +43,42 @@ class Mercury.Regions.Editable extends Mercury.Region
       return unless Mercury.region == @
       setTimeout((=> @selection().forceSelection(@element.get(0))), 1)
 
+#    # possible:drop custom event
+#    # we have to do this because webkit doesn't fire the drop event unless both
+#    # dragover and dragstart default behaviors are canceled... but when we do
+#    # that and observe the drop event, the default behavior isn't handled (eg,
+#    # putting the image where it was dropped).. so to allow the browser to do
+#    # it's thing, and also do our thing we have this little hack.  *sigh*
+#    # read: http://www.quirksmode.org/blog/archives/2009/09/the_html5_drag.html
+#    if $.browser.webkit
+#      @element.bind 'dragover', (event) =>
+#        clearTimeout(@_dropTimeout)
+#        @_dropTimeout = setTimeout((=> @element.trigger('snippet:dropped')), 100)
+#    else
+#      @element.bind 'drop', (event) =>
+#        clearTimeout(@_dropTimeout)
+#        @_dropTimeout = setTimeout((=> @element.trigger('snippet:dropped')), 1)
+#
+#    @element.bind 'snippet:dropped', (event, originalEvent) =>
+
+
+    @element.bind 'dragenter', (event) =>
+      return if @previewing
+      event.preventDefault() if event.shiftKey
+      event.originalEvent.dataTransfer.dropEffect = 'copy'
+
+    @element.bind 'dragover', (event) =>
+      return if @previewing
+      event.preventDefault() if event.shiftKey
+      event.originalEvent.dataTransfer.dropEffect = 'copy'
+
+    @element.bind 'drop', (event) =>
+      return if @previewing
+      return unless event.originalEvent.dataTransfer.files.length
+      event.preventDefault()
+      @focus()
+      Mercury.uploader(event.originalEvent.dataTransfer.files[0])
+
     @element.bind 'paste', =>
       return if @previewing
       return unless Mercury.region == @
@@ -50,10 +86,6 @@ class Mercury.Regions.Editable extends Mercury.Region
       html = @html()
       event.preventDefault() if @specialContainer
       setTimeout((=> @handlePaste(html)), 1)
-
-    @element.bind 'drop', =>
-      return if @previewing
-      console.debug('dropped')
 
     @element.focus =>
       return if @previewing

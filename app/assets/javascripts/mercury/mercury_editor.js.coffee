@@ -28,6 +28,7 @@
 #= require ./toolbar.expander
 #= require ./snippet
 #= require ./region
+#= require ./uploader
 #= require_tree ./regions
 #= require_tree ./dialogs
 #= require_tree ./modals

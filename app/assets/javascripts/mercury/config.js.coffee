@@ -13,6 +13,22 @@ Mercury.config =
   ignoredLinks: ['lightview'],
 
 
+  # Image Uploading (via editable regions)
+  #
+  # If you drag images (while pressing shift) from your desktop into an
+  # editable region it will be uploaded to the server and inserted into the
+  # region.  This configuration allows you to specify if you want to disable
+  # this feature, the accepted mime-types, file size restrictions, and other
+  # things related to uploading.
+  #
+  uploading:
+    enabled: true
+    allowedMimeTypes: ['image/jpeg', 'image/gif', 'image/png']
+    maxFileSize: 1235242880 # bytes (5 Mb by default)
+    inputName: 'image[image]'
+    url: '/images'
+
+
   # Toolbars
   #
   # This is where you can customize the toolbar by adding new ones, and add or

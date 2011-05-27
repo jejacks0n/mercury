@@ -8,7 +8,6 @@ describe "Mercury.Toolbar", ->
     ajaxSpy = spyOn($, 'ajax').andCallFake (url, options) =>
       options.success('data') if options.success
 
-
   afterEach ->
     @toolbar = null
     delete(@toolbar)

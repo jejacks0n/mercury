@@ -33,16 +33,16 @@ $.extend Mercury.uploader, {
         ui8a[index] = (datastr.charCodeAt(index) & 0xff) for data, index in datastr
         @send(ui8a.buffer)
 
-    return xhr.upload && xhr.sendAsBinary && fileReader
+    return !!(xhr.upload && xhr.sendAsBinary && fileReader)
 
 
   build: ->
-    @element = $('<div>', {class: 'mercury-uploader'})
+    @element = $('<div>', {class: 'mercury-uploader', style: 'display:none'})
     @element.append('<div class="mercury-uploader-preview"><b><img/></b></div>')
     @element.append('<div class="mercury-uploader-details"></div>')
     @element.append('<div class="mercury-uploader-progress"><span>Processing...</span><div class="mercury-uploader-indicator"><div><b>0%</b></div></div></div>')
 
-    @overlay = $('<div>', {class: 'mercury-uploader-overlay'})
+    @overlay = $('<div>', {class: 'mercury-uploader-overlay', style: 'display:none'})
 
     @element.appendTo($(@options.appendTo).get(0) ? 'body')
     @overlay.appendTo($(@options.appendTo).get(0) ? 'body')
@@ -79,14 +79,13 @@ $.extend Mercury.uploader, {
 
   fillDisplay: ->
     details = ["Name: #{@file.name}", "Size: #{@file.readableSize}", "Type: #{@file.type}"]
-    details.push("<span>Unable to upload file because the file is either too large, or isn't a supported format.</span>") if @file.errors
     @element.find('.mercury-uploader-details').html(details.join('<br/>'))
 
 
   loadImage: ->
     @file.readAsDataURL (result) =>
       @element.find('.mercury-uploader-preview b').html($('<img>', {src: result}))
-      @upload() unless @file.errors
+      @upload()
 
 
   upload: ->
@@ -111,8 +110,6 @@ $.extend Mercury.uploader, {
 
       # update the content size so we can calculate
       @file.updateSize(multipart.delta)
-      @total = @file.size
-      @loaded = 0
 
       # set the content type and send
       xhr.setRequestHeader('Content-Type', 'multipart/form-data; boundary=' + multipart.boundary)
@@ -122,7 +119,7 @@ $.extend Mercury.uploader, {
   updateStatus: (message, loaded) ->
     @element.find('.mercury-uploader-progress span').html(message)
     if loaded
-      percent = Math.floor((@loaded + loaded) * 100 / @total) + '%'
+      percent = Math.floor(loaded * 100 / @file.size) + '%'
       @element.find('.mercury-uploader-indicator div').css({width: percent})
       @element.find('.mercury-uploader-indicator b').html(percent).show()
 
@@ -133,30 +130,33 @@ $.extend Mercury.uploader, {
         @overlay.animate {opacity: 0}, 200, 'easeInOutSine', =>
           @overlay.hide()
           @element.hide()
-          @element.find('.mercury-uploader-preview b').html('')
-          @loaded = 0
-          @total = 0
-          @element.find('.mercury-uploader-indicator div').css({width: 0})
-          @element.find('.mercury-uploader-indicator b').html('0%').hide()
-          @updateStatus('Processing...',)
-
+          @reset()
           @visible = false
     ), delay * 1000)
+
+
+  reset: ->
+    @element.find('.mercury-uploader-preview b').html('')
+    @element.find('.mercury-uploader-indicator div').css({width: 0})
+    @element.find('.mercury-uploader-indicator b').html('0%').hide()
+    @updateStatus('Processing...',)
 
 
   uploaderEvents: {
     onloadstart: -> @updateStatus('Uploading...')
 
-    onprogress: (event) -> @updateStatus('Uploading...', event.loaded, event.total)
+    onprogress: (event) -> @updateStatus('Uploading...', event.loaded)
 
-    onabort: -> @updateStatus('Aborted')
+    onabort: ->
+      @updateStatus('Aborted')
+      @hide(1)
 
     onload: ->
       @updateStatus('Successfully uploaded', @file.size)
       @hide(1)
 
-    onerror: (event) ->
-      @updateStatus('Error: Unable to upload file')
+    onerror: ->
+      @updateStatus('Error: Unable to upload the file')
       @hide(1)
   }
 }
@@ -182,13 +182,13 @@ class Mercury.uploader.File
   readAsDataURL: (callback = null) ->
     reader = new FileReader()
     reader.readAsDataURL(@file)
-    reader.onload = => callback(reader.result)
+    reader.onload = => callback(reader.result) if callback
 
 
   readAsBinaryString: (callback = null) ->
     reader = new FileReader()
     reader.readAsBinaryString(@file)
-    reader.onload = => callback(reader.result)
+    reader.onload = => callback(reader.result) if callback
 
 
   updateSize: (delta) ->
@@ -198,7 +198,7 @@ class Mercury.uploader.File
 
 class Mercury.uploader.MultiPartPost
 
-  constructor: (@inputName, @file, @contents) ->
+  constructor: (@inputName, @file, @contents, @formInputs = {}) ->
     @boundary = 'Boundaryx20072377098235644401115438165x'
     @body = ''
     @buildBody()
@@ -207,9 +207,6 @@ class Mercury.uploader.MultiPartPost
 
   buildBody: ->
     boundary = '--' + @boundary
-    crlf = '\r\n'
-    #for name, value of @formInputs
-    #  @body += boundary + crlf + 'Content-Disposition: form-data; name="' + name + '"' + crlf + crlf + unescape(encodeURIComponent(value)) + crlf
-
-    @body += boundary + crlf + 'Content-Disposition: form-data; name="' + @inputName + '"; filename="' + @file.name + '"' + crlf + 'Content-Type: ' + @file.type + crlf + 'Content-Transfer-Encoding: binary' + crlf + crlf + @contents + crlf
-    @body += boundary + '--'
+    for name, value of @formInputs
+      @body += "#{boundary}\r\nContent-Disposition: form-data; name=\"#{name}\"\r\n\r\n#{unescape(encodeURIComponent(value))}\r\n"
+    @body += "#{boundary}\r\nContent-Disposition: form-data; name=\"#{@inputName}\"; filename=\"#{@file.name}\"\r\nContent-Type: #{@file.type}\r\nContent-Transfer-Encoding: binary\r\n\r\n#{@contents}\r\n#{boundary}--"

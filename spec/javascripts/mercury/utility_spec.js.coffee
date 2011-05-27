@@ -50,3 +50,17 @@ describe "Number", ->
     it "pads 0-F with a 0", ->
       expect(0.toHex()).toEqual('00')
       expect(15.toHex()).toEqual('0F')
+
+  describe "#toBytes", ->
+
+    it "converts a number to a readable byte representation (eg. 1.2 kb, 3.4 Mb)", ->
+      kb = 1024
+      expect(kb.toBytes()).toEqual('1.00 kb')
+      expect((kb + 100).toBytes()).toEqual('1.10 kb')
+      expect((kb * 1000).toBytes()).toEqual('1000.00 kb')
+      expect((kb * 1024).toBytes()).toEqual('1.00 Mb')
+      expect((kb * 1024 * 1024).toBytes()).toEqual('1.00 Gb')
+      expect((kb * 1024 * 1024 * 1024).toBytes()).toEqual('1.00 Tb')
+      expect((kb * 1024 * 1024 * 1024 * 1024).toBytes()).toEqual('1.00 Pb')
+      expect((kb * 1024 * 1024 * 1024 * 1024 * 1024).toBytes()).toEqual('1.00 Eb')
+

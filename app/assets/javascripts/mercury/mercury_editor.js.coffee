@@ -15,7 +15,7 @@
 #= require_self
 #= require ./utility
 #= require ./history_buffer
-#= require ./table
+#= require ./table_editor
 #= require ./dialog
 #= require ./palette
 #= require ./select
@@ -38,9 +38,9 @@ class MercuryEditor
 
   constructor: (@options = {}) ->
     throw "MercuryEditor is unsupported in this client. Supported browsers are chrome 10+, firefix 4+, and safari 5+." unless Mercury.supported
-    throw "MercuryEditor can only be instantiated once" if Mercury.instance
+    throw "MercuryEditor can only be instantiated once" if window.mercuryInstance
 
-    Mercury.instance = @
+    window.mercuryInstance = @
     @saveUrl = @options.saveUrl
     @regions = []
     @initializeInterface()

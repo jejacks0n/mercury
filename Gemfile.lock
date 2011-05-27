@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/jnicklas/evergreen.git
-  revision: ac64d51b92a6d19092ea880cad1b30427e92ab8f
+  revision: 0402087fd081a3244ea0d2ca69a58966accb4797
   submodules: true
   specs:
     evergreen (0.4.0)

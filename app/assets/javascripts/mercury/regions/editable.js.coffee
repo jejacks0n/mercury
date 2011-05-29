@@ -42,6 +42,10 @@ class Mercury.Regions.Editable extends Mercury.Region
       return if @previewing
       return unless Mercury.region == @
       setTimeout((=> @selection().forceSelection(@element.get(0))), 1)
+      currentElement = @currentElement()
+      if currentElement.length
+        table = currentElement.closest('table', @element)
+        Mercury.tableEditor(table, currentElement) if table.length
 
 #    # possible:drop custom event
 #    # we have to do this because webkit doesn't fire the drop event unless both
@@ -329,6 +333,18 @@ class Mercury.Regions.Editable extends Mercury.Region
 
 # Custom handled actions (eg. things that execCommand doesn't do, or doesn't do well)
 Mercury.Regions.Editable.actions =
+
+  insertrowbefore: -> Mercury.tableEditor.addRow('before')
+
+  insertrowafter: -> Mercury.tableEditor.addRow('after')
+
+  insertcolumnbefore: -> Mercury.tableEditor.addColumn('before')
+
+  insertcolumnafter: -> Mercury.tableEditor.addColumn('after')
+
+  deletecolumn: -> Mercury.tableEditor.removeColumn()
+
+  deleterow: -> Mercury.tableEditor.removeRow()
 
   undo: -> @html(@history.undo())
 

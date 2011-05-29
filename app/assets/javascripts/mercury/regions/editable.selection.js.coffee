@@ -39,8 +39,8 @@ class Mercury.Regions.Editable.Selection
     range = @context.createRange()
 
     if @range
-      if @commonAncestor(true).closest('.mercury-snippet')
-         lastChild = @context.createTextNode('\00')
+      if @commonAncestor(true).closest('.mercury-snippet').length
+        lastChild = @context.createTextNode('\00')
         element.appendChild(lastChild)
     else
       if element.lastChild && element.lastChild.nodeType == 3 && element.lastChild.textContent.replace(/^[\s+|\n+]|[\s+|\n+]$/, '') == ''

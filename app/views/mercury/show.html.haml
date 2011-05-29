@@ -9,17 +9,16 @@ Content outside the regions
   = link_to image_tag('mercury/clippy.png'), '/something_else'
   %table{ border: 1 }
     %tr
-      %th{ colspan: 6 } TITLE
+      %th TITLE
+      %th{ colspan: 5 } TITLE
     %tr
-      %th Head1
-      %th Head2
+      %th{ colspan: 2 } Head1
       %th{ rowspan: 2 } Head3
       %th Head4
       %th{ rowspan: 4 } Head5
       %th Head6
     %tr
-      %td Column1
-      %td Column2
+      %td{ colspan: 2 } Column1
       %td Column4
       %td Column6
     %tr
@@ -46,7 +45,7 @@ Content outside the regions
 
   %p this is a <u>pa<span style="text-decoration:overline">rag</span>raph</u>
   %p this is a <span style="text-decoration:overline">pa<u>rag</u>raph</span>
-  %style table {  }
+  %style img { border:2px solid red }
 
   = image_tag('mercury/clippy.png')
   = link_to 'link', '#link2'
@@ -108,7 +107,7 @@ Content outside the regions
 :plain
   <style>
   .mercury-region { min-height: 10px; outline: 1px dotted #09F }
-  .mercury-region:focus, .mercury-region.focus { outline: 0; box-shadow: 0 0 10px #09F, 0 0 1px #045 }
+  .mercury-region:focus, .mercury-region.focus { outline: 0; -webkit-box-shadow: 0 0 10px #09F, 0 0 1px #045; box-shadow: 0 0 10px #09F, 0 0 1px #045 }
   .mercury-region:after { content: '\00a0'; display: block; visibility: hidden; clear: both; height: 0; overflow: hidden; }
   .mercury-snippet { width:200px; height:100px; border: 1px solid red; }
   </style>

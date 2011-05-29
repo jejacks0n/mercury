@@ -1,23 +1,72 @@
-=== Mercury Editor
+= Mercury Editor
 
+== The Story
 
+Mercury is an editor much like TinyMCE and FCKEditor, but with a different usage paradigm.  It expects that an entire
+page is something that can be editable, and allows different types of editable regions to be specified.
 
+The important difference is that it uses the HTML5 contentEditable feature on block elements, instead of using iframes,
+which allows for CSS to be applied in ways that other editors can't handle.
 
+I needed a fully featured editor that didn't use iframes, and at the time there weren't any decent ones.  A few nice
+ones have cropped up since then (AlohaEditor), but they still didn't do everything that I needed, and lacked some of the
+features that I really wanted and would expect.
 
+Mercury was written to be as simple as possible, while also providing a really advanced featureset.  Instead of a
+complex configuration, we chose code simplicity, which should give you a much better chance at customizing Mercury to
+suit your exact needs.
 
+Mercury is also fully tested using Jasmine and Cucumber.
 
+=== Browser Support
 
+Mercury has been written for the future, and thus doesn't support legacy browsers or browsers that don't follow the W3C
+specifications for content editing.
 
+Supported Browsers:
+* Chrome 10+
+* Safari 5+
+* Firefox 4+
 
+=== WYSIWYG editors suck
 
-== The Name
+They just do.  Which as I've learned, is primarily due to the browser implementations.  Don't get me wrong, what the
+browsers have implemented is amazing, because it's hard stuff, plain and simple.  But if you're expecting a WYSIWYG
+editor to solve all your content problems you're wrong.  A better perception is that it will solve many of them, but
+shifts some into a new area.
 
-  It's sure to come up, so let's take care of it now.  Mercury is the messenger
-  god of Roman mythology, so the name seemed appropriate.  When it came to logo
-  ideas the element came up, which also seemed appropriate since it requires
-  careful usage.
+With that being said, Mercury tries to solve many of those issues, and succeeds to a great degree with lots of them.
+But it's nearly impossible to address everything, and the browsers don't expose enough to fix some things.
 
-  The same seems to be true for a WYSIWYG editor, because great power should be
-  weilded carefully.  It goes to the core ideals behind how the configuration
-  for Mercury was designed.  You can easily remove or add aspects based on your
-  needs, and how sauvy you think the people using will be.
+It's important to understand this, and the details are more suited for long nerdy blog posts, so they won't be covered
+here.
+
+=== The Code and Why
+
+==== CoffeeScript
+
+Mercury has been written entirely in coffeescript because it simplifies a lot of the patterns that are used, and
+provides really readable code.  The goal was to provide good readable code that could be adjusted based on need, instead
+of complex configuration that makes the code harder to understand.
+
+==== jQuery
+
+jQuery was used as the javascript library, but is primarily used for the selectors, traversing, and manipulating the
+DOM.  Chaining is kept to a minimum for readability, and even though much of Mercury could've been written as jQuery
+plugins, it was not.
+
+==== Rails
+
+With the asset handling that comes bundled with Rails 3.1, Rails Engines, and the Rubygem tools there wasn't any other
+option.  The javascript from Mercury can be used by any back end system, and isn't limited to Rails or PHP.  The plain
+javascript files can be found in the repo.
+
+=== The Name
+
+It's sure to come up, so let's take care of it now.  Mercury is the messenger god of Roman mythology, so the name
+seemed appropriate.  When it came to logo ideas the element came up, which also seemed appropriate since it requires
+careful usage.
+
+The same seems to be true for a WYSIWYG editor, because great power should be weilded carefully.  It goes to the core
+ideals behind how the configuration for Mercury was designed.  You can easily remove or add aspects based on your
+needs, and how sauvy you think the people using will be.

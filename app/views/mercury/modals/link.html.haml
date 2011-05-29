@@ -1,48 +1,31 @@
-%form#mercury_link{ :style => 'width:600px' }
+= semantic_form_for 'link', { html: { id: 'mercury_link', style: 'width:600px' } } do |f|
 
   .mercury-modal-pane-container
     .mercury-modal-pane
-      %fieldset#link_text_container
-        %label{ :for => 'link_text' } Link Content
-        %input#link_text{ :type => 'text' }/
 
-      .legend Standard Links
-      %fieldset
-        %p
-          %label{ :for => 'external_url' }
-            %input{ :name => 'link_type', :type => 'radio', :value => 'external_url', :checked => true }/
-            URL
-          %input#external_url.selectable{ :type => 'text', :value => 'http://' }/
+      = f.inputs id: 'link_text_container' do
+        = f.input :text, required: false, label: 'Link Content'
 
-      .legend Bookmarks
-      %fieldset
-        %p
-          %label{ :for => 'existing_bookmark' }
-            %input{ :name => 'link_type', :type => 'radio', :value => 'existing_bookmark' }/
-            Existing Bookmarks
-          %select#existing_bookmark.selectable
-        %p
-          %label{ :for => 'new_bookmark' }
-            %input{ :name => 'link_type', :type => 'radio', :value => 'new_bookmark' }/
-            Bookmark
-          %input#new_bookmark.selectable{ :type => 'text', :value => '' }/
+      = f.inputs 'Standard Links' do
+        = f.input :external_url, required: false, input_html: { class: 'selectable' },
+                  label: '<input name="link_type" type="radio" value="external_url" checked="checked"/>URL'.html_safe
 
-      .legend Options
-      %fieldset
-        %p
-          %label{ :for => 'link_target' } Link Target
-          %select#link_target{ :name => 'link_target' }
-            %option{ :selected => 'selected', :value => '' } Self (the same window or tab)
-            %option{ :value => '_blank' } Blank (a new window or tab)
-            %option{ :value => '_top' } Top (removes any frames)
-            %option{ :value => 'popup' } Popup Window (javascript new window popup)
-        #popup_options.link-target-options{ :style => 'display:none' }
-          %p
-            %label{ :for => 'popup_width' } Popup Width
-            %input#popup_width{ :type => 'text', :value => '' }/
-          %p
-            %label{ :for => 'popup_height' } Popup Height
-            %input#popup_height{ :type => 'text', :value => '' }/
+      = f.inputs 'Index / Bookmark Links' do
+        = f.input :existing_bookmark, as: :select, required: false, input_html: { class: 'selectable' }, collection: [], include_blank: false,
+                  label: '<input name="link_type" type="radio" value="existing_bookmark"/>Existing Bookmarks'.html_safe
+        = f.input :new_bookmark, required: false, input_html: { class: 'selectable' },
+                  label: '<input name="link_type" type="radio" value="new_bookmark"/>Bookmark'.html_safe
+
+      = f.inputs 'Options' do
+        = f.input :target, as: :select, required: false, label: 'Link Target',
+                  include_blank: 'Self (the same window or tab)',
+                  collection: [['Blank (a new window or tab)', '_blank'], ['Top (removes any frames)', '_top'], ['Popup Window (javascript new window popup)', 'popup']]
+
+        #popup_options.link-target-options{ style: 'display:none' }
+          = f.input :popup_width, required: false, label: 'Popup Width'
+          = f.input :popup_height, required: false, label: 'Popup Height'
 
   .mercury-modal-controls
-    %input{ :type => 'submit', :value => 'Insert Link' }
+
+    = f.buttons do
+      = f.commit_button 'Insert Link'

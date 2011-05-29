@@ -10,6 +10,7 @@ gem 'haml'
 gem 'haml-rails'
 
 gem 'paperclip', :git => 'git://github.com/thoughtbot/paperclip.git'
+gem 'formtastic', :git => 'git://github.com/justinfrench/formtastic.git'
 
 group :development do
 end

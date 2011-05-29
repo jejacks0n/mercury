@@ -1,6 +1,8 @@
-%form#mercury_htmleditor{ :style => 'width:650px' }
+= semantic_form_for 'htmleditor', { html: { id: 'mercury_htmleditor', style: 'width:650px' } } do |f|
 
   %textarea.mercury-modal-pane-container{ :rows => '5' }
 
   .mercury-modal-controls
-    %input{ :type => 'submit', :value => 'Save and Replace' }
+
+    = f.buttons do
+      = f.commit_button 'Save and Replace'

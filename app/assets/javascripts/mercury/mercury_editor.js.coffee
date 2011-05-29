@@ -155,6 +155,8 @@ class MercuryEditor
 # Mercury static properties and utlity methods
 Mercury =
   Regions: {}
+  modalHandlers: {}
+  dialogHandlers: {}
 
   version: 1.0
 

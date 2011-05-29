@@ -11,6 +11,13 @@ GIT
       sinatra (>= 1.1)
 
 GIT
+  remote: git://github.com/justinfrench/formtastic.git
+  revision: 4503a22891b6648cb0320107d7d1e3e4d77de209
+  specs:
+    formtastic (2.0.0.pre)
+      rails (~> 3.0)
+
+GIT
   remote: git://github.com/thoughtbot/paperclip.git
   revision: e703662fd40fe43ec7af76266f1e897e9471a873
   specs:
@@ -197,6 +204,7 @@ DEPENDENCIES
   cucumber-rails
   database_cleaner
   evergreen!
+  formtastic!
   haml
   haml-rails
   mysql2

@@ -1,39 +1,34 @@
-%form#mercury_media{ :style => 'width:600px' }
+= semantic_form_for 'media', { html: { id: 'mercury_media', style: 'width:600px' } } do |f|
 
   .mercury-modal-pane-container
     .mercury-modal-pane
-      .legend Image
-      %fieldset
-        %p
-          %label{ :for => 'image_url' }
-            %input{ :name => 'media_type', :type => 'radio', :value => 'image_url', :checked => true }/
-            URL
-          %input#image_url.selectable{ :type => 'text', :value => 'http://' }/
 
-      .legend YouTube
-      %fieldset
-        %p
-          %label{ :for => 'youtube_url' }
-            %input{ :name => 'media_type', :type => 'radio', :value => 'youtube_url' }/
-            YouTube Share Url
-          %input#youtube_url.selectable{ :type => 'text', :value => '' }/
+      = f.inputs 'Images' do
+        = f.input :image_url, required: false, input_html: { class: 'selectable' },
+                  label: '<input name="media_type" type="radio" value="image_url" checked="checked"/>URL'.html_safe
 
-      .legend Options
-      %fieldset
-        #image_url_options.media-options
-          %p
-            %label{ :for => 'image_alignment' } Alignment
-            %select#image_alignment{ :name => 'image_alignment' }
-              %option{ :value => '', :selected => true } None
-              %option{ :value => 'left' } Left
-              %option{ :value => 'right' } Right
-              %option{ :value => 'top' } Top
-              %option{ :value => 'middle' } Middle
-              %option{ :value => 'bottom' } Bottom
-              %option{ :value => 'absmiddle' } Absolute Middle
-              %option{ :value => 'absbottom' } Absolute Bottom
-        #youtube_url_options.media-options{ :style => 'display:none' }
-          No options available for youtube.
+      = f.inputs 'Videos' do
+        = f.input :youtube_url, required: false, input_html: { class: 'selectable' },
+                  label: '<input name="media_type" type="radio" value="youtube_url"/>YouTube Share URL'.html_safe
+        = f.input :vimeo_url, required: false, input_html: { class: 'selectable' },
+                  label: '<input name="media_type" type="radio" value="vimeo_url"/>Vimeo URL'.html_safe
+
+      = f.inputs 'Options' do
+
+        #image_url.media-options
+          = f.input :image_alignment, as: :select, required: false, label: 'Alignment',
+                    include_blank: 'None',
+                    collection: [['Left', 'left'], ['Right', 'right'], ['Top', 'top'], ['Middle', 'middle'], ['Bottom', 'bottom'], ['Absolute Middle', 'absmiddle'], ['Absolute Bottom', 'absbottom']]
+
+        #youtube_url.media-options{ :style => 'display:none' }
+          = f.input :youtube_width, required: false, label: 'Width', input_html: { value: '560' }
+          = f.input :youtube_height, required: false, label: 'Height', input_html: { value: '349' }
+
+        #vimeo_url.media-options{ :style => 'display:none' }
+          = f.input :vimeo_width, required: false, label: 'Width', input_html: { value: '400' }
+          = f.input :vimeo_height, required: false, label: 'Height', input_html: { value: '225' }
 
   .mercury-modal-controls
-    %input{ :type => 'submit', :value => 'Insert Media' }
+
+    = f.buttons do
+      = f.commit_button 'Insert Media'

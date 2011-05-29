@@ -1,22 +1,22 @@
 = Mercury Editor
 
-A full featured advanced HTML5 WYSIWYG editor.
+Mercury Editor is a fully featured editor much like TinyMCE or CKEditor, but with a different usage paradigm.  It
+expects that an entire page is something that can be editable, and allows different types of editable regions to be
+specified.  It displays a single toolbar for every region on the page, and uses the HTML5 contentEditable features on
+block elements, instead of iframes, which allows for CSS to be applied in ways that most other editors can't handle.
+
 
 == The Story
 
-Mercury is an editor much like TinyMCE or CKEditor, but with a different usage paradigm.  It expects that an entire page
-is something that can be editable, and allows different types of editable regions to be specified.  Another important
-difference is that it uses the HTML5 contentEditable feature on block elements, instead of iframes, which allows for CSS
-to be applied in ways that other editors can't handle.
-
-I was looking for a fully featured editor that didn't use iframes, and at the time there weren't any decent ones.  My
-primary goal was to have areas that were editable, but that also allowed CSS to flow naturally.  A few have cropped up
-since then (Aloha Editor), but they still didn't do everything that I needed, and lacked some of the features that I
-really wanted and would expect.
+I was looking for a fully featured editor that didn't use iframes, and there weren't any decent ones.  My primary goal
+was to have areas that were editable, but that also allowed CSS to flow naturally.  A few have cropped up since then
+(Aloha Editor), but they still didn't do everything that I needed, and lacked some of the features that I really wanted
+and would expect.
 
 Mercury was written to be as simple as possible, while also providing a really advanced featureset.  Instead of complex
-configuration, we chose code simplicity, which should give you a much better chance at customizing Mercury to suit your
-exact needs.  Mercury is also fully tested using Jasmine and Cucumber, which will help as well.
+configuration, we chose a mix of configuration, and code simplicity, which should give you a much better chance at
+customizing Mercury to suit your exact needs.  This doesn't mean there's no configuration, there is, and it provides
+much of what you'll want, but efforts were taken to keep it simple and powerful.
 
 Even though it's a great editor, Mercury Editor may not be the best for your needs (based on javascript library, etc.)
 so here's a list of other editors that you might want to check out:
@@ -27,6 +27,9 @@ so here's a list of other editors that you might want to check out:
 * {TinyMCE}[http://tinymce.moxiecode.com/]
 * {CKEditor}[http://ckeditor.com/]
 * {NicEdit}[http://nicedit.com/]
+
+
+== Project Details
 
 === Browser Support
 
@@ -74,6 +77,10 @@ other option.  The javascript from Mercury can be used by any back end system, a
 features do require a back end, and that stuff would have to be rewritten in whatever language you wanted support for.
 The plain javascript files can be found in the repo, and I would be fully supportive of anyone who wanted to do
 something like this.
+
+==== Specs / Integration Tests
+
+Mercury is fully tested using Jasmine (via Evergreen) and Cucumber.
 
 === The Name
 

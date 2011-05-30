@@ -12,7 +12,7 @@
 
       = f.inputs 'Index / Bookmark Links' do
         = f.input :existing_bookmark, as: :select, required: false, input_html: { class: 'selectable' }, collection: [], include_blank: false,
-                  label: '<input name="link_type" type="radio" value="existing_bookmark"/>Existing Bookmarks'.html_safe
+                  label: '<input name="link_type" type="radio" value="existing_bookmark"/>Existing Links'.html_safe
         = f.input :new_bookmark, required: false, input_html: { class: 'selectable' },
                   label: '<input name="link_type" type="radio" value="new_bookmark"/>Bookmark'.html_safe
 

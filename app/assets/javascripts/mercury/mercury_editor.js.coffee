@@ -48,7 +48,7 @@ class MercuryEditor
 
   initializeInterface: ->
     @focusableElement = $('<input>', {type: 'text', style: 'position:absolute;opacity:0'}).appendTo('body')
-    @iframe = $('<iframe>', {class: 'mercury-iframe', seamless: 'true', frameborder: '0', src: 'about:blank'})
+    @iframe = $('<iframe>', {class: 'mercury-iframe', seamless: 'true', frameborder: '0', src: 'about:blank', style: 'position:absolute;top:0;width:100%;visibility:hidden'})
     @iframe.load => @initializeFrame()
     @iframe.attr('src', @iframeSrc())
     @iframe.appendTo('body')

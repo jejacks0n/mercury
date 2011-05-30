@@ -1,4 +1,6 @@
 class ImagesController < ActionController::Base
+  protect_from_forgery
+
   respond_to :json
 
   # POST /images.json

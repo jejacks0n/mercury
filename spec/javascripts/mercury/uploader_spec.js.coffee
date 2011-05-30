@@ -286,8 +286,15 @@ describe "Mercury.uploader", ->
       Mercury.uploader.hide()
       expect(Mercury.uploader.visible).toEqual(false)
 
+    it "focuses the frame", ->
+      @setTimeoutSpy.andCallFake((callback) => callback())
+      spy = spyOn(Mercury, 'trigger').andCallFake(=>)
+      Mercury.uploader.hide()
+      expect(spy.callCount).toEqual(1)
+      expect(spy.argsForCall[0]).toEqual(['focus:frame'])
 
-  describe "reset", ->
+
+  describe "#reset", ->
 
     beforeEach ->
       Mercury.uploader.options = {appendTo: '#test'}

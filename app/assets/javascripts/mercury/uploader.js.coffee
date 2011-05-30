@@ -102,7 +102,7 @@ $.extend Mercury.uploader, {
     xhr.open('post', Mercury.config.uploading.url, true)
     xhr.setRequestHeader('Accept', 'application/json, text/javascript, text/html, application/xml, text/xml, */*')
     xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest')
-    #xhr.setRequestHeader('X-CSRF-Token', this.token)
+    xhr.setRequestHeader('X-CSRF-Token', Mercury.csrfToken)
 
     @file.readAsBinaryString (result) =>
       # build the multipart post string
@@ -132,6 +132,7 @@ $.extend Mercury.uploader, {
           @element.hide()
           @reset()
           @visible = false
+          Mercury.trigger('focus:frame')
     ), delay * 1000)
 
 

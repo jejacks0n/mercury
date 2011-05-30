@@ -3,10 +3,11 @@ class Mercury.HistoryBuffer
   constructor: (@maxLength = 200) ->
     @index = 0
     @stack = []
+    @markerRegExp = /<em class="mercury-marker"><\/em>/g
 
 
   push: (item) ->
-    return if @stack[@index] && @stack[@index].replace(/<em class="mercury-marker"><\/em>/g, '') == item.replace(/<em class="mercury-marker"><\/em>/g, '') # if it's the same, don't do anything
+    return if @stack[@index] && @stack[@index].replace(@markerRegExp, '') == item.replace(@markerRegExp, '')
 
     @stack = @stack[0...@index + 1]
     @stack.push(item)

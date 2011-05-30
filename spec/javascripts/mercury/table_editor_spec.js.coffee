@@ -118,9 +118,3 @@ describe "Mercury.tableEditor", ->
     it "removes the rowspan if the value was 1", ->
       Mercury.tableEditor.setRowSpan(@cell, 1)
       expect(@cell.attr('rowspan')).toEqual(undefined)
-
-
-  describe "#addRow", ->
-
-
-  describe "#addColumn", ->

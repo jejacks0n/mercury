@@ -1,13 +1,9 @@
-#= require_self
-#= require ./snippetable.toolbar
-
 class Mercury.Regions.Snippetable extends Mercury.Region
   type = 'snippetable'
 
   constructor: (@element, @window, @options = {}) ->
     @type = 'snippetable'
     super
-    @toolbar = new Mercury.Regions.Snippetable.Toolbar(@element, @document)
     @makeSortable()
 
 
@@ -53,17 +49,6 @@ class Mercury.Regions.Snippetable extends Mercury.Region
       @focus()
       Mercury.trigger('region:focused', {region: @})
 
-    @element.mousemove (event) =>
-      return if @previewing
-      return unless Mercury.region == @
-      @snippet = $(event.target).closest('.mercury-snippet')
-      if @snippet.length
-        @snippet.mouseout => @toolbar.hide()
-        @toolbar.show(@snippet)
-
-    @element.mouseout (event) =>
-      @toolbar.hide()
-
 
   focus: ->
     Mercury.region = @
@@ -97,7 +82,7 @@ class Mercury.Regions.Snippetable extends Mercury.Region
       tolerance: 'pointer',
       connectWith: '.mercury-region[data-type=snippetable]',
       beforeStop: =>
-        @toolbar.hide(true)
+        Mercury.trigger('hide:toolbar', {type: 'snippet', immediately: true})
         return true
       stop: =>
         setTimeout((=> @pushHistory()), 100)
@@ -114,4 +99,4 @@ Mercury.Regions.Snippetable.actions =
 
   removesnippet: ->
     @snippet.remove() if @snippet
-    @toolbar.hide(true)
+    Mercury.trigger('hide:toolbar', {type: 'snippet', immediately: true})

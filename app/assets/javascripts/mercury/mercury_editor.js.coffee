@@ -27,6 +27,7 @@
 #= require ./toolbar.button_group
 #= require ./toolbar.expander
 #= require ./snippet
+#= require ./snippet_toolbar
 #= require ./region
 #= require ./uploader
 #= require_tree ./regions
@@ -44,6 +45,7 @@ class MercuryEditor
     @saveUrl = @options.saveUrl
     @regions = []
     @initializeInterface()
+    Mercury.csrfToken = token if token = $('meta[name="csrf-token"]').attr('content')
 
 
   initializeInterface: ->
@@ -90,6 +92,8 @@ class MercuryEditor
 
 
   finalizeInterface: ->
+    @snippetToolbar = new Mercury.SnippetToolbar(@document)
+
     Mercury.editor = @
     Mercury.hijackLinks(@document)
     @resize()

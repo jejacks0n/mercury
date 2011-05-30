@@ -2,7 +2,7 @@ class Mercury.Region
   type = 'region'
 
   constructor: (@element, @window, @options = {}) ->
-    @type = 'unknown' unless @type
+    @type = 'region' unless @type
     Mercury.log("building #{@type}", @element, @options)
 
     @document = @window.document
@@ -32,6 +32,17 @@ class Mercury.Region
       return if @previewing
       return unless Mercury.region == @
       @execCommand(options.action, options) if options.action
+
+    @element.mousemove (event) =>
+      return if @previewing
+      return unless Mercury.region == @
+      @snippet = $(event.target).closest('.mercury-snippet')
+      if @snippet.length
+        Mercury.trigger('show:toolbar', {type: 'snippet', snippet: @snippet})
+
+    @element.mouseout (event) =>
+      return if @previewing
+      Mercury.trigger('hide:toolbar', {type: 'snippet', immediately: false})
 
 
   html: (value = null, filterSnippets = false) ->

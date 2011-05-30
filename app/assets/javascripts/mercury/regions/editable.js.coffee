@@ -366,3 +366,7 @@ Mercury.Regions.Editable.actions =
     selection.selectNode(options.node)
     html = $('<div>').html(selection.content()).find('a').html()
     selection.replace($(options.value, selection.context).html(html))
+
+  removesnippet: ->
+    @snippet.remove() if @snippet
+    Mercury.trigger('hide:toolbar', {type: 'snippet', immediately: true})

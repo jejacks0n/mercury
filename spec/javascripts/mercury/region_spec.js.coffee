@@ -57,7 +57,7 @@ describe "Mercury.Region", ->
   describe "observed events", ->
 
     beforeEach ->
-      @region = new Mercury.Region($('#region'), window)
+      @region = new Mercury.Region($('#region_with_snippet'), window)
 
     describe "custom event: mode", ->
 
@@ -109,8 +109,47 @@ describe "Mercury.Region", ->
         expect(@execCommandSpy.callCount).toEqual(1)
         expect(@execCommandSpy.argsForCall[0]).toEqual(['foo', {action: 'foo', value: 'bar'}])
 
+    describe "mouseover", ->
+
+      beforeEach ->
+        @triggerSpy = spyOn(Mercury, 'trigger').andCallFake(=>)
+
+      it "does nothing if in preview mode", ->
+        @region.previewing = true
+        jasmine.simulate.mousemove($('#region_with_snippet .mercury-snippet').get(0))
+        expect(@triggerSpy.callCount).toEqual(0)
+
+      it "does nothing if it's not the active region", ->
+        Mercury.region = {}
+        jasmine.simulate.mousemove($('#region_with_snippet .mercury-snippet').get(0))
+        expect(@triggerSpy.callCount).toEqual(0)
+
+      it "shows the snippet toolbar if a snippet was moused over", ->
+        Mercury.region = @region
+        jasmine.simulate.mousemove($('#region_with_snippet .mercury-snippet').get(0))
+        expect(@triggerSpy.callCount).toEqual(1)
+        expect(@triggerSpy.argsForCall[0][0]).toEqual('show:toolbar')
+
+    describe "mouseout", ->
+
+      beforeEach ->
+        @triggerSpy = spyOn(Mercury, 'trigger').andCallFake(=>)
+
+      it "does nothing if previewing", ->
+        @region.previewing = true
+        jasmine.simulate.mouseout(@region.element.get(0))
+        expect(@triggerSpy.callCount).toEqual(0)
+
+      it "hides the snippet toolbar", ->
+        jasmine.simulate.mouseout(@region.element.get(0))
+        expect(@triggerSpy.callCount).toEqual(1)
+        expect(@triggerSpy.argsForCall[0]).toEqual(['hide:toolbar', {type: 'snippet', immediately: false}])
+
 
   describe "#html", ->
+
+    # todo: test me
+    it "should be tested", ->
 
 
   describe "#togglePreview", ->

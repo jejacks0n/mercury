@@ -1,6 +1,6 @@
-class Mercury.Regions.Snippetable.Toolbar extends Mercury.Toolbar
+class Mercury.SnippetToolbar extends Mercury.Toolbar
 
-  constructor: (@region, @document, @options = {}) ->
+  constructor: (@document, @options = {}) ->
     super(@options)
 
 
@@ -13,6 +13,15 @@ class Mercury.Regions.Snippetable.Toolbar extends Mercury.Toolbar
 
 
   bindEvents: ->
+    Mercury.bind 'show:toolbar', (event, options) =>
+      return unless options.snippet
+      options.snippet.mouseout => @hide()
+      @show(options.snippet)
+
+    Mercury.bind 'hide:toolbar', (event, options) =>
+      return unless options.type && options.type == 'snippet'
+      @hide(options.immediately)
+
     $(@document).scroll => @position() if @visible
 
     @element.mousemove => clearInterval(@hideTimeout)

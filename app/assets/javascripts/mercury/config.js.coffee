@@ -1,25 +1,28 @@
 Mercury.config =
 
+  # Saving
+  #
+  # When saving content, it can be sent to the server as JSON, or as normal form variables.
+  #
+  saveStyle: 'json' # or form
+
+
   # Ignored Links
   #
-  # Links need to be specially handled because the editor loads content into an
-  # iframe, and to ensure that links load outsite of the content iframe they're
-  # "hijacked" to load in the _top window.  This allow for displaying a
-  # confirmation when leaving an edited page.  There are times when you may be
-  # observing clicks on anchor tags and you might not want this behavior, for
-  # instance a link that pops a modal.  You can add classnames to this array
-  # and the special handling won't be attached to anchors that have them.
+  # Links need to be specially handled because the editor loads content into an iframe, and to ensure that links load
+  # outsite of the content iframe they're "hijacked" to load in the _top window.  This allow for displaying a
+  # confirmation when leaving an edited page.  There are times when you may be observing clicks on anchor tags and you
+  # might not want this behavior, for instance a link that pops a modal.  You can add classnames to this array and the
+  # special handling won't be attached to anchors that have them.
   #
   ignoredLinks: ['lightview'],
 
 
   # Image Uploading (via editable regions)
   #
-  # If you drag images (while pressing shift) from your desktop into an
-  # editable region it will be uploaded to the server and inserted into the
-  # region.  This configuration allows you to specify if you want to disable
-  # this feature, the accepted mime-types, file size restrictions, and other
-  # things related to uploading.
+  # If you drag images (while pressing shift) from your desktop into an editable region it will be uploaded to the
+  # server and inserted into the region.  This configuration allows you to specify if you want to disable this feature,
+  # the accepted mime-types, file size restrictions, and other things related to uploading.
   #
   uploading:
     enabled: true
@@ -31,22 +34,17 @@ Mercury.config =
 
   # Toolbars
   #
-  # This is where you can customize the toolbar by adding new ones, and add or
-  # change buttons and their behaviors.  Any top level object put here will
-  # create a new toolbar.  Buttons are nested inside the toolbars.  Some
-  # toolbars are custom (the snippetable one for instance), and to denote that
-  # a custom toolbar, use _custom: true.
+  # This is where you can customize the toolbar by adding new ones, and add or change buttons and their behaviors.  Any
+  # top level object put here will create a new toolbar.  Buttons are nested inside the toolbars.  Some toolbars are
+  # custom (the snippetable one for instance), and to denote that a custom toolbar, use _custom: true.
   #
-  # Buttons can be grouped.  A button group is simply a way to wrap buttons
-  # for styling, and can also handle enabling or disabling all the buttons
-  # within it by using a context.  The table button group is a good example of
-  # this.
+  # Buttons can be grouped.  A button group is simply a way to wrap buttons for styling, and can also handle enabling or
+  # disabling all the buttons within it by using a context.  The table button group is a good example of this.
   #
-  # It's important to note that each of the names (keys), in this object must
-  # be unique, regardless of if it's in a button group, or nested, etc.
+  # It's important to note that each of the names (keys), in this object must be unique, regardless of if it's in a
+  # button group, or nested, etc.  This is because styling is applied to them by name.
   #
-  # Button format: [label, description, {type: action, type: action, etc}]
-  # The available button types are:
+  # Button format: [label, description, {type: action, type: action, etc}] The available button types are:
   #
   # button:  (default) calls handleCommand and passes the key of the object
   #          (eg. save, preview, undo etc.)
@@ -65,15 +63,12 @@ Mercury.config =
   #            a function that returns a string url
   # context: calls a callback function, expects the action to be:
   #            a function that returns a boolean to highlight the button
-  #            note: if a function isn't provided, the key will be passed to
-  #                  the contextHandler (eg. backcolor, bold), in which case
-  #                  default context will be used (for more info read the
-  #                  Contexts section below)
+  #            note: if a function isn't provided, the key will be passed to the contextHandler (eg. backcolor, bold),
+  #                  in which case default context will be used (for more info read the Contexts section below)
   # mode:    toggle a given mode in the editor, expects the action to be:
   #            a string, denoting the name of the mode
-  #            note: it's assumed that when a specific mode is turned on, all
-  #                  other modes will be turned off which happens automatically,
-  #                  thus putting the editor into a specific "state"
+  #            note: it's assumed that when a specific mode is turned on, all other modes will be turned off which
+  #                  happens automatically, thus putting the editor into a specific "state"
   # regions: allows buttons to be enabled/disabled based on what region type
   #          has focus, expects the action to be.
   #            an array of region types (eg. ['editable', 'snippetable']
@@ -81,8 +76,8 @@ Mercury.config =
   # preload: preloads views when the editor is loaded instead of on first open
   #          (only used for panels, selects, and palettes, otherwise ignored)
   #
-  # Separators are any "button" that's not an array, and are expected to be a
-  # string.  You can use two different separator styles: line, and spacer.
+  # Separators are any "button" that's not an array, and are expected to be a string.  You can use two different
+  # separator styles: line, and spacer.
   # '-' = line
   # ' ' = spacer
   #
@@ -170,14 +165,12 @@ Mercury.config =
 
   # Behaviors
   #
-  # Behaviors are used to change the default behaviors of a given region type
-  # when a given button is clicked.  For example, you may prefer to add HR tags
-  # using an HR wrapped within a div with a classname (for styling).  To add
-  # your own complex behaviors you can do so here.
+  # Behaviors are used to change the default behaviors of a given region type when a given button is clicked.  For
+  # example, you may prefer to add HR tags using an HR wrapped within a div with a classname (for styling).  You can add
+  # your own complex behaviors here.
   #
-  # You can see how the behavior matches up directly with the button name.
-  # It's also important to note that the callback functions are executed within
-  # the scope of the given region.
+  # You can see how the behavior matches up directly with the button name.  It's also important to note that the
+  # callback functions are executed within the scope of the given region, so you have access to all it's methods.
   #
   behaviors:
     horizontalrule: (selection) -> selection.replace('<hr/>')
@@ -192,10 +185,9 @@ Mercury.config =
 
   # Contexts
   #
-  # Contexts are used callback functions used for highlighting and
-  # disabling/enabling buttons and buttongroups.  When the cursor enters an
-  # element within an html region for instance we want to disable or highlight
-  # buttons based on the properties of the given node.
+  # Contexts are used callback functions used for highlighting and disabling/enabling buttons and buttongroups.  When
+  # the cursor enters an element within an html region for instance we want to disable or highlight buttons based on the
+  # properties of the given node.
   #
   # You can see some examples of contexts in:
   #

@@ -4,7 +4,7 @@ Mercury.config =
   #
   # When saving content, it can be sent to the server as JSON, or as normal form variables.
   #
-  saveStyle: 'json' # or form
+  saveStyle: 'json' # or 'form'
 
 
   # Ignored Links

@@ -85,7 +85,7 @@ class Mercury.Region
 
 
   snippets: ->
-    return {snippet1: 'something'}
+    return {}
 
 
   serialize: ->

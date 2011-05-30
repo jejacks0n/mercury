@@ -148,16 +148,33 @@ describe "Mercury.Region", ->
 
   describe "#html", ->
 
-    # todo: test me
-    it "should be tested", ->
+    beforeEach ->
+      @region = new Mercury.Region($('#region_with_snippet'), window)
+
+    describe "getting html", ->
+
+      it "returns the html of the element", ->
+        html = @region.html()
+        expect(html).toEqual('contents<div class="mercury-snippet">snippet</div>')
+
+      it "replaces snippet content with an indentifier if asked", ->
+        html = @region.html(null, true)
+        expect(html).toEqual('contents<div class="mercury-snippet">[snippet0]</div>')
+
+    describe "setting html", ->
+
+      it "sets the value of the html", ->
+        @region.html('new html')
+        expect($('#region_with_snippet').html()).toEqual('new html')
 
 
   describe "#togglePreview", ->
 
     beforeEach ->
+      @region = new Mercury.Region($('#region'), window)
       Mercury.region = @region
       @focusSpy = spyOn(Mercury.Region.prototype, 'focus').andCallFake(=>)
-      @region = new Mercury.Region($('#region'), window)
+      @triggerSpy = spyOn(Mercury, 'trigger').andCallFake(=>)
 
     describe "when not previewing", ->
 
@@ -172,31 +189,73 @@ describe "Mercury.Region", ->
         expect(@region.element.hasClass('mercury-region-preview')).toEqual(true)
 
       it "triggers a blur event", ->
+        expect(@triggerSpy.callCount).toEqual(1)
+        expect(@triggerSpy.argsForCall[0]).toEqual(['region:blurred', {region: @region}])
 
     describe "when previewing", ->
 
-      it "sets previewing to true", ->
+      beforeEach ->
+        @region.previewing = true
+        @region.togglePreview()
+
+      it "sets previewing to false", ->
+        expect(@region.previewing).toEqual(false)
+
       it "swaps classes on the element", ->
+        expect(@region.element.hasClass('mercury-region-preview')).toEqual(false)
+        expect(@region.element.hasClass('mercury-region')).toEqual(true)
+
       it "calls focus if it's the active region", ->
+        expect(@focusSpy.callCount).toEqual(1)
 
 
   describe "#execCommand", ->
 
+    beforeEach ->
+      Mercury.changes = false
+      @region = new Mercury.Region($('#region'), window)
+
     it "calls focus", ->
+      spy = spyOn(Mercury.Region.prototype, 'focus').andCallFake(=>)
+      @region.execCommand('foo')
+      expect(spy.callCount).toEqual(1)
+
     it "pushes to the history (unless the action is redo)", ->
+      spy = spyOn(Mercury.Region.prototype, 'pushHistory').andCallFake(=>)
+      @region.execCommand('redo')
+      expect(spy.callCount).toEqual(0)
+      @region.execCommand('foo')
+      expect(spy.callCount).toEqual(1)
+
     it "tells Mercury that changes have been made", ->
+      @region.execCommand('foo')
+      expect(Mercury.changes).toEqual(true)
 
 
   describe "#pushHistory", ->
 
+    beforeEach ->
+      Mercury.changes = false
+      @region = new Mercury.Region($('#region'), window)
+
     it "pushes the current content (html) of the region to the history buffer", ->
+      spy = spyOn(@region.history, 'push').andCallFake(=>)
+      @region.pushHistory('foo')
+      expect(spy.callCount).toEqual(1)
 
 
   describe "#snippets", ->
 
-    it "...", ->
+    it "does nothing and is there as an interface", ->
 
 
   describe "#serialize", ->
 
+    beforeEach ->
+      @region = new Mercury.Region($('#region'), window)
+
     it "returns an object with it's type, value, and snippets", ->
+      serialized = @region.serialize()
+      expect(serialized.type).toEqual('region')
+      expect(serialized.value).toEqual('contents')
+      expect(serialized.snippets).toEqual({})

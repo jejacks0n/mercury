@@ -5,7 +5,7 @@ class Mercury.SnippetToolbar extends Mercury.Toolbar
 
 
   build: ->
-    @element = $('<div>', {class: 'mercury-toolbar mercury-snippetable-toolbar', style: 'display:none'})
+    @element = $('<div>', {class: 'mercury-toolbar mercury-snippet-toolbar', style: 'display:none'})
     @element.appendTo($(@options.appendTo).get(0) ? 'body')
 
     for buttonName, options of Mercury.config.toolbars.snippetable
@@ -24,7 +24,7 @@ class Mercury.SnippetToolbar extends Mercury.Toolbar
 
     $(@document).scroll => @position() if @visible
 
-    @element.mousemove => clearInterval(@hideTimeout)
+    @element.mousemove => clearTimeout(@hideTimeout)
     @element.mouseout => @hide()
 
 
@@ -46,7 +46,7 @@ class Mercury.SnippetToolbar extends Mercury.Toolbar
 
 
   appear: ->
-    clearInterval(@hideTimeout)
+    clearTimeout(@hideTimeout)
     return if @visible
     @visible = true
     @element.css({display: 'block', opacity: 0})
@@ -54,13 +54,14 @@ class Mercury.SnippetToolbar extends Mercury.Toolbar
 
 
   hide: (immediately = false) ->
-    clearInterval(@hideTimeout)
+    clearTimeout(@hideTimeout)
     if immediately
       @element.hide()
       @visible = false
     else
       @hideTimeout = setTimeout((=>
+        @element.stop().animate {opacity: 0}, 300, 'easeInOutSine', =>
+          @element.hide()
         @visible = false
-        @element.stop().animate({opacity: 0}, 300, 'easeInOutSine')
       ), 500)
 

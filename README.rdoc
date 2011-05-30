@@ -13,7 +13,7 @@ was to have areas that were editable, but that also allowed CSS to flow naturall
 (Aloha Editor), but they still didn't do everything that I needed, and lacked some of the features that I really wanted
 and would expect.
 
-Mercury was written to be as simple as possible, while also providing a really advanced featureset.  Instead of complex
+Mercury was written to be as simple as possible, while also providing a really advanced feature set.  Instead of complex
 configuration, we chose a mix of configuration, and code simplicity, which should give you a much better chance at
 customizing Mercury to suit your exact needs.  This doesn't mean there's no configuration, there is, and it provides
 much of what you'll want, but efforts were taken to keep it simple and powerful.
@@ -88,6 +88,6 @@ It's sure to come up, so let's take care of it now.  Mercury is the messenger go
 appropriate.  When it came to logo ideas the element came up, which also seemed appropriate since it requires careful
 usage.
 
-The same seems to be true for a WYSIWYG editor, because great power should be weilded carefully.  It goes to the core
+The same seems to be true for a WYSIWYG editor, because great power should be wielded carefully.  It goes to the core
 ideals behind how the configuration for Mercury was designed.  You can easily remove or add aspects based on your
-needs, and how sauvy you think the people using will be.
+needs, and how savvy you think the people using will be.

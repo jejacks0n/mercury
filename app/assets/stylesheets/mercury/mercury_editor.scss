@@ -82,7 +82,7 @@ form, form ul, form ol, form li, form fieldset, form p {
     padding: 2px 4px;
     font-family: Arial, Geneva, sans-serif;
     font-size: 1.5em;
-    width: 75%;
+    width: 74%;
     box-sizing: border-box;
     -moz-box-sizing: border-box;
   }
@@ -125,36 +125,6 @@ form, form ul, form ol, form li, form fieldset, form p {
           background-color: #000;
         }
       }
-
-      /*margin: 0;*/
-      /*background: #B6B6B6 url(/assets/button.png) repeat-x;*/
-      /*font-size: 1em;*/
-      /*font-weight: bold;*/
-      /*color: #404040;*/
-      /*box-shadow: none;*/
-      /*-moz-box-shadow: none;*/
-      /*text-shadow: none;*/
-      /*padding: 2px 14px 2px;*/
-      /*-moz-border-radius: 15px;*/
-      /*-webkit-border-radius: 15px;*/
-      /*border: 1px solid #979797;*/
-      /*&:hover {*/
-        /*background-color: #777;*/
-      /*}*/
-      /*&.disabled {*/
-        /*opacity: .4;*/
-        /*cursor: default;*/
-        /*&:hover {*/
-          /*background-color: #B6B6B6;*/
-        /*}*/
-      /*}*/
     }
   }
-}
-
-
-
-.right form input.create,
-.container button {
-  font-size: 1.2em;
 }

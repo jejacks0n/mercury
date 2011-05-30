@@ -1,9 +1,11 @@
-%form#mercury_table{ :style => 'width:700px' }
+= semantic_form_for 'table', { html: { id: 'mercury_table', style: 'width:700px' } } do |f|
 
   .mercury-modal-pane-container
     .mercury-modal-pane
+
       #table_display
-        %table{ :style => 'width:100%;height:300px;', :border => '1', :cellpadding => '1' }
+
+        %table{ border: 1 }
           %tr
             %td
             %td
@@ -12,20 +14,32 @@
             %td
 
       #table_options
-        .legend Structure Options
-        %fieldset
-          %p
-            %input{ :type => 'button', :value => '+' }/
-            %input{ :type => 'button', :value => '-' }/
+        = f.inputs do
+          %li{ class: "select input optional", id: "table_rows_input" }
+            %label{ for: "table_rows" } Rows
+            %input{ type: 'button', name: 'row_add_before', class: 'action', value: 'Add Before' }/
+            %input{ type: 'button', name: 'row_add_after', class: 'action', value: 'Add After' }/
+            %input{ type: 'button', name: 'row_remove', class: 'action', value: 'Remove' }/
+          %li{ class: "select input optional", id: "table_columns_input" }
+            %label{ for: "table_columns" } Columns
+            %input{ type: 'button', name: 'column_add_before', class: 'action', value: 'Add Before' }/
+            %input{ type: 'button', name: 'column_add_after', class: 'action', value: 'Add After' }/
+            %input{ type: 'button', name: 'column_remove', class: 'action', value: 'Remove' }/
+          %hr
+          %li{ class: "select input optional", id: "table_row_adjust_input" }
+            %label{ for: "table_row_adjust" } Row Span
+            %input{ type: 'button', name: 'row_expand', class: 'action', value: '+' }/
+          %li{ class: "select input optional", id: "table_column_adjust_input" }
+            %label{ for: "table_column_adjust" } Column Span
+            %input{ type: 'button', name: 'column_expand', class: 'action', value: '+' }/
 
-        .legend Display Options
-        %fieldset
-          %p
-            %label{ :for => 'alignment' } Alignment
-            %select#alignment{ :name => 'alignment' }
-              %option{ :value => '', :selected => true } None
-              %option{ :value => 'left' } Left
-              %option{ :value => 'right' } Right
+        = f.inputs 'Options' do
+          = f.input :alignment, as: :select, required: false, include_blank: 'None',
+            collection: [['Left', 'left'], ['Right', 'right']]
+          = f.input :border, required: false, input_html: { value: 1 }
+          = f.input :spacing, required: false, input_html: { value: 0 }
 
   .mercury-modal-controls
-    %input{ :type => 'submit', :value => 'Insert Table' }
+
+    = f.buttons do
+      = f.commit_button 'Insert Table'

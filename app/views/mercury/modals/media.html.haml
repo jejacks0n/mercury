@@ -16,8 +16,7 @@
       = f.inputs 'Options' do
 
         #image_url.media-options
-          = f.input :image_alignment, as: :select, required: false, label: 'Alignment',
-                    include_blank: 'None',
+          = f.input :image_alignment, as: :select, required: false, label: 'Alignment', include_blank: 'None',
                     collection: [['Left', 'left'], ['Right', 'right'], ['Top', 'top'], ['Middle', 'middle'], ['Bottom', 'bottom'], ['Absolute Middle', 'absmiddle'], ['Absolute Bottom', 'absbottom']]
 
         #youtube_url.media-options{ :style => 'display:none' }

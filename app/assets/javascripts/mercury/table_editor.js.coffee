@@ -109,8 +109,8 @@ $.extend Mercury.tableEditor, {
     cellCount = 0
     newRow = $('<tr>')
     for cell in @row.find('th, td')
-      newCell = $(cell).clone(false).empty()
       cellCount += @colSpan($(cell))
+      newCell = $("<#{cell.tagName.toLowerCase()}>", {colspan: cellCount})
       if (rowSpan = @rowSpan($(cell))) > 1
         if position == 'after'
           @setRowSpan($(cell), rowSpan + 1)

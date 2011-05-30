@@ -2,7 +2,7 @@ class MercuryController < ActionController::Base
   protect_from_forgery
 
   def edit
-    render :text => '', :layout => 'toolbar'
+    render text: '', layout: 'toolbar'
   end
 
   def show
@@ -10,7 +10,7 @@ class MercuryController < ActionController::Base
   end
 
   def resource
-    render :action => "/#{params[:type]}/#{params[:resource]}", :layout => false
+    render action: "/#{params[:type]}/#{params[:resource]}", layout: false
   end
 
 end

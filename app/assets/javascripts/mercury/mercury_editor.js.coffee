@@ -164,7 +164,7 @@ Mercury =
   # TODO: using client detection, but should use feature detection
   supported: document.getElementById && document.designMode && !$.browser.konqueror && !$.browser.msie
 
-  silent: false
+  silent: true
 
   debug: true
 

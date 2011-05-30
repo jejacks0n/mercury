@@ -9,16 +9,16 @@ gem 'uglifier'
 gem 'haml'
 gem 'haml-rails'
 
-gem 'paperclip', :git => 'git://github.com/thoughtbot/paperclip.git'
-gem 'formtastic', :git => 'git://github.com/justinfrench/formtastic.git'
+gem 'paperclip', git: 'git://github.com/thoughtbot/paperclip.git'
+gem 'formtastic', git: 'git://github.com/justinfrench/formtastic.git'
 
 group :development do
 end
 
 group :development, :test do
   gem 'thin'
-  gem 'ruby-debug19', :require => 'ruby-debug'
-  gem 'evergreen', :git => 'git://github.com/jnicklas/evergreen.git', :submodules => true, :require => 'evergreen/rails'
+  gem 'ruby-debug19', require: 'ruby-debug'
+  gem 'evergreen', git: 'git://github.com/jnicklas/evergreen.git', submodules: true, require: 'evergreen/rails'
 end
 
 group :test do

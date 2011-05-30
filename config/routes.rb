@@ -58,8 +58,8 @@ Mercury::Application.routes.draw do
 
   resources :images
 
-  root :to => 'mercury#show'
-  match '/edit(/*requested_uri)' => "mercury#edit", :as => :edit
+  root to: 'mercury#show'
+  match '/edit(/*requested_uri)' => "mercury#edit", as: :edit
   namespace :mercury do
     match ':type/:resource' => "mercury#resource"
   end

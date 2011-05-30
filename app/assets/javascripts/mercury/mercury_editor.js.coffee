@@ -139,9 +139,10 @@ class MercuryEditor
   save: ->
     url = @saveUrl ? @iframeSrc()
     data = @serialize()
+    data = $.toJSON(data) if Mercury.config.saveStyle == 'json'
     $.ajax url, {
       type: 'POST'
-      data: {content: $.toJSON(data)}
+      data: {content: data}
       success: =>
         Mercury.changes = false
       error: =>

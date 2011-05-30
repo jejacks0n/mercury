@@ -5,6 +5,20 @@ expects that an entire page is something that can be editable, and allows differ
 specified.  It displays a single toolbar for every region on the page, and uses the HTML5 contentEditable features on
 block elements, instead of iframes, which allows for CSS to be applied in ways that most other editors can't handle.
 
+Mercury has been written using CoffeeScript and jQuery for the Javascript portions, and is written on top of Rails 3.1.
+
+
+== Browser Support
+
+Mercury has been written for the future, and thus doesn't support legacy browsers or browsers that don't follow the W3C
+specifications for content editing.  Any browser will be supported if they support the W3C specification in the future,
+but there's no plans for adding support for alternate implementations at this point.
+
+Supported browsers are:
+* Chrome 10+
+* Safari 5+
+* Firefox 4+
+
 
 == The Story
 
@@ -19,7 +33,7 @@ customizing Mercury to suit your exact needs.  This doesn't mean there's no conf
 much of what you'll want, but efforts were taken to keep it simple and powerful.
 
 Even though it's a great editor, Mercury Editor may not be the best for your needs (based on javascript library, etc.)
-so here's a list of other editors that you might want to check out:
+so here's a list of some other editors that you might want to check out:
 
 * {Aloha Editor}[http://www.aloha-editor.org/]
 * {jHtmlArea}[http://jhtmlarea.codeplex.com/]
@@ -30,17 +44,6 @@ so here's a list of other editors that you might want to check out:
 
 
 == Project Details
-
-=== Browser Support
-
-Mercury has been written for the future, and thus doesn't support legacy browsers or browsers that don't follow the W3C
-specifications for content editing.  Any browser will be supported if they support the W3C specification in the future,
-but there's no plans for adding support for alternate implementations at this point.
-
-Supported Browsers:
-* Chrome 10+
-* Safari 5+
-* Firefox 4+
 
 === WYSIWYG editors suck
 
@@ -91,3 +94,20 @@ usage.
 The same seems to be true for a WYSIWYG editor, because great power should be wielded carefully.  It goes to the core
 ideals behind how the configuration for Mercury was designed.  You can easily remove or add aspects based on your
 needs, and how savvy you think the people using will be.
+
+
+== Features
+
+The feature list is actually pretty long, so this list is only the top 11 (important or cool features)
+
+* Previewing: preview content while you're working on it to see exactly how it'll look
+* Link Tools: insert and edit links (including TOC style links)
+* Media Tools: insert and edit images, youtube videos, and vimeo videos
+* Image Uploading: drag images from your desktop to any editable region and they'll be uploaded and inserted
+* Table Editing: advanced table editing and creation
+* Snippets: insert and edit reusable bits of markup/code that are predefined using drag and drop
+* Drag and Drop Ordering: snippets can be moved around by dragging and dropping them (in snippet regions)
+* Notes and Todos: attach notes and todos to any page
+* Customizable Toolbars: remove any of the existing toolbar items, or easily add your own custom buttons
+* Colaborative Authoring: edit any page while others are also editing (and watch what they're doing)
+* Region Types: edit HTML, Markdown, or Textile -- or create your own custom region type

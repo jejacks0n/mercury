@@ -96,8 +96,8 @@ Mercury.config =
       insertcharacter:       ['Character', 'Special Characters', {modal: '/mercury/modals/character', regions: ['editable']}]
       objectspanel:          ['Snippet', 'Snippet Panel', {panel: -> "/mercury/panels/snippets"}]
       sep2:                  ' '
-      historypanel:          ['History', 'Page Version History', {panel: -> "/mercury/panels/history"}]
-      sep3:                  ' '
+#      historypanel:          ['History', 'Page Version History', {panel: -> "/mercury/panels/history"}]
+#      sep3:                  ' '
       notespanel:            ['Notes', 'Page Notes', {panel: '/mercury/panels/notes'}]
       todospanel:            ['Todos', 'Page Todos', {panel: '/mercury/panels/todos'}]
 

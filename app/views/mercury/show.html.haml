@@ -55,6 +55,19 @@ Content outside the regions
       %td 7
 
 
+  %table{ border: 1, width: 200 }
+    %tr
+      %td{ rowspan: 2 } x1
+      %td{ rowspan: 2, colspan: 2 } x2
+    %tr
+    %tr
+      %td 1
+      %td{ colspan: 2 } 2
+    %tr
+      %td 3
+      %td{ colspan: 2 } 4
+
+
 
   %p this is a <u>pa<span style="text-decoration:overline">rag</span>raph</u>
   %p this is a <span style="text-decoration:overline">pa<u>rag</u>raph</span>

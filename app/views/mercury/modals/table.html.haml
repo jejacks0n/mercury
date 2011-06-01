@@ -9,7 +9,9 @@
           %tr
             %td
             %td
+            %td
           %tr
+            %td
             %td
             %td
 
@@ -17,21 +19,23 @@
         = f.inputs do
           %li{ class: "select input optional", id: "table_rows_input" }
             %label{ for: "table_rows" } Rows
-            %input{ type: 'button', name: 'row_add_before', class: 'action', value: 'Add Before' }/
-            %input{ type: 'button', name: 'row_add_after', class: 'action', value: 'Add After' }/
-            %input{ type: 'button', name: 'row_remove', class: 'action', value: 'Remove' }/
+            %input{ type: 'button', name: 'insertrowbefore', class: 'action', value: 'Add Before' }/
+            %input{ type: 'button', name: 'insertrowafter', class: 'action', value: 'Add After' }/
+            %input{ type: 'button', name: 'deleterow', class: 'action', value: 'Remove' }/
           %li{ class: "select input optional", id: "table_columns_input" }
             %label{ for: "table_columns" } Columns
-            %input{ type: 'button', name: 'column_add_before', class: 'action', value: 'Add Before' }/
-            %input{ type: 'button', name: 'column_add_after', class: 'action', value: 'Add After' }/
-            %input{ type: 'button', name: 'column_remove', class: 'action', value: 'Remove' }/
+            %input{ type: 'button', name: 'insertcolumnbefore', class: 'action', value: 'Add Before' }/
+            %input{ type: 'button', name: 'insertcolumnafter', class: 'action', value: 'Add After' }/
+            %input{ type: 'button', name: 'deletecolumn', class: 'action', value: 'Remove' }/
           %hr
           %li{ class: "select input optional", id: "table_row_adjust_input" }
             %label{ for: "table_row_adjust" } Row Span
-            %input{ type: 'button', name: 'row_expand', class: 'action', value: '+' }/
+            %input{ type: 'button', name: 'increaserowspan', class: 'action', value: '+' }/
+            %input{ type: 'button', name: 'decreaserowspan', class: 'action', value: '-' }/
           %li{ class: "select input optional", id: "table_column_adjust_input" }
             %label{ for: "table_column_adjust" } Column Span
-            %input{ type: 'button', name: 'column_expand', class: 'action', value: '+' }/
+            %input{ type: 'button', name: 'increasecolspan', class: 'action', value: '+' }/
+            %input{ type: 'button', name: 'decreasecolspan', class: 'action', value: '-' }/
 
         = f.inputs 'Options' do
           = f.input :alignment, as: :select, required: false, include_blank: 'None',

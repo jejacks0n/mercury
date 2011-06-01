@@ -145,7 +145,12 @@ Mercury.config =
         insertcolumnbefore:  ['Insert Table Column', 'Insert a table column before the cursor']
         insertcolumnafter:   ['Insert Table Column', 'Insert a table column after the cursor']
         deletecolumn:        ['Delete Table Column', 'Delete this table column']
-        sep:                 '-'
+        sep1:                ' '
+        increasecolspan:     ['Increase Cell Columns', 'Increase the cells colspan']
+        decreasecolspan:     ['Decrease Cell Columns', 'Decrease the cells colspan and add a new cell']
+        increaserowspan:     ['Increase Cell Rows', 'Increase the cells rowspan']
+        decreaserowspan:     ['Decrease Cell Rows', 'Decrease the cells rowspan and add a new cell']
+        sep2:                '-'
       rules:
         horizontalrule:      ['Horizontal Rule', 'Insert a horizontal rule']
         sep:                 '-'

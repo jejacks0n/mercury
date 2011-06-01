@@ -18,15 +18,18 @@ Mercury.modalHandlers.inserttable = ->
     action = $(event.target).attr('name')
     switch action
 
-      when 'row_add_before' then Mercury.tableEditor.addRow('before')
-      when 'row_add_after' then Mercury.tableEditor.addRow('after')
-      when 'row_remove' then Mercury.tableEditor.removeRow()
-      when 'column_add_before' then Mercury.tableEditor.addColumn('before')
-      when 'column_add_after' then Mercury.tableEditor.addColumn('after')
-      when 'column_remove' then Mercury.tableEditor.removeColumn()
-      when 'row_expand' then Mercury.tableEditor.increaseRowSpan()
-      when 'column_expand' then Mercury.tableEditor.increaseColSpan()
+      when 'insertrowbefore' then Mercury.tableEditor.addRow('before')
+      when 'insertrowafter' then Mercury.tableEditor.addRow('after')
+      when 'deleterow' then Mercury.tableEditor.removeRow()
+      when 'insertcolumnbefore' then Mercury.tableEditor.addColumn('before')
+      when 'insertcolumnafter' then Mercury.tableEditor.addColumn('after')
+      when 'deletecolumn' then Mercury.tableEditor.removeColumn()
+      when 'increasecolspan' then Mercury.tableEditor.increaseColspan()
+      when 'decreasecolspan' then Mercury.tableEditor.decreaseColspan()
+      when 'increaserowspan' then Mercury.tableEditor.increaseRowspan()
+      when 'decreaserowspan' then Mercury.tableEditor.decreaseRowspan()
 
+  #todo: finish me
   # make the alignment option work
 
   # make the border option work

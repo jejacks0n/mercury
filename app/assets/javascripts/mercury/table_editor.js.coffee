@@ -1,4 +1,3 @@
-# there's several bugs here
 Mercury.tableEditor = (table, cell) ->
   Mercury.tableEditor.load(table, cell)
   return Mercury.tableEditor
@@ -7,225 +6,255 @@ $.extend Mercury.tableEditor, {
 
   load: (@table, @cell) ->
     @row = @cell.parent('tr')
-
-
-  # counts the columns of the first row in the table, using colspans
-  columnCount: ->
-    count = 0
-    section = @table.find('thead tr:first-child, tbody tr:first-child, tfoot tr:first-child').first()
-    return @columnIndex(section.find('th, td'))
-
-
-  # counts the rows of the table
-  rowCount: ->
-    return @table.find('tr').length
-
-
-  # counts the columns including colspans, given a set of cells (in px)
-  columnIndex: (cells) ->
-    count = 0
-    count += @colSpan($(cell)) for cell in cells
-    return count
-
-
-  # calculates the left, and optionally the width of a cell
-  columnOffset: (cell, includeWidth = true) ->
-    @table.css({position: 'relative'}) # todo: can we reset this back quickly?
-    offset = @columnLeft(cell)
-    offset += @columnWidth(cell) if includeWidth
-    return offset
-
-
-  # calculates the left of a cell (in px)
-  columnLeft: (cell) ->
-    return cell.position().left
-
-
-  # calculates the width of a cell (in px)
-  columnWidth: (cell) ->
-    return cell.outerWidth()
-
-
-  # gets the colspans of a cell, and falls back to 1
-  colSpan: (cell) ->
-    return parseInt(cell.attr('colspan')) || 1
-
-
-  # gets the rowspans of a cell, and falls back to 1
-  rowSpan: (cell) ->
-    return parseInt(cell.attr('rowspan')) || 1
-
-
-  # sets the colspan of a cell, removing it if it's 1
-  setColSpan: (cell, value) ->
-    cell.attr('colspan', if value > 1 then value else null)
-
-
-  # sets the rowspan of a cell, removing it if it's 1
-  setRowSpan: (cell, value) ->
-    cell.attr('rowspan', if value > 1 then value else null)
-
-
-  # work through cells in a row to find the one at a given index
-  cellAtIndex: (row, index) ->
-    cellIndex = 0
-    for cell in row.find('th, td')
-      cellIndex += @colSpan($(cell))
-      return $(cell) if cellIndex == index
-      break if cellIndex > index
-    return false
+    @columnCount = @getColumnCount()
+    @rowCount = @getRowCount()
 
 
   addColumn: (position = 'after') ->
-    includeWidth = @cell.siblings('th, td').length > 1
-    currentOffset = @columnOffset(@cell, includeWidth)
-    currentColSpan = @colSpan(@cell)
+    sig = @cellSignatureFor(@cell)
 
-    for row, index in @table.find('tr')
-      for cell in $(row).find('th, td')
-        cell = $(cell)
-        offset = @columnOffset(cell, includeWidth)
-
-        if offset == currentOffset
-          colSpan = @colSpan(cell)
-          if colSpan > currentColSpan
-            @setColSpan(cell, colSpan + 1)
-          else
-            rowSpan = @rowSpan(cell)
-            newCell = $("<#{cell.get(0).tagName}>", {rowspan: rowSpan})
-            if position == 'before'
-              cell.before(newCell)
-              currentOffset = @columnOffset(newCell, includeWidth)
-            else
-              cell.after(newCell)
-            index += rowSpan - 1
-          break
-        else if offset > currentOffset
-          @setColSpan(cell, @colSpan(cell) + 1)
-          break
-
-
-  addRow: (position = 'after') ->
-    cellCount = 0
-    newRow = $('<tr>')
-    for cell in @row.find('th, td')
-      cellCount += @colSpan($(cell))
-      newCell = $("<#{cell.tagName.toLowerCase()}>", {colspan: cellCount})
-      if (rowSpan = @rowSpan($(cell))) > 1
-        if position == 'after'
-          @setRowSpan($(cell), rowSpan + 1)
-          continue
-        else
-          @setRowSpan(newCell, 1)
-      newRow.append(newCell)
-
-    # go up in rows, adjusting cells that intersect
-    if cellCount < @columnCount()
-      rowCount = 0
-      for previousRow in @row.prevAll('tr')
-        rowCount += 1
-        for cell in $(previousRow).find('td[rowspan], th[rowspan]')
-          rowSpan = @rowSpan($(cell))
-          if rowSpan > rowCount then @setRowSpan($(cell), rowSpan + 1)
-
-    if position == 'before'
-      @row.before(newRow)
-    else
-      @row.after(newRow)
+    for row, i in @table.find('tr')
+      rowSpan = 1
+      matchOptions = if position == 'after' then {right: sig.right} else {left: sig.left}
+      if matching = @findCellByOptionsFor(row, matchOptions)
+        newCell = $("<#{matching.cell.get(0).tagName}>", {rowspan: matching.height})
+        @setRowspanFor(newCell, matching.height)
+        if position == 'before' then matching.cell.before(newCell) else matching.cell.after(newCell)
+        i += matching.height - 1
+      else if intersecting = @findCellByIntersectionFor(row, sig)
+        @setColspanFor(intersecting.cell, intersecting.width + 1)
 
 
   removeColumn: ->
-    currentLeft = @columnLeft(@cell)
-    currentWidth = @columnWidth(@cell)
-    currentColSpan = @colSpan(@cell)
+    sig = @cellSignatureFor(@cell)
+    return if sig.width > 1
 
-    # figure out what we should delete, or adjust
-    deletable = []
-    adjustable = []
-    for row in @table.find('tr')
-      for cell in $(row).find('th, td')
-        cell = $(cell)
-        left = @columnLeft(cell)
-        width = @columnWidth(cell)
-        if left == currentLeft && width == currentWidth
-          deletable.push(cell)
-        else if left + width >= currentLeft + currentWidth && !(left > currentLeft)
-          adjustable.push(cell)
-        else if left == currentLeft && width < currentWidth
-          return
+    removing = []
+    adjusting = []
+    for row, i in @table.find('tr')
+      if matching = @findCellByOptionsFor(row, {left: sig.left, width: sig.width})
+        removing.push(matching.cell)
+        i += matching.height - 1
+      else if intersecting = @findCellByIntersectionFor(row, sig)
+        adjusting.push(intersecting.cell)
 
-    # make the deletions and adjustments
-    $(cell).remove() for cell in deletable
-    @setColSpan($(cell), @colSpan($(cell)) - currentColSpan) for cell in adjustable
+    $(cell).remove() for cell in removing
+    @setColspanFor(cell, @colspanFor(cell) - 1) for cell in adjusting
 
 
-  removeRow: ->
-    columnCount = @columnIndex(@row.find('th, td'))
+  # problem: row 6, any column: inserting after increases the rowspan of head 3, but it shouldn't
+  #          row 5, and column: inserting after increases the rowspan of head 5, but it shouldn't
+  # solution: we need to not increase the rowspan, and instead insert a cell there
+  addRow: (position = 'after') ->
+    newRow = $('<tr>')
 
-    # go up in rows, adjusting cells that intersect
-    if columnCount < @columnCount()
+    cellCount = 0
+    for cell in @row.find('th, td')
+      colspan = @colspanFor(cell)
+      newCell = $("<#{cell.tagName}>")
+      @setColspanFor(newCell, colspan)
+      cellCount += colspan
+      if (rowspan = @rowspanFor(cell)) > 1 && position == 'after'
+        @setRowspanFor(cell, rowspan + 1)
+        continue
+      newRow.append(newCell)
+
+    if cellCount < @columnCount
       rowCount = 0
       for previousRow in @row.prevAll('tr')
         rowCount += 1
         for cell in $(previousRow).find('td[rowspan], th[rowspan]')
-          rowSpan = @rowSpan($(cell))
-          if rowSpan > rowCount then @setRowSpan($(cell), rowSpan - 1)
+          rowspan = @rowspanFor(cell)
+          if rowspan - 1 > rowCount
+            @setRowspanFor(cell, rowspan + 1)
+          else
+            newCell = $("<#{cell.tagName}>", {colspan: @colspanFor(cell)})
 
-    # figure out if we should move any cells down
-    cells = @row.find('td[rowspan], th[rowspan]')
-    moveable = []
-    if cells.length
-      nextRow = @row.next('tr')
-      count = 0
-      for cell in cells
-        index = @columnIndex($(cell).prevAll('td, th'))
-        count += 1
-        if cellAtIndex = @cellAtIndex(nextRow, index)
-          newCell = $(cell).clone(false)
-          @setRowSpan(newCell, @rowSpan(newCell) - 1)
-          cellAtIndex.after(newCell)
+
+
+    if position == 'before' then @row.before(newRow) else @row.after(newRow)
+
+
+  removeRow: ->
+    # check to see that all cells have the same rowspan, and figure out the minimum rowspan
+    rowspansMatch = true
+    prevRowspan = 0
+    minRowspan = 0
+    for cell in @row.find('td, th')
+      rowspan = @rowspanFor(cell)
+      rowspansMatch = false if prevRowspan && rowspan != prevRowspan
+      minRowspan = rowspan if rowspan < minRowspan || !minRowspan
+      prevRowspan = rowspan
+
+    return if !rowspansMatch && @rowspanFor(@cell) > minRowspan
+
+    # remove any emtpy rows below
+    if minRowspan > 1
+      $(@row.nextAll('tr')[i]).remove() for i in [0..minRowspan - 2]
+
+    # find and move down any cells that have a larger rowspan
+    for cell in @row.find('td[rowspan], th[rowspan]')
+      sig = @cellSignatureFor(cell)
+      continue if sig.height == minRowspan
+      if match = @findCellByOptionsFor(@row.nextAll('tr')[minRowspan - 1], {left: sig.left, forceAdjacent: true})
+        @setRowspanFor(cell, @rowspanFor(cell) - @rowspanFor(@cell))
+        if match.direction == 'before' then match.cell.before($(cell).clone()) else match.cell.after($(cell).clone())
+
+    if @columnsFor(@row.find('td, th')) < @columnCount
+      # move up rows looking for cells with rowspans that might intersect
+      rowsAbove = 0
+      for aboveRow in @row.prevAll('tr')
+        rowsAbove += 1
+        for cell in $(aboveRow).find('td[rowspan], th[rowspan]')
+          # if the cell intersects with the row we're trying to calculate on, and it's index is less than where we've
+          # gotten so far, add it
+          rowspan = @rowspanFor(cell)
+          @setRowspanFor(cell, rowspan - @rowspanFor(@cell)) if rowspan > rowsAbove
 
     @row.remove()
 
 
-  increaseColSpan: ->
-    currentIndex = @columnIndex(@cell.prevAll('td, th')) + @colSpan(@cell)
-    currentRowSpan = @rowSpan(@cell)
-
-    nextCell = @cell.next('td, th')
-    if nextCell.length
-      rowSpan = @rowSpan($(nextCell))
-      if rowSpan == currentRowSpan
-        # go up in rows to see if there's any intersections
-        columnCount = @columnIndex(@row.find('th, td'))
-        if columnCount < @columnCount()
-          console.debug('intersection possible')
-          rowCount = 0
-          for previousRow in @row.prevAll('tr')
-            rowCount += 1
-            for cell in $(previousRow).find('td[rowspan], th[rowspan]')
-              console.debug('intersection probable')
-              console.debug(@columnIndex($(cell).prevAll('td, th')), currentIndex)
+  increaseColspan: ->
+    cell = @cell.next('td, th')
+    return unless cell.length
+    return if @rowspanFor(cell) != @rowspanFor(@cell)
+    return if @cellIndexFor(cell) > @cellIndexFor(@cell) + @colspanFor(@cell)
+    @setColspanFor(@cell, @colspanFor(@cell) + @colspanFor(cell))
+    cell.remove()
 
 
-        @setColSpan(@cell, @colSpan(@cell) + @colSpan($(nextCell)))
-        $(nextCell).remove()
+  decreaseColspan: ->
+    return if @colspanFor(@cell) == 1
+    @setColspanFor(@cell, @colspanFor(@cell) - 1)
+    newCell = $("<#{@cell.get(0).tagName}>", {rowspan: @rowspanFor(@cell)})
+    @cell.after(newCell)
 
 
-  increaseRowSpan: ->
-    currentLeft = @columnLeft(@cell)
-    currentWidth = @columnWidth(@cell)
-    currentRowSpan = @rowSpan(@cell)
+  increaseRowspan: ->
+    sig = @cellSignatureFor(@cell)
+    nextRow = @row.nextAll('tr')[sig.height - 1]
+    if nextRow && match = @findCellByOptionsFor(nextRow, {left: sig.left, width: sig.width})
+      @setRowspanFor(@cell, sig.height + match.height)
+      match.cell.remove()
 
-    nextRow = @row.nextAll('tr').get(currentRowSpan - 1)
-    if nextRow
-      for cell in $(nextRow).find('th, td')
-        left = @columnLeft($(cell))
-        width = @columnWidth($(cell))
-        if left == currentLeft && width == currentWidth
-          @setRowSpan(@cell, @rowSpan(@cell) + @rowSpan($(cell)))
-          $(cell).remove()
+  decreaseRowspan: ->
+    sig = @cellSignatureFor(@cell)
+    return if sig.height == 1
+    nextRow = @row.nextAll('tr')[sig.height - 2]
+    if match = @findCellByOptionsFor(nextRow, {left: sig.left, forceAdjacent: true})
+      console.debug("match #{match.cell.html()}")
+      newCell = $("<#{@cell.get(0).tagName}>", {colspan: @colspanFor(@cell)})
+      @setRowspanFor(@cell, sig.height - 1)
+      if match.direction == 'before' then match.cell.before(newCell) else match.cell.after(newCell)
+    else
+      console.debug('no match')
 
+  # Counts the columns of the first row (alpha row) in the table.  We can safely rely on the first row always being
+  # comprised of a full set of cells or cells with colspans.
+  getColumnCount: ->
+    return @columnsFor(@table.find('thead tr:first-child, tbody tr:first-child, tfoot tr:first-child').first().find('td, th'))
+
+
+  # Counts the rows of the table.
+  getRowCount: ->
+    return @table.find('tr').length
+
+
+  # Gets the index for a given cell, taking into account that rows above it can have cells that have rowspans.
+  cellIndexFor: (cell) ->
+    cell = $(cell)
+
+    # get the row for the cell and calculate all the columns in it
+    row = cell.parent('tr')
+    columns = @columnsFor(row.find('td, th'))
+    index = @columnsFor(cell.prevAll('td, th'))
+
+    # if the columns is less than expected, we need to look above for rowspans
+    if columns < @columnCount
+      # move up rows looking for cells with rowspans that might intersect
+      rowsAbove = 0
+      for aboveRow in row.prevAll('tr')
+        rowsAbove += 1
+        for aboveCell in $(aboveRow).find('td[rowspan], th[rowspan]')
+          # if the cell intersects with the row we're trying to calculate on, and it's index is less than where we've
+          # gotten so far, add it
+          if @rowspanFor(aboveCell) > rowsAbove && @cellIndexFor(aboveCell) <= index
+            index += @colspanFor(aboveCell)
+
+    return index
+
+  # Creates a signature for a given cell, which is made up if it's size, and itself.
+  cellSignatureFor: (cell) ->
+    sig = {cell: $(cell)}
+    sig.left = @cellIndexFor(cell)
+    sig.width = @colspanFor(cell)
+    sig.height = @rowspanFor(cell)
+    sig.right = sig.left + sig.width
+    return sig
+
+
+  findCellByOptionsFor: (row, options) ->
+    for cell in $(row).find('td, th')
+      sig = @cellSignatureFor(cell)
+      if typeof(options.right) != 'undefined'
+        return sig if sig.right == options.right
+      if typeof(options.left) != 'undefined'
+
+        if options.width
+          return sig if sig.left == options.left && sig.width == options.width
+        else if !options.forceAdjacent
+          return sig if sig.left == options.left
+        else if options.forceAdjacent
+          if sig.left > options.left
+            prev = $(cell).prev('td, th')
+            if prev.length
+              sig = @cellSignatureFor(prev)
+              sig.direction = 'after'
+            else
+              sig.direction = 'before'
+            return sig
+
+    if options.forceAdjacent
+      sig.direction = 'after'
+      return sig
+
+    return null
+
+
+  findCellByIntersectionFor: (row, signature) ->
+    for cell in $(row).find('td, th')
+      sig = @cellSignatureFor(cell)
+      return sig if sig.right - signature.left >= 0 && sig.right > signature.left
+    return null
+
+
+  # Counts all the columns in a given array of columns, taking colspans into
+  # account.
+  columnsFor: (cells) ->
+    count = 0
+    count += @colspanFor(cell) for cell in cells
+    return count
+
+
+  # Tries to get the colspan of a cell, falling back to 1 if there's none
+  # specified.
+  colspanFor: (cell) ->
+    return parseInt($(cell).attr('colspan')) || 1
+
+
+  # Tries to get the rowspan of a cell, falling back to 1 if there's none
+  # specified.
+  rowspanFor: (cell) ->
+    return parseInt($(cell).attr('rowspan')) || 1
+
+
+  # Sets the colspan of a cell, removing it if it's 1.
+  setColspanFor: (cell, value) ->
+    $(cell).attr('colspan', if value > 1 then value else null)
+
+
+  # Sets the rowspan of a cell, removing it if it's 1
+  setRowspanFor: (cell, value) ->
+    $(cell).attr('rowspan', if value > 1 then value else null)
 
 }
-

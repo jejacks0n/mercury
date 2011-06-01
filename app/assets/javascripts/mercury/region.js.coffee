@@ -36,8 +36,9 @@ class Mercury.Region
     @element.mousemove (event) =>
       return if @previewing
       return unless Mercury.region == @
-      @snippet = $(event.target).closest('.mercury-snippet')
-      if @snippet.length
+      snippet = $(event.target).closest('.mercury-snippet')
+      if snippet.length
+        @snippet = snippet
         Mercury.trigger('show:toolbar', {type: 'snippet', snippet: @snippet})
 
     @element.mouseout (event) =>

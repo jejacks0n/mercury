@@ -120,11 +120,7 @@ class Mercury.Regions.Editable extends Mercury.Region
         when 90 # undo / redo
           return unless event.metaKey
           event.preventDefault()
-          if event.shiftKey
-            @execCommand('redo')
-          else
-            @execCommand('undo')
-
+          if event.shiftKey then @execCommand('redo') else @execCommand('undo')
           return
 
         when 13 # enter
@@ -135,11 +131,6 @@ class Mercury.Regions.Editable extends Mercury.Region
             # mozilla: pressing enter in any elemeny besides a div handles strangely
             event.preventDefault()
             @document.execCommand('insertHTML', false, '<br/>')
-
-        when 90 # undo and redo
-          break unless event.metaKey
-          event.preventDefault()
-          if event.shiftKey then @execCommand('redo') else @execCommand('undo')
 
         when 9 # tab
           event.preventDefault()
@@ -343,6 +334,14 @@ Mercury.Regions.Editable.actions =
 
   deleterow: -> Mercury.tableEditor.removeRow()
 
+  increasecolspan: -> Mercury.tableEditor.increaseColspan()
+
+  decreasecolspan: -> Mercury.tableEditor.decreaseColspan()
+
+  increaserowspan: -> Mercury.tableEditor.increaseRowspan()
+
+  decreaserowspan: -> Mercury.tableEditor.decreaseRowspan()
+
   undo: -> @html(@history.undo())
 
   redo: -> @html(@history.redo())
@@ -351,7 +350,7 @@ Mercury.Regions.Editable.actions =
 
   backcolor: (selection, options) -> selection.wrap("<span style=\"background-color:#{options.value.toHex()}\">", true)
 
-  overline: (selection, options) -> selection.wrap('<span style="text-decoration:overline">', true)
+  overline: (selection) -> selection.wrap('<span style="text-decoration:overline">', true)
 
   style: (selection, options) -> selection.wrap("<span class=\"#{options.value}\">", true)
 

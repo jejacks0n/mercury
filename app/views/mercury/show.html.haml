@@ -28,20 +28,33 @@ Content outside the regions
       %td Column4
       %td Column6
     %tr
-      %th Head1
-      %th Head2
+      %th{ rowspan: 2 } Head1
+      %th{ rowspan: 2 } Head2
       %th{ rowspan: 2 } Head3
       %th Head4
       %th Head6
     %tr
-      %td Column1
-      %td Column2
       %td Column4
       %td Column5
       %td Column6
     %tr
       %td{ colspan: 2 } Column1
       %td{ colspan: 4 } Column2
+
+  a--------
+  %table{ border: 1 }
+    %tr
+      %td 1
+      %td{ colspan: 2 } 2
+    %tr
+      %td{ rowspan: 2 } 3
+      %td 4
+      %td 5
+    %tr
+      %td 6
+      %td 7
+
+
 
   %p this is a <u>pa<span style="text-decoration:overline">rag</span>raph</u>
   %p this is a <span style="text-decoration:overline">pa<u>rag</u>raph</span>

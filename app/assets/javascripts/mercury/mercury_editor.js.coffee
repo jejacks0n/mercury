@@ -94,7 +94,6 @@ class MercuryEditor
   finalizeInterface: ->
     @snippetToolbar = new Mercury.SnippetToolbar(@document)
 
-    Mercury.editor = @
     Mercury.hijackLinks(@document)
     @resize()
 
@@ -171,7 +170,7 @@ Mercury =
 
   silent: true
 
-  debug: true
+  debug: false
 
 
   beforeUnload: ->

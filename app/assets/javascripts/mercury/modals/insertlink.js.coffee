@@ -14,7 +14,7 @@ Mercury.modalHandlers.insertlink = ->
 
   # fill the existing bookmark select
   bookmarkSelect = @element.find('#link_existing_bookmark')
-  for link in $('a[name]', Mercury.editor.document)
+  for link in $('a[name]', window.mercuryInstance.document)
     bookmarkSelect.append($('<option>', {value: $(link).attr('name')}).text($(link).text()))
 
   # get the selection and initialize its information into the form

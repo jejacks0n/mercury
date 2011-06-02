@@ -192,7 +192,11 @@ $.extend Mercury.tableEditor, {
     sig.right = sig.left + sig.width
     return sig
 
-
+  # Find a cell based on options.  Options can be:
+  # right
+  # or
+  # left, [width], [forceAdjacent]
+  # eg. findCellByOptionsFor(@row, {left: 1, width: 2, forceAdjacent: true})
   findCellByOptionsFor: (row, options) ->
     for cell in $(row).find('td, th')
       sig = @cellSignatureFor(cell)
@@ -220,7 +224,7 @@ $.extend Mercury.tableEditor, {
 
     return null
 
-
+  # Finds a cell that intersects with the current signature
   findCellByIntersectionFor: (row, signature) ->
     for cell in $(row).find('td, th')
       sig = @cellSignatureFor(cell)

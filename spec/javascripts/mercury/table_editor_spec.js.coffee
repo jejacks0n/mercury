@@ -101,109 +101,92 @@ describe "Mercury.tableEditor", ->
     it "finds a matching cell in a specific row, based on right", ->
       row = @table.find('#row2').get(0)
       sig = Mercury.tableEditor.findCellByOptionsFor(row, { right: 5 })
-      expect(sig.cell.get(0)).toBe(@table.find('#row2 th:nth-child(5n)').get(0))
+      expect(sig.cell.get(0)).toEqual(@table.find('#row2 th:nth-child(5n)').get(0))
 
     it "finds a cell based on left", ->
       row = @table.find('#row5').get(0)
       sig = Mercury.tableEditor.findCellByOptionsFor(row, { left: 5 })
-      expect(sig.cell.get(0)).toBe(@table.find('#row5 th:nth-child(5n)').get(0))
+      expect(sig.cell.get(0)).toEqual(@table.find('#row5 th:nth-child(5n)').get(0))
 
     it "finds a cell based on left and width", ->
       row = @table.find('#row7').get(0)
       sig = Mercury.tableEditor.findCellByOptionsFor(row, { left: 2, width: 4 })
-      expect(sig.cell.get(0)).toBe(@table.find('#row7 td:nth-child(2n)').get(0))
+      expect(sig.cell.get(0)).toEqual(@table.find('#row7 td:nth-child(2n)').get(0))
 
-    it "will force to an adjacent cell if asked", ->
-      row = @table.find('#row3').get(0)
-      sig = Mercury.tableEditor.findCellByOptionsFor(row, { left: 2 })
-      expect(sig).toEqual(null)
+    describe "when a cell isn't there", ->
 
-      sig = Mercury.tableEditor.findCellByOptionsFor(row, { left: 2, forceAdjacent: true })
-      expect(sig.cell.get(0)).toBe(@table.find('#row3 td:nth-child(2n)').get(0))
-      expect(sig.direction).toEqual('after')
+      beforeEach ->
+        @row = @table.find('#row3').get(0)
 
-#  describe "#columnCount", ->
-#
-#    beforeEach ->
-#      Mercury.tableEditor(@table, @cell)
-#
-#    it "counts all the columns, including colspans of the first row", ->
-#      count = Mercury.tableEditor.columnCount()
-#      expect(count).toEqual(6)
-#
-#
-#  describe "#rowCount", ->
-#
-#    beforeEach ->
-#      Mercury.tableEditor(@table, @cell)
-#
-#    it "it returns the count of all the rows", ->
-#      count = Mercury.tableEditor.rowCount()
-#      expect(count).toEqual(8)
-#
-#
-#  describe "#columnOffset", ->
-#
-#    beforeEach ->
-#      @cell = @table.find('#row2 th:first-child')
-#      Mercury.tableEditor(@table, @cell)
-#
-#    it "returns the offset (left) + width of a cell", ->
-#      offset = Mercury.tableEditor.columnOffset(@cell)
-#      expect(offset).toEqual(104)
-#
-#    it "returns just the offset (left) of a cell if width isn't included", ->
-#      offset = Mercury.tableEditor.columnOffset(@cell, false)
-#      expect(offset).toEqual(2)
-#
-#
-#  describe "#colSpan", ->
-#
-#    beforeEach ->
-#
-#    it "returns the colspan of a cell", ->
-#      @cell = @table.find('#row7 td:nth-child(2n)')
-#      expect(Mercury.tableEditor.colSpan(@cell)).toEqual(4)
-#
-#    it "returns 1 if the cell doesn't have a colspan", ->
-#      @cell = @table.find('#row6 td:first-child')
-#      expect(Mercury.tableEditor.colSpan(@cell)).toEqual(1)
-#
-#
-#  describe "#rowSpan", ->
-#
-#    it "returns the rowspan of a cell", ->
-#      @cell = @table.find('#row2 th:nth-child(5n)')
-#      expect(Mercury.tableEditor.rowSpan(@cell)).toEqual(4)
-#
-#    it "returns 1 if the cell doesn't have a rowspan", ->
-#      @cell = @table.find('#row6 td:first-child')
-#      expect(Mercury.tableEditor.rowSpan(@cell)).toEqual(1)
-#
-#
-#  describe "#setColSpan", ->
-#
-#    beforeEach ->
-#      @cell = @table.find('#row2 th:first-child')
-#
-#    it "sets the colspan of a cell", ->
-#      Mercury.tableEditor.setColSpan(@cell, 20)
-#      expect(@cell.attr('colspan')).toEqual('20')
-#
-#    it "removes the colspan entirely if the value was 1", ->
-#      Mercury.tableEditor.setColSpan(@cell, 1)
-#      expect(@cell.attr('colspan')).toEqual(undefined)
-#
-#
-#  describe "#setRowSpan", ->
-#
-#    beforeEach ->
-#      @cell = @table.find('#row2 th:first-child')
-#
-#    it "sets the rowspan of a cell", ->
-#      Mercury.tableEditor.setRowSpan(@cell, 20)
-#      expect(@cell.attr('rowspan')).toEqual('20')
-#
-#    it "removes the rowspan if the value was 1", ->
-#      Mercury.tableEditor.setRowSpan(@cell, 1)
-#      expect(@cell.attr('rowspan')).toEqual(undefined)
+      it "returns null", ->
+        sig = Mercury.tableEditor.findCellByOptionsFor(@row, { left: 2 })
+        expect(sig).toEqual(null)
+
+      it "can force to an adjacent cell", ->
+        sig = Mercury.tableEditor.findCellByOptionsFor(@row, { left: 2, forceAdjacent: true })
+        expect(sig.cell.get(0)).toEqual(@table.find('#row3 td:nth-child(2n)').get(0))
+        expect(sig.direction).toEqual('after')
+
+
+  describe "#findCellByIntersectionFor", ->
+
+    it "finds cells that intersect vertically, based on the signature of another cell", ->
+      sig = Mercury.tableEditor.cellSignatureFor(@table.find('#row6 td:nth-child(3n)'))
+      intersectingSig = Mercury.tableEditor.findCellByIntersectionFor(@table.find('#row7'), sig)
+      expect(intersectingSig.cell.get(0)).toEqual(@table.find('#row7 td:nth-child(2n)').get(0))
+
+
+  describe "#columnsFor", ->
+
+    it "returns the total number of cells and colspans for a given collection of cells", ->
+      expect(Mercury.tableEditor.columnsFor(@table.find('#row7 td'))).toEqual(6)
+
+
+  describe "#colspanFor", ->
+
+    it "returns the colspan of a given cell", ->
+      cell = @table.find('#row7 td:nth-child(2n)')
+      expect(Mercury.tableEditor.colspanFor(cell)).toEqual(4)
+
+    it "defaults to 1", ->
+      cell = @table.find('#row6 td:first-child')
+      expect(Mercury.tableEditor.colspanFor(cell)).toEqual(1)
+
+
+  describe "#rowspanFor", ->
+
+    it "returns the rowspan of a given cell", ->
+      cell = @table.find('#row2 th:nth-child(5n)')
+      expect(Mercury.tableEditor.rowspanFor(cell)).toEqual(4)
+
+    it "defaults to 1", ->
+      cell = @table.find('#row6 td:first-child')
+      expect(Mercury.tableEditor.rowspanFor(cell)).toEqual(1)
+
+
+  describe "setColspanFor", ->
+
+    beforeEach ->
+      @cell = @table.find('#row2 th:first-child')
+
+    it "sets the colspan for a cell", ->
+      Mercury.tableEditor.setColspanFor(@cell, 20)
+      expect(@cell.attr('colspan')).toEqual('20')
+
+    it "removes the attribute if it's 1", ->
+      Mercury.tableEditor.setColspanFor(@cell, 1)
+      expect(@cell.attr('colspan')).toEqual(undefined)
+
+
+  describe "setRowspanFor", ->
+
+    beforeEach ->
+      @cell = @table.find('#row2 th:first-child')
+
+    it "sets the rowspan for a cell", ->
+      Mercury.tableEditor.setRowspanFor(@cell, 20)
+      expect(@cell.attr('rowspan')).toEqual('20')
+
+    it "removes the attribute if it's 1", ->
+      Mercury.tableEditor.setRowspanFor(@cell, 1)
+      expect(@cell.attr('rowspan')).toEqual(undefined)

@@ -33,7 +33,7 @@ describe "Mercury.SnippetToolbar", ->
     it "builds an element", ->
       @snippetToolbar = new Mercury.SnippetToolbar($('document'), {appendTo: '#test'})
       html = $('<div>').html(@snippetToolbar.element).html()
-      expect(html).toContain('class="mercury-toolbar mercury-snippet-toolbar" ')
+      expect(html).toContain('class="mercury-toolbar mercury-snippet-toolbar"')
       expect(html).toContain('style="display:none"')
 
     it "appends to any element", ->
@@ -115,7 +115,10 @@ describe "Mercury.SnippetToolbar", ->
     it "positions itself based on the snippet", ->
       @snippetToolbar.element.show()
       @snippetToolbar.position()
-      expect(@snippetToolbar.element.offset()).toEqual({top: 13, left : 200})
+      if $.browser.webkit
+        expect(@snippetToolbar.element.offset()).toEqual({top: 13, left : 200})
+      else
+        expect(@snippetToolbar.element.offset()).toEqual({top: 9, left : 200})
 
 
   describe "#appear", ->

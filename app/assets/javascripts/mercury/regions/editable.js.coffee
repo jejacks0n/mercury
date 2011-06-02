@@ -316,6 +316,15 @@ class Mercury.Regions.Editable extends Mercury.Region
           title: 'HTML Sanitizer (Starring Clippy)',
           afterLoad: -> @element.find('textarea').val(cleaned.replace(/<br\/>/g, '\n'))
         }
+    else if Mercury.config.cleanStylesOnPaste
+      # strip styles
+      pasted = prePasteHTML.singleDiff(@html())
+
+      container = $('<div>').appendTo(@document.createDocumentFragment()).html(pasted)
+      container.find('[style]').attr({style: null})
+
+      @document.execCommand('undo', false, null)
+      @execCommand('insertHTML', {value: container.html()})
 
 
 

@@ -7,6 +7,14 @@ Mercury.config =
   saveStyle: 'json' # or 'form'
 
 
+  # Pasting
+  #
+  # When copying content using webkit, it embeds all the user defined styles (from the css files) into the html style
+  # attributes directly.  This can be a desired feature, or an annoyance.  You can enable it or disable it here.
+  #
+  cleanStylesOnPaste: true
+
+
   # Ignored Links
   #
   # Links need to be specially handled because the editor loads content into an iframe, and to ensure that links load

@@ -59,8 +59,8 @@ describe "Mercury.tableEditor", ->
   describe "#cellIndexFor", ->
 
     it "gives the right index for different cells", ->
-      Mercury.tableEditor(@table, @cell)
-      expect(Mercury.tableEditor.cellIndexFor(@table.find('#row1 td:nth-child(1n)'))).toEqual(0)
+      cell = @table.find('#row1 td:nth-child(1n)').get(0)
+      expect(Mercury.tableEditor.cellIndexFor(cell)).toEqual(0)
 
       cell = @table.find('#row2 th:nth-child(2n)').get(0)
       expect(Mercury.tableEditor.cellIndexFor(cell)).toEqual(1)
@@ -74,6 +74,53 @@ describe "Mercury.tableEditor", ->
       cell = @table.find('#row7 td:nth-child(2n)').get(0)
       expect(Mercury.tableEditor.cellIndexFor(cell)).toEqual(2)
 
+
+  describe "#cellSignatureFor", ->
+
+    it "returns an object with cell information", ->
+      cell = @table.find('#row2 th:nth-child(3n)').get(0)
+      sig = Mercury.tableEditor.cellSignatureFor(cell)
+      expect(sig.width).toEqual(1)
+      expect(sig.height).toEqual(2)
+      expect(sig.right).toEqual(3)
+
+      cell = @table.find('#row2 th:nth-child(5n)').get(0)
+      sig = Mercury.tableEditor.cellSignatureFor(cell)
+      expect(sig.width).toEqual(1)
+      expect(sig.height).toEqual(4)
+      expect(sig.right).toEqual(5)
+
+      cell = @table.find('#row7 td:nth-child(1n)').get(0)
+      sig = Mercury.tableEditor.cellSignatureFor(cell)
+      expect(sig.width).toEqual(2)
+      expect(sig.height).toEqual(1)
+      expect(sig.right).toEqual(2)
+
+  describe "#findCellByOptionsFor", ->
+
+    it "finds a matching cell in a specific row, based on right", ->
+      row = @table.find('#row2').get(0)
+      sig = Mercury.tableEditor.findCellByOptionsFor(row, { right: 5 })
+      expect(sig.cell.get(0)).toBe(@table.find('#row2 th:nth-child(5n)').get(0))
+
+    it "finds a cell based on left", ->
+      row = @table.find('#row5').get(0)
+      sig = Mercury.tableEditor.findCellByOptionsFor(row, { left: 5 })
+      expect(sig.cell.get(0)).toBe(@table.find('#row5 th:nth-child(5n)').get(0))
+
+    it "finds a cell based on left and width", ->
+      row = @table.find('#row7').get(0)
+      sig = Mercury.tableEditor.findCellByOptionsFor(row, { left: 2, width: 4 })
+      expect(sig.cell.get(0)).toBe(@table.find('#row7 td:nth-child(2n)').get(0))
+
+    it "will force to an adjacent cell if asked", ->
+      row = @table.find('#row3').get(0)
+      sig = Mercury.tableEditor.findCellByOptionsFor(row, { left: 2 })
+      expect(sig).toEqual(null)
+
+      sig = Mercury.tableEditor.findCellByOptionsFor(row, { left: 2, forceAdjacent: true })
+      expect(sig.cell.get(0)).toBe(@table.find('#row3 td:nth-child(2n)').get(0))
+      expect(sig.direction).toEqual('after')
 
 #  describe "#columnCount", ->
 #

@@ -15,7 +15,7 @@ Content outside the regions
       %th{ colspan: 2 } Head1
       %th{ rowspan: 2 } Head3
       %th Head4
-      %th{ rowspan: 4 } Head5
+      %th{ rowspan: 5 } Head5
       %th Head6
     %tr
       %td{ colspan: 2 } Column1
@@ -24,13 +24,17 @@ Content outside the regions
     %tr
       %td Column1
       %td Column2
-      %td Column3
+      %td{ rowspan: 4 } Column3
+      %td Column4
+      %td Column6
+    %tr
+      %td Column1
+      %td Column2
       %td Column4
       %td Column6
     %tr
       %th{ rowspan: 2 } Head1
       %th{ rowspan: 2 } Head2
-      %th{ rowspan: 2 } Head3
       %th Head4
       %th Head6
     %tr

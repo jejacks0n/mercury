@@ -42,11 +42,11 @@ $.extend Mercury.tableEditor, {
     @setColspanFor(cell, @colspanFor(cell) - 1) for cell in adjusting
 
 
-  # problem: row 6, any column: inserting after increases the rowspan of head 3, but it shouldn't
-  #          row 5, and column: inserting after increases the rowspan of head 5, but it shouldn't
-  # solution: we need to not increase the rowspan, and instead insert a cell there
   addRow: (position = 'after') ->
     newRow = $('<tr>')
+
+    if (rowspan = @rowspanFor(@cell)) > 1 && position == 'after'
+      @row = $(@row.nextAll('tr')[rowspan - 2])
 
     cellCount = 0
     for cell in @row.find('th, td')
@@ -57,6 +57,7 @@ $.extend Mercury.tableEditor, {
       if (rowspan = @rowspanFor(cell)) > 1 && position == 'after'
         @setRowspanFor(cell, rowspan + 1)
         continue
+
       newRow.append(newCell)
 
     if cellCount < @columnCount
@@ -65,12 +66,14 @@ $.extend Mercury.tableEditor, {
         rowCount += 1
         for cell in $(previousRow).find('td[rowspan], th[rowspan]')
           rowspan = @rowspanFor(cell)
-          if rowspan - 1 > rowCount
+          if rowspan - 1 >= rowCount && position == 'before'
             @setRowspanFor(cell, rowspan + 1)
-          else
-            newCell = $("<#{cell.tagName}>", {colspan: @colspanFor(cell)})
-
-
+          else if rowspan - 1 >= rowCount && position == 'after'
+            if rowspan - 1 == rowCount
+              newCell = $("<#{cell.tagName}>", {colspan: @colspanFor(cell)})
+              newRow.append(newCell);
+            else
+              @setRowspanFor(cell, rowspan + 1)
 
     if position == 'before' then @row.before(newRow) else @row.after(newRow)
 
@@ -142,12 +145,9 @@ $.extend Mercury.tableEditor, {
     return if sig.height == 1
     nextRow = @row.nextAll('tr')[sig.height - 2]
     if match = @findCellByOptionsFor(nextRow, {left: sig.left, forceAdjacent: true})
-      console.debug("match #{match.cell.html()}")
       newCell = $("<#{@cell.get(0).tagName}>", {colspan: @colspanFor(@cell)})
       @setRowspanFor(@cell, sig.height - 1)
       if match.direction == 'before' then match.cell.before(newCell) else match.cell.after(newCell)
-    else
-      console.debug('no match')
 
   # Counts the columns of the first row (alpha row) in the table.  We can safely rely on the first row always being
   # comprised of a full set of cells or cells with colspans.

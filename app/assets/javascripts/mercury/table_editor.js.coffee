@@ -17,7 +17,7 @@ $.extend Mercury.tableEditor, {
       rowSpan = 1
       matchOptions = if position == 'after' then {right: sig.right} else {left: sig.left}
       if matching = @findCellByOptionsFor(row, matchOptions)
-        newCell = $("<#{matching.cell.get(0).tagName}>", {rowspan: matching.height})
+        newCell = $("<#{matching.cell.get(0).tagName}>").text('\00')
         @setRowspanFor(newCell, matching.height)
         if position == 'before' then matching.cell.before(newCell) else matching.cell.after(newCell)
         i += matching.height - 1
@@ -51,7 +51,7 @@ $.extend Mercury.tableEditor, {
     cellCount = 0
     for cell in @row.find('th, td')
       colspan = @colspanFor(cell)
-      newCell = $("<#{cell.tagName}>")
+      newCell = $("<#{cell.tagName}>").text('\00')
       @setColspanFor(newCell, colspan)
       cellCount += colspan
       if (rowspan = @rowspanFor(cell)) > 1 && position == 'after'
@@ -129,7 +129,8 @@ $.extend Mercury.tableEditor, {
   decreaseColspan: ->
     return if @colspanFor(@cell) == 1
     @setColspanFor(@cell, @colspanFor(@cell) - 1)
-    newCell = $("<#{@cell.get(0).tagName}>", {rowspan: @rowspanFor(@cell)})
+    newCell = $("<#{@cell.get(0).tagName}>").text('\00')
+    @setRowspanFor(newCell, @rowspanFor(@cell))
     @cell.after(newCell)
 
 
@@ -145,7 +146,8 @@ $.extend Mercury.tableEditor, {
     return if sig.height == 1
     nextRow = @row.nextAll('tr')[sig.height - 2]
     if match = @findCellByOptionsFor(nextRow, {left: sig.left, forceAdjacent: true})
-      newCell = $("<#{@cell.get(0).tagName}>", {colspan: @colspanFor(@cell)})
+      newCell = $("<#{@cell.get(0).tagName}>").text('\00')
+      @setColspanFor(newCell, @colspanFor(@cell))
       @setRowspanFor(@cell, sig.height - 1)
       if match.direction == 'before' then match.cell.before(newCell) else match.cell.after(newCell)
 

@@ -29,12 +29,17 @@ Mercury.modalHandlers.inserttable = ->
       when 'increaserowspan' then Mercury.tableEditor.increaseRowspan()
       when 'decreaserowspan' then Mercury.tableEditor.decreaseRowspan()
 
-  #todo: finish me
-  # make the alignment option work
+  # set the alignment
+  @element.find('#table_alignment').change =>
+    table.attr({align: @element.find('#table_alignment').val()})
 
-  # make the border option work
+  # set the border
+  @element.find('#table_border').change =>
+    table.attr({border: parseInt(@element.find('#table_border').val())})
 
-  # make the cellspacing option work
+  # set the cellspacing
+  @element.find('#table_spacing').change =>
+    table.attr({cellspacing: parseInt(@element.find('#table_spacing').val())})
 
   # build the table on form submission
   @element.find('form').submit (event) =>

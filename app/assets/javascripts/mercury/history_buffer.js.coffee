@@ -7,7 +7,7 @@ class Mercury.HistoryBuffer
 
 
   push: (item) ->
-    return if @stack[@index] && @stack[@index].replace(@markerRegExp, '') == item.replace(@markerRegExp, '')
+    return if @stack[@index] && typeof(item) == 'string' && @stack[@index].replace(@markerRegExp, '') == item.replace(@markerRegExp, '')
 
     @stack = @stack[0...@index + 1]
     @stack.push(item)

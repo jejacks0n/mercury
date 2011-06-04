@@ -111,7 +111,7 @@ Mercury.Regions.Snippetable.actions =
 
   insertsnippet: (options) ->
     snippet = options.value
-    if (existing = @element.find("[data-snippet=#{snippet.identifier}]")).length
+    if (existing = @element.find("[data-snippet=#{snippet.identity}]")).length
       existing.replaceWith(snippet.getHTML(@document, => @pushHistory()))
     else
       @element.append(snippet.getHTML(@document, => @pushHistory()))

@@ -86,7 +86,12 @@ class Mercury.Region
 
 
   snippets: ->
-    return {}
+    snippets = {}
+    for element in @element.find('[data-snippet]')
+      snippet = Mercury.Snippet.find($(element).data('snippet'))
+      snippet.setVersion($(element).data('version'))
+      snippets[snippet.identity] = snippet.serialize()
+    return snippets
 
 
   serialize: ->

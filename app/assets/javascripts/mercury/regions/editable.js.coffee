@@ -380,7 +380,7 @@ Mercury.Regions.Editable.actions =
 
   insertsnippet: (selection, options) ->
     snippet = options.value
-    if (existing = @element.find("[data-snippet=#{snippet.identifier}]")).length
+    if (existing = @element.find("[data-snippet=#{snippet.identity}]")).length
       selection.selectNode(existing.get(0))
     selection.insertNode(snippet.getHTML(@document))
 

@@ -1,6 +1,6 @@
 class Mercury.Snippet
 
-  constructor: (@name, @identifier, options) ->
+  constructor: (@name, @identity, options) ->
     @version = 0
     @history = new Mercury.HistoryBuffer()
     @setOptions(options)
@@ -8,15 +8,15 @@ class Mercury.Snippet
 
   getHTML: (context, callback) ->
     element = $('<div class="mercury-snippet" contenteditable="false">', context)
-    element.attr({'data-snippet': @identifier})
+    element.attr({'data-snippet': @identity})
     element.attr({'data-version': @version})
-    element.html("[#{@identifier}]")
+    element.html("[#{@identity}]")
     @loadPreview(element, callback)
     return element
 
 
   getText: (callback) ->
-    return "[--#{@identity()}--]"
+    return "[--#{@identity}--]"
 
 
   loadPreview: (element, callback) ->
@@ -46,6 +46,22 @@ class Mercury.Snippet
     @history.push(@options)
 
 
+  setVersion: (version) ->
+    version = parseInt(version)
+    if version && @history.stack[version - 1]
+      @version = version - 1
+      @options = @history.stack[@version]
+      return true
+    return false
+
+
+  serialize: ->
+    return {
+      name: @name,
+      options: @options
+    }
+
+
 
 $.extend Mercury.Snippet, {
 
@@ -57,15 +73,15 @@ $.extend Mercury.Snippet, {
 
 
   create: (name, options) ->
-    identifier = "snippet_#{@all.length}"
-    instance = new Mercury.Snippet(name, identifier, options)
+    identity = "snippet_#{@all.length}"
+    instance = new Mercury.Snippet(name, identity, options)
     @all.push(instance)
     return instance
 
 
-  find: (identifier) ->
+  find: (identity) ->
     for snippet in @all
-      return snippet if snippet.identifier == identifier
+      return snippet if snippet.identity == identity
     return null
 
 }

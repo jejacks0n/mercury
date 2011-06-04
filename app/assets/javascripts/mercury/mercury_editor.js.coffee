@@ -192,9 +192,9 @@ Mercury =
     $(document).bind("mercury:#{eventName}", callback)
 
 
-  trigger: (eventName, arguments...) ->
-    Mercury.log(eventName, arguments)
-    $(document).trigger("mercury:#{eventName}", arguments)
+  trigger: (eventName, options) ->
+    Mercury.log(eventName, options)
+    $(document).trigger("mercury:#{eventName}", options)
 
 
   log: ->

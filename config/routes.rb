@@ -62,6 +62,8 @@ Mercury::Application.routes.draw do
   match '/edit(/*requested_uri)' => "mercury#edit", as: :edit
   namespace :mercury do
     match ':type/:resource' => "mercury#resource"
+    match 'snippets/:name/options' => "snippets#options"
+    match 'snippets/:name/preview' => "snippets#preview"
   end
 
 end

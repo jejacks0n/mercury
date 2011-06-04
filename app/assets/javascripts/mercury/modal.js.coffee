@@ -14,6 +14,7 @@ $.extend Mercury.modal, {
 
   initialize: ->
     return if @initialized
+    @options ||= {}
     @build()
     @bindEvents()
     @initialized = true
@@ -127,6 +128,8 @@ $.extend Mercury.modal, {
     @element.addClass('loading')
     @setTitle()
     $.ajax @url, {
+      type: @options.loadType || 'get'
+      data: @options.loadData
       success: (data) => @loadContent(data)
       error: =>
         @hide()
@@ -135,6 +138,7 @@ $.extend Mercury.modal, {
 
 
   loadContent: (data, options) ->
+    @initialize()
     @options = options || @options
     @setTitle()
     @loaded = true

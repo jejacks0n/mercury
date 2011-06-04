@@ -44,25 +44,6 @@ class Mercury.Regions.Editable extends Mercury.Region
         table = currentElement.closest('table', @element)
         Mercury.tableEditor(table, currentElement) if table.length
 
-#    # possible:drop custom event
-#    # we have to do this because webkit doesn't fire the drop event unless both
-#    # dragover and dragstart default behaviors are canceled... but when we do
-#    # that and observe the drop event, the default behavior isn't handled (eg,
-#    # putting the image where it was dropped).. so to allow the browser to do
-#    # it's thing, and also do our thing we have this little hack.  *sigh*
-#    # read: http://www.quirksmode.org/blog/archives/2009/09/the_html5_drag.html
-#    if $.browser.webkit
-#      @element.bind 'dragover', (event) =>
-#        clearTimeout(@_dropTimeout)
-#        @_dropTimeout = setTimeout((=> @element.trigger('snippet:dropped')), 100)
-#    else
-#      @element.bind 'drop', (event) =>
-#        clearTimeout(@_dropTimeout)
-#        @_dropTimeout = setTimeout((=> @element.trigger('snippet:dropped')), 1)
-#
-#    @element.bind 'snippet:dropped', (event, originalEvent) =>
-
-
     @element.bind 'dragenter', (event) =>
       return if @previewing
       event.preventDefault() if event.shiftKey
@@ -72,14 +53,39 @@ class Mercury.Regions.Editable extends Mercury.Region
       return if @previewing
       event.preventDefault() if event.shiftKey
       event.originalEvent.dataTransfer.dropEffect = 'copy'
+      if $.browser.webkit
+        clearTimeout(@dropTimeout)
+        @dropTimeout = setTimeout((=> @element.trigger('possible:drop')), 10)
 
     @element.bind 'drop', (event) =>
       return if @previewing
+
+      # handle dropping snippets
+      clearTimeout(@dropTimeout)
+      @dropTimeout = setTimeout((=> @element.trigger('possible:drop')), 1)
+
+      # handle any files that were dropped
       return unless event.originalEvent.dataTransfer.files.length
       event.preventDefault()
       @focus()
       Mercury.uploader(event.originalEvent.dataTransfer.files[0])
 
+    # possible:drop custom event: we have to do this because webkit doesn't fire the drop event unless both dragover and
+    # dragstart default behaviors are canceled.. but when we do that and observe the drop event, the default behavior
+    # isn't handled (eg, putting the image where it was dropped,) so to allow the browser to do it's thing, and also do
+    # our thing we have this little hack.  *sigh*
+    # read: http://www.quirksmode.org/blog/archives/2009/09/the_html5_drag.html
+    @element.bind 'possible:drop', (event) =>
+      return if @previewing
+      if snippet = @element.find('img[data-snippet]').get(0)
+        @focus()
+        Mercury.Snippet.displayOptionsFor($(snippet).data('snippet'))
+        @document.execCommand('undo', false, null)
+
+    # custom paste handling: we have to do some hackery to get the pasted content since it's not exposed normally
+    # through a clipboard in firefox (heaven forbid), and to keep the behavior across all browsers, we manually detect
+    # what was pasted by running a quick diff, removing it by calling undo, making our adjustments, and then putting the
+    # content back.  This is possible, so it doesn't make sense why it wouldn't be exposed in a sensible way.  *sigh*
     @element.bind 'paste', =>
       return if @previewing
       return unless Mercury.region == @
@@ -375,6 +381,15 @@ Mercury.Regions.Editable.actions =
   removesnippet: ->
     @snippet.remove() if @snippet
     Mercury.trigger('hide:toolbar', {type: 'snippet', immediately: true})
+
+  editsnippet: ->
+    return unless @snippet
+    snippet = Mercury.Snippet.find(@snippet.data('snippet'))
+    snippet.displayOptions()
+
+  insertsnippet: (selection, options) ->
+    snippet = options.value
+    selection.insertNode(snippet.getHTML(@document))
 
 
 # Helper class for managing selection and getting information from it

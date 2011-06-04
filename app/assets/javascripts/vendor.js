@@ -9,4 +9,6 @@
  *= require jquery.ujs
  *= require jquery.uri
  *= require jquery.websocket
+ *= require jquery.serialize_object
+ *= require liquidmetal
  */

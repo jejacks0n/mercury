@@ -1,0 +1,16 @@
+= semantic_form_for 'options', { html: { style: 'width:600px' } } do |f|
+
+  .mercury-modal-pane-container
+    .mercury-modal-pane
+
+      = f.inputs do
+        = f.input :first_name, required: false, label: 'First Name'
+
+      = f.inputs 'Options' do
+        = f.input :favorite_beer, as: :select, required: false, label: 'Favorite Beer', include_blank: false,
+                  collection: [['Miller Lite', 'miller_lite'], ['PBR', 'pbr'], ['Coors', 'coors']]
+
+  .mercury-modal-controls
+
+    = f.buttons do
+      = f.commit_button 'Insert Snippet'

@@ -180,23 +180,20 @@ class Mercury.Regions.Editable extends Mercury.Region
 
   html: (value = null, filterSnippets = true, includeMarker = false) ->
     if value != null
-      # get the snippet contents out of the region
-      snippets = {}
-      for snippet, index in @element.find('.mercury-snippet')
-        snippets["[snippet#{index}]"] = $(snippet).html()
-
       # sanitize the html before we insert it
       container = $('<div>').appendTo(@document.createDocumentFragment())
       container.html(value)
 
       # fill in the snippet contents
-      for snippet in container.find('.mercury-snippet')
-        snippet.contentEditable = false
-        snippet = $(snippet)
-        content = snippets[snippet.html()]
-        if content
-          delete(snippets[snippet.html()])
-          snippet.html(content) if content
+      for element in container.find('[data-snippet]')
+        element.contentEditable = false
+        element = $(element)
+        if snippet = Mercury.Snippet.find(element.data('snippet'))
+          unless element.data('version')
+            version = parseInt(element.html().match(/\/(\d+)\]/)[1])
+            snippet.setVersion(version)
+            element.attr({'data-version': version})
+            element.html(snippet.data)
 
       # set the html
       @element.html(container.html())
@@ -217,9 +214,12 @@ class Mercury.Regions.Editable extends Mercury.Region
       container.html(@element.html().replace(/^\s+|\s+$/g, ''))
 
       # replace snippet contents to be an identifier
-      if filterSnippets then for snippet, index in container.find('.mercury-snippet')
-        snippet = $(snippet)
-        snippet.attr({contenteditable: null}).html("[snippet#{index}]")
+      if filterSnippets then for element, index in container.find('[data-snippet]')
+        element = $(element)
+        if snippet = Mercury.Snippet.find(element.data("snippet"))
+          snippet.data = element.html()
+        element.html("[#{element.data("snippet")}/#{element.data("version")}]")
+        element.attr({contenteditable: null, 'data-version': null})
 
       # get the html before removing the markers
       html = container.html()

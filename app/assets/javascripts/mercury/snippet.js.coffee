@@ -2,6 +2,7 @@ class Mercury.Snippet
 
   constructor: (@name, @identity, options) ->
     @version = 0
+    @data = ''
     @history = new Mercury.HistoryBuffer()
     @setOptions(options)
 
@@ -24,6 +25,7 @@ class Mercury.Snippet
       type: 'POST'
       data: @options
       success: (data) =>
+        @data = data
         element.html(data)
         callback() if callback
       error: =>

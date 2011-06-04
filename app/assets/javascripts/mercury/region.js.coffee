@@ -57,7 +57,8 @@ class Mercury.Region
       # replace snippet contents to be an identifier
       if filterSnippets then for snippet, index in container.find('.mercury-snippet')
         snippet = $(snippet)
-        snippet.attr({contenteditable: null}).html("[snippet#{index}]")
+        snippet.attr({contenteditable: null, 'data-version': null})
+        snippet.html("[#{snippet.data('snippet')}]")
 
       return container.html()
 

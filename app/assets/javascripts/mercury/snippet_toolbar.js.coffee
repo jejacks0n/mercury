@@ -36,7 +36,7 @@ class Mercury.SnippetToolbar extends Mercury.Toolbar
   position: ->
     offset = @snippet.offset()
 
-    top = offset.top + Mercury.displayRect.top - $(@document).scrollTop() - @height() + 5
+    top = offset.top + Mercury.displayRect.top - $(@document).scrollTop() - @height() + 10
     left = offset.left - $(@document).scrollLeft()
 
     @element.css {

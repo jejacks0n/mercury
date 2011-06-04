@@ -109,6 +109,11 @@
       line-height: 15px;
       color: #222;
     }
+    &.active {
+      em {
+        background-position: 51% 8px;
+      }
+    }
   }
   .mercury-separator,
   .mercury-line-separator {

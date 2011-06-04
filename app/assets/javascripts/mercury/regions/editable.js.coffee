@@ -378,18 +378,21 @@ Mercury.Regions.Editable.actions =
     html = $('<div>').html(selection.content()).find('a').html()
     selection.replace($(options.value, selection.context).html(html))
 
-  removesnippet: ->
-    @snippet.remove() if @snippet
-    Mercury.trigger('hide:toolbar', {type: 'snippet', immediately: true})
+  insertsnippet: (selection, options) ->
+    snippet = options.value
+    if (existing = @element.find("[data-snippet=#{snippet.identifier}]")).length
+      selection.selectNode(existing.get(0))
+    selection.insertNode(snippet.getHTML(@document))
 
   editsnippet: ->
     return unless @snippet
     snippet = Mercury.Snippet.find(@snippet.data('snippet'))
     snippet.displayOptions()
 
-  insertsnippet: (selection, options) ->
-    snippet = options.value
-    selection.insertNode(snippet.getHTML(@document))
+  removesnippet: ->
+    @snippet.remove() if @snippet
+    Mercury.trigger('hide:toolbar', {type: 'snippet', immediately: true})
+
 
 
 # Helper class for managing selection and getting information from it

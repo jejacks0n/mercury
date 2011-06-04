@@ -1,15 +1,22 @@
 class Mercury.Snippet
 
-  constructor: (@name, @identifier, @options) ->
-    @text = "[--#{@identifier}--]"
+  constructor: (@name, @identifier, options) ->
+    @version = 0
+    @history = new Mercury.HistoryBuffer()
+    @setOptions(options)
 
 
   getHTML: (context, callback) ->
     element = $('<div class="mercury-snippet" contenteditable="false">', context)
     element.attr({'data-snippet': @identifier})
+    element.attr({'data-version': @version})
     element.html("[#{@identifier}]")
     @loadPreview(element, callback)
     return element
+
+
+  getText: (callback) ->
+    return "[--#{@identity()}--]"
 
 
   loadPreview: (element, callback) ->
@@ -25,12 +32,18 @@ class Mercury.Snippet
 
 
   displayOptions: ->
+    Mercury.snippet = @
     Mercury.modal "/mercury/snippets/#{@name}/options", {
       title: 'Snippet Options',
       handler: 'insertsnippet',
       loadType: 'post',
       loadData: @options
     }
+
+
+  setOptions: (@options) ->
+    @version += 1
+    @history.push(@options)
 
 
 
@@ -40,6 +53,7 @@ $.extend Mercury.Snippet, {
 
   displayOptionsFor: (name) ->
     Mercury.modal("/mercury/snippets/#{name}/options", {title: 'Snippet Options', handler: 'insertsnippet'})
+    Mercury.snippet = null
 
 
   create: (name, options) ->

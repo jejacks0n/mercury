@@ -56,9 +56,10 @@ class Mercury.Regions.Snippetable extends Mercury.Region
 
     @element.bind 'drop', (event) =>
       return if @previewing
+      return unless Mercury.snippet
       @focus()
       event.preventDefault()
-      Mercury.Snippet.displayOptionsFor(Mercury.snippet) if Mercury.snippet
+      Mercury.Snippet.displayOptionsFor(Mercury.snippet)
 
 
   focus: ->
@@ -108,15 +109,18 @@ Mercury.Regions.Snippetable.actions =
 
   redo: -> @html(@history.redo())
 
-  removesnippet: ->
-    @snippet.remove() if @snippet
-    Mercury.trigger('hide:toolbar', {type: 'snippet', immediately: true})
+  insertsnippet: (options) ->
+    snippet = options.value
+    if (existing = @element.find("[data-snippet=#{snippet.identifier}]")).length
+      existing.replaceWith(snippet.getHTML(@document, => @pushHistory()))
+    else
+      @element.append(snippet.getHTML(@document, => @pushHistory()))
 
   editsnippet: ->
     return unless @snippet
     snippet = Mercury.Snippet.find(@snippet.data('snippet'))
     snippet.displayOptions()
 
-  insertsnippet: (options) ->
-    snippet = options.value
-    @element.append(snippet.getHTML(@document, => @pushHistory()))
+  removesnippet: ->
+    @snippet.remove() if @snippet
+    Mercury.trigger('hide:toolbar', {type: 'snippet', immediately: true})

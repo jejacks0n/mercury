@@ -1,4 +1,4 @@
-require '/assets/mercury/utility.js'
+require '/assets/mercury/native_extensions.js'
 
 describe "String", ->
 

@@ -1,5 +1,5 @@
 /* Application Javascript
  *= require vendor
- *= require mercury/mercury_editor
+ *= require mercury/mercury
  *= require_self
  */

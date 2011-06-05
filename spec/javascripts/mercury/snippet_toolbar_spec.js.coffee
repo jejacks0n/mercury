@@ -116,9 +116,9 @@ describe "Mercury.SnippetToolbar", ->
       @snippetToolbar.element.show()
       @snippetToolbar.position()
       if $.browser.webkit
-        expect(@snippetToolbar.element.offset()).toEqual({top: 13, left : 200})
+        expect(@snippetToolbar.element.offset()).toEqual({top: 18, left : 200})
       else
-        expect(@snippetToolbar.element.offset()).toEqual({top: 9, left : 200})
+        expect(@snippetToolbar.element.offset()).toEqual({top: 14, left : 200})
 
 
   describe "#appear", ->

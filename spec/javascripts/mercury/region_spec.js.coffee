@@ -155,11 +155,11 @@ describe "Mercury.Region", ->
 
       it "returns the html of the element", ->
         html = @region.html()
-        expect(html).toEqual('contents<div class="mercury-snippet">snippet</div>')
+        expect(html).toEqual('contents<div class="mercury-snippet" data-snippet="snippet_1" data-version="1">snippet</div>')
 
       it "replaces snippet content with an indentifier if asked", ->
         html = @region.html(null, true)
-        expect(html).toEqual('contents<div class="mercury-snippet">[snippet0]</div>')
+        expect(html).toEqual('contents<div class="mercury-snippet" data-snippet="snippet_1">[snippet_1]</div>')
 
     describe "setting html", ->
 

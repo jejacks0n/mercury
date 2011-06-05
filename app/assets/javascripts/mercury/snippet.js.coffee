@@ -7,7 +7,7 @@ class Mercury.Snippet
     @setOptions(options)
 
 
-  getHTML: (context, callback) ->
+  getHTML: (context, callback = null) ->
     element = $('<div class="mercury-snippet" contenteditable="false">', context)
     element.attr({'data-snippet': @identity})
     element.attr({'data-version': @version})
@@ -20,7 +20,7 @@ class Mercury.Snippet
     return "[--#{@identity}--]"
 
 
-  loadPreview: (element, callback) ->
+  loadPreview: (element, callback = null) ->
     $.ajax "/mercury/snippets/#{@name}/preview", {
       type: 'POST'
       data: @options
@@ -50,7 +50,7 @@ class Mercury.Snippet
     @history.push(@options)
 
 
-  setVersion: (version) ->
+  setVersion: (version = null) ->
     version = parseInt(version)
     if version && @history.stack[version - 1]
       @version = version - 1

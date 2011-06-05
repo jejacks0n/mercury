@@ -1,4 +1,4 @@
-require '/assets/mercury/mercury_editor.js'
+require '/assets/mercury/mercury.js'
 
 describe "Mercury.Region", ->
 

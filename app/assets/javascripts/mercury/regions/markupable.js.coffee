@@ -3,4 +3,4 @@ class Mercury.Regions.Markupable extends Mercury.Region
 
   constructor: (@element, @window, @options = {}) ->
     @type = 'markupable'
-    super
+#    super

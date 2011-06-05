@@ -12,9 +12,11 @@ class Mercury.Toolbar
     for toolbarName, buttons of Mercury.config.toolbars
       continue if buttons._custom
       toolbar = $('<div>', {class: "mercury-toolbar mercury-#{toolbarName}-toolbar"}).appendTo(@element)
+      toolbar.attr('data-regions', buttons._regions) if buttons._regions
       container = $('<div>', {class: 'mercury-toolbar-button-container'}).appendTo(toolbar)
 
       for buttonName, options of buttons
+        continue if buttonName == '_regions'
         @buildButton(buttonName, options).appendTo(container)
 
       if container.css('white-space') == 'nowrap'
@@ -48,10 +50,18 @@ class Mercury.Toolbar
 
   bindEvents: ->
     Mercury.bind 'region:focused', (event, options) =>
-      @element.find(".mercury-#{options.region.type}-toolbar").removeClass('disabled')
+      for toolbar in @element.find(".mercury-toolbar")
+        toolbar = $(toolbar)
+        if regions = toolbar.data('regions')
+          toolbar.removeClass('disabled') if regions.split(',').indexOf(options.region.type) > -1
 
     Mercury.bind 'region:blurred', (event, options) =>
       @element.find(".mercury-#{options.region.type}-toolbar").addClass('disabled')
+      for toolbar in @element.find(".mercury-toolbar")
+        toolbar = $(toolbar)
+        if regions = toolbar.data('regions')
+          toolbar.addClass('disabled') if regions.split(',').indexOf(options.region.type) > -1
+
 
     @element.click -> Mercury.trigger('hide:dialogs')
     @element.mousedown (event) -> event.preventDefault()

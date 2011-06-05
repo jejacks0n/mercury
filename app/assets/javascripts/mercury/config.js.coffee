@@ -106,10 +106,11 @@ Mercury.config =
       sep2:                  ' '
 #      historypanel:          ['History', 'Page Version History', {panel: -> "/mercury/panels/history"}]
 #      sep3:                  ' '
-      notespanel:            ['Notes', 'Page Notes', {panel: '/mercury/panels/notes'}]
-      todospanel:            ['Todos', 'Page Todos', {panel: '/mercury/panels/todos'}]
+#      notespanel:            ['Notes', 'Page Notes', {panel: '/mercury/panels/notes'}]
+#      todospanel:            ['Todos', 'Page Todos', {panel: '/mercury/panels/todos'}]
 
     editable:
+      _regions:              ['editable', 'markupable']
       predefined:
         style:               ['Style', null, {select: '/mercury/selects/style', preload: true}]
         sep1:                ' '

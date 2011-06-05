@@ -5,13 +5,13 @@
     = csrf_meta_tags
     = stylesheet_link_tag "application"
     = javascript_include_tag "application"
-    = javascript_tag "$(document).ready(function() { mercuryEditor = new MercuryEditor({snippets: window.snippets}) });"
   %body
 
     = yield
 
     :javascript
-      window.snippets = {
+      mercuryEditor = new MercuryEditor();
+      Mercury.Snippet.load({
         'snippet_1': {name: 'example', options: {'options[favorite_beer]': "miller_lite", 'options[first_name]': "1"}},
         'snippet_2': {name: 'example', options: {'options[favorite_beer]': "miller_lite", 'options[first_name]': "2"}},
         'snippet_3': {name: 'example', options: {'options[favorite_beer]': "miller_lite", 'options[first_name]': "3"}},
@@ -20,4 +20,4 @@
         'snippet_6': {name: 'example', options: {'options[favorite_beer]': "miller_lite", 'options[first_name]': "6"}},
         'snippet_7': {name: 'example', options: {'options[favorite_beer]': "miller_lite", 'options[first_name]': "7"}},
         'snippet_8': {name: 'example', options: {'options[favorite_beer]': "miller_lite", 'options[first_name]': "8"}}
-      }
+      });

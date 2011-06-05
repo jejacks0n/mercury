@@ -46,7 +46,6 @@ class MercuryEditor
     @regions = []
     @initializeInterface()
     Mercury.csrfToken = token if token = $('meta[name="csrf-token"]').attr('content')
-    Mercury.Snippet.load(options.snippets) if options.snippets
 
 
   initializeInterface: ->

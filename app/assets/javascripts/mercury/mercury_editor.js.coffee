@@ -46,6 +46,7 @@ class MercuryEditor
     @regions = []
     @initializeInterface()
     Mercury.csrfToken = token if token = $('meta[name="csrf-token"]').attr('content')
+    Mercury.Snippet.load(options.snippets) if options.snippets
 
 
   initializeInterface: ->
@@ -138,6 +139,7 @@ class MercuryEditor
   save: ->
     url = @saveUrl ? @iframeSrc()
     data = @serialize()
+    Mercury.log('saving', data)
     data = $.toJSON(data) if Mercury.config.saveStyle == 'json'
     $.ajax url, {
       type: 'POST'
@@ -170,7 +172,7 @@ Mercury =
 
   silent: true
 
-  debug: false
+  debug: true
 
 
   beforeUnload: ->

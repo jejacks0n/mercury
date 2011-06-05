@@ -44,6 +44,8 @@ class Mercury.Snippet
 
 
   setOptions: (@options) ->
+    delete(@options['authenticity_token'])
+    delete(@options['utf8'])
     @version += 1
     @history.push(@options)
 
@@ -85,5 +87,11 @@ $.extend Mercury.Snippet, {
     for snippet in @all
       return snippet if snippet.identity == identity
     return null
+
+
+  load: (snippets) ->
+    for identity, details of snippets
+      instance = new Mercury.Snippet(details.name, identity, details.options)
+      @all.push(instance)
 
 }

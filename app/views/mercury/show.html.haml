@@ -1,6 +1,6 @@
 Content outside the regions
 
-#primary.mercury-region{ 'data-type' => 'editable' }
+#primary.mercury-region{ data: { type: 'editable' } }
   123
   %meta{}/
   editable content
@@ -77,21 +77,21 @@ Content outside the regions
   %p this is a <span style="text-decoration:overline">pa<u>rag</u>raph</span>
   %style img { border:2px solid red }
 
-  = image_tag('mercury/clippy.png')
+  = image_tag 'mercury/clippy.png'
   = link_to 'link', '#link2'
-  .mercury-snippet snippet1
+  .mercury-snippet{ data: { snippet: 'snippet_1' }} snippet1
 
   %p
-    %a{ :name => 'inner_link1' } Bookmark
+    %a{ name: 'inner_link1' } Bookmark
 
   more content here
 
-  %iframe{ :width => "560", :height => "349", :src => "http://www.youtube.com/embed/QGJuMBdaqIw?wmode=transparent", :frameborder => "0", :allowfullscreen => 'true' }
+  %iframe{ width: '560', height: '349', src: 'http://www.youtube.com/embed/QGJuMBdaqIw?wmode=transparent', frameborder: '0', allowfullscreen: 'true' }
 
-#region2.mercury-region{ 'data-type' => 'editable' }
-  .mercury-snippet snippet1
+#region2.mercury-region{ data: { type: 'editable' } }
+  .mercury-snippet{ data: { snippet: 'snippet_2' }} snippet2
 
-#region3.mercury-region{ 'data-type' => 'editable', :style => 'width:200px;height:90px;' }
+#region3.mercury-region{ style: 'width:200px;height:90px;', data: { type: 'editable' } }
   %meta{}/
   editable contentaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
   = link_to '/something_else'
@@ -105,33 +105,34 @@ Content outside the regions
   %p this is a <u>pa<span style="text-decoration:overline">rag</span>raph</u>
   %p this is a <span style="text-decoration:overline">pa<u>rag</u>raph</span>
 
-#snippet_region1.mercury-region{ 'data-type' => 'snippetable' }
-  .mercury-snippet snippet1
-  .mercury-snippet snippet2
+#snippet_region1.mercury-region{ data: { type: 'snippetable' } }
+  .mercury-snippet{ data: { snippet: 'snippet_3' }} snippet3
+  .mercury-snippet{ data: { snippet: 'snippet_4' }} snippet4
+  .mercury-snippet{ data: { snippet: 'snippet_5' }} snippet5
 
-#snippet_region2.mercury-region{ 'data-type' => 'snippetable' }
-  .mercury-snippet snippet1
-  .mercury-snippet snippet2
-  %iframe.mercury-snippet{ :width => "560", :height => "349", :src => "http://www.youtube.com/embed/QGJuMBdaqIw?wmode=transparent", :frameborder => "0", :allowfullscreen => 'true' }
+#snippet_region2.mercury-region{ data: { type: 'snippetable' } }
+  .mercury-snippet{ data: { snippet: 'snippet_6' }} snippet6
+  .mercury-snippet{ data: { snippet: 'snippet_7' }} snippet7
+  %iframe.mercury-snippet{ width: '560', height: '349', src: 'http://www.youtube.com/embed/QGJuMBdaqIw?wmode=transparent', frameborder: '0', allowfullscreen: 'true', data: { snippet: 'snippet_8' } }
 
 = link_to '/something'
 
 %p
   %h3
-    %a{ :name => 'link1' } Title 1
+    %a{ name: 'link1' } Title 1
   Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 
 %p
   %h3
-    %a{ :name => 'link2' } Title 2
+    %a{ name: 'link2' } Title 2
   Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 
 %p
   %h3
-    %a{ :name => 'link3' } Title 3
+    %a{ name: 'link3' } Title 3
   Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 
-%div{ :style => 'min-width:600px' }
+%div{ style: 'min-width:600px' }
   = '--------------'
 
 %textarea

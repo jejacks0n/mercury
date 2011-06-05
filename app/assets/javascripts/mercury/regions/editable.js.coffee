@@ -20,8 +20,10 @@ class Mercury.Regions.Editable extends Mercury.Region
     # make it editable
     @element.get(0).contentEditable = true
 
-    # make all snippets not editable
-    element.contentEditable = false for element in @element.find('.mercury-snippet')
+    # make all snippets not editable, and set their versions to 1
+    for element in @element.find('.mercury-snippet')
+      element.contentEditable = false
+      $(element).attr('data-version', '1')
 
     # add the basic editor settings to the document (only once)
     unless @document.mercuryEditing
@@ -190,10 +192,14 @@ class Mercury.Regions.Editable extends Mercury.Region
         element = $(element)
         if snippet = Mercury.Snippet.find(element.data('snippet'))
           unless element.data('version')
-            version = parseInt(element.html().match(/\/(\d+)\]/)[1])
-            snippet.setVersion(version)
-            element.attr({'data-version': version})
-            element.html(snippet.data)
+            try
+              version = parseInt(element.html().match(/\/(\d+)\]/)[1])
+              if version
+                snippet.setVersion(version)
+                element.attr({'data-version': version})
+                element.html(snippet.data)
+            catch error
+
 
       # set the html
       @element.html(container.html())

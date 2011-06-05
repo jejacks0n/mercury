@@ -1,6 +1,6 @@
 class Mercury.Snippet
 
-  constructor: (@name, @identity, options) ->
+  constructor: (@name, @identity, options = {}) ->
     @version = 0
     @data = ''
     @history = new Mercury.HistoryBuffer()
@@ -29,7 +29,7 @@ class Mercury.Snippet
         element.html(data)
         callback() if callback
       error: =>
-        alert("Error rendering preview for the #{@name} snippet.")
+        alert("Error loading the preview for the #{@name} snippet.")
     }
 
 

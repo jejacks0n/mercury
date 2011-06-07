@@ -1,4 +1,10 @@
 GIT
+  remote: git://github.com/eventmachine/eventmachine.git
+  revision: d326bb323aae552f662a2b8db0964691b743ae51
+  specs:
+    eventmachine (1.0.0.beta.3)
+
+GIT
   remote: git://github.com/jnicklas/evergreen.git
   revision: 0402087fd081a3244ea0d2ca69a58966accb4797
   submodules: true
@@ -59,6 +65,7 @@ GEM
       activesupport (= 3.1.0.beta1)
     activesupport (3.1.0.beta1)
       multi_json (~> 1.0)
+    addressable (2.2.6)
     archive-tar-minitar (0.5.2)
     arel (2.1.0)
     bcrypt-ruby (2.1.4)
@@ -98,8 +105,12 @@ GEM
     daemons (1.1.3)
     database_cleaner (0.6.7)
     diff-lcs (1.1.2)
+    em-hiredis (0.1.0)
+      hiredis (~> 0.3.0)
+    em-websocket (0.3.0)
+      addressable (>= 2.1.1)
+      eventmachine (>= 0.12.9)
     erubis (2.7.0)
-    eventmachine (0.12.10)
     execjs (0.3.1)
       multi_json (~> 1.0)
     ffi (1.0.7)
@@ -113,6 +124,7 @@ GEM
       haml (~> 3.0)
       railties (~> 3.0)
     hike (1.0.0)
+    hiredis (0.3.2)
     i18n (0.6.0beta1)
     json (1.5.1)
     json_pure (1.5.1)
@@ -203,6 +215,9 @@ DEPENDENCIES
   coffee-script
   cucumber-rails
   database_cleaner
+  em-hiredis
+  em-websocket
+  eventmachine!
   evergreen!
   formtastic!
   haml

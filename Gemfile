@@ -12,6 +12,10 @@ gem 'haml-rails'
 gem 'paperclip', git: 'git://github.com/thoughtbot/paperclip.git'
 gem 'formtastic', git: 'git://github.com/justinfrench/formtastic.git'
 
+gem 'eventmachine', :git => 'git://github.com/eventmachine/eventmachine.git'
+gem 'em-hiredis'
+gem 'em-websocket'
+
 group :development do
 end
 

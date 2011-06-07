@@ -8,8 +8,10 @@
 
 Content outside the regions
 
-#test.mercury-region{ data: { type: 'markupable' } }
-  asdasdasd
+#snippet_region1.mercury-region{ data: { type: 'snippetable' } }
+  .mercury-snippet{ data: { snippet: 'snippet_3' }} snippet3
+  .mercury-snippet{ data: { snippet: 'snippet_4' }} snippet4
+  .mercury-snippet{ data: { snippet: 'snippet_5' }} snippet5
 
 #primary.mercury-region{ data: { type: 'editable' } }
   123
@@ -115,11 +117,6 @@ Content outside the regions
       %td Column2
   %p this is a <u>pa<span style="text-decoration:overline">rag</span>raph</u>
   %p this is a <span style="text-decoration:overline">pa<u>rag</u>raph</span>
-
-#snippet_region1.mercury-region{ data: { type: 'snippetable' } }
-  .mercury-snippet{ data: { snippet: 'snippet_3' }} snippet3
-  .mercury-snippet{ data: { snippet: 'snippet_4' }} snippet4
-  .mercury-snippet{ data: { snippet: 'snippet_5' }} snippet5
 
 #snippet_region2.mercury-region{ data: { type: 'snippetable' } }
   .mercury-snippet{ data: { snippet: 'snippet_6' }} snippet6

@@ -43,8 +43,15 @@ class Mercury.Regions.Editable extends Mercury.Region
       setTimeout((=> @selection().forceSelection(@element.get(0))), 1)
       currentElement = @currentElement()
       if currentElement.length
+        # setup the table editor if we're inside a table
         table = currentElement.closest('table', @element)
         Mercury.tableEditor(table, currentElement) if table.length
+        # display a tooltip if we're in an anchor
+        anchor = currentElement.closest('a', @element)
+        if anchor.length
+          Mercury.tooltip(anchor, "<a href=\"#{anchor.attr('href')}\" target=\"_blank\">#{anchor.attr('href')}</a>", {position: 'below'})
+        else
+          Mercury.tooltip.hide()
 
     @element.bind 'dragenter', (event) =>
       return if @previewing
@@ -105,6 +112,7 @@ class Mercury.Regions.Editable extends Mercury.Region
     @element.blur =>
       return if @previewing
       Mercury.trigger('region:blurred', {region: @})
+      Mercury.tooltip.hide()
 
     @element.click (event) =>
       $(event.target).closest('a').attr('target', '_top') if @previewing
@@ -339,66 +347,64 @@ class Mercury.Regions.Editable extends Mercury.Region
       @execCommand('insertHTML', {value: container.html()})
 
 
+  # Custom actions (eg. things that execCommand doesn't do, or doesn't do well)
+  @actions: {
+    insertrowbefore: -> Mercury.tableEditor.addRow('before')
 
-# Custom handled actions (eg. things that execCommand doesn't do, or doesn't do well)
-Mercury.Regions.Editable.actions =
+    insertrowafter: -> Mercury.tableEditor.addRow('after')
 
-  insertrowbefore: -> Mercury.tableEditor.addRow('before')
+    insertcolumnbefore: -> Mercury.tableEditor.addColumn('before')
 
-  insertrowafter: -> Mercury.tableEditor.addRow('after')
+    insertcolumnafter: -> Mercury.tableEditor.addColumn('after')
 
-  insertcolumnbefore: -> Mercury.tableEditor.addColumn('before')
+    deletecolumn: -> Mercury.tableEditor.removeColumn()
 
-  insertcolumnafter: -> Mercury.tableEditor.addColumn('after')
+    deleterow: -> Mercury.tableEditor.removeRow()
 
-  deletecolumn: -> Mercury.tableEditor.removeColumn()
+    increasecolspan: -> Mercury.tableEditor.increaseColspan()
 
-  deleterow: -> Mercury.tableEditor.removeRow()
+    decreasecolspan: -> Mercury.tableEditor.decreaseColspan()
 
-  increasecolspan: -> Mercury.tableEditor.increaseColspan()
+    increaserowspan: -> Mercury.tableEditor.increaseRowspan()
 
-  decreasecolspan: -> Mercury.tableEditor.decreaseColspan()
+    decreaserowspan: -> Mercury.tableEditor.decreaseRowspan()
 
-  increaserowspan: -> Mercury.tableEditor.increaseRowspan()
+    undo: -> @html(@history.undo())
 
-  decreaserowspan: -> Mercury.tableEditor.decreaseRowspan()
+    redo: -> @html(@history.redo())
 
-  undo: -> @html(@history.undo())
+    removeformatting: (selection) -> selection.insertTextNode(selection.textContent())
 
-  redo: -> @html(@history.redo())
+    backcolor: (selection, options) -> selection.wrap("<span style=\"background-color:#{options.value.toHex()}\">", true)
 
-  removeformatting: (selection) -> selection.insertTextNode(selection.textContent())
+    overline: (selection) -> selection.wrap('<span style="text-decoration:overline">', true)
 
-  backcolor: (selection, options) -> selection.wrap("<span style=\"background-color:#{options.value.toHex()}\">", true)
+    style: (selection, options) -> selection.wrap("<span class=\"#{options.value}\">", true)
 
-  overline: (selection) -> selection.wrap('<span style="text-decoration:overline">', true)
+    replaceHTML: (selection, options) -> @html(options.value)
 
-  style: (selection, options) -> selection.wrap("<span class=\"#{options.value}\">", true)
+    insertLink: (selection, options) -> selection.insertNode(options.value)
 
-  replaceHTML: (selection, options) -> @html(options.value)
+    replaceLink: (selection, options) ->
+      selection.selectNode(options.node)
+      html = $('<div>').html(selection.content()).find('a').html()
+      selection.replace($(options.value, selection.context).html(html))
 
-  insertLink: (selection, options) -> selection.insertNode(options.value)
+    insertsnippet: (selection, options) ->
+      snippet = options.value
+      if (existing = @element.find("[data-snippet=#{snippet.identity}]")).length
+        selection.selectNode(existing.get(0))
+      selection.insertNode(snippet.getHTML(@document))
 
-  replaceLink: (selection, options) ->
-    selection.selectNode(options.node)
-    html = $('<div>').html(selection.content()).find('a').html()
-    selection.replace($(options.value, selection.context).html(html))
+    editsnippet: ->
+      return unless @snippet
+      snippet = Mercury.Snippet.find(@snippet.data('snippet'))
+      snippet.displayOptions()
 
-  insertsnippet: (selection, options) ->
-    snippet = options.value
-    if (existing = @element.find("[data-snippet=#{snippet.identity}]")).length
-      selection.selectNode(existing.get(0))
-    selection.insertNode(snippet.getHTML(@document))
-
-  editsnippet: ->
-    return unless @snippet
-    snippet = Mercury.Snippet.find(@snippet.data('snippet'))
-    snippet.displayOptions()
-
-  removesnippet: ->
-    @snippet.remove() if @snippet
-    Mercury.trigger('hide:toolbar', {type: 'snippet', immediately: true})
-
+    removesnippet: ->
+      @snippet.remove() if @snippet
+      Mercury.trigger('hide:toolbar', {type: 'snippet', immediately: true})
+  }
 
 
 # Helper class for managing selection and getting information from it

@@ -1,0 +1,66 @@
+Mercury.tooltip = (forElement, content, options = {}) ->
+  Mercury.tooltip.show(forElement, content, options)
+  return Mercury.tooltip
+
+$.extend Mercury.tooltip, {
+
+  show: (@forElement, @content, @options = {}) ->
+    @document = $(@forElement.get(0).ownerDocument)
+    @initialize()
+    if @visible then @update() else @appear()
+
+
+  initialize: ->
+    return if @initialized
+    @build()
+    @bindEvents()
+    @initialized = true
+
+
+  build: ->
+    @element = $('<div>', {class: 'mercury-tooltip'})
+    @element.appendTo($(@options.appendTo).get(0) ? 'body')
+
+
+  bindEvents: ->
+    Mercury.bind 'resize', => @position() if @visible
+    @document.scroll => @position() if @visible
+    @element.mousedown (event) ->
+      event.preventDefault()
+      event.stopPropagation()
+
+
+  appear: ->
+    @update()
+
+    @element.show()
+    @element.animate {opacity: 1}, 200, 'easeInOutSine', =>
+      @visible = true
+
+
+  update: ->
+    @element.html(@content)
+    @position()
+
+
+  position: ->
+    offset = @forElement.offset()
+    width = @element.width()
+
+    top = offset.top + (Mercury.displayRect.top - $(@document).scrollTop()) + @forElement.outerHeight()
+    left = offset.left - $(@document).scrollLeft()
+
+    left = left - (left + width + 25) - Mercury.displayRect.width if (left + width + 25) > Mercury.displayRect.width
+    left = if left <= 0 then 0 else left
+
+    @element.css {
+      top: top,
+      left: left
+    }
+
+
+  hide: ->
+    @element.hide()
+    @visible = false
+
+}

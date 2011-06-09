@@ -1,0 +1,26 @@
+/*
+ * Tooltip
+ *----------------------------------------------------------------------------*/
+.mercury-tooltip {
+  position: absolute;
+  top: 100px;
+  left: 100px;
+  max-width: 400px;
+  overflow: hidden;
+  background: rgba(0, 0, 0, .70);
+  padding: 2px 5px;
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, .3);
+  -moz-box-shadow: 0 0 5px rgba(0, 0, 0, .3);
+  font: normal normal normal 11px/normal Helvetica, Tahoma, Arial, sans-serif;
+  color: #EEE;
+  word-wrap: break-word;
+  a {
+    color: #EEE;
+    text-decoration: none;
+    &:hover {
+      color: #FFF;
+    }
+  }
+}

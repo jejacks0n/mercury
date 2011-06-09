@@ -27,6 +27,7 @@
 #= require ./toolbar.button
 #= require ./toolbar.button_group
 #= require ./toolbar.expander
+#= require ./tooltip
 #= require ./snippet
 #= require ./snippet_toolbar
 #= require ./region
@@ -46,7 +47,7 @@ Mercury = {
   # TODO: using client detection, but should use feature detection
   supported: document.getElementById && document.designMode && !$.browser.konqueror && !$.browser.msie
 
-  silent: true
+  silent: false
 
   debug: true
 

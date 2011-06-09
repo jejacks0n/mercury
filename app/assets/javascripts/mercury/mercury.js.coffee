@@ -38,10 +38,7 @@
 
 
 # Mercury static properties and utlity methods
-Mercury =
-  Regions: {}
-  modalHandlers: {}
-  dialogHandlers: {}
+Mercury = {
 
   version: 1.0
 
@@ -53,10 +50,17 @@ Mercury =
 
   debug: true
 
+  Regions: {}
+
+  modalHandlers: {}
+
+  dialogHandlers: {}
+
 
   beforeUnload: ->
     if Mercury.changes && !Mercury.silent
-     return "You have unsaved changes.  Are you sure you want to leave without saving them first?"
+      return "You have unsaved changes.  Are you sure you want to leave without saving them first?"
+    return null
 
 
   refresh: ->
@@ -75,3 +79,5 @@ Mercury =
   log: ->
     if Mercury.debug && console
       try console.debug(arguments) catch e
+
+}

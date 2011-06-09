@@ -1,5 +1,31 @@
 class Mercury.Snippet
 
+  @all: []
+
+  @displayOptionsFor: (name) ->
+    Mercury.modal("/mercury/snippets/#{name}/options", {title: 'Snippet Options', handler: 'insertsnippet'})
+    Mercury.snippet = null
+
+
+  @create: (name, options) ->
+    identity = "snippet_#{@all.length}"
+    instance = new Mercury.Snippet(name, identity, options)
+    @all.push(instance)
+    return instance
+
+
+  @find: (identity) ->
+    for snippet in @all
+      return snippet if snippet.identity == identity
+    return null
+
+
+  @load: (snippets) ->
+    for identity, details of snippets
+      instance = new Mercury.Snippet(details.name, identity, details.options)
+      @all.push(instance)
+
+
   constructor: (@name, @identity, options = {}) ->
     @version = 0
     @data = ''
@@ -64,34 +90,3 @@ class Mercury.Snippet
       name: @name,
       options: @options
     }
-
-
-
-$.extend Mercury.Snippet, {
-
-  all: []
-
-  displayOptionsFor: (name) ->
-    Mercury.modal("/mercury/snippets/#{name}/options", {title: 'Snippet Options', handler: 'insertsnippet'})
-    Mercury.snippet = null
-
-
-  create: (name, options) ->
-    identity = "snippet_#{@all.length}"
-    instance = new Mercury.Snippet(name, identity, options)
-    @all.push(instance)
-    return instance
-
-
-  find: (identity) ->
-    for snippet in @all
-      return snippet if snippet.identity == identity
-    return null
-
-
-  load: (snippets) ->
-    for identity, details of snippets
-      instance = new Mercury.Snippet(details.name, identity, details.options)
-      @all.push(instance)
-
-}

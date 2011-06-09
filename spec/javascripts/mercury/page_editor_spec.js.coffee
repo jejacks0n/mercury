@@ -1,0 +1,406 @@
+require '/assets/mercury/mercury.js'
+
+describe "Mercury.PageEditor", ->
+
+  template 'mercury/page_editor.html'
+
+  afterEach ->
+    @pageEditor = null
+    delete(@pageEditor)
+    window.mercuryInstance = null
+    $(document).unbind('mercury:initialize:frame')
+    $(document).unbind('mercury:focus:frame')
+    $(document).unbind('mercury:focus:window')
+    $(document).unbind('mercury:action')
+    $(document).unbind('mousedown')
+    $(window).unbind('resize')
+
+  describe "constructor", ->
+
+    beforeEach ->
+      @initializeInterfaceSpy = spyOn(Mercury.PageEditor.prototype, 'initializeInterface').andCallFake(=>)
+
+    it "throws an error if it's not supported", ->
+      Mercury.supported = false
+      expect(=>
+        new Mercury.PageEditor()
+      ).toThrow('Mercury.PageEditor is unsupported in this client. Supported browsers are chrome 10+, firefix 4+, and safari 5+.')
+      Mercury.supported = true
+
+    it "throws an error if it's already instantiated", ->
+      window.mercuryInstance = true
+      expect(=>
+        new Mercury.PageEditor()
+      ).toThrow('Mercury.PageEditor can only be instantiated once.')
+      window.mercuryInstance = false
+
+    it "sets the mercuryInstance to window", ->
+      @pageEditor = new Mercury.PageEditor()
+      expect(window.mercuryInstance).toEqual(@pageEditor)
+
+    it "accepts a saveUrl, and options", ->
+      @pageEditor = new Mercury.PageEditor('/foo/1', {foo: 'bar'})
+      expect(@pageEditor.saveUrl).toEqual('/foo/1')
+      expect(@pageEditor.options).toEqual({foo: 'bar'})
+
+    it "calls initializeInterface", ->
+      @pageEditor = new Mercury.PageEditor()
+      expect(@initializeInterfaceSpy.callCount).toEqual(1)
+
+    it "gets the csrf token if there's one available", ->
+      new Mercury.PageEditor()
+      expect(Mercury.csrfToken).toEqual('K6JhyfOVKJX8X2ZkiJXSf491fc1fF+k79wzrChHQa0g=')
+
+
+  describe "#initializeInterface", ->
+
+    beforeEach ->
+      Mercury.Toolbar = -> {toolbar: true}
+      Mercury.Statusbar = -> {statusbar: true}
+      @iframeSrcSpy = spyOn(Mercury.PageEditor.prototype, 'iframeSrc').andCallFake(=> '/foo')
+
+    it "builds a focusable element (so we can get focus off the iframe)", ->
+      @pageEditor = new Mercury.PageEditor('', {appendTo: $('#test')})
+      expect($('input[type=text]').length).toEqual(1)
+
+    it "builds an iframe", ->
+      @pageEditor = new Mercury.PageEditor('', {appendTo: $('#test')})
+      expect($('iframe.mercury-iframe').length).toEqual(1)
+      expect($('iframe.mercury-iframe').attr('src')).toEqual('/foo')
+
+    it "appends the elements to any node", ->
+      @pageEditor = new Mercury.PageEditor('', {appendTo: $('#page_editor_container')})
+      expect($('#page_editor_container input[type=text]').length).toEqual(1)
+      expect($('#page_editor_container iframe.mercury-iframe').length).toEqual(1)
+
+    it "instantiates the toolbar", ->
+      @pageEditor = new Mercury.PageEditor('', {appendTo: $('#test')})
+      expect(@pageEditor.toolbar).toEqual({toolbar: true})
+
+    it "instantiates the statusbar", ->
+      @pageEditor = new Mercury.PageEditor('', {appendTo: $('#test')})
+      expect(@pageEditor.statusbar).toEqual({statusbar: true})
+
+
+  describe "#initializeFrame", ->
+
+    beforeEach ->
+      @bindEventsSpy = spyOn(Mercury.PageEditor.prototype, 'bindEvents').andCallFake(=>)
+      @initializeRegionsSpy = spyOn(Mercury.PageEditor.prototype, 'initializeRegions').andCallFake(=>)
+      @finalizeInterfaceSpy = spyOn(Mercury.PageEditor.prototype, 'finalizeInterface')
+      @pageEditor = new Mercury.PageEditor('', {appendTo: $('#test')})
+
+    it "does nothing if the iframe is already loaded", ->
+      @finalizeInterfaceSpy.andCallFake(=>)
+      @pageEditor.iframe.data('loaded', true)
+      @pageEditor.initializeFrame()
+      expect(@pageEditor.document).toBeUndefined()
+
+    it "tells the iframe that it's loaded", ->
+      @finalizeInterfaceSpy.andCallFake(=>)
+      @pageEditor.initializeFrame()
+      expect(@pageEditor.iframe.data('loaded')).toEqual(true)
+
+    it "gets the document from the iframe", ->
+      @finalizeInterfaceSpy.andCallFake(=>)
+      @pageEditor.initializeFrame()
+      expect(@pageEditor.document).toBeDefined()
+
+    it "calls bindEvents", ->
+      @finalizeInterfaceSpy.andCallFake(=>)
+      @pageEditor.initializeFrame()
+      expect(@bindEventsSpy.callCount).toEqual(1)
+
+    it "calls initializeRegions", ->
+      @finalizeInterfaceSpy.andCallFake(=>)
+      @pageEditor.initializeFrame()
+      expect(@initializeRegionsSpy.callCount).toEqual(1)
+
+    it "calls finalizeInterface", ->
+      @finalizeInterfaceSpy.andCallFake(=>)
+      @pageEditor.initializeFrame()
+      expect(@finalizeInterfaceSpy.callCount).toEqual(1)
+
+    it "shows the iframe", ->
+      @finalizeInterfaceSpy.andCallFake(=>)
+      @pageEditor.initializeFrame()
+      @pageEditor.iframe.css('loaded', true)
+
+    it "captures errors and alerts them", ->
+      @finalizeInterfaceSpy.andCallFake(=> throw('unknown error' ))
+      spy = spyOn(window, 'alert').andCallFake(=>)
+      @pageEditor.initializeFrame()
+      expect(spy.callCount).toEqual(1)
+      expect(spy.argsForCall[0]).toEqual(['Mercury.PageEditor failed to load: unknown error\n\nPlease try refreshing.'])
+
+
+  describe "#initializeRegions", ->
+
+    beforeEach ->
+      Mercury.PageEditor.prototype.initializeFrame = ->
+      @pageEditor = new Mercury.PageEditor('', {appendTo: $('#test')})
+      @pageEditor.document = $(document)
+      @buildRegionSpy = spyOn(Mercury.PageEditor.prototype, 'buildRegion').andCallFake(=>)
+
+    it "it calls buildRegion for all the regions found in a document", ->
+      @pageEditor.initializeRegions()
+      expect(@buildRegionSpy.callCount).toEqual(3)
+
+    it "focuses the first region", ->
+      firstFocusCalled = false
+      @pageEditor.regions = [{focus: => firstFocusCalled = true}, {}, {}]
+      @pageEditor.initializeRegions()
+      expect(firstFocusCalled).toEqual(true)
+
+
+  describe "#buildRegion", ->
+
+    beforeEach ->
+      Mercury.PageEditor.prototype.initializeFrame = ->
+      Mercury.Regions.Editable = -> {region: true}
+      @pageEditor = new Mercury.PageEditor('', {appendTo: $('#test')})
+
+    it "instantiates the region and pushes it into the regions array", ->
+      @pageEditor.buildRegion($('#region2'))
+      expect(@pageEditor.regions.length).toEqual(1)
+      expect(@pageEditor.regions[0]).toEqual({region: true})
+
+    it "alerts on errors", ->
+      Mercury.debug = false
+      Mercury.Regions.Editable = -> throw('error!')
+      spy = spyOn(window, 'alert').andCallFake(=>)
+      @pageEditor.buildRegion($('#region2'))
+      expect(spy.callCount).toEqual(1)
+      expect(spy.argsForCall[0]).toEqual(['Region type is malformed, no data-type provided, or "Editable" is unknown.'])
+
+
+  describe "#finalizeInterface", ->
+
+    beforeEach ->
+      Mercury.PageEditor.prototype.initializeFrame = ->
+      Mercury.SnippetToolbar = -> {snippetToolbar: true}
+      @pageEditor = new Mercury.PageEditor('', {appendTo: $('#test')})
+      @highjackLinksSpy = spyOn(Mercury.PageEditor.prototype, 'hijackLinks').andCallFake(=>)
+      @resizeSpy = spyOn(Mercury.PageEditor.prototype, 'resize').andCallFake(=>)
+
+    it "it builds a snippetToolbar", ->
+      @pageEditor.finalizeInterface()
+      expect(@pageEditor.snippetToolbar).toEqual({snippetToolbar: true})
+
+    it "calls hijackLinks", ->
+      @pageEditor.finalizeInterface()
+      expect(@highjackLinksSpy.callCount).toEqual(1)
+
+    it "calls resize", ->
+      @pageEditor.finalizeInterface()
+      expect(@resizeSpy.callCount).toEqual(1)
+
+
+  describe "observed events", ->
+
+    beforeEach ->
+      @initializeInterfaceSpy = spyOn(Mercury.PageEditor.prototype, 'initializeInterface').andCallFake(=>)
+      @pageEditor = new Mercury.PageEditor('', {appendTo: $('#test')})
+      @pageEditor.document = $(document)
+      @pageEditor.bindEvents()
+
+    describe "custom event: initialize:frame", ->
+
+      it "calls initializeFrame", ->
+        @initializeFrameSpy = spyOn(Mercury.PageEditor.prototype, 'initializeFrame').andCallFake(=>)
+        @setTimeoutSpy = spyOn(window, 'setTimeout').andCallFake((callback) -> callback())
+        Mercury.trigger('initialize:frame')
+        expect(@initializeFrameSpy.callCount).toEqual(1)
+        expect(@setTimeoutSpy.callCount).toEqual(1)
+
+    describe "custom event: focus:frame", ->
+
+      it "calls focus on the iframe", ->
+        callCount = 0
+        @pageEditor.iframe = {focus: -> callCount += 1}
+        Mercury.trigger('focus:frame')
+        expect(callCount).toEqual(1)
+
+    describe "custom event: focus:window", ->
+
+      it "calls focus on a focusable element", ->
+        callCount = 0
+        @pageEditor.focusableElement = {focus: -> callCount += 1}
+        @setTimeoutSpy = spyOn(window, 'setTimeout').andCallFake((callback) -> callback())
+        Mercury.trigger('focus:window')
+        expect(callCount).toEqual(1)
+
+    describe "custom event: action", ->
+
+      it "calls save if the action was save", ->
+        spy = spyOn(Mercury.PageEditor.prototype, 'save').andCallFake(=>)
+        Mercury.trigger('action', {action: 'foo'})
+        expect(spy.callCount).toEqual(0)
+
+        Mercury.trigger('action', {action: 'save'})
+        expect(spy.callCount).toEqual(1)
+
+    describe "mousedown on document", ->
+
+      beforeEach ->
+        @triggerSpy = spyOn(Mercury, 'trigger').andCallFake(=>)
+
+      it "triggers hide:dialogs", ->
+        Mercury.region = {element: $('#region3')}
+        jasmine.simulate.mousedown($('#anchor1r').get(0))
+        expect(@triggerSpy.callCount).toEqual(1)
+        expect(@triggerSpy.argsForCall[0]).toEqual(['hide:dialogs'])
+
+      it "triggers unfocus:regions unless the event happened in a region", ->
+        Mercury.region = {element: {get: -> null}}
+        jasmine.simulate.mousedown(document)
+        expect(@triggerSpy.callCount).toEqual(2)
+        expect(@triggerSpy.argsForCall[1]).toEqual(['unfocus:regions'])
+
+    describe "window resize", ->
+
+      it "calls resize", ->
+        spy = spyOn(Mercury.PageEditor.prototype, 'resize').andCallFake(=>)
+        # untestable in webkit
+        unless $.browser.webkit
+          resizeTo($(window).width() - 1, $(window).height() - 1)
+          expect(spy.callCount).toEqual(1)
+
+    describe "onbeforeunload", ->
+
+      it "calls Mercury.beforeUnload", ->
+        # untestable
+        #spy = spyOn(Mercury, 'beforeUnload').andCallFake(=>)
+        #window.onbeforeunload()
+        #expect(spy.callCount).toEqual(1)
+
+
+  describe "#resize", ->
+
+    beforeEach ->
+      Mercury.Toolbar = -> {toolbar: true, height: -> 100}
+      Mercury.Statusbar = -> {statusbar: true, height: -> 10}
+      Mercury.PageEditor.prototype.initializeFrame = ->
+      @pageEditor = new Mercury.PageEditor('', {appendTo: $('#test')})
+
+    it "sets the display rectangle to displayRect", ->
+      @pageEditor.resize()
+      expect(Mercury.displayRect.top).toEqual(100)
+      expect(Mercury.displayRect.height).toEqual($(window).height() - 100 - 10)
+
+    it "resizes the iframe", ->
+      @pageEditor.resize()
+      expect($('.mercury-iframe').css('top')).toEqual('100px')
+      expect($('.mercury-iframe').css('height')).toEqual("#{$(window).height() - 100 - 10}px")
+
+    it "triggers a resize event", ->
+      spy = spyOn(Mercury, 'trigger').andCallFake(=>)
+      @pageEditor.resize()
+      expect(spy.callCount).toEqual(1)
+
+
+  describe "#iframeSrc", ->
+
+    beforeEach ->
+      Mercury.PageEditor.prototype.initializeFrame = ->
+      @pageEditor = new Mercury.PageEditor('', {appendTo: $('#test')})
+
+    it "takes the location and removes the /edit", ->
+      expect(@pageEditor.iframeSrc('http://something/edit/path')).toEqual('http://something/path')
+
+
+  describe "#hijackLinks", ->
+
+    beforeEach ->
+      Mercury.PageEditor.prototype.initializeFrame = ->
+      @pageEditor = new Mercury.PageEditor('', {appendTo: $('#test')})
+      @pageEditor.document = $(document)
+
+    it "finds links and set their target to top if it's not already set", ->
+      @pageEditor.hijackLinks()
+      expect($('#anchor1').attr('target')).toEqual('_top')
+      expect($('#anchor2').attr('target')).toEqual('_blank')
+      expect($('#anchor3').attr('target')).toEqual('_top')
+      expect($('#anchor4').attr('target')).toEqual('_top')
+
+    it "ignores links in regions", ->
+      @pageEditor.hijackLinks()
+      expect($('#anchor1r').attr('target')).toEqual('_top')
+      expect($('#anchor2r').attr('target')).toEqual('_blank')
+      expect($('#anchor3r').attr('target')).toEqual('_self')
+      expect($('#anchor4r').attr('target')).toBeUndefined()
+
+
+  describe "#save", ->
+
+    beforeEach ->
+      Mercury.PageEditor.prototype.initializeInterface = ->
+      @pageEditor = new Mercury.PageEditor('', {appendTo: $('#test')})
+      @iframeSrcSpy = spyOn(Mercury.PageEditor.prototype, 'iframeSrc').andCallFake(=> '/foo/baz')
+      @ajaxSpy = spyOn($, 'ajax')
+
+    it "makes an ajax request", ->
+      @ajaxSpy.andCallFake(=>)
+      @pageEditor.save()
+      expect(@ajaxSpy.callCount).toEqual(1)
+
+    it "uses the save url passed in via options, or the iframe src", ->
+      @ajaxSpy.andCallFake(=>)
+      @pageEditor.saveUrl = '/foo/bar'
+      @pageEditor.save()
+      expect(@ajaxSpy.argsForCall[0][0]).toEqual('/foo/bar')
+
+      @pageEditor.saveUrl = null
+      @pageEditor.save()
+      expect(@ajaxSpy.argsForCall[1][0]).toEqual('/foo/baz')
+
+    it "serializes the data in json", ->
+      @ajaxSpy.andCallFake(=>)
+      Mercury.config.saveStyle = 'json'
+      spy = spyOn(Mercury.PageEditor.prototype, 'serialize').andCallFake(=> {region1: 'region1'})
+      @pageEditor.save()
+      expect(@ajaxSpy.argsForCall[0][1]['data']).toEqual({content: '{"region1":"region1"}' })
+
+    it "can serialize as form values", ->
+      @ajaxSpy.andCallFake(=>)
+      Mercury.config.saveStyle = 'form'
+      spy = spyOn(Mercury.PageEditor.prototype, 'serialize').andCallFake(=> {region1: 'region1'})
+      @pageEditor.save()
+      expect(@ajaxSpy.argsForCall[0][1]['data']).toEqual({content: {region1: 'region1'}})
+
+    describe "on successful ajax request", ->
+
+      beforeEach ->
+        @ajaxSpy.andCallFake((url, options) => options.success('data') )
+
+      it "sets changes back to false", ->
+        Mercury.changes = true
+        @pageEditor.save()
+        expect(Mercury.changes).toEqual(false)
+
+    describe "on failed ajax request", ->
+
+      beforeEach ->
+        @ajaxSpy.andCallFake((url, options) => options.error() )
+
+      it "alerts with the url", ->
+        spy = spyOn(window, 'alert').andCallFake(=>)
+        @pageEditor.saveUrl = '/foo/bar'
+        @pageEditor.save()
+        expect(spy.callCount).toEqual(1)
+        expect(spy.argsForCall[0]).toEqual(['Mercury was unable to save to the url: /foo/bar'])
+
+
+  describe "#serialize", ->
+
+    beforeEach ->
+      Mercury.PageEditor.prototype.initializeInterface = ->
+      @pageEditor = new Mercury.PageEditor('', {appendTo: $('#test')})
+      @pageEditor.regions = [
+        {name: 'region1', serialize: -> 'region1'},
+        {name: 'region2', serialize: -> 'region2'}
+      ]
+
+    it "returns an object with the region name, and it's serialized value", ->
+      ret = @pageEditor.serialize()
+      expect(ret).toEqual({region1: 'region1', region2: 'region2'})

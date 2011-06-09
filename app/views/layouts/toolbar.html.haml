@@ -1,7 +1,7 @@
 !!!
 %html
   %head
-    %title MercuryEditor
+    %title Mercury
     = csrf_meta_tags
     = stylesheet_link_tag "application"
     = javascript_include_tag "application"
@@ -10,7 +10,7 @@
     = yield
 
     :javascript
-      mercuryEditor = new MercuryEditor();
+      new Mercury.PageEditor();
       Mercury.Snippet.load({
         'snippet_1': {name: 'example', options: {'options[favorite_beer]': "miller_lite", 'options[first_name]': "1"}},
         'snippet_2': {name: 'example', options: {'options[favorite_beer]': "miller_lite", 'options[first_name]': "2"}},

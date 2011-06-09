@@ -1,22 +1,21 @@
-class MercuryEditor
+class Mercury.PageEditor
 
-  constructor: (@options = {}) ->
-    throw "MercuryEditor is unsupported in this client. Supported browsers are chrome 10+, firefix 4+, and safari 5+." unless Mercury.supported
-    throw "MercuryEditor can only be instantiated once" if window.mercuryInstance
+  constructor: (@saveUrl = null, @options = {}) ->
+    throw "Mercury.PageEditor is unsupported in this client. Supported browsers are chrome 10+, firefix 4+, and safari 5+." unless Mercury.supported
+    throw "Mercury.PageEditor can only be instantiated once." if window.mercuryInstance
 
     window.mercuryInstance = @
-    @saveUrl = @options.saveUrl
     @regions = []
     @initializeInterface()
     Mercury.csrfToken = token if token = $('meta[name="csrf-token"]').attr('content')
 
 
   initializeInterface: ->
-    @focusableElement = $('<input>', {type: 'text', style: 'position:absolute;opacity:0'}).appendTo('body')
+    @focusableElement = $('<input>', {type: 'text', style: 'position:absolute;opacity:0'}).appendTo(@options.appendTo ? 'body')
     @iframe = $('<iframe>', {class: 'mercury-iframe', seamless: 'true', frameborder: '0', src: 'about:blank', style: 'position:absolute;top:0;width:100%;visibility:hidden'})
     @iframe.load => @initializeFrame()
     @iframe.attr('src', @iframeSrc())
-    @iframe.appendTo('body')
+    @iframe.appendTo(@options.appendTo ? 'body')
 
     @toolbar = new Mercury.Toolbar(@options)
     @statusbar = new Mercury.Statusbar(@options)
@@ -34,7 +33,7 @@ class MercuryEditor
 
       @iframe.css({visibility: 'visible'})
     catch error
-      alert("MercuryEditor failed to load: #{error}\n\nPlease try refreshing.")
+      alert("Mercury.PageEditor failed to load: #{error}\n\nPlease try refreshing.")
 
 
   initializeRegions: ->
@@ -57,7 +56,7 @@ class MercuryEditor
   finalizeInterface: ->
     @snippetToolbar = new Mercury.SnippetToolbar(@document)
 
-    Mercury.hijackLinks(@document)
+    @hijackLinks()
     @resize()
 
 
@@ -94,8 +93,14 @@ class MercuryEditor
     Mercury.trigger('resize')
 
 
-  iframeSrc: ->
-    window.location.href.replace(/([http|https]:\/\/.[^\/]*)\/edit\/?(.*)/i, "$1/$2")
+  iframeSrc: (url = null) ->
+    (url ? window.location.href).replace(/([http|https]:\/\/.[^\/]*)\/edit\/?(.*)/i, "$1/$2")
+
+
+  hijackLinks: ->
+    for link in $('a', @document)
+      if (link.target == '' || link.target == '_self') && !$(link).closest('.mercury-region').length
+        $(link).attr('target', '_top')
 
 
   save: ->
@@ -117,5 +122,3 @@ class MercuryEditor
     serialized = {}
     serialized[region.name] = region.serialize() for region in @regions
     return serialized
-
-

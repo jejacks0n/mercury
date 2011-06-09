@@ -14,7 +14,7 @@
 #
 #= require_self
 #= require ./native_extensions
-#= require ./mercury_editor
+#= require ./page_editor
 #= require ./history_buffer
 #= require ./table_editor
 #= require ./dialog
@@ -57,12 +57,6 @@ Mercury =
   beforeUnload: ->
     if Mercury.changes && !Mercury.silent
      return "You have unsaved changes.  Are you sure you want to leave without saving them first?"
-
-
-  hijackLinks: (document) ->
-    for link in $('a', document)
-      if (link.target == '' || link.target == '_self') and !$(link).closest('.mercury-region').length
-        $(link).attr('target', '_top')
 
 
   refresh: ->

@@ -329,6 +329,10 @@ describe "Mercury.PageEditor", ->
       expect($('#anchor3r').attr('target')).toEqual('_self')
       expect($('#anchor4r').attr('target')).toBeUndefined()
 
+    it "ignores links that are in the config to be ignored (by class)", ->
+      @pageEditor.hijackLinks()
+      expect($('#anchor5').attr('target')).toEqual('_self')
+
 
   describe "#save", ->
 

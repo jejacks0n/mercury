@@ -99,7 +99,12 @@ class Mercury.PageEditor
 
   hijackLinks: ->
     for link in $('a', @document)
-      if (link.target == '' || link.target == '_self') && !$(link).closest('.mercury-region').length
+      ignored = false
+      for classname in Mercury.config.ignoredLinks
+        if $(link).hasClass(classname)
+          ignored = true
+          continue
+      if !ignored && (link.target == '' || link.target == '_self') && !$(link).closest('.mercury-region').length
         $(link).attr('target', '_top')
 
 

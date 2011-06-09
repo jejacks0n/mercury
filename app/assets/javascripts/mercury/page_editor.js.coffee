@@ -15,7 +15,7 @@ class Mercury.PageEditor
     @iframe = $('<iframe>', {class: 'mercury-iframe', seamless: 'true', frameborder: '0', src: 'about:blank', style: 'position:absolute;top:0;width:100%;visibility:hidden'})
     @iframe.load => @initializeFrame()
     @iframe.attr('src', @iframeSrc())
-    @iframe.appendTo(@options.appendTo ? 'body')
+    @iframe.appendTo($(@options.appendTo).get(0) ? 'body')
 
     @toolbar = new Mercury.Toolbar(@options)
     @statusbar = new Mercury.Statusbar(@options)

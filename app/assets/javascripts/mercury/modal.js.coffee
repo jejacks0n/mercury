@@ -1,4 +1,4 @@
-Mercury.modal = (url, options) ->
+Mercury.modal = (url, options = {}) ->
   Mercury.modal.show(url, options)
   return Mercury.modal
 
@@ -14,7 +14,6 @@ $.extend Mercury.modal, {
 
   initialize: ->
     return if @initialized
-    @options ||= {}
     @build()
     @bindEvents()
     @initialized = true
@@ -85,6 +84,7 @@ $.extend Mercury.modal, {
         @contentPane.find('.mercury-modal-pane').css({width: width - 40})
       else
         @contentElement.css({height: height - titleHeight, overflow: 'auto'})
+
 
   position: ->
     viewportWidth = $(window).width()

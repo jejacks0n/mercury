@@ -18,7 +18,8 @@
  *= require ./modal
  *= require ./statusbar
  *= require ./toolbar
- *= require ./uploader
+ *= require ./tooltip
+  = require ./uploader
  */
 html, body {
   margin: 0;

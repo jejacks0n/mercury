@@ -92,7 +92,6 @@ class Mercury.Regions.Snippetable extends Mercury.Region
       opacity: .4,
       revert: 100,
       tolerance: 'pointer',
-#      connectWith: '.mercury-region[data-type=snippetable]',
       beforeStop: =>
         Mercury.trigger('hide:toolbar', {type: 'snippet', immediately: true})
         return true

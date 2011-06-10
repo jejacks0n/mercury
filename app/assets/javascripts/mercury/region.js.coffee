@@ -103,5 +103,3 @@ class Mercury.Region
       value: @html(null, true)
       snippets: @snippets()
     }
-
-

@@ -48,7 +48,7 @@ class Mercury.Regions.Editable extends Mercury.Region
         Mercury.tableEditor(table, currentElement) if table.length
         # display a tooltip if we're in an anchor
         anchor = currentElement.closest('a', @element)
-        if anchor.length
+        if anchor.length && anchor.attr('href')
           Mercury.tooltip(anchor, "<a href=\"#{anchor.attr('href')}\" target=\"_blank\">#{anchor.attr('href')}</a>", {position: 'below'})
         else
           Mercury.tooltip.hide()
@@ -207,7 +207,6 @@ class Mercury.Regions.Editable extends Mercury.Region
                 element.attr({'data-version': version})
                 element.html(snippet.data)
             catch error
-
 
       # set the html
       @element.html(container.html())

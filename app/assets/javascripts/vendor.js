@@ -11,4 +11,5 @@
  *= require jquery.websocket
  *= require jquery.serialize_object
  *= require liquidmetal
+ *= require showdown
  */

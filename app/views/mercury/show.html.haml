@@ -4,9 +4,14 @@
   .mercury-region:focus, .mercury-region.focus { outline: 0; -webkit-box-shadow: 0 0 10px #09F, 0 0 1px #045; box-shadow: 0 0 10px #09F, 0 0 1px #045 }
   .mercury-region:after { content: '\00a0'; display: block; visibility: hidden; clear: both; height: 0; overflow: hidden; }
   .mercury-snippet { width:200px; height:100px; border: 1px solid red; }
+  .mercury-region[data-type=markupable] textarea { width: 100%; }
   </style>
 
 Content outside the regions
+
+#markupable_region.mercury-region{ data: { type: 'markupable' } }
+  %textarea
+    textarea
 
 #snippet_region1.mercury-region{ data: { type: 'snippetable' } }
   .mercury-snippet{ data: { snippet: 'snippet_3' }} snippet3

@@ -66,11 +66,13 @@ class Mercury.Region
   togglePreview: ->
     if @previewing
       @previewing = false
+      @toggleMarkdownPreview() if @type == 'markupable'
       @element.addClass('mercury-region').removeClass('mercury-region-preview')
       @focus() if Mercury.region == @
     else
       @previewing = true
       @element.addClass('mercury-region-preview').removeClass('mercury-region')
+      @toggleMarkdownPreview(true) if @type == 'markupable'
       Mercury.trigger('region:blurred', {region: @})
 
 

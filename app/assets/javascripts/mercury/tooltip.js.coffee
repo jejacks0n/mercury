@@ -60,6 +60,7 @@ $.extend Mercury.tooltip, {
 
 
   hide: ->
+    return unless @initialized
     @element.hide()
     @visible = false
 

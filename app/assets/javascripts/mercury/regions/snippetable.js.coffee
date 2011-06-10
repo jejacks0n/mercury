@@ -101,25 +101,27 @@ class Mercury.Regions.Snippetable extends Mercury.Region
     }
 
 
+  # Actions
+  @actions: {
 
-Mercury.Regions.Snippetable.actions =
+    undo: -> @html(@history.undo())
 
-  undo: -> @html(@history.undo())
+    redo: -> @html(@history.redo())
 
-  redo: -> @html(@history.redo())
+    insertsnippet: (options) ->
+      snippet = options.value
+      if (existing = @element.find("[data-snippet=#{snippet.identity}]")).length
+        existing.replaceWith(snippet.getHTML(@document, => @pushHistory()))
+      else
+        @element.append(snippet.getHTML(@document, => @pushHistory()))
 
-  insertsnippet: (options) ->
-    snippet = options.value
-    if (existing = @element.find("[data-snippet=#{snippet.identity}]")).length
-      existing.replaceWith(snippet.getHTML(@document, => @pushHistory()))
-    else
-      @element.append(snippet.getHTML(@document, => @pushHistory()))
+    editsnippet: ->
+      return unless @snippet
+      snippet = Mercury.Snippet.find(@snippet.data('snippet'))
+      snippet.displayOptions()
 
-  editsnippet: ->
-    return unless @snippet
-    snippet = Mercury.Snippet.find(@snippet.data('snippet'))
-    snippet.displayOptions()
+    removesnippet: ->
+      @snippet.remove() if @snippet
+      Mercury.trigger('hide:toolbar', {type: 'snippet', immediately: true})
 
-  removesnippet: ->
-    @snippet.remove() if @snippet
-    Mercury.trigger('hide:toolbar', {type: 'snippet', immediately: true})
+  }

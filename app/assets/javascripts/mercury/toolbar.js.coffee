@@ -56,7 +56,7 @@ class Mercury.Toolbar
           toolbar.removeClass('disabled') if regions.split(',').indexOf(options.region.type) > -1
 
     Mercury.bind 'region:blurred', (event, options) =>
-      @element.find(".mercury-#{options.region.type}-toolbar").addClass('disabled')
+#      @element.find(".mercury-#{options.region.type}-toolbar").addClass('disabled')
       for toolbar in @element.find(".mercury-toolbar")
         toolbar = $(toolbar)
         if regions = toolbar.data('regions')

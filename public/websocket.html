@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+	<title>Websockets!</title>
+	<script type="text/javascript">
+	function onMessage(evt) {
+		con = document.getElementById("console");
+		con.innerHTML += evt.data;
+		con.innerHTML += '<br />';
+	}
+	websocket = new WebSocket("ws://localhost:8080");
+	websocket.onmessage = function(evt) { onMessage(evt); };
+	</script>
+</head>
+
+<body>
+	<div id="console">
+	</div>
+</body>
+</html>

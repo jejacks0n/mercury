@@ -264,7 +264,7 @@ var _HashHTMLBlocks = function(text) {
   text = text.replace(/^(<(p|div|h[1-6]|blockquote|pre|table|dl|ol|ul|script|noscript|form|fieldset|iframe|math)\b[^\r]*?.*<\/\2>[ \t]*(?=\n+)\n)/gm,hashElement);
 
   // Special case just for <hr />. It was easier to make a special case than
-  // to make the other regex more complicated.  
+  // to make the other regex more complicated.
 
   /*
     text = text.replace(/
@@ -273,7 +273,7 @@ var _HashHTMLBlocks = function(text) {
       [ ]{0,3}
       (<(hr)        // start tag = $2
       \b          // word break
-      ([^<>])*?     // 
+      ([^<>])*?     //
       \/?>)       // the matching end tag
       [ \t]*
       (?=\n{2,})      // followed by a blank line
@@ -403,7 +403,7 @@ var _EscapeSpecialCharsWithinTagAttributes = function(text) {
 // don't conflict with their use in Markdown for code, italics and strong.
 //
 
-  // Build a regex to find HTML tags and comments.  See Friedl's 
+  // Build a regex to find HTML tags and comments.  See Friedl's
   // "Mastering Regular Expressions", 2nd Ed., pp. 200-201.
   var regex = /(<[a-z\/!$]("[^"]*"|'[^']*'|[^'">])*>|<!(--.*?--\s*)+>)/gi;
 
@@ -530,7 +530,7 @@ var writeAnchorTag = function(wholeMatch,m1,m2,m3,m4,m5,m6,m7) {
         return whole_match;
       }
     }
-  } 
+  }
 
   url = escapeCharacters(url,"*_");
   var result = "<a href=\"" + url + "\"";
@@ -630,7 +630,7 @@ var writeImageTag = function(wholeMatch,m1,m2,m3,m4,m5,m6,m7) {
     else {
       return whole_match;
     }
-  } 
+  }
 
   alt_text = alt_text.replace(/"/g,"&quot;");
   url = escapeCharacters(url,"*_");
@@ -656,7 +656,7 @@ var _DoHeaders = function(text) {
   // Setext-style headers:
   //  Header 1
   //  ========
-  //  
+  //
   //  Header 2
   //  --------
   //
@@ -761,7 +761,7 @@ var _DoLists = function(text) {
       // paragraph for the last item in a list, if necessary:
       var list = list.replace(/\n{2,}/g,"\n\n\n");;
       var result = _ProcessListItems(list);
-      result = runup + "<"+list_type+">\n" + result + "</"+list_type+">\n"; 
+      result = runup + "<"+list_type+">\n" + result + "</"+list_type+">\n";
       return result;
     });
   }
@@ -847,7 +847,7 @@ _ProcessListItems = function(list_str) {
 var _DoCodeBlocks = function(text) {
 //
 //  Process Markdown `<pre><code>` blocks.
-//  
+//
 
   /*
     text = text.replace(text,
@@ -896,26 +896,26 @@ var hashBlock = function(text) {
 var _DoCodeSpans = function(text) {
 //
 //   *  Backtick quotes are used for <code></code> spans.
-// 
+//
 //   *  You can use multiple backticks as the delimiters if you want to
 //   include literal backticks in the code span. So, this input:
-//   
+//
 //     Just type ``foo `bar` baz`` at the prompt.
-//   
+//
 //     Will translate to:
-//   
+//
 //     <p>Just type <code>foo `bar` baz</code> at the prompt.</p>
-//   
+//
 //  There's no arbitrary limit to the number of backticks you
 //  can use as delimters. If you need three consecutive backticks
 //  in your code, use four for delimiters, etc.
 //
 //  *  You can use spaces to get literal backticks at the edges:
-//   
+//
 //     ... type `` `bar` `` ...
-//   
+//
 //     Turns to:
-//   
+//
 //     ... type <code>`bar`</code> ...
 //
 

@@ -79,6 +79,7 @@ Mercury = {
 
   log: ->
     if Mercury.debug && console
+      return if arguments[0] == 'hide:toolbar'
       try console.debug(arguments) catch e
 
 }

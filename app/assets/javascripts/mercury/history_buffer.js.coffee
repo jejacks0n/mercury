@@ -3,7 +3,7 @@ class Mercury.HistoryBuffer
   constructor: (@maxLength = 200) ->
     @index = 0
     @stack = []
-    @markerRegExp = /<em class="mercury-marker"><\/em>/g
+    @markerRegExp = /<em class="mercury-marker"><\/em>|\[mercury-marker\]/g
 
 
   push: (item) ->

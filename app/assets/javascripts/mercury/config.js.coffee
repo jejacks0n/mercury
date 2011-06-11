@@ -104,13 +104,13 @@ Mercury.config =
       insertcharacter:       ['Character', 'Special Characters', {modal: '/mercury/modals/character', regions: ['editable']}]
       objectspanel:          ['Snippet', 'Snippet Panel', {panel: -> "/mercury/panels/snippets"}]
       sep2:                  ' '
-#      historypanel:          ['History', 'Page Version History', {panel: -> "/mercury/panels/history"}]
-#      sep3:                  ' '
-#      notespanel:            ['Notes', 'Page Notes', {panel: '/mercury/panels/notes'}]
-#      todospanel:            ['Todos', 'Page Todos', {panel: '/mercury/panels/todos'}]
+      historypanel:          ['History', 'Page Version History', {panel: -> "/mercury/panels/history"}]
+      sep3:                  ' '
+      notespanel:            ['Notes', 'Page Notes', {panel: '/mercury/panels/notes'}]
+      todospanel:            ['Todos', 'Page Todos', {panel: '/mercury/panels/todos'}]
 
     editable:
-      _regions:              ['editable', 'markupable']
+      _regions:              ['editable']
       predefined:
         style:               ['Style', null, {select: '/mercury/selects/style', preload: true}]
         sep1:                ' '
@@ -176,6 +176,31 @@ Mercury.config =
         sep1:                ' '
         removesnippet:       ['Remove Snippet', null]
 
+    markupable:
+      _regions:              ['markupable']
+      predefined:
+        style:               ['Style', null, {select: '/mercury/selects/style', preload: true}]
+        sep1:                ' '
+        formatblock:         ['Block Format', null, {select: '/mercury/selects/formatblock', preload: true}]
+        sep2:                '-'
+      decoration:
+        bold:                ['Bold', null, {context: true}]
+        italic:              ['Italicize', null, {context: true}]
+        sep:                 '-'
+      script:
+        subscript:           ['Subscript', null, {context: true}]
+        superscript:         ['Superscript', null, {context: true}]
+        sep:                 '-'
+      list:
+        insertunorderedlist: ['Unordered List', null, {context: true}]
+        insertorderedlist:   ['Numbered List', null, {context: true}]
+        sep:                 '-'
+      indent:
+        outdent:             ['Decrease Indentation', null]
+        indent:              ['Increase Indentation', null]
+        sep:                 '-'
+      rules:
+        horizontalrule:      ['Horizontal Rule', 'Insert a horizontal rule']
 
   # Behaviors
   #

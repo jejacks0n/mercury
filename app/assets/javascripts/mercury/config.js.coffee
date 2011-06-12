@@ -234,3 +234,19 @@ Mercury.config =
   # and
   # Mercury.Toolbar.ButtonGroup.contexts
   #
+
+
+  # Styles
+  #
+  # Mercury tries to stay as much out of your code as possible, but because regions appear within your document we need
+  # to include a few styles to indicate regions, as well as the different states of them (eg. focused and active).  The
+  # following styles are injected into your document, and as simple as they might be, you may want to change them.  You
+  # can do so here.
+  #
+  injectedStyles:
+    '''
+    .mercury-region, .mercury-textarea { min-height: 10px; outline: 1px dotted #09F }
+    .mercury-region:focus, .mercury-region.focus, .mercury-textarea.focus { outline: none; -webkit-box-shadow: 0 0 10px #09F, 0 0 1px #045; box-shadow: 0 0 10px #09F, 0 0 1px #045 }
+    .mercury-region:after { content: '\00a0'; display: block; visibility: hidden; clear: both; height: 0; overflow: hidden; }
+    .mercury-snippet { width:200px; height:100px; border: 1px solid red; }
+    '''

@@ -55,7 +55,7 @@ describe "Mercury.Toolbar", ->
     it "builds out toolbar elements from the configuration", ->
       expect($('.mercury-primary-toolbar').length).toEqual(1)
       expect($('.mercury-editable-toolbar').length).toEqual(1)
-      expect($('.mercury-editable-toolbar').data('regions')).toEqual('editable,markupable')
+      expect($('.mercury-editable-toolbar').data('regions')).toEqual('editable')
 
     it "builds buttons etc.", ->
       expect(@buildButtonSpy.callCount).toBeGreaterThan(10)
@@ -134,10 +134,6 @@ describe "Mercury.Toolbar", ->
       it "disables toolbars for the region type", ->
         $('.mercury-editable-toolbar').removeClass('disabled')
         Mercury.trigger('region:blurred', {region: {type: 'editable'}})
-        expect($('.mercury-editable-toolbar').hasClass('disabled')).toEqual(true)
-
-        $('.mercury-editable-toolbar').removeClass('disabled')
-        Mercury.trigger('region:blurred', {region: {type: 'markupable'}})
         expect($('.mercury-editable-toolbar').hasClass('disabled')).toEqual(true)
 
 

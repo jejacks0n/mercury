@@ -175,6 +175,7 @@ describe "Mercury.tooltip", ->
 
     beforeEach ->
       Mercury.tooltip.build()
+      Mercury.tooltip.initialized = true
 
     it "hides the element", ->
       Mercury.tooltip.element.css({display: 'block'})

@@ -306,7 +306,7 @@ Mercury = {
   log: ->
     if Mercury.debug && console
       return if arguments[0] == 'hide:toolbar'
-      try console.log(arguments) catch e
+      try console.debug(arguments) catch e
 
 
   # Mercury object namespaces

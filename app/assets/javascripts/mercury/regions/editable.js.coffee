@@ -119,7 +119,8 @@ class Mercury.Regions.Editable extends Mercury.Region
 
     @element.dblclick (event) =>
       return if @previewing
-      if image = $(event.target).closest('img')
+      image = $(event.target).closest('img', @element)
+      if image.length
         @selection().selectNode(image.get(0), true)
         Mercury.trigger('button', {action: 'insertmedia'})
 

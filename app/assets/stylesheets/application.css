@@ -1,4 +1,8 @@
 /* Application CSS
- *= require mercury/mercury
  *= require_self
  */
+
+#header {
+  background: url(/assets/header-background.png) repeat-x;
+  height: 411px;
+}

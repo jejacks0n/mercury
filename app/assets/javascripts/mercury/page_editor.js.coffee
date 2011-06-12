@@ -1,5 +1,8 @@
 class Mercury.PageEditor
 
+  # options
+  # saveStyle: 'form', or 'json' (defaults to json)
+  # ignoredLinks: an array containing classes for links to ignore (eg. lightbox or accordian controls)
   constructor: (@saveUrl = null, @options = {}) ->
     throw "Mercury.PageEditor is unsupported in this client. Supported browsers are chrome 10+, firefix 4+, and safari 5+." unless Mercury.supported
     throw "Mercury.PageEditor can only be instantiated once." if window.mercuryInstance
@@ -74,7 +77,7 @@ class Mercury.PageEditor
       Mercury.trigger('unfocus:regions') unless $(event.target).closest('.mercury-region').get(0) == Mercury.region.element.get(0)
 
     $(window).resize => @resize()
-    window.onbeforeunload = Mercury.beforeUnload
+    window.onbeforeunload = @beforeUnload
 
 
   resize: ->
@@ -101,7 +104,7 @@ class Mercury.PageEditor
   hijackLinks: ->
     for link in $('a', @document)
       ignored = false
-      for classname in Mercury.config.ignoredLinks
+      for classname in @options.ignoredLinks || []
         if $(link).hasClass(classname)
           ignored = true
           continue
@@ -109,11 +112,17 @@ class Mercury.PageEditor
         $(link).attr('target', '_top')
 
 
+  beforeUnload: ->
+    if Mercury.changes && !Mercury.silent
+      return "You have unsaved changes.  Are you sure you want to leave without saving them first?"
+    return null
+
+
   save: ->
     url = @saveUrl ? @iframeSrc()
     data = @serialize()
     Mercury.log('saving', data)
-    data = $.toJSON(data) if Mercury.config.saveStyle == 'json'
+    data = $.toJSON(data) unless @options.saveStyle == 'form'
     $.ajax url, {
       type: 'POST'
       data: {content: data}

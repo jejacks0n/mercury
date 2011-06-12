@@ -1,5 +1,4 @@
-class ImagesController < ActionController::Base
-  protect_from_forgery
+class ImagesController < ApplicationController
 
   respond_to :json
 
@@ -16,4 +15,5 @@ class ImagesController < ActionController::Base
     @image.destroy
     respond_with @image
   end
+
 end

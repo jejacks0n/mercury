@@ -1,29 +1,16 @@
-###
-# Mercury Editor is a Coffeescript and jQuery based WYSIWYG editor.  Mercury Editor utilizes the HTML5 ContentEditable
-# spec to allow editing sections of a given page (instead of using iframes) and provides an editing experience that's as
-# realistic as possible.  By not using iframes for editable regions it allows CSS to behave naturally.
 #
-# Mercury Editor was written for the future, and doesn't attempt to support legacy implementations of document editing.
-#
-# Currently supported browsers are
-#   - Firefox 4+
-#   - Chrome 10+
-#   - Safari 5+
-#
-# Copyright (c) 2011 Jeremy Jackson
-#
-# Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
-# documentation files (the "Software"), to deal in the Software without restriction, including without limitation the
-# rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit
-# persons to whom the Software is furnished to do so, subject to the following conditions:
-#
-# The above copyright notice and this permission notice shall be included in all copies or substantial portions of the
-# Software.
-#
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-# WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
-# COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
-# OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+#= require jquery-1.6
+#= require jquery-ui-1.8.13.custom.min
+#= require jquery-ui-1.8.13.sortable.custom
+#= require jquery.cookie
+#= require jquery.easing
+#= require jquery.json2
+#= require jquery.ujs
+#= require jquery.uri
+#= require jquery.websocket
+#= require jquery.serialize_object
+#= require liquidmetal
+#= require showdown
 #
 #= require_self
 #= require ./native_extensions
@@ -48,39 +35,265 @@
 #= require_tree ./regions
 #= require_tree ./dialogs
 #= require_tree ./modals
-#= require ./config
-###
+#
 
-# Mercury static properties and utlity methods
 Mercury = {
 
   version: 1.0
 
-  # No IE because it doesn't follow the w3c standards for designMode
-  # TODO: using client detection, but should use feature detection
+
+  # No IE support yet because it doesn't follow the W3C standards for HTML5 contentEditable (aka designMode).
   supported: document.getElementById && document.designMode && !$.browser.konqueror && !$.browser.msie
 
+
+  # Silent mode disables things like asking about unsaved changes before leaving the page.
   silent: false
 
+
+  # Turning debug mode on will log events and other various things (using console.log if available).
   debug: true
 
-  Regions: {}
 
-  modalHandlers: {}
+  # Configuration
+  config: {
 
-  dialogHandlers: {}
-
-
-  beforeUnload: ->
-    if Mercury.changes && !Mercury.silent
-      return "You have unsaved changes.  Are you sure you want to leave without saving them first?"
-    return null
-
-
-  refresh: ->
-    Mercury.trigger('refresh')
+    # Pasting (in Chrome/Safari)
+    #
+    # When copying content using webkit, it embeds all the user defined styles (from the css files) into the html style
+    # attributes directly.  When pasting this content into HTML5 contentEditable elements it leaves these intact.  This
+    # can be a desired feature, or an annoyance, so you can enable it or disable it here.  Keep in mind this will only
+    # change the behavior in webkit, as gecko doesn't do this.
+    #
+    cleanStylesOnPaste: true
 
 
+    # Image Uploading (in supported regions)
+    #
+    # If you drag images (while pressing shift) from your desktop into regions that support it, it will be uploaded to
+    # the server and inserted into the region.  This configuration allows you to specify if you want to disable/enable
+    # this feature, the accepted mime-types, file size restrictions, and other things related to uploading.
+    #
+    uploading:
+      enabled: true
+      allowedMimeTypes: ['image/jpeg', 'image/gif', 'image/png']
+      maxFileSize: 1235242880 # bytes (5 Mb by default)
+      inputName: 'image[image]'
+      url: '/images'
+
+
+    # Toolbars
+    #
+    # This is where you can customize the toolbars by adding or removing buttons, or changing them and their behaviors.
+    # Any top level object put here will create a new toolbar.  Buttons are simply nested inside the toolbars, along
+    # with button groups.
+    #
+    # Buttons can be grouped.  A button group is simply a way to wrap buttons for styling, and can also handle enabling
+    # or disabling all the buttons within it by using a context.  The table button group is a good example of this.
+    #
+    # The primary toolbar is always visible, but any other toolbar should have a name based on what type of region it's
+    # for.  The toolbar will be enabled/disabled base on what region currently has focus.  Some toolbars are custom (the
+    # snippetable toolbar for instance), and to denote that use _custom: true.  You can then build the toolbar yourself
+    # with it's own behavior.
+    #
+    # It's important to note that each of the button names (keys), in each toolbar object must be unique, regardless of
+    # if it's in a button group, or nested, etc.  This is because styling is applied to them by name.
+    #
+    # Button format: [label, description, {type: action, type: action, etc}] The available button types are:
+    #
+    # toggle:  toggles on or off when clicked, otherwise behaves like a button
+    # modal:   opens a modal window, expects the action to be one of:
+    #            a string url
+    #            a function that returns a string url
+    # panel:   opens a panel dialog, expects the action to be one of:
+    #            a string url
+    #            a function that returns a string url
+    # palette: opens a palette window, expects the action to be one of:
+    #            a string url
+    #            a function that returns a string url
+    # select:  opens a pulldown style window, expects the action to be one of:
+    #            a string url
+    #            a function that returns a string url
+    # context: calls a callback function, expects the action to be:
+    #            a function that returns a boolean to highlight the button
+    #            note: if a function isn't provided, the key will be passed to the contextHandler, in which case a
+    #                  default context will be used (for more info read the Contexts section below)
+    # mode:    toggle a given mode in the editor, expects the action to be:
+    #            a string, denoting the name of the mode
+    #            note: it's assumed that when a specific mode is turned on, all other modes will be turned off, which
+    #                  happens automatically, thus putting the editor into a specific "state"
+    # regions: allows buttons to be enabled/disabled based on what region type has focus, expects the action to be:
+    #            an array of region types (eg. ['editable', 'markupable']
+    # preload: allows some dialog views to be loaded whtn the button is created instead of on first open, expects:
+    #            a boolean
+    #            note: only used for panels, selects, and palettes
+    #
+    # Separators are any "button" that's not an array, and are expected to be a string.  You can use two different
+    # separator styles: line ('-'), and spacer (' ').
+    #
+    toolbars:
+      primary:
+        save:                  ['Save', 'Save this page']
+        preview:               ['Preview', 'Preview this page', {toggle: true, mode: true}]
+        sep1:                  ' '
+        undoredo:
+          undo:                ['Undo', 'Undo your last action']
+          redo:                ['Redo', 'Redo your last action']
+          sep:                 ' '
+        insertlink:            ['Link', 'Insert Link', {modal: '/mercury/modals/link', regions: ['editable']}]
+        insertmedia:           ['Media', 'Insert Media (images and videos)', {modal: '/mercury/modals/media', regions: ['editable']}]
+        inserttable:           ['Table', 'Insert Table', {modal: '/mercury/modals/table', regions: ['editable']}]
+        insertcharacter:       ['Character', 'Special Characters', {modal: '/mercury/modals/character', regions: ['editable']}]
+        objectspanel:          ['Snippet', 'Snippet Panel', {panel: '/mercury/panels/snippets'}]
+        sep2:                  ' '
+        historypanel:          ['History', 'Page Version History', {panel: '/mercury/panels/history'}]
+        sep3:                  ' '
+        notespanel:            ['Notes', 'Page Notes', {panel: '/mercury/panels/notes'}]
+        todospanel:            ['Todos', 'Page Todos', {panel: '/mercury/panels/todos'}]
+
+      editable:
+        _regions:              ['editable']
+        predefined:
+          style:               ['Style', null, {select: '/mercury/selects/style', preload: true}]
+          sep1:                ' '
+          formatblock:         ['Block Format', null, {select: '/mercury/selects/formatblock', preload: true}]
+          sep2:                '-'
+        colors:
+          backcolor:           ['Background Color', null, {palette: '/mercury/palettes/backcolor', context: true, preload: true}]
+          sep1:                ' '
+          forecolor:           ['Text Color', null, {palette: '/mercury/palettes/forecolor', context: true, preload: true}]
+          sep2:                '-'
+        decoration:
+          bold:                ['Bold', null, {context: true}]
+          italic:              ['Italicize', null, {context: true}]
+          overline:            ['Overline', null, {context: true}]
+          strikethrough:       ['Strikethrough', null, {context: true}]
+          underline:           ['Underline', null, {context: true}]
+          sep:                 '-'
+        script:
+          subscript:           ['Subscript', null, {context: true}]
+          superscript:         ['Superscript', null, {context: true}]
+          sep:                 '-'
+        justify:
+          justifyleft:         ['Align Left', null, {context: true}]
+          justifycenter:       ['Center', null, {context: true}]
+          justifyright:        ['Align Right', null, {context: true}]
+          justifyfull:         ['Justify Full', null, {context: true}]
+          sep:                 '-'
+        list:
+          insertunorderedlist: ['Unordered List', null, {context: true}]
+          insertorderedlist:   ['Numbered List', null, {context: true}]
+          sep:                 '-'
+        indent:
+          outdent:             ['Decrease Indentation', null]
+          indent:              ['Increase Indentation', null]
+          sep:                 '-'
+        table:
+          _context:            true
+          insertrowbefore:     ['Insert Table Row', 'Insert a table row before the cursor']
+          insertrowafter:      ['Insert Table Row', 'Insert a table row after the cursor']
+          deleterow:           ['Delete Table Row', 'Delete this table row']
+          insertcolumnbefore:  ['Insert Table Column', 'Insert a table column before the cursor']
+          insertcolumnafter:   ['Insert Table Column', 'Insert a table column after the cursor']
+          deletecolumn:        ['Delete Table Column', 'Delete this table column']
+          sep1:                ' '
+          increasecolspan:     ['Increase Cell Columns', 'Increase the cells colspan']
+          decreasecolspan:     ['Decrease Cell Columns', 'Decrease the cells colspan and add a new cell']
+          increaserowspan:     ['Increase Cell Rows', 'Increase the cells rowspan']
+          decreaserowspan:     ['Decrease Cell Rows', 'Decrease the cells rowspan and add a new cell']
+          sep2:                '-'
+        rules:
+          horizontalrule:      ['Horizontal Rule', 'Insert a horizontal rule']
+          sep:                 '-'
+        formatting:
+          removeformatting:    ['Remove Formatting', 'Remove formatting for the selection']
+          sep:                 ' '
+        editors:
+          htmleditor:          ['Edit HTML', 'Edit the HTML content'] # example behavior below
+
+      markupable:
+        _regions:              ['markupable']
+        predefined:
+          style:               ['Style', null, {select: '/mercury/selects/style', preload: true}]
+          sep1:                ' '
+          formatblock:         ['Block Format', null, {select: '/mercury/selects/formatblock', preload: true}]
+          sep2:                '-'
+        decoration:
+          bold:                ['Bold', null, {context: true}]
+          italic:              ['Italicize', null, {context: true}]
+          sep:                 '-'
+        script:
+          subscript:           ['Subscript', null, {context: true}]
+          superscript:         ['Superscript', null, {context: true}]
+          sep:                 '-'
+        list:
+          insertunorderedlist: ['Unordered List', null, {context: true}]
+          insertorderedlist:   ['Numbered List', null, {context: true}]
+          sep:                 '-'
+        indent:
+          outdent:             ['Decrease Indentation', null]
+          indent:              ['Increase Indentation', null]
+          sep:                 '-'
+        rules:
+          horizontalrule:      ['Horizontal Rule', 'Insert a horizontal rule']
+
+      snippetable:
+        _custom:               true
+        actions:
+          editsnippet:         ['Edit Snippet Settings', null]
+          sep1:                ' '
+          removesnippet:       ['Remove Snippet', null]
+
+
+    # Behaviors
+    #
+    # Behaviors are used to change the default behaviors of a given region type when a given button is clicked.  For
+    # example, you may prefer to add HR tags using an HR wrapped within a div with a classname (for styling).  You can
+    # add your own complex behaviors here.
+    #
+    # You can see how the behavior matches up directly with the button name.  It's also important to note that the
+    # callback functions are executed within the scope of the given region, so you have access to all it's methods.
+    # todo: figure out how this impacts different regions.. should they go away, or should they get moved into region types?
+    behaviors:
+      horizontalrule: (selection) -> selection.replace('<hr/>')
+
+      htmleditor: ->
+        Mercury.modal '/mercury/modals/htmleditor', {
+          title: 'HTML Editor',
+          fullHeight: true,
+          handler: 'htmleditor'
+        }
+
+
+    # Contexts
+    #
+    # Contexts are used callback functions used for highlighting and disabling/enabling buttons and buttongroups.  When
+    # the cursor enters an element within an html region for instance we want to disable or highlight buttons based on
+    # the properties of the given node.  You can see some examples of contexts in:
+    #
+    # Mercury.Toolbar.Button.contexts
+    # and
+    # Mercury.Toolbar.ButtonGroup.contexts
+    #
+
+
+    # Styles
+    #
+    # Mercury tries to stay as much out of your code as possible, but because regions appear within your document we
+    # need to include a few styles to indicate regions, as well as the different states of them (eg. focused).  These
+    # styles are injected into your document, and as simple as they might be, you may want to change them.  You can do
+    # so here.
+    #
+    injectedStyles:
+      '''
+      .mercury-region, .mercury-textarea { min-height: 10px; outline: 1px dotted #09F }
+      .mercury-region:focus, .mercury-region.focus, .mercury-textarea.focus { outline: none; -webkit-box-shadow: 0 0 10px #09F, 0 0 1px #045; box-shadow: 0 0 10px #09F, 0 0 1px #045 }
+      .mercury-region:after { content: '\00a0'; display: block; visibility: hidden; clear: both; height: 0; overflow: hidden; }
+      .mercury-snippet { width:200px; height:100px; border: 1px solid red; }
+      '''
+  }
+
+
+  # Custom event and logging methods
   bind: (eventName, callback) ->
     $(document).bind("mercury:#{eventName}", callback)
 
@@ -93,6 +306,12 @@ Mercury = {
   log: ->
     if Mercury.debug && console
       return if arguments[0] == 'hide:toolbar'
-      try console.debug(arguments) catch e
+      try console.log(arguments) catch e
+
+
+  # Mercury object namespaces
+  Regions: {}
+  modalHandlers: {}
+  dialogHandlers: {}
 
 }

@@ -9,30 +9,6 @@ describe "Mercury", ->
     it "checks document.designMode", ->
     it "disallows konqueror and msie", ->
 
-  describe "#beforeUnload", ->
-
-    beforeEach ->
-      Mercury.silent = false
-      Mercury.changes = true
-
-    it "returns a message if changes were made", ->
-      expect(Mercury.beforeUnload()).toEqual('You have unsaved changes.  Are you sure you want to leave without saving them first?')
-
-      Mercury.changes = false
-      expect(Mercury.beforeUnload()).toEqual(null)
-
-    it "does nothing if in silent mode", ->
-      Mercury.silent = true
-      expect(Mercury.beforeUnload()).toEqual(null)
-
-
-  describe "#refresh", ->
-
-    it "triggers an event telling everyone to refresh themselves", ->
-      spy = spyOn(Mercury, 'trigger').andCallFake(=>)
-      Mercury.refresh()
-      expect(spy.callCount).toEqual(1)
-
 
   describe "#bind", ->
 

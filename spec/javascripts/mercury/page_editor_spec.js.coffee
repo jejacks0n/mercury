@@ -319,6 +319,7 @@ describe "Mercury.PageEditor", ->
     beforeEach ->
       Mercury.PageEditor.prototype.initializeFrame = ->
       @pageEditor = new Mercury.PageEditor('', {appendTo: $('#test')})
+      @pageEditor.options.ignoredLinks = ['lightview']
       @pageEditor.document = $(document)
 
     it "finds links and set their target to top if it's not already set", ->
@@ -338,6 +339,25 @@ describe "Mercury.PageEditor", ->
     it "ignores links that are in the config to be ignored (by class)", ->
       @pageEditor.hijackLinks()
       expect($('#anchor5').attr('target')).toEqual('_self')
+
+
+  describe "#beforeUnload", ->
+
+    beforeEach ->
+      Mercury.PageEditor.prototype.initializeInterface = ->
+      @pageEditor = new Mercury.PageEditor('', {appendTo: $('#test')})
+      Mercury.silent = false
+      Mercury.changes = true
+
+    it "returns a message if changes were made", ->
+      expect(@pageEditor.beforeUnload()).toEqual('You have unsaved changes.  Are you sure you want to leave without saving them first?')
+
+      Mercury.changes = false
+      expect(@pageEditor.beforeUnload()).toEqual(null)
+
+    it "does nothing if in silent mode", ->
+      Mercury.silent = true
+      expect(@pageEditor.beforeUnload()).toEqual(null)
 
 
   describe "#save", ->
@@ -372,7 +392,7 @@ describe "Mercury.PageEditor", ->
 
     it "can serialize as form values", ->
       @ajaxSpy.andCallFake(=>)
-      Mercury.config.saveStyle = 'form'
+      @pageEditor.options.saveStyle = 'form'
       spy = spyOn(Mercury.PageEditor.prototype, 'serialize').andCallFake(=> {region1: 'region1'})
       @pageEditor.save()
       expect(@ajaxSpy.argsForCall[0][1]['data']).toEqual({content: {region1: 'region1'}})

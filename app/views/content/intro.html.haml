@@ -1,0 +1,183 @@
+#header
+  .intro
+    %h1 Finally, managing content is <strong>easy</strong> and <strong>reliable</strong>
+    %h2 Mercury is a <strong>full featured</strong> HTML5 editor.  It was built from the ground up to help your team <strong>get the most</strong> out of <strong>content editing</strong> in modern browsers.
+    .action
+      %a.button.green{ href: 'http://github.com/jejacks0n/mercury' } Download now
+      Download the package.
+    .action
+      %a.button.blue{ href: '/edit' } Test it out
+      Check out all the features
+    %a.logo{ href: '/' } <em>Mercury Editor</em>
+  %hr/
+
+%h2.brief Mercury is built to handle all your content needs.
+%hr/
+
+#base_features.mercury-region{ data: { type: 'editable' } }
+  %h2 Base Features
+  There's a ton of base features, and here's a list of a few of the notable ones.  In this document we'll cover off on
+  all of these and more.
+
+  %ul.features
+    %li Previewing:<br/>Preview content while you're working on it to see exactly how it'll look.
+    %li Link Tools:<br/>Insert and edit links (including TOC/Bookmark links).
+    %li Media Tools:<br/>Insert and edit images, youtube videos, and vimeo videos.
+    %li Image Uploading:<br/>Drag images from your desktop to regions and they'll be automatically uploaded and inserted.
+    %li Table Editing:<br/>Advanced table editing and creation.
+    %li Snippets:<br/>Insert and edit predefined reusable bits of markup/code using drag and drop.
+    %li Notes and Todos:<br/>Attach notes or todos to any page.
+    %li Colaborative Editing:<br/>Edit any page that others are editing at the same time.
+
+#region_types.mercury-region{ data: { type: 'editable' } }
+  %h2 Region Types
+  Mercury is completely extendable.  The base set of features provide you with everything you need, but at the core,
+  it allows for any type of region you can imagine.  Mercury comes bundled with three region types, but as a developer
+  you can write and bundle your own.
+
+-##markdown_region1.mercury-region{ data: { type: 'markupable' } }<
+-#  :plain
+-#    ## testing ##
+-#
+-#    this is some content
+-#
+-#    1. list item 1
+-#    2. list item 2
+-#
+-#    **bold** and _italic_
+-#
+-#    - - -
+-#
+-#    Turkey corned beef ham, chuck ham hock venison drumstick tongue ribeye. Beef tongue pancetta, short ribs meatball headcheese jowl bacon swine t-bone shoulder venison. Hamburger short loin turkey flank short ribs tail. Chicken tri-tip sausage, bresaola sirloin turkey hamburger headcheese shank rump. Pork ground round t-bone, ham hock sirloin biltong chicken fatback pork belly pastrami pancetta jowl tail. Cow ribeye pork chop, flank sirloin tail short loin pork loin chicken boudin pastrami. Boudin chuck shankle, spare ribs pancetta fatback bresaola.
+-#
+-##snippet_region1.mercury-region{ data: { type: 'snippetable' } }
+-#  .mercury-snippet{ data: { snippet: 'snippet_3' }} snippet3
+-#  .mercury-snippet{ data: { snippet: 'snippet_4' }} snippet4
+-#  .mercury-snippet{ data: { snippet: 'snippet_5' }} snippet5
+-#
+-##primary.mercury-region{ data: { type: 'editable' } }
+-#  123
+-#  %meta{}/
+-#  editable content
+-#  = link_to 'l<span>in</span>k'.html_safe, '/something_else'
+-#
+-#  = link_to image_tag('mercury/clippy.png'), '/something_else'
+-#  %table{ border: 1 }
+-#    %tr
+-#      %th TITLE
+-#      %th{ colspan: 5 } TITLE
+-#    %tr
+-#      %th{ colspan: 2 } Head1
+-#      %th{ rowspan: 2 } Head3
+-#      %th Head4
+-#      %th{ rowspan: 5 } Head5
+-#      %th Head6
+-#    %tr
+-#      %td{ colspan: 2 } Column1
+-#      %td Column4
+-#      %td Column6
+-#    %tr
+-#      %td Column1
+-#      %td Column2
+-#      %td{ rowspan: 4 } Column3
+-#      %td Column4
+-#      %td Column6
+-#    %tr
+-#      %td Column1
+-#      %td Column2
+-#      %td Column4
+-#      %td Column6
+-#    %tr
+-#      %th{ rowspan: 2 } Head1
+-#      %th{ rowspan: 2 } Head2
+-#      %th Head4
+-#      %th Head6
+-#    %tr
+-#      %td Column4
+-#      %td Column5
+-#      %td Column6
+-#    %tr
+-#      %td{ colspan: 2 } Column1
+-#      %td{ colspan: 4 } Column2
+-#
+-#  a--------
+-#  %table{ border: 1 }
+-#    %tr
+-#      %td 1
+-#      %td{ colspan: 2 } 2
+-#    %tr
+-#      %td{ rowspan: 2 } 3
+-#      %td 4
+-#      %td 5
+-#    %tr
+-#      %td 6
+-#      %td 7
+-#
+-#
+-#  %table{ border: 1, width: 200 }
+-#    %tr
+-#      %td{ rowspan: 2 } x1
+-#      %td{ rowspan: 2, colspan: 2 } x2
+-#    %tr
+-#    %tr
+-#      %td 1
+-#      %td{ colspan: 2 } 2
+-#    %tr
+-#      %td 3
+-#      %td{ colspan: 2 } 4
+-#
+-#
+-#
+-#  %p this is a <u>pa<span style="text-decoration:overline">rag</span>raph</u>
+-#  %p this is a <span style="text-decoration:overline">pa<u>rag</u>raph</span>
+-#  %style img { border:2px solid red }
+-#
+-#  = image_tag 'mercury/clippy.png'
+-#  = link_to 'link', '#link2'
+-#  .mercury-snippet{ data: { snippet: 'snippet_1' }} snippet1
+-#
+-#  %p
+-#    %a{ name: 'inner_link1' } Bookmark
+-#
+-#  more content here
+-#
+-#  %iframe{ width: '560', height: '349', src: 'http://www.youtube.com/embed/QGJuMBdaqIw?wmode=transparent', frameborder: '0', allowfullscreen: 'true' }
+-#
+-##region2.mercury-region{ data: { type: 'editable' } }
+-#  .mercury-snippet{ data: { snippet: 'snippet_2' }} snippet2
+-#
+-##region3.mercury-region{ style: 'width:200px;height:90px;', data: { type: 'editable' } }
+-#  %meta{}/
+-#  editable contentaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+-#  = link_to '/something_else'
+-#  %table
+-#    %tr
+-#      %th Head1
+-#      %th Head2
+-#    %tr
+-#      %td Column1
+-#      %td Column2
+-#  %p this is a <u>pa<span style="text-decoration:overline">rag</span>raph</u>
+-#  %p this is a <span style="text-decoration:overline">pa<u>rag</u>raph</span>
+-#
+-##snippet_region2.mercury-region{ data: { type: 'snippetable' } }
+-#  .mercury-snippet{ data: { snippet: 'snippet_6' }} snippet6
+-#  .mercury-snippet{ data: { snippet: 'snippet_7' }} snippet7
+-#  %iframe.mercury-snippet{ width: '560', height: '349', src: 'http://www.youtube.com/embed/QGJuMBdaqIw?wmode=transparent', frameborder: '0', allowfullscreen: 'true', data: { snippet: 'snippet_8' } }
+-#
+-#= link_to '/something'
+-#
+-#%p
+-#  %h3
+-#    %a{ name: 'link1' } Title 1
+-#  Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+-#
+-#%p
+-#  %h3
+-#    %a{ name: 'link2' } Title 2
+-#  Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+-#
+-#%p
+-#  %h3
+-#    %a{ name: 'link3' } Title 3
+-#  Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.

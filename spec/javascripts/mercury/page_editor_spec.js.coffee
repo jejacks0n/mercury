@@ -106,6 +106,12 @@ describe "Mercury.PageEditor", ->
       @pageEditor.initializeFrame()
       expect(@pageEditor.document).toBeDefined()
 
+    it "injects needed mercury styles", ->
+      @finalizeInterfaceSpy.andCallFake(=>)
+      spy = spyOn($.fn, 'appendTo').andCallFake(=>)
+      @pageEditor.initializeFrame()
+      expect(spy.callCount).toEqual(1)
+
     it "calls bindEvents", ->
       @finalizeInterfaceSpy.andCallFake(=>)
       @pageEditor.initializeFrame()

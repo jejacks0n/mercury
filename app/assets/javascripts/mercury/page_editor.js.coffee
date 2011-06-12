@@ -26,6 +26,7 @@ class Mercury.PageEditor
       return if @iframe.data('loaded')
       @iframe.data('loaded', true)
       @document = $(@iframe.get(0).contentWindow.document)
+      $("<style mercury-styles=\"true\">").html(Mercury.config.injectedStyles).appendTo(@document.find('head'))
 
       @bindEvents()
       @initializeRegions()

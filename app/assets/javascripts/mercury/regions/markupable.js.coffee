@@ -1,3 +1,14 @@
+# todo:
+# make dropping images work
+# make primary tools work -- like inserting media, links, tables
+# make dropping snippets work
+# toolbars should toggle better based on what region your in.. for instance, if I'm in an editable region, I should see
+# only that toolbar, and when I focus a markupable region, I should only see that toolbar -- and figure out how that
+# impacts the snippet regions and it's lack of a static toolbar (do we disable the visible toolbar, or hide it and shift
+# the iframe up?)
+# how to handle context for buttons?  if the cursor is within a bold area (**bo|ld**), or selecting it -- it would be
+# nice if we could activate the bold button for instance.
+
 class Mercury.Regions.Markupable extends Mercury.Region
   type = 'markupable'
 
@@ -38,6 +49,31 @@ class Mercury.Regions.Markupable extends Mercury.Region
       return if @previewing
       return unless Mercury.region == @
       @execCommand(options.action, options) if options.action
+
+    @textarea.bind 'dragenter', (event) =>
+      return if @previewing
+      event.preventDefault() if event.shiftKey
+      event.originalEvent.dataTransfer.dropEffect = 'copy'
+
+    @textarea.bind 'dragover', (event) =>
+      return if @previewing
+      event.preventDefault() if event.shiftKey
+      event.originalEvent.dataTransfer.dropEffect = 'copy'
+
+    @textarea.bind 'drop', (event) =>
+      return if @previewing
+
+      # handle dropping snippets
+      if Mercury.snippet
+        event.preventDefault()
+        @focus()
+        Mercury.Snippet.displayOptionsFor(Mercury.snippet)
+
+      # handle any files that were dropped
+      if event.originalEvent.dataTransfer.files.length
+        event.preventDefault()
+        @focus()
+        Mercury.uploader(event.originalEvent.dataTransfer.files[0])
 
     @textarea.focus =>
       return if @previewing

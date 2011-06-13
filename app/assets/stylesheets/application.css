@@ -2,7 +2,338 @@
  *= require_self
  */
 
+/* Node level declarations
+ *----------------------------------------------------------------------------*/
+html {
+  overflow-y: scroll;
+}
+body, html {
+  margin: 0;
+  padding: 0;
+}
+body, td {
+  font: normal normal normal 100%/normal 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  color: #333;
+  padding: 0;
+}
+body {
+  padding-bottom: 50px;
+}
+h1, h2, h3, h4, h5, h6 {
+  font-size: 1em;
+  font-weight: normal;
+  margin: 0;
+}
+h1 {
+  font-size: 1.4em;
+}
+h2 {
+  font-size: 1.3em;
+}
+h3 {
+  font-size: 1.2em;
+}
+form {
+  display: inline;
+}
+table {
+  border-collapse: collapse;
+}
+a {
+  color: #CD0000;
+  text-decoration: none;
+  cursor: pointer;
+}
+a:hover {
+  text-decoration: underline;
+}
+img {
+  border: 0;
+}
+input, select, textarea {
+  font: normal normal normal 11px/normal 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  color: #666;
+}
+input.text {
+  margin: 0;
+  border: 1px solid #CCC;
+  padding: 3px 0;
+}
+
+
+/* Header styles
+ *----------------------------------------------------------------------------*/
 #header {
-  background: url(/assets/header-background.png) repeat-x;
+  background: url(/assets/header-background.png) repeat-x bottom;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   height: 411px;
+  color: #000;
+}
+#header hr {
+  display: none;
+}
+#header .intro {
+  width: 900px;
+  margin: 50px auto;
+}
+
+/* logo */
+#header .intro .logo {
+  float: right;
+  width: 275px;
+  height: 340px;
+  background: url(/assets/mercury-logo.png) no-repeat 0 15px;
+}
+#header .intro .logo em {
+  display: none;
+}
+
+/* copy */
+#header .intro h1 {
+  font-size: 2.6em;
+  font-weight: 200;
+  width: 515px;
+  margin-bottom: 40px;
+}
+#header .intro h1 strong {
+  font-weight: 500;
+}
+#header .intro h2 {
+  font-size: 1.2em;
+  width: 515px;
+  margin-bottom: 50px;
+}
+
+/* action buttons */
+#header .intro .action {
+  float: left;
+  width: 225px;
+  margin-right: 40px;
+  color: #666;
+  text-align: center;
+  font-size: .8em;
+}
+#header .intro .action a {
+  display: block;
+  color: #FFF;
+  font-size: 1.5em;
+  padding: 8px 14px 9px;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-weight: 600;
+  background: url(/assets/button-background.png) repeat-x;
+  color: #FFF;
+  text-decoration: none;
+  -moz-border-radius: 30px;
+  -webkit-border-radius: 30px;
+  -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+  -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(0, 0, 0, 0.35);
+  position: relative;
+  cursor: pointer;
+  line-height: normal;
+  margin-bottom: 10px;
+}
+#header .intro a.green {
+  background-color: #29BD29;
+}
+#header .intro a.green:hover {
+  background-color: #26A326;
+}
+#header .intro a.blue {
+  background-color: #4381C6;
+}
+#header .intro a.blue:hover {
+  background-color: #396fAB;
+}
+
+
+/* Content layout styles
+ *----------------------------------------------------------------------------*/
+#intro_content, #content {
+  width: 1024px;
+  margin: 20px auto 0 auto;
+}
+#intro_content hr, #content hr {
+  display: block;
+  border: none;
+  height: 5px;
+  margin: 30px 0 25px 0;
+  background: url(/assets/hr.png) no-repeat center top;
+}
+#intro_content hr.clear, #content hr.clear {
+  clear: both;
+}
+#intro_content hr.invisible, #content hr.invisible {
+  height: 0;
+  overflow: hidden;
+}
+#intro_content .container, #content .container {
+  border: 1px solid #CCC;
+  border-radius: 4px;
+  padding: 20px;
+}
+#intro_content h2.brief {
+  width: 900px;
+  margin: 0 auto;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 2.65em;
+  font-weight: 200;
+  text-align: center;
+  text-transform: none;
+}
+#intro_content h2 {
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  font-weight: 200;
+}
+
+/* aspects region */
+#aspects .aspect {
+  float: left;
+  width: 50%;
+  margin: 15px 0;
+}
+#aspects .aspect h3 {
+  margin-left: 60px;
+  font-weight: 600;
+}
+#aspects .aspect p {
+  margin: 5px 20px 0 60px;
+  font-size: .9em;
+}
+#aspects .simple {
+  background: url(/assets/aspect-simple.png) no-repeat top left;
+}
+#aspects .unobtrusive {
+  background: url(/assets/aspect-unobtrusive.png) no-repeat top left;
+}
+#aspects .configurable {
+  background: url(/assets/aspect-configurable.png) no-repeat top left;
+}
+#aspects .extendable {
+  background: url(/assets/aspect-extendable.png) no-repeat top left;
+}
+#aspects:after {
+  content: '\00a0';
+  display: block;
+  visibility: hidden;
+  clear: both;
+  height: 0;
+}
+
+/* primary region */
+#primary {
+  width: 737px;
+  float: left;
+}
+#primary hr {
+  margin: 30px 20px;
+  border: 0;
+  border-top: 1px solid #EEE;
+  height: 1px;
+  background: none;
+}
+#primary ul {
+  margin: 0;
+  padding: 0 0 0 18px;
+}
+#primary ul li {
+  margin-bottom: 10px;
+}
+#primary a.more-info {
+  margin: 40px auto 20px auto;
+  display: inline-block;
+  color: #FFF;
+  font-size: 1.2em;
+  padding: 8px 40px 9px;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-weight: 600;
+  background: #4381C6 url(/assets/button-background.png) repeat-x;
+  color: #FFF;
+  text-decoration: none;
+  -moz-border-radius: 30px;
+  -webkit-border-radius: 30px;
+  -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+  -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(0, 0, 0, 0.35);
+  position: relative;
+  line-height: normal;
+}
+#primary a.more-info:hover {
+  background-color: #396fAB;
+}
+
+/* tech region */
+#tech {
+  width: 205px;
+  float: right;
+  text-align: center;
+  margin-left: 40px;
+}
+#tech h2 {
+  font-size: .9em;
+  text-transform: uppercase;
+  border-bottom: 1px solid #EEE;
+  padding-bottom: 15px;
+  font-weight: 200;
+  margin-bottom: 20px;
+}
+#tech a {
+  display: inline-block;
+  margin: 15px;
+}
+
+/* walkthrough regions */
+#intro, .walkthrough {
+  float: right;
+  width: 737px;
+}
+
+.walkthrough {
+  margin-top: 30px;
+}
+
+/* toc region */
+#toc {
+  width: 205px;
+  float: left;
+}
+#toc h2 {
+  font-size: .9em;
+  text-transform: uppercase;
+  border-bottom: 1px solid #EEE;
+  padding-bottom: 15px;
+  font-weight: 200;
+  margin-bottom: 20px;
+}
+
+/* walkthrough intro */
+#intro h1 {
+  margin-bottom: 10px;
+  font-size: 1.3em;
+}
+#intro h2 {
+  margin-bottom: 10px;
+  font-size: 1.2em;
+}
+
+
+/* Footer styles
+ *----------------------------------------------------------------------------*/
+#footer {
+  clear: both;
+  width: 1024px;
+  margin: 0 auto;
+  padding-top: 30px;
+  text-align: center;
+  color: #999;
+  font-size: .9em;
+}
+#footer hr {
+  display: block;
+  border: none;
+  height: 15px;
+  background: url(/assets/hr.png) no-repeat center top;
 }

@@ -148,7 +148,6 @@ Mercury = {
         historypanel:          ['History', 'Page Version History', {panel: '/mercury/panels/history'}]
         sep3:                  ' '
         notespanel:            ['Notes', 'Page Notes', {panel: '/mercury/panels/notes'}]
-        todospanel:            ['Todos', 'Page Todos', {panel: '/mercury/panels/todos'}]
 
       editable:
         _regions:              ['editable']

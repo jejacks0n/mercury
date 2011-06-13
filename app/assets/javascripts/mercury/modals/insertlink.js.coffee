@@ -47,7 +47,7 @@ Mercury.modalHandlers.insertlink = ->
         @element.find('#link_target').val(container.attr('target'))
 
       # if it's a popup window
-      if container.attr('href').indexOf('javascript:void') == 0
+      if container.attr('href') && container.attr('href').indexOf('javascript:void') == 0
         href = container.attr('href')
         @element.find('#link_external_url').val(href.match(/window.open\('([^']+)',/)[1])
         @element.find('#link_target').val('popup')

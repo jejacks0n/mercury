@@ -139,10 +139,10 @@ Mercury = {
           undo:                ['Undo', 'Undo your last action']
           redo:                ['Redo', 'Redo your last action']
           sep:                 ' '
-        insertlink:            ['Link', 'Insert Link', {modal: '/mercury/modals/link', regions: ['editable']}]
-        insertmedia:           ['Media', 'Insert Media (images and videos)', {modal: '/mercury/modals/media', regions: ['editable']}]
-        inserttable:           ['Table', 'Insert Table', {modal: '/mercury/modals/table', regions: ['editable']}]
-        insertcharacter:       ['Character', 'Special Characters', {modal: '/mercury/modals/character', regions: ['editable']}]
+        insertlink:            ['Link', 'Insert Link', {modal: '/mercury/modals/link', regions: ['editable', 'markupable']}]
+        insertmedia:           ['Media', 'Insert Media (images and videos)', {modal: '/mercury/modals/media', regions: ['editable', 'markupable']}]
+        inserttable:           ['Table', 'Insert Table', {modal: '/mercury/modals/table', regions: ['editable', 'markupable']}]
+        insertcharacter:       ['Character', 'Special Characters', {modal: '/mercury/modals/character', regions: ['editable', 'markupable']}]
         objectspanel:          ['Snippet', 'Snippet Panel', {panel: '/mercury/panels/snippets'}]
         sep2:                  ' '
         historypanel:          ['History', 'Page Version History', {panel: '/mercury/panels/history'}]
@@ -150,13 +150,14 @@ Mercury = {
         notespanel:            ['Notes', 'Page Notes', {panel: '/mercury/panels/notes'}]
 
       editable:
-        _regions:              ['editable']
+        _regions:              ['editable', 'markupable']
         predefined:
           style:               ['Style', null, {select: '/mercury/selects/style', preload: true}]
           sep1:                ' '
           formatblock:         ['Block Format', null, {select: '/mercury/selects/formatblock', preload: true}]
           sep2:                '-'
         colors:
+          _regions:            ['editable']
           backcolor:           ['Background Color', null, {palette: '/mercury/palettes/backcolor', context: true, preload: true}]
           sep1:                ' '
           forecolor:           ['Text Color', null, {palette: '/mercury/palettes/forecolor', context: true, preload: true}]
@@ -164,15 +165,16 @@ Mercury = {
         decoration:
           bold:                ['Bold', null, {context: true}]
           italic:              ['Italicize', null, {context: true}]
-          overline:            ['Overline', null, {context: true}]
-          strikethrough:       ['Strikethrough', null, {context: true}]
-          underline:           ['Underline', null, {context: true}]
+          overline:            ['Overline', null, {context: true, regions: ['editable']}]
+          strikethrough:       ['Strikethrough', null, {context: true, regions: ['editable']}]
+          underline:           ['Underline', null, {context: true, regions: ['editable']}]
           sep:                 '-'
         script:
           subscript:           ['Subscript', null, {context: true}]
           superscript:         ['Superscript', null, {context: true}]
           sep:                 '-'
         justify:
+          _regions:            ['editable']
           justifyleft:         ['Align Left', null, {context: true}]
           justifycenter:       ['Center', null, {context: true}]
           justifyright:        ['Align Right', null, {context: true}]
@@ -188,6 +190,7 @@ Mercury = {
           sep:                 '-'
         table:
           _context:            true
+          _regions:            ['editable']
           insertrowbefore:     ['Insert Table Row', 'Insert a table row before the cursor']
           insertrowafter:      ['Insert Table Row', 'Insert a table row after the cursor']
           deleterow:           ['Delete Table Row', 'Delete this table row']
@@ -202,38 +205,14 @@ Mercury = {
           sep2:                '-'
         rules:
           horizontalrule:      ['Horizontal Rule', 'Insert a horizontal rule']
-          sep:                 '-'
+          sep1:                '-'
         formatting:
+          _regions:            ['editable']
           removeformatting:    ['Remove Formatting', 'Remove formatting for the selection']
-          sep:                 ' '
+          sep2:                ' '
         editors:
+          _regions:            ['editable']
           htmleditor:          ['Edit HTML', 'Edit the HTML content'] # example behavior below
-
-      markupable:
-        _regions:              ['markupable']
-        predefined:
-          style:               ['Style', null, {select: '/mercury/selects/style', preload: true}]
-          sep1:                ' '
-          formatblock:         ['Block Format', null, {select: '/mercury/selects/formatblock', preload: true}]
-          sep2:                '-'
-        decoration:
-          bold:                ['Bold', null, {context: true}]
-          italic:              ['Italicize', null, {context: true}]
-          sep:                 '-'
-        script:
-          subscript:           ['Subscript', null, {context: true}]
-          superscript:         ['Superscript', null, {context: true}]
-          sep:                 '-'
-        list:
-          insertunorderedlist: ['Unordered List', null, {context: true}]
-          insertorderedlist:   ['Numbered List', null, {context: true}]
-          sep:                 '-'
-        indent:
-          outdent:             ['Decrease Indentation', null]
-          indent:              ['Increase Indentation', null]
-          sep:                 '-'
-        rules:
-          horizontalrule:      ['Horizontal Rule', 'Insert a horizontal rule']
 
       snippetable:
         _custom:               true
@@ -285,6 +264,7 @@ Mercury = {
     injectedStyles:
       '''
       .mercury-region, .mercury-textarea { min-height: 10px; outline: 1px dotted #09F }
+      .mercury-textarea { box-sizing: border-box; -moz-box-sizing: border-box; resize: vertical; }
       .mercury-region:focus, .mercury-region.focus, .mercury-textarea.focus { outline: none; -webkit-box-shadow: 0 0 10px #09F, 0 0 1px #045; box-shadow: 0 0 10px #09F, 0 0 1px #045 }
       .mercury-region:after { content: '\00a0'; display: block; visibility: hidden; clear: both; height: 0; overflow: hidden; }
       .mercury-snippet { width:200px; height:100px; border: 1px solid red; }

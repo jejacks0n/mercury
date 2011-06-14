@@ -132,14 +132,24 @@ describe "Mercury.Toolbar.Button", ->
     describe "custom event: region:focused", ->
 
       it "disables if the region type isn't supported", ->
-        @button = new Mercury.Toolbar.Button('foo', 'title', 'summary', {context: true, regions: ['editable']})
+        @button = new Mercury.Toolbar.Button('foo', 'title', 'summary', {context: true, regions: ['foo']})
+        @button.removeClass('disabled')
         Mercury.trigger('region:focused', {region: @region})
-
-    describe "custom event: region:blurred", ->
+        expect(@button.hasClass('disabled')).toEqual(true)
 
       it "enables if the region type is supported", ->
         @button = new Mercury.Toolbar.Button('foo', 'title', 'summary', {context: true, regions: ['editable']})
+        @button.addClass('disabled')
+        Mercury.trigger('region:focused', {region: @region})
+        expect(@button.hasClass('disabled')).toEqual(false)
+
+    describe "custom event: region:blurred", ->
+
+      it "disables if it's a button for specific region types", ->
+        @button = new Mercury.Toolbar.Button('foo', 'title', 'summary', {context: true, regions: ['editable']})
+        @button.addClass('disabled')
         Mercury.trigger('region:blurred', {region: @region})
+        expect(@button.hasClass('disabled')).toEqual(true)
 
     describe "mousedown", ->
 

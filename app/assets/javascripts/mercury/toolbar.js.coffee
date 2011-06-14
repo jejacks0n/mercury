@@ -17,7 +17,8 @@ class Mercury.Toolbar
 
       for buttonName, options of buttons
         continue if buttonName == '_regions'
-        @buildButton(buttonName, options).appendTo(container)
+        button = @buildButton(buttonName, options)
+        button.appendTo(container) if button
 
       if container.css('white-space') == 'nowrap'
         expander = new Mercury.Toolbar.Expander(toolbarName, {appendTo: toolbar, for: container})
@@ -29,7 +30,7 @@ class Mercury.Toolbar
 
 
   buildButton: (name, options) ->
-    return $('<span>') if name == '_custom'
+    return false if name[0] == '_'
     switch $.type(options)
 
       when 'array' # button
@@ -39,7 +40,8 @@ class Mercury.Toolbar
       when 'object' # button group
         group = new Mercury.Toolbar.ButtonGroup(name, options)
         for a, o of options
-          @buildButton(a, o).appendTo(group) unless a == '_context'
+          button = @buildButton(a, o)
+          button.appendTo(group) if button
         group
 
       when 'string' # separator
@@ -56,7 +58,6 @@ class Mercury.Toolbar
           toolbar.removeClass('disabled') if regions.split(',').indexOf(options.region.type) > -1
 
     Mercury.bind 'region:blurred', (event, options) =>
-#      @element.find(".mercury-#{options.region.type}-toolbar").addClass('disabled')
       for toolbar in @element.find(".mercury-toolbar")
         toolbar = $(toolbar)
         if regions = toolbar.data('regions')

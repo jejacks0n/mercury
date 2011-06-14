@@ -9,7 +9,8 @@ class Mercury.SnippetToolbar extends Mercury.Toolbar
     @element.appendTo($(@options.appendTo).get(0) ? 'body')
 
     for buttonName, options of Mercury.config.toolbars.snippetable
-      @buildButton(buttonName, options).appendTo(@element)
+      button = @buildButton(buttonName, options)
+      button.appendTo(@element) if button
 
 
   bindEvents: ->

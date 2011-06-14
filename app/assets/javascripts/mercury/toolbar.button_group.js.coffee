@@ -3,12 +3,13 @@ class Mercury.Toolbar.ButtonGroup
   constructor: (@name, @options = {}) ->
     @build()
     @bindEvents()
+    @regions = @options._regions
     return @element
 
 
   build: ->
     @element = $('<div>', {class: "mercury-button-group mercury-#{@name}-group"})
-    if @options._context
+    if @options._context || @options._regions
       @element.addClass('disabled')
 
 
@@ -22,6 +23,16 @@ class Mercury.Toolbar.ButtonGroup
             @element.removeClass('disabled')
           else
             @element.addClass('disabled')
+
+    Mercury.bind 'region:focused', (event, options) =>
+      if @regions && options.region && options.region.type
+        if @regions.indexOf(options.region.type) > -1
+          @element.removeClass('disabled') unless @options._context
+        else
+          @element.addClass('disabled')
+
+    Mercury.bind 'region:blurred', (event, options) =>
+      @element.addClass('disabled') if @options.regions
 
 
 

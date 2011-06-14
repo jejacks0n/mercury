@@ -55,7 +55,7 @@ describe "Mercury.Toolbar", ->
     it "builds out toolbar elements from the configuration", ->
       expect($('.mercury-primary-toolbar').length).toEqual(1)
       expect($('.mercury-editable-toolbar').length).toEqual(1)
-      expect($('.mercury-editable-toolbar').data('regions')).toEqual('editable')
+      expect($('.mercury-editable-toolbar').data('regions')).toEqual('editable,markupable')
 
     it "builds buttons etc.", ->
       expect(@buildButtonSpy.callCount).toBeGreaterThan(10)
@@ -78,6 +78,10 @@ describe "Mercury.Toolbar", ->
 
     it "throws an exception when invalid options are passed", ->
       expect(=> @toolbar.buildButton('foo', false)).toThrow('Unknown button structure -- please provide an array, object, or string for foo.')
+
+    it "returns false if the name is _custom, or _regions", ->
+      expect(@toolbar.buildButton('_custom', 'foo')).toEqual(false)
+      expect(@toolbar.buildButton('_regions', ['regiontype', 'another_regiontype'])).toEqual(false)
 
     it "builds buttons", ->
       html = $('<div>').html(@toolbar.buildButton('foobutton', ['title', 'summary', {}])).html()

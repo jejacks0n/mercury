@@ -19,13 +19,13 @@ class Mercury.Regions.Markupable extends Mercury.Region
 
 
   build: ->
-    width = @element.get(0).style.width
+    width = @element.width()
     width = '100%' unless width
     height = @element.height()
 
     value = @element.html().replace(/^\s+|\s+$/g, '')
     @textarea = $('<textarea>', @document).val(value)
-    @textarea.addClass('mercury-textarea')
+    @textarea.attr('class', @element.attr('class')).addClass('mercury-textarea')
     @textarea.css({border: 0, background: 'transparent', display: 'block', width: width, height: height, fontFamily: '"Courier New", Courier, monospace', fontSize: '14px'})
     @element.after(@textarea)
     @element.hide()
@@ -197,8 +197,8 @@ class Mercury.Regions.Markupable extends Mercury.Region
 
 
   resize: ->
-    adjustedHeight = Math.max(@textarea.get(0).scrollHeight, @textarea.get(0).clientHeight)
-    @textarea.height(adjustedHeight) if adjustedHeight >= @textarea.get(0).clientHeight
+#    adjustedHeight = Math.max(@textarea.get(0).scrollHeight, @textarea.get(0).clientHeight)
+#    @textarea.height(adjustedHeight) if adjustedHeight >= @textarea.get(0).clientHeight
 
 
   snippets: ->
@@ -282,5 +282,3 @@ class Mercury.Regions.Markupable.Selection
     end = val.indexOf('[mercury-marker]', start + 1) - '[mercury-marker]'.length
     @element.val(@element.val().replace(/\[mercury-marker\]/g, ''))
     @select(start, end)
-
-

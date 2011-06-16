@@ -1,11 +1,6 @@
 # todo:
-# make dropping images work
 # make primary tools work -- like inserting media, links, tables
-# make dropping snippets work
-# toolbars should toggle better based on what region your in.. for instance, if I'm in an editable region, I should see
-# only that toolbar, and when I focus a markupable region, I should only see that toolbar -- and figure out how that
-# impacts the snippet regions and it's lack of a static toolbar (do we disable the visible toolbar, or hide it and shift
-# the iframe up?)
+# context for the toolbar buttons and groups needs to change so we can do the following:
 # how to handle context for buttons?  if the cursor is within a bold area (**bo|ld**), or selecting it -- it would be
 # nice if we could activate the bold button for instance.
 
@@ -52,12 +47,12 @@ class Mercury.Regions.Markupable extends Mercury.Region
 
     @textarea.bind 'dragenter', (event) =>
       return if @previewing
-      event.preventDefault() if event.shiftKey
+      event.preventDefault()
       event.originalEvent.dataTransfer.dropEffect = 'copy'
 
     @textarea.bind 'dragover', (event) =>
       return if @previewing
-      event.preventDefault() if event.shiftKey
+      event.preventDefault()
       event.originalEvent.dataTransfer.dropEffect = 'copy'
 
     @textarea.bind 'drop', (event) =>
@@ -86,16 +81,20 @@ class Mercury.Regions.Markupable extends Mercury.Region
       @textarea.removeClass('focus')
       Mercury.trigger('region:blurred', {region: @})
 
-    @textarea.mouseup =>
-      return if @previewing
-      @pushHistory()
-      Mercury.trigger('region:update', {region: @})
-
     @textarea.keydown (event) =>
       return if @previewing
       Mercury.changes = true
       @resize()
       switch event.keyCode
+
+        when 13 # enter or return
+          selection = @selection()
+          text = @textarea.val()
+          start = text.lastIndexOf('\n', selection.start)
+          start = text.lastIndexOf('\n', selection.start - 1) if text[start] == '\n'
+          if text[start + 1] == '-'
+            selection.replace('\n- ', false, true)
+            event.preventDefault()
 
         when 90 # undo / redo
           return unless event.metaKey
@@ -128,25 +127,15 @@ class Mercury.Regions.Markupable extends Mercury.Region
       $(event.target).closest('a').attr('target', '_top') if @previewing
 
 
-  html: (value = null, filterSnippets = true, includeMarker = false) ->
+  html: (value = null, filterSnippets = true) ->
     if value != null
-      @textarea.val(value)
-
-      # create a selection if there's markers
-      @selection().removeMarker()
+      if $.type(value) == 'string'
+        @textarea.val(value)
+      else
+        @textarea.val(value.html)
+        @selection().select(value.selection.start, value.selection.end)
     else
-      # place markers for the selection
-      if includeMarker
-        selection = @selection()
-        selection.placeMarker()
-
-      # get the html before removing the markers
-      val = @textarea.val()
-
-      # remove the markers
-      selection.removeMarker() if includeMarker
-
-      return val
+      return @textarea.val()
 
 
   togglePreview: ->
@@ -155,7 +144,6 @@ class Mercury.Regions.Markupable extends Mercury.Region
       @textarea.show()
     else
       value = @converter.makeHtml(@textarea.val())
-      console.debug(value)
       @element.html(value)
       @element.show()
       @textarea.hide()
@@ -167,6 +155,10 @@ class Mercury.Regions.Markupable extends Mercury.Region
 
     handler.call(@, @selection(), options) if handler = Mercury.Regions.Markupable.actions[action]
     @resize()
+
+
+  htmlAndSelection: ->
+    return {html: @html(null, false), selection: @selection().serialize()}
 
 
   pushHistory: (keyCode) ->
@@ -181,13 +173,13 @@ class Mercury.Regions.Markupable extends Mercury.Region
 
     # if the key code was return, delete, or backspace store now -- unless it was the same as last time
     if knownKeyCode >= 0 && knownKeyCode != @lastKnownKeyCode # || !keyCode
-      @history.push(@html(null, false, true))
+      @history.push(@htmlAndSelection())
     else if keyCode
       # set a timeout for pushing to the history
-      @historyTimeout = setTimeout((=> @history.push(@html(null, false, true))), waitTime * 1000)
+      @historyTimeout = setTimeout((=> @history.push(@htmlAndSelection())), waitTime * 1000)
     else
       # push to the history immediately
-      @history.push(@html(null, false, true))
+      @history.push(@htmlAndSelection())
 
     @lastKnownKeyCode = knownKeyCode
 
@@ -211,14 +203,36 @@ class Mercury.Regions.Markupable extends Mercury.Region
 
     redo: -> @html(@history.redo())
 
-    formatblock: (selection, options) ->
-      # todo: wrap the line, not the selection
-      # todo: remove any of the other block format elements before wrapping
-      selection.wrap('## ', ' ##')
+    insertImage: (selection, options) -> selection.replace('![add alt text](' + encodeURI(options.value.src) + ')', true)
 
-    # todo: things that are wrapped should not wrap empty or strings that just contain line feeds
-    # todo: if it's an empty string that we're wrapping, put the cursor inside it
-    # todo: do we unwrap things if it's already wrapped?
+    insertLink: (selection, options) ->
+      console.log(selection, options)
+    #selection.insertNode(options.value)
+
+    insertunorderedlist: (selection) -> selection.addList('-')
+
+    insertorderedlist: (selection) -> selection.addList('1.')
+
+    style: (selection, options) -> selection.wrap("<span class=\"#{options.value}\">", '</span>')
+
+    formatblock: (selection, options) ->
+      wrappers = {
+        h1: ['# ', ' #']
+        h2: ['## ', ' ##']
+        h3: ['### ', ' ###']
+        h4: ['#### ', ' ####']
+        h5: ['##### ', ' #####']
+        h6: ['###### ', ' ######']
+        pre: ['    ', '']
+        blockquote: ['> ', '']
+        p: ['\n', '\n']
+      }
+      selection.unWrapLine("#{wrapper[0]}", "#{wrapper[1]}") for wrapperName, wrapper of wrappers
+      if options.value == 'blockquote'
+        Mercury.Regions.Markupable.actions.indent.call(@, selection, options)
+        return
+      selection.wrapLine("#{wrappers[options.value][0]}", "#{wrappers[options.value][1]}")
+
     bold: (selection) -> selection.wrap('**', '**')
 
     italic: (selection) -> selection.wrap('_', '_')
@@ -227,12 +241,26 @@ class Mercury.Regions.Markupable extends Mercury.Region
 
     superscript: (selection) -> selection.wrap('<sup>', '</sup>')
 
-    horizontalrule: (selection) ->
-      # todo: on a blank line don't insert line feeds
-      # todo: at the start of a line, don't insert the first line feed
-      # todo: at the end of a line don't insert the last line feed
-      selection.replace('\n- - -\n')
+    indent: (selection) ->
+      selection.wrapLine('> ', '', false, true)
 
+    outdent: (selection) ->
+      selection.unWrapLine('> ', '', false, true)
+
+    horizontalrule: (selection) -> selection.replace('\n- - -\n')
+
+    insertsnippet: (selection, options) ->
+      snippet = options.value
+      selection.replace(snippet.getText())
+
+    editsnippet: ->
+      return unless @snippet
+      snippet = Mercury.Snippet.find(@snippet.data('snippet'))
+      snippet.displayOptions()
+
+    removesnippet: ->
+      @snippet.remove() if @snippet
+      Mercury.trigger('hide:toolbar', {type: 'snippet', immediately: true})
 
   }
 
@@ -245,6 +273,10 @@ class Mercury.Regions.Markupable.Selection
     @getDetails()
 
 
+  serialize: ->
+    return {start: @start, end: @end}
+
+
   getDetails: ->
     @length = @el.selectionEnd - @el.selectionStart
     @start = @el.selectionStart
@@ -252,11 +284,15 @@ class Mercury.Regions.Markupable.Selection
     @text = @element.val().substr(@start, @length)
 
 
-  replace: (text, select = false) ->
+  replace: (text, select = false, placeCursor = false) ->
     @getDetails()
     val = @element.val()
+    savedVal = @element.val()
     @element.val(val.substr(0, @start) + text + val.substr(@end, val.length))
+    changed = @element.val() != savedVal
     @select(@start, @start + text.length) if select
+    @select(@start + text.length, @start + text.length) if placeCursor
+    return changed
 
 
   select: (@start, @end) ->
@@ -268,7 +304,55 @@ class Mercury.Regions.Markupable.Selection
 
   wrap: (left, right) ->
     @getDetails()
-    @replace(left + @text + right, true)
+    @deselectNewLines()
+    @replace(left + @text + right, @text != '')
+    @select(@start + left.length, @start + left.length) if @text == ''
+
+
+  wrapLine: (left, right, selectAfter = true, reselect = false) ->
+    @getDetails()
+    savedSelection = @serialize()
+    text = @element.val()
+    start = text.lastIndexOf('\n', @start)
+    end = text.indexOf('\n', @end)
+    end = text.length if end < start
+    start = text.lastIndexOf('\n', @start - 1) if text[start] == '\n'
+    @select(start + 1, end)
+    @replace(left + @text + right, selectAfter)
+    @select(savedSelection.start + left.length, savedSelection.end + left.length) if reselect
+
+
+  unWrapLine: (left, right, selectAfter = true, reselect = false) ->
+    @getDetails()
+    savedSelection = @serialize()
+    text = @element.val()
+    start = text.lastIndexOf('\n', @start)
+    end = text.indexOf('\n', @end)
+    end = text.length if end < start
+    start = text.lastIndexOf('\n', @start - 1) if text[start] == '\n'
+    @select(start + 1, end)
+    window.something = @text
+    leftRegExp = new RegExp("^#{left.regExpEscape()}")
+    rightRegExp = new RegExp("#{right.regExpEscape()}$")
+    changed = @replace(@text.replace(leftRegExp, '').replace(rightRegExp, ''), selectAfter)
+    @select(savedSelection.start - left.length, savedSelection.end - left.length) if reselect && changed
+
+
+  addList: (content) ->
+    text = @element.val()
+    start = text.lastIndexOf('\n', @start)
+    end = text.indexOf('\n', @end)
+    end = text.length if end < start
+    start = text.lastIndexOf('\n', @start - 1) if text[start] == '\n'
+    @select(start + 1, end)
+    lines = @text.split('\n')
+    @replace("#{content} " + lines.join("\n#{content} "), true)
+
+
+  deselectNewLines: ->
+    text = @text
+    length = text.replace(/\n+$/g, '').length
+    @select(@start, @start + length)
 
 
   placeMarker: ->

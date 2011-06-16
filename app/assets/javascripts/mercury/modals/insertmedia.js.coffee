@@ -46,7 +46,8 @@ Mercury.modalHandlers.insertmedia = ->
       when 'image_url'
         attrs = {src: @element.find('#media_image_url').val()}
         attrs['align'] = alignment if alignment = @element.find('#media_image_alignment').val()
-        value = $('<img>', attrs)
+        Mercury.trigger('action', {action: 'insertImage', value: attrs})
+
       when 'youtube_url'
         code = @element.find('#media_youtube_url').val().replace('http://youtu.be/', '')
         value = $('<iframe>', {
@@ -56,6 +57,8 @@ Mercury.modalHandlers.insertmedia = ->
           frameborder: 0,
           allowfullscreen: 'true'
         })
+        Mercury.trigger('action', {action: 'insertHTML', value: value})
+
       when 'vimeo_url'
         code = @element.find('#media_vimeo_url').val().replace('http://vimeo.com/', '')
         value = $('<iframe>', {
@@ -64,6 +67,6 @@ Mercury.modalHandlers.insertmedia = ->
           src: "http://player.vimeo.com/video/#{code}?title=1&amp;byline=1&amp;portrait=0&amp;color=ffffff",
           frameborder: 0,
         })
+        Mercury.trigger('action', {action: 'insertHTML', value: value})
 
-    Mercury.trigger('action', {action: 'insertHTML', value: value})
     Mercury.modal.hide()

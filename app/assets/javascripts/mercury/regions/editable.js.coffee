@@ -18,6 +18,7 @@ class Mercury.Regions.Editable extends Mercury.Region
     @specialContainer = $.browser.mozilla && @element.get(0).tagName != 'DIV'
 
     # make it editable
+    # gecko: in this makes double clicking in textareas fail: https://bugzilla.mozilla.org/show_bug.cgi?id=490367
     @element.get(0).contentEditable = true
 
     # make all snippets not editable, and set their versions to 1
@@ -382,6 +383,8 @@ class Mercury.Regions.Editable extends Mercury.Region
     style: (selection, options) -> selection.wrap("<span class=\"#{options.value}\">", true)
 
     replaceHTML: (selection, options) -> @html(options.value)
+
+    insertImage: (selection, options) -> @execCommand('insertHTML', {value: $('<img/>', options.value)})
 
     insertLink: (selection, options) -> selection.insertNode(options.value)
 

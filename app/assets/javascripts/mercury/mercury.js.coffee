@@ -47,7 +47,7 @@ Mercury = {
 
 
   # Silent mode disables things like asking about unsaved changes before leaving the page.
-  silent: false
+  silent: true
 
 
   # Turning debug mode on will log events and other various things (using console.log if available).
@@ -261,8 +261,7 @@ Mercury = {
     # styles are injected into your document, and as simple as they might be, you may want to change them.  You can do
     # so here.
     #
-    injectedStyles:
-      '''
+    injectedStyles: '''
       .mercury-region, .mercury-textarea { min-height: 10px; outline: 1px dotted #09F }
       .mercury-textarea { box-sizing: border-box; -moz-box-sizing: border-box; resize: vertical; }
       .mercury-region:focus, .mercury-region.focus, .mercury-textarea.focus { outline: none; -webkit-box-shadow: 0 0 10px #09F, 0 0 1px #045; box-shadow: 0 0 10px #09F, 0 0 1px #045 }

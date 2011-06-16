@@ -1,5 +1,5 @@
 Mercury = {}
-require '/assets/mercury/history_buffer.js'
+require '/assets/mercury.js'
 
 describe "Mercury.HistoryBuffer", ->
 

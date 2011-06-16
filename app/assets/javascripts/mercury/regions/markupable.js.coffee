@@ -91,10 +91,20 @@ class Mercury.Regions.Markupable extends Mercury.Region
           selection = @selection()
           text = @textarea.val()
           start = text.lastIndexOf('\n', selection.start)
+          end = text.indexOf('\n', selection.end)
+          end = text.length if end < start
           start = text.lastIndexOf('\n', selection.start - 1) if text[start] == '\n'
           if text[start + 1] == '-'
             selection.replace('\n- ', false, true)
             event.preventDefault()
+          if /\d/.test(text[start + 1])
+            lineText = text.substring(start, end)
+            console.debug(lineText)
+            if /(\d+)\./.test(lineText)
+              console.debug(2)
+              number = parseInt(RegExp.$1)
+              selection.replace("\n#{number += 1}. ", false, true)
+              event.preventDefault()
 
         when 90 # undo / redo
           return unless event.metaKey
@@ -209,9 +219,9 @@ class Mercury.Regions.Markupable extends Mercury.Region
       console.log(selection, options)
     #selection.insertNode(options.value)
 
-    insertunorderedlist: (selection) -> selection.addList('-')
+    insertunorderedlist: (selection) -> selection.addList('unordered')
 
-    insertorderedlist: (selection) -> selection.addList('1.')
+    insertorderedlist: (selection) -> selection.addList('ordered')
 
     style: (selection, options) -> selection.wrap("<span class=\"#{options.value}\">", '</span>')
 
@@ -338,7 +348,7 @@ class Mercury.Regions.Markupable.Selection
     @select(savedSelection.start - left.length, savedSelection.end - left.length) if reselect && changed
 
 
-  addList: (content) ->
+  addList: (type) ->
     text = @element.val()
     start = text.lastIndexOf('\n', @start)
     end = text.indexOf('\n', @end)
@@ -346,7 +356,11 @@ class Mercury.Regions.Markupable.Selection
     start = text.lastIndexOf('\n', @start - 1) if text[start] == '\n'
     @select(start + 1, end)
     lines = @text.split('\n')
-    @replace("#{content} " + lines.join("\n#{content} "), true)
+    if type == 'unordered'
+      @replace("- " + lines.join("\n- "), true)
+    else
+      @replace(("#{index + 1}. #{line}" for line, index in lines).join('\n'), true)
+
 
 
   deselectNewLines: ->

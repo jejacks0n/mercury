@@ -49,7 +49,6 @@ Gem::Specification.new do |s|
     "app/assets/images/mercury/toolbar/primary/todospanel.png",
     "app/assets/images/mercury/toolbar/primary/undo.png",
     "app/assets/images/mercury/toolbar/snippetable/buttons.png",
-    "app/assets/javascripts/application.js",
     "app/assets/javascripts/mercury.js",
     "app/assets/javascripts/mercury/dialog.js.coffee",
     "app/assets/javascripts/mercury/dialogs/backcolor.js.coffee",
@@ -86,7 +85,6 @@ Gem::Specification.new do |s|
     "app/assets/javascripts/mercury/tooltip.js.coffee",
     "app/assets/javascripts/mercury/uploader.js.coffee",
     "app/assets/javascripts/mercury/websocket.js.coffee",
-    "app/assets/stylesheets/application.css",
     "app/assets/stylesheets/mercury.css",
     "app/assets/stylesheets/mercury/dialog.scss",
     "app/assets/stylesheets/mercury/mercury.scss",
@@ -99,8 +97,7 @@ Gem::Specification.new do |s|
     "app/controllers/images_controller.rb",
     "app/controllers/mercury_controller.rb",
     "app/models/image.rb",
-    "app/views/content/intro.html.haml",
-    "app/views/content/walkthrough.html.haml",
+    "app/views/application/intro.html.haml",
     "app/views/layouts/application.html.haml",
     "app/views/layouts/mercury.html.haml",
     "app/views/mercury/modals/character.html.haml",
@@ -126,16 +123,8 @@ Gem::Specification.new do |s|
     "config/database.yml",
     "config/engine.rb",
     "config/environment.rb",
-    "config/environments/development.rb",
-    "config/environments/production.rb",
-    "config/environments/test.rb",
     "config/evergreen.rb",
-    "config/initializers/backtrace_silencers.rb",
     "config/initializers/formtastic.rb",
-    "config/initializers/inflections.rb",
-    "config/initializers/mime_types.rb",
-    "config/initializers/secret_token.rb",
-    "config/initializers/session_store.rb",
     "config/initializers/wrap_parameters.rb",
     "config/locales/en.yml",
     "config/routes.rb",
@@ -148,10 +137,11 @@ Gem::Specification.new do |s|
     "features/support/env.rb",
     "features/support/paths.rb",
     "features/support/selectors.rb",
-    "lib/mercury.rb",
+    "lib/mercury-rails.rb",
     "lib/mercury/websocket_server.rb",
     "lib/tasks/cucumber.rake",
     "log/.gitkeep",
+    "mercury-rails.gemspec",
     "public/404.html",
     "public/422.html",
     "public/500.html",
@@ -226,7 +216,7 @@ Gem::Specification.new do |s|
     s.specification_version = 3
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
-      s.add_runtime_dependency(%q<rails>, ["= 3.1.0.beta1"])
+      s.add_runtime_dependency(%q<rails>, ["= 3.1.0.rc4"])
       s.add_runtime_dependency(%q<jeweler>, [">= 0"])
       s.add_runtime_dependency(%q<mysql2>, [">= 0"])
       s.add_runtime_dependency(%q<sass>, [">= 0"])
@@ -243,7 +233,7 @@ Gem::Specification.new do |s|
       s.add_development_dependency(%q<ruby-debug19>, [">= 0"])
       s.add_development_dependency(%q<evergreen>, [">= 0"])
     else
-      s.add_dependency(%q<rails>, ["= 3.1.0.beta1"])
+      s.add_dependency(%q<rails>, ["= 3.1.0.rc4"])
       s.add_dependency(%q<jeweler>, [">= 0"])
       s.add_dependency(%q<mysql2>, [">= 0"])
       s.add_dependency(%q<sass>, [">= 0"])
@@ -261,7 +251,7 @@ Gem::Specification.new do |s|
       s.add_dependency(%q<evergreen>, [">= 0"])
     end
   else
-    s.add_dependency(%q<rails>, ["= 3.1.0.beta1"])
+    s.add_dependency(%q<rails>, ["= 3.1.0.rc4"])
     s.add_dependency(%q<jeweler>, [">= 0"])
     s.add_dependency(%q<mysql2>, [">= 0"])
     s.add_dependency(%q<sass>, [">= 0"])

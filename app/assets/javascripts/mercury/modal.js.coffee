@@ -1,4 +1,4 @@
-Mercury.modal = (url, options = {}) ->
+@Mercury.modal = (url, options = {}) ->
   Mercury.modal.show(url, options)
   return Mercury.modal
 

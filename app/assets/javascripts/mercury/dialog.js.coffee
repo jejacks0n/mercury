@@ -1,4 +1,4 @@
-class Mercury.Dialog
+class @Mercury.Dialog
 
   constructor: (@url, @name, @options = {}) ->
     @button = @options.for

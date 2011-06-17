@@ -1,4 +1,4 @@
-class Mercury.HistoryBuffer
+class @Mercury.HistoryBuffer
 
   constructor: (@maxLength = 200) ->
     @index = 0

@@ -1,4 +1,4 @@
-class Mercury.Regions.Editable extends Mercury.Region
+class @Mercury.Regions.Editable extends Mercury.Region
   type = 'editable'
 
   constructor: (@element, @window, @options = {}) ->

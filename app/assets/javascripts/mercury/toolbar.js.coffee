@@ -1,4 +1,4 @@
-class Mercury.Toolbar
+class @Mercury.Toolbar
 
   constructor: (@options = {}) ->
     @build()

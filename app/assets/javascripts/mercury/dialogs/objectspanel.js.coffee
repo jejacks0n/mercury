@@ -1,4 +1,4 @@
-Mercury.dialogHandlers.objectspanel = ->
+@Mercury.dialogHandlers.objectspanel = ->
   # make the filter work
   @element.find('input.filter').keyup =>
     value = @element.find('input.filter').val()

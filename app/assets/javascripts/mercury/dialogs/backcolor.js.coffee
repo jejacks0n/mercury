@@ -1,4 +1,4 @@
-Mercury.dialogHandlers.backcolor = ->
+@Mercury.dialogHandlers.backcolor = ->
   @element.find('.picker, .last-picked').click (event) =>
     color = $(event.target).css('background-color')
     @element.find('.last-picked').css({background: color})

@@ -1,4 +1,4 @@
-class Mercury.Statusbar
+class @Mercury.Statusbar
 
   constructor: (@options = {}) ->
     @build()

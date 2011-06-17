@@ -3,7 +3,7 @@ class ApplicationController < ActionController::Base
 
   # stub for content pages
   def show
-    render action: "/../content/#{params[:content_page] || 'intro'}"
+    render action: "#{params[:content_page] || 'intro'}"
   end
 
 end

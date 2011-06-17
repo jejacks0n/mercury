@@ -1,4 +1,4 @@
-Mercury::Application.routes.draw do
+Rails.application.routes.draw do
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
@@ -66,6 +66,5 @@ Mercury::Application.routes.draw do
   end
 
   root to: "application#show"
-  match '/content(/*content_page)' => "application#show"
 
 end

@@ -1,4 +1,4 @@
-Mercury.tooltip = (forElement, content, options = {}) ->
+@Mercury.tooltip = (forElement, content, options = {}) ->
   Mercury.tooltip.show(forElement, content, options)
   return Mercury.tooltip
 

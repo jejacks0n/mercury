@@ -1,4 +1,4 @@
-class Mercury.Regions.Snippetable extends Mercury.Region
+class @Mercury.Regions.Snippetable extends Mercury.Region
   type = 'snippetable'
 
   constructor: (@element, @window, @options = {}) ->

@@ -1,4 +1,4 @@
-class Mercury.Select extends Mercury.Dialog
+class @Mercury.Select extends Mercury.Dialog
 
   constructor: (@url, @name, @options = {}) ->
     super

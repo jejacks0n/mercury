@@ -1,4 +1,4 @@
-class Mercury.Panel extends Mercury.Dialog
+class @Mercury.Panel extends Mercury.Dialog
 
   constructor: (@url, @name, @options = {}) ->
     super

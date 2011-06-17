@@ -1,4 +1,4 @@
-Mercury.tableEditor = (table, cell) ->
+@Mercury.tableEditor = (table, cell) ->
   Mercury.tableEditor.load(table, cell)
   return Mercury.tableEditor
 

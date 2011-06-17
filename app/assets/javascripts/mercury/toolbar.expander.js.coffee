@@ -1,4 +1,4 @@
-class Mercury.Toolbar.Expander extends Mercury.Palette
+class @Mercury.Toolbar.Expander extends Mercury.Palette
 
   constructor: (@name, @options) ->
     @container = @options.for

@@ -3,7 +3,7 @@
 # how to handle context for buttons?  if the cursor is within a bold area (**bo|ld**), or selecting it -- it would be
 # nice if we could activate the bold button for instance.
 
-class Mercury.Regions.Markupable extends Mercury.Region
+class @Mercury.Regions.Markupable extends Mercury.Region
   type = 'markupable'
 
   constructor: (@element, @window, @options = {}) ->

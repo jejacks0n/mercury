@@ -1,6 +1,7 @@
 source 'http://rubygems.org'
 
-gem 'rails', '3.1.0.beta1'
+gem 'rails', '3.1.0.rc4'
+gem 'jeweler'
 
 gem 'mysql2'
 gem 'sass'
@@ -15,9 +16,6 @@ gem 'formtastic', git: 'git://github.com/justinfrench/formtastic.git'
 gem 'eventmachine', :git => 'git://github.com/eventmachine/eventmachine.git'
 gem 'em-hiredis'
 gem 'em-websocket'
-
-group :development do
-end
 
 group :development, :test do
   gem 'thin'

@@ -1,4 +1,4 @@
-class Mercury.Toolbar.Button
+class @Mercury.Toolbar.Button
 
   constructor: (@name, @title, @summary = null, @types = [], @options = {}) ->
     @build()
@@ -114,7 +114,7 @@ class Mercury.Toolbar.Button
 
 
 # Button contexts
-Mercury.Toolbar.Button.contexts =
+@Mercury.Toolbar.Button.contexts =
 
   backcolor: (node) -> @element.css('background-color', node.css('background-color'))
 

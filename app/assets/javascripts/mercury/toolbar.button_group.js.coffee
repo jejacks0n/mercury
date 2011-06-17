@@ -1,4 +1,4 @@
-class Mercury.Toolbar.ButtonGroup
+class @Mercury.Toolbar.ButtonGroup
 
   constructor: (@name, @options = {}) ->
     @build()
@@ -37,6 +37,6 @@ class Mercury.Toolbar.ButtonGroup
 
 
 # ButtonGroup contexts
-Mercury.Toolbar.ButtonGroup.contexts =
+@Mercury.Toolbar.ButtonGroup.contexts =
 
   table: (node, region) -> !!node.closest('table', region).length

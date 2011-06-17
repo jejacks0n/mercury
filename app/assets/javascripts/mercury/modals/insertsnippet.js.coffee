@@ -1,4 +1,4 @@
-Mercury.modalHandlers.insertsnippet = ->
+@Mercury.modalHandlers.insertsnippet = ->
   @element.find('form').submit (event) =>
     event.preventDefault()
     if Mercury.snippet

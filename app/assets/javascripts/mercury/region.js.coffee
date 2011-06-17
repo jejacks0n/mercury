@@ -1,4 +1,4 @@
-class Mercury.Region
+class @Mercury.Region
   type = 'region'
 
   constructor: (@element, @window, @options = {}) ->

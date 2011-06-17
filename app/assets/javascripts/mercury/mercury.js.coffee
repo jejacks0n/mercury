@@ -10,7 +10,6 @@
 #= require jquery.websocket
 #= require jquery.serialize_object
 #= require liquidmetal
-#= require showdown
 #
 #= require_self
 #= require ./native_extensions
@@ -36,8 +35,10 @@
 #= require_tree ./dialogs
 #= require_tree ./modals
 #
+#= require showdown
+#
 
-Mercury = {
+@Mercury = {
 
   version: 1.0
 

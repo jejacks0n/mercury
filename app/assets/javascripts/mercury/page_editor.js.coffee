@@ -1,4 +1,4 @@
-class Mercury.PageEditor
+class @Mercury.PageEditor
 
   # options
   # saveStyle: 'form', or 'json' (defaults to json)

@@ -1,4 +1,4 @@
-class Mercury.Snippet
+class @Mercury.Snippet
 
   @all: []
 

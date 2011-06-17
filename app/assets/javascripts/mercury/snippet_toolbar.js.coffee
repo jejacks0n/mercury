@@ -1,4 +1,4 @@
-class Mercury.SnippetToolbar extends Mercury.Toolbar
+class @Mercury.SnippetToolbar extends Mercury.Toolbar
 
   constructor: (@document, @options = {}) ->
     super(@options)

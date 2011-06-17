@@ -1,4 +1,4 @@
-Mercury.uploader = (file, options) ->
+@Mercury.uploader = (file, options) ->
   Mercury.uploader.show(file, options)
   return Mercury.uploader
 

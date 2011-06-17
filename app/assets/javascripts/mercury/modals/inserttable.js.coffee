@@ -1,4 +1,4 @@
-Mercury.modalHandlers.inserttable = ->
+@Mercury.modalHandlers.inserttable = ->
   table = @element.find('#table_display table')
   # make td's selectable
   table.click (event) =>

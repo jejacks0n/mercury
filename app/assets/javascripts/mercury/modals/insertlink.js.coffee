@@ -22,8 +22,8 @@ Mercury.modalHandlers.insertlink = ->
     selection = Mercury.region.selection()
 
     # if we're editing a link prefill the information
-    container = selection.commonAncestor(true).closest('a')
-    if container.length
+    container = selection.commonAncestor(true).closest('a') if selection.commonAncestor
+    if container && container.length
       existingLink = container
 
       # don't allow changing the content on edit
@@ -82,12 +82,11 @@ Mercury.modalHandlers.insertlink = ->
         attrs['href'] = "javascript:void(window.open('#{attrs['href']}', 'popup_window', '#{$.param(args).replace(/&/g, ',')}'))"
       else attrs['target'] = target if target
 
-    attrs = for name, value of attrs
-      "#{name}=\"#{value}\""
-    value = "<a #{attrs.join(' ')}>"
+    value = {tagName: 'a', attrs: attrs, content: content}
 
     if existingLink
       Mercury.trigger('action', {action: 'replaceLink', value: value, node: existingLink.get(0)})
     else
-      Mercury.trigger('action', {action: 'insertLink', value: "#{value}#{content}</a>"})
+      Mercury.trigger('action', {action: 'insertLink', value: value})
+
     Mercury.modal.hide()

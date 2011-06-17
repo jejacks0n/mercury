@@ -16,12 +16,12 @@ Mercury.modalHandlers.insertmedia = ->
     selection = Mercury.region.selection()
 
     # if we're editing an image prefill the information
-    if image = selection.is('img')
+    if selection.is && image = selection.is('img')
       @element.find('#media_image_url').val(image.attr('src'))
       @element.find('#media_image_alignment').val(image.attr('align'))
 
     # if we're editing an iframe (assume it's a video for now)
-    if iframe = selection.is('iframe')
+    if selection.is && iframe = selection.is('iframe')
       src = iframe.attr('src')
       if src.indexOf('http://www.youtube.com') > -1
         # it's a youtube video

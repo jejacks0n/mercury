@@ -1,5 +1,4 @@
 # todo:
-# make primary tools work -- like inserting media, links, tables
 # context for the toolbar buttons and groups needs to change so we can do the following:
 # how to handle context for buttons?  if the cursor is within a bold area (**bo|ld**), or selecting it -- it would be
 # nice if we could activate the bold button for instance.
@@ -213,11 +212,16 @@ class Mercury.Regions.Markupable extends Mercury.Region
 
     redo: -> @html(@history.redo())
 
-    insertImage: (selection, options) -> selection.replace('![add alt text](' + encodeURI(options.value.src) + ')', true)
+    insertHTML: (selection, options) ->
+      if options.value.get && element = options.value.get(0)
+        options.value = $('<div>').html(element).html()
+      selection.replace(options.value, false, true)
+
+    insertImage: (selection, options) ->
+      selection.replace('![add alt text](' + encodeURI(options.value.src) + ')', true)
 
     insertLink: (selection, options) ->
-      console.log(selection, options)
-    #selection.insertNode(options.value)
+      selection.replace("[#{options.value.content}](#{options.value.attrs.href} 'optional title')", true)
 
     insertunorderedlist: (selection) -> selection.addList('unordered')
 
@@ -262,15 +266,6 @@ class Mercury.Regions.Markupable extends Mercury.Region
     insertsnippet: (selection, options) ->
       snippet = options.value
       selection.replace(snippet.getText())
-
-    editsnippet: ->
-      return unless @snippet
-      snippet = Mercury.Snippet.find(@snippet.data('snippet'))
-      snippet.displayOptions()
-
-    removesnippet: ->
-      @snippet.remove() if @snippet
-      Mercury.trigger('hide:toolbar', {type: 'snippet', immediately: true})
 
   }
 
@@ -362,7 +357,6 @@ class Mercury.Regions.Markupable.Selection
       @replace(("#{index + 1}. #{line}" for line, index in lines).join('\n'), true)
 
 
-
   deselectNewLines: ->
     text = @text
     length = text.replace(/\n+$/g, '').length
@@ -380,3 +374,7 @@ class Mercury.Regions.Markupable.Selection
     end = val.indexOf('[mercury-marker]', start + 1) - '[mercury-marker]'.length
     @element.val(@element.val().replace(/\[mercury-marker\]/g, ''))
     @select(start, end)
+
+
+  textContent: ->
+    return @text

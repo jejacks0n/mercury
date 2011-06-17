@@ -47,6 +47,10 @@ Mercury.modalHandlers.inserttable = ->
     table.find('.selected').removeClass('selected')
     table.find('td, th').html('&nbsp;')
 
-    Mercury.trigger('action', {action: 'insertHTML', value: table})
+    tableHTML = $('<div>').html(table).html()
+    tableHTML = tableHTML.replace(/^\s+|\n/gm, '')
+    tableHTML = tableHTML.replace(/(<\/.*?>|<table.*?>|<tbody>|<tr>)/g, '$1\n')
+
+    Mercury.trigger('action', {action: 'insertHTML', value: tableHTML})
     Mercury.modal.hide()
 

@@ -386,12 +386,15 @@ class Mercury.Regions.Editable extends Mercury.Region
 
     insertImage: (selection, options) -> @execCommand('insertHTML', {value: $('<img/>', options.value)})
 
-    insertLink: (selection, options) -> selection.insertNode(options.value)
+    insertLink: (selection, options) ->
+      anchor = $("<#{options.value.tagName}>").attr(options.value.attrs).html(options.value.content)
+      selection.insertNode(anchor)
 
     replaceLink: (selection, options) ->
+      anchor = $("<#{options.value.tagName}>").attr(options.value.attrs).html(options.value.content)
       selection.selectNode(options.node)
       html = $('<div>').html(selection.content()).find('a').html()
-      selection.replace($(options.value, selection.context).html(html))
+      selection.replace($(anchor, selection.context).html(html))
 
     insertsnippet: (selection, options) ->
       snippet = options.value

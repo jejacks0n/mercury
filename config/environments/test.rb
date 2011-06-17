@@ -11,6 +11,10 @@ Mercury::Application.configure do
   config.serve_static_assets = true
   config.static_cache_control = "public, max-age=3600"
 
+  # Compress assets in tests so they're more like production
+  config.assets.js_compressor = :uglifier
+  config.assets.css_compressor = :scss
+
   # Log error messages when you accidentally call methods on nil
   config.whiny_nils = true
 

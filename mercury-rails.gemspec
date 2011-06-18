@@ -17,13 +17,8 @@ Gem::Specification.new do |s|
     "README.rdoc"
   ]
   s.files = [
-    ".pairs",
-    ".rvmrc",
-    "Gemfile",
-    "Gemfile.lock",
     "LICENSE",
     "README.rdoc",
-    "Rakefile",
     "VERSION",
     "app/assets/images/mercury/button.png",
     "app/assets/images/mercury/clippy.png",
@@ -93,12 +88,9 @@ Gem::Specification.new do |s|
     "app/assets/stylesheets/mercury/toolbar.scss",
     "app/assets/stylesheets/mercury/tooltip.scss",
     "app/assets/stylesheets/mercury/uploader.scss",
-    "app/controllers/application_controller.rb",
     "app/controllers/images_controller.rb",
     "app/controllers/mercury_controller.rb",
     "app/models/image.rb",
-    "app/views/application/intro.html.haml",
-    "app/views/layouts/application.html.haml",
     "app/views/layouts/mercury.html.haml",
     "app/views/mercury/modals/character.html.haml",
     "app/views/mercury/modals/htmleditor.html.haml",
@@ -116,22 +108,9 @@ Gem::Specification.new do |s|
     "app/views/mercury/selects/style.html.haml",
     "app/views/mercury/snippets/example.html.haml",
     "app/views/mercury/snippets/example_options.html.haml",
-    "config.ru",
-    "config/application.rb",
-    "config/boot.rb",
-    "config/cucumber.yml",
-    "config/database.yml",
     "config/engine.rb",
-    "config/environment.rb",
-    "config/evergreen.rb",
-    "config/initializers/backtrace_silencers.rb",
-    "config/initializers/formtastic.rb",
-    "config/initializers/secret_token.rb",
-    "config/locales/en.yml",
     "config/routes.rb",
     "db/migrate/20110526035601_create_images.rb",
-    "db/schema.rb",
-    "db/seeds.rb",
     "features/editing/basic.feature",
     "features/step_definitions/debug_steps.rb",
     "features/step_definitions/web_steps.rb",
@@ -139,18 +118,8 @@ Gem::Specification.new do |s|
     "features/support/paths.rb",
     "features/support/selectors.rb",
     "lib/mercury-rails.rb",
-    "lib/mercury/websocket_server.rb",
-    "lib/tasks/cucumber.rake",
     "log/.gitkeep",
     "mercury-rails.gemspec",
-    "public/404.html",
-    "public/422.html",
-    "public/500.html",
-    "public/favicon.ico",
-    "public/robots.txt",
-    "public/websocket.html",
-    "script/cucumber",
-    "script/rails",
     "spec/javascripts/mercury/dialog_spec.js.coffee",
     "spec/javascripts/mercury/history_buffer_spec.js.coffee",
     "spec/javascripts/mercury/mercury_spec.js.coffee",
@@ -195,17 +164,12 @@ Gem::Specification.new do |s|
     "vendor/assets/javascripts/jquery-1.6.js",
     "vendor/assets/javascripts/jquery-ui-1.8.13.custom.min.js",
     "vendor/assets/javascripts/jquery-ui-1.8.13.sortable.custom.js",
-    "vendor/assets/javascripts/jquery.cookie.js",
     "vendor/assets/javascripts/jquery.easing.js",
     "vendor/assets/javascripts/jquery.json2.js",
     "vendor/assets/javascripts/jquery.serialize_object.js",
     "vendor/assets/javascripts/jquery.ujs.js",
-    "vendor/assets/javascripts/jquery.uri.js",
-    "vendor/assets/javascripts/jquery.websocket.js",
     "vendor/assets/javascripts/liquidmetal.js",
-    "vendor/assets/javascripts/showdown.js",
-    "vendor/plugins/.gitkeep",
-    "websocket-server"
+    "vendor/assets/javascripts/showdown.js"
   ]
   s.homepage = %q{http://github.com/jejacks0n/mercury}
   s.licenses = ["MIT"]
@@ -219,34 +183,30 @@ Gem::Specification.new do |s|
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
       s.add_runtime_dependency(%q<rails>, ["= 3.1.0.rc4"])
       s.add_runtime_dependency(%q<jeweler>, [">= 0"])
-      s.add_runtime_dependency(%q<mysql2>, [">= 0"])
-      s.add_runtime_dependency(%q<sass>, [">= 0"])
+      s.add_runtime_dependency(%q<sqlite3>, [">= 0"])
+      s.add_runtime_dependency(%q<paperclip>, [">= 0"])
+      s.add_runtime_dependency(%q<formtastic>, [">= 0"])
+      s.add_runtime_dependency(%q<json>, [">= 0"])
+      s.add_runtime_dependency(%q<sass-rails>, ["~> 3.1.0.rc"])
       s.add_runtime_dependency(%q<coffee-script>, [">= 0"])
       s.add_runtime_dependency(%q<uglifier>, [">= 0"])
       s.add_runtime_dependency(%q<haml>, [">= 0"])
-      s.add_runtime_dependency(%q<haml-rails>, [">= 0"])
-      s.add_runtime_dependency(%q<paperclip>, [">= 0"])
-      s.add_runtime_dependency(%q<formtastic>, [">= 0"])
-      s.add_runtime_dependency(%q<eventmachine>, [">= 0"])
-      s.add_runtime_dependency(%q<em-hiredis>, [">= 0"])
-      s.add_runtime_dependency(%q<em-websocket>, [">= 0"])
+      s.add_runtime_dependency(%q<jquery-rails>, [">= 0"])
       s.add_development_dependency(%q<thin>, [">= 0"])
       s.add_development_dependency(%q<ruby-debug19>, [">= 0"])
       s.add_development_dependency(%q<evergreen>, [">= 0"])
     else
       s.add_dependency(%q<rails>, ["= 3.1.0.rc4"])
       s.add_dependency(%q<jeweler>, [">= 0"])
-      s.add_dependency(%q<mysql2>, [">= 0"])
-      s.add_dependency(%q<sass>, [">= 0"])
+      s.add_dependency(%q<sqlite3>, [">= 0"])
+      s.add_dependency(%q<paperclip>, [">= 0"])
+      s.add_dependency(%q<formtastic>, [">= 0"])
+      s.add_dependency(%q<json>, [">= 0"])
+      s.add_dependency(%q<sass-rails>, ["~> 3.1.0.rc"])
       s.add_dependency(%q<coffee-script>, [">= 0"])
       s.add_dependency(%q<uglifier>, [">= 0"])
       s.add_dependency(%q<haml>, [">= 0"])
-      s.add_dependency(%q<haml-rails>, [">= 0"])
-      s.add_dependency(%q<paperclip>, [">= 0"])
-      s.add_dependency(%q<formtastic>, [">= 0"])
-      s.add_dependency(%q<eventmachine>, [">= 0"])
-      s.add_dependency(%q<em-hiredis>, [">= 0"])
-      s.add_dependency(%q<em-websocket>, [">= 0"])
+      s.add_dependency(%q<jquery-rails>, [">= 0"])
       s.add_dependency(%q<thin>, [">= 0"])
       s.add_dependency(%q<ruby-debug19>, [">= 0"])
       s.add_dependency(%q<evergreen>, [">= 0"])
@@ -254,17 +214,15 @@ Gem::Specification.new do |s|
   else
     s.add_dependency(%q<rails>, ["= 3.1.0.rc4"])
     s.add_dependency(%q<jeweler>, [">= 0"])
-    s.add_dependency(%q<mysql2>, [">= 0"])
-    s.add_dependency(%q<sass>, [">= 0"])
+    s.add_dependency(%q<sqlite3>, [">= 0"])
+    s.add_dependency(%q<paperclip>, [">= 0"])
+    s.add_dependency(%q<formtastic>, [">= 0"])
+    s.add_dependency(%q<json>, [">= 0"])
+    s.add_dependency(%q<sass-rails>, ["~> 3.1.0.rc"])
     s.add_dependency(%q<coffee-script>, [">= 0"])
     s.add_dependency(%q<uglifier>, [">= 0"])
     s.add_dependency(%q<haml>, [">= 0"])
-    s.add_dependency(%q<haml-rails>, [">= 0"])
-    s.add_dependency(%q<paperclip>, [">= 0"])
-    s.add_dependency(%q<formtastic>, [">= 0"])
-    s.add_dependency(%q<eventmachine>, [">= 0"])
-    s.add_dependency(%q<em-hiredis>, [">= 0"])
-    s.add_dependency(%q<em-websocket>, [">= 0"])
+    s.add_dependency(%q<jquery-rails>, [">= 0"])
     s.add_dependency(%q<thin>, [">= 0"])
     s.add_dependency(%q<ruby-debug19>, [">= 0"])
     s.add_dependency(%q<evergreen>, [">= 0"])

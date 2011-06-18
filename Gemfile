@@ -3,19 +3,21 @@ source 'http://rubygems.org'
 gem 'rails', '3.1.0.rc4'
 gem 'jeweler'
 
-gem 'mysql2'
-gem 'sass'
+# Database
+gem 'sqlite3'
+
+# Assets and forms
+gem 'paperclip'
+gem 'formtastic', git: 'git://github.com/justinfrench/formtastic.git'
+
+# Asset template engines
+gem 'json'
+gem 'sass-rails', "~> 3.1.0.rc"
 gem 'coffee-script'
 gem 'uglifier'
 gem 'haml'
-gem 'haml-rails'
 
-gem 'paperclip', git: 'git://github.com/thoughtbot/paperclip.git'
-gem 'formtastic', git: 'git://github.com/justinfrench/formtastic.git'
-
-gem 'eventmachine', :git => 'git://github.com/eventmachine/eventmachine.git'
-gem 'em-hiredis'
-gem 'em-websocket'
+gem 'jquery-rails'
 
 group :development, :test do
   gem 'thin'

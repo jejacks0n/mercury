@@ -1,4 +1,4 @@
-class ImagesController < ApplicationController
+class ImagesController < MercuryController
 
   respond_to :json
 

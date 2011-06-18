@@ -106,7 +106,6 @@ The feature list is actually pretty long, so this list is only the top 10 (impor
 * Image Uploading: drag images from your desktop to any editable region and they'll be uploaded and inserted
 * Table Editing: advanced table editing and creation
 * Snippets: insert and edit reusable bits of markup/code that are predefined using drag and drop
-* Drag and Drop Ordering: snippets can be moved around by dragging and dropping them (in snippet regions)
-* Notes and Todos: attach notes and todos to any page
+* Notes: attach notes to any page
 * Customizable Toolbars: remove any of the existing toolbar items, or easily add your own custom buttons
 * Colaborative Authoring: edit any page while others are also editing (and watch what they're doing)

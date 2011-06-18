@@ -1,26 +1,10 @@
 development:
-  adapter: mysql2
-  database: mercury_development
-  user: root
-  password:
-  encoding: utf8
-  host: localhost
+  adapter: sqlite3
+  database: db/development.sqlite3
 
 test: &test
-  adapter: mysql2
-  database: mercury_test
-  user: root
-  password:
-  encoding: utf8
-  host: localhost
+  adapter: sqlite3
+  database: db/test.sqlite3
 
 cucumber:
   <<: *test
-
-production:
-  adapter: mysql2
-  database: mercury_production
-  user: root
-  password:
-  encoding: utf8
-  host: localhost

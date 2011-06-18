@@ -1,10 +1,4 @@
 GIT
-  remote: git://github.com/eventmachine/eventmachine.git
-  revision: d326bb323aae552f662a2b8db0964691b743ae51
-  specs:
-    eventmachine (1.0.0.beta.3)
-
-GIT
   remote: git://github.com/jnicklas/evergreen.git
   revision: 0402087fd081a3244ea0d2ca69a58966accb4797
   submodules: true
@@ -22,15 +16,6 @@ GIT
   specs:
     formtastic (2.0.0.rc2)
       rails (~> 3.0)
-
-GIT
-  remote: git://github.com/thoughtbot/paperclip.git
-  revision: 28746ecf206808ac80a77b10143446ae979f0655
-  specs:
-    paperclip (2.3.10)
-      activerecord (>= 2.3.0)
-      activesupport (>= 2.3.2)
-      cocaine (>= 0.0.2)
 
 GEM
   remote: http://rubygems.org/
@@ -65,7 +50,6 @@ GEM
       activesupport (= 3.1.0.rc4)
     activesupport (3.1.0.rc4)
       multi_json (~> 1.0)
-    addressable (2.2.6)
     archive-tar-minitar (0.5.2)
     arel (2.1.1)
     bcrypt-ruby (2.1.4)
@@ -84,7 +68,6 @@ GEM
     celerity (0.8.9)
     childprocess (0.1.9)
       ffi (~> 1.0.6)
-    cocaine (0.1.0)
     coffee-script (2.2.0)
       coffee-script-source
       execjs
@@ -105,12 +88,8 @@ GEM
     daemons (1.1.3)
     database_cleaner (0.6.7)
     diff-lcs (1.1.2)
-    em-hiredis (0.1.0)
-      hiredis (~> 0.3.0)
-    em-websocket (0.3.0)
-      addressable (>= 2.1.1)
-      eventmachine (>= 0.12.9)
     erubis (2.7.0)
+    eventmachine (0.12.10)
     execjs (1.1.3)
       multi_json (~> 1.0)
     ffi (1.0.9)
@@ -118,18 +97,15 @@ GEM
       json (>= 1.4.6)
     git (1.2.5)
     haml (3.1.2)
-    haml-rails (0.3.4)
-      actionpack (~> 3.0)
-      activesupport (~> 3.0)
-      haml (~> 3.0)
-      railties (~> 3.0)
     hike (1.1.0)
-    hiredis (0.3.2)
     i18n (0.6.0)
     jeweler (1.6.2)
       bundler (~> 1.0)
       git (>= 1.2.5)
       rake
+    jquery-rails (1.0.11)
+      railties (~> 3.0)
+      thor (~> 0.14)
     json (1.5.2)
     json_pure (1.5.2)
     launchy (0.4.0)
@@ -143,8 +119,10 @@ GEM
       treetop (~> 1.4.8)
     mime-types (1.16)
     multi_json (1.0.3)
-    mysql2 (0.3.6)
     nokogiri (1.4.5)
+    paperclip (2.3.11)
+      activerecord (>= 2.3.0)
+      activesupport (>= 2.3.2)
     polyglot (0.3.1)
     rack (1.3.0)
     rack-cache (1.0.2)
@@ -184,6 +162,11 @@ GEM
       archive-tar-minitar (>= 0.5.2)
     rubyzip (0.9.4)
     sass (3.1.2)
+    sass-rails (3.1.0.rc.2)
+      actionpack (~> 3.1.0.rc1)
+      railties (~> 3.1.0.rc1)
+      sass (>= 3.1.2)
+      sprockets (>= 2.0.0.beta.9)
     selenium-webdriver (0.2.1)
       childprocess (>= 0.1.7)
       ffi (>= 1.0.7)
@@ -196,6 +179,7 @@ GEM
       hike (~> 1.0)
       rack (~> 1.0)
       tilt (!= 1.3.0, ~> 1.1)
+    sqlite3 (1.3.3)
     term-ansicolor (1.0.5)
     thin (1.2.11)
       daemons (>= 1.0.9)
@@ -221,18 +205,16 @@ DEPENDENCIES
   coffee-script
   cucumber-rails
   database_cleaner
-  em-hiredis
-  em-websocket
-  eventmachine!
   evergreen!
   formtastic!
   haml
-  haml-rails
   jeweler
-  mysql2
-  paperclip!
+  jquery-rails
+  json
+  paperclip
   rails (= 3.1.0.rc4)
   ruby-debug19
-  sass
+  sass-rails (~> 3.1.0.rc)
+  sqlite3
   thin
   uglifier

@@ -264,7 +264,7 @@
       .mercury-textarea { box-sizing: border-box; -moz-box-sizing: border-box; resize: vertical; }
       .mercury-region:focus, .mercury-region.focus, .mercury-textarea.focus { outline: none; -webkit-box-shadow: 0 0 10px #09F, 0 0 1px #045; box-shadow: 0 0 10px #09F, 0 0 1px #045 }
       .mercury-region:after { content: '\00a0'; display: block; visibility: hidden; clear: both; height: 0; overflow: hidden; }
-      .mercury-snippet { width:200px; height:100px; border: 1px solid red; }
+      .mercury-region table, .mercury-region td { border: 1px dotted red; }
       '''
   }
 

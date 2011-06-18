@@ -103,7 +103,6 @@ Gem::Specification.new do |s|
     "app/views/mercury/panels/history.html.haml",
     "app/views/mercury/panels/notes.html.haml",
     "app/views/mercury/panels/snippets.html.haml",
-    "app/views/mercury/panels/todos.html.haml",
     "app/views/mercury/selects/formatblock.html.haml",
     "app/views/mercury/selects/style.html.haml",
     "app/views/mercury/snippets/example.html.haml",

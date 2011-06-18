@@ -122,4 +122,4 @@ Include the gem in your Gemfile
   gem 'mercury-rails'
 
 Then just bundle install and you should be all set.  Browse to any existing content page and prefix it's url with /edit.
-so for instance, *localhost:3000/edit/content/page*.
+so for instance, localhost:3000/edit/content/page.

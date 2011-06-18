@@ -195,7 +195,7 @@ describe "Mercury.Snippet class methods", ->
     it "opens a modal with the name in the url", ->
       Mercury.Snippet.displayOptionsFor('foo')
       expect(@modalSpy.callCount).toEqual(1)
-      expect(@modalSpy.argsForCall[0]).toEqual(["/mercury/snippets/foo/options", {title: 'Snippet Options', handler: 'insertsnippet'}])
+      expect(@modalSpy.argsForCall[0]).toEqual(["/mercury/snippets/foo/options", {title: 'Snippet Options', handler: 'insertsnippet', snippetName: 'foo'}])
 
     it "sets the snippet back to nothing", ->
       Mercury.snippet = 'foo'

@@ -102,24 +102,51 @@ The feature list is actually pretty long, so here's a short list that need highl
 * Colaborative Editing: Edit any page that others are editing at the same time and see their changes in real time.
 
 
+== Installation
+
+Include the gem in your Gemfile
+
+  gem 'mercury-rails'
+
+Then just bundle install and you should be all set.  Browse to any existing content page and prefix it's url with /edit,
+so for instance, localhost:3000/edit/content/page to edit the content on /content/page.
+
+
 == Usage
 
-Mercury has an expectation that content regions will be on the page.  To define content regions that Mercury will make
-editable you need to add a `mercury-region` class attribute to any div.  Then specify what region type by using the
-`data-type` attribute -- which can be *editable*, *markupable*, or *snippetable*.  Region types are outlined below.
+Mercury has an expectation that content regions will be on the page (not required, but probably useful).  To define
+content regions that Mercury will make editable you need to add a `mercury-region` class attribute to a div.  Then
+specify what region type by using the `data-type` attribute -- which can be *editable*, *markupable*, or *snippetable*.
+Region types are outlined below.
 
   <div class="mercury-region" data-type="editable">
     default content
   </div>
 
 
-== Installation
+== Region Types
 
-=== Rails 3.1
+=== Editable
 
-Include the gem in your Gemfile
+Editable Regions are HTML markup, and use the HTML5 contentEditable feature.  This is the core of what Mercury is about,
+and provides the most flexibility and visual representation of what the content will look like when saved.
 
-  gem 'mercury-rails'
+=== Markupable
 
-Then just bundle install and you should be all set.  Browse to any existing content page and prefix it's url with /edit.
-so for instance, localhost:3000/edit/content/page.
+These regions are based on Markdown syntax (specifically the github flavored version), and isn't as full featured as the
+editable region type -- primarily because markdown is meant to be simple, so to keep it such you can't do things like
+set colors etc.  This region type is super useful if you want to keep the markup clean and simple.
+
+=== Snippetable
+
+Snippetable regions only allow snippets.  There isn't any content editing in these regions, but snippets can sometimes
+be the way to go with complex markup and functionality.  Snippets are basically chunks of reusable markup, that can be
+defined by a developer and placed into content regions later.  More on this below.
+
+
+== Snippets
+
+Snippets are reusable and configurable chunks of markup.  They can be defined by developers, and then placed anywhere in
+content regions.  When you drag a snippet into a region you'll be prompted to enter options, and after entering options
+the snippet will be rendered into the page as a preview.  Snippets can be dragged around (in snippetable regions) and
+edited or removed.

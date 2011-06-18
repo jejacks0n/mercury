@@ -12,9 +12,9 @@ Mercury has been written using CoffeeScript and jQuery for the Javascript portio
 
 Mercury has been written for the future, and thus doesn't support legacy browsers or browsers that don't follow the W3C
 specifications for content editing.  Any browser will be supported if they support the W3C specification in the future,
-but there's no plans for adding support for alternate implementations at this point.
+but there aren't plans for adding support for alternate implementations at this time.
 
-Supported browsers are:
+Supported Browsers:
 * Chrome 10+
 * Safari 5+
 * Firefox 4+
@@ -24,16 +24,15 @@ Supported browsers are:
 
 I was looking for a fully featured editor that didn't use iframes, and there weren't any decent ones.  My primary goal
 was to have areas that were editable, but that also allowed CSS to flow naturally.  A few have cropped up since then
-(Aloha Editor), but they still didn't do everything that I needed, and lacked some of the features that I really wanted
-and would expect.
+(Aloha Editor for instance), and as good as they are, none had all the features I was looking for.
 
-Mercury was written to be as simple as possible, while also providing a really advanced feature set.  Instead of complex
-configuration, we chose a mix of configuration, and code simplicity, which should give you a much better chance at
-customizing Mercury to suit your exact needs.  This doesn't mean there's no configuration, there is, and it provides
-much of what you'll want, but efforts were taken to keep it simple and powerful.
+Mercury was written to be as simple as possible, while also providing an advanced feature set.  Instead of complex
+configuration, we chose a mix of configuration and code simplicity, which should give you a much better chance at
+customizing Mercury to suit your exact needs.  This doesn't mean there's not configuration, and what's there provides
+much of what you'll need, but efforts were taken to keep it simple and powerful.
 
-Even though it's a great editor, Mercury Editor may not be the best for your needs (based on javascript library, etc.)
-so here's a list of some other editors that you might want to check out:
+Even though it's a great editor, Mercury Editor may not be the best for your needs (based on browser support, javascript
+library, etc.) so here's a list of some other editors that you might want to check out:
 
 * {Aloha Editor}[http://www.aloha-editor.org/]
 * {jHtmlArea}[http://jhtmlarea.codeplex.com/]
@@ -45,16 +44,16 @@ so here's a list of some other editors that you might want to check out:
 
 == Project Details
 
-=== WYSIWYG editors suck
+=== WYSIWYG Editors Suck
 
 They just do.  Which as I've learned, is primarily due to the browser implementations.  Don't get me wrong, what the
 browsers have implemented is amazing, because it's hard stuff, plain and simple.  But if you're expecting a WYSIWYG
 editor to solve all your content problems you're wrong.  A better perception is that it will solve many of them, but
 shifts some into a new area.
 
-With that being said, Mercury tries to solve many of those issues, and succeeds to a great degree with lots of them.
-But it's nearly impossible to address everything, and the browsers don't expose enough to fix some things.  This is true
-for every editor that I've looked into as well.
+With that being said, Mercury tries to solve many of those issues and succeeds to a great degree, but alas, it's nearly
+impossible to address everything, and the browsers don't expose enough to fix some things.  This is true for every
+editor that I've looked into as well.
 
 It's important to understand this, and the details are more suited for long nerdy blog posts, so they won't be covered
 here.
@@ -78,34 +77,49 @@ plugins, it was not.
 With the asset handling that comes bundled with Rails 3.1, Rails Engines, and the gem tools, there really wasn't any
 other option.  The javascript from Mercury can be used by any back end system, and isn't limited to Rails.  Many of the
 features do require a back end, and that stuff would have to be rewritten in whatever language you wanted support for.
-The plain javascript files can be found in the repo, and I would be fully supportive of anyone who wanted to do
-something like this.
+The coffeescript files can be found in the repo, and I would be fully supportive of anyone who wanted to add support for
+different back end frameworks or languages.
 
 ==== Specs / Integration Tests
 
-Mercury is fully tested using Jasmine (via Evergreen) and Cucumber.
+Mercury is fully tested using Jasmine (via Evergreen) and Cucumber.  You can clone the project to run the full suite.
 
-=== The Name
-
-It's sure to come up, so let's take care of it now.  Mercury is the messenger god of Roman mythology, so the name seemed
-appropriate.  When it came to logo ideas the element came up, which also seemed appropriate since it requires careful
-usage.
-
-The same seems to be true for a WYSIWYG editor, because great power should be wielded carefully.  It goes to the core
-ideals behind how the configuration for Mercury was designed.  You can easily remove or add aspects based on your
-needs, and how savvy you think the people using will be.
+  rake spec:javascripts
+  rake cucumber
 
 
 == Features
 
-The feature list is actually pretty long, so this list is only the top 10 (important or cool features)
+The feature list is actually pretty long, so here's a short list that need highlighting.
 
-* Previewing: preview content while you're working on it to see exactly how it'll look
-* Link Tools: insert and edit links (including TOC style links)
-* Media Tools: insert and edit images, youtube videos, and vimeo videos
-* Image Uploading: drag images from your desktop to any editable region and they'll be uploaded and inserted
-* Table Editing: advanced table editing and creation
-* Snippets: insert and edit reusable bits of markup/code that are predefined using drag and drop
-* Notes: attach notes to any page
-* Customizable Toolbars: remove any of the existing toolbar items, or easily add your own custom buttons
-* Colaborative Authoring: edit any page while others are also editing (and watch what they're doing)
+* Previewing: Preview content while you're working to see exactly how it'll look.
+* Link Tools: Insert and edit links, including TOC/Bookmark links.
+* Media Tools: Insert and edit images, youtube videos, and vimeo videos.
+* Image Uploading: Drag images from your desktop and they'll be automatically uploaded and inserted.
+* Table Editing: Advanced table editing and creation.
+* Snippets: Insert and edit predefined and reusable bits of markup/code using drag and drop.
+* Notes: Attach notes to any page and communicate with other content authors.
+* Colaborative Editing: Edit any page that others are editing at the same time and see their changes in real time.
+
+
+== Usage
+
+Mercury has an expectation that content regions will be on the page.  To define content regions that Mercury will make
+editable you need to add a `mercury-region` class attribute to any div.  Then specify what region type by using the
+`data-type` attribute -- which can be *editable*, *markupable*, or *snippetable*.  Region types are outlined below.
+
+  <div class="mercury-region" data-type="editable">
+    default content
+  </div>
+
+
+== Installation
+
+=== Rails 3.1
+
+Include the gem in your Gemfile
+
+  gem 'mercury-rails'
+
+Then just bundle install and you should be all set.  Browse to any existing content page and prefix it's url with /edit.
+so for instance, *localhost:3000/edit/content/page*.

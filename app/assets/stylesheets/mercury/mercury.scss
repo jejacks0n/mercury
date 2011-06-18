@@ -75,6 +75,13 @@ form, form ul, form ol, form li, form fieldset, form p, .filter {
     box-sizing: border-box;
     -moz-box-sizing: border-box;
   }
+  li.boolean {
+    margin-left: 23%;
+    padding-left: 9px;
+    label {
+      width: auto;
+    }
+  }
   fieldset.buttons {
     clear: both;
     padding: 0;

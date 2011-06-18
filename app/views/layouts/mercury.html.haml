@@ -5,8 +5,8 @@
     = csrf_meta_tags
     = stylesheet_link_tag "mercury"
     = javascript_include_tag "mercury"
-    :javascript
-      Mercury.Snippet.load({
-        'snippet_1': {name: 'example', options: {'options[favorite_beer]': "miller_lite", 'options[first_name]': "1"}},
-      });
+    -#:javascript
+    -#  Mercury.Snippet.load({
+    -#    'snippet_1': {name: 'example', options: {'options[favorite_beer]': "miller_lite", 'options[first_name]': "1"}},
+    -#  });
   %body= javascript_tag 'new Mercury.PageEditor()'

@@ -3,7 +3,7 @@ class @Mercury.Snippet
   @all: []
 
   @displayOptionsFor: (name) ->
-    Mercury.modal("/mercury/snippets/#{name}/options", {title: 'Snippet Options', handler: 'insertsnippet'})
+    Mercury.modal("/mercury/snippets/#{name}/options", {title: 'Snippet Options', handler: 'insertsnippet', snippetName: name})
     Mercury.snippet = null
 
 

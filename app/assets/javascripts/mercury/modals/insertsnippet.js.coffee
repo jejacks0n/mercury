@@ -6,6 +6,6 @@
       snippet.setOptions(@element.find('form').serializeObject())
       Mercury.snippet = null
     else
-      snippet = Mercury.Snippet.create('example', @element.find('form').serializeObject())
+      snippet = Mercury.Snippet.create(@options.snippetName, @element.find('form').serializeObject())
     Mercury.trigger('action', {action: 'insertsnippet', value: snippet})
     @hide()

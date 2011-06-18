@@ -9,7 +9,7 @@ Rails.application.routes.draw do
     match 'snippets/:name/preview' => "mercury#snippet_preview"
   end
 
-  if Mercury::Application
+  if definded?(Mercury::Application)
     root to: "application#show"
   end
 end

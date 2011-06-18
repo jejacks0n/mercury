@@ -132,7 +132,7 @@ describe "Mercury.Panel", ->
       html = @panel.element.html()
       expect(html).toContain('<h1>foo panel</h1>')
       expect(html).toContain('class="mercury-panel-pane"')
-      expect(html).toContain('style="visibility: hidden;"')
+      expect(html).toContain('style="visibility: hidden;')
       expect(html).toContain('hello world')
 
 

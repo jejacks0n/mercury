@@ -30,6 +30,7 @@ describe "Mercury.dialogHandlers.forecolor", ->
       expect(spy.callCount).toEqual(1)
       expect(spy.argsForCall[0]).toEqual(['action', {action: 'forecolor', value: 'rgb(255, 255, 255)'}])
 
+
   describe "when any other element is clicked", ->
 
     it "does nothing", ->

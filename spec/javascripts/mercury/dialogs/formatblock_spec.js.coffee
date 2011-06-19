@@ -18,6 +18,7 @@ describe "Mercury.dialogHandlers.formatblock", ->
       jasmine.simulate.click($('#div').get(0))
       expect(spy.argsForCall[1]).toEqual(['action', {action: 'formatblock', value: 'pre'}])
 
+
   describe "when any other element is clicked", ->
 
     it "does nothing", ->

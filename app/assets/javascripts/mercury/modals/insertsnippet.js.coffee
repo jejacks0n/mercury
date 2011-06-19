@@ -1,11 +1,12 @@
 @Mercury.modalHandlers.insertsnippet = ->
   @element.find('form').submit (event) =>
     event.preventDefault()
+    serializedForm = @element.find('form').serializeObject()
     if Mercury.snippet
       snippet = Mercury.snippet
-      snippet.setOptions(@element.find('form').serializeObject())
+      snippet.setOptions(serializedForm)
       Mercury.snippet = null
     else
-      snippet = Mercury.Snippet.create(@options.snippetName, @element.find('form').serializeObject())
+      snippet = Mercury.Snippet.create(@options.snippetName, serializedForm)
     Mercury.trigger('action', {action: 'insertsnippet', value: snippet})
     @hide()

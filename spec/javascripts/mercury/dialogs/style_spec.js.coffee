@@ -18,6 +18,7 @@ describe "Mercury.dialogHandlers.style", ->
       jasmine.simulate.click($('#bold').get(0))
       expect(spy.argsForCall[1]).toEqual(['action', {action: 'style', value: 'bold'}])
 
+
   describe "when any other element is clicked", ->
 
     it "does nothing", ->

@@ -1,12 +1,13 @@
 @Mercury.modalHandlers.inserttable = ->
   table = @element.find('#table_display table')
+
   # make td's selectable
   table.click (event) =>
     cell = $(event.target)
     table = cell.closest('table')
     table.find('.selected').removeClass('selected')
     cell.addClass('selected')
-    @tableEditor = Mercury.tableEditor(table, cell)
+    Mercury.tableEditor(table, cell)
 
   # select the first td
   firstCell = table.find('td, th').first()
@@ -34,11 +35,11 @@
     table.attr({align: @element.find('#table_alignment').val()})
 
   # set the border
-  @element.find('#table_border').change =>
+  @element.find('#table_border').keyup =>
     table.attr({border: parseInt(@element.find('#table_border').val())})
 
   # set the cellspacing
-  @element.find('#table_spacing').change =>
+  @element.find('#table_spacing').keyup =>
     table.attr({cellspacing: parseInt(@element.find('#table_spacing').val())})
 
   # build the table on form submission
@@ -47,10 +48,9 @@
     table.find('.selected').removeClass('selected')
     table.find('td, th').html('&nbsp;')
 
-    tableHTML = $('<div>').html(table).html()
-    tableHTML = tableHTML.replace(/^\s+|\n/gm, '')
-    tableHTML = tableHTML.replace(/(<\/.*?>|<table.*?>|<tbody>|<tr>)/g, '$1\n')
+    html = $('<div>').html(table).html()
+    value = html.replace(/^\s+|\n/gm, '').replace(/(<\/.*?>|<table.*?>|<tbody>|<tr>)/g, '$1\n')
 
-    Mercury.trigger('action', {action: 'insertHTML', value: tableHTML})
-    Mercury.modal.hide()
+    Mercury.trigger('action', {action: 'insertHTML', value: value})
+    @hide()
 

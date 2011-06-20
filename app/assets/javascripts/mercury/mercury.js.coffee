@@ -45,11 +45,11 @@
 
 
   # Silent mode disables things like asking about unsaved changes before leaving the page.
-  silent: true
+  silent: false
 
 
   # Turning debug mode on will log events and other various things (using console.log if available).
-  debug: true
+  debug: false
 
 
   # Configuration

@@ -104,12 +104,17 @@ The feature list is actually pretty long, so here's a short list that need highl
 
 == Installation
 
-Include the gem in your Gemfile
+Include the gem in your Gemfile and bundle to install the gem.
 
   gem 'mercury-rails'
 
-Then just bundle install and you should be all set.  Browse to any existing content page and prefix it's url with /edit,
-so for instance, localhost:3000/edit/content/page to edit the content on /content/page.
+There's a migration for images that you'll need as well.
+
+  rake mercury_engine:install:migrations
+  rake db:migrate
+
+To access the editor on any page simply browse to any existing content page and prefix it's url with /edit, so for
+instance, localhost:3000/edit/content/page to edit the content on /content/page.
 
 
 == Usage

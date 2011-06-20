@@ -9,7 +9,7 @@ describe "Mercury.modalHandlers.htmleditor", ->
       element: $('#test')
       hide: ->
     Mercury.region =
-      html: -> '<span>html \ncontent</span>'
+      content: -> '<span>html \ncontent</span>'
     Mercury.modalHandlers.htmleditor.call(@modal)
 
   describe "loading", ->

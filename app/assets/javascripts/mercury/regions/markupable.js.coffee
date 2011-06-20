@@ -136,7 +136,7 @@ class @Mercury.Regions.Markupable extends Mercury.Region
       $(event.target).closest('a').attr('target', '_top') if @previewing
 
 
-  html: (value = null, filterSnippets = true) ->
+  content: (value = null, filterSnippets = true) ->
     if value != null
       if $.type(value) == 'string'
         @textarea.val(value)
@@ -167,7 +167,7 @@ class @Mercury.Regions.Markupable extends Mercury.Region
 
 
   htmlAndSelection: ->
-    return {html: @html(null, false), selection: @selection().serialize()}
+    return {html: @content(null, false), selection: @selection().serialize()}
 
 
   pushHistory: (keyCode) ->
@@ -208,9 +208,9 @@ class @Mercury.Regions.Markupable extends Mercury.Region
   # Actions
   @actions: {
 
-    undo: -> @html(@history.undo())
+    undo: -> @content(@history.undo())
 
-    redo: -> @html(@history.redo())
+    redo: -> @content(@history.redo())
 
     insertHTML: (selection, options) ->
       if options.value.get && element = options.value.get(0)

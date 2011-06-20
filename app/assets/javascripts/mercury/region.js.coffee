@@ -46,7 +46,7 @@ class @Mercury.Region
       Mercury.trigger('hide:toolbar', {type: 'snippet', immediately: false})
 
 
-  html: (value = null, filterSnippets = false) ->
+  content: (value = null, filterSnippets = false) ->
     if value != null
       @element.html(value)
     else
@@ -83,7 +83,7 @@ class @Mercury.Region
 
 
   pushHistory: ->
-    @history.push(@html())
+    @history.push(@content())
 
 
   snippets: ->
@@ -98,6 +98,6 @@ class @Mercury.Region
   serialize: ->
     return {
       type: @type,
-      value: @html(null, true)
+      value: @content(null, true)
       snippets: @snippets()
     }

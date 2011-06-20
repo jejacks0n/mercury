@@ -104,9 +104,9 @@ class @Mercury.Regions.Snippetable extends Mercury.Region
   # Actions
   @actions: {
 
-    undo: -> @html(@history.undo())
+    undo: -> @content(@history.undo())
 
-    redo: -> @html(@history.redo())
+    redo: -> @content(@history.redo())
 
     insertsnippet: (options) ->
       snippet = options.value

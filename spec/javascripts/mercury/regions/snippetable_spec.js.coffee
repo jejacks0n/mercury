@@ -278,7 +278,7 @@ describe "Mercury.Regions.Snippetable.actions", ->
   describe ".undo", ->
 
     it "calls undo on the history buffer and sets the content", ->
-      htmlSpy = spyOn(Mercury.Regions.Snippetable.prototype, 'html').andCallFake(=>)
+      htmlSpy = spyOn(Mercury.Regions.Snippetable.prototype, 'content').andCallFake(=>)
       historySpy = spyOn(@region.history, 'undo').andCallFake(=> 'history -1')
       @actions['undo'].call(@region)
       expect(historySpy.callCount).toEqual(1)
@@ -289,7 +289,7 @@ describe "Mercury.Regions.Snippetable.actions", ->
   describe ".redo", ->
 
     it "calls redo on the history buffer and sets the content", ->
-      htmlSpy = spyOn(Mercury.Regions.Snippetable.prototype, 'html').andCallFake(=>)
+      htmlSpy = spyOn(Mercury.Regions.Snippetable.prototype, 'content').andCallFake(=>)
       historySpy = spyOn(@region.history, 'redo').andCallFake(=> 'history +1')
       @actions['redo'].call(@region)
       expect(historySpy.callCount).toEqual(1)

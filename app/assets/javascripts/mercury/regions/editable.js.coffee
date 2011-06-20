@@ -8,7 +8,7 @@ class @Mercury.Regions.Editable extends Mercury.Region
 
   build: ->
     # mozilla: set some initial content so everything works correctly
-    @html('&nbsp;') if $.browser.mozilla && @html() == ''
+    @content('&nbsp;') if $.browser.mozilla && @content() == ''
 
     # set overflow just in case
     @element.data({originalOverflow: @element.css('overflow')})
@@ -100,9 +100,9 @@ class @Mercury.Regions.Editable extends Mercury.Region
       return if @previewing
       return unless Mercury.region == @
       Mercury.changes = true
-      html = @html()
+      content = @content()
       event.preventDefault() if @specialContainer
-      setTimeout((=> @handlePaste(html)), 1)
+      setTimeout((=> @handlePaste(content)), 1)
 
     @element.focus =>
       return if @previewing
@@ -190,7 +190,7 @@ class @Mercury.Regions.Editable extends Mercury.Region
     Mercury.trigger('region:update', {region: @})
 
 
-  html: (value = null, filterSnippets = true, includeMarker = false) ->
+  content: (value = null, filterSnippets = true, includeMarker = false) ->
     if value != null
       # sanitize the html before we insert it
       container = $('<div>').appendTo(@document.createDocumentFragment())
@@ -237,12 +237,12 @@ class @Mercury.Regions.Editable extends Mercury.Region
         element.attr({contenteditable: null, 'data-version': null})
 
       # get the html before removing the markers
-      html = container.html()
+      content = container.html()
 
       # remove the markers from the dom
       selection.removeMarker() if includeMarker
 
-      return html
+      return content
 
 
   togglePreview: ->
@@ -250,7 +250,7 @@ class @Mercury.Regions.Editable extends Mercury.Region
       @element.get(0).contentEditable = true
       @element.css({overflow: 'auto'})
     else
-      @html(@html())
+      @content(@content())
       @element.get(0).contentEditable = false
       @element.css({overflow: @element.data('originalOverflow')})
       @element.blur()
@@ -285,13 +285,13 @@ class @Mercury.Regions.Editable extends Mercury.Region
 
     # if the key code was return, delete, or backspace store now -- unless it was the same as last time
     if knownKeyCode >= 0 && knownKeyCode != @lastKnownKeyCode # || !keyCode
-      @history.push(@html(null, false, true))
+      @history.push(@content(null, false, true))
     else if keyCode
       # set a timeout for pushing to the history
-      @historyTimeout = setTimeout((=> @history.push(@html(null, false, true))), waitTime * 1000)
+      @historyTimeout = setTimeout((=> @history.push(@content(null, false, true))), waitTime * 1000)
     else
       # push to the history immediately
-      @history.push(@html(null, false, true))
+      @history.push(@content(null, false, true))
 
     @lastKnownKeyCode = knownKeyCode
 
@@ -315,31 +315,31 @@ class @Mercury.Regions.Editable extends Mercury.Region
     return element
 
 
-  handlePaste: (prePasteHTML) ->
-    prePasteHTML = prePasteHTML.replace(/^\<br\>/, '')
+  handlePaste: (prePasteContent) ->
+    prePasteContent = prePasteContent.replace(/^\<br\>/, '')
 
     # remove any regions that might have been pasted
     @element.find('.mercury-region').remove()
 
     # handle pasting from ms office etc
-    html = @html()
-    if html.indexOf('<!--StartFragment-->') > -1 || html.indexOf('="mso-') > -1 || html.indexOf('<o:') > -1 || html.indexOf('="Mso') > -1
+    content = @content()
+    if content.indexOf('<!--StartFragment-->') > -1 || content.indexOf('="mso-') > -1 || content.indexOf('<o:') > -1 || content.indexOf('="Mso') > -1
       # clean out all the tags from the pasted contents
-      cleaned = prePasteHTML.singleDiff(@html()).sanitizeHTML()
+      cleaned = prePasteContent.singleDiff(@content()).sanitizeHTML()
       try
         # try to undo and put the cleaned html where the selection was
         @document.execCommand('undo', false, null)
         @execCommand('insertHTML', {value: cleaned})
       catch error
         # remove the pasted html and load up the cleaned contents into a modal
-        @html(prePasteHTML)
+        @content(prePasteContent)
         Mercury.modal '/mercury/modals/sanitizer', {
           title: 'HTML Sanitizer (Starring Clippy)',
           afterLoad: -> @element.find('textarea').val(cleaned.replace(/<br\/>/g, '\n'))
         }
     else if Mercury.config.cleanStylesOnPaste
       # strip styles
-      pasted = prePasteHTML.singleDiff(@html())
+      pasted = prePasteContent.singleDiff(@content())
 
       container = $('<div>').appendTo(@document.createDocumentFragment()).html(pasted)
       container.find('[style]').attr({style: null})
@@ -370,9 +370,9 @@ class @Mercury.Regions.Editable extends Mercury.Region
 
     decreaseRowspan: -> Mercury.tableEditor.decreaseRowspan()
 
-    undo: -> @html(@history.undo())
+    undo: -> @content(@history.undo())
 
-    redo: -> @html(@history.redo())
+    redo: -> @content(@history.redo())
 
     removeFormatting: (selection) -> selection.insertTextNode(selection.textContent())
 
@@ -382,7 +382,7 @@ class @Mercury.Regions.Editable extends Mercury.Region
 
     style: (selection, options) -> selection.wrap("<span class=\"#{options.value}\">", true)
 
-    replaceHTML: (selection, options) -> @html(options.value)
+    replaceHTML: (selection, options) -> @content(options.value)
 
     insertImage: (selection, options) -> @execCommand('insertHTML', {value: $('<img/>', options.value)})
 

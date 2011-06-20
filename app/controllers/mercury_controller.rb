@@ -1,4 +1,4 @@
-class Mercury::MercuryController < ActionController::Base
+class MercuryController < ActionController::Base
   protect_from_forgery
 
   def edit

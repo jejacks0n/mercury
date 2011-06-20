@@ -1,4 +1,4 @@
-class Mercury::ImagesController < Mercury::MercuryController
+class ImagesController < MercuryController
 
   respond_to :json
 

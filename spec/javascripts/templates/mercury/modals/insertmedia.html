@@ -1,0 +1,35 @@
+<form>
+  <label for="media_image_url"><input id="checkbox1" name="media_type" type="radio" value="image_url" checked="checked"/>URL</label>
+  <input class="selectable" id="media_image_url" name="media[image_url]" type="text"/>
+
+  <label for="media_youtube_url"><input id="checkbox2" name="media_type" type="radio" value="youtube_url"/>YouTube Share URL</label>
+  <input class="selectable" id="media_youtube_url" name="media[youtube_url]" type="text"/>
+
+  <label for="media_vimeo_url"><input name="media_type" type="radio" value="vimeo_url"/>Vimeo URL</label>
+  <input class="selectable" id="media_vimeo_url" name="media[vimeo_url]" type="text"/>
+
+  <div class="media-options" id="image_url">
+    <select id="media_image_alignment" name="media[image_alignment]">
+      <option value="">None</option>
+      <option value="left">Left</option>
+      <option value="right">Right</option>
+      <option value="top">Top</option>
+      <option value="middle">Middle</option>
+      <option value="bottom">Bottom</option>
+      <option value="absmiddle">Absolute Middle</option>
+      <option value="absbottom">Absolute Bottom</option>
+    </select>
+  </div>
+
+  <div class="media-options" id="youtube_url" style="display:none">
+    <input id="media_youtube_width" name="media[youtube_width]" type="text" value="560"/>
+    <input id="media_youtube_height" name="media[youtube_height]" type="text" value="349"/>
+  </div>
+
+  <div class="media-options" id="vimeo_url" style="display:none">
+    <input id="media_vimeo_width" name="media[vimeo_width]" type="text" value="400"/>
+    <input id="media_vimeo_height" name="media[vimeo_height]" type="text" value="225"/>
+  </div>
+
+  <input id="submit" type="submit"/>
+</form>

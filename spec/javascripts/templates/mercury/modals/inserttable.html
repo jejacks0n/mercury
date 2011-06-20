@@ -1,28 +1,27 @@
 <form>
-  <div id='table_display'>
-    <table id="table" border='1' cellspacing='0'><tr><td id="cell1"></td></tr><tr><td id="cell2"></td></tr></table>
+  <div id="table_display">
+    <table id="table" border="1" cellspacing="0"><tr><td id="cell1"></td></tr><tr><td id="cell2"></td></tr></table>
   </div>
-  <div id='table_options'>
-    <input class='action' name='insertrowbefore' type='button' value='Add Before'>
-    <input class='action' name='insertrowafter' type='button' value='Add After'>
-    <input class='action' name='deleterow' type='button' value='Remove'>
-    <input class='action' name='insertcolumnbefore' type='button' value='Add Before'>
-    <input class='action' name='insertcolumnafter' type='button' value='Add After'>
-    <input class='action' name='deletecolumn' type='button' value='Remove'>
-    <input class='action' name='increaserowspan' type='button' value='+'>
-    <input class='action' name='decreaserowspan' type='button' value='-'>
-    <input class='action' name='increasecolspan' type='button' value='+'>
-    <input class='action' name='decreasecolspan' type='button' value='-'>
 
-    <select id="table_alignment" name="table[alignment]">
-      <option value="">None</option>
-      <option value="left">Left</option>
-      <option value="right" id="right_option">Right</option>
-    </select>
+  <input class="action" name="insertrowbefore" type="button" value="Add Before">
+  <input class="action" name="insertrowafter" type="button" value="Add After">
+  <input class="action" name="deleterow" type="button" value="Remove">
+  <input class="action" name="insertcolumnbefore" type="button" value="Add Before">
+  <input class="action" name="insertcolumnafter" type="button" value="Add After">
+  <input class="action" name="deletecolumn" type="button" value="Remove">
+  <input class="action" name="increaserowspan" type="button" value="+">
+  <input class="action" name="decreaserowspan" type="button" value="-">
+  <input class="action" name="increasecolspan" type="button" value="+">
+  <input class="action" name="decreasecolspan" type="button" value="-">
 
-    <input id="table_border" type="text" value="1"/>
-    <input id="table_spacing" type="text" value="0"/>
+  <select id="table_alignment" name="table[alignment]">
+    <option value="">None</option>
+    <option value="left">Left</option>
+    <option value="right" id="right_option">Right</option>
+  </select>
 
-    <input id="submit" type="submit"/>
-  </div>
+  <input id="table_border" type="text" value="1"/>
+  <input id="table_spacing" type="text" value="0"/>
+
+  <input id="submit" type="submit"/>
 </form>

@@ -22,7 +22,7 @@
     selection = Mercury.region.selection()
 
     # if we're editing a link prefill the information
-    container = selection.commonAncestor(true).closest('a') if selection.commonAncestor
+    container = selection.commonAncestor(true).closest('a') if selection && selection.commonAncestor
     if container && container.length
       existingLink = container
 
@@ -55,9 +55,6 @@
         @element.find('#link_popup_height').val(href.match(/height=(\d+),/)[1])
         @element.find('#popup_options').show()
 
-    # get the text content
-    @element.find('#link_text').val(selection.textContent())
-
   # build the link on form submission
   @element.find('form').submit (event) =>
     event.preventDefault()
@@ -68,7 +65,7 @@
 
     switch type
       when 'existing_bookmark' then attrs = {href: "##{@element.find('#link_existing_bookmark').val()}"}
-      when 'new_bookmark' then attrs = {name: "##{@element.find('#link_new_bookmark').val()}"}
+      when 'new_bookmark' then attrs = {name: "#{@element.find('#link_new_bookmark').val()}"}
       else attrs = {href: @element.find("#link_#{type}").val()}
 
     switch target
@@ -89,4 +86,4 @@
     else
       Mercury.trigger('action', {action: 'insertLink', value: value})
 
-    Mercury.modal.hide()
+    @hide()

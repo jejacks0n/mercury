@@ -1,0 +1,30 @@
+<form>
+  <fieldset id="link_text_container">
+    <input id="link_text" name="link[text]" type="text"/>
+  </fieldset>
+
+  <label for="link_external_url"><input id="checkbox1" name="link_type" type="radio" value="external_url" checked="checked"/>URL</label>
+  <input class="selectable" id="link_external_url" name="link[external_url]" type="text"/>
+
+  <label for="link_existing_bookmark"><input id="checkbox2" name="link_type" type="radio" value="existing_bookmark"/>Existing Links</label>
+  <select class="selectable" id="link_existing_bookmark" name="link[existing_bookmark]"></select>
+
+  <label for="link_new_bookmark"><input name="link_type" type="radio" value="new_bookmark"/>Bookmark</label>
+  <input class="selectable" id="link_new_bookmark" name="link[new_bookmark]" type="text"/>
+
+  <select id="link_target" name="link[target]">
+    <option value="">Self (the same window or tab)</option>
+    <option value="_blank">Blank (a new window or tab)</option>
+    <option value="_top">Top (removes any frames)</option>
+    <option value="popup">Popup Window (javascript new window popup)</option>
+  </select>
+
+  <div class="link-target-options" id="popup_options" style="display:none">
+    <input id="link_popup_width" name="link[popup_width]" type="text"/>
+    <input id="link_popup_height" name="link[popup_height]" type="text"/>
+  </div>
+
+  <input id="submit" type="submit"/>
+</form>
+<a name="link1">Link One</a>
+<a name="link2">Link Two</a>

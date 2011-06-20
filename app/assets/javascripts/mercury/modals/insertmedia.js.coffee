@@ -26,14 +26,14 @@
       if src.indexOf('http://www.youtube.com') > -1
         # it's a youtube video
         @element.find('#media_youtube_url').val("http://youtu.be/#{src.match(/\/embed\/(\w+)/)[1]}")
-        @element.find('#media_youtube_width').val(iframe.attr('width'))
-        @element.find('#media_youtube_height').val(iframe.attr('height'))
+        @element.find('#media_youtube_width').val(iframe.width())
+        @element.find('#media_youtube_height').val(iframe.height())
         @element.find('#media_youtube_url').focus()
       else if src.indexOf('http://player.vimeo.com') > -1
         # it's a vimeo video
         @element.find('#media_vimeo_url').val("http://vimeo.com/#{src.match(/\/video\/(\w+)/)[1]}")
-        @element.find('#media_vimeo_width').val(iframe.attr('width'))
-        @element.find('#media_vimeo_height').val(iframe.attr('height'))
+        @element.find('#media_vimeo_width').val(iframe.width())
+        @element.find('#media_vimeo_height').val(iframe.height())
         @element.find('#media_vimeo_url').focus()
 
   # build the image or youtube embed on form submission
@@ -64,9 +64,9 @@
         value = $('<iframe>', {
           width: @element.find('#media_vimeo_width').val() || 400,
           height: @element.find('#media_vimeo_height').val() || 225,
-          src: "http://player.vimeo.com/video/#{code}?title=1&amp;byline=1&amp;portrait=0&amp;color=ffffff",
+          src: "http://player.vimeo.com/video/#{code}?title=1&byline=1&portrait=0&color=ffffff",
           frameborder: 0,
         })
         Mercury.trigger('action', {action: 'insertHTML', value: value})
 
-    Mercury.modal.hide()
+    @hide()

@@ -1,4 +1,4 @@
-@Mercury.modalHandlers.insertlink = ->
+@Mercury.modalHandlers.insertLink = ->
   # make the inputs work with the radio buttons
   @element.find('label input').click (event) ->
     $(@).closest('label').next('.selectable').focus()

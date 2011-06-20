@@ -123,7 +123,7 @@ class @Mercury.Regions.Editable extends Mercury.Region
       image = $(event.target).closest('img', @element)
       if image.length
         @selection().selectNode(image.get(0), true)
-        Mercury.trigger('button', {action: 'insertmedia'})
+        Mercury.trigger('button', {action: 'insertMedia'})
 
     @element.mouseup =>
       return if @previewing
@@ -350,33 +350,33 @@ class @Mercury.Regions.Editable extends Mercury.Region
 
   # Custom actions (eg. things that execCommand doesn't do, or doesn't do well)
   @actions: {
-    insertrowbefore: -> Mercury.tableEditor.addRow('before')
+    insertRowBefore: -> Mercury.tableEditor.addRow('before')
 
-    insertrowafter: -> Mercury.tableEditor.addRow('after')
+    insertRowAfter: -> Mercury.tableEditor.addRow('after')
 
-    insertcolumnbefore: -> Mercury.tableEditor.addColumn('before')
+    insertColumnBefore: -> Mercury.tableEditor.addColumn('before')
 
-    insertcolumnafter: -> Mercury.tableEditor.addColumn('after')
+    insertColumnAfter: -> Mercury.tableEditor.addColumn('after')
 
-    deletecolumn: -> Mercury.tableEditor.removeColumn()
+    deleteColumn: -> Mercury.tableEditor.removeColumn()
 
-    deleterow: -> Mercury.tableEditor.removeRow()
+    deleteRow: -> Mercury.tableEditor.removeRow()
 
-    increasecolspan: -> Mercury.tableEditor.increaseColspan()
+    increaseColspan: -> Mercury.tableEditor.increaseColspan()
 
-    decreasecolspan: -> Mercury.tableEditor.decreaseColspan()
+    decreaseColspan: -> Mercury.tableEditor.decreaseColspan()
 
-    increaserowspan: -> Mercury.tableEditor.increaseRowspan()
+    increaseRowspan: -> Mercury.tableEditor.increaseRowspan()
 
-    decreaserowspan: -> Mercury.tableEditor.decreaseRowspan()
+    decreaseRowspan: -> Mercury.tableEditor.decreaseRowspan()
 
     undo: -> @html(@history.undo())
 
     redo: -> @html(@history.redo())
 
-    removeformatting: (selection) -> selection.insertTextNode(selection.textContent())
+    removeFormatting: (selection) -> selection.insertTextNode(selection.textContent())
 
-    backcolor: (selection, options) -> selection.wrap("<span style=\"background-color:#{options.value.toHex()}\">", true)
+    backColor: (selection, options) -> selection.wrap("<span style=\"background-color:#{options.value.toHex()}\">", true)
 
     overline: (selection) -> selection.wrap('<span style="text-decoration:overline">', true)
 
@@ -402,12 +402,12 @@ class @Mercury.Regions.Editable extends Mercury.Region
         selection.selectNode(existing.get(0))
       selection.insertNode(snippet.getHTML(@document))
 
-    editsnippet: ->
+    editSnippet: ->
       return unless @snippet
       snippet = Mercury.Snippet.find(@snippet.data('snippet'))
       snippet.displayOptions()
 
-    removesnippet: ->
+    removeSnippet: ->
       @snippet.remove() if @snippet
       Mercury.trigger('hide:toolbar', {type: 'snippet', immediately: true})
   }

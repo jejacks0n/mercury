@@ -137,15 +137,15 @@
           undo:                ['Undo', 'Undo your last action']
           redo:                ['Redo', 'Redo your last action']
           sep:                 ' '
-        insertlink:            ['Link', 'Insert Link', {modal: '/mercury/modals/link', regions: ['editable', 'markupable']}]
-        insertmedia:           ['Media', 'Insert Media (images and videos)', {modal: '/mercury/modals/media', regions: ['editable', 'markupable']}]
-        inserttable:           ['Table', 'Insert Table', {modal: '/mercury/modals/table', regions: ['editable', 'markupable']}]
-        insertcharacter:       ['Character', 'Special Characters', {modal: '/mercury/modals/character', regions: ['editable', 'markupable']}]
-        objectspanel:          ['Snippet', 'Snippet Panel', {panel: '/mercury/panels/snippets'}]
+        insertLink:            ['Link', 'Insert Link', {modal: '/mercury/modals/link', regions: ['editable', 'markupable']}]
+        insertMedia:           ['Media', 'Insert Media (images and videos)', {modal: '/mercury/modals/media', regions: ['editable', 'markupable']}]
+        insertTable:           ['Table', 'Insert Table', {modal: '/mercury/modals/table', regions: ['editable', 'markupable']}]
+        insertCharacter:       ['Character', 'Special Characters', {modal: '/mercury/modals/character', regions: ['editable', 'markupable']}]
+        objectsPanel:          ['Snippet', 'Snippet Panel', {panel: '/mercury/panels/snippets'}]
         sep2:                  ' '
-        historypanel:          ['History', 'Page Version History', {panel: '/mercury/panels/history'}]
+        historyPanel:          ['History', 'Page Version History', {panel: '/mercury/panels/history'}]
         sep3:                  ' '
-        notespanel:            ['Notes', 'Page Notes', {panel: '/mercury/panels/notes'}]
+        notesPanel:            ['Notes', 'Page Notes', {panel: '/mercury/panels/notes'}]
 
       editable:
         _regions:              ['editable', 'markupable']
@@ -156,9 +156,9 @@
           sep2:                '-'
         colors:
           _regions:            ['editable']
-          backcolor:           ['Background Color', null, {palette: '/mercury/palettes/backcolor', context: true, preload: true}]
+          backColor:           ['Background Color', null, {palette: '/mercury/palettes/backcolor', context: true, preload: true}]
           sep1:                ' '
-          forecolor:           ['Text Color', null, {palette: '/mercury/palettes/forecolor', context: true, preload: true}]
+          foreColor:           ['Text Color', null, {palette: '/mercury/palettes/forecolor', context: true, preload: true}]
           sep2:                '-'
         decoration:
           bold:                ['Bold', null, {context: true}]
@@ -173,14 +173,14 @@
           sep:                 '-'
         justify:
           _regions:            ['editable']
-          justifyleft:         ['Align Left', null, {context: true}]
-          justifycenter:       ['Center', null, {context: true}]
-          justifyright:        ['Align Right', null, {context: true}]
-          justifyfull:         ['Justify Full', null, {context: true}]
+          justifyLeft:         ['Align Left', null, {context: true}]
+          justifyCenter:       ['Center', null, {context: true}]
+          justifyRight:        ['Align Right', null, {context: true}]
+          justifyFull:         ['Justify Full', null, {context: true}]
           sep:                 '-'
         list:
-          insertunorderedlist: ['Unordered List', null, {context: true}]
-          insertorderedlist:   ['Numbered List', null, {context: true}]
+          insertUnorderedList: ['Unordered List', null, {context: true}]
+          insertOrderedList:   ['Numbered List', null, {context: true}]
           sep:                 '-'
         indent:
           outdent:             ['Decrease Indentation', null]
@@ -189,35 +189,35 @@
         table:
           _context:            true
           _regions:            ['editable']
-          insertrowbefore:     ['Insert Table Row', 'Insert a table row before the cursor']
-          insertrowafter:      ['Insert Table Row', 'Insert a table row after the cursor']
-          deleterow:           ['Delete Table Row', 'Delete this table row']
-          insertcolumnbefore:  ['Insert Table Column', 'Insert a table column before the cursor']
-          insertcolumnafter:   ['Insert Table Column', 'Insert a table column after the cursor']
-          deletecolumn:        ['Delete Table Column', 'Delete this table column']
+          insertRowBefore:     ['Insert Table Row', 'Insert a table row before the cursor']
+          insertRowAfter:      ['Insert Table Row', 'Insert a table row after the cursor']
+          deleteRow:           ['Delete Table Row', 'Delete this table row']
+          insertColumnBefore:  ['Insert Table Column', 'Insert a table column before the cursor']
+          insertColumnAfter:   ['Insert Table Column', 'Insert a table column after the cursor']
+          deleteColumn:        ['Delete Table Column', 'Delete this table column']
           sep1:                ' '
-          increasecolspan:     ['Increase Cell Columns', 'Increase the cells colspan']
-          decreasecolspan:     ['Decrease Cell Columns', 'Decrease the cells colspan and add a new cell']
-          increaserowspan:     ['Increase Cell Rows', 'Increase the cells rowspan']
-          decreaserowspan:     ['Decrease Cell Rows', 'Decrease the cells rowspan and add a new cell']
+          increaseColspan:     ['Increase Cell Columns', 'Increase the cells colspan']
+          decreaseColspan:     ['Decrease Cell Columns', 'Decrease the cells colspan and add a new cell']
+          increaseRowspan:     ['Increase Cell Rows', 'Increase the cells rowspan']
+          decreaseRowspan:     ['Decrease Cell Rows', 'Decrease the cells rowspan and add a new cell']
           sep2:                '-'
         rules:
-          horizontalrule:      ['Horizontal Rule', 'Insert a horizontal rule']
+          horizontalRule:      ['Horizontal Rule', 'Insert a horizontal rule']
           sep1:                '-'
         formatting:
           _regions:            ['editable']
-          removeformatting:    ['Remove Formatting', 'Remove formatting for the selection']
+          removeFormatting:    ['Remove Formatting', 'Remove formatting for the selection']
           sep2:                ' '
         editors:
           _regions:            ['editable']
-          htmleditor:          ['Edit HTML', 'Edit the HTML content'] # example behavior below
+          htmlEditor:          ['Edit HTML', 'Edit the HTML content'] # example behavior below
 
       snippetable:
         _custom:               true
         actions:
-          editsnippet:         ['Edit Snippet Settings', null]
+          editSnippet:         ['Edit Snippet Settings', null]
           sep1:                ' '
-          removesnippet:       ['Remove Snippet', null]
+          removeSnippet:       ['Remove Snippet', null]
 
 
     # Behaviors
@@ -230,13 +230,13 @@
     # callback functions are executed within the scope of the given region, so you have access to all it's methods.
     # todo: figure out how this impacts different regions.. should they go away, or should they get moved into region types?
     behaviors:
-      horizontalrule: (selection) -> selection.replace('<hr/>')
+      horizontalRule: (selection) -> selection.replace('<hr/>')
 
-      htmleditor: ->
+      htmlEditor: ->
         Mercury.modal '/mercury/modals/htmleditor', {
           title: 'HTML Editor',
           fullHeight: true,
-          handler: 'htmleditor'
+          handler: 'htmlEditor'
         }
 
 

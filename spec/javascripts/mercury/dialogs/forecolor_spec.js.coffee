@@ -1,12 +1,12 @@
 require '/assets/mercury/mercury.js'
 
-describe "Mercury.dialogHandlers.forecolor", ->
+describe "Mercury.dialogHandlers.foreColor", ->
 
   template 'mercury/dialogs/forecolor.html'
 
   beforeEach ->
     @dialog = {element: $('#test'), button: $('#button')}
-    Mercury.dialogHandlers.forecolor.call(@dialog)
+    Mercury.dialogHandlers.foreColor.call(@dialog)
 
   describe "when a .picker or .last-picked element is clicked", ->
 
@@ -28,7 +28,7 @@ describe "Mercury.dialogHandlers.forecolor", ->
       spy = spyOn(Mercury, 'trigger').andCallFake(=>)
       jasmine.simulate.click($('#white').get(0))
       expect(spy.callCount).toEqual(1)
-      expect(spy.argsForCall[0]).toEqual(['action', {action: 'forecolor', value: 'rgb(255, 255, 255)'}])
+      expect(spy.argsForCall[0]).toEqual(['action', {action: 'foreColor', value: 'rgb(255, 255, 255)'}])
 
 
   describe "when any other element is clicked", ->

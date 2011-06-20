@@ -223,9 +223,9 @@ class @Mercury.Regions.Markupable extends Mercury.Region
     insertLink: (selection, options) ->
       selection.replace("[#{options.value.content}](#{options.value.attrs.href} 'optional title')", true)
 
-    insertunorderedlist: (selection) -> selection.addList('unordered')
+    insertUnorderedList: (selection) -> selection.addList('unordered')
 
-    insertorderedlist: (selection) -> selection.addList('ordered')
+    insertOrderedList: (selection) -> selection.addList('ordered')
 
     style: (selection, options) -> selection.wrap("<span class=\"#{options.value}\">", '</span>')
 
@@ -261,7 +261,7 @@ class @Mercury.Regions.Markupable extends Mercury.Region
     outdent: (selection) ->
       selection.unWrapLine('> ', '', false, true)
 
-    horizontalrule: (selection) -> selection.replace('\n- - -\n')
+    horizontalRule: (selection) -> selection.replace('\n- - -\n')
 
     insertsnippet: (selection, options) ->
       snippet = options.value

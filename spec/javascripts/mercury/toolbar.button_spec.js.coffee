@@ -260,20 +260,20 @@ describe "Mercury.Toolbar.Button.contexts", ->
     @element = $('#context_button')
 
   it "handles background color", ->
-    @contexts.backcolor.call(@, $('#context_backcolor'), @region)
+    @contexts.backColor.call(@, $('#context_backcolor'), @region)
     expect(@element.css('background-color')).toEqual('rgb(255, 0, 0)')
 
-    @contexts.backcolor.call(@, $('#context_none'), @region)
+    @contexts.backColor.call(@, $('#context_none'), @region)
     if $.browser.mozilla
       expect(@element.css('background-color')).toEqual('transparent')
     else
       expect(@element.css('background-color')).toEqual('rgba(0, 0, 0, 0)')
 
   it "handles foreground color", ->
-    @contexts.forecolor.call(@, $('#context_forecolor'), @region)
+    @contexts.foreColor.call(@, $('#context_forecolor'), @region)
     expect(@element.css('background-color')).toEqual('rgb(0, 255, 0)')
 
-    @contexts.forecolor.call(@, $('#context_none'), @region)
+    @contexts.foreColor.call(@, $('#context_none'), @region)
     expect(@element.css('background-color')).toEqual('rgb(0, 0, 0)')
 
   it "knows when something is bold", ->
@@ -313,28 +313,28 @@ describe "Mercury.Toolbar.Button.contexts", ->
     expect(@contexts.superscript.call(@, $('#context_none'), @region)).toEqual(false)
 
   it "knows when something is justified left", ->
-    expect(@contexts.justifyleft.call(@, $('#context_justifyleft span'), @region)).toEqual(true)
-    expect(@contexts.justifyleft.call(@, $('#context_none'), @region)).toEqual(false)
+    expect(@contexts.justifyLeft.call(@, $('#context_justifyLeft span'), @region)).toEqual(true)
+    expect(@contexts.justifyLeft.call(@, $('#context_none'), @region)).toEqual(false)
 
   it "knows when something is justified center", ->
-    expect(@contexts.justifycenter.call(@, $('#context_justifycenter span'), @region)).toEqual(true)
-    expect(@contexts.justifycenter.call(@, $('#context_none'), @region)).toEqual(false)
+    expect(@contexts.justifyCenter.call(@, $('#context_justifyCenter span'), @region)).toEqual(true)
+    expect(@contexts.justifyCenter.call(@, $('#context_none'), @region)).toEqual(false)
 
   it "knows when something is justified right", ->
-    expect(@contexts.justifyright.call(@, $('#context_justifyright span'), @region)).toEqual(true)
-    expect(@contexts.justifyright.call(@, $('#context_none'), @region)).toEqual(false)
+    expect(@contexts.justifyRight.call(@, $('#context_justifyRight span'), @region)).toEqual(true)
+    expect(@contexts.justifyRight.call(@, $('#context_none'), @region)).toEqual(false)
 
   it "knows when something is justified fully", ->
-    expect(@contexts.justifyfull.call(@, $('#context_justifyfull span'), @region)).toEqual(true)
-    expect(@contexts.justifyfull.call(@, $('#context_none'), @region)).toEqual(false)
+    expect(@contexts.justifyFull.call(@, $('#context_justifyFull span'), @region)).toEqual(true)
+    expect(@contexts.justifyFull.call(@, $('#context_none'), @region)).toEqual(false)
 
   it "knows when something is inside an ordered list", ->
-    expect(@contexts.insertorderedlist.call(@, $('#context_orderedlist span'), @region)).toEqual(true)
-    expect(@contexts.insertorderedlist.call(@, $('#context_none'), @region)).toEqual(false)
+    expect(@contexts.insertOrderedList.call(@, $('#context_orderedlist span'), @region)).toEqual(true)
+    expect(@contexts.insertOrderedList.call(@, $('#context_none'), @region)).toEqual(false)
 
   it "knows when something is inside an unordered list", ->
-    expect(@contexts.insertunorderedlist.call(@, $('#context_unorderedlist span'), @region)).toEqual(true)
-    expect(@contexts.insertunorderedlist.call(@, $('#context_none'), @region)).toEqual(false)
+    expect(@contexts.insertUnorderedList.call(@, $('#context_unorderedlist span'), @region)).toEqual(true)
+    expect(@contexts.insertUnorderedList.call(@, $('#context_none'), @region)).toEqual(false)
 
 # todo: fix in jquery
 #  it "understands nested text-decoration styles", ->

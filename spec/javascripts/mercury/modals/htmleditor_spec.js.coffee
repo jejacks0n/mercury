@@ -1,6 +1,6 @@
 require '/assets/mercury/mercury.js'
 
-describe "Mercury.modalHandlers.htmleditor", ->
+describe "Mercury.modalHandlers.htmlEditor", ->
 
   template 'mercury/modals/htmleditor.html'
 
@@ -10,7 +10,7 @@ describe "Mercury.modalHandlers.htmleditor", ->
       hide: ->
     Mercury.region =
       html: -> '<span>html \ncontent</span>'
-    Mercury.modalHandlers.htmleditor.call(@modal)
+    Mercury.modalHandlers.htmlEditor.call(@modal)
 
   describe "loading", ->
 

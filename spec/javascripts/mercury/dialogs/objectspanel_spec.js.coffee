@@ -1,12 +1,12 @@
 require '/assets/mercury/mercury.js'
 
-describe "Mercury.dialogHandlers.backcolor", ->
+describe "Mercury.dialogHandlers.backColor", ->
 
   template 'mercury/dialogs/objectspanel.html'
 
   beforeEach ->
     @dialog = {element: $('#test'), button: $('#button')}
-    Mercury.dialogHandlers.objectspanel.call(@dialog)
+    Mercury.dialogHandlers.objectsPanel.call(@dialog)
 
   describe "filter", ->
 

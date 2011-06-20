@@ -1,4 +1,4 @@
-@Mercury.modalHandlers.inserttable = ->
+@Mercury.modalHandlers.insertTable = ->
   table = @element.find('#table_display table')
 
   # make td's selectable
@@ -19,16 +19,16 @@
     action = $(event.target).attr('name')
     switch action
 
-      when 'insertrowbefore' then Mercury.tableEditor.addRow('before')
-      when 'insertrowafter' then Mercury.tableEditor.addRow('after')
-      when 'deleterow' then Mercury.tableEditor.removeRow()
-      when 'insertcolumnbefore' then Mercury.tableEditor.addColumn('before')
-      when 'insertcolumnafter' then Mercury.tableEditor.addColumn('after')
-      when 'deletecolumn' then Mercury.tableEditor.removeColumn()
-      when 'increasecolspan' then Mercury.tableEditor.increaseColspan()
-      when 'decreasecolspan' then Mercury.tableEditor.decreaseColspan()
-      when 'increaserowspan' then Mercury.tableEditor.increaseRowspan()
-      when 'decreaserowspan' then Mercury.tableEditor.decreaseRowspan()
+      when 'insertRowBefore' then Mercury.tableEditor.addRow('before')
+      when 'insertRowAfter' then Mercury.tableEditor.addRow('after')
+      when 'deleteRow' then Mercury.tableEditor.removeRow()
+      when 'insertColumnBefore' then Mercury.tableEditor.addColumn('before')
+      when 'insertColumnAfter' then Mercury.tableEditor.addColumn('after')
+      when 'deleteColumn' then Mercury.tableEditor.removeColumn()
+      when 'increaseColspan' then Mercury.tableEditor.increaseColspan()
+      when 'decreaseColspan' then Mercury.tableEditor.decreaseColspan()
+      when 'increaseRowspan' then Mercury.tableEditor.increaseRowspan()
+      when 'decreaseRowspan' then Mercury.tableEditor.decreaseRowspan()
 
   # set the alignment
   @element.find('#table_alignment').change =>

@@ -1,6 +1,6 @@
 require '/assets/mercury/mercury.js'
 
-describe "Mercury.modalHandlers.insertmedia", ->
+describe "Mercury.modalHandlers.insertMedia", ->
 
   template 'mercury/modals/insertmedia.html'
 
@@ -14,7 +14,7 @@ describe "Mercury.modalHandlers.insertmedia", ->
   describe "clicking on a radio button (in a label)", ->
 
     beforeEach ->
-      Mercury.modalHandlers.insertmedia.call(@modal)
+      Mercury.modalHandlers.insertMedia.call(@modal)
 
     it "focuses the next input with a selectable class", ->
       spy = spyOn($.fn, 'focus').andCallFake(=>)
@@ -24,7 +24,7 @@ describe "Mercury.modalHandlers.insertmedia", ->
   describe "focusing an input", ->
 
     beforeEach ->
-      Mercury.modalHandlers.insertmedia.call(@modal)
+      Mercury.modalHandlers.insertMedia.call(@modal)
 
     it "checks the corresponding checkbox", ->
       $('#media_youtube_url').focus()
@@ -53,7 +53,7 @@ describe "Mercury.modalHandlers.insertmedia", ->
         @focusSpy = spyOn($.fn, 'focus').andCallThrough()
         @selection = {is: -> $('<img>', {src: '/foo.gif', align: 'right'})}
         Mercury.region = selection: => @selection
-        Mercury.modalHandlers.insertmedia.call(@modal)
+        Mercury.modalHandlers.insertMedia.call(@modal)
 
       it "pre-fills the image url", ->
         expect($('#media_image_url').val()).toEqual('/foo.gif')
@@ -71,7 +71,7 @@ describe "Mercury.modalHandlers.insertmedia", ->
         @focusSpy = spyOn($.fn, 'focus').andCallThrough()
         @selection = {is: -> $('<iframe>', {src: 'http://www.youtube.com/embed/foo?wmode=transparent', style: 'width:100px;height:42px'})}
         Mercury.region = selection: => @selection
-        Mercury.modalHandlers.insertmedia.call(@modal)
+        Mercury.modalHandlers.insertMedia.call(@modal)
 
       it "pre-fills the url", ->
         expect($('#media_youtube_url').val()).toEqual('http://youtu.be/foo')
@@ -91,7 +91,7 @@ describe "Mercury.modalHandlers.insertmedia", ->
         @focusSpy = spyOn($.fn, 'focus').andCallThrough()
         @selection = {is: -> $('<iframe>', {src: 'http://player.vimeo.com/video/foo?title=1&byline=1&portrait=0&color=ffffff', style: 'width:100px;height:42px'})}
         Mercury.region = selection: => @selection
-        Mercury.modalHandlers.insertmedia.call(@modal)
+        Mercury.modalHandlers.insertMedia.call(@modal)
 
       it "pre-fills the url", ->
         expect($('#media_vimeo_url').val()).toEqual('http://vimeo.com/foo')
@@ -109,7 +109,7 @@ describe "Mercury.modalHandlers.insertmedia", ->
   describe "submitting", ->
 
     beforeEach ->
-      Mercury.modalHandlers.insertmedia.call(@modal)
+      Mercury.modalHandlers.insertMedia.call(@modal)
       @triggerSpy = spyOn(Mercury, 'trigger').andCallFake(=>)
 
     it "hides the modal", ->

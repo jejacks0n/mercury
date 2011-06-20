@@ -114,10 +114,10 @@
   }
 }
 /*
- * Specific Modals (eg. htmleditor)
+ * Specific Modals (eg. htmlEditor)
  *----------------------------------------------------------------------------*/
-/* htmleditor */
-#mercury_htmleditor {
+/* htmlEditor */
+#mercury_htmlEditor {
   textarea {
     margin: 0 0 -2px 0;
     padding: 0;
@@ -143,8 +143,8 @@
     white-space: pre;
   }
 }
-/* insertcharacter */
-#mercury_insertcharacter {
+/* insertCharacter */
+#mercury_insertCharacter {
   .character {
     float: left;
     width: 20px;

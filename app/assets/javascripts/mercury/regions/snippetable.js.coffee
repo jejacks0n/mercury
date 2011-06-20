@@ -115,12 +115,12 @@ class @Mercury.Regions.Snippetable extends Mercury.Region
       else
         @element.append(snippet.getHTML(@document, => @pushHistory()))
 
-    editsnippet: ->
+    editSnippet: ->
       return unless @snippet
       snippet = Mercury.Snippet.find(@snippet.data('snippet'))
       snippet.displayOptions()
 
-    removesnippet: ->
+    removeSnippet: ->
       @snippet.remove() if @snippet
       Mercury.trigger('hide:toolbar', {type: 'snippet', immediately: true})
 

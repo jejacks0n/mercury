@@ -335,34 +335,34 @@ describe "Mercury.Regions.Snippetable.actions", ->
         expect(spy.callCount).toEqual(1)
 
 
-  describe ".editsnippet", ->
+  describe ".editSnippet", ->
 
     beforeEach ->
       @region.snippet = $('#snippetable_region2 .mercury-snippet')
 
     it "finds and displays the options for the given snippet", ->
       spy = spyOn(Mercury.Snippet.prototype, 'displayOptions')
-      @actions['editsnippet'].call(@region)
+      @actions['editSnippet'].call(@region)
       expect(spy.callCount).toEqual(1)
 
     it "does nothing if there's no active snippet (eg. hovered over)", ->
       @region.snippet = null
       spy = spyOn(Mercury.Snippet.prototype, 'displayOptions')
-      @actions['editsnippet'].call(@region)
+      @actions['editSnippet'].call(@region)
       expect(spy.callCount).toEqual(0)
 
 
-  describe ".removesnippet", ->
+  describe ".removeSnippet", ->
 
     beforeEach ->
       @region.snippet = $('#snippetable_region2 .mercury-snippet')
 
     it "removes the snippet if there's an active one", ->
-      @actions['removesnippet'].call(@region)
+      @actions['removeSnippet'].call(@region)
       expect($('#snippetable_region2 .mercury-snippet').length).toEqual(0)
 
     it "triggers the hide:toolbar event", ->
       spy = spyOn(Mercury, 'trigger').andCallFake(=>)
-      @actions['removesnippet'].call(@region)
+      @actions['removeSnippet'].call(@region)
       expect(spy.callCount).toEqual(1)
       expect(spy.argsForCall[0]).toEqual(['hide:toolbar', {type: 'snippet', immediately: true}])

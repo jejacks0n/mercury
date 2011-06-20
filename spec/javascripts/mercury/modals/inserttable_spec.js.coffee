@@ -1,6 +1,6 @@
 require '/assets/mercury/mercury.js'
 
-describe "Mercury.modalHandlers.inserttable", ->
+describe "Mercury.modalHandlers.insertTable", ->
 
   template 'mercury/modals/inserttable.html'
 
@@ -13,7 +13,7 @@ describe "Mercury.modalHandlers.inserttable", ->
 
     beforeEach ->
       @tableEditorSpy = spyOn(Mercury, 'tableEditor').andCallFake(=>)
-      Mercury.modalHandlers.inserttable.call(@modal)
+      Mercury.modalHandlers.insertTable.call(@modal)
 
     it "selects the first cell", ->
       expect($('#cell1').hasClass('selected')).toEqual(true)
@@ -27,7 +27,7 @@ describe "Mercury.modalHandlers.inserttable", ->
 
     beforeEach ->
       @tableEditorSpy = spyOn(Mercury, 'tableEditor').andCallFake(=>)
-      Mercury.modalHandlers.inserttable.call(@modal)
+      Mercury.modalHandlers.insertTable.call(@modal)
 
     it "should unselect any selected cells", ->
       jasmine.simulate.click($('#cell2').get(0))
@@ -54,50 +54,50 @@ describe "Mercury.modalHandlers.inserttable", ->
       @decreaseColspanSpy = spyOn(Mercury.tableEditor, 'decreaseColspan').andCallFake(=>)
       @increaseRowspanSpy = spyOn(Mercury.tableEditor, 'increaseRowspan').andCallFake(=>)
       @decreaseRowspanSpy = spyOn(Mercury.tableEditor, 'decreaseRowspan').andCallFake(=>)
-      Mercury.modalHandlers.inserttable.call(@modal)
+      Mercury.modalHandlers.insertTable.call(@modal)
 
     it "adds a row before the selected cell", ->
-      jasmine.simulate.click($('input[name=insertrowbefore]').get(0))
+      jasmine.simulate.click($('input[name=insertRowBefore]').get(0))
       expect(@addRowSpy.callCount).toEqual(1)
       expect(@addRowSpy.argsForCall[0]).toEqual(['before'])
 
     it "adds a row after the selected cell", ->
-      jasmine.simulate.click($('input[name=insertrowafter]').get(0))
+      jasmine.simulate.click($('input[name=insertRowAfter]').get(0))
       expect(@addRowSpy.callCount).toEqual(1)
       expect(@addRowSpy.argsForCall[0]).toEqual(['after'])
 
     it "deletes the row of the selected cell", ->
-      jasmine.simulate.click($('input[name=deleterow]').get(0))
+      jasmine.simulate.click($('input[name=deleteRow]').get(0))
       expect(@removeRowSpy.callCount).toEqual(1)
 
     it "adds a column before the selected cell", ->
-      jasmine.simulate.click($('input[name=insertcolumnbefore]').get(0))
+      jasmine.simulate.click($('input[name=insertColumnBefore]').get(0))
       expect(@addColumnSpy.callCount).toEqual(1)
       expect(@addColumnSpy.argsForCall[0]).toEqual(['before'])
 
     it "adds a column after the selected cell", ->
-      jasmine.simulate.click($('input[name=insertcolumnafter]').get(0))
+      jasmine.simulate.click($('input[name=insertColumnAfter]').get(0))
       expect(@addColumnSpy.callCount).toEqual(1)
       expect(@addColumnSpy.argsForCall[0]).toEqual(['after'])
 
     it "deletes the column of the selected cell", ->
-      jasmine.simulate.click($('input[name=deletecolumn]').get(0))
+      jasmine.simulate.click($('input[name=deleteColumn]').get(0))
       expect(@removeColumnSpy.callCount).toEqual(1)
 
     it "increases the colspan of the selected cell", ->
-      jasmine.simulate.click($('input[name=increasecolspan]').get(0))
+      jasmine.simulate.click($('input[name=increaseColspan]').get(0))
       expect(@increaseColspanSpy.callCount).toEqual(1)
 
     it "decreases the colspan of the selected cell", ->
-      jasmine.simulate.click($('input[name=decreasecolspan]').get(0))
+      jasmine.simulate.click($('input[name=decreaseColspan]').get(0))
       expect(@decreaseColspanSpy.callCount).toEqual(1)
 
     it "increases the rowspan of the selected cell", ->
-      jasmine.simulate.click($('input[name=increaserowspan]').get(0))
+      jasmine.simulate.click($('input[name=increaseRowspan]').get(0))
       expect(@increaseRowspanSpy.callCount).toEqual(1)
 
     it "decreases the rowspan of the selected cell", ->
-      jasmine.simulate.click($('input[name=decreaserowspan]').get(0))
+      jasmine.simulate.click($('input[name=decreaseRowspan]').get(0))
       expect(@decreaseRowspanSpy.callCount).toEqual(1)
 
 
@@ -109,7 +109,7 @@ describe "Mercury.modalHandlers.inserttable", ->
   describe "changing the border", ->
 
     beforeEach ->
-      Mercury.modalHandlers.inserttable.call(@modal)
+      Mercury.modalHandlers.insertTable.call(@modal)
 
     it "changes the border of the table", ->
       $('#table_border').val('19')
@@ -125,7 +125,7 @@ describe "Mercury.modalHandlers.inserttable", ->
   describe "changing the cellspacing", ->
 
     beforeEach ->
-      Mercury.modalHandlers.inserttable.call(@modal)
+      Mercury.modalHandlers.insertTable.call(@modal)
 
     it "changes the cellspacing of the table", ->
       $('#table_spacing').val('5')
@@ -141,7 +141,7 @@ describe "Mercury.modalHandlers.inserttable", ->
   describe "submitting", ->
 
     beforeEach ->
-      Mercury.modalHandlers.inserttable.call(@modal)
+      Mercury.modalHandlers.insertTable.call(@modal)
 
     it "triggers an action", ->
       spy = spyOn(Mercury, 'trigger').andCallFake(=>)

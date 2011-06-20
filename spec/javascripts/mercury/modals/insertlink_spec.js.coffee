@@ -1,6 +1,6 @@
 require '/assets/mercury/mercury.js'
 
-describe "Mercury.modalHandlers.insertlink", ->
+describe "Mercury.modalHandlers.insertLink", ->
 
   template 'mercury/modals/insertlink.html'
 
@@ -15,7 +15,7 @@ describe "Mercury.modalHandlers.insertlink", ->
   describe "initializing", ->
 
     beforeEach ->
-      Mercury.modalHandlers.insertlink.call(@modal)
+      Mercury.modalHandlers.insertLink.call(@modal)
 
     it "loads all links with a name into the existing bookmarks pulldown", ->
       options = $('#link_existing_bookmark').html()
@@ -27,7 +27,7 @@ describe "Mercury.modalHandlers.insertlink", ->
   describe "clicking on a radio button (in a label)", ->
 
     beforeEach ->
-      Mercury.modalHandlers.insertlink.call(@modal)
+      Mercury.modalHandlers.insertLink.call(@modal)
 
     it "focuses the next input with a selectable class", ->
       spy = spyOn($.fn, 'focus').andCallFake(=>)
@@ -38,7 +38,7 @@ describe "Mercury.modalHandlers.insertlink", ->
   describe "focusing an input", ->
 
     beforeEach ->
-      Mercury.modalHandlers.insertlink.call(@modal)
+      Mercury.modalHandlers.insertLink.call(@modal)
 
     it "checks the corresponding checkbox", ->
       $('#link_existing_bookmark').focus()
@@ -57,7 +57,7 @@ describe "Mercury.modalHandlers.insertlink", ->
 
       beforeEach ->
         Mercury.region = selection: => {commonAncestor: -> $('<a>', {href: 'http://cnn.com', target: '_top'}).html('foo')}
-        Mercury.modalHandlers.insertlink.call(@modal)
+        Mercury.modalHandlers.insertLink.call(@modal)
 
       it "hides the link text input", ->
         expect($('#link_text_container').css('display')).toEqual('none')
@@ -72,7 +72,7 @@ describe "Mercury.modalHandlers.insertlink", ->
 
       beforeEach ->
         Mercury.region = selection: => {commonAncestor: -> $('<a>', {href: "javascript:void(window.open('http://cnn.com', 'popup_window', 'width=100,height=42,menubar=no,toolbar=no'))"}).html('foo')}
-        Mercury.modalHandlers.insertlink.call(@modal)
+        Mercury.modalHandlers.insertLink.call(@modal)
 
       it "hides the link text input", ->
         expect($('#link_text_container').css('display')).toEqual('none')
@@ -91,7 +91,7 @@ describe "Mercury.modalHandlers.insertlink", ->
 
       beforeEach ->
         Mercury.region = selection: => {commonAncestor: -> $('<a>', {href: '#link2'}).html('foo')}
-        Mercury.modalHandlers.insertlink.call(@modal)
+        Mercury.modalHandlers.insertLink.call(@modal)
 
       it "hides the link text input", ->
         expect($('#link_text_container').css('display')).toEqual('none')
@@ -106,7 +106,7 @@ describe "Mercury.modalHandlers.insertlink", ->
 
       beforeEach ->
         Mercury.region = selection: => {commonAncestor: -> $('<a>', {name: 'link3'}).html('foo')}
-        Mercury.modalHandlers.insertlink.call(@modal)
+        Mercury.modalHandlers.insertLink.call(@modal)
 
       it "hides the link text input", ->
         expect($('#link_text_container').css('display')).toEqual('none')
@@ -123,7 +123,7 @@ describe "Mercury.modalHandlers.insertlink", ->
     describe "a new link", ->
 
       beforeEach ->
-        Mercury.modalHandlers.insertlink.call(@modal)
+        Mercury.modalHandlers.insertLink.call(@modal)
         @triggerSpy = spyOn(Mercury, 'trigger').andCallFake(=>)
         $('#link_text').val('foo')
 
@@ -191,7 +191,7 @@ describe "Mercury.modalHandlers.insertlink", ->
       beforeEach ->
         @existingLink = $('<a>', {name: 'link3'}).html('foo')
         Mercury.region = selection: => {commonAncestor: => @existingLink}
-        Mercury.modalHandlers.insertlink.call(@modal)
+        Mercury.modalHandlers.insertLink.call(@modal)
         @triggerSpy = spyOn(Mercury, 'trigger').andCallFake(=>)
         $('#link_text').val('foo')
 

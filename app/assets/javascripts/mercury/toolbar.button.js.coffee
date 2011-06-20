@@ -116,9 +116,9 @@ class @Mercury.Toolbar.Button
 # Button contexts
 @Mercury.Toolbar.Button.contexts =
 
-  backcolor: (node) -> @element.css('background-color', node.css('background-color'))
+  backColor: (node) -> @element.css('background-color', node.css('background-color'))
 
-  forecolor: (node) -> @element.css('background-color', node.css('color'))
+  foreColor: (node) -> @element.css('background-color', node.css('color'))
 
   bold: (node) ->
     weight = node.css('font-weight')
@@ -139,14 +139,14 @@ class @Mercury.Toolbar.Button
 
   superscript: (node, region) -> !!node.closest('sup', region).length
 
-  justifyleft: (node) -> node.css('text-align').indexOf('left') > -1
+  justifyLeft: (node) -> node.css('text-align').indexOf('left') > -1
 
-  justifycenter: (node) -> node.css('text-align').indexOf('center') > -1
+  justifyCenter: (node) -> node.css('text-align').indexOf('center') > -1
 
-  justifyright: (node) -> node.css('text-align').indexOf('right') > -1
+  justifyRight: (node) -> node.css('text-align').indexOf('right') > -1
 
-  justifyfull: (node) -> node.css('text-align').indexOf('justify') > -1
+  justifyFull: (node) -> node.css('text-align').indexOf('justify') > -1
 
-  insertorderedlist: (node, region) -> !!node.closest('ol', region.element).length
+  insertOrderedList: (node, region) -> !!node.closest('ol', region.element).length
 
-  insertunorderedlist: (node, region) -> !!node.closest('ul', region.element).length
+  insertUnorderedList: (node, region) -> !!node.closest('ul', region.element).length

@@ -141,24 +141,22 @@
 .mercury-expander-button[data-button=undo] em             { background-image: url(/assets/mercury/toolbar/primary/undo.png) }
 .mercury-primary-toolbar .mercury-redo-button em,
 .mercury-expander-button[data-button=redo] em             { background-image: url(/assets/mercury/toolbar/primary/redo.png) }
-.mercury-primary-toolbar .mercury-insertlink-button em,
-.mercury-expander-button[data-button=insertlink] em       { background-image: url(/assets/mercury/toolbar/primary/insertlink.png) }
-.mercury-primary-toolbar .mercury-insertmedia-button em,
-.mercury-expander-button[data-button=insertmedia] em      { background-image: url(/assets/mercury/toolbar/primary/insertmedia.png) }
-.mercury-primary-toolbar .mercury-inserttable-button em,
-.mercury-expander-button[data-button=inserttable] em      { background-image: url(/assets/mercury/toolbar/primary/inserttable.png) }
-.mercury-primary-toolbar .mercury-insertcharacter-button em,
-.mercury-expander-button[data-button=insertcharacter] em  { background-image: url(/assets/mercury/toolbar/primary/insertcharacter.png) }
-.mercury-primary-toolbar .mercury-objectspanel-button em,
-.mercury-expander-button[data-button=objectspanel] em     { background-image: url(/assets/mercury/toolbar/primary/objectspanel.png) }
-.mercury-primary-toolbar .mercury-historypanel-button em,
-.mercury-expander-button[data-button=historypanel] em     { background-image: url(/assets/mercury/toolbar/primary/historypanel.png) }
-.mercury-primary-toolbar .mercury-notespanel-button em,
-.mercury-expander-button[data-button=notespanel] em       { background-image: url(/assets/mercury/toolbar/primary/notespanel.png) }
+.mercury-primary-toolbar .mercury-insertLink-button em,
+.mercury-expander-button[data-button=insertLink] em       { background-image: url(/assets/mercury/toolbar/primary/insertlink.png) }
+.mercury-primary-toolbar .mercury-insertMedia-button em,
+.mercury-expander-button[data-button=insertMedia] em      { background-image: url(/assets/mercury/toolbar/primary/insertmedia.png) }
+.mercury-primary-toolbar .mercury-insertTable-button em,
+.mercury-expander-button[data-button=insertTable] em      { background-image: url(/assets/mercury/toolbar/primary/inserttable.png) }
+.mercury-primary-toolbar .mercury-insertCharacter-button em,
+.mercury-expander-button[data-button=insertCharacter] em  { background-image: url(/assets/mercury/toolbar/primary/insertcharacter.png) }
+.mercury-primary-toolbar .mercury-objectsPanel-button em,
+.mercury-expander-button[data-button=objectsPanel] em     { background-image: url(/assets/mercury/toolbar/primary/objectspanel.png) }
+.mercury-primary-toolbar .mercury-historyPanel-button em,
+.mercury-expander-button[data-button=historyPanel] em     { background-image: url(/assets/mercury/toolbar/primary/historypanel.png) }
+.mercury-primary-toolbar .mercury-notesPanel-button em,
+.mercury-expander-button[data-button=notesPanel] em       { background-image: url(/assets/mercury/toolbar/primary/notespanel.png) }
 .mercury-primary-toolbar .mercury-todospanel-button em,
 .mercury-expander-button[data-button=todospanel] em       { background-image: url(/assets/mercury/toolbar/primary/todospanel.png) }
-.mercury-primary-toolbar .mercury-notespanel-button em,
-.mercury-expander-button[data-button=notespanel] em       { background-image: url(/assets/mercury/toolbar/primary/notespanel.png) }
 .mercury-primary-toolbar .mercury-todospanel-button em,
 .mercury-expander-button[data-button=todospanel] em       { background-image: url(/assets/mercury/toolbar/primary/todospanel.png) }
 /*
@@ -238,48 +236,48 @@
   .mercury-subscript-button.active           { background-position: -112px -18px }
   .mercury-superscript-button                { background-position: -135px 0 }
   .mercury-superscript-button.active         { background-position: -135px -18px }
-  .mercury-justifyleft-button                { background-position: -158px 0 }
-  .mercury-justifyleft-button.active         { background-position: -158px -18px }
-  .mercury-justifycenter-button              { background-position: -181px 0 }
-  .mercury-justifycenter-button.active       { background-position: -181px -18px }
-  .mercury-justifyright-button               { background-position: -203px 0 }
-  .mercury-justifyright-button.active        { background-position: -203px -18px }
-  .mercury-justifyfull-button                { background-position: -225px 0 }
-  .mercury-justifyfull-button.active         { background-position: -225px -18px }
-  .mercury-insertunorderedlist-button        { background-position: -248px 0 }
-  .mercury-insertunorderedlist-button.active { background-position: -248px -18px }
-  .mercury-insertorderedlist-button          { background-position: -271px 0 }
-  .mercury-insertorderedlist-button.active   { background-position: -271px -18px }
+  .mercury-justifyLeft-button                { background-position: -158px 0 }
+  .mercury-justifyLeft-button.active         { background-position: -158px -18px }
+  .mercury-justifyCenter-button              { background-position: -181px 0 }
+  .mercury-justifyCenter-button.active       { background-position: -181px -18px }
+  .mercury-justifyRight-button               { background-position: -203px 0 }
+  .mercury-justifyRight-button.active        { background-position: -203px -18px }
+  .mercury-justifyFull-button                { background-position: -225px 0 }
+  .mercury-justifyFull-button.active         { background-position: -225px -18px }
+  .mercury-insertUnorderedList-button        { background-position: -248px 0 }
+  .mercury-insertUnorderedList-button.active { background-position: -248px -18px }
+  .mercury-insertOrderedList-button          { background-position: -271px 0 }
+  .mercury-insertOrderedList-button.active   { background-position: -271px -18px }
   .mercury-outdent-button                    { background-position: -294px 0 }
   .mercury-outdent-button.active             { background-position: -294px -18px }
   .mercury-indent-button                     { background-position: -317px 0 }
   .mercury-indent-button.active              { background-position: -317px -18px }
-  .mercury-insertrowbefore-button            { background-position: -340px 0 }
-  .mercury-insertrowbefore-button.active     { background-position: -340px -18px }
-  .mercury-insertrowafter-button             { background-position: -363px 0 }
-  .mercury-insertrowafter-button.active      { background-position: -363px -18px }
-  .mercury-deleterow-button                  { background-position: -385px 0 }
-  .mercury-deleterow-button.active           { background-position: -385px -18px }
-  .mercury-insertcolumnbefore-button         { background-position: -407px 0 }
-  .mercury-insertcolumnbefore-button.active  { background-position: -407px -18px }
-  .mercury-insertcolumnafter-button          { background-position: -429px 0 }
-  .mercury-insertcolumnafter-button.active   { background-position: -429px -18px }
-  .mercury-deletecolumn-button               { background-position: -451px 0 }
-  .mercury-deletecolumn-button.active        { background-position: -451px -18px }
-  .mercury-increasecolspan-button            { background-position: -474px 0; width: 23px }
-  .mercury-increasecolspan-button.active     { background-position: -474px -18px }
-  .mercury-decreasecolspan-button            { background-position: -497px 0 }
-  .mercury-decreasecolspan-button.active     { background-position: -497px -18px }
-  .mercury-increaserowspan-button            { background-position: -520px 0 }
-  .mercury-increaserowspan-button.active     { background-position: -520px -18px }
-  .mercury-decreaserowspan-button            { background-position: -542px 0 }
-  .mercury-decreaserowspan-button.active     { background-position: -542px -18px }
-  .mercury-horizontalrule-button             { background-position: -564px 0 }
-  .mercury-horizontalrule-button.active      { background-position: -564px -18px }
-  .mercury-removeformatting-button           { background-position: -588px 0 }
-  .mercury-removeformatting-button.active    { background-position: -588px -18px }
-  .mercury-htmleditor-button                 { background-position: -612px 0 }
-  .mercury-htmleditor-button.active          { background-position: -612px -18px }
+  .mercury-insertRowBefore-button            { background-position: -340px 0 }
+  .mercury-insertRowBefore-button.active     { background-position: -340px -18px }
+  .mercury-insertRowAfter-button             { background-position: -363px 0 }
+  .mercury-insertRowAfter-button.active      { background-position: -363px -18px }
+  .mercury-deleteRow-button                  { background-position: -385px 0 }
+  .mercury-deleteRow-button.active           { background-position: -385px -18px }
+  .mercury-insertColumnBefore-button         { background-position: -407px 0 }
+  .mercury-insertColumnBefore-button.active  { background-position: -407px -18px }
+  .mercury-insertColumnAfter-button          { background-position: -429px 0 }
+  .mercury-insertColumnAfter-button.active   { background-position: -429px -18px }
+  .mercury-deleteColumn-button               { background-position: -451px 0 }
+  .mercury-deleteColumn-button.active        { background-position: -451px -18px }
+  .mercury-increaseColspan-button            { background-position: -474px 0; width: 23px }
+  .mercury-increaseColspan-button.active     { background-position: -474px -18px }
+  .mercury-decreaseColspan-button            { background-position: -497px 0 }
+  .mercury-decreaseColspan-button.active     { background-position: -497px -18px }
+  .mercury-increaseRowspan-button            { background-position: -520px 0 }
+  .mercury-increaseRowspan-button.active     { background-position: -520px -18px }
+  .mercury-decreaseRowspan-button            { background-position: -542px 0 }
+  .mercury-decreaseRowspan-button.active     { background-position: -542px -18px }
+  .mercury-horizontalRule-button             { background-position: -564px 0 }
+  .mercury-horizontalRule-button.active      { background-position: -564px -18px }
+  .mercury-removeFormatting-button           { background-position: -588px 0 }
+  .mercury-removeFormatting-button.active    { background-position: -588px -18px }
+  .mercury-htmlEditor-button                 { background-position: -612px 0 }
+  .mercury-htmlEditor-button.active          { background-position: -612px -18px }
 }
 /*
  * Toolbar: Markupable Region Toolbar
@@ -352,16 +350,16 @@
   .mercury-subscript-button.active           { background-position: -112px -18px }
   .mercury-superscript-button                { background-position: -135px 0 }
   .mercury-superscript-button.active         { background-position: -135px -18px }
-  .mercury-insertunorderedlist-button        { background-position: -248px 0 }
-  .mercury-insertunorderedlist-button.active { background-position: -248px -18px }
-  .mercury-insertorderedlist-button          { background-position: -271px 0 }
-  .mercury-insertorderedlist-button.active   { background-position: -271px -18px }
+  .mercury-insertUnorderedList-button        { background-position: -248px 0 }
+  .mercury-insertUnorderedList-button.active { background-position: -248px -18px }
+  .mercury-insertOrderedList-button          { background-position: -271px 0 }
+  .mercury-insertOrderedList-button.active   { background-position: -271px -18px }
   .mercury-outdent-button                    { background-position: -294px 0 }
   .mercury-outdent-button.active             { background-position: -294px -18px }
   .mercury-indent-button                     { background-position: -317px 0 }
   .mercury-indent-button.active              { background-position: -317px -18px }
-  .mercury-horizontalrule-button             { background-position: -564px 0 }
-  .mercury-horizontalrule-button.active      { background-position: -564px -18px }
+  .mercury-horizontalRule-button             { background-position: -564px 0 }
+  .mercury-horizontalRule-button.active      { background-position: -564px -18px }
 }
 /*
  * Toolbar: Snippetable Region Toolbar
@@ -408,10 +406,10 @@
     }
   }
   /* default buttons */
-  .mercury-editsnippet-button                { background-position: -24px 0 }
-  .mercury-editsnippet-button.active         { background-position: -24px -18px }
-  .mercury-removesnippet-button              { background-position: -48px 0 }
-  .mercury-removesnippet-button.active       { background-position: -48px -18px }
+  .mercury-editSnippet-button                { background-position: -24px 0 }
+  .mercury-editSnippet-button.active         { background-position: -24px -18px }
+  .mercury-removeSnippet-button              { background-position: -48px 0 }
+  .mercury-removeSnippet-button.active       { background-position: -48px -18px }
   .mercury-dragsnippet-button                { background-position: -72px 0 }
   .mercury-dragsnippet-button.active         { background-position: -72px -18px }
 }

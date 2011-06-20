@@ -1,4 +1,4 @@
-@Mercury.modalHandlers.htmleditor = ->
+@Mercury.modalHandlers.htmlEditor = ->
   # fill the text area with the content
   @element.find('textarea').val(Mercury.region.html(null, true, false))
 

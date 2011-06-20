@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Jeremy Jackson"]
-  s.date = %q{2011-06-18}
+  s.date = %q{2011-06-19}
   s.description = %q{A fully featured and advanced HTML5 WYSIWYG editor written in CoffeeScript on top of Rails 3.1}
   s.email = %q{jejacks0n@gmail.com}
   s.extra_rdoc_files = [
@@ -120,8 +120,19 @@ Gem::Specification.new do |s|
     "log/.gitkeep",
     "mercury-rails.gemspec",
     "spec/javascripts/mercury/dialog_spec.js.coffee",
+    "spec/javascripts/mercury/dialogs/backcolor_spec.js.coffee",
+    "spec/javascripts/mercury/dialogs/forecolor_spec.js.coffee",
+    "spec/javascripts/mercury/dialogs/formatblock_spec.js.coffee",
+    "spec/javascripts/mercury/dialogs/objectspanel_spec.js.coffee",
+    "spec/javascripts/mercury/dialogs/style_spec.js.coffee",
     "spec/javascripts/mercury/history_buffer_spec.js.coffee",
     "spec/javascripts/mercury/mercury_spec.js.coffee",
+    "spec/javascripts/mercury/modals/htmleditor_spec.js.coffee",
+    "spec/javascripts/mercury/modals/insertcharacter_spec.js.coffee",
+    "spec/javascripts/mercury/modals/insertlink_spec.js.coffee",
+    "spec/javascripts/mercury/modals/insertmedia_spec.js.coffee",
+    "spec/javascripts/mercury/modals/insertsnippet_spec.js.coffee",
+    "spec/javascripts/mercury/modals/inserttable_spec.js.coffee",
     "spec/javascripts/mercury/native_extensions_spec.js.coffee",
     "spec/javascripts/mercury/page_editor_spec.js.coffee",
     "spec/javascripts/mercury/palette_spec.js.coffee",
@@ -144,6 +155,17 @@ Gem::Specification.new do |s|
     "spec/javascripts/responses/blank.html",
     "spec/javascripts/spec_helper.js",
     "spec/javascripts/templates/mercury/dialog.html",
+    "spec/javascripts/templates/mercury/dialogs/backcolor.html",
+    "spec/javascripts/templates/mercury/dialogs/forecolor.html",
+    "spec/javascripts/templates/mercury/dialogs/formatblock.html",
+    "spec/javascripts/templates/mercury/dialogs/objectspanel.html",
+    "spec/javascripts/templates/mercury/dialogs/style.html",
+    "spec/javascripts/templates/mercury/modals/htmleditor.html",
+    "spec/javascripts/templates/mercury/modals/insertcharacter.html",
+    "spec/javascripts/templates/mercury/modals/insertlink.html",
+    "spec/javascripts/templates/mercury/modals/insertmedia.html",
+    "spec/javascripts/templates/mercury/modals/insertsnippet.html",
+    "spec/javascripts/templates/mercury/modals/inserttable.html",
     "spec/javascripts/templates/mercury/page_editor.html",
     "spec/javascripts/templates/mercury/palette.html",
     "spec/javascripts/templates/mercury/panel.html",

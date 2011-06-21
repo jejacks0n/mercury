@@ -24,6 +24,8 @@ if defined?(Mercury::Application)
     config.action_dispatch.best_standards_support = :builtin
 
     # Do not compress assets
+#    config.assets.js_compressor = :uglifier
+#    config.assets.compress = true
     config.assets.compress = false
   end
 end

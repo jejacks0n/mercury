@@ -21,7 +21,7 @@ class @Mercury.Snippet
 
 
   @load: (snippets) ->
-    for identity, details of snippets
+    for own identity, details of snippets
       instance = new Mercury.Snippet(details.name, identity, details.options)
       @all.push(instance)
 
@@ -34,7 +34,7 @@ class @Mercury.Snippet
 
 
   getHTML: (context, callback = null) ->
-    element = $('<div class="mercury-snippet" contenteditable="false">', context)
+    element = jQuery('<div class="mercury-snippet" contenteditable="false">', context)
     element.attr({'data-snippet': @identity})
     element.attr({'data-version': @version})
     element.html("[#{@identity}]")
@@ -47,7 +47,7 @@ class @Mercury.Snippet
 
 
   loadPreview: (element, callback = null) ->
-    $.ajax "/mercury/snippets/#{@name}/preview", {
+    jQuery.ajax "/mercury/snippets/#{@name}/preview", {
       type: 'POST'
       data: @options
       success: (data) =>

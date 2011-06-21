@@ -28,12 +28,11 @@ class @Mercury.Regions.Snippetable extends Mercury.Region
         @element.sortable('destroy')
         Mercury.trigger('region:blurred', {region: @})
 
-    $(@document).keydown (event) =>
+    jQuery(@document).keydown (event) =>
       return if @previewing
       return unless Mercury.region == @
       Mercury.changes = true
       switch event.keyCode
-
         when 90 # undo / redo
           return unless event.metaKey
           event.preventDefault()
@@ -89,7 +88,7 @@ class @Mercury.Regions.Snippetable extends Mercury.Region
       scroll: false, #scrolling is buggy
       containment: 'parent',
       items: '.mercury-snippet',
-      opacity: .4,
+      opacity: 0.4,
       revert: 100,
       tolerance: 'pointer',
       beforeStop: =>

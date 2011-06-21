@@ -8,7 +8,7 @@ class @Mercury.Toolbar.ButtonGroup
 
 
   build: ->
-    @element = $('<div>', {class: "mercury-button-group mercury-#{@name}-group"})
+    @element = jQuery('<div>', {class: "mercury-button-group mercury-#{@name}-group"})
     if @options._context || @options._regions
       @element.addClass('disabled')
 
@@ -17,7 +17,7 @@ class @Mercury.Toolbar.ButtonGroup
     Mercury.bind 'region:update', (event, options) =>
       context = Mercury.Toolbar.ButtonGroup.contexts[@name]
       if context
-        if options.region && $.type(options.region.currentElement) == 'function'
+        if options.region && jQuery.type(options.region.currentElement) == 'function'
           element = options.region.currentElement()
           if element.length && context.call(@, element, options.region.element)
             @element.removeClass('disabled')

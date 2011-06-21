@@ -41,7 +41,7 @@
 
 
   # No IE support yet because it doesn't follow the W3C standards for HTML5 contentEditable (aka designMode).
-  supported: document.getElementById && document.designMode && !$.browser.konqueror && !$.browser.msie
+  supported: document.getElementById && document.designMode && !jQuery.browser.konqueror && !jQuery.browser.msie
 
 
   # Silent mode disables things like asking about unsaved changes before leaving the page.
@@ -271,12 +271,12 @@
 
   # Custom event and logging methods
   bind: (eventName, callback) ->
-    $(document).bind("mercury:#{eventName}", callback)
+    jQuery(document).bind("mercury:#{eventName}", callback)
 
 
   trigger: (eventName, options) ->
     Mercury.log(eventName, options)
-    $(document).trigger("mercury:#{eventName}", options)
+    jQuery(document).trigger("mercury:#{eventName}", options)
 
 
   log: ->

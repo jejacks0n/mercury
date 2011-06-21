@@ -1,10 +1,10 @@
 @Mercury.modalHandlers.insertLink = ->
   # make the inputs work with the radio buttons
   @element.find('label input').click (event) ->
-    $(@).closest('label').next('.selectable').focus()
+    jQuery(@).closest('label').next('.selectable').focus()
 
   @element.find('.selectable').focus ->
-    $(@).prev('label').find('input[type=radio]').prop("checked", true)
+    jQuery(@).prev('label').find('input[type=radio]').prop("checked", true)
 
   # show/hide the link target options on target change
   @element.find('#link_target').change =>
@@ -14,8 +14,8 @@
 
   # fill the existing bookmark select
   bookmarkSelect = @element.find('#link_existing_bookmark')
-  for link in $('a[name]', window.mercuryInstance.document)
-    bookmarkSelect.append($('<option>', {value: $(link).attr('name')}).text($(link).text()))
+  for link in jQuery('a[name]', window.mercuryInstance.document)
+    bookmarkSelect.append(jQuery('<option>', {value: jQuery(link).attr('name')}).text(jQuery(link).text()))
 
   # get the selection and initialize its information into the form
   if Mercury.region && Mercury.region.selection
@@ -76,7 +76,7 @@
           menubar: 'no',
           toolbar: 'no'
         }
-        attrs['href'] = "javascript:void(window.open('#{attrs['href']}', 'popup_window', '#{$.param(args).replace(/&/g, ',')}'))"
+        attrs['href'] = "javascript:void(window.open('#{attrs['href']}', 'popup_window', '#{jQuery.param(args).replace(/&/g, ',')}'))"
       else attrs['target'] = target if target
 
     value = {tagName: 'a', attrs: attrs, content: content}

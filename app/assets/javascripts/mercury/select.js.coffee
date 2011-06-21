@@ -5,8 +5,8 @@ class @Mercury.Select extends Mercury.Dialog
 
 
   build: ->
-    @element = $('<div>', {class: "mercury-select mercury-#{@name}-select loading", style: 'display:none'})
-    @element.appendTo($(@options.appendTo).get(0) ? 'body')
+    @element = jQuery('<div>', {class: "mercury-select mercury-#{@name}-select loading", style: 'display:none'})
+    @element.appendTo(jQuery(@options.appendTo).get(0) ? 'body')
 
 
   bindEvents: ->
@@ -19,7 +19,7 @@ class @Mercury.Select extends Mercury.Dialog
     position = @button.offset()
     elementWidth = @element.width()
     elementHeight = @element.height()
-    documentHeight = $(document).height()
+    documentHeight = jQuery(document).height()
 
     top = position.top + (@button.height() / 2) - (elementHeight / 2)
     top = position.top - 100 if top < position.top - 100
@@ -29,7 +29,7 @@ class @Mercury.Select extends Mercury.Dialog
     height = documentHeight - top - 20 if top + elementHeight >= documentHeight - 20
 
     left = position.left
-    left = left - elementWidth + @button.width() if left + elementWidth > $(window).width()
+    left = left - elementWidth + @button.width() if left + elementWidth > jQuery(window).width()
 
     @element.css {
       top: top,

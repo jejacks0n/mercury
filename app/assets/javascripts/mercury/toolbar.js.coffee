@@ -6,16 +6,16 @@ class @Mercury.Toolbar
 
 
   build: ->
-    @element = $('<div>', {class: 'mercury-toolbar-container', style: 'width:10000px'})
-    @element.appendTo($(@options.appendTo).get(0) ? 'body')
+    @element = jQuery('<div>', {class: 'mercury-toolbar-container', style: 'width:10000px'})
+    @element.appendTo(jQuery(@options.appendTo).get(0) ? 'body')
 
-    for toolbarName, buttons of Mercury.config.toolbars
+    for own toolbarName, buttons of Mercury.config.toolbars
       continue if buttons._custom
-      toolbar = $('<div>', {class: "mercury-toolbar mercury-#{toolbarName}-toolbar"}).appendTo(@element)
+      toolbar = jQuery('<div>', {class: "mercury-toolbar mercury-#{toolbarName}-toolbar"}).appendTo(@element)
       toolbar.attr('data-regions', buttons._regions) if buttons._regions
-      container = $('<div>', {class: 'mercury-toolbar-button-container'}).appendTo(toolbar)
+      container = jQuery('<div>', {class: 'mercury-toolbar-button-container'}).appendTo(toolbar)
 
-      for buttonName, options of buttons
+      for own buttonName, options of buttons
         continue if buttonName == '_regions'
         button = @buildButton(buttonName, options)
         button.appendTo(container) if button
@@ -31,21 +31,20 @@ class @Mercury.Toolbar
 
   buildButton: (name, options) ->
     return false if name[0] == '_'
-    switch $.type(options)
-
+    switch jQuery.type(options)
       when 'array' # button
         [title, summary, handled] = options
         new Mercury.Toolbar.Button(name, title, summary, handled, {appendDialogsTo: @element})
 
       when 'object' # button group
         group = new Mercury.Toolbar.ButtonGroup(name, options)
-        for a, o of options
-          button = @buildButton(a, o)
+        for own action, opts of options
+          button = @buildButton(action, opts)
           button.appendTo(group) if button
         group
 
       when 'string' # separator
-        $('<hr>', {class: "mercury-#{if options == '-' then 'line-separator' else 'separator'}"})
+        jQuery('<hr>', {class: "mercury-#{if options == '-' then 'line-separator' else 'separator'}"})
 
       else throw "Unknown button structure -- please provide an array, object, or string for #{name}."
 
@@ -53,13 +52,13 @@ class @Mercury.Toolbar
   bindEvents: ->
     Mercury.bind 'region:focused', (event, options) =>
       for toolbar in @element.find(".mercury-toolbar")
-        toolbar = $(toolbar)
+        toolbar = jQuery(toolbar)
         if regions = toolbar.data('regions')
           toolbar.removeClass('disabled') if regions.split(',').indexOf(options.region.type) > -1
 
     Mercury.bind 'region:blurred', (event, options) =>
       for toolbar in @element.find(".mercury-toolbar")
-        toolbar = $(toolbar)
+        toolbar = jQuery(toolbar)
         if regions = toolbar.data('regions')
           toolbar.addClass('disabled') if regions.split(',').indexOf(options.region.type) > -1
 

@@ -8,14 +8,14 @@ class @Mercury.Regions.Editable extends Mercury.Region
 
   build: ->
     # mozilla: set some initial content so everything works correctly
-    @content('&nbsp;') if $.browser.mozilla && @content() == ''
+    @content('&nbsp;') if jQuery.browser.mozilla && @content() == ''
 
     # set overflow just in case
     @element.data({originalOverflow: @element.css('overflow')})
     @element.css({overflow: 'auto'})
 
     # mozilla: there's some weird behavior when the element isn't a div
-    @specialContainer = $.browser.mozilla && @element.get(0).tagName != 'DIV'
+    @specialContainer = jQuery.browser.mozilla && @element.get(0).tagName != 'DIV'
 
     # make it editable
     # gecko: in this makes double clicking in textareas fail: https://bugzilla.mozilla.org/show_bug.cgi?id=490367
@@ -24,7 +24,7 @@ class @Mercury.Regions.Editable extends Mercury.Region
     # make all snippets not editable, and set their versions to 1
     for element in @element.find('.mercury-snippet')
       element.contentEditable = false
-      $(element).attr('data-version', '1')
+      jQuery(element).attr('data-version', '1')
 
     # add the basic editor settings to the document (only once)
     unless @document.mercuryEditing
@@ -63,7 +63,7 @@ class @Mercury.Regions.Editable extends Mercury.Region
       return if @previewing
       event.preventDefault() if event.shiftKey
       event.originalEvent.dataTransfer.dropEffect = 'copy'
-      if $.browser.webkit
+      if jQuery.browser.webkit
         clearTimeout(@dropTimeout)
         @dropTimeout = setTimeout((=> @element.trigger('possible:drop')), 10)
 
@@ -89,7 +89,7 @@ class @Mercury.Regions.Editable extends Mercury.Region
       return if @previewing
       if snippet = @element.find('img[data-snippet]').get(0)
         @focus()
-        Mercury.Snippet.displayOptionsFor($(snippet).data('snippet'))
+        Mercury.Snippet.displayOptionsFor(jQuery(snippet).data('snippet'))
         @document.execCommand('undo', false, null)
 
     # custom paste handling: we have to do some hackery to get the pasted content since it's not exposed normally
@@ -116,11 +116,11 @@ class @Mercury.Regions.Editable extends Mercury.Region
       Mercury.tooltip.hide()
 
     @element.click (event) =>
-      $(event.target).closest('a').attr('target', '_top') if @previewing
+      jQuery(event.target).closest('a').attr('target', '_top') if @previewing
 
     @element.dblclick (event) =>
       return if @previewing
-      image = $(event.target).closest('img', @element)
+      image = jQuery(event.target).closest('img', @element)
       if image.length
         @selection().selectNode(image.get(0), true)
         Mercury.trigger('button', {action: 'insertMedia'})
@@ -134,7 +134,6 @@ class @Mercury.Regions.Editable extends Mercury.Region
       return if @previewing
       Mercury.changes = true
       switch event.keyCode
-
         when 90 # undo / redo
           return unless event.metaKey
           event.preventDefault()
@@ -142,7 +141,7 @@ class @Mercury.Regions.Editable extends Mercury.Region
           return
 
         when 13 # enter
-          if $.browser.webkit && @selection().commonAncestor().closest('li, ul', @element).length == 0
+          if jQuery.browser.webkit && @selection().commonAncestor().closest('li, ul', @element).length == 0
             event.preventDefault()
             @document.execCommand('insertlinebreak', false, null)
           else if @specialContainer
@@ -193,13 +192,13 @@ class @Mercury.Regions.Editable extends Mercury.Region
   content: (value = null, filterSnippets = true, includeMarker = false) ->
     if value != null
       # sanitize the html before we insert it
-      container = $('<div>').appendTo(@document.createDocumentFragment())
+      container = jQuery('<div>').appendTo(@document.createDocumentFragment())
       container.html(value)
 
       # fill in the snippet contents
       for element in container.find('[data-snippet]')
         element.contentEditable = false
-        element = $(element)
+        element = jQuery(element)
         if snippet = Mercury.Snippet.find(element.data('snippet'))
           unless element.data('version')
             try
@@ -225,12 +224,12 @@ class @Mercury.Regions.Editable extends Mercury.Region
         selection.placeMarker()
 
       # sanitize the html before we return it
-      container = $('<div>').appendTo(@document.createDocumentFragment())
+      container = jQuery('<div>').appendTo(@document.createDocumentFragment())
       container.html(@element.html().replace(/^\s+|\s+$/g, ''))
 
       # replace snippet contents to be an identifier
       if filterSnippets then for element, index in container.find('[data-snippet]')
-        element = $(element)
+        element = jQuery(element)
         if snippet = Mercury.Snippet.find(element.data("snippet"))
           snippet.data = element.html()
         element.html("[#{element.data("snippet")}/#{element.data("version")}]")
@@ -265,7 +264,7 @@ class @Mercury.Regions.Editable extends Mercury.Region
       handler.call(@, @selection(), options)
     else
       sibling = @element.get(0).previousSibling if action == 'indent'
-      options.value = $('<div>').html(options.value).html() if action == 'insertHTML' && options.value && options.value.get
+      options.value = jQuery('<div>').html(options.value).html() if action == 'insertHTML' && options.value && options.value.get
       try
         @document.execCommand(action, false, options.value)
       catch error
@@ -341,7 +340,7 @@ class @Mercury.Regions.Editable extends Mercury.Region
       # strip styles
       pasted = prePasteContent.singleDiff(@content())
 
-      container = $('<div>').appendTo(@document.createDocumentFragment()).html(pasted)
+      container = jQuery('<div>').appendTo(@document.createDocumentFragment()).html(pasted)
       container.find('[style]').attr({style: null})
 
       @document.execCommand('undo', false, null)
@@ -384,17 +383,17 @@ class @Mercury.Regions.Editable extends Mercury.Region
 
     replaceHTML: (selection, options) -> @content(options.value)
 
-    insertImage: (selection, options) -> @execCommand('insertHTML', {value: $('<img/>', options.value)})
+    insertImage: (selection, options) -> @execCommand('insertHTML', {value: jQuery('<img/>', options.value)})
 
     insertLink: (selection, options) ->
-      anchor = $("<#{options.value.tagName}>").attr(options.value.attrs).html(options.value.content)
+      anchor = jQuery("<#{options.value.tagName}>").attr(options.value.attrs).html(options.value.content)
       selection.insertNode(anchor)
 
     replaceLink: (selection, options) ->
-      anchor = $("<#{options.value.tagName}>").attr(options.value.attrs).html(options.value.content)
+      anchor = jQuery("<#{options.value.tagName}>").attr(options.value.attrs).html(options.value.content)
       selection.selectNode(options.node)
-      html = $('<div>').html(selection.content()).find('a').html()
-      selection.replace($(anchor, selection.context).html(html))
+      html = jQuery('<div>').html(selection.content()).find('a').html()
+      selection.replace(jQuery(anchor, selection.context).html(html))
 
     insertsnippet: (selection, options) ->
       snippet = options.value
@@ -427,11 +426,11 @@ class Mercury.Regions.Editable.Selection
     return null unless @range
     ancestor = @range.commonAncestorContainer
     ancestor = ancestor.parentNode if ancestor.nodeType == 3 && onlyTag
-    return $(ancestor)
+    return jQuery(ancestor)
 
 
   wrap: (element, replace = false) ->
-    element = $(element, @context).html(@fragment)
+    element = jQuery(element, @context).html(@fragment)
     @replace(element) if replace
     return element
 
@@ -446,12 +445,12 @@ class Mercury.Regions.Editable.Selection
 
   is: (elementType) ->
     content = @content()
-    return $(content.firstChild) if content.childNodes.length == 1 && $(content.firstChild).is(elementType)
+    return jQuery(content.firstChild) if content.childNodes.length == 1 && jQuery(content.firstChild).is(elementType)
     return false
 
 
   forceSelection: (element) ->
-    return unless $.browser.webkit
+    return unless jQuery.browser.webkit
     range = @context.createRange()
 
     if @range
@@ -489,8 +488,8 @@ class Mercury.Regions.Editable.Selection
   placeMarker: ->
     return unless @range
 
-    @startMarker = $('<em class="mercury-marker"/>', @context).get(0)
-    @endMarker = $('<em class="mercury-marker"/>', @context).get(0)
+    @startMarker = jQuery('<em class="mercury-marker"/>', @context).get(0)
+    @endMarker = jQuery('<em class="mercury-marker"/>', @context).get(0)
 
     # put a single marker (the end)
     rangeEnd = @range.cloneRange()
@@ -508,8 +507,8 @@ class Mercury.Regions.Editable.Selection
 
 
   removeMarker: ->
-    $(@startMarker).remove()
-    $(@endMarker).remove()
+    jQuery(@startMarker).remove()
+    jQuery(@endMarker).remove()
 
 
   insertTextNode: (string) ->
@@ -522,7 +521,7 @@ class Mercury.Regions.Editable.Selection
 
   insertNode: (element) ->
     element = element.get(0) if element.get
-    element = $(element, @context).get(0) if $.type(element) == 'string'
+    element = jQuery(element, @context).get(0) if jQuery.type(element) == 'string'
 
     @range.deleteContents()
     @range.insertNode(element)
@@ -538,7 +537,7 @@ class Mercury.Regions.Editable.Selection
 
   replace: (element) ->
     element = element.get(0) if element.get
-    element = $(element, @context).get(0) if $.type(element) == 'string'
+    element = jQuery(element, @context).get(0) if jQuery.type(element) == 'string'
 
     @range.deleteContents()
     @range.insertNode(element)

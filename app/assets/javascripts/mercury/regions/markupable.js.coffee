@@ -18,7 +18,7 @@ class @Mercury.Regions.Markupable extends Mercury.Region
     height = @element.height()
 
     value = @element.html().replace(/^\s+|\s+$/g, '')
-    @textarea = $('<textarea>', @document).val(value)
+    @textarea = jQuery('<textarea>', @document).val(value)
     @textarea.attr('class', @element.attr('class')).addClass('mercury-textarea')
     @textarea.css({border: 0, background: 'transparent', display: 'block', width: width, height: height, fontFamily: '"Courier New", Courier, monospace', fontSize: '14px'})
     @element.after(@textarea)
@@ -90,7 +90,6 @@ class @Mercury.Regions.Markupable extends Mercury.Region
       Mercury.changes = true
       @resize()
       switch event.keyCode
-
         when 13 # enter or return
           selection = @selection()
           text = @element.val()
@@ -116,7 +115,6 @@ class @Mercury.Regions.Markupable extends Mercury.Region
 
       if event.metaKey
         switch event.keyCode
-
           when 66 # b
             @execCommand('bold')
             event.preventDefault()
@@ -147,6 +145,8 @@ class @Mercury.Regions.Markupable extends Mercury.Region
   content: (value = null, filterSnippets = true) ->
     if value != null
       if $.type(value) == 'string'
+        @element.val(value)
+      if jQuery.type(value) == 'string'
         @element.val(value)
       else
         @element.val(value.html)
@@ -222,7 +222,7 @@ class @Mercury.Regions.Markupable extends Mercury.Region
 
     insertHTML: (selection, options) ->
       if options.value.get && element = options.value.get(0)
-        options.value = $('<div>').html(element).html()
+        options.value = jQuery('<div>').html(element).html()
       selection.replace(options.value, false, true)
 
     insertImage: (selection, options) ->

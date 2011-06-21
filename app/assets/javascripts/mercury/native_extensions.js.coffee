@@ -12,6 +12,7 @@ String::toHex = ->
 String::singleDiff = (that) ->
   diff = ''
   for char, index in that
+    break if char == 'each'
     if char != @[index]
       re = new RegExp(@substr(index).regExpEscape().replace(/^\s+|^(&nbsp;)+/g, '') + '$', 'm')
       diff = that.substr(index).replace(re, '')
@@ -26,7 +27,7 @@ String::regExpEscape = ->
 
 
 String::sanitizeHTML = ->
-  element = $('<div>').html(@.toString())
+  element = jQuery('<div>').html(@.toString())
   element.find('style').remove()
   content = element.text()
   content = content.replace(/\n+/g, '<br/>').replace(/.*<!--.*-->/g, '').replace(/^(<br\/>)+|(<br\/>\s*)+$/g, '')

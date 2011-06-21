@@ -2,7 +2,7 @@
   Mercury.uploader.show(file, options)
   return Mercury.uploader
 
-$.extend Mercury.uploader, {
+jQuery.extend Mercury.uploader, {
 
   show: (file, @options = {}) ->
     @file = new Mercury.uploader.File(file)
@@ -37,15 +37,15 @@ $.extend Mercury.uploader, {
 
 
   build: ->
-    @element = $('<div>', {class: 'mercury-uploader', style: 'display:none'})
+    @element = jQuery('<div>', {class: 'mercury-uploader', style: 'display:none'})
     @element.append('<div class="mercury-uploader-preview"><b><img/></b></div>')
     @element.append('<div class="mercury-uploader-details"></div>')
     @element.append('<div class="mercury-uploader-progress"><span>Processing...</span><div class="mercury-uploader-indicator"><div><b>0%</b></div></div></div>')
 
-    @overlay = $('<div>', {class: 'mercury-uploader-overlay', style: 'display:none'})
+    @overlay = jQuery('<div>', {class: 'mercury-uploader-overlay', style: 'display:none'})
 
-    @element.appendTo($(@options.appendTo).get(0) ? 'body')
-    @overlay.appendTo($(@options.appendTo).get(0) ? 'body')
+    @element.appendTo(jQuery(@options.appendTo).get(0) ? 'body')
+    @overlay.appendTo(jQuery(@options.appendTo).get(0) ? 'body')
 
 
   bindEvents: ->
@@ -65,8 +65,8 @@ $.extend Mercury.uploader, {
 
 
   position: ->
-    viewportWidth = $(window).width()
-    viewportHeight = $(window).height()
+    viewportWidth = jQuery(window).width()
+    viewportHeight = jQuery(window).height()
 
     width = @element.outerWidth()
     height = @element.outerHeight()
@@ -84,17 +84,17 @@ $.extend Mercury.uploader, {
 
   loadImage: ->
     @file.readAsDataURL (result) =>
-      @element.find('.mercury-uploader-preview b').html($('<img>', {src: result}))
+      @element.find('.mercury-uploader-preview b').html(jQuery('<img>', {src: result}))
       @upload()
 
 
   upload: ->
     xhr = new XMLHttpRequest
-    $.each ['onloadstart', 'onprogress', 'onload', 'onabort', 'onerror'], (index, eventName) =>
+    jQuery.each ['onloadstart', 'onprogress', 'onload', 'onabort', 'onerror'], (index, eventName) =>
       xhr.upload[eventName] = (event) => @uploaderEvents[eventName].call(@, event)
     xhr.onload = (event) =>
       try
-        response = $.evalJSON(event.target.responseText)
+        response = jQuery.evalJSON(event.target.responseText)
         Mercury.trigger('action', {action: 'insertImage', value: {src: response.url}})
       catch error
         @updateStatus('Unable to process response')
@@ -208,6 +208,6 @@ class Mercury.uploader.MultiPartPost
 
   buildBody: ->
     boundary = '--' + @boundary
-    for name, value of @formInputs
+    for own name, value of @formInputs
       @body += "#{boundary}\r\nContent-Disposition: form-data; name=\"#{name}\"\r\n\r\n#{unescape(encodeURIComponent(value))}\r\n"
     @body += "#{boundary}\r\nContent-Disposition: form-data; name=\"#{@inputName}\"; filename=\"#{@file.name}\"\r\nContent-Type: #{@file.type}\r\nContent-Transfer-Encoding: binary\r\n\r\n#{@contents}\r\n#{boundary}--"

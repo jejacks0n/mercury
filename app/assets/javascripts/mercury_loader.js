@@ -33,19 +33,19 @@
   var head = document.getElementsByTagName("head")[0];
   if (window == top) {
     var style = document.createElement('style');
-    style.innerText = 'body{visibility:hidden;}';
+    style.innerText = 'body{visibility:hidden;display:none}';
     head.appendChild(style);
   }
 
   var timer;
   function fireContentLoadedEvent() {
-    if (document.loaded) return;
+    if (document.mercuryLoaded) return;
     if (timer) window.clearTimeout(timer);
-    document.loaded = true;
+    document.mercuryLoaded = true;
 
     if (window == top) {
       setTimeout(function() {
-        document.body.innerHTML = '';
+        document.body.innerHTML = '&nbsp;';
 
         var link = document.createElement('link');
         link.href = '/assets/mercury.css';
@@ -60,6 +60,7 @@
         head.appendChild(script);
         script.onload = function() {
           document.body.style.visibility = 'visible';
+          document.body.style.display = 'block';
           new Mercury.PageEditor()
         }
       }, 1);

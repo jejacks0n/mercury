@@ -1,6 +1,6 @@
 #Mercury.websocket =
 #
-#  websocket: $.websocket("ws://#{$.uri(window.location.href).host}:8081")
+#  websocket: jQuery.websocket("ws://#{jQuery.uri(window.location.href).host}:8081")
 #
 #
 #  send: (eventName, options) ->
@@ -11,24 +11,24 @@
 #
 #  bind: (eventName, callback) ->
 #    # todo: this will override any that are already set -- callbacks should be an array that we can push onto
-#    $.websocketSettings[eventName] = callback
+#    jQuery.websocketSettings[eventName] = callback
 
-#window.socket = $.websocket(, {
+#window.socket = jQuery.websocket(, {
 #  lock: (element) ->
-#    $('#' + element).attr('disabled', true);
+#    jQuery('#' + element).attr('disabled', true);
 #
 #  unlock: (element) ->
-#    $('#' + element).attr('disabled', false);
+#    jQuery('#' + element).attr('disabled', false);
 #
 #  chat: (element) ->
-#    $('#chat').get(0).innerHTML += message + "<br/>";
+#    jQuery('#chat').get(0).innerHTML += message + "<br/>";
 #});
 #
-#$(document).ready ->
+#jQuery(document).ready ->
 #
-#  $('.shared').bind 'focus', -> window.socket.send({"lock": this.id})
+#  jQuery('.shared').bind 'focus', -> window.socket.send({"lock": this.id})
 #
-#  $('.shared').bind 'blur', -> window.socket.send({"unlock": this.id})
+#  jQuery('.shared').bind 'blur', -> window.socket.send({"unlock": this.id})
 #
-#  $('.shared').bind 'keypress', (e) ->
-#    window.socket.send({chat: $(this).val()}) if (e.charCode == 13)
+#  jQuery('.shared').bind 'keypress', (e) ->
+#    window.socket.send({chat: jQuery(this).val()}) if (e.charCode == 13)

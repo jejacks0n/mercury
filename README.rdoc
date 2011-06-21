@@ -134,12 +134,23 @@ you may want to wrap this in conditional logic (eg. only admins or something).
 
   javascript_include_tag 'mercury_loader.js'
 
+Even though many efforts have been made to keep conflicts with javascript libraries from happening, we can't avoid all
+of them.  If you use this method, understand that there may be conflicts with javascript and css.  You should use the
+route method if you see any issues.
+
 === Route Method
 
 The other way to initialize Mercury, which provides some slight performance improvements to the script method, is to
 access the editor route.  There's a glob route that captures everything beginning with /editor, so for instance to edit
 an /about_us content page, you should access it at the /editor/about_us path.  Again, you may want to define this route
 in your own routes file to restrict access to it.
+
+If you use this method, you may want to notify Mercury when the page is ready to be initialized.  To do this just
+trigger the initialize:frame event.  You can do this when the dom is ready to be interacted with (eg. dom:loaded,
+document.ready), or at the bottom of your body tag.  It's recommended that you do this because it gives you some load
+performance improvements, but it's not required.
+
+  top.Mercury.trigger('initialize:frame');
 
 
 == Region Types

@@ -6,16 +6,20 @@ class @Mercury.Statusbar
 
 
   build: ->
-    @element = $('<div>', {class: 'mercury-statusbar'}).appendTo($(@options.appendTo).get(0) ? 'body')
+    @element = jQuery('<div>', {class: 'mercury-statusbar'}).appendTo(jQuery(@options.appendTo).get(0) ? 'body')
 
 
   bindEvents: ->
     Mercury.bind 'region:update', (event, options) =>
-      @setPath(options.region.path()) if options.region && $.type(options.region.path) == 'function'
+      @setPath(options.region.path()) if options.region && jQuery.type(options.region.path) == 'function'
 
 
   height: ->
-    @element.outerHeight()
+    return @element.outerHeight()
+
+
+  top: ->
+    return @element.offset().top
 
 
   setPath: (elements) ->

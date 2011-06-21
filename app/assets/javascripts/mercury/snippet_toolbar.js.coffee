@@ -5,10 +5,10 @@ class @Mercury.SnippetToolbar extends Mercury.Toolbar
 
 
   build: ->
-    @element = $('<div>', {class: 'mercury-toolbar mercury-snippet-toolbar', style: 'display:none'})
-    @element.appendTo($(@options.appendTo).get(0) ? 'body')
+    @element = jQuery('<div>', {class: 'mercury-toolbar mercury-snippet-toolbar', style: 'display:none'})
+    @element.appendTo(jQuery(@options.appendTo).get(0) ? 'body')
 
-    for buttonName, options of Mercury.config.toolbars.snippetable
+    for own buttonName, options of Mercury.config.toolbars.snippetable
       button = @buildButton(buttonName, options)
       button.appendTo(@element) if button
 
@@ -23,7 +23,7 @@ class @Mercury.SnippetToolbar extends Mercury.Toolbar
       return unless options.type && options.type == 'snippet'
       @hide(options.immediately)
 
-    $(@document).scroll => @position() if @visible
+    jQuery(@document).scroll => @position() if @visible
 
     @element.mousemove => clearTimeout(@hideTimeout)
     @element.mouseout => @hide()
@@ -38,8 +38,8 @@ class @Mercury.SnippetToolbar extends Mercury.Toolbar
   position: ->
     offset = @snippet.offset()
 
-    top = offset.top + Mercury.displayRect.top - $(@document).scrollTop() - @height() + 10
-    left = offset.left - $(@document).scrollLeft()
+    top = offset.top + Mercury.displayRect.top - jQuery(@document).scrollTop() - @height() + 10
+    left = offset.left - jQuery(@document).scrollLeft()
 
     @element.css {
       top: top,

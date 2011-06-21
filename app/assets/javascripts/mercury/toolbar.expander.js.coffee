@@ -9,8 +9,8 @@ class @Mercury.Toolbar.Expander extends Mercury.Palette
 
   build: ->
     @container.css({whiteSpace: 'normal'})
-    @trigger = $('<div>', {class: 'mercury-toolbar-expander'}).appendTo($(@options.appendTo).get(0) ? 'body')
-    @element = $('<div>', {class: "mercury-palette mercury-expander mercury-#{@name}-expander", style: 'display:none'})
+    @trigger = jQuery('<div>', {class: 'mercury-toolbar-expander'}).appendTo(jQuery(@options.appendTo).get(0) ? 'body')
+    @element = jQuery('<div>', {class: "mercury-palette mercury-expander mercury-#{@name}-expander", style: 'display:none'})
     @windowResize()
 
 
@@ -24,20 +24,20 @@ class @Mercury.Toolbar.Expander extends Mercury.Palette
       event.stopPropagation()
       hiddenButtons = []
       for button in @container.find('.mercury-button')
-        button = $(button)
+        button = jQuery(button)
         hiddenButtons.push(button.data('expander')) if button.position().top > 5
 
       @loadContent(hiddenButtons.join(''))
       @toggle()
 
     @element.click (event) =>
-      buttonName = $(event.target).closest('[data-button]').data('button')
+      buttonName = jQuery(event.target).closest('[data-button]').data('button')
       button = @container.find(".mercury-#{buttonName}-button")
       button.click()
 
 
   windowResize: ->
-    if @containerWidth > $(window).width() then @trigger.show() else @trigger.hide()
+    if @containerWidth > jQuery(window).width() then @trigger.show() else @trigger.hide()
     @hide()
 
 
@@ -46,7 +46,7 @@ class @Mercury.Toolbar.Expander extends Mercury.Palette
     position = @trigger.offset()
     width = @element.width()
 
-    position.left = position.left - width + @trigger.width() if position.left + width > $(window).width()
+    position.left = position.left - width + @trigger.width() if position.left + width > jQuery(window).width()
 
     @element.css {
       top: position.top + @trigger.height(),

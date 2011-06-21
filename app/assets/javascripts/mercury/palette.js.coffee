@@ -5,8 +5,8 @@ class @Mercury.Palette extends Mercury.Dialog
 
 
   build: ->
-    @element = $('<div>', {class: "mercury-palette mercury-#{@name}-palette loading", style: 'display:none'})
-    @element.appendTo($(@options.appendTo).get(0) ? 'body')
+    @element = jQuery('<div>', {class: "mercury-palette mercury-#{@name}-palette loading", style: 'display:none'})
+    @element.appendTo(jQuery(@options.appendTo).get(0) ? 'body')
 
 
   bindEvents: ->
@@ -19,7 +19,7 @@ class @Mercury.Palette extends Mercury.Dialog
     position = @button.offset()
     width = @element.width()
 
-    position.left = position.left - width + @button.width() if position.left + width > $(window).width()
+    position.left = position.left - width + @button.width() if position.left + width > jQuery(window).width()
 
     @element.css {
       top: position.top + @button.height(),

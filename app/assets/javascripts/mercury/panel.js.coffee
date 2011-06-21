@@ -5,11 +5,11 @@ class @Mercury.Panel extends Mercury.Dialog
 
 
   build: ->
-    @element = $('<div>', {class: 'mercury-panel loading', style: 'display:none;'})
-    @titleElement = $("<h1>#{@options.title}</h1>").appendTo(@element)
-    @paneElement = $('<div>', {class: 'mercury-panel-pane'}).appendTo(@element)
+    @element = jQuery('<div>', {class: 'mercury-panel loading', style: 'display:none;'})
+    @titleElement = jQuery("<h1>#{@options.title}</h1>").appendTo(@element)
+    @paneElement = jQuery('<div>', {class: 'mercury-panel-pane'}).appendTo(@element)
 
-    @element.appendTo($(@options.appendTo).get(0) ? 'body');
+    @element.appendTo(jQuery(@options.appendTo).get(0) ? 'body')
 
 
   bindEvents: ->

@@ -2,10 +2,10 @@
   Mercury.tooltip.show(forElement, content, options)
   return Mercury.tooltip
 
-$.extend Mercury.tooltip, {
+jQuery.extend Mercury.tooltip, {
 
   show: (@forElement, @content, @options = {}) ->
-    @document = $(@forElement.get(0).ownerDocument)
+    @document = jQuery(@forElement.get(0).ownerDocument)
     @initialize()
     if @visible then @update() else @appear()
 
@@ -18,8 +18,8 @@ $.extend Mercury.tooltip, {
 
 
   build: ->
-    @element = $('<div>', {class: 'mercury-tooltip'})
-    @element.appendTo($(@options.appendTo).get(0) ? 'body')
+    @element = jQuery('<div>', {class: 'mercury-tooltip'})
+    @element.appendTo(jQuery(@options.appendTo).get(0) ? 'body')
 
 
   bindEvents: ->
@@ -47,8 +47,8 @@ $.extend Mercury.tooltip, {
     offset = @forElement.offset()
     width = @element.width()
 
-    top = offset.top + (Mercury.displayRect.top - $(@document).scrollTop()) + @forElement.outerHeight()
-    left = offset.left - $(@document).scrollLeft()
+    top = offset.top + (Mercury.displayRect.top - jQuery(@document).scrollTop()) + @forElement.outerHeight()
+    left = offset.left - jQuery(@document).scrollLeft()
 
     left = left - (left + width + 25) - Mercury.displayRect.width if (left + width + 25) > Mercury.displayRect.width
     left = if left <= 0 then 0 else left

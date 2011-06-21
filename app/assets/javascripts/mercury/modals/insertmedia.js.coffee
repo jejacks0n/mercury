@@ -1,10 +1,10 @@
 @Mercury.modalHandlers.insertMedia = ->
   # make the inputs work with the radio buttons, and options
   @element.find('label input').click (event) ->
-    $(@).closest('label').next('.selectable').focus()
+    jQuery(@).closest('label').next('.selectable').focus()
 
   @element.find('.selectable').focus (event) =>
-    element = $(event.target)
+    element = jQuery(event.target)
     element.prev('label').find('input[type=radio]').prop("checked", true)
 
     @element.find(".media-options").hide()
@@ -50,7 +50,7 @@
 
       when 'youtube_url'
         code = @element.find('#media_youtube_url').val().replace('http://youtu.be/', '')
-        value = $('<iframe>', {
+        value = jQuery('<iframe>', {
           width: @element.find('#media_youtube_width').val() || 560,
           height: @element.find('#media_youtube_height').val() || 349,
           src: "http://www.youtube.com/embed/#{code}?wmode=transparent",
@@ -61,7 +61,7 @@
 
       when 'vimeo_url'
         code = @element.find('#media_vimeo_url').val().replace('http://vimeo.com/', '')
-        value = $('<iframe>', {
+        value = jQuery('<iframe>', {
           width: @element.find('#media_vimeo_width').val() || 400,
           height: @element.find('#media_vimeo_height').val() || 225,
           src: "http://player.vimeo.com/video/#{code}?title=1&byline=1&portrait=0&color=ffffff",

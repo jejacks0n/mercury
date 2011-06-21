@@ -2,7 +2,7 @@
   Mercury.modal.show(url, options)
   return Mercury.modal
 
-$.extend Mercury.modal, {
+jQuery.extend Mercury.modal, {
 
   minWidth: 400
 
@@ -20,18 +20,18 @@ $.extend Mercury.modal, {
 
 
   build: ->
-    @element = $('<div>', {class: 'mercury-modal loading'})
+    @element = jQuery('<div>', {class: 'mercury-modal loading'})
     @element.html('<h1 class="mercury-modal-title"><span></span><a>&times;</a></h1>')
     @element.append('<div class="mercury-modal-content-container"><div class="mercury-modal-content"></div></div>')
 
-    @overlay = $('<div>', {class: 'mercury-modal-overlay'})
+    @overlay = jQuery('<div>', {class: 'mercury-modal-overlay'})
 
     @titleElement = @element.find('.mercury-modal-title')
     @contentContainerElement = @element.find('.mercury-modal-content-container')
     @contentElement = @element.find('.mercury-modal-content')
 
-    @element.appendTo($(@options.appendTo).get(0) ? 'body')
-    @overlay.appendTo($(@options.appendTo).get(0) ? 'body')
+    @element.appendTo(jQuery(@options.appendTo).get(0) ? 'body')
+    @overlay.appendTo(jQuery(@options.appendTo).get(0) ? 'body')
 
     @titleElement.find('span').html(@options.title)
 
@@ -62,7 +62,7 @@ $.extend Mercury.modal, {
     # TODO: resizing is a bit shitty when the modal has panes and is scrollable
     visibility = if keepVisible then 'visible' else 'hidden'
 
-    viewportHeight = $(window).height()
+    viewportHeight = jQuery(window).height()
     titleHeight = @titleElement.outerHeight()
 
     width = @contentElement.outerWidth()
@@ -75,7 +75,7 @@ $.extend Mercury.modal, {
     width = @minWidth if width < @minWidth
     height = viewportHeight - 20 if height > viewportHeight - 20 || @options.fullHeight
 
-    @element.stop().animate {left: ($(window).width() - width) / 2, width: width, height: height}, 200, 'easeInOutSine', =>
+    @element.stop().animate {left: (jQuery(window).width() - width) / 2, width: width, height: height}, 200, 'easeInOutSine', =>
       @contentElement.css({visibility: 'visible', display: 'block'})
       if @contentPane.length
         @contentElement.css({height: height - titleHeight, overflow: 'visible'})
@@ -87,8 +87,8 @@ $.extend Mercury.modal, {
 
 
   position: ->
-    viewportWidth = $(window).width()
-    viewportHeight = $(window).height()
+    viewportWidth = jQuery(window).width()
+    viewportHeight = jQuery(window).height()
 
     @contentPane.css({height: 'auto'}) if @contentPane
     @contentElement.css({height: 'auto'})
@@ -127,7 +127,7 @@ $.extend Mercury.modal, {
   load: ->
     @element.addClass('loading')
     @setTitle()
-    $.ajax @url, {
+    jQuery.ajax @url, {
       type: @options.loadType || 'get'
       data: @options.loadData
       success: (data) => @loadContent(data)

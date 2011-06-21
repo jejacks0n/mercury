@@ -36,7 +36,7 @@ class @Mercury.Region
     @element.mousemove (event) =>
       return if @previewing
       return unless Mercury.region == @
-      snippet = $(event.target).closest('.mercury-snippet')
+      snippet = jQuery(event.target).closest('.mercury-snippet')
       if snippet.length
         @snippet = snippet
         Mercury.trigger('show:toolbar', {type: 'snippet', snippet: @snippet})
@@ -51,12 +51,12 @@ class @Mercury.Region
       @element.html(value)
     else
       # sanitize the html before we return it
-      container = $('<div>').appendTo(@document.createDocumentFragment())
+      container = jQuery('<div>').appendTo(@document.createDocumentFragment())
       container.html(@element.html().replace(/^\s+|\s+$/g, ''))
 
       # replace snippet contents to be an identifier
       if filterSnippets then for snippet, index in container.find('.mercury-snippet')
-        snippet = $(snippet)
+        snippet = jQuery(snippet)
         snippet.attr({contenteditable: null, 'data-version': null})
         snippet.html("[#{snippet.data('snippet')}]")
 
@@ -89,8 +89,8 @@ class @Mercury.Region
   snippets: ->
     snippets = {}
     for element in @element.find('[data-snippet]')
-      snippet = Mercury.Snippet.find($(element).data('snippet'))
-      snippet.setVersion($(element).data('version'))
+      snippet = Mercury.Snippet.find(jQuery(element).data('snippet'))
+      snippet.setVersion(jQuery(element).data('version'))
       snippets[snippet.identity] = snippet.serialize()
     return snippets
 

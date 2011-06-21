@@ -9,8 +9,8 @@ class @Mercury.Dialog
 
 
   build: ->
-    @element = $('<div>', {class: "mercury-dialog mercury-#{@name}-dialog loading", style: 'display:none'})
-    @element.appendTo($(@options.appendTo).get(0) ? 'body')
+    @element = jQuery('<div>', {class: "mercury-dialog mercury-#{@name}-dialog loading", style: 'display:none'})
+    @element.appendTo(jQuery(@options.appendTo).get(0) ? 'body')
 
 
   bindEvents: ->
@@ -57,7 +57,7 @@ class @Mercury.Dialog
 
   load: (callback) ->
     return unless @url
-    $.ajax @url, {
+    jQuery.ajax @url, {
       success: (data) =>
         @loadContent(data)
         Mercury.dialogHandlers[@name].call(@) if Mercury.dialogHandlers[@name]

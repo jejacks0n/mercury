@@ -7,9 +7,9 @@ class @Mercury.HistoryBuffer
 
 
   push: (item) ->
-    if $.type(item) == 'string'
+    if jQuery.type(item) == 'string'
       return if @stack[@index] && @stack[@index].replace(@markerRegExp, '') == item.replace(@markerRegExp, '')
-    else if $.type(item) == 'object' && item.html
+    else if jQuery.type(item) == 'object' && item.html
       return if @stack[@index] && @stack[@index].html == item.html
 
     @stack = @stack[0...@index + 1]

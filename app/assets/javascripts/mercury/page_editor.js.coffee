@@ -10,15 +10,16 @@ class @Mercury.PageEditor
     window.mercuryInstance = @
     @regions = []
     @initializeInterface()
-    Mercury.csrfToken = token if token = $('meta[name="csrf-token"]').attr('content')
+    Mercury.csrfToken = token if token = jQuery('meta[name="csrf-token"]').attr('content')
 
 
   initializeInterface: ->
-    @focusableElement = $('<input>', {type: 'text', style: 'position:absolute;opacity:0'}).appendTo(@options.appendTo ? 'body')
-    @iframe = $('<iframe>', {class: 'mercury-iframe', seamless: 'true', frameborder: '0', src: 'about:blank', style: 'position:absolute;top:0;width:100%;visibility:hidden'})
+    @focusableElement = jQuery('<input>', {type: 'text', style: 'position:absolute;opacity:0'}).appendTo(@options.appendTo ? 'body')
+    @iframe = jQuery('<iframe>', {class: 'mercury-iframe', seamless: 'true', frameborder: '0', src: 'about:blank', style: 'position:absolute;top:0;width:100%;visibility:hidden'})
+    @iframe.appendTo(jQuery(@options.appendTo).get(0) ? 'body')
+
     @iframe.load => @initializeFrame()
-    @iframe.attr('src', @iframeSrc())
-    @iframe.appendTo($(@options.appendTo).get(0) ? 'body')
+    @iframe.get(0).contentWindow.document.location.href = @iframeSrc()
 
     @toolbar = new Mercury.Toolbar(@options)
     @statusbar = new Mercury.Statusbar(@options)
@@ -28,14 +29,14 @@ class @Mercury.PageEditor
     try
       return if @iframe.data('loaded')
       @iframe.data('loaded', true)
-      @document = $(@iframe.get(0).contentWindow.document)
-      $("<style mercury-styles=\"true\">").html(Mercury.config.injectedStyles).appendTo(@document.find('head'))
+      @document = jQuery(@iframe.get(0).contentWindow.document)
+      jQuery("<style mercury-styles=\"true\">").html(Mercury.config.injectedStyles).appendTo(@document.find('head'))
 
       # jquery: make jQuery evaluate scripts within the context of the iframe window -- note that this means that we
       # can't use eval in mercury (eg. script tags in ajax responses) because it will eval in the wrong context (you can
       # use top.Mercury though, if you keep it in mind)
       iframeWindow = @iframe.get(0).contentWindow
-      $.globalEval = (data) -> (iframeWindow.execScript || (data) -> iframeWindow["eval"].call(iframeWindow, data))(data) if (data && /\S/.test(data))
+      jQuery.globalEval = (data) -> (iframeWindow.execScript || (data) -> iframeWindow["eval"].call(iframeWindow, data))(data) if (data && /\S/.test(data))
 
       @bindEvents()
       @initializeRegions()
@@ -47,7 +48,7 @@ class @Mercury.PageEditor
 
 
   initializeRegions: ->
-    @buildRegion($(region)) for region in $('.mercury-region', @document)
+    @buildRegion(jQuery(region)) for region in jQuery('.mercury-region', @document)
     for region in @regions
       if region.focus
         region.focus()
@@ -71,33 +72,32 @@ class @Mercury.PageEditor
 
 
   bindEvents: ->
-    Mercury.bind 'initialize:frame', => setTimeout(@initializeFrame, 100)
+    Mercury.bind 'initialize:frame', => setTimeout(@initializeFrame, 1000)
     Mercury.bind 'focus:frame', => @iframe.focus()
     Mercury.bind 'focus:window', => setTimeout((=> @focusableElement.focus()), 10)
 
     Mercury.bind 'action', (event, options) =>
-      @save() if options.action == 'save'
+       @save() if options.action == 'save'
 
     @document.mousedown (event) ->
       Mercury.trigger('hide:dialogs')
-      Mercury.trigger('unfocus:regions') unless $(event.target).closest('.mercury-region').get(0) == Mercury.region.element.get(0)
+      Mercury.trigger('unfocus:regions') unless jQuery(event.target).closest('.mercury-region').get(0) == Mercury.region.element.get(0)
 
-    $(window).resize => @resize()
+    jQuery(window).resize => @resize()
     window.onbeforeunload = @beforeUnload
 
 
   resize: ->
-    width = $(window).width()
-    height = $(window).height()
+    width = jQuery(window).width()
+    height = @statusbar.top()
     toolbarHeight = @toolbar.height()
-    statusbarHeight = @statusbar.height()
 
-    Mercury.displayRect = {top: toolbarHeight, left: 0, width: width, height: height - statusbarHeight - toolbarHeight}
+    Mercury.displayRect = {top: toolbarHeight, left: 0, width: width, height: height - toolbarHeight}
 
     @iframe.css {
       top: toolbarHeight,
-      width: width,
-      height: height - statusbarHeight - toolbarHeight
+      left: 0,
+      height: height - toolbarHeight
     }
 
     Mercury.trigger('resize')
@@ -108,14 +108,14 @@ class @Mercury.PageEditor
 
 
   hijackLinks: ->
-    for link in $('a', @document)
+    for link in jQuery('a', @document)
       ignored = false
       for classname in @options.ignoredLinks || []
-        if $(link).hasClass(classname)
+        if jQuery(link).hasClass(classname)
           ignored = true
           continue
-      if !ignored && (link.target == '' || link.target == '_self') && !$(link).closest('.mercury-region').length
-        $(link).attr('target', '_top')
+      if !ignored && (link.target == '' || link.target == '_self') && !jQuery(link).closest('.mercury-region').length
+        jQuery(link).attr('target', '_top')
 
 
   beforeUnload: ->
@@ -128,8 +128,8 @@ class @Mercury.PageEditor
     url = @saveUrl ? @iframeSrc()
     data = @serialize()
     Mercury.log('saving', data)
-    data = $.toJSON(data) unless @options.saveStyle == 'form'
-    $.ajax url, {
+    data = jQuery.toJSON(data) unless @options.saveStyle == 'form'
+    jQuery.ajax url, {
       type: 'POST'
       data: {content: data}
       success: =>

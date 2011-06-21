@@ -1,25 +1,24 @@
 class @Mercury.Toolbar.Button
 
-  constructor: (@name, @title, @summary = null, @types = [], @options = {}) ->
+  constructor: (@name, @title, @summary = null, @types = {}, @options = {}) ->
     @build()
     @bindEvents()
     return @element
 
 
   build: ->
-    @element = $('<div>', {title: @summary ? @title, class: "mercury-button mercury-#{@name}-button"}).html("<em>#{@title}</em>")
+    @element = jQuery('<div>', {title: @summary ? @title, class: "mercury-button mercury-#{@name}-button"}).html("<em>#{@title}</em>")
     @element.data('expander', "<div class=\"mercury-expander-button\" data-button=\"#{@name}\"><em></em><span>#{@title}</span></div>")
 
     @handled = []
     dialogOptions = {title: @summary || @title, preload: @types.preload, appendTo: @options.appendDialogsTo || 'body', for: @element}
-    for type, mixed of @types
+    for own type, mixed of @types
       switch type
-
         when 'preload' then true
 
         when 'regions'
           @element.addClass('disabled')
-          @handled[type] = if $.isFunction(mixed) then mixed.call(@, @name) else mixed
+          @handled[type] = if jQuery.isFunction(mixed) then mixed.call(@, @name) else mixed
 
         when 'toggle'
           @handled[type] = true
@@ -28,26 +27,26 @@ class @Mercury.Toolbar.Button
           @handled[type] = if mixed == true then @name else mixed
 
         when 'context'
-          @handled[type] = if $.isFunction(mixed) then mixed else Mercury.Toolbar.Button.contexts[@name]
+          @handled[type] = if jQuery.isFunction(mixed) then mixed else Mercury.Toolbar.Button.contexts[@name]
 
         when 'palette'
           @element.addClass("mercury-button-palette")
-          url = if $.isFunction(mixed) then mixed.call(@, @name) else mixed
+          url = if jQuery.isFunction(mixed) then mixed.call(@, @name) else mixed
           @handled[type] = new Mercury.Palette(url, @name, dialogOptions)
 
         when 'select'
           @element.addClass("mercury-button-select").find('em').html(@title)
-          url = if $.isFunction(mixed) then mixed.call(@, @name) else mixed
+          url = if jQuery.isFunction(mixed) then mixed.call(@, @name) else mixed
           @handled[type] = new Mercury.Select(url, @name, dialogOptions)
 
         when 'panel'
           @element.addClass('mercury-button-panel')
-          url = if $.isFunction(mixed) then mixed.call(@, @name) else mixed
+          url = if jQuery.isFunction(mixed) then mixed.call(@, @name) else mixed
           @handled['toggle'] = true
           @handled[type] = new Mercury.Panel(url, @name, dialogOptions)
 
         when 'modal'
-          @handled[type] = if $.isFunction(mixed) then mixed.apply(@, @name) else mixed
+          @handled[type] = if jQuery.isFunction(mixed) then mixed.apply(@, @name) else mixed
 
         else throw "Unknown button type #{type} used for the #{@name} button."
 
@@ -57,7 +56,7 @@ class @Mercury.Toolbar.Button
       @element.click() if options.action == @name
 
     Mercury.bind 'region:update', (event, options) =>
-      if @handled.context && options.region && $.type(options.region.currentElement) == 'function'
+      if @handled.context && options.region && jQuery.type(options.region.currentElement) == 'function'
         element = options.region.currentElement()
         if element.length && @handled.context.call(@, element, options.region.element)
           @element.addClass('active')
@@ -86,9 +85,8 @@ class @Mercury.Toolbar.Button
       if @element.closest('.disabled').length then return
 
       handled = false
-      for type, mixed of @handled
+      for own type, mixed of @handled
         switch type
-
           when 'toggle'
             @togglePressed()
 
@@ -97,6 +95,7 @@ class @Mercury.Toolbar.Button
             Mercury.trigger('mode', {mode: mixed})
 
           when 'modal'
+            handled = true
             Mercury.modal(@handled.modal, {title: @summary || @title, handler: @name})
 
           when 'palette', 'select', 'panel'

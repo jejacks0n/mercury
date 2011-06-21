@@ -3,7 +3,7 @@
 
   # make td's selectable
   table.click (event) =>
-    cell = $(event.target)
+    cell = jQuery(event.target)
     table = cell.closest('table')
     table.find('.selected').removeClass('selected')
     cell.addClass('selected')
@@ -16,9 +16,8 @@
 
   # make the buttons work
   @element.find('input.action').click (event) =>
-    action = $(event.target).attr('name')
+    action = jQuery(event.target).attr('name')
     switch action
-
       when 'insertRowBefore' then Mercury.tableEditor.addRow('before')
       when 'insertRowAfter' then Mercury.tableEditor.addRow('after')
       when 'deleteRow' then Mercury.tableEditor.removeRow()
@@ -48,7 +47,7 @@
     table.find('.selected').removeClass('selected')
     table.find('td, th').html('&nbsp;')
 
-    html = $('<div>').html(table).html()
+    html = jQuery('<div>').html(table).html()
     value = html.replace(/^\s+|\n/gm, '').replace(/(<\/.*?>|<table.*?>|<tbody>|<tr>)/g, '$1\n')
 
     Mercury.trigger('action', {action: 'insertHTML', value: value})

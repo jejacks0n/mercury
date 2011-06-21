@@ -66,7 +66,6 @@ describe "Mercury.PageEditor", ->
     it "builds an iframe", ->
       @pageEditor = new Mercury.PageEditor('', {appendTo: $('#test')})
       expect($('iframe.mercury-iframe').length).toEqual(1)
-      expect($('iframe.mercury-iframe').attr('src')).toEqual('/foo')
 
     it "appends the elements to any node", ->
       @pageEditor = new Mercury.PageEditor('', {appendTo: $('#page_editor_container')})
@@ -284,19 +283,19 @@ describe "Mercury.PageEditor", ->
 
     beforeEach ->
       Mercury.Toolbar = -> {toolbar: true, height: -> 100}
-      Mercury.Statusbar = -> {statusbar: true, height: -> 10}
+      Mercury.Statusbar = -> {statusbar: true, top: -> 500}
       Mercury.PageEditor.prototype.initializeFrame = ->
       @pageEditor = new Mercury.PageEditor('', {appendTo: $('#test')})
 
     it "sets the display rectangle to displayRect", ->
       @pageEditor.resize()
       expect(Mercury.displayRect.top).toEqual(100)
-      expect(Mercury.displayRect.height).toEqual($(window).height() - 100 - 10)
+      expect(Mercury.displayRect.height).toEqual(500 - 100)
 
     it "resizes the iframe", ->
       @pageEditor.resize()
       expect($('.mercury-iframe').css('top')).toEqual('100px')
-      expect($('.mercury-iframe').css('height')).toEqual("#{$(window).height() - 100 - 10}px")
+      expect($('.mercury-iframe').css('height')).toEqual("#{500 - 100}px")
 
     it "triggers a resize event", ->
       spy = spyOn(Mercury, 'trigger').andCallFake(=>)

@@ -10,7 +10,7 @@ describe "Mercury.modalHandlers.htmlEditor", ->
       hide: ->
     Mercury.region =
       content: -> '<span>html \ncontent</span>'
-    Mercury.modalHandlers.htmleditor.call(@modal)
+    Mercury.modalHandlers.htmlEditor.call(@modal)
 
   describe "loading", ->
 

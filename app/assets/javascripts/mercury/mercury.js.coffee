@@ -37,7 +37,7 @@
 
 @Mercury = {
 
-  version: 1.0
+  version: '0.1.1'
 
 
   # No IE support yet because it doesn't follow the W3C standards for HTML5 contentEditable (aka designMode).

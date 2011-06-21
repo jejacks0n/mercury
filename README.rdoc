@@ -113,9 +113,6 @@ There's a migration for images that you'll need as well.
   rake mercury_engine:install:migrations
   rake db:migrate
 
-To access the editor on any page simply browse to any existing content page and prefix it's url with /edit, so for
-instance, localhost:3000/edit/content/page to edit the content on /content/page.
-
 
 == Usage
 
@@ -127,6 +124,22 @@ Region types are outlined below.
   <div class="mercury-region" data-type="editable">
     default content
   </div>
+
+There's two methods to initialize Mercury Editor, and each one has it's benefits.
+
+=== Script Method
+
+Include the mercury_loader.js file.  The loader will reload the page and enable Mercury in full page editing mode, so
+you may want to wrap this in conditional logic (eg. only admins or something).
+
+  javascript_include_tag 'mercury_loader.js'
+
+=== Route Method
+
+The other way to initialize Mercury, which provides some slight performance improvements to the script method, is to
+access the editor route.  There's a glob route that captures everything beginning with /editor, so for instance to edit
+an /about_us content page, you should access it at the /editor/about_us path.  Again, you may want to define this route
+in your own routes file to restrict access to it.
 
 
 == Region Types
@@ -155,3 +168,10 @@ Snippets are reusable and configurable chunks of markup.  They can be defined by
 content regions.  When you drag a snippet into a region you'll be prompted to enter options, and after entering options
 the snippet will be rendered into the page as a preview.  Snippets can be dragged around (in snippetable regions) and
 edited or removed.
+
+Mercury does very little to save content and snippets for you, but it does provide the ability to load snippets from
+your own storage implementation.  Here's an example of loading existing snippet options back into Mercury.
+
+  top.Mercury.Snippet.load({
+    'snippet_1': {name: 'example', options: {'options[favorite_beer]': "Bells Hopslam", 'options[first_name]': "Jeremy"}},
+  });

@@ -286,8 +286,8 @@ Showdown.converter = function() {
     // "paragraphs" that are wrapped in non-block-level tags, such as anchors,
     // phrase emphasis, and spans. The list of tags we're looking for is
     // hard-coded:
-    var block_tags_a = "p|div|h[1-6]|blockquote|pre|table|dl|ol|ul|script|noscript|form|fieldset|iframe|math|ins|del"
-    var block_tags_b = "p|div|h[1-6]|blockquote|pre|table|dl|ol|ul|script|noscript|form|fieldset|iframe|math"
+    var block_tags_a = "p|div|h[1-6]|blockquote|pre|table|dl|ol|ul|script|noscript|form|fieldset|iframe|math|ins|del";
+    var block_tags_b = "p|div|h[1-6]|blockquote|pre|table|dl|ol|ul|script|noscript|form|fieldset|iframe|math";
 
     // First, look for nested blocks, e.g.:
     //   <div>
@@ -836,7 +836,6 @@ Showdown.converter = function() {
         // Turn double returns into triple returns, so that we can make a
         // paragraph for the last item in a list, if necessary:
         var list = list.replace(/\n{2,}/g, "\n\n\n");
-        ;
         var result = _ProcessListItems(list);
         result = runup + "<" + list_type + ">\n" + result + "</" + list_type + ">\n";
         return result;

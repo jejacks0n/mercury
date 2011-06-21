@@ -46,6 +46,9 @@
     if (window == top) {
       setTimeout(function() {
         document.body.innerHTML = '&nbsp;';
+        for (var i = 0; i <= document.styleSheets.length - 1; i += 1) {
+          document.styleSheets[i].disabled = true
+        }
 
         var link = document.createElement('link');
         link.href = '/assets/mercury.css';

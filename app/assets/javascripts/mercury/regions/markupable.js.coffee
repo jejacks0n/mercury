@@ -25,9 +25,12 @@ class @Mercury.Regions.Markupable extends Mercury.Region
     @element.hide()
     @resize()
 
+    @previewElement = @element
+    @element = @textarea
+
 
   focus: ->
-    @textarea.focus()
+    @element.focus()
 
 
   bindEvents: ->
@@ -44,17 +47,23 @@ class @Mercury.Regions.Markupable extends Mercury.Region
       return unless Mercury.region == @
       @execCommand(options.action, options) if options.action
 
-    @textarea.bind 'dragenter', (event) =>
+    Mercury.bind 'unfocus:regions', (event) =>
+      return if @previewing
+      if Mercury.region == @
+        @element.blur()
+        Mercury.trigger('region:blurred', {region: @})
+
+    @element.bind 'dragenter', (event) =>
       return if @previewing
       event.preventDefault()
       event.originalEvent.dataTransfer.dropEffect = 'copy'
 
-    @textarea.bind 'dragover', (event) =>
+    @element.bind 'dragover', (event) =>
       return if @previewing
       event.preventDefault()
       event.originalEvent.dataTransfer.dropEffect = 'copy'
 
-    @textarea.bind 'drop', (event) =>
+    @element.bind 'drop', (event) =>
       return if @previewing
 
       # handle dropping snippets
@@ -69,18 +78,12 @@ class @Mercury.Regions.Markupable extends Mercury.Region
         @focus()
         Mercury.uploader(event.originalEvent.dataTransfer.files[0])
 
-    @textarea.focus =>
+    @element.focus =>
       return if @previewing
       Mercury.region = @
-      @textarea.addClass('focus')
       Mercury.trigger('region:focused', {region: @})
 
-    @textarea.blur =>
-      return if @previewing
-      @textarea.removeClass('focus')
-      Mercury.trigger('region:blurred', {region: @})
-
-    @textarea.keydown (event) =>
+    @element.keydown (event) =>
       return if @previewing
       Mercury.changes = true
       @resize()
@@ -88,7 +91,7 @@ class @Mercury.Regions.Markupable extends Mercury.Region
 
         when 13 # enter or return
           selection = @selection()
-          text = @textarea.val()
+          text = @element.val()
           start = text.lastIndexOf('\n', selection.start)
           end = text.indexOf('\n', selection.end)
           end = text.length if end < start
@@ -98,9 +101,7 @@ class @Mercury.Regions.Markupable extends Mercury.Region
             event.preventDefault()
           if /\d/.test(text[start + 1])
             lineText = text.substring(start, end)
-            console.debug(lineText)
             if /(\d+)\./.test(lineText)
-              console.debug(2)
               number = parseInt(RegExp.$1)
               selection.replace("\n#{number += 1}. ", false, true)
               event.preventDefault()
@@ -128,34 +129,39 @@ class @Mercury.Regions.Markupable extends Mercury.Region
 
       @pushHistory(event.keyCode)
 
-    @textarea.keyup =>
+    @element.keyup =>
       return if @previewing
       Mercury.trigger('region:update', {region: @})
 
-    @element.click (event) =>
+    @element.mouseup =>
+      return if @previewing
+      @focus()
+      Mercury.trigger('region:focused', {region: @})
+
+    @previewElement.click (event) =>
       $(event.target).closest('a').attr('target', '_top') if @previewing
 
 
   content: (value = null, filterSnippets = true) ->
     if value != null
       if $.type(value) == 'string'
-        @textarea.val(value)
+        @element.val(value)
       else
-        @textarea.val(value.html)
+        @element.val(value.html)
         @selection().select(value.selection.start, value.selection.end)
     else
-      return @textarea.val()
+      return @element.val()
 
 
   togglePreview: ->
     if @previewing
-      @element.hide()
-      @textarea.show()
-    else
-      value = @converter.makeHtml(@textarea.val())
-      @element.html(value)
+      @previewElement.hide()
       @element.show()
-      @textarea.hide()
+    else
+      value = @converter.makeHtml(@element.val())
+      @previewElement.html(value)
+      @previewElement.show()
+      @element.hide()
     super
 
 
@@ -194,7 +200,7 @@ class @Mercury.Regions.Markupable extends Mercury.Region
 
 
   selection: ->
-    return new Mercury.Regions.Markupable.Selection(@textarea)
+    return new Mercury.Regions.Markupable.Selection(@element)
 
 
   resize: ->

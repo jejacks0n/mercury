@@ -51,6 +51,7 @@ class @Mercury.Regions.Markupable extends Mercury.Region
       return if @previewing
       if Mercury.region == @
         @element.blur()
+        @element.removeClass('focus')
         Mercury.trigger('region:blurred', {region: @})
 
     @element.bind 'dragenter', (event) =>
@@ -81,6 +82,7 @@ class @Mercury.Regions.Markupable extends Mercury.Region
     @element.focus =>
       return if @previewing
       Mercury.region = @
+      @element.addClass('focus')
       Mercury.trigger('region:focused', {region: @})
 
     @element.keydown (event) =>

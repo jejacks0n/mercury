@@ -2,7 +2,7 @@ Rails.application.routes.draw do
 
   resources :images
 
-  match '/edit(/*requested_uri)' => "mercury#edit"
+  match '/editor(/*requested_uri)' => "mercury#edit"
   scope '/mercury' do
     match ':type/:resource' => "mercury#resource"
     match 'snippets/:name/options' => "mercury#snippet_options"

@@ -1,0 +1,191 @@
+<html>
+<head>
+  <script src="/assets/mercury_loader.js" type="text/javascript"></script>
+</head>
+<body>
+<div id="content">
+  <div class="container" id="toc">
+    <h2>Walkthrough Topics</h2>
+
+    <h3>General</h3>
+    <ul>
+      <li><a href="#saving">Saving</a></li>
+      <li><a href="#previewing">Previewing</a></li>
+      <li><a href="#undo">Undo / Redo</a></li>
+      <li><a href="#previewing">Inserting Links</a></li>
+      <li><a href="#media">Inserting Media</a></li>
+      <li><a href="#tables">Inserting Tables</a></li>
+      <li><a href="#characters">Special Characters</a></li>
+      <li><a href="#snippets">Inserting Snippets</a></li>
+      <li><a href="#versioning">Page History</a></li>
+      <li><a href="#notes">Page Notes</a></li>
+    </ul>
+    <h3>HTML Editing</h3>
+    <ul>
+      <li><a href="#">General Notes</a></li>
+    </ul>
+    <h3>Markdown Editing</h3>
+    <ul>
+      <li><a href="#">General Notes</a></li>
+    </ul>
+  </div>
+  <div class="walkthrough mercury-region" data-type="markupable" id="markupable_region1">## testing ##
+
+    this is some content
+
+    1. list item 1
+    2. list item 2
+
+    **bold** and _italic_
+
+    - - -
+
+    Turkey corned beef ham, chuck ham hock venison drumstick tongue ribeye. Beef tongue pancetta, short ribs meatball
+    headcheese jowl bacon swine t-bone shoulder venison. Hamburger short loin turkey flank short ribs tail. Chicken
+    tri-tip sausage, bresaola sirloin turkey hamburger headcheese shank rump. Pork ground round t-bone, ham hock sirloin
+    biltong chicken fatback pork belly pastrami pancetta jowl tail. Cow ribeye pork chop, flank sirloin tail short loin
+    pork loin chicken boudin pastrami. Boudin chuck shankle, spare ribs pancetta fatback bresaola.
+  </div>
+  <div class="walkthrough mercury-region" data-type="editable" id="editable_region1">
+    123
+    <meta>
+    editable content
+    <a href="/something_else">l<span>in</span>k</a>
+    <a href="/something_else"><img alt="Clippy" src="/assets/mercury/clippy.png"></a>
+    <table border="1">
+      <tbody>
+      <tr>
+        <th>TITLE</th>
+        <th colspan="5">TITLE</th>
+      </tr>
+      <tr>
+        <th colspan="2">Head1</th>
+        <th rowspan="2">Head3</th>
+        <th>Head4</th>
+        <th rowspan="5">Head5</th>
+        <th>Head6</th>
+      </tr>
+      <tr>
+        <td colspan="2">Column1</td>
+        <td>Column4</td>
+        <td>Column6</td>
+      </tr>
+      <tr>
+        <td>Column1</td>
+        <td>Column2</td>
+        <td rowspan="4">Column3</td>
+        <td>Column4</td>
+        <td>Column6</td>
+      </tr>
+      <tr>
+        <td>Column1</td>
+        <td>Column2</td>
+        <td>Column4</td>
+        <td>Column6</td>
+      </tr>
+      <tr>
+        <th rowspan="2">Head1</th>
+        <th rowspan="2">Head2</th>
+        <th>Head4</th>
+        <th>Head6</th>
+      </tr>
+      <tr>
+        <td>Column4</td>
+        <td>Column5</td>
+        <td>Column6</td>
+      </tr>
+      <tr>
+        <td colspan="2">Column1</td>
+        <td colspan="4">Column2</td>
+      </tr>
+      </tbody>
+    </table>
+    a--------
+    <table border="1">
+      <tbody>
+      <tr>
+        <td>1</td>
+        <td colspan="2">2</td>
+      </tr>
+      <tr>
+        <td rowspan="2">3</td>
+        <td>4</td>
+        <td>5</td>
+      </tr>
+      <tr>
+        <td>6</td>
+        <td>7</td>
+      </tr>
+      </tbody>
+    </table>
+    <table border="1" width="200">
+      <tbody>
+      <tr>
+        <td rowspan="2">x1</td>
+        <td colspan="2" rowspan="2">x2</td>
+      </tr>
+      <tr></tr>
+      <tr>
+        <td>1</td>
+        <td colspan="2">2</td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td colspan="2">4</td>
+      </tr>
+      </tbody>
+    </table>
+    <p>this is a <u>pa<span style="text-decoration:overline">rag</span>raph</u></p>
+
+    <p>this is a <span style="text-decoration:overline">pa<u>rag</u>raph</span></p>
+    <style>img {
+      border: 2px solid red
+    }</style>
+    <img alt="Clippy" src="/assets/mercury/clippy.png">
+    <a href="#link2">link</a>
+
+    <div class="mercury-snippet" data-snippet="snippet_1">snippet1</div>
+    <p>
+      <a name="inner_link1">Bookmark</a>
+    </p>
+    more content here
+    <iframe allowfullscreen="true" frameborder="0" height="349"
+            src="http://www.youtube.com/embed/QGJuMBdaqIw?wmode=transparent" width="560"></iframe>
+  </div>
+  <div class="walkthrough mercury-region" data-type="snippetable" id="snippetable_region1">
+    <div class="mercury-snippet" data-snippet="snippet_3">snippet3</div>
+    <div class="mercury-snippet" data-snippet="snippet_4">snippet4</div>
+    <div class="mercury-snippet" data-snippet="snippet_5">snippet5</div>
+  </div>
+  <div class="walkthrough mercury-region" data-type="editable" id="editable_region2">
+    <div class="mercury-snippet" data-snippet="snippet_2">snippet2</div>
+  </div>
+  <div class="walkthrough mercury-region" data-type="editable" id="editable_region3" style="width:200px;height:90px;">
+    <meta>
+    editable contentaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+    <a href="/">/something_else</a>
+    <table>
+      <tbody>
+      <tr>
+        <th>Head1</th>
+        <th>Head2</th>
+      </tr>
+      <tr>
+        <td>Column1</td>
+        <td>Column2</td>
+      </tr>
+      </tbody>
+    </table>
+    <p>this is a <u>pa<span style="text-decoration:overline">rag</span>raph</u></p>
+
+    <p>this is a <span style="text-decoration:overline">pa<u>rag</u>raph</span></p>
+  </div>
+  <div class="walkthrough mercury-region" data-type="snippetable" id="snippetable_region2">
+    <div class="mercury-snippet" data-snippet="snippet_6">snippet6</div>
+    <div class="mercury-snippet" data-snippet="snippet_7">snippet7</div>
+    <iframe allowfullscreen="true" class="mercury-snippet" data-snippet="snippet_8" frameborder="0" height="349"
+            src="http://www.youtube.com/embed/QGJuMBdaqIw?wmode=transparent" width="560"></iframe>
+  </div>
+</div>
+</body>
+</html>

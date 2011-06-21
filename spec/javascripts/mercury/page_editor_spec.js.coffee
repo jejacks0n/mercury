@@ -310,8 +310,8 @@ describe "Mercury.PageEditor", ->
       Mercury.PageEditor.prototype.initializeFrame = ->
       @pageEditor = new Mercury.PageEditor('', {appendTo: $('#test')})
 
-    it "takes the location and removes the /edit", ->
-      expect(@pageEditor.iframeSrc('http://something/edit/path')).toEqual('http://something/path')
+    it "takes the location and removes the /editor", ->
+      expect(@pageEditor.iframeSrc('http://foo.com/editor/path')).toEqual('http://foo.com/path')
 
 
   describe "#hijackLinks", ->

@@ -42,52 +42,6 @@ library, etc.) so here's a list of some other editors that you might want to che
 * {NicEdit}[http://nicedit.com/]
 
 
-== Project Details
-
-=== WYSIWYG Editors Suck
-
-They just do.  Which as I've learned, is primarily due to the browser implementations.  Don't get me wrong, what the
-browsers have implemented is amazing, because it's hard stuff, plain and simple.  But if you're expecting a WYSIWYG
-editor to solve all your content problems you're wrong.  A better perception is that it will solve many of them, but
-shifts some into a new area.
-
-With that being said, Mercury tries to solve many of those issues and succeeds to a great degree, but alas, it's nearly
-impossible to address everything, and the browsers don't expose enough to fix some things.  This is true for every
-editor that I've looked into as well.
-
-It's important to understand this, and the details are more suited for long nerdy blog posts, so they won't be covered
-here.
-
-=== The Code and Why
-
-==== CoffeeScript
-
-Mercury has been written entirely in CoffeeScript because it simplifies a lot of the patterns that are used, and allows
-for very readable code.  The goal was to provide good readable code that could be adjusted based on need, instead of a
-complex configuration that makes the code harder to understand and tweak.
-
-==== jQuery
-
-jQuery was used as the javascript library, but is primarily used for the selectors, traversing, and manipulating the
-DOM.  Chaining is kept to a minimum for readability, and even though much of Mercury could've been written as jQuery
-plugins, it was not.
-
-==== Rails
-
-With the asset handling that comes bundled with Rails 3.1, Rails Engines, and the gem tools, there really wasn't any
-other option.  The javascript from Mercury can be used by any back end system, and isn't limited to Rails.  Many of the
-features do require a back end, and that stuff would have to be rewritten in whatever language you wanted support for.
-The coffeescript files can be found in the repo, and I would be fully supportive of anyone who wanted to add support for
-different back end frameworks or languages.
-
-==== Specs / Integration Tests
-
-Mercury is fully tested using Jasmine (via Evergreen) and Cucumber.  You can clone the project to run the full suite.
-
-  rake spec:javascripts
-  rake cucumber
-
-
 == Features
 
 The feature list is actually pretty long, so here's a short list that need highlighting.
@@ -186,3 +140,49 @@ your own storage implementation.  Here's an example of loading existing snippet 
   top.Mercury.Snippet.load({
     'snippet_1': {name: 'example', options: {'options[favorite_beer]': "Bells Hopslam", 'options[first_name]': "Jeremy"}},
   });
+
+
+== Project Details
+
+=== WYSIWYG Editors Suck
+
+They just do.  Which as I've learned, is primarily due to the browser implementations.  Don't get me wrong, what the
+browsers have implemented is amazing, because it's hard stuff, plain and simple.  But if you're expecting a WYSIWYG
+editor to solve all your content problems you're wrong.  A better perception is that it will solve many of them, but
+shifts some into a new area.
+
+With that being said, Mercury tries to solve many of those issues and succeeds to a great degree, but alas, it's nearly
+impossible to address everything, and the browsers don't expose enough to fix some things.  This is true for every
+editor that I've looked into as well.
+
+It's important to understand this, and the details are more suited for long nerdy blog posts, so they won't be covered
+here.
+
+=== The Code and Why
+
+==== CoffeeScript
+
+Mercury has been written entirely in CoffeeScript because it simplifies a lot of the patterns that are used, and allows
+for very readable code.  The goal was to provide good readable code that could be adjusted based on need, instead of a
+complex configuration that makes the code harder to understand and tweak.
+
+==== jQuery
+
+jQuery was used as the javascript library, but is primarily used for the selectors, traversing, and manipulating the
+DOM.  Chaining is kept to a minimum for readability, and even though much of Mercury could've been written as jQuery
+plugins, it was not.
+
+==== Rails
+
+With the asset handling that comes bundled with Rails 3.1, Rails Engines, and the gem tools, there really wasn't any
+other option.  The javascript from Mercury can be used by any back end system, and isn't limited to Rails.  Many of the
+features do require a back end, and that stuff would have to be rewritten in whatever language you wanted support for.
+The coffeescript files can be found in the repo, and I would be fully supportive of anyone who wanted to add support for
+different back end frameworks or languages.
+
+==== Specs / Integration Tests
+
+Mercury is fully tested using Jasmine (via Evergreen) and Cucumber.  You can clone the project to run the full suite.
+
+  rake spec:javascripts
+  rake cucumber

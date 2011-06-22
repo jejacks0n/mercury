@@ -206,6 +206,13 @@ Gem::Specification.new do |s|
       s.add_runtime_dependency(%q<sass-rails>, ["~> 3.1.0.rc"])
       s.add_runtime_dependency(%q<coffee-script>, [">= 0"])
       s.add_runtime_dependency(%q<haml>, [">= 0"])
+      s.add_development_dependency(%q<uglifier>, [">= 0"])
+      s.add_development_dependency(%q<jquery-rails>, [">= 0"])
+      s.add_development_dependency(%q<jeweler>, [">= 0"])
+      s.add_development_dependency(%q<sqlite3>, [">= 0"])
+      s.add_development_dependency(%q<thin>, [">= 0"])
+      s.add_development_dependency(%q<ruby-debug19>, [">= 0"])
+      s.add_development_dependency(%q<evergreen>, [">= 0"])
     else
       s.add_dependency(%q<rails>, ["= 3.1.0.rc4"])
       s.add_dependency(%q<paperclip>, [">= 0"])
@@ -214,6 +221,13 @@ Gem::Specification.new do |s|
       s.add_dependency(%q<sass-rails>, ["~> 3.1.0.rc"])
       s.add_dependency(%q<coffee-script>, [">= 0"])
       s.add_dependency(%q<haml>, [">= 0"])
+      s.add_dependency(%q<uglifier>, [">= 0"])
+      s.add_dependency(%q<jquery-rails>, [">= 0"])
+      s.add_dependency(%q<jeweler>, [">= 0"])
+      s.add_dependency(%q<sqlite3>, [">= 0"])
+      s.add_dependency(%q<thin>, [">= 0"])
+      s.add_dependency(%q<ruby-debug19>, [">= 0"])
+      s.add_dependency(%q<evergreen>, [">= 0"])
     end
   else
     s.add_dependency(%q<rails>, ["= 3.1.0.rc4"])
@@ -223,6 +237,13 @@ Gem::Specification.new do |s|
     s.add_dependency(%q<sass-rails>, ["~> 3.1.0.rc"])
     s.add_dependency(%q<coffee-script>, [">= 0"])
     s.add_dependency(%q<haml>, [">= 0"])
+    s.add_dependency(%q<uglifier>, [">= 0"])
+    s.add_dependency(%q<jquery-rails>, [">= 0"])
+    s.add_dependency(%q<jeweler>, [">= 0"])
+    s.add_dependency(%q<sqlite3>, [">= 0"])
+    s.add_dependency(%q<thin>, [">= 0"])
+    s.add_dependency(%q<ruby-debug19>, [">= 0"])
+    s.add_dependency(%q<evergreen>, [">= 0"])
   end
 end
 

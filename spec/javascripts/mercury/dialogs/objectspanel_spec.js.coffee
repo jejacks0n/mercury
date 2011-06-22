@@ -1,4 +1,4 @@
-require '/assets/mercury/mercury.js'
+require '/assets/mercury.js'
 
 describe "Mercury.dialogHandlers.backColor", ->
 

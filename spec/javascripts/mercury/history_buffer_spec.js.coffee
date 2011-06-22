@@ -1,4 +1,3 @@
-Mercury = {}
 require '/assets/mercury.js'
 
 describe "Mercury.HistoryBuffer", ->

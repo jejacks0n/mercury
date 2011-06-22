@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Jeremy Jackson"]
-  s.date = %q{2011-06-20}
+  s.date = %q{2011-06-21}
   s.description = %q{A fully featured and advanced HTML5 WYSIWYG editor written in CoffeeScript on top of Rails 3.1}
   s.email = %q{jejacks0n@gmail.com}
   s.extra_rdoc_files = [
@@ -79,7 +79,6 @@ Gem::Specification.new do |s|
     "app/assets/javascripts/mercury/toolbar.js.coffee",
     "app/assets/javascripts/mercury/tooltip.js.coffee",
     "app/assets/javascripts/mercury/uploader.js.coffee",
-    "app/assets/javascripts/mercury/websocket.js.coffee",
     "app/assets/javascripts/mercury_loader.js",
     "app/assets/stylesheets/mercury.css",
     "app/assets/stylesheets/mercury/dialog.scss",
@@ -139,8 +138,8 @@ Gem::Specification.new do |s|
     "spec/javascripts/mercury/palette_spec.js.coffee",
     "spec/javascripts/mercury/panel_spec.js.coffee",
     "spec/javascripts/mercury/region_spec.js.coffee",
-    "spec/javascripts/mercury/regions/_editable_.js.coffee",
     "spec/javascripts/mercury/regions/_markupable_.js.coffee",
+    "spec/javascripts/mercury/regions/editable_spec.js.coffee",
     "spec/javascripts/mercury/regions/snippetable_spec.js.coffee",
     "spec/javascripts/mercury/select_spec.js.coffee",
     "spec/javascripts/mercury/snippet_spec.js.coffee",
@@ -171,6 +170,7 @@ Gem::Specification.new do |s|
     "spec/javascripts/templates/mercury/palette.html",
     "spec/javascripts/templates/mercury/panel.html",
     "spec/javascripts/templates/mercury/region.html",
+    "spec/javascripts/templates/mercury/regions/editable.html",
     "spec/javascripts/templates/mercury/regions/snippetable.html",
     "spec/javascripts/templates/mercury/select.html",
     "spec/javascripts/templates/mercury/snippet.html",
@@ -184,12 +184,8 @@ Gem::Specification.new do |s|
     "spec/javascripts/templates/mercury/tooltip.html",
     "spec/javascripts/templates/mercury/uploader.html",
     "vendor/assets/javascripts/jquery-1.6.js",
-    "vendor/assets/javascripts/jquery-ui-1.8.13.custom.min.js",
-    "vendor/assets/javascripts/jquery-ui-1.8.13.sortable.custom.js",
-    "vendor/assets/javascripts/jquery.easing.js",
-    "vendor/assets/javascripts/jquery.json2.js",
-    "vendor/assets/javascripts/jquery.serialize_object.js",
-    "vendor/assets/javascripts/jquery.ujs.js",
+    "vendor/assets/javascripts/jquery-ui-1.8.13.custom.js",
+    "vendor/assets/javascripts/jquery.additions.js",
     "vendor/assets/javascripts/liquidmetal.js",
     "vendor/assets/javascripts/showdown.js"
   ]
@@ -210,6 +206,13 @@ Gem::Specification.new do |s|
       s.add_runtime_dependency(%q<sass-rails>, ["~> 3.1.0.rc"])
       s.add_runtime_dependency(%q<coffee-script>, [">= 0"])
       s.add_runtime_dependency(%q<haml>, [">= 0"])
+      s.add_development_dependency(%q<uglifier>, [">= 0"])
+      s.add_development_dependency(%q<jquery-rails>, [">= 0"])
+      s.add_development_dependency(%q<jeweler>, [">= 0"])
+      s.add_development_dependency(%q<sqlite3>, [">= 0"])
+      s.add_development_dependency(%q<thin>, [">= 0"])
+      s.add_development_dependency(%q<ruby-debug19>, [">= 0"])
+      s.add_development_dependency(%q<evergreen>, [">= 0"])
     else
       s.add_dependency(%q<rails>, ["= 3.1.0.rc4"])
       s.add_dependency(%q<paperclip>, [">= 0"])
@@ -218,6 +221,13 @@ Gem::Specification.new do |s|
       s.add_dependency(%q<sass-rails>, ["~> 3.1.0.rc"])
       s.add_dependency(%q<coffee-script>, [">= 0"])
       s.add_dependency(%q<haml>, [">= 0"])
+      s.add_dependency(%q<uglifier>, [">= 0"])
+      s.add_dependency(%q<jquery-rails>, [">= 0"])
+      s.add_dependency(%q<jeweler>, [">= 0"])
+      s.add_dependency(%q<sqlite3>, [">= 0"])
+      s.add_dependency(%q<thin>, [">= 0"])
+      s.add_dependency(%q<ruby-debug19>, [">= 0"])
+      s.add_dependency(%q<evergreen>, [">= 0"])
     end
   else
     s.add_dependency(%q<rails>, ["= 3.1.0.rc4"])
@@ -227,6 +237,13 @@ Gem::Specification.new do |s|
     s.add_dependency(%q<sass-rails>, ["~> 3.1.0.rc"])
     s.add_dependency(%q<coffee-script>, [">= 0"])
     s.add_dependency(%q<haml>, [">= 0"])
+    s.add_dependency(%q<uglifier>, [">= 0"])
+    s.add_dependency(%q<jquery-rails>, [">= 0"])
+    s.add_dependency(%q<jeweler>, [">= 0"])
+    s.add_dependency(%q<sqlite3>, [">= 0"])
+    s.add_dependency(%q<thin>, [">= 0"])
+    s.add_dependency(%q<ruby-debug19>, [">= 0"])
+    s.add_dependency(%q<evergreen>, [">= 0"])
   end
 end
 

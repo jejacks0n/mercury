@@ -111,6 +111,11 @@ describe "Mercury.PageEditor", ->
       @pageEditor.initializeFrame()
       expect(spy.callCount).toEqual(1)
 
+    it "injects mercury namespace into the iframe", ->
+      @finalizeInterfaceSpy.andCallFake(=>)
+      @pageEditor.initializeFrame()
+      expect(@pageEditor.iframe.get(0).contentWindow.Mercury).toEqual(Mercury)
+
     it "calls bindEvents", ->
       @finalizeInterfaceSpy.andCallFake(=>)
       @pageEditor.initializeFrame()

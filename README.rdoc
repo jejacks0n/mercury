@@ -137,8 +137,8 @@ edited or removed.
 Mercury does very little to save content and snippets for you, but it does provide the ability to load snippets from
 your own storage implementation.  Here's an example of loading existing snippet options back into Mercury.
 
-  top.Mercury.Snippet.load({
-    'snippet_1': {name: 'example', options: {'options[favorite_beer]': "Bells Hopslam", 'options[first_name]': "Jeremy"}},
+  Mercury.Snippet.load({
+    'snippet_1': {name: 'example', options: {favorite_beer: "Bells Hopslam", first_name: "Jeremy"}},
   });
 
 

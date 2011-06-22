@@ -3,7 +3,7 @@ class @Mercury.Snippet
   @all: []
 
   @displayOptionsFor: (name) ->
-    Mercury.modal("/mercury/snippets/#{name}/options", {title: 'Snippet Options', handler: 'insertsnippet', snippetName: name})
+    Mercury.modal("/mercury/snippets/#{name}/options", {title: 'Snippet Options', handler: 'insertSnippet', snippetName: name})
     Mercury.snippet = null
 
 
@@ -63,7 +63,7 @@ class @Mercury.Snippet
     Mercury.snippet = @
     Mercury.modal "/mercury/snippets/#{@name}/options", {
       title: 'Snippet Options',
-      handler: 'insertsnippet',
+      handler: 'insertSnippet',
       loadType: 'post',
       loadData: @options
     }
@@ -87,6 +87,6 @@ class @Mercury.Snippet
 
   serialize: ->
     return {
-      name: @name,
+      name: @name
       options: @options
     }

@@ -18,7 +18,7 @@ describe "Mercury.Regions.Snippetable", ->
       @bindEventsSpy = spyOn(Mercury.Regions.Snippetable.prototype, 'bindEvents').andCallFake(=>)
       @makeSortableSpy = spyOn(Mercury.Regions.Snippetable.prototype, 'makeSortable').andCallFake(=>)
 
-    it "expects an element, window", ->
+    it "expects an element and window", ->
       @region = new Mercury.Regions.Snippetable(@regionElement, window)
       expect(@region.element.get(0)).toEqual($('#snippetable_region1').get(0))
       expect(@region.window).toEqual(window)
@@ -26,6 +26,10 @@ describe "Mercury.Regions.Snippetable", ->
     it "accepts options", ->
       @region = new Mercury.Regions.Snippetable(@regionElement, window, {foo: 'something'})
       expect(@region.options).toEqual({foo: 'something'})
+
+    it "sets it's type", ->
+      @region = new Mercury.Regions.Snippetable(@regionElement, window)
+      expect(@region.type).toEqual('snippetable')
 
     it "calls build", ->
       @region = new Mercury.Regions.Snippetable(@regionElement, window)
@@ -297,7 +301,7 @@ describe "Mercury.Regions.Snippetable.actions", ->
       expect(htmlSpy.argsForCall[0]).toEqual(['history +1'])
 
 
-  describe ".insertsnippet", ->
+  describe ".insertSnippet", ->
 
     beforeEach ->
       Mercury.Snippet.load({
@@ -309,7 +313,7 @@ describe "Mercury.Regions.Snippetable.actions", ->
     describe "updating a snippet", ->
 
       it "finds the snippet by it's identity and replaces it with the new snippet", ->
-        @actions['insertsnippet'].call(@region, {value: Mercury.Snippet.find('snippet_1')})
+        @actions['insertSnippet'].call(@region, {value: Mercury.Snippet.find('snippet_1')})
         expect($('#snippetable_region2').html()).toContain('class="mercury-snippet"')
         expect($('#snippetable_region2').html()).toContain('contenteditable="false"')
         expect($('#snippetable_region2').html()).toContain('data-version="1"')
@@ -319,19 +323,19 @@ describe "Mercury.Regions.Snippetable.actions", ->
       it "pushes to the history after it's been rendered", ->
         spyOn(Mercury.Snippet.prototype, 'getHTML').andCallFake((x, callback) => callback() if callback)
         spy = spyOn(Mercury.Regions.Snippetable.prototype, 'pushHistory').andCallFake(=>)
-        @actions['insertsnippet'].call(@region, {value: Mercury.Snippet.find('snippet_1')})
+        @actions['insertSnippet'].call(@region, {value: Mercury.Snippet.find('snippet_1')})
         expect(spy.callCount).toEqual(1)
 
     describe "inserting a snippet", ->
 
       it "appends the new snippet html to the element", ->
-        @actions['insertsnippet'].call(@region, {value: Mercury.Snippet.find('snippet_2')})
+        @actions['insertSnippet'].call(@region, {value: Mercury.Snippet.find('snippet_2')})
         expect($('#snippetable_region2 .mercury-snippet').length).toEqual(2)
 
       it "pushes to the history after it's been rendered", ->
         spyOn(Mercury.Snippet.prototype, 'getHTML').andCallFake((x, callback) => callback() if callback)
         spy = spyOn(Mercury.Regions.Snippetable.prototype, 'pushHistory').andCallFake(=>)
-        @actions['insertsnippet'].call(@region, {value: Mercury.Snippet.find('snippet_2')})
+        @actions['insertSnippet'].call(@region, {value: Mercury.Snippet.find('snippet_2')})
         expect(spy.callCount).toEqual(1)
 
 

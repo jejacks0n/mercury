@@ -97,7 +97,7 @@ class @Mercury.Region
 
   serialize: ->
     return {
-      type: @type,
+      type: @type
       value: @content(null, true)
       snippets: @snippets()
     }

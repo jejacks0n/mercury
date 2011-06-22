@@ -107,7 +107,7 @@ class @Mercury.Regions.Snippetable extends Mercury.Region
 
     redo: -> @content(@history.redo())
 
-    insertsnippet: (options) ->
+    insertSnippet: (options) ->
       snippet = options.value
       if (existing = @element.find("[data-snippet=#{snippet.identity}]")).length
         existing.replaceWith(snippet.getHTML(@document, => @pushHistory()))

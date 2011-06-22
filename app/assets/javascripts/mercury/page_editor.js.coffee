@@ -95,8 +95,8 @@ class @Mercury.PageEditor
     Mercury.displayRect = {top: toolbarHeight, left: 0, width: width, height: height - toolbarHeight}
 
     @iframe.css {
-      top: toolbarHeight,
-      left: 0,
+      top: toolbarHeight
+      left: 0
       height: height - toolbarHeight
     }
 

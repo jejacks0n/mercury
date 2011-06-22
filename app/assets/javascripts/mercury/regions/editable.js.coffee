@@ -46,7 +46,7 @@ class @Mercury.Regions.Editable extends Mercury.Region
       if currentElement.length
         # setup the table editor if we're inside a table
         table = currentElement.closest('table', @element)
-        Mercury.tableEditor(table, currentElement) if table.length
+        Mercury.tableEditor(table, currentElement.closest('tr, td')) if table.length
         # display a tooltip if we're in an anchor
         anchor = currentElement.closest('a', @element)
         if anchor.length && anchor.attr('href')
@@ -143,7 +143,7 @@ class @Mercury.Regions.Editable extends Mercury.Region
         when 13 # enter
           if jQuery.browser.webkit && @selection().commonAncestor().closest('li, ul', @element).length == 0
             event.preventDefault()
-            @document.execCommand('insertlinebreak', false, null)
+            @document.execCommand('insertLineBreak', false, null)
           else if @specialContainer
             # mozilla: pressing enter in any elemeny besides a div handles strangely
             event.preventDefault()
@@ -163,7 +163,6 @@ class @Mercury.Regions.Editable extends Mercury.Region
 
       if event.metaKey
         switch event.keyCode
-
           when 66 # b
             @execCommand('bold')
             event.preventDefault()
@@ -395,7 +394,7 @@ class @Mercury.Regions.Editable extends Mercury.Region
       html = jQuery('<div>').html(selection.content()).find('a').html()
       selection.replace(jQuery(anchor, selection.context).html(html))
 
-    insertsnippet: (selection, options) ->
+    insertSnippet: (selection, options) ->
       snippet = options.value
       if (existing = @element.find("[data-snippet=#{snippet.identity}]")).length
         selection.selectNode(existing.get(0))

@@ -22,8 +22,8 @@ class @Mercury.Palette extends Mercury.Dialog
     position.left = position.left - width + @button.width() if position.left + width > jQuery(window).width()
 
     @element.css {
-      top: position.top + @button.height(),
-      left: position.left,
-      display: if keepVisible then 'block' else 'none',
+      top: position.top + @button.height()
+      left: position.left
+      display: if keepVisible then 'block' else 'none'
       visibility: 'visible'
     }

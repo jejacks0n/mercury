@@ -1,6 +1,6 @@
 require '/assets/mercury/mercury.js'
 
-describe "Mercury.modalHandlers.insertsnippet", ->
+describe "Mercury.modalHandlers.insertSnippet", ->
 
   template 'mercury/modals/insertsnippet.html'
 
@@ -13,7 +13,7 @@ describe "Mercury.modalHandlers.insertsnippet", ->
       element: $('#test')
       hide: ->
       options: {snippetName: 'test'}
-    Mercury.modalHandlers.insertsnippet.call(@modal)
+    Mercury.modalHandlers.insertSnippet.call(@modal)
 
   describe "submitting", ->
 
@@ -37,7 +37,7 @@ describe "Mercury.modalHandlers.insertsnippet", ->
         spy = spyOn(Mercury, 'trigger').andCallFake(=>)
         jasmine.simulate.click($('#submit').get(0))
         expect(spy.callCount).toEqual(1)
-        expect(spy.argsForCall[0]).toEqual(['action', {action: 'insertsnippet', value: Mercury.Snippet.all[0]}])
+        expect(spy.argsForCall[0]).toEqual(['action', {action: 'insertSnippet', value: Mercury.Snippet.all[0]}])
 
     describe "if there's no active snippet", ->
 
@@ -51,4 +51,4 @@ describe "Mercury.modalHandlers.insertsnippet", ->
         spy = spyOn(Mercury, 'trigger').andCallFake(=>)
         jasmine.simulate.click($('#submit').get(0))
         expect(spy.callCount).toEqual(1)
-        expect(spy.argsForCall[0]).toEqual(['action', {action: 'insertsnippet', value: Mercury.Snippet.all[1]}])
+        expect(spy.argsForCall[0]).toEqual(['action', {action: 'insertSnippet', value: Mercury.Snippet.all[1]}])

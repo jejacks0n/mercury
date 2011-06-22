@@ -49,8 +49,8 @@ class @Mercury.Toolbar.Expander extends Mercury.Palette
     position.left = position.left - width + @trigger.width() if position.left + width > jQuery(window).width()
 
     @element.css {
-      top: position.top + @trigger.height(),
-      left: position.left,
-      display: if keepVisible then 'block' else 'none',
+      top: position.top + @trigger.height()
+      left: position.left
+      display: if keepVisible then 'block' else 'none'
       visibility: 'visible'
     }

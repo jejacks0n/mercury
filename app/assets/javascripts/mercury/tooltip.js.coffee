@@ -54,7 +54,7 @@ jQuery.extend Mercury.tooltip, {
     left = if left <= 0 then 0 else left
 
     @element.css {
-      top: top,
+      top: top
       left: left
     }
 

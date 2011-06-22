@@ -42,7 +42,7 @@ class @Mercury.SnippetToolbar extends Mercury.Toolbar
     left = offset.left - jQuery(@document).scrollLeft()
 
     @element.css {
-      top: top,
+      top: top
       left: left
     }
 

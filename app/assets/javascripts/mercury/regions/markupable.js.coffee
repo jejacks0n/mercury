@@ -206,8 +206,9 @@ class @Mercury.Regions.Markupable extends Mercury.Region
 
 
   resize: ->
-#    adjustedHeight = Math.max(@textarea.get(0).scrollHeight, @textarea.get(0).clientHeight)
-#    @textarea.height(adjustedHeight) if adjustedHeight >= @textarea.get(0).clientHeight
+    # todo: get this working if possible, and it seems to be useful
+    # adjustedHeight = Math.max(@textarea.get(0).scrollHeight, @textarea.get(0).clientHeight)
+    # @textarea.height(adjustedHeight) if adjustedHeight >= @textarea.get(0).clientHeight
 
 
   snippets: ->
@@ -271,7 +272,7 @@ class @Mercury.Regions.Markupable extends Mercury.Region
 
     horizontalRule: (selection) -> selection.replace('\n- - -\n')
 
-    insertsnippet: (selection, options) ->
+    insertSnippet: (selection, options) ->
       snippet = options.value
       selection.replace(snippet.getText())
 

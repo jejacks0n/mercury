@@ -111,9 +111,9 @@ jQuery.extend Mercury.modal, {
 
     @element.css {
       left: (viewportWidth - width) / 2
-      width: width,
-      height: height,
-      display: if @visible then 'block' else 'none',
+      width: width
+      height: height
+      display: if @visible then 'block' else 'none'
       visibility: 'visible'
     }
 

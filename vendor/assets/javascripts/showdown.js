@@ -1101,11 +1101,11 @@ Showdown.converter = function() {
   };
 
 
+  //
+  //  Params:
+  //    $text - string to process with html <p> tags
+  //
   var _FormParagraphs = function(text) {
-//
-//  Params:
-//    $text - string to process with html <p> tags
-//
 
     // Strip leading and trailing lines:
     text = text.replace(/^\n+/g, "");

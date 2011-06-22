@@ -1,11 +1,7 @@
 #
 #= require jquery-1.6
-#= require jquery-ui-1.8.13.custom.min
-#= require jquery-ui-1.8.13.sortable.custom
-#= require jquery.easing
-#= require jquery.json2
-#= require jquery.ujs
-#= require jquery.serialize_object
+#= require jquery-ui-1.8.13.custom
+#= require jquery.additions
 #= require liquidmetal
 #= require showdown
 #
@@ -34,7 +30,7 @@
 #= require_tree ./modals
 #
 
-@Mercury = {
+@Mercury =
 
   version: '0.1.1'
 
@@ -227,14 +223,14 @@
     #
     # You can see how the behavior matches up directly with the button name.  It's also important to note that the
     # callback functions are executed within the scope of the given region, so you have access to all it's methods.
-    # todo: figure out how this impacts different regions.. should they go away, or should they get moved into region types?
+    # todo: figure out how this impacts different regions.. should they go away, or should they get moved into regions?
     behaviors:
       horizontalRule: (selection) -> selection.replace('<hr/>')
 
       htmlEditor: ->
         Mercury.modal '/mercury/modals/htmleditor', {
-          title: 'HTML Editor',
-          fullHeight: true,
+          title: 'HTML Editor'
+          fullHeight: true
           handler: 'htmlEditor'
         }
 
@@ -288,5 +284,3 @@
   Regions: {}
   modalHandlers: {}
   dialogHandlers: {}
-
-}

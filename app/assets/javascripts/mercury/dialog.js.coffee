@@ -46,7 +46,7 @@ class @Mercury.Dialog
 
   appear: ->
     @element.css({display: 'block', opacity: 0})
-    @element.animate {opacity: .95}, 200, 'easeInOutSine', =>
+    @element.animate {opacity: 0.95}, 200, 'easeInOutSine', =>
       @load(=> @resize()) unless @loaded
 
 

@@ -32,9 +32,9 @@ class @Mercury.Select extends Mercury.Dialog
     left = left - elementWidth + @button.width() if left + elementWidth > jQuery(window).width()
 
     @element.css {
-      top: top,
-      left: left,
-      height: height,
-      display: if keepVisible then 'block' else 'none',
+      top: top
+      left: left
+      height: height
+      display: if keepVisible then 'block' else 'none'
       visibility: 'visible'
     }

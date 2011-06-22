@@ -143,7 +143,7 @@ jQuery.extend Mercury.uploader, {
     @updateStatus('Processing...',)
 
 
-  uploaderEvents: {
+  uploaderEvents:
     onloadstart: -> @updateStatus('Uploading...')
 
     onprogress: (event) -> @updateStatus('Uploading...', event.loaded)
@@ -159,7 +159,6 @@ jQuery.extend Mercury.uploader, {
     onerror: ->
       @updateStatus('Error: Unable to upload the file')
       @hide(1)
-  }
 }
 
 

@@ -1,10 +1,11 @@
-require '/assets/mercury/mercury.js'
+require '/assets/mercury.js'
 
 describe "Mercury.uploader", ->
 
   template 'mercury/uploader.html'
 
   beforeEach ->
+    Mercury.config.uploading.enabled = true
     $.fx.off = true
     @mockFile = {
       size: 1024
@@ -27,6 +28,11 @@ describe "Mercury.uploader", ->
     it "returns the function object", ->
       ret = Mercury.uploader(@mockFile)
       expect(ret).toEqual(Mercury.uploader)
+
+    it "doesn't call show if disabled in configuration", ->
+      Mercury.config.uploading.enabled = false
+      Mercury.uploader(@mockFile)
+      expect(@showSpy.callCount).toEqual(0)
 
 
   describe "#show", ->

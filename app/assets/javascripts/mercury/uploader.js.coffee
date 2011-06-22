@@ -1,5 +1,5 @@
 @Mercury.uploader = (file, options) ->
-  Mercury.uploader.show(file, options)
+  Mercury.uploader.show(file, options) if Mercury.config.uploading.enabled
   return Mercury.uploader
 
 jQuery.extend Mercury.uploader, {

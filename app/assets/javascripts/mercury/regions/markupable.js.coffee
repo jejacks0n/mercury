@@ -13,20 +13,20 @@ class @Mercury.Regions.Markupable extends Mercury.Region
 
 
   build: ->
-    width = @element.width()
-    width = '100%' unless width
+    width = '100%'
     height = @element.height()
 
     value = @element.html().replace(/^\s+|\s+$/g, '')
     @textarea = jQuery('<textarea>', @document).val(value)
     @textarea.attr('class', @element.attr('class')).addClass('mercury-textarea')
     @textarea.css({border: 0, background: 'transparent', display: 'block', width: width, height: height, fontFamily: '"Courier New", Courier, monospace', fontSize: '14px'})
-    @element.after(@textarea)
-    @element.hide()
-    @resize()
+    @element.empty().append(@textarea)
+    @element.removeAttr('class')
 
-    @previewElement = @element
+    @previewElement = jQuery('<div>', @document)
+    @element.append(@previewElement)
     @element = @textarea
+    #@resize()
 
 
   focus: ->
@@ -112,6 +112,10 @@ class @Mercury.Regions.Markupable extends Mercury.Region
           event.preventDefault()
           if event.shiftKey then @execCommand('redo') else @execCommand('undo')
           return
+
+        when 9 # tab
+          event.preventDefault()
+          @execCommand('insertHTML', {value: '  '})
 
       if event.metaKey
         switch event.keyCode

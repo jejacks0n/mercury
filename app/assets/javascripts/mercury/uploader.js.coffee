@@ -65,15 +65,12 @@ jQuery.extend Mercury.uploader, {
 
 
   position: ->
-    viewportWidth = jQuery(window).width()
-    viewportHeight = jQuery(window).height()
-
     width = @element.outerWidth()
     height = @element.outerHeight()
 
     @element.css {
-      top: (viewportHeight - height) / 2
-      left: (viewportWidth - width) / 2
+      top: (Mercury.displayRect.height - height) / 2
+      left: (Mercury.displayRect.width - width) / 2
     }
 
 

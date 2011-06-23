@@ -62,7 +62,6 @@ jQuery.extend Mercury.modal, {
     # TODO: resizing is a bit shitty when the modal has panes and is scrollable
     visibility = if keepVisible then 'visible' else 'hidden'
 
-    viewportHeight = jQuery(window).height()
     titleHeight = @titleElement.outerHeight()
 
     width = @contentElement.outerWidth()
@@ -73,9 +72,9 @@ jQuery.extend Mercury.modal, {
     height = @contentElement.outerHeight() + titleHeight
 
     width = @minWidth if width < @minWidth
-    height = viewportHeight - 20 if height > viewportHeight - 20 || @options.fullHeight
+    height = Mercury.displayRect.fullHeight - 20 if height > Mercury.displayRect.fullHeight - 20 || @options.fullHeight
 
-    @element.stop().animate {left: (jQuery(window).width() - width) / 2, width: width, height: height}, 200, 'easeInOutSine', =>
+    @element.stop().animate {left: (Mercury.displayRect.width - width) / 2, width: width, height: height}, 200, 'easeInOutSine', =>
       @contentElement.css({visibility: 'visible', display: 'block'})
       if @contentPane.length
         @contentElement.css({height: height - titleHeight, overflow: 'visible'})
@@ -87,8 +86,7 @@ jQuery.extend Mercury.modal, {
 
 
   position: ->
-    viewportWidth = jQuery(window).width()
-    viewportHeight = jQuery(window).height()
+    viewportWidth = Mercury.displayRect.width
 
     @contentPane.css({height: 'auto'}) if @contentPane
     @contentElement.css({height: 'auto'})
@@ -98,7 +96,7 @@ jQuery.extend Mercury.modal, {
     height = @element.height()
 
     width = @minWidth if width < @minWidth
-    height = viewportHeight - 20 if height > viewportHeight - 20 || @options.fullHeight
+    height = Mercury.displayRect.fullHeight - 20 if height > Mercury.displayRect.fullHeight - 20 || @options.fullHeight
 
     titleHeight = @titleElement.outerHeight()
     if @contentPane && @contentPane.length

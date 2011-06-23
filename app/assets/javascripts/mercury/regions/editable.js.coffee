@@ -268,6 +268,7 @@ class @Mercury.Regions.Editable extends Mercury.Region
         @document.execCommand(action, false, options.value)
       catch error
         # mozilla: indenting when there's no br tag handles strangely
+        # todo: mozilla: trying to justify the first line of any contentEditable fails
         @element.prev().remove() if action == 'indent' && @element.prev() != sibling
 
 

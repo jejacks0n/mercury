@@ -93,7 +93,7 @@ class @Mercury.PageEditor
     height = @statusbar.top()
     toolbarHeight = @toolbar.height()
 
-    Mercury.displayRect = {top: toolbarHeight, left: 0, width: width, height: height - toolbarHeight}
+    Mercury.displayRect = {top: toolbarHeight, left: 0, width: width, height: height - toolbarHeight, fullHeight: height}
 
     @iframe.css {
       top: toolbarHeight

@@ -134,7 +134,7 @@
     margin: 0;
     line-height: 1.6em;
   }
-  *:hover {
+  div:hover, h1:hover, h2:hover, h3:hover, h4:hover, h5:hover, h6:hover, pre:hover {
     background-color: #E2E1E2 !important;
     color: #000 !important;
   }

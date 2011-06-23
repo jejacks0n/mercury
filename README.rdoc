@@ -62,10 +62,16 @@ Include the gem in your Gemfile and bundle to install the gem.
 
   gem 'mercury-rails'
 
-There's a migration for images that you'll need as well.
+Make sure you get the migrations that you'll need.
 
   rake mercury_engine:install:migrations
   rake db:migrate
+
+You can also get the configuration file by running the generator.
+
+  rails generate mercury:install
+
+This generator puts the mercury base file (configuration) into your project in /app/assets/javascripts/mercury.js.
 
 
 == Usage
@@ -79,7 +85,7 @@ Region types are outlined below.
     default content
   </div>
 
-There's two methods to initialize Mercury Editor, and each one has it's benefits.
+There's two methods to initialize Mercury Editor, and each one has it's benefits and drawbacks.
 
 === Script Method
 
@@ -104,7 +110,7 @@ trigger the initialize:frame event.  You can do this when the dom is ready to be
 document.ready), or at the bottom of your body tag.  It's recommended that you do this because it gives you some load
 performance improvements, but it's not required.
 
-  top.Mercury.trigger('initialize:frame');
+  Mercury.trigger('initialize:frame');
 
 
 == Region Types

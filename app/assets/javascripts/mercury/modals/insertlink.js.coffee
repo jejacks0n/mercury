@@ -55,6 +55,9 @@
         @element.find('#link_popup_height').val(href.match(/height=(\d+),/)[1])
         @element.find('#popup_options').show()
 
+    # get the text content
+    @element.find('#link_text').val(selection.textContent()) if selection.textContent
+
   # build the link on form submission
   @element.find('form').submit (event) =>
     event.preventDefault()

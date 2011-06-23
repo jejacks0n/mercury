@@ -56,7 +56,10 @@ describe "Mercury.modalHandlers.insertLink", ->
     describe "a standard link", ->
 
       beforeEach ->
-        Mercury.region = selection: => {commonAncestor: -> $('<a>', {href: 'http://cnn.com', target: '_top'}).html('foo')}
+        Mercury.region = selection: => {
+          commonAncestor: -> $('<a>', {href: 'http://cnn.com', target: '_top'}).html('foo'),
+          textContent: -> 'content'
+          }
         Mercury.modalHandlers.insertLink.call(@modal)
 
       it "hides the link text input", ->
@@ -67,6 +70,9 @@ describe "Mercury.modalHandlers.insertLink", ->
 
       it "selects the target if one's available", ->
         expect($('#link_target').val()).toEqual('_top')
+
+      it "fills the content", ->
+        expect($('#link_text').val()).toEqual('content')
 
     describe "a javascript popup link", ->
 

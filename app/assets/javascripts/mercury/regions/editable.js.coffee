@@ -183,8 +183,11 @@ class @Mercury.Regions.Editable extends Mercury.Region
 
 
   focus: ->
-    @element.focus()
-    setTimeout((=> @selection().forceSelection(@element.get(0))), 1)
+    if Mercury.region != @
+      @element.focus()
+      selection = @selection().selection.collapseToStart()
+
+    Mercury.trigger('region:focused', {region: @})
     Mercury.trigger('region:update', {region: @})
 
 
@@ -386,11 +389,11 @@ class @Mercury.Regions.Editable extends Mercury.Region
     insertImage: (selection, options) -> @execCommand('insertHTML', {value: jQuery('<img/>', options.value)})
 
     insertLink: (selection, options) ->
-      anchor = jQuery("<#{options.value.tagName}>").attr(options.value.attrs).html(options.value.content)
+      anchor = jQuery("<#{options.value.tagName}>", @document).attr(options.value.attrs).html(options.value.content)
       selection.insertNode(anchor)
 
     replaceLink: (selection, options) ->
-      anchor = jQuery("<#{options.value.tagName}>").attr(options.value.attrs).html(options.value.content)
+      anchor = jQuery("<#{options.value.tagName}>", @document).attr(options.value.attrs).html(options.value.content)
       selection.selectNode(options.node)
       html = jQuery('<div>').html(selection.content()).find('a').html()
       selection.replace(jQuery(anchor, selection.context).html(html))

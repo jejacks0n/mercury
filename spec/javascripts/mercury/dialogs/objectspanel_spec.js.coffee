@@ -2,11 +2,11 @@ require '/assets/mercury.js'
 
 describe "Mercury.dialogHandlers.backColor", ->
 
-  template 'mercury/dialogs/objectspanel.html'
+  template 'mercury/dialogs/snippetpanel.html'
 
   beforeEach ->
     @dialog = {element: $('#test'), button: $('#button')}
-    Mercury.dialogHandlers.objectsPanel.call(@dialog)
+    Mercury.dialogHandlers.snippetPanel.call(@dialog)
 
   describe "filter", ->
 

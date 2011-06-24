@@ -79,9 +79,10 @@ This generator puts the mercury base file (configuration) into your project in /
 Mercury has an expectation that content regions will be on the page (not required, but probably useful).  To define
 content regions that Mercury will make editable you need to add a `mercury-region` class attribute to a div.  Then
 specify what region type by using the `data-type` attribute -- which can be *editable*, *markupable*, or *snippetable*.
-Region types are outlined below.
+It's important for saving that an id attribute be set on regions, you should always include.  Region types are outlined
+below.
 
-  <div class="mercury-region" data-type="editable">
+  <div id="primary" class="mercury-region" data-type="editable">
     default content
   </div>
 
@@ -143,8 +144,8 @@ edited or removed.
 Mercury does very little to save content and snippets for you, but it does provide the ability to load snippets from
 your own storage implementation.  Here's an example of loading existing snippet options back into Mercury.
 
-  Mercury.Snippet.load({
-    'snippet_1': {name: 'example', options: {favorite_beer: "Bells Hopslam", first_name: "Jeremy"}},
+  if (top.Mercury) top.Mercury.Snippet.load({
+    snippet_1: {name: 'example', options: {'options[favorite_beer]': "Bells Hopslam", 'options[first_name]': "Jeremy"}}
   });
 
 

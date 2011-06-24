@@ -1,4 +1,4 @@
-@Mercury.dialogHandlers.objectsPanel = ->
+@Mercury.dialogHandlers.snippetPanel = ->
   # make the filter work
   @element.find('input.filter').keyup =>
     value = @element.find('input.filter').val()

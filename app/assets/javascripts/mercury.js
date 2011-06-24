@@ -127,7 +127,7 @@ window.Mercury = {
         insertMedia:           ['Media', 'Insert Media (images and videos)', { modal: '/mercury/modals/media', regions: ['editable', 'markupable'] }],
         insertTable:           ['Table', 'Insert Table', { modal: '/mercury/modals/table', regions: ['editable', 'markupable'] }],
         insertCharacter:       ['Character', 'Special Characters', { modal: '/mercury/modals/character', regions: ['editable', 'markupable'] }],
-        objectsPanel:          ['Snippet', 'Snippet Panel', { panel: '/mercury/panels/snippets' }],
+        snippetPanel:          ['Snippet', 'Snippet Panel', { panel: '/mercury/panels/snippets' }],
         sep2:                  ' ',
         historyPanel:          ['History', 'Page Version History', { panel: '/mercury/panels/history' }],
         sep3:                  ' ',
@@ -252,7 +252,7 @@ window.Mercury = {
       '.mercury-textarea { box-sizing: border-box; -moz-box-sizing: border-box; -webkit-box-sizing: border-box; resize: vertical; }' +
       '.mercury-region:focus, .mercury-region.focus, .mercury-textarea.focus { outline: none; -webkit-box-shadow: 0 0 10px #09F, 0 0 1px #045; box-shadow: 0 0 10px #09F, 0 0 1px #045 }' +
       '.mercury-region:after { content: "."; display: block; visibility: hidden; clear: both; height: 0; overflow: hidden; }' +
-      '.mercury-region table, .mercury-region td { border: 1px dotted red; }'
+      '.mercury-region table, .mercury-region td, .mercury-region th { border: 1px dotted red; }'
   }
 };
 

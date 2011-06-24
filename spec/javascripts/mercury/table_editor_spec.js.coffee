@@ -29,6 +29,10 @@ describe "Mercury.tableEditor", ->
       expect(Mercury.tableEditor.table).toEqual(@table)
       expect(Mercury.tableEditor.cell).toEqual(@cell)
 
+    it "accepts content that will be placed inside cells", ->
+      Mercury.tableEditor(@table, @cell, '&nbsp;')
+      expect(Mercury.tableEditor.cellContent).toEqual('&nbsp;')
+
     it "sets row based on where the cell is", ->
       Mercury.tableEditor(@table, @cell)
       expect(Mercury.tableEditor.row.get(0)).toEqual(@table.find('tr').get(0))

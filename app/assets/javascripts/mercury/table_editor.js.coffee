@@ -1,10 +1,10 @@
-@Mercury.tableEditor = (table, cell) ->
-  Mercury.tableEditor.load(table, cell)
+@Mercury.tableEditor = (table, cell, cellContent) ->
+  Mercury.tableEditor.load(table, cell, cellContent)
   return Mercury.tableEditor
 
 jQuery.extend Mercury.tableEditor, {
 
-  load: (@table, @cell) ->
+  load: (@table, @cell, @cellContent = '') ->
     @row = @cell.parent('tr')
     @columnCount = @getColumnCount()
     @rowCount = @getRowCount()
@@ -17,7 +17,7 @@ jQuery.extend Mercury.tableEditor, {
       rowSpan = 1
       matchOptions = if position == 'after' then {right: sig.right} else {left: sig.left}
       if matching = @findCellByOptionsFor(row, matchOptions)
-        newCell = jQuery("<#{matching.cell.get(0).tagName}>").text('')
+        newCell = jQuery("<#{matching.cell.get(0).tagName}>").html(@cellContent)
         @setRowspanFor(newCell, matching.height)
         if position == 'before' then matching.cell.before(newCell) else matching.cell.after(newCell)
         i += matching.height - 1
@@ -51,7 +51,7 @@ jQuery.extend Mercury.tableEditor, {
     cellCount = 0
     for cell in @row.find('th, td')
       colspan = @colspanFor(cell)
-      newCell = jQuery("<#{cell.tagName}>").text('')
+      newCell = jQuery("<#{cell.tagName}>").html(@cellContent)
       @setColspanFor(newCell, colspan)
       cellCount += colspan
       if (rowspan = @rowspanFor(cell)) > 1 && position == 'after'
@@ -70,7 +70,8 @@ jQuery.extend Mercury.tableEditor, {
             @setRowspanFor(cell, rowspan + 1)
           else if rowspan - 1 >= rowCount && position == 'after'
             if rowspan - 1 == rowCount
-              newCell = jQuery("<#{cell.tagName}>", {colspan: @colspanFor(cell)})
+              newCell = jQuery("<#{cell.tagName}>").html(@cellContent)
+              @setColspanFor(newCell, @colspanFor(cell))
               newRow.append(newCell)
             else
               @setRowspanFor(cell, rowspan + 1)
@@ -129,7 +130,7 @@ jQuery.extend Mercury.tableEditor, {
   decreaseColspan: ->
     return if @colspanFor(@cell) == 1
     @setColspanFor(@cell, @colspanFor(@cell) - 1)
-    newCell = jQuery("<#{@cell.get(0).tagName}>").text('')
+    newCell = jQuery("<#{@cell.get(0).tagName}>").html(@cellContent)
     @setRowspanFor(newCell, @rowspanFor(@cell))
     @cell.after(newCell)
 
@@ -146,7 +147,7 @@ jQuery.extend Mercury.tableEditor, {
     return if sig.height == 1
     nextRow = @row.nextAll('tr')[sig.height - 2]
     if match = @findCellByOptionsFor(nextRow, {left: sig.left, forceAdjacent: true})
-      newCell = jQuery("<#{@cell.get(0).tagName}>").text('')
+      newCell = jQuery("<#{@cell.get(0).tagName}>").html(@cellContent)
       @setColspanFor(newCell, @colspanFor(@cell))
       @setRowspanFor(@cell, sig.height - 1)
       if match.direction == 'before' then match.cell.before(newCell) else match.cell.after(newCell)

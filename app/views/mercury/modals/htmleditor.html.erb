@@ -1,0 +1,11 @@
+<%= semantic_form_for 'htmlEditor', { :html => { :id => 'mercury_htmlEditor', :style => 'width:650px' } } do |f| %>
+
+  <textarea class="mercury-modal-pane-container" rows="5"></textarea>
+
+  <div class="mercury-modal-controls">
+    <%= f.buttons do %>
+      <%= f.commit_button 'Save and Replace' %>
+    <% end %>
+  </div>
+
+<% end %>

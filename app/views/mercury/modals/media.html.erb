@@ -1,0 +1,43 @@
+<%= semantic_form_for 'media', { :html => { :id => 'mercury_media', :style => 'width:600px' } } do |f| %>
+
+  <div class="mercury-modal-pane-container">
+    <div class="mercury-modal-pane">
+      <%= f.inputs 'Images' do %>
+        <%= f.input :image_url, :required => false, :input_html => { :class => 'selectable' },
+                    :label => '<input name="media_type" type="radio" value="image_url" checked="checked"/>URL'.html_safe %>
+      <% end %>
+
+      <%= f.inputs 'Videos' do %>
+        <%= f.input :youtube_url, :required => false, :input_html => { :class => 'selectable' },
+                    :label => '<input name="media_type" type="radio" value="youtube_url"/>YouTube Share URL'.html_safe %>
+        <%= f.input :vimeo_url, :required => false, :input_html => { :class => 'selectable' },
+                    :label => '<input name="media_type" type="radio" value="vimeo_url"/>Vimeo URL'.html_safe %>
+      <% end %>
+
+      <%= f.inputs 'Options' do %>
+        <div id="image_url" class="media-options">
+          <%= f.input :image_alignment, :as => :select, :required => false, :include_blank => 'None',
+                      :collection => [['Left', 'left'], ['Right', 'right'], ['Top', 'top'], ['Middle', 'middle'], ['Bottom', 'bottom'], ['Absolute Middle', 'absmiddle'], ['Absolute Bottom', 'absbottom']],
+                      :label => 'Alignment' %>
+        </div>
+
+        <div id="youtube_url" class="media-options" style="display:none">
+          <%= f.input :youtube_width, :required => false, :label => 'Width', :input_html => { :value => '560' } %>
+          <%= f.input :youtube_height, :required => false, :label => 'Height', :input_html => { :value => '349' } %>
+        </div>
+
+        <div id="vimeo_url" class="media-options" style="display:none">
+          <%= f.input :vimeo_width, :required => false, :label => 'Width', :input_html => { :value => '400' } %>
+          <%= f.input :vimeo_height, :required => false, :label => 'Height', :input_html => { :value => '225' } %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="mercury-modal-controls">
+    <%= f.buttons do %>
+      <%= f.commit_button 'Insert Media' %>
+    <% end %>
+  </div>
+
+<% end %>

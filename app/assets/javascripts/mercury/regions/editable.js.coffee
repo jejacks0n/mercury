@@ -18,7 +18,7 @@ class @Mercury.Regions.Editable extends Mercury.Region
     @specialContainer = jQuery.browser.mozilla && @element.get(0).tagName != 'DIV'
 
     # make it editable
-    # gecko: in this makes double clicking in textareas fail: https://bugzilla.mozilla.org/show_bug.cgi?id=490367
+    # mozilla: this makes double clicking in textareas fail: https://bugzilla.mozilla.org/show_bug.cgi?id=490367
     @element.get(0).contentEditable = true
 
     # make all snippets not editable, and set their versions to 1

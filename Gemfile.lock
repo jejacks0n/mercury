@@ -96,7 +96,6 @@ GEM
     gherkin (2.4.0)
       json (>= 1.4.6)
     git (1.2.5)
-    haml (3.1.2)
     hike (1.1.0)
     i18n (0.6.0)
     jeweler (1.6.2)
@@ -207,7 +206,6 @@ DEPENDENCIES
   database_cleaner
   evergreen!
   formtastic!
-  haml
   jeweler
   jquery-rails
   json

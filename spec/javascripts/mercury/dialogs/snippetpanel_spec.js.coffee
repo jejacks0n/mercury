@@ -1,6 +1,6 @@
 require '/assets/mercury.js'
 
-describe "Mercury.dialogHandlers.backColor", ->
+describe "Mercury.dialogHandlers.snippetPanel", ->
 
   template 'mercury/dialogs/snippetpanel.html'
 

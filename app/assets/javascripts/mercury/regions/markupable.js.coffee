@@ -21,12 +21,11 @@ class @Mercury.Regions.Markupable extends Mercury.Region
     @textarea.attr('class', @element.attr('class')).addClass('mercury-textarea')
     @textarea.css({border: 0, background: 'transparent', display: 'block', width: width, height: height, fontFamily: '"Courier New", Courier, monospace', fontSize: '14px'})
     @element.empty().append(@textarea)
-    @element.removeAttr('class')
 
     @previewElement = jQuery('<div>', @document)
     @element.append(@previewElement)
     @element = @textarea
-    #@resize()
+    @resize()
 
 
   focus: ->
@@ -49,10 +48,10 @@ class @Mercury.Regions.Markupable extends Mercury.Region
 
     Mercury.bind 'unfocus:regions', (event) =>
       return if @previewing
-      if Mercury.region == @
-        @element.blur()
-        @element.removeClass('focus')
-        Mercury.trigger('region:blurred', {region: @})
+      return unless Mercury.region == @
+      @element.blur()
+      @element.removeClass('focus')
+      Mercury.trigger('region:blurred', {region: @})
 
     @element.bind 'dragenter', (event) =>
       return if @previewing
@@ -90,6 +89,12 @@ class @Mercury.Regions.Markupable extends Mercury.Region
       Mercury.changes = true
       @resize()
       switch event.keyCode
+        when 90 # undo / redo
+          return unless event.metaKey
+          event.preventDefault()
+          if event.shiftKey then @execCommand('redo') else @execCommand('undo')
+          return
+
         when 13 # enter or return
           selection = @selection()
           text = @element.val()
@@ -106,12 +111,6 @@ class @Mercury.Regions.Markupable extends Mercury.Region
               number = parseInt(RegExp.$1)
               selection.replace("\n#{number += 1}. ", false, true)
               event.preventDefault()
-
-        when 90 # undo / redo
-          return unless event.metaKey
-          event.preventDefault()
-          if event.shiftKey then @execCommand('redo') else @execCommand('undo')
-          return
 
         when 9 # tab
           event.preventDefault()
@@ -148,8 +147,6 @@ class @Mercury.Regions.Markupable extends Mercury.Region
 
   content: (value = null, filterSnippets = true) ->
     if value != null
-      if $.type(value) == 'string'
-        @element.val(value)
       if jQuery.type(value) == 'string'
         @element.val(value)
       else
@@ -157,6 +154,10 @@ class @Mercury.Regions.Markupable extends Mercury.Region
         @selection().select(value.selection.start, value.selection.end)
     else
       return @element.val()
+
+
+  contentAndSelection: ->
+    return {html: @content(null, false), selection: @selection().serialize()}
 
 
   togglePreview: ->
@@ -178,10 +179,6 @@ class @Mercury.Regions.Markupable extends Mercury.Region
     @resize()
 
 
-  htmlAndSelection: ->
-    return {html: @content(null, false), selection: @selection().serialize()}
-
-
   pushHistory: (keyCode) ->
     # when pressing return, delete or backspace it should push to the history
     # all other times it should store if there's a 1 second pause
@@ -194,13 +191,13 @@ class @Mercury.Regions.Markupable extends Mercury.Region
 
     # if the key code was return, delete, or backspace store now -- unless it was the same as last time
     if knownKeyCode >= 0 && knownKeyCode != @lastKnownKeyCode # || !keyCode
-      @history.push(@htmlAndSelection())
+      @history.push(@contentAndSelection())
     else if keyCode
       # set a timeout for pushing to the history
-      @historyTimeout = setTimeout((=> @history.push(@htmlAndSelection())), waitTime * 1000)
+      @historyTimeout = setTimeout((=> @history.push(@contentAndSelection())), waitTime * 1000)
     else
       # push to the history immediately
-      @history.push(@htmlAndSelection())
+      @history.push(@contentAndSelection())
 
     @lastKnownKeyCode = knownKeyCode
 

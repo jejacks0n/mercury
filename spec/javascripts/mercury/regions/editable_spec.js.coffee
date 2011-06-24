@@ -86,13 +86,13 @@ describe "Mercury.Regions.Editable", ->
 
       it "does nothing if previewing", ->
 
-      it "it prevents the default action if shift is pressed", ->
+      it "prevents the default action if shift is pressed", ->
 
     describe "dragover", ->
 
       it "does nothing if previewing", ->
 
-      it "it prevents the default action if shift is pressed", ->
+      it "prevents the default action if shift is pressed", ->
 
     describe "drop", ->
 
@@ -165,6 +165,8 @@ describe "Mercury.Regions.Editable", ->
 
       it "does nothing if previewing", ->
 
+      it "tells mercury that changes have been made", ->
+
       it "calls pushHistory", ->
 
       it "calls execCommand with undo on meta+z", ->
@@ -210,7 +212,11 @@ describe "Mercury.Regions.Editable", ->
 
   describe "#focus", ->
 
-    it "calls focus on the element", ->
+    describe "if this isn't the active region", ->
+
+      it "calls focus on the element", ->
+
+      it "collapses the selection", ->
 
     it "sets a timeout that forces the selection", ->
 
@@ -341,6 +347,7 @@ describe "Mercury.Regions.Editable", ->
       it "strips style attributes from the pasted content and inserts the cleaned html", ->
 
 
+
 describe "Mercury.Regions.Editable.actions", ->
 
   template 'mercury/regions/editable.html'
@@ -349,50 +356,228 @@ describe "Mercury.Regions.Editable.actions", ->
     #@region = new Mercury.Regions.Editable($('#editable_region1'), window)
     #@actions = Mercury.Regions.Editable.actions
 
+  #
   # behaviors
+  #
+
   describe "*horizontalRule", ->
+
+    it "replaces the selection with an hr tag", ->
+
+
   describe "*htmlEditor", ->
 
+    it "opens a modal", ->
+
+  #
   # native actions
+  #
+
   describe "-formatblock", ->
+
+    it "wraps the line of the selection in a given tag", ->
+
+
   describe "-foreColor", ->
+
+    it "wraps the selection in a span styled with the color", ->
+
+
   describe "-bold", ->
+
+    it "wraps the selection in a strong or s tag", ->
+
+
   describe "-italic", ->
+
+    it "wraps the selection in an em or i tag", ->
+
+
   describe "-strikethrough", ->
+
+    it "wraps the selection in a strike tag", ->
+
+
   describe "-underline", ->
+
+    it "wraps the selection in a u tag", ->
+
+
   describe "-subscript", ->
+
+    it "wraps the selection in a sub tag", ->
+
+
   describe "-superscript", ->
+
+    it "wraps the selection in a sup tag", ->
+
+
   describe "-justifyLeft", ->
+
+    it "justifies the text to the left", ->
+
+
   describe "-justifyCenter", ->
+
+    it "justifies the test to be in the center", ->
+
+
   describe "-justifyRight", ->
+
+    it "justifies the text to the right", ->
+
+
   describe "-justifyFull", ->
+
+    it "styles the text to be fully justified", ->
+
+
   describe "-insertUnorderedList", ->
+
+    it "wraps the line of the selection in an unordered list", ->
+
+
   describe "-insertOrderedList", ->
+
+    it "wraps the line of the selection in an ordered list", ->
+
+
   describe "-outdent", ->
+
+    it "unwraps the line of the selection in a blockquote tag", ->
+
+
   describe "-indent", ->
 
+    it "wraps the line of the selection in a blockquote tag", ->
+
+  #
   # custom actions
-  describe ".style", ->
-  describe ".backColor", ->
-  describe ".removeFormatting", ->
-  describe ".overline", ->
-  describe ".insertRowBefore", ->
-  describe ".insertRowAfter", ->
-  describe ".deleteRow", ->
-  describe ".insertColumnBefore", ->
-  describe ".insertColumnAfter", ->
-  describe ".deleteColumn", ->
-  describe ".increaseColspan", ->
-  describe ".decreaseColspan", ->
-  describe ".increaseRowspan", ->
-  describe ".decreaseRowspan", ->
+  #
+
   describe ".undo", ->
+
+    it "calls undo on the history buffer", ->
+
+    it "sets the contents", ->
+
+
   describe ".redo", ->
+
+    it "calls redo on the history buffer", ->
+
+    it "sets the contents", ->
+
+
+  describe ".style", ->
+
+    it "wraps the selection in a span tag with a given class", ->
+
+
+  describe ".backColor", ->
+
+    it "wraps the selection in a span styled with the background color", ->
+
+
+  describe ".removeFormatting", ->
+
+    it "replaces the selection with the text content of the selection", ->
+
+
+  describe ".overline", ->
+
+    it "wraps the selection in a span styled with an overline", ->
+
+
+  describe ".insertRowBefore", ->
+
+    it "calls addRow on the table editor", ->
+
+
+  describe ".insertRowAfter", ->
+
+    it "calls addRow on the table editor", ->
+
+
+  describe ".deleteRow", ->
+
+    it "calls removeRow on the table editor", ->
+
+
+  describe ".insertColumnBefore", ->
+
+    it "calls addColumn on the table editor", ->
+
+
+  describe ".insertColumnAfter", ->
+
+    it "calls addColumn on the table editor", ->
+
+
+  describe ".deleteColumn", ->
+
+    it "calls removeColumn on the table editor", ->
+
+
+  describe ".increaseColspan", ->
+
+    it "calls increaseColspan on the table editor", ->
+
+
+  describe ".decreaseColspan", ->
+
+    it "calls decreaseColspan on the table editor", ->
+
+
+  describe ".increaseRowspan", ->
+
+    it "calls increaseRowspan on the table editor", ->
+
+
+  describe ".decreaseRowspan", ->
+
+    it "calls decreaseRowspan on the table editor", ->
+
+
   describe ".replaceHTML", ->
+
+    it "sets the content", ->
+
+
   describe ".insertImage", ->
+
+    it "replaces the selection with an image tag", ->
+
+
   describe ".insertLink", ->
+
+    it "inserts a link node", ->
+
+
   describe ".replaceLink", ->
+
+    it "selects the anchor tag that we're going to replace", ->
+
+    it "replaces the selection with an anchor tag", ->
+
+
   describe ".insertSnippet", ->
+
+    it "selects any snippets that have the same identity", ->
+
+    it "replaces the selection with the content returned from the snippets getHTML", ->
+
+
   describe ".editSnippet", ->
+
+    it "does nothing if there's no snippet being hovered over", ->
+
+    it "calls displayOntions for the snippet", ->
+
+
   describe ".removeSnippet", ->
 
+    it "calls remove on the snippet element", ->
+
+    it "fires a hide:toolbar event", ->

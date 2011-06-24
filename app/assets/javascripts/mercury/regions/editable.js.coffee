@@ -460,12 +460,12 @@ class Mercury.Regions.Editable.Selection
     # https://github.com/lautis/uglifier/issues/11
     if @range
       if @commonAncestor(true).closest('.mercury-snippet').length
-        lastChild = @context.createTextNode(' ') #\00
+        lastChild = @context.createTextNode('\00') #\00
         element.appendChild(lastChild)
     else
       if element.lastChild && element.lastChild.nodeType == 3 && element.lastChild.textContent.replace(/^[\s+|\n+]|[\s+|\n+]$/, '') == ''
         lastChild = element.lastChild
-        element.lastChild.textContent = ' ' #\00
+        element.lastChild.textContent = '\00' #\00
       else
         lastChild = @context.createTextNode(' ') #\00
         element.appendChild(lastChild)

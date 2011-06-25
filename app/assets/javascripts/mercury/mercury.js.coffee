@@ -40,6 +40,7 @@ jQuery.extend Mercury, {
   Regions: {}
   modalHandlers: {}
   dialogHandlers: {}
+  preloadedViews: {}
 
   # Custom event and logging methods
   bind: (eventName, callback) ->

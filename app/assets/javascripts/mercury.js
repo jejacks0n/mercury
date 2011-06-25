@@ -49,6 +49,19 @@ window.Mercury = {
     cleanStylesOnPaste: true,
 
 
+    // Snippet Options and Preview
+    //
+    // When a user drags a snippet onto the page they'll be prompted to enter options for the given snippet.  The server
+    // is expected to respond with a form.  Once the user submits this form, an Ajax request is sent to the server with
+    // the options provided; this preview request is expected to respond with the rendered markup for the snippet.
+    //
+    // Name will be replaced with the snippet name (eg. example)
+    snippets: {
+      optionsUrl: '/mercury/snippets/:name/options',
+      previewUrl: '/mercury/snippets/:name/preview'
+    },
+
+
     // Image Uploading (in supported regions)
     //
     // If you drag images (while pressing shift) from your desktop into regions that support it, it will be uploade

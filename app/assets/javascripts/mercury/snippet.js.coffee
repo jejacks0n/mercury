@@ -3,7 +3,11 @@ class @Mercury.Snippet
   @all: []
 
   @displayOptionsFor: (name) ->
-    Mercury.modal("/mercury/snippets/#{name}/options", {title: 'Snippet Options', handler: 'insertSnippet', snippetName: name})
+    Mercury.modal Mercury.config.snippets.optionsUrl.replace(':name', name), {
+      title: 'Snippet Options'
+      handler: 'insertSnippet'
+      snippetName: name
+    }
     Mercury.snippet = null
 
 
@@ -47,7 +51,7 @@ class @Mercury.Snippet
 
 
   loadPreview: (element, callback = null) ->
-    jQuery.ajax "/mercury/snippets/#{@name}/preview", {
+    jQuery.ajax Mercury.config.snippets.previewUrl.replace(':name', @name), {
       type: 'POST'
       data: @options
       success: (data) =>
@@ -61,7 +65,7 @@ class @Mercury.Snippet
 
   displayOptions: ->
     Mercury.snippet = @
-    Mercury.modal "/mercury/snippets/#{@name}/options", {
+    Mercury.modal Mercury.config.snippets.optionsUrl.replace(':name', @name), {
       title: 'Snippet Options',
       handler: 'insertSnippet',
       loadType: 'post',

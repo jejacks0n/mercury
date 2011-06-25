@@ -125,14 +125,17 @@ jQuery.extend Mercury.modal, {
   load: ->
     @element.addClass('loading')
     @setTitle()
-    jQuery.ajax @url, {
-      type: @options.loadType || 'get'
-      data: @options.loadData
-      success: (data) => @loadContent(data)
-      error: =>
-        @hide()
-        alert("Mercury was unable to load #{@url} for the modal.")
-    }
+    if Mercury.preloadedViews[@url]
+      setTimeout((=> @loadContent(Mercury.preloadedViews[@url])), 10)
+    else
+      jQuery.ajax @url, {
+        type: @options.loadType || 'get'
+        data: @options.loadData
+        success: (data) => @loadContent(data)
+        error: =>
+          @hide()
+          alert("Mercury was unable to load #{@url} for the modal.")
+      }
 
 
   loadContent: (data, options) ->

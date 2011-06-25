@@ -184,60 +184,76 @@ describe "Mercury.Dialog", ->
       Mercury.dialogHandlers.foo = ->
       @dialog = new Mercury.Dialog('/evergreen/responses/blank.html', 'foo', {appendTo: '#test', for: $('#button')})
 
-    it "makes an ajax request", ->
-      spy = spyOn($, 'ajax').andCallFake(=>)
-      @dialog.load()
-      expect(spy.callCount).toEqual(1)
-
     it "does nothing if there's no url", ->
       spy = spyOn($, 'ajax').andCallFake(=>)
       @dialog.url = false
       @dialog.load()
       expect(spy.callCount).toEqual(0)
 
-    describe "on success", ->
+    describe "on a preloaded view", ->
 
       beforeEach ->
-        @loadContentSpy = spyOn(Mercury.Dialog.prototype, 'loadContent').andCallFake(=>)
-        @ajaxSpy = spyOn($, 'ajax').andCallFake (url, options) =>
-          options.success('return value') if (options.success)
+        Mercury.preloadedViews = {'/evergreen/responses/blank.html': 'this is the preloaded content'}
 
-      it "calls loadContent with data", ->
+      afterEach ->
+        Mercury.preloadedViews = {}
+
+      it "calls loadContent with the content in the preloaded view", ->
+        spy = spyOn(Mercury.Dialog.prototype, 'loadContent').andCallFake(=>)
         @dialog.load()
-        expect(@loadContentSpy.callCount).toEqual(1)
-        expect(@loadContentSpy.argsForCall[0]).toEqual(['return value'])
+        expect(spy.callCount).toEqual(1)
+        expect(spy.argsForCall[0]).toEqual(['this is the preloaded content'])
 
-      it "calls a dialog handler if there's one", ->
-        spy = spyOn(Mercury.dialogHandlers, 'foo').andCallFake(=>)
+    describe "when not a preloaded view", ->
+
+      it "makes an ajax request", ->
+        spy = spyOn($, 'ajax').andCallFake(=>)
         @dialog.load()
         expect(spy.callCount).toEqual(1)
 
-      it "calls a callback if one was provided", ->
-        spy = spyOn(@, 'spyFunction').andCallFake(=>)
-        @dialog.load(@spyFunction)
-        expect(spy.callCount).toEqual(1)
+      describe "on success", ->
 
-    describe "on failure", ->
+        beforeEach ->
+          @loadContentSpy = spyOn(Mercury.Dialog.prototype, 'loadContent').andCallFake(=>)
+          @ajaxSpy = spyOn($, 'ajax').andCallFake (url, options) =>
+            options.success('return value') if (options.success)
 
-      beforeEach ->
-        @alertSpy = spyOn(window, 'alert').andCallFake(=>)
-        @ajaxSpy = spyOn($, 'ajax').andCallFake (url, options) =>
-          options.error() if (options.error)
+        it "calls loadContent with data", ->
+          @dialog.load()
+          expect(@loadContentSpy.callCount).toEqual(1)
+          expect(@loadContentSpy.argsForCall[0]).toEqual(['return value'])
 
-      it "hides", ->
-        spy = spyOn(Mercury.Dialog.prototype, 'hide').andCallFake(=>)
-        @dialog.load()
-        expect(spy.callCount).toEqual(1)
+        it "calls a dialog handler if there's one", ->
+          spy = spyOn(Mercury.dialogHandlers, 'foo').andCallFake(=>)
+          @dialog.load()
+          expect(spy.callCount).toEqual(1)
 
-      it "removes the pressed state for it's button", ->
-        $('#button').addClass('pressed')
-        @dialog.load()
-        expect($('#button').hasClass('pressed')).toEqual(false)
+        it "calls a callback if one was provided", ->
+          spy = spyOn(@, 'spyFunction').andCallFake(=>)
+          @dialog.load(@spyFunction)
+          expect(spy.callCount).toEqual(1)
 
-      it "alerts the user", ->
-        @dialog.load()
-        expect(@alertSpy.callCount).toEqual(1)
-        expect(@alertSpy.argsForCall[0]).toEqual(['Mercury was unable to load /evergreen/responses/blank.html for the foo dialog.'])
+      describe "on failure", ->
+
+        beforeEach ->
+          @alertSpy = spyOn(window, 'alert').andCallFake(=>)
+          @ajaxSpy = spyOn($, 'ajax').andCallFake (url, options) =>
+            options.error() if (options.error)
+
+        it "hides", ->
+          spy = spyOn(Mercury.Dialog.prototype, 'hide').andCallFake(=>)
+          @dialog.load()
+          expect(spy.callCount).toEqual(1)
+
+        it "removes the pressed state for it's button", ->
+          $('#button').addClass('pressed')
+          @dialog.load()
+          expect($('#button').hasClass('pressed')).toEqual(false)
+
+        it "alerts the user", ->
+          @dialog.load()
+          expect(@alertSpy.callCount).toEqual(1)
+          expect(@alertSpy.argsForCall[0]).toEqual(['Mercury was unable to load /evergreen/responses/blank.html for the foo dialog.'])
 
 
   describe "#loadContent", ->

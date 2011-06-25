@@ -57,16 +57,21 @@ class @Mercury.Dialog
 
   load: (callback) ->
     return unless @url
-    jQuery.ajax @url, {
-      success: (data) =>
-        @loadContent(data)
-        Mercury.dialogHandlers[@name].call(@) if Mercury.dialogHandlers[@name]
-        callback() if callback
-      error: =>
-        @hide()
-        @button.removeClass('pressed') if @button
-        alert("Mercury was unable to load #{@url} for the #{@name} dialog.")
-    }
+    if Mercury.preloadedViews[@url]
+      @loadContent(Mercury.preloadedViews[@url])
+      Mercury.dialogHandlers[@name].call(@) if Mercury.dialogHandlers[@name]
+      callback() if callback
+    else
+      jQuery.ajax @url, {
+        success: (data) =>
+          @loadContent(data)
+          Mercury.dialogHandlers[@name].call(@) if Mercury.dialogHandlers[@name]
+          callback() if callback
+        error: =>
+          @hide()
+          @button.removeClass('pressed') if @button
+          alert("Mercury was unable to load #{@url} for the #{@name} dialog.")
+      }
 
 
   loadContent: (data) ->

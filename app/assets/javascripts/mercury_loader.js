@@ -38,7 +38,7 @@
   }
 
   var timer;
-  function fireContentLoadedEvent() {
+  function loadMercury() {
     if (document.mercuryLoaded) return;
     if (timer) window.clearTimeout(timer);
     document.mercuryLoaded = true;
@@ -76,7 +76,7 @@
   function checkReadyState() {
     if (document.readyState === 'complete') {
       document.stopObserving('readystatechange', checkReadyState);
-      fireContentLoadedEvent();
+      loadMercury();
     }
   }
 
@@ -86,11 +86,11 @@
       timer = pollDoScroll.defer();
       return;
     }
-    fireContentLoadedEvent();
+    loadMercury();
   }
 
   if (document.addEventListener) {
-    document.addEventListener('DOMContentLoaded', fireContentLoadedEvent, false);
+    document.addEventListener('DOMContentLoaded', loadMercury, false);
   } else {
     document.observe('readystatechange', checkReadyState);
     if (window == top) { timer = pollDoScroll.defer(); }

@@ -13324,7 +13324,9 @@ Showdown.converter = function() {
       this.element.addClass('loading');
       this.setTitle();
       if (Mercury.preloadedViews[this.url]) {
-        return this.loadContent(Mercury.preloadedViews[this.url]);
+        return setTimeout((__bind(function() {
+          return this.loadContent(Mercury.preloadedViews[this.url]);
+        }, this)), 10);
       } else {
         return jQuery.ajax(this.url, {
           type: this.options.loadType || 'get',

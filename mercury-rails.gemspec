@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{mercury-rails}
-  s.version = "0.1.2"
+  s.version = "0.1.3"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Jeremy Jackson"]
-  s.date = %q{2011-06-21}
+  s.date = %q{2011-06-24}
   s.description = %q{A fully featured and advanced HTML5 WYSIWYG editor written in CoffeeScript on top of Rails 3.1}
   s.email = %q{jejacks0n@gmail.com}
   s.extra_rdoc_files = [
@@ -27,7 +27,6 @@ Gem::Specification.new do |s|
     "app/assets/images/mercury/loading-light.gif",
     "app/assets/images/mercury/search-icon.png",
     "app/assets/images/mercury/toolbar/editable/buttons.png",
-    "app/assets/images/mercury/toolbar/markupable/buttons.png",
     "app/assets/images/mercury/toolbar/primary/_expander.png",
     "app/assets/images/mercury/toolbar/primary/_pressed.png",
     "app/assets/images/mercury/toolbar/primary/historypanel.png",
@@ -37,11 +36,10 @@ Gem::Specification.new do |s|
     "app/assets/images/mercury/toolbar/primary/inserttable.png",
     "app/assets/images/mercury/toolbar/primary/inspectorpanel.png",
     "app/assets/images/mercury/toolbar/primary/notespanel.png",
-    "app/assets/images/mercury/toolbar/primary/objectspanel.png",
     "app/assets/images/mercury/toolbar/primary/preview.png",
     "app/assets/images/mercury/toolbar/primary/redo.png",
     "app/assets/images/mercury/toolbar/primary/save.png",
-    "app/assets/images/mercury/toolbar/primary/todospanel.png",
+    "app/assets/images/mercury/toolbar/primary/snippetpanel.png",
     "app/assets/images/mercury/toolbar/primary/undo.png",
     "app/assets/images/mercury/toolbar/snippetable/buttons.png",
     "app/assets/javascripts/mercury.js",
@@ -91,22 +89,22 @@ Gem::Specification.new do |s|
     "app/controllers/images_controller.rb",
     "app/controllers/mercury_controller.rb",
     "app/models/image.rb",
-    "app/views/layouts/mercury.html.haml",
-    "app/views/mercury/modals/character.html.haml",
-    "app/views/mercury/modals/htmleditor.html.haml",
-    "app/views/mercury/modals/link.html.haml",
-    "app/views/mercury/modals/media.html.haml",
-    "app/views/mercury/modals/sanitizer.html.haml",
-    "app/views/mercury/modals/table.html.haml",
-    "app/views/mercury/palettes/backcolor.html.haml",
-    "app/views/mercury/palettes/forecolor.html.haml",
-    "app/views/mercury/panels/history.html.haml",
-    "app/views/mercury/panels/notes.html.haml",
-    "app/views/mercury/panels/snippets.html.haml",
-    "app/views/mercury/selects/formatblock.html.haml",
-    "app/views/mercury/selects/style.html.haml",
-    "app/views/mercury/snippets/example.html.haml",
-    "app/views/mercury/snippets/example_options.html.haml",
+    "app/views/layouts/mercury.html.erb",
+    "app/views/mercury/modals/character.html",
+    "app/views/mercury/modals/htmleditor.html",
+    "app/views/mercury/modals/link.html",
+    "app/views/mercury/modals/media.html",
+    "app/views/mercury/modals/sanitizer.html",
+    "app/views/mercury/modals/table.html",
+    "app/views/mercury/palettes/backcolor.html",
+    "app/views/mercury/palettes/forecolor.html",
+    "app/views/mercury/panels/history.html",
+    "app/views/mercury/panels/notes.html",
+    "app/views/mercury/panels/snippets.html",
+    "app/views/mercury/selects/formatblock.html",
+    "app/views/mercury/selects/style.html",
+    "app/views/mercury/snippets/example.html.erb",
+    "app/views/mercury/snippets/example_options.html.erb",
     "config/engine.rb",
     "config/routes.rb",
     "db/migrate/20110526035601_create_images.rb",
@@ -116,17 +114,18 @@ Gem::Specification.new do |s|
     "features/support/env.rb",
     "features/support/paths.rb",
     "features/support/selectors.rb",
+    "lib/generators/mercury/install/install_generator.rb",
     "lib/mercury-rails.rb",
-    "log/.gitkeep",
     "mercury-rails.gemspec",
     "spec/javascripts/mercury/dialog_spec.js.coffee",
     "spec/javascripts/mercury/dialogs/backcolor_spec.js.coffee",
     "spec/javascripts/mercury/dialogs/forecolor_spec.js.coffee",
     "spec/javascripts/mercury/dialogs/formatblock_spec.js.coffee",
-    "spec/javascripts/mercury/dialogs/objectspanel_spec.js.coffee",
+    "spec/javascripts/mercury/dialogs/snippetpanel_spec.js.coffee",
     "spec/javascripts/mercury/dialogs/style_spec.js.coffee",
     "spec/javascripts/mercury/history_buffer_spec.js.coffee",
     "spec/javascripts/mercury/mercury_spec.js.coffee",
+    "spec/javascripts/mercury/modal_spec.js.coffee",
     "spec/javascripts/mercury/modals/htmleditor_spec.js.coffee",
     "spec/javascripts/mercury/modals/insertcharacter_spec.js.coffee",
     "spec/javascripts/mercury/modals/insertlink_spec.js.coffee",
@@ -138,8 +137,8 @@ Gem::Specification.new do |s|
     "spec/javascripts/mercury/palette_spec.js.coffee",
     "spec/javascripts/mercury/panel_spec.js.coffee",
     "spec/javascripts/mercury/region_spec.js.coffee",
-    "spec/javascripts/mercury/regions/_markupable_.js.coffee",
     "spec/javascripts/mercury/regions/editable_spec.js.coffee",
+    "spec/javascripts/mercury/regions/markupable_spec.js.coffee",
     "spec/javascripts/mercury/regions/snippetable_spec.js.coffee",
     "spec/javascripts/mercury/select_spec.js.coffee",
     "spec/javascripts/mercury/snippet_spec.js.coffee",
@@ -158,7 +157,7 @@ Gem::Specification.new do |s|
     "spec/javascripts/templates/mercury/dialogs/backcolor.html",
     "spec/javascripts/templates/mercury/dialogs/forecolor.html",
     "spec/javascripts/templates/mercury/dialogs/formatblock.html",
-    "spec/javascripts/templates/mercury/dialogs/objectspanel.html",
+    "spec/javascripts/templates/mercury/dialogs/snippetpanel.html",
     "spec/javascripts/templates/mercury/dialogs/style.html",
     "spec/javascripts/templates/mercury/modals/htmleditor.html",
     "spec/javascripts/templates/mercury/modals/insertcharacter.html",
@@ -205,14 +204,6 @@ Gem::Specification.new do |s|
       s.add_runtime_dependency(%q<json>, [">= 0"])
       s.add_runtime_dependency(%q<sass-rails>, ["~> 3.1.0.rc"])
       s.add_runtime_dependency(%q<coffee-script>, [">= 0"])
-      s.add_runtime_dependency(%q<haml>, [">= 0"])
-      s.add_development_dependency(%q<uglifier>, [">= 0"])
-      s.add_development_dependency(%q<jquery-rails>, [">= 0"])
-      s.add_development_dependency(%q<jeweler>, [">= 0"])
-      s.add_development_dependency(%q<sqlite3>, [">= 0"])
-      s.add_development_dependency(%q<thin>, [">= 0"])
-      s.add_development_dependency(%q<ruby-debug19>, [">= 0"])
-      s.add_development_dependency(%q<evergreen>, [">= 0"])
     else
       s.add_dependency(%q<rails>, ["= 3.1.0.rc4"])
       s.add_dependency(%q<paperclip>, [">= 0"])
@@ -220,14 +211,6 @@ Gem::Specification.new do |s|
       s.add_dependency(%q<json>, [">= 0"])
       s.add_dependency(%q<sass-rails>, ["~> 3.1.0.rc"])
       s.add_dependency(%q<coffee-script>, [">= 0"])
-      s.add_dependency(%q<haml>, [">= 0"])
-      s.add_dependency(%q<uglifier>, [">= 0"])
-      s.add_dependency(%q<jquery-rails>, [">= 0"])
-      s.add_dependency(%q<jeweler>, [">= 0"])
-      s.add_dependency(%q<sqlite3>, [">= 0"])
-      s.add_dependency(%q<thin>, [">= 0"])
-      s.add_dependency(%q<ruby-debug19>, [">= 0"])
-      s.add_dependency(%q<evergreen>, [">= 0"])
     end
   else
     s.add_dependency(%q<rails>, ["= 3.1.0.rc4"])
@@ -236,14 +219,6 @@ Gem::Specification.new do |s|
     s.add_dependency(%q<json>, [">= 0"])
     s.add_dependency(%q<sass-rails>, ["~> 3.1.0.rc"])
     s.add_dependency(%q<coffee-script>, [">= 0"])
-    s.add_dependency(%q<haml>, [">= 0"])
-    s.add_dependency(%q<uglifier>, [">= 0"])
-    s.add_dependency(%q<jquery-rails>, [">= 0"])
-    s.add_dependency(%q<jeweler>, [">= 0"])
-    s.add_dependency(%q<sqlite3>, [">= 0"])
-    s.add_dependency(%q<thin>, [">= 0"])
-    s.add_dependency(%q<ruby-debug19>, [">= 0"])
-    s.add_dependency(%q<evergreen>, [">= 0"])
   end
 end
 

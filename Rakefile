@@ -90,7 +90,7 @@ Jeweler::Tasks.new do |gem|
     'db/*.sqlite3',
     'db/schema.rb',
     'lib/tasks/*',
-    'public/*',
+    'public/**/*',
     'script/*',
     'log/*',
     '.gitignore',

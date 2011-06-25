@@ -58,6 +58,8 @@ The feature list is actually pretty long, so here's a short list that need highl
 
 == Installation
 
+=== For Rails
+
 Include the gem in your Gemfile and bundle to install the gem.
 
   gem 'mercury-rails'
@@ -72,6 +74,26 @@ You can also get the configuration file by running the generator.
   rails generate mercury:install
 
 This generator puts the mercury base file (configuration) into your project in /app/assets/javascripts/mercury.js.
+
+=== For Other Frameworks / Languages
+
+Get the distro files by downloading them from github using the downloads feature, or pull them out of the project
+manually (the files are in /public/mercury_distro).  Copy the files into your project, and if you adjust where they're
+located (eg. not within mercury_distro/javascripts or mercury_distro/stylesheets) make sure you update the
+mercury_loader.js file to reflect this.
+
+Images are bundled into the CSS if you use the mercury.bundle.css file, but if you'd rather not use the bundled CSS
+you'll need to grab the images manually and adjust the paths in the css file.
+
+The dialogs (eg. color palettes, modals, and other dialog types) are bundled into the mercury_dialogs.js file.  If you
+would like to customize a view you can remove the view from the mercury_dialogs.js file and adjust the path you want to
+load using the configuration -- your custom view will then load using Ajax.
+
+Bundling snippet options and snippets doesn't work in this way, so you may need to disable snippets or adjust where
+they're loaded from.. We'll see how this pans out and adjust over time if needed, so feedback would be useful here.
+
+If you use the distro instead of using the Rails Engine, you won't be able to utilize the Route usage method outlined in
+the Usage portion of this documentation.
 
 
 == Usage

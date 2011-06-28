@@ -59,7 +59,6 @@ jQuery.extend Mercury.modal, {
 
 
   resize: (keepVisible) ->
-    # TODO: resizing is a bit shitty when the modal has panes and is scrollable
     visibility = if keepVisible then 'visible' else 'hidden'
 
     titleHeight = @titleElement.outerHeight()
@@ -138,7 +137,7 @@ jQuery.extend Mercury.modal, {
       }
 
 
-  loadContent: (data, options) ->
+  loadContent: (data, options = null) ->
     @initialize()
     @options = options || @options
     @setTitle()

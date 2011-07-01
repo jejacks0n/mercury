@@ -4,7 +4,7 @@ gem 'rails', '3.1.0.rc4'
 
 # Assets and forms
 gem 'paperclip'
-gem 'formtastic', :git => 'git://github.com/justinfrench/formtastic.git'
+gem 'formtastic', :git => 'git://github.com/justinfrench/formtastic.git' # this is only here for the snippet options form
 
 # Asset template engines
 gem 'json'

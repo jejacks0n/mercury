@@ -25,15 +25,21 @@ if (window.Uint8Array && window.ArrayBuffer && !XMLHttpRequest.prototype.sendAsB
 var canvas = $('canvas').get(0);
 // the browser supports canvas
 if (canvas.getContext) {
-  // draw a cicle
   context = canvas.getContext('2d');
-  context.strokeStyle = "#000000";
-  context.fillStyle = "#0099FF";
-  context.beginPath();
-  context.arc(50,50,25,0,Math.PI*2,true);
-  context.closePath();
-  context.stroke();
-  context.fill();
+
+  var image = new Image();
+  image.onload = function() {
+    context.drawImage(image, 0, 15, 130, 110);
+    // draw a cicle
+    context.strokeStyle = '#000000';
+    context.fillStyle = '#0099FF';
+    context.beginPath();
+    context.arc(50, 50, 25, 0, Math.PI * 2, true);
+    context.closePath();
+    context.stroke();
+    context.fill();
+  };
+  image.src = '/assets/mercury/default-snippet.png';
 }
 
 // get the binary contents of the canvas and submit them back to the server using a multipart form

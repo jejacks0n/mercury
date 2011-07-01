@@ -1,4 +1,4 @@
-= Mercury Editor
+# Mercury Editor
 
 Mercury Editor is a fully featured editor much like TinyMCE or CKEditor, but with a different usage paradigm.  It
 expects that an entire page is something that can be editable, and allows different types of editable regions to be
@@ -8,19 +8,26 @@ block elements, instead of iframes, which allows for CSS to be applied in ways t
 Mercury has been written using CoffeeScript and jQuery for the Javascript portions, and is written on top of Rails 3.1.
 
 
-== Browser Support
+## Browser Support
 
 Mercury has been written for the future, and thus doesn't support legacy browsers or browsers that don't follow the W3C
 specifications for content editing.  Any browser will be supported if they support the W3C specification in the future,
 but there aren't plans for adding support for alternate implementations at this time.
 
 Supported Browsers:
-* Chrome 10+
-* Safari 5+
-* Firefox 4+
+
+- Chrome 10+
+- Safari 5+
+- Firefox 4+
 
 
-== The Story
+## A Demo
+
+Feel free to check out [the demo](http://mercury-demo.herokuapp.com/).  A full walkthrough that details each of the
+common features will be provided shortly.
+
+
+## The Story
 
 I was looking for a fully featured editor that didn't use iframes, and there weren't any decent ones.  My primary goal
 was to have areas that were editable, but that also allowed CSS to flow naturally.  A few have cropped up since then
@@ -31,51 +38,51 @@ configuration, we chose a mix of configuration and code simplicity, which should
 customizing Mercury to suit your exact needs.  This doesn't mean there's not configuration, and what's there provides
 much of what you'll need, but efforts were taken to keep it simple and powerful.
 
-Even though it's a great editor, Mercury Editor may not be the best for your needs (based on browser support, javascript
-library, etc.) so here's a list of some other editors that you might want to check out:
+Even though it's a great editor, Mercury Editor may not be the best for your needs (based on browser support,
+functionality, etc.) so here's a list of some other editors that you might want to check out:
 
-* {Aloha Editor}[http://www.aloha-editor.org/]
-* {jHtmlArea}[http://jhtmlarea.codeplex.com/]
-* {MarkItUp}[http://markitup.jaysalvat.com/home/]
-* {TinyMCE}[http://tinymce.moxiecode.com/]
-* {CKEditor}[http://ckeditor.com/]
-* {NicEdit}[http://nicedit.com/]
+- [Aloha Editor](http://www.aloha-editor.org/)
+- [jHtmlArea](http://jhtmlarea.codeplex.com/)
+- [MarkItUp](http://markitup.jaysalvat.com/home/)
+- [TinyMCE](http://tinymce.moxiecode.com/)
+- [CKEditor](http://ckeditor.com/)
+- [NicEdit](http://nicedit.com/)
 
 
-== Features
+## Features
 
 The feature list is actually pretty long, so here's a short list that need highlighting.
 
-* Previewing: Preview content while you're working to see exactly how it'll look.
-* Link Tools: Insert and edit links, including TOC/Bookmark links.
-* Media Tools: Insert and edit images, youtube videos, and vimeo videos.
-* Image Uploading: Drag images from your desktop and they'll be automatically uploaded and inserted.
-* Table Editing: Advanced table editing and creation.
-* Snippets: Insert and edit predefined and reusable bits of markup/code using drag and drop.
-* Notes: Attach notes to any page and communicate with other content authors.
-* Colaborative Editing: Edit any page that others are editing at the same time and see their changes in real time.
+- Previewing: Preview content while you're working to see exactly how it'll look.
+- Link Tools: Insert and edit links, including TOC/Bookmark links.
+- Media Tools: Insert and edit images, youtube videos, and vimeo videos.
+- Image Uploading: Drag images from your desktop and they'll be automatically uploaded and inserted.
+- Table Editing: Advanced table editing and creation.
+- Snippets: Insert and edit predefined and reusable bits of markup/code using drag and drop.
+- Notes: Attach notes to any page and communicate with other content authors.
+- Colaborative Editing: Edit any page that others are editing at the same time and see their changes in real time.
 
 
-== Installation
+## Installation
 
-=== For Rails
+### For Rails
 
 Include the gem in your Gemfile and bundle to install the gem.
 
-  gem 'mercury-rails'
+    gem 'mercury-rails'
 
 Make sure you get the migrations that you'll need.
 
-  rake mercury_engine:install:migrations
-  rake db:migrate
+    rake mercury_engine:install:migrations
+    rake db:migrate
 
 You can also get the configuration file by running the generator.
 
-  rails generate mercury:install
+    rails generate mercury:install
 
 This generator puts the mercury base file (configuration) into your project in /app/assets/javascripts/mercury.js.
 
-=== For Other Frameworks / Languages
+### For Other Frameworks / Languages
 
 Get the distro files by downloading them from github using the downloads feature, or pull them out of the project
 manually (the files are in /public/mercury_distro).  Copy the files into your project, and if you adjust where they're
@@ -96,7 +103,7 @@ If you use the distro instead of using the Rails Engine, you won't be able to ut
 the Usage portion of this documentation.
 
 
-== Usage
+## Usage
 
 Mercury has an expectation that content regions will be on the page (not required, but probably useful).  To define
 content regions that Mercury will make editable you need to add a `mercury-region` class attribute to a div.  Then
@@ -104,24 +111,24 @@ specify what region type by using the `data-type` attribute -- which can be *edi
 It's important for saving that an id attribute be set on regions, you should always include.  Region types are outlined
 below.
 
-  <div id="primary" class="mercury-region" data-type="editable">
-    default content
-  </div>
+    <div id="primary" class="mercury-region" data-type="editable">
+      default content
+    </div>
 
 There's two methods to initialize Mercury Editor, and each one has it's benefits and drawbacks.
 
-=== Script Method
+### Script Method
 
 Include the mercury_loader.js file.  The loader will reload the page and enable Mercury in full page editing mode, so
 you may want to wrap this in conditional logic (eg. only admins or something).
 
-  javascript_include_tag 'mercury_loader.js'
+    javascript_include_tag 'mercury_loader.js'
 
 Even though many efforts have been made to keep conflicts with javascript libraries from happening, we can't avoid all
 of them.  If you use this method, understand that there may be conflicts with javascript and css.  You should use the
 route method if you see any issues.
 
-=== Route Method
+### Route Method
 
 The other way to initialize Mercury, which provides some slight performance improvements to the script method, is to
 access the editor route.  There's a glob route that captures everything beginning with /editor, so for instance to edit
@@ -133,30 +140,30 @@ trigger the initialize:frame event.  You can do this when the dom is ready to be
 document.ready), or at the bottom of your body tag.  It's recommended that you do this because it gives you some load
 performance improvements, but it's not required.
 
-  Mercury.trigger('initialize:frame');
+    Mercury.trigger('initialize:frame');
 
 
-== Region Types
+## Region Types
 
-=== Editable
+### Editable
 
 Editable Regions are HTML markup, and use the HTML5 contentEditable feature.  This is the core of what Mercury is about,
 and provides the most flexibility and visual representation of what the content will look like when saved.
 
-=== Markupable
+### Markupable
 
 These regions are based on Markdown syntax (specifically the github flavored version), and isn't as full featured as the
 editable region type -- primarily because markdown is meant to be simple, so to keep it such you can't do things like
 set colors etc.  This region type is super useful if you want to keep the markup clean and simple.
 
-=== Snippetable
+### Snippetable
 
 Snippetable regions only allow snippets.  There isn't any content editing in these regions, but snippets can sometimes
 be the way to go with complex markup and functionality.  Snippets are basically chunks of reusable markup, that can be
 defined by a developer and placed into content regions later.  More on this below.
 
 
-== Snippets
+## Snippets
 
 Snippets are reusable and configurable chunks of markup.  They can be defined by developers, and then placed anywhere in
 content regions.  When you drag a snippet into a region you'll be prompted to enter options, and after entering options
@@ -166,52 +173,60 @@ edited or removed.
 Mercury does very little to save content and snippets for you, but it does provide the ability to load snippets from
 your own storage implementation.  Here's an example of loading existing snippet options back into Mercury.
 
-  if (top.Mercury) top.Mercury.Snippet.load({
-    snippet_1: {name: 'example', options: {'options[favorite_beer]': "Bells Hopslam", 'options[first_name]': "Jeremy"}}
-  });
+    if (top.Mercury) top.Mercury.Snippet.load({
+      snippet_1: {name: 'example', options: {'options[favorite_beer]': "Bells Hopslam", 'options[first_name]': "Jeremy"}}
+    });
 
 
-== Project Details
+## Project Details
 
-=== WYSIWYG Editors Suck
+### WYSIWYG Editors Suck
 
 They just do.  Which as I've learned, is primarily due to the browser implementations.  Don't get me wrong, what the
 browsers have implemented is amazing, because it's hard stuff, plain and simple.  But if you're expecting a WYSIWYG
 editor to solve all your content problems you're wrong.  A better perception is that it will solve many of them, but
 shifts some into a new area.
 
-With that being said, Mercury tries to solve many of those issues and succeeds to a great degree, but alas, it's nearly
-impossible to address everything, and the browsers don't expose enough to fix some things.  This is true for every
-editor that I've looked into as well.
+With that being said, Mercury tries to solve many of those issues and succeeds to a great degree, but it seems to be
+nearly impossible (impractical at least) to address everything, and the browsers don't expose enough to fix some things.
+This is true for every editor that I've looked into as well, and will likely just take time as the browser vendors begin
+to prioritize and fix these issues.
 
 It's important to understand this, and the details are more suited for long nerdy blog posts, so they won't be covered
 here.
 
-=== The Code and Why
+### The Code and Why
 
-==== CoffeeScript
+#### CoffeeScript
 
 Mercury has been written entirely in CoffeeScript because it simplifies a lot of the patterns that are used, and allows
 for very readable code.  The goal was to provide good readable code that could be adjusted based on need, instead of a
 complex configuration that makes the code harder to understand and tweak.
 
-==== jQuery
+#### jQuery
 
 jQuery was used as the javascript library, but is primarily used for the selectors, traversing, and manipulating the
 DOM.  Chaining is kept to a minimum for readability, and even though much of Mercury could've been written as jQuery
 plugins, it was not.
 
-==== Rails
+#### Rails
 
 With the asset handling that comes bundled with Rails 3.1, Rails Engines, and the gem tools, there really wasn't any
 other option.  The javascript from Mercury can be used by any back end system, and isn't limited to Rails.  Many of the
-features do require a back end, and that stuff would have to be rewritten in whatever language you wanted support for.
+features do require a back end, and those features would have to be written in whatever language you wanted support for.
 The coffeescript files can be found in the repo, and I would be fully supportive of anyone who wanted to add support for
-different back end frameworks or languages.
+different back end frameworks or languages.  There's a server specification in the wiki that will help as well.
 
-==== Specs / Integration Tests
+#### Specs / Integration Tests
 
 Mercury is fully tested using Jasmine (via Evergreen) and Cucumber.  You can clone the project to run the full suite.
 
   rake spec:javascripts
   rake cucumber
+
+
+## License
+
+Licensed under the [MIT License](http://creativecommons.org/licenses/MIT/)
+
+Copyright 2011 [Jeremy Jackson](https://github.com/jejacks0n)

@@ -1,0 +1,95 @@
+<!DOCTYPE html>  <html> <head>   <title>mercury_loader.js</title>   <meta http-equiv="content-type" content="text/html; charset=UTF-8">   <link rel="stylesheet" media="all" href="docco.css" /> </head> <body>   <div id="container">     <div id="background"></div>          <table cellpadding="0" cellspacing="0">       <thead>         <tr>           <th class="docs">             <h1>               mercury_loader.js             </h1>           </th>           <th class="code">           </th>         </tr>       </thead>       <tbody>                               <tr id="section-1">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-1">&#182;</a>               </div>                            </td>             <td class="code">               <div class="highlight"><pre><span class="cm">/*!</span>
+<span class="cm"> * Mercury Editor is a Coffeescript and jQuery based WYSIWYG editor.  Documentation and other useful information can be</span>
+<span class="cm"> * found at https://github.com/jejacks0n/mercury</span>
+<span class="cm"> *</span>
+<span class="cm"> * Supported browsers:</span>
+<span class="cm"> *   - Firefox 4+</span>
+<span class="cm"> *   - Chrome 10+</span>
+<span class="cm"> *   - Safari 5+</span>
+<span class="cm"> *</span>
+<span class="cm"> * Copyright (c) 2011 Jeremy Jackson</span>
+<span class="cm"> *</span>
+<span class="cm"> * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated</span>
+<span class="cm"> * documentation files (the &quot;Software&quot;), to deal in the Software without restriction, including without limitation the</span>
+<span class="cm"> * rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit</span>
+<span class="cm"> * persons to whom the Software is furnished to do so, subject to the following conditions:</span>
+<span class="cm"> *</span>
+<span class="cm"> * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the</span>
+<span class="cm"> * Software.</span>
+<span class="cm"> *</span>
+<span class="cm"> * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE</span>
+<span class="cm"> * WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR</span>
+<span class="cm"> * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR</span>
+<span class="cm"> * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</span>
+<span class="cm"> *</span>
+<span class="cm"> */</span>
+<span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span></pre></div>             </td>           </tr>                               <tr id="section-2">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-2">&#182;</a>               </div>               <p>If the browser isn't supported, we don't try to do anything more.</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementsByTagName</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span></pre></div>             </td>           </tr>                               <tr id="section-3">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-3">&#182;</a>               </div>               <p>Hide the document during loading so there isn't a flicker while mercury is being loaded.</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="kd">var</span> <span class="nx">head</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementsByTagName</span><span class="p">(</span><span class="s2">&quot;head&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">];</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nb">window</span> <span class="o">==</span> <span class="nx">top</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">style</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;style&#39;</span><span class="p">);</span>
+    <span class="nx">style</span><span class="p">.</span><span class="nx">innerText</span> <span class="o">=</span> <span class="s1">&#39;body{visibility:hidden;display:none}&#39;</span><span class="p">;</span>
+    <span class="nx">head</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">style</span><span class="p">);</span>
+  <span class="p">}</span></pre></div>             </td>           </tr>                               <tr id="section-4">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-4">&#182;</a>               </div>               <p>Because Mercury loads the document it's going to edit into an iframe we do some tweaks to the current document to
+make that feel more seamless.</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="kd">function</span> <span class="nx">loadMercury</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">mercuryLoaded</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">timer</span><span class="p">)</span> <span class="nb">window</span><span class="p">.</span><span class="nx">clearTimeout</span><span class="p">(</span><span class="nx">timer</span><span class="p">);</span>
+    <span class="nb">document</span><span class="p">.</span><span class="nx">mercuryLoaded</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="nb">window</span> <span class="o">==</span> <span class="nx">top</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span></pre></div>             </td>           </tr>                               <tr id="section-5">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-5">&#182;</a>               </div>               <p>Once we're ready to load Mercury we clear the document contents, and add in the css and javascript tags.
+Once the script has loaded we display the body again, and instantiate a new instance of Mercury.PageEditor.</p>             </td>             <td class="code">               <div class="highlight"><pre>        <span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s1">&#39;&amp;nbsp;&#39;</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">styleSheets</span><span class="p">.</span><span class="nx">length</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="nx">i</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+          <span class="nb">document</span><span class="p">.</span><span class="nx">styleSheets</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">disabled</span> <span class="o">=</span> <span class="kc">true</span>
+        <span class="p">}</span>
+
+        <span class="kd">var</span> <span class="nx">link</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;link&#39;</span><span class="p">);</span>
+        <span class="nx">link</span><span class="p">.</span><span class="nx">href</span> <span class="o">=</span> <span class="s1">&#39;/assets/mercury.css&#39;</span><span class="p">;</span>
+        <span class="nx">link</span><span class="p">.</span><span class="nx">media</span> <span class="o">=</span> <span class="s1">&#39;screen&#39;</span><span class="p">;</span>
+        <span class="nx">link</span><span class="p">.</span><span class="nx">rel</span> <span class="o">=</span> <span class="s1">&#39;stylesheet&#39;</span><span class="p">;</span>
+        <span class="nx">link</span><span class="p">.</span><span class="nx">type</span> <span class="o">=</span> <span class="s1">&#39;text/css&#39;</span><span class="p">;</span>
+        <span class="nx">head</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">link</span><span class="p">);</span>
+
+        <span class="kd">var</span> <span class="nx">script</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;script&#39;</span><span class="p">);</span>
+        <span class="nx">script</span><span class="p">.</span><span class="nx">src</span> <span class="o">=</span> <span class="s1">&#39;/assets/mercury.js&#39;</span><span class="p">;</span>
+        <span class="nx">script</span><span class="p">.</span><span class="nx">type</span> <span class="o">=</span> <span class="s1">&#39;text/javascript&#39;</span><span class="p">;</span>
+        <span class="nx">head</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">script</span><span class="p">);</span>
+        <span class="nx">script</span><span class="p">.</span><span class="nx">onload</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+          <span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">visibility</span> <span class="o">=</span> <span class="s1">&#39;visible&#39;</span><span class="p">;</span>
+          <span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">display</span> <span class="o">=</span> <span class="s1">&#39;block&#39;</span><span class="p">;</span>
+          <span class="k">new</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">PageEditor</span><span class="p">()</span>
+        <span class="p">}</span>
+      <span class="p">},</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">top</span><span class="p">.</span><span class="nx">Mercury</span><span class="p">)</span> <span class="p">{</span></pre></div>             </td>           </tr>                               <tr id="section-6">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-6">&#182;</a>               </div>               <p>Since this file will be included in the iframe as well, we use it to tell Mercury that the document is ready to
+be worked on.  By firing this event we're able to build the regions and get everything ready without having to
+wait for assets and slow javascripts to load or complete.</p>             </td>             <td class="code">               <div class="highlight"><pre>      <span class="nb">window</span><span class="p">.</span><span class="nx">Mercury</span> <span class="o">=</span> <span class="nx">top</span><span class="p">.</span><span class="nx">Mercury</span><span class="p">;</span>
+      <span class="nx">Mercury</span><span class="p">.</span><span class="nx">trigger</span><span class="p">(</span><span class="s1">&#39;initialize:frame&#39;</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">}</span></pre></div>             </td>           </tr>                               <tr id="section-7">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-7">&#182;</a>               </div>               <p>This is a common technique for determining if the document has loaded yet, and is based on the methods used in
+Prototype.js.  The following portions just call loadMercury once it's appropriate to do so.</p>
+
+<p>Support for the DOMContentLoaded event is based on work by Dan Webb, Matthias Miller, Dean Edwards, John Resig,
+and Diego Perini.</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="kd">var</span> <span class="nx">timer</span><span class="p">;</span>
+  <span class="kd">function</span> <span class="nx">checkReadyState</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">readyState</span> <span class="o">===</span> <span class="s1">&#39;complete&#39;</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nb">document</span><span class="p">.</span><span class="nx">stopObserving</span><span class="p">(</span><span class="s1">&#39;readystatechange&#39;</span><span class="p">,</span> <span class="nx">checkReadyState</span><span class="p">);</span>
+      <span class="nx">loadMercury</span><span class="p">();</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+
+  <span class="kd">function</span> <span class="nx">pollDoScroll</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">try</span> <span class="p">{</span> <span class="nb">document</span><span class="p">.</span><span class="nx">documentElement</span><span class="p">.</span><span class="nx">doScroll</span><span class="p">(</span><span class="s1">&#39;left&#39;</span><span class="p">);</span> <span class="p">}</span>
+    <span class="k">catch</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">timer</span> <span class="o">=</span> <span class="nx">pollDoScroll</span><span class="p">.</span><span class="nx">defer</span><span class="p">();</span>
+      <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="nx">loadMercury</span><span class="p">();</span>
+  <span class="p">}</span>
+
+  <span class="k">if</span> <span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nb">document</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;DOMContentLoaded&#39;</span><span class="p">,</span> <span class="nx">loadMercury</span><span class="p">,</span> <span class="kc">false</span><span class="p">);</span>
+  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="nb">document</span><span class="p">.</span><span class="nx">observe</span><span class="p">(</span><span class="s1">&#39;readystatechange&#39;</span><span class="p">,</span> <span class="nx">checkReadyState</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nb">window</span> <span class="o">==</span> <span class="nx">top</span><span class="p">)</span> <span class="p">{</span> <span class="nx">timer</span> <span class="o">=</span> <span class="nx">pollDoScroll</span><span class="p">.</span><span class="nx">defer</span><span class="p">();</span> <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">})();</span>
+
+</pre></div>             </td>           </tr>                </tbody>     </table>   </div> </body> </html> 

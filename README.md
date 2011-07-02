@@ -187,21 +187,21 @@ want to force our opinions.
 Mercury will submit JSON or form values back to the server on save, and this can be adjusted in the configuration.  By
 default it will use JSON, that JSON looks like:
 
-{
-  "region_name": {
-    "type": "editable",
-    "value": "[contents with a snippet]",
-    "snippets": {
-      "snippet_1": {
-        "name": "example",
-        "options": {
-          "options[favorite_beer]": "Bells Hopslam",
-          "options[first_name]": "Jeremy"
+    {
+      "region_name": {
+        "type": "editable",
+        "value": "[contents with a snippet]",
+        "snippets": {
+          "snippet_1": {
+            "name": "example",
+            "options": {
+              "options[favorite_beer]": "Bells Hopslam",
+              "options[first_name]": "Jeremy"
+            }
+          }
         }
-      }
+      },
     }
-  },
-}
 
 Where it gets saved to is also up to you.. by default it submits a post to the current url, but you can adjust this by
 setting Mercury.saveURL, or passing it into the Mercury.PageEditor constructor.. how you do this is dependent on how
@@ -265,8 +265,8 @@ different back end frameworks or languages.  There's a server specification in t
 
 Mercury is fully tested using Jasmine (via Evergreen) and Cucumber.  You can clone the project to run the full suite.
 
-  rake spec:javascripts
-  rake cucumber
+    rake spec:javascripts
+    rake cucumber
 
 
 ## License

@@ -48,6 +48,19 @@ window.Mercury = {
     cleanStylesOnPaste: true,
 
 
+    // Snippet Options and Preview
+    //
+    // When a user drags a snippet onto the page they'll be prompted to enter options for the given snippet.  The server
+    // is expected to respond with a form.  Once the user submits this form, an Ajax request is sent to the server with
+    // the options provided; this preview request is expected to respond with the rendered markup for the snippet.
+    //
+    // Name will be replaced with the snippet name (eg. example)
+    snippets: {
+      optionsUrl: '/mercury/snippets/:name/options',
+      previewUrl: '/mercury/snippets/:name/preview'
+    },
+
+
     // Image Uploading (in supported regions)
     //
     // If you drag images (while pressing shift) from your desktop into regions that support it, it will be uploade
@@ -12311,8 +12324,8 @@ Showdown.converter = function() {
       return null;
     };
     PageEditor.prototype.save = function() {
-      var data, url, _ref;
-      url = (_ref = this.saveUrl) != null ? _ref : this.iframeSrc();
+      var data, url, _ref, _ref2;
+      url = (_ref = (_ref2 = this.saveUrl) != null ? _ref2 : Mercury.saveURL) != null ? _ref : this.iframeSrc();
       data = this.serialize();
       Mercury.log('saving', data);
       if (this.options.saveStyle !== 'form') {
@@ -13342,6 +13355,9 @@ Showdown.converter = function() {
       }
     },
     loadContent: function(data, options) {
+      if (options == null) {
+        options = null;
+      }
       this.initialize();
       this.options = options || this.options;
       this.setTitle();
@@ -13994,7 +14010,7 @@ Showdown.converter = function() {
   this.Mercury.Snippet = (function() {
     Snippet.all = [];
     Snippet.displayOptionsFor = function(name) {
-      Mercury.modal("/mercury/snippets/" + name + "/options", {
+      Mercury.modal(Mercury.config.snippets.optionsUrl.replace(':name', name), {
         title: 'Snippet Options',
         handler: 'insertSnippet',
         snippetName: name
@@ -14064,7 +14080,7 @@ Showdown.converter = function() {
       if (callback == null) {
         callback = null;
       }
-      return jQuery.ajax("/mercury/snippets/" + this.name + "/preview", {
+      return jQuery.ajax(Mercury.config.snippets.previewUrl.replace(':name', this.name), {
         type: 'POST',
         data: this.options,
         success: __bind(function(data) {
@@ -14081,7 +14097,7 @@ Showdown.converter = function() {
     };
     Snippet.prototype.displayOptions = function() {
       Mercury.snippet = this;
-      return Mercury.modal("/mercury/snippets/" + this.name + "/options", {
+      return Mercury.modal(Mercury.config.snippets.optionsUrl.replace(':name', this.name), {
         title: 'Snippet Options',
         handler: 'insertSnippet',
         loadType: 'post',
@@ -14501,11 +14517,11 @@ Showdown.converter = function() {
       xhr.onload = __bind(function(event) {
         var response;
         try {
-          response = jQuery.evalJSON(event.target.responseText);
+          response = jQuery.parseJSON(event.target.responseText);
           return Mercury.trigger('action', {
             action: 'insertImage',
             value: {
-              src: response.url
+              src: response.image.url
             }
           });
         } catch (error) {

@@ -163,7 +163,7 @@ namespace :mercury do
 
       # import image files using: url(data:image/gif;base64,XEQA7)
       bundled.gsub!(/url\(\/assets\/(.*?)\)/ix) do |m|
-        encoded = Base64.encode64(File.read(Rails.root.join('app/assets/images', $1))).gsub("\n", '')
+        encoded = Base64.encode64(File.read(Rails.root.join('vendor/assets/images', $1))).gsub("\n", '')
         "url(data:image/png;base64,#{encoded})"
       end
 

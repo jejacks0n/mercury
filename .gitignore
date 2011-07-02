@@ -5,3 +5,4 @@ tmp/
 .sass-cache
 public/system
 pkg/
+mercury.ids

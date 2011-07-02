@@ -127,7 +127,7 @@ class @Mercury.PageEditor
 
 
   save: ->
-    url = @saveUrl ? @iframeSrc()
+    url = @saveUrl ? Mercury.saveURL ? @iframeSrc()
     data = @serialize()
     Mercury.log('saving', data)
     data = jQuery.toJSON(data) unless @options.saveStyle == 'form'

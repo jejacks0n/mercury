@@ -377,15 +377,21 @@ describe "Mercury.PageEditor", ->
       @pageEditor.save()
       expect(@ajaxSpy.callCount).toEqual(1)
 
-    it "uses the save url passed in via options, or the iframe src", ->
+    it "uses the save url passed in via options, the configured save url, or the iframe src", ->
       @ajaxSpy.andCallFake(=>)
       @pageEditor.saveUrl = '/foo/bar'
       @pageEditor.save()
       expect(@ajaxSpy.argsForCall[0][0]).toEqual('/foo/bar')
 
       @pageEditor.saveUrl = null
+      Mercury.saveURL = '/foo/bit'
       @pageEditor.save()
-      expect(@ajaxSpy.argsForCall[1][0]).toEqual('/foo/baz')
+      expect(@ajaxSpy.argsForCall[1][0]).toEqual('/foo/bit')
+
+      @pageEditor.saveUrl = null
+      Mercury.saveURL = null
+      @pageEditor.save()
+      expect(@ajaxSpy.argsForCall[2][0]).toEqual('/foo/baz')
 
     it "serializes the data in json", ->
       @ajaxSpy.andCallFake(=>)

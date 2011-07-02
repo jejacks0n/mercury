@@ -178,6 +178,50 @@ your own storage implementation.  Here's an example of loading existing snippet 
     });
 
 
+## Saving Content / Rendering Content
+
+Note: Mercury doesn't implement saving or rendering of content.  We leave this part up to you because it can vary in so
+many different ways.. You may want to implement content versioning, use a nosql data store like mongo etc. and we don't
+want to force our opinions.
+
+Mercury will submit JSON or form values back to the server on save, and this can be adjusted in the configuration.  By
+default it will use JSON, that JSON looks like:
+
+{
+  "region_name": {
+    "type": "editable",
+    "value": "[contents with a snippet]",
+    "snippets": {
+      "snippet_1": {
+        "name": "example",
+        "options": {
+          "options[favorite_beer]": "Bells Hopslam",
+          "options[first_name]": "Jeremy"
+        }
+      }
+    }
+  },
+}
+
+Where it gets saved to is also up to you.. by default it submits a post to the current url, but you can adjust this by
+setting Mercury.saveURL, or passing it into the Mercury.PageEditor constructor.. how you do this is dependent on how
+you're using loading mercury (via the loader, or by using the route method).  In both situations setting Mercury.saveURL
+is the most consistent.
+
+    top.Mercury.saveURL = '/contents';
+
+Assuming you have a ContentsController and a RESTful route, this will make it through to the create action.  Where you
+can store the content in whatever way you think is appropriate for your project.
+
+Rendering content is up to you as well.. Now that you have content saved, you can add that content back to your pages,
+and there's a lot of ways you could approach this.  In the past I've used Nokogiri to find and replace the contents of
+regions, and do some additional handling for putting snippets back into the content.  You could also use regular
+expressions to do this, which is probably faster, but maybe not as safe.
+
+I'm interested in what solutions people are looking for and end up using for this, so feel free to shoot me a line if
+you write something (eg. a middleware layer, an nginx module, or just something simple to get the job done).
+
+
 ## Project Details
 
 ### WYSIWYG Editors Suck

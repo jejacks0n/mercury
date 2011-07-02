@@ -6,7 +6,7 @@ module Mercury
       desc "Installs Mercury into your application by copying the configuration file."
 
       def copy_config
-        copy_file 'app/assets/javascripts/mercury.js'
+        copy_file 'vendor/assets/javascripts/mercury.js', 'app/assets/javascripts/mercury.js'
       end
 
     end

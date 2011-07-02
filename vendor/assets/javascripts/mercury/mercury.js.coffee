@@ -1,9 +1,9 @@
 #
-#= require jquery-1.6
-#= require jquery-ui-1.8.13.custom
-#= require jquery.additions
-#= require liquidmetal
-#= require showdown
+#= require mercury_dependencies/jquery-1.6
+#= require mercury_dependencies/jquery-ui-1.8.13.custom
+#= require mercury_dependencies/jquery.additions
+#= require mercury_dependencies/liquidmetal
+#= require mercury_dependencies/showdown
 #
 #= require_self
 #= require ./native_extensions

@@ -1,3 +1,8 @@
+Mercury Editor is a Coffeescript and jQuery based WYSIWYG editor.
+
+Documentation and other useful information can be found at
+https://github.com/jejacks0n/mercury
+
 Copyright (c) 2011 Jeremy Jackson
 
 Permission is hereby granted, free of charge, to any person obtaining

@@ -1,11 +1,8 @@
 /*!
- * Mercury Editor is a Coffeescript and jQuery based WYSIWYG editor.  Mercury Editor utilizes the HTML5 ContentEditable
- * spec to allow editing sections of a given page (instead of using iframes) and provides an editing experience that's as
- * realistic as possible.  By not using iframes for editable regions it allows CSS to behave naturally.
+ * Mercury Editor is a Coffeescript and jQuery based WYSIWYG editor.  Documentation and other useful information can be
+ * found at https://github.com/jejacks0n/mercury
  *
- * Mercury Editor was written for the future, and doesn't attempt to support legacy implementations of document editing.
- *
- * Currently supported browsers are
+ * Supported browsers:
  *   - Firefox 4+
  *   - Chrome 10+
  *   - Safari 5+
@@ -25,11 +22,13 @@
  * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- *= require_self
  */
 (function() {
+
+  // If the browser isn't supported, we don't try to do anything more.
   if (!document.getElementsByTagName) return;
 
+  // Hide the document during loading so there isn't a flicker while mercury is being loaded.
   var head = document.getElementsByTagName("head")[0];
   if (window == top) {
     var style = document.createElement('style');
@@ -37,7 +36,8 @@
     head.appendChild(style);
   }
 
-  var timer;
+  // Because Mercury loads the document it's going to edit into an iframe we do some tweaks to the current document to
+  // make that feel more seamless.
   function loadMercury() {
     if (document.mercuryLoaded) return;
     if (timer) window.clearTimeout(timer);
@@ -45,6 +45,8 @@
 
     if (window == top) {
       setTimeout(function() {
+        // Once we're ready to load Mercury we clear the document contents, and add in the css and javascript tags.
+        // Once the script has loaded we display the body again, and instantiate a new instance of Mercury.PageEditor.
         document.body.innerHTML = '&nbsp;';
         for (var i = 0; i <= document.styleSheets.length - 1; i += 1) {
           document.styleSheets[i].disabled = true
@@ -68,11 +70,20 @@
         }
       }, 1);
     } else if (top.Mercury) {
+      // Since this file will be included in the iframe as well, we use it to tell Mercury that the document is ready to
+      // be worked on.  By firing this event we're able to build the regions and get everything ready without having to
+      // wait for assets and slow javascripts to load or complete.
       window.Mercury = top.Mercury;
       Mercury.trigger('initialize:frame');
     }
   }
 
+  // This is a common technique for determining if the document has loaded yet, and is based on the methods used in
+  // Prototype.js.  The following portions just call loadMercury once it's appropriate to do so.
+  //
+  // Support for the DOMContentLoaded event is based on work by Dan Webb, Matthias Miller, Dean Edwards, John Resig,
+  // and Diego Perini.
+  var timer;
   function checkReadyState() {
     if (document.readyState === 'complete') {
       document.stopObserving('readystatechange', checkReadyState);

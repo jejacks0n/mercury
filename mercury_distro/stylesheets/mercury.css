@@ -1,0 +1,1374 @@
+/*!
+ * Mercury Editor is a Coffeescript and jQuery based WYSIWYG editor.  Documentation and other useful information can be
+ * found at https://github.com/jejacks0n/mercury
+ *
+ * Supported browsers:
+ *   - Firefox 4+
+ *   - Chrome 10+
+ *   - Safari 5+
+ *
+ * Copyright (c) 2011 Jeremy Jackson
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
+ * documentation files (the "Software"), to deal in the Software without restriction, including without limitation the
+ * rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit
+ * persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the
+ * Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
+ * WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+ * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
+ */
+
+
+/*
+ */
+/* line 6, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/mercury.scss */
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+/*
+ * Forms
+ *---------------------------------------------------------------------------*/
+/* line 16, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/mercury.scss */
+form, form ul, form ol, form li, form fieldset, form p, .filter {
+  margin: 0;
+  padding: 0;
+}
+/* line 19, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/mercury.scss */
+form abbr, form ul abbr, form ol abbr, form li abbr, form fieldset abbr, form p abbr, .filter abbr {
+  border: 0;
+  font-variant: normal;
+}
+/* line 23, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/mercury.scss */
+form fieldset, form ul fieldset, form ol fieldset, form li fieldset, form fieldset fieldset, form p fieldset, .filter fieldset {
+  margin-bottom: 10px;
+  background: #F6F6F6;
+  border: 1px solid #CCC;
+  border-radius: 7px;
+  -moz-border-radius: 7px;
+}
+/* line 29, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/mercury.scss */
+form fieldset:last-child, form ul fieldset:last-child, form ol fieldset:last-child, form li fieldset:last-child, form fieldset fieldset:last-child, form p fieldset:last-child, .filter fieldset:last-child {
+  margin-bottom: 0;
+}
+/* line 32, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/mercury.scss */
+form fieldset legend, form ul fieldset legend, form ol fieldset legend, form li fieldset legend, form fieldset fieldset legend, form p fieldset legend, .filter fieldset legend {
+  font-weight: bold;
+  margin-left: 10px;
+  margin-bottom: -4px;
+}
+/* line 37, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/mercury.scss */
+form fieldset ol, form ul fieldset ol, form ol fieldset ol, form li fieldset ol, form fieldset fieldset ol, form p fieldset ol, .filter fieldset ol {
+  margin: 12px 9px;
+}
+/* line 39, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/mercury.scss */
+form fieldset ol li, form ul fieldset ol li, form ol fieldset ol li, form li fieldset ol li, form fieldset fieldset ol li, form p fieldset ol li, .filter fieldset ol li {
+  display: block;
+  margin-bottom: 10px;
+}
+/* line 45, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/mercury.scss */
+form label, form ul label, form ol label, form li label, form fieldset label, form p label, .filter label {
+  display: block;
+  float: left;
+  width: 23%;
+  margin-right: 9px;
+  text-align: right;
+  line-height: 27px;
+  font-size: 1.1em;
+}
+/* line 53, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/mercury.scss */
+form label input, form ul label input, form ol label input, form li label input, form fieldset label input, form p label input, .filter label input {
+  width: auto !important;
+  margin: 0 5px 0 -20px !important;
+}
+/* line 62, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/mercury.scss */
+form select,
+form input[type=text],
+form input[type=password],
+form textarea,
+form input.text, form ul select, form ul input[type=text], form ul input[type=password], form ul textarea, form ul input.text, form ol select, form ol input[type=text], form ol input[type=password], form ol textarea, form ol input.text, form li select, form li input[type=text], form li input[type=password], form li textarea, form li input.text, form fieldset select, form fieldset input[type=text], form fieldset input[type=password], form fieldset textarea, form fieldset input.text, form p select, form p input[type=text], form p input[type=password], form p textarea, form p input.text, .filter select, .filter input[type=text], .filter input[type=password], .filter textarea, .filter input.text {
+  margin: 0;
+  border: 2px solid #CCC;
+  padding: 2px 4px;
+  font-family: Arial, Geneva, sans-serif;
+  font-size: 1.5em;
+  width: 74%;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+}
+/* line 73, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/mercury.scss */
+form li.boolean, form ul li.boolean, form ol li.boolean, form li li.boolean, form fieldset li.boolean, form p li.boolean, .filter li.boolean {
+  margin-left: 23%;
+  padding-left: 9px;
+}
+/* line 76, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/mercury.scss */
+form li.boolean label, form ul li.boolean label, form ol li.boolean label, form li li.boolean label, form fieldset li.boolean label, form p li.boolean label, .filter li.boolean label {
+  width: auto;
+}
+/* line 80, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/mercury.scss */
+form fieldset.buttons, form ul fieldset.buttons, form ol fieldset.buttons, form li fieldset.buttons, form fieldset fieldset.buttons, form p fieldset.buttons, .filter fieldset.buttons {
+  clear: both;
+  padding: 0;
+  background: none;
+  border: none;
+  text-align: left;
+}
+/* line 86, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/mercury.scss */
+form fieldset.buttons ol, form ul fieldset.buttons ol, form ol fieldset.buttons ol, form li fieldset.buttons ol, form fieldset fieldset.buttons ol, form p fieldset.buttons ol, .filter fieldset.buttons ol {
+  margin: 0 -2px 0 0;
+  float: right;
+}
+/* line 89, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/mercury.scss */
+form fieldset.buttons ol li, form ul fieldset.buttons ol li, form ol fieldset.buttons ol li, form li fieldset.buttons ol li, form fieldset fieldset.buttons ol li, form p fieldset.buttons ol li, .filter fieldset.buttons ol li {
+  float: left;
+  padding-left: 0.5em;
+  padding-right: 0;
+}
+/* line 95, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/mercury.scss */
+form fieldset.buttons .commit, form ul fieldset.buttons .commit, form ol fieldset.buttons .commit, form li fieldset.buttons .commit, form fieldset fieldset.buttons .commit, form p fieldset.buttons .commit, .filter fieldset.buttons .commit {
+  margin: 0;
+}
+/* line 97, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/mercury.scss */
+form fieldset.buttons .commit input, form ul fieldset.buttons .commit input, form ol fieldset.buttons .commit input, form li fieldset.buttons .commit input, form fieldset fieldset.buttons .commit input, form p fieldset.buttons .commit input, .filter fieldset.buttons .commit input {
+  padding: 8px 14px 9px !important;
+  font-family: 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', sans-serif;
+  font-size: 1.3em;
+  background: #222222 url(/assets/mercury/button.png) repeat-x;
+  display: inline-block;
+  color: #FFF;
+  text-decoration: none;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+  -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+  text-shadow: 0 -1px 1px rgba(0, 0, 0, 0.25);
+  border: 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+  position: relative;
+  cursor: pointer;
+  line-height: normal;
+}
+/* line 115, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/mercury.scss */
+form fieldset.buttons .commit input:hover, form ul fieldset.buttons .commit input:hover, form ol fieldset.buttons .commit input:hover, form li fieldset.buttons .commit input:hover, form fieldset fieldset.buttons .commit input:hover, form p fieldset.buttons .commit input:hover, .filter fieldset.buttons .commit input:hover {
+  background-color: #000;
+}
+/*
+ * Dialogs
+ *----------------------------------------------------------------------------*/
+/* line 7, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/dialog.scss */
+.mercury-dialog,
+.mercury-select,
+.mercury-palette {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  position: absolute;
+  z-index: 10012;
+  width: 30px;
+  height: 30px;
+  border: 1px solid #727272;
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  margin-top: -1px;
+  background-color: #E2E1E2;
+  box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
+  -moz-box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
+  font-family: Helvetica, Tahoma, Arial, sans-serif;
+  font-size: 8.5pt;
+}
+/* line 24, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/dialog.scss */
+.mercury-dialog.loading,
+.mercury-select.loading,
+.mercury-palette.loading {
+  background-image: url(/assets/mercury/loading-light.gif);
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+/*
+ * Selects
+ *----------------------------------------------------------------------------*/
+/* line 33, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/dialog.scss */
+.mercury-select {
+  border-radius: 4px;
+  -moz-border-radius: 4px;
+  overflow: auto;
+  background-color: #FFF;
+}
+
+/*
+ * Panels
+ *----------------------------------------------------------------------------*/
+/* line 42, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/dialog.scss */
+.mercury-panel {
+  position: absolute;
+  z-index: 10011;
+  background-color: #111;
+  opacity: .9;
+  box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
+  -moz-box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
+  border-radius: 4px;
+  -moz-border-radius: 4px;
+  color: #FFF;
+  font-family: Helvetica, Tahoma, Arial, sans-serif;
+  font-size: 9.5pt;
+  max-width: 500px;
+}
+/* line 55, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/dialog.scss */
+.mercury-panel.loading {
+  background-image: url(/assets/mercury/loading-dark.gif);
+  background-repeat: no-repeat;
+  background-position: center;
+}
+/* line 61, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/dialog.scss */
+.mercury-panel h1,
+.mercury-panel h3 {
+  font-size: 9pt;
+  padding: 10px 15px 8px;
+  margin: 0;
+  background: #333;
+  white-space: nowrap;
+}
+/* line 68, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/dialog.scss */
+.mercury-panel h1 {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  font-size: 10pt;
+  -moz-border-radius-topleft: 4px;
+  -moz-border-radius-topright: 4px;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  height: 15px;
+  cursor: move;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.9);
+}
+/* line 81, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/dialog.scss */
+.mercury-panel h4, .mercury-panel h5, .mercury-panel h6 {
+  margin: 0;
+}
+/* line 84, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/dialog.scss */
+.mercury-panel .mercury-panel-pane {
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  padding: 15px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  width: 100%;
+}
+/* line 92, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/dialog.scss */
+.mercury-panel .mercury-panel-pane h3 {
+  margin: 10px -15px;
+  font-size: 9.5pt;
+  font-weight: normal;
+  padding: 8px 14px;
+}
+
+/*
+ * Specific Dialogs (eg. color palettes, selects)
+ *----------------------------------------------------------------------------*/
+/* line 103, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/dialog.scss */
+.mercury-color-picker {
+  width: 170px;
+  height: auto;
+  padding: 1px;
+  cursor: default;
+}
+/* line 108, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/dialog.scss */
+.mercury-color-picker .picker {
+  float: left;
+  width: 15px;
+  height: 15px;
+  margin: 1px;
+}
+/* line 113, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/dialog.scss */
+.mercury-color-picker .picker:hover {
+  outline: 1px solid #333;
+}
+/* line 117, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/dialog.scss */
+.mercury-color-picker .last-picked {
+  position: relative;
+  top: 1px;
+  width: 166px;
+  border: 1px solid #333;
+  border-radius: 2px;
+  margin: 1px 1px 2px 1px;
+  -moz-border-radius: 2px;
+  clear: left;
+  text-align: center;
+}
+
+/* line 129, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/dialog.scss */
+.mercury-select-options {
+  margin: 10px 0;
+  white-space: nowrap;
+}
+/* line 132, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/dialog.scss */
+.mercury-select-options * {
+  cursor: default;
+  padding: 0 10px;
+  margin: 0;
+  line-height: 1.6em;
+}
+/* line 138, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/dialog.scss */
+.mercury-select-options div:hover, .mercury-select-options h1:hover, .mercury-select-options h2:hover, .mercury-select-options h3:hover, .mercury-select-options h4:hover, .mercury-select-options h5:hover, .mercury-select-options h6:hover, .mercury-select-options pre:hover {
+  background-color: #E2E1E2 !important;
+  color: #000 !important;
+}
+/* line 142, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/dialog.scss */
+.mercury-select-options div[data-tag=pre] {
+  font-family: monospace;
+}
+
+/*
+ * Specific Panels (eg. snippets, notes, todos)
+ *----------------------------------------------------------------------------*/
+/* line 149, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/dialog.scss */
+.mercury-snippet-panel {
+  width: 300px;
+}
+/* line 151, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/dialog.scss */
+.mercury-snippet-panel input.filter {
+  outline: none;
+  font-size: 1em;
+  border-radius: 30px;
+  moz-border-radius: 30px;
+  width: 100%;
+  padding-left: 20px;
+  background: white url(/assets/mercury/search-icon.png) no-repeat 4px center;
+}
+/* line 160, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/dialog.scss */
+.mercury-snippet-panel ul {
+  font-size: .9em;
+  padding: 10px 0 0 0;
+  margin: 0;
+  list-style-type: none;
+}
+/* line 165, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/dialog.scss */
+.mercury-snippet-panel ul li {
+  clear: both;
+  padding-top: 20px;
+}
+/* line 168, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/dialog.scss */
+.mercury-snippet-panel ul li img {
+  float: left;
+}
+/* line 171, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/dialog.scss */
+.mercury-snippet-panel ul li h4, .mercury-snippet-panel ul li .description {
+  float: right;
+  width: 245px;
+}
+/* line 175, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/dialog.scss */
+.mercury-snippet-panel ul li h4 {
+  margin-bottom: 5px;
+}
+/*
+ * Modal
+ *----------------------------------------------------------------------------*/
+/* line 5, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/modal.scss */
+.mercury-modal-overlay {
+  position: fixed;
+  z-index: 10040;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  display: none;
+  background: rgba(0, 0, 0, 0.65);
+}
+
+/* line 16, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/modal.scss */
+.mercury-modal {
+  position: fixed;
+  z-index: 10050;
+  top: 0;
+  width: 500px;
+  overflow: hidden;
+  padding: 0 0 10px;
+  background: #EFEFEF;
+  -webkit-border-bottom-left-radius: 4px;
+  -webkit-border-bottom-right-radius: 4px;
+  -moz-border-radius-bottomleft: 4px;
+  -moz-border-radius-bottomright: 4px;
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
+  -moz-box-shadow: 0 0 40px rgba(0, 0, 0, 0.9);
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.9);
+  font: normal normal normal 12px/normal Helvetica, Tahoma, Arial, sans-serif;
+}
+/* line 33, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/modal.scss */
+.mercury-modal.loading .mercury-modal-content-container {
+  background: #efefef url(/assets/mercury/loading-light.gif) no-repeat center;
+}
+/* line 36, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/modal.scss */
+.mercury-modal h1.mercury-modal-title {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  margin: 0;
+  padding: 2px 10px 0 10px;
+  background: #DDD;
+  border-bottom: 1px solid #CCC;
+  white-space: nowrap;
+  font-size: 14px;
+  line-height: 23px;
+  overflow: hidden;
+}
+/* line 48, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/modal.scss */
+.mercury-modal h1.mercury-modal-title:after {
+  content: '\00a0';
+  display: block;
+  visibility: hidden;
+  clear: both;
+  height: 0;
+}
+/* line 55, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/modal.scss */
+.mercury-modal h1.mercury-modal-title span {
+  float: left;
+  color: #000;
+  text-shadow: #EEE 1px 1px 0;
+}
+/* line 60, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/modal.scss */
+.mercury-modal h1.mercury-modal-title a {
+  display: block;
+  float: right;
+  font-size: 10px;
+  cursor: pointer;
+  color: #666;
+  padding: 0 4px;
+  line-height: 23px;
+}
+/* line 68, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/modal.scss */
+.mercury-modal h1.mercury-modal-title a:hover {
+  color: #333;
+}
+/* line 73, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/modal.scss */
+.mercury-modal .mercury-modal-content-container {
+  float: left;
+  width: 100%;
+}
+/* line 77, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/modal.scss */
+.mercury-modal .mercury-modal-content {
+  position: relative;
+  overflow: auto;
+  float: left;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  padding: 20px 20px 10px;
+  font-family: Helvetica, Tahoma, Arial, sans-serif;
+  color: #000;
+}
+/* line 87, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/modal.scss */
+.mercury-modal .mercury-modal-content:after {
+  display: block;
+  clear: both;
+  content: '\00a0';
+  visibility: hidden;
+  overflow: hidden;
+  height: 0;
+}
+/* line 96, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/modal.scss */
+.mercury-modal .mercury-modal-pane-container {
+  overflow: auto;
+  margin: -20px -20px 0;
+  padding: 20px 20px 10px;
+}
+/* line 100, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/modal.scss */
+.mercury-modal .mercury-modal-pane-container .mercury-modal-pane {
+  float: left;
+}
+/* line 104, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/modal.scss */
+.mercury-modal .mercury-modal-controls {
+  padding: 15px 0 0;
+  border-top: 1px solid #CCC;
+  text-align: right;
+}
+/* line 109, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/modal.scss */
+.mercury-modal textarea {
+  resize: none;
+  padding: 0;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+}
+
+/*
+ * Specific Modals (eg. htmlEditor)
+ *----------------------------------------------------------------------------*/
+/* htmlEditor */
+/* line 122, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/modal.scss */
+#mercury_htmlEditor textarea {
+  margin: 0 0 -2px 0;
+  padding: 0;
+  border: 2px solid #CCC;
+  width: 100%;
+}
+/* line 128, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/modal.scss */
+#mercury_htmlEditor .mercury-modal-controls {
+  border: 0;
+  margin-top: -2px;
+}
+
+/* html sanitizer (when pasting from msword) */
+/* line 135, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/modal.scss */
+#mercury_sanitizer .information {
+  background: url(/assets/mercury/clippy.png) no-repeat top left;
+  min-height: 65px;
+  padding-left: 50px;
+  margin-bottom: 10px;
+}
+/* line 141, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/modal.scss */
+#mercury_sanitizer textarea {
+  width: 100%;
+  font-family: monospace;
+  white-space: pre;
+}
+
+/* insertCharacter */
+/* line 149, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/modal.scss */
+#mercury_insertCharacter .character {
+  float: left;
+  width: 20px;
+  height: 20px;
+  border: 1px solid #999;
+  background: #FFF;
+  margin: 0 2px 2px 0;
+  text-align: center;
+  font-size: 11pt;
+  line-height: 23px;
+  cursor: pointer;
+}
+/* line 160, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/modal.scss */
+#mercury_insertCharacter .character:hover {
+  position: relative;
+  margin: -11px -5px 1px -5px;
+  width: 32px;
+  height: 32px;
+  font-size: 19pt;
+  line-height: 35px;
+  background: #DDD;
+}
+
+/* table */
+/* line 173, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/modal.scss */
+#mercury_table #table_display {
+  width: 285px;
+  height: 285px;
+  float: left;
+  padding: 10px;
+  background: #F6F6F6;
+  border: 1px solid #CCC;
+  border-radius: 7px;
+  -moz-border-radius: 7px;
+}
+/* line 182, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/modal.scss */
+#mercury_table #table_display table {
+  width: 100%;
+  height: 100%;
+}
+/* line 186, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/modal.scss */
+#mercury_table #table_display td.selected {
+  background: #09F;
+}
+/* line 190, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/modal.scss */
+#mercury_table #table_options {
+  width: 383px;
+  float: left;
+  margin-left: 10px;
+}
+/*
+ * Statusbar
+ *----------------------------------------------------------------------------*/
+/* line 5, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/statusbar.scss */
+.mercury-statusbar {
+  position: fixed;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  z-index: 10020;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 23px;
+  cursor: default;
+  padding: 0 10px;
+  background: #E2E1E2;
+  border-top: 1px solid #727272;
+  font-family: Helvetica, Tahoma, Arial, sans-serif;
+  font-size: 8.5pt;
+  line-height: 23px;
+  color: #222;
+}
+/*
+ * Toolbar
+ *----------------------------------------------------------------------------*/
+/* line 5, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-toolbar-container {
+  user-select: none;
+  position: fixed;
+  z-index: 10010;
+  top: 0;
+  left: 0;
+  width: 100%;
+  border-bottom: 1px solid #E2E1E2;
+}
+
+/* line 14, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-toolbar {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0, #c6c6c6), color-stop(1, #e2e1e2));
+  background-image: -moz-linear-gradient(center bottom, #c6c6c6 0%, #e2e1e2 100%);
+  border-bottom: 1px solid #727272;
+  cursor: default;
+}
+
+/* line 23, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-toolbar-button-container {
+  float: left;
+}
+
+/* line 26, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-toolbar-expander {
+  position: absolute;
+  display: none;
+  right: 0;
+  border-left: 1px solid #727272;
+}
+
+/* line 35, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-button,
+.mercury-button-group,
+.mercury-separator,
+.mercury-line-separator {
+  display: block;
+  float: left;
+}
+
+/* line 40, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-separator,
+.mercury-line-separator {
+  width: 1px;
+  border: 0;
+  margin: 0;
+}
+
+/* line 45, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-line-separator {
+  width: 1px;
+  background: #727272;
+}
+
+/* line 49, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-button em {
+  display: block;
+  font-style: normal;
+}
+
+/* line 53, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-expander {
+  padding: 5px 0;
+  border-radius: 4px;
+  -moz-border-radius: 4px;
+}
+/* line 57, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-expander .mercury-expander-button {
+  cursor: default;
+  white-space: nowrap;
+  padding: 0 20px 0 10px;
+}
+/* line 61, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-expander .mercury-expander-button:hover {
+  background: #CCC;
+}
+/* line 64, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-expander .mercury-expander-button em {
+  display: inline-block;
+  float: left;
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+  -webkit-background-size: 100% 100%;
+  -moz-background-size: 100% 100%;
+  background-size: 100% 100%;
+}
+/* line 74, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-expander .mercury-expander-button span {
+  display: inline-block;
+  line-height: 20px;
+}
+
+/* line 81, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.disabled .mercury-button,
+.mercury-button.disabled {
+  opacity: 0.33;
+}
+
+/*
+ * Toolbar: Primary Toolbar
+ *----------------------------------------------------------------------------*/
+/* line 87, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-primary-toolbar {
+  position: relative;
+  height: 58px;
+  overflow: hidden;
+  text-shadow: #EEE 0 1px 0;
+}
+/* line 92, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-primary-toolbar .mercury-button {
+  display: inline-block;
+  height: 58px;
+  margin-bottom: 20px;
+  min-width: 55px;
+  text-align: center;
+  white-space: nowrap;
+  text-decoration: none;
+  font-family: Helvetica, Tahoma, Arial, sans-serif;
+}
+/* line 101, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-primary-toolbar .mercury-button.pressed {
+  background: url(/assets/mercury/toolbar/primary/_pressed.png) no-repeat top center;
+}
+/* line 104, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-primary-toolbar .mercury-button em {
+  margin: 0 -5px;
+  height: 15px;
+  padding-top: 41px;
+  background-repeat: no-repeat;
+  background-position: 50% 7px;
+  font-size: 8.5pt;
+  line-height: 15px;
+  color: #222;
+}
+/* line 115, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-primary-toolbar .mercury-button.active em {
+  background-position: 51% 8px;
+}
+/* line 121, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-primary-toolbar .mercury-separator,
+.mercury-primary-toolbar .mercury-line-separator {
+  display: inline-block;
+  width: 1px;
+  height: 50px;
+  margin: 5px 20px 28px;
+}
+/* line 127, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-primary-toolbar .mercury-toolbar-button-container {
+  white-space: nowrap;
+  padding-right: 10px;
+}
+/* line 131, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-primary-toolbar .mercury-toolbar-expander {
+  width: 12px;
+  height: 58px;
+  background: rgba(0, 0, 0, 0.2) url(/assets/mercury/toolbar/primary/_expander.png) no-repeat center 90%;
+}
+
+/* default buttons */
+/* line 139, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-primary-toolbar .mercury-save-button em,
+.mercury-expander-button[data-button=save] em {
+  background-image: url(/assets/mercury/toolbar/primary/save.png);
+}
+
+/* line 141, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-primary-toolbar .mercury-preview-button em,
+.mercury-expander-button[data-button=preview] em {
+  background-image: url(/assets/mercury/toolbar/primary/preview.png);
+}
+
+/* line 143, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-primary-toolbar .mercury-undo-button em,
+.mercury-expander-button[data-button=undo] em {
+  background-image: url(/assets/mercury/toolbar/primary/undo.png);
+}
+
+/* line 145, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-primary-toolbar .mercury-redo-button em,
+.mercury-expander-button[data-button=redo] em {
+  background-image: url(/assets/mercury/toolbar/primary/redo.png);
+}
+
+/* line 147, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-primary-toolbar .mercury-insertLink-button em,
+.mercury-expander-button[data-button=insertLink] em {
+  background-image: url(/assets/mercury/toolbar/primary/insertlink.png);
+}
+
+/* line 149, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-primary-toolbar .mercury-insertMedia-button em,
+.mercury-expander-button[data-button=insertMedia] em {
+  background-image: url(/assets/mercury/toolbar/primary/insertmedia.png);
+}
+
+/* line 151, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-primary-toolbar .mercury-insertTable-button em,
+.mercury-expander-button[data-button=insertTable] em {
+  background-image: url(/assets/mercury/toolbar/primary/inserttable.png);
+}
+
+/* line 153, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-primary-toolbar .mercury-insertCharacter-button em,
+.mercury-expander-button[data-button=insertCharacter] em {
+  background-image: url(/assets/mercury/toolbar/primary/insertcharacter.png);
+}
+
+/* line 155, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-primary-toolbar .mercury-snippetPanel-button em,
+.mercury-expander-button[data-button=snippetPanel] em {
+  background-image: url(/assets/mercury/toolbar/primary/snippetpanel.png);
+}
+
+/* line 157, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-primary-toolbar .mercury-historyPanel-button em,
+.mercury-expander-button[data-button=historyPanel] em {
+  background-image: url(/assets/mercury/toolbar/primary/historypanel.png);
+}
+
+/* line 159, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-primary-toolbar .mercury-notesPanel-button em,
+.mercury-expander-button[data-button=notesPanel] em {
+  background-image: url(/assets/mercury/toolbar/primary/notespanel.png);
+}
+
+/*
+ * Toolbar: Editable Region Toolbar
+ *----------------------------------------------------------------------------*/
+/* line 163, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-editable-toolbar {
+  padding: 3px 13px 1px 10px;
+  border-top: 1px solid #E2E1E2;
+  background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0, #c6c6c6), color-stop(1, #d2d2d1));
+  background-image: -moz-linear-gradient(center bottom, #c6c6c6 0%, #d2d2d1 100%);
+  /* default buttons */
+}
+/* line 168, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-editable-toolbar:after {
+  content: '\00a0';
+  display: block;
+  visibility: hidden;
+  clear: both;
+  height: 0;
+}
+/* line 176, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-editable-toolbar .mercury-separator,
+.mercury-editable-toolbar .mercury-line-separator {
+  height: 18px;
+  padding: 0;
+  margin: 0 7px 2px;
+}
+/* line 181, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-editable-toolbar .mercury-separator {
+  margin: 0 3px 2px;
+}
+/* line 184, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-editable-toolbar .mercury-button-group {
+  white-space: nowrap;
+}
+/* line 186, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-editable-toolbar .mercury-button-group .mercury-button:first-child {
+  width: 23px;
+}
+/* line 190, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-editable-toolbar .mercury-button {
+  width: 22px;
+  height: 18px;
+  margin: 0 0 2px;
+  background-image: url(/assets/mercury/toolbar/editable/buttons.png);
+}
+/* line 195, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-editable-toolbar .mercury-button em {
+  background-image: url(/assets/mercury/toolbar/editable/buttons.png);
+  display: none;
+}
+/* line 200, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-editable-toolbar .mercury-button-palette {
+  width: 23px;
+  background-position: 0 -36px;
+}
+/* line 204, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-editable-toolbar .mercury-button-select {
+  width: auto !important;
+  overflow: hidden;
+  padding-left: 6px;
+  background-position: -24px -36px;
+}
+/* line 209, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-editable-toolbar .mercury-button-select em {
+  display: block;
+  padding-right: 15px;
+  background-position: right -36px;
+  cursor: pointer;
+  white-space: nowrap;
+  font-style: normal;
+  font-family: Helvetica, Tahoma, Arial, sans-serif;
+  font-size: 8.5pt;
+  line-height: 19px;
+  color: #222;
+}
+/* line 223, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-editable-toolbar .mercury-bold-button {
+  background-position: 0 0;
+}
+/* line 224, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-editable-toolbar .mercury-bold-button.active {
+  background-position: 0 -18px;
+}
+/* line 225, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-editable-toolbar .mercury-italic-button {
+  background-position: -23px 0;
+}
+/* line 226, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-editable-toolbar .mercury-italic-button.active {
+  background-position: -23px -18px;
+}
+/* line 227, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-editable-toolbar .mercury-overline-button {
+  background-position: -45px 0;
+}
+/* line 228, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-editable-toolbar .mercury-overline-button.active {
+  background-position: -45px -18px;
+}
+/* line 229, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-editable-toolbar .mercury-strikethrough-button {
+  background-position: -67px 0;
+}
+/* line 230, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-editable-toolbar .mercury-strikethrough-button.active {
+  background-position: -67px -18px;
+}
+/* line 231, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-editable-toolbar .mercury-underline-button {
+  background-position: -89px 0;
+}
+/* line 232, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-editable-toolbar .mercury-underline-button.active {
+  background-position: -89px -18px;
+}
+/* line 233, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-editable-toolbar .mercury-subscript-button {
+  background-position: -112px 0;
+}
+/* line 234, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-editable-toolbar .mercury-subscript-button.active {
+  background-position: -112px -18px;
+}
+/* line 235, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-editable-toolbar .mercury-superscript-button {
+  background-position: -135px 0;
+}
+/* line 236, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-editable-toolbar .mercury-superscript-button.active {
+  background-position: -135px -18px;
+}
+/* line 237, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-editable-toolbar .mercury-justifyLeft-button {
+  background-position: -158px 0;
+}
+/* line 238, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-editable-toolbar .mercury-justifyLeft-button.active {
+  background-position: -158px -18px;
+}
+/* line 239, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-editable-toolbar .mercury-justifyCenter-button {
+  background-position: -181px 0;
+}
+/* line 240, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-editable-toolbar .mercury-justifyCenter-button.active {
+  background-position: -181px -18px;
+}
+/* line 241, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-editable-toolbar .mercury-justifyRight-button {
+  background-position: -203px 0;
+}
+/* line 242, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-editable-toolbar .mercury-justifyRight-button.active {
+  background-position: -203px -18px;
+}
+/* line 243, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-editable-toolbar .mercury-justifyFull-button {
+  background-position: -225px 0;
+}
+/* line 244, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-editable-toolbar .mercury-justifyFull-button.active {
+  background-position: -225px -18px;
+}
+/* line 245, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-editable-toolbar .mercury-insertUnorderedList-button {
+  background-position: -248px 0;
+}
+/* line 246, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-editable-toolbar .mercury-insertUnorderedList-button.active {
+  background-position: -248px -18px;
+}
+/* line 247, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-editable-toolbar .mercury-insertOrderedList-button {
+  background-position: -271px 0;
+}
+/* line 248, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-editable-toolbar .mercury-insertOrderedList-button.active {
+  background-position: -271px -18px;
+}
+/* line 249, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-editable-toolbar .mercury-outdent-button {
+  background-position: -294px 0;
+}
+/* line 250, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-editable-toolbar .mercury-outdent-button.active {
+  background-position: -294px -18px;
+}
+/* line 251, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-editable-toolbar .mercury-indent-button {
+  background-position: -317px 0;
+}
+/* line 252, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-editable-toolbar .mercury-indent-button.active {
+  background-position: -317px -18px;
+}
+/* line 253, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-editable-toolbar .mercury-insertRowBefore-button {
+  background-position: -340px 0;
+}
+/* line 254, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-editable-toolbar .mercury-insertRowBefore-button.active {
+  background-position: -340px -18px;
+}
+/* line 255, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-editable-toolbar .mercury-insertRowAfter-button {
+  background-position: -363px 0;
+}
+/* line 256, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-editable-toolbar .mercury-insertRowAfter-button.active {
+  background-position: -363px -18px;
+}
+/* line 257, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-editable-toolbar .mercury-deleteRow-button {
+  background-position: -385px 0;
+}
+/* line 258, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-editable-toolbar .mercury-deleteRow-button.active {
+  background-position: -385px -18px;
+}
+/* line 259, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-editable-toolbar .mercury-insertColumnBefore-button {
+  background-position: -407px 0;
+}
+/* line 260, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-editable-toolbar .mercury-insertColumnBefore-button.active {
+  background-position: -407px -18px;
+}
+/* line 261, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-editable-toolbar .mercury-insertColumnAfter-button {
+  background-position: -429px 0;
+}
+/* line 262, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-editable-toolbar .mercury-insertColumnAfter-button.active {
+  background-position: -429px -18px;
+}
+/* line 263, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-editable-toolbar .mercury-deleteColumn-button {
+  background-position: -451px 0;
+}
+/* line 264, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-editable-toolbar .mercury-deleteColumn-button.active {
+  background-position: -451px -18px;
+}
+/* line 265, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-editable-toolbar .mercury-increaseColspan-button {
+  background-position: -474px 0;
+  width: 23px;
+}
+/* line 266, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-editable-toolbar .mercury-increaseColspan-button.active {
+  background-position: -474px -18px;
+}
+/* line 267, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-editable-toolbar .mercury-decreaseColspan-button {
+  background-position: -497px 0;
+}
+/* line 268, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-editable-toolbar .mercury-decreaseColspan-button.active {
+  background-position: -497px -18px;
+}
+/* line 269, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-editable-toolbar .mercury-increaseRowspan-button {
+  background-position: -520px 0;
+}
+/* line 270, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-editable-toolbar .mercury-increaseRowspan-button.active {
+  background-position: -520px -18px;
+}
+/* line 271, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-editable-toolbar .mercury-decreaseRowspan-button {
+  background-position: -542px 0;
+}
+/* line 272, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-editable-toolbar .mercury-decreaseRowspan-button.active {
+  background-position: -542px -18px;
+}
+/* line 273, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-editable-toolbar .mercury-horizontalRule-button {
+  background-position: -564px 0;
+}
+/* line 274, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-editable-toolbar .mercury-horizontalRule-button.active {
+  background-position: -564px -18px;
+}
+/* line 275, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-editable-toolbar .mercury-removeFormatting-button {
+  background-position: -588px 0;
+}
+/* line 276, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-editable-toolbar .mercury-removeFormatting-button.active {
+  background-position: -588px -18px;
+}
+/* line 277, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-editable-toolbar .mercury-htmlEditor-button {
+  background-position: -612px 0;
+}
+/* line 278, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-editable-toolbar .mercury-htmlEditor-button.active {
+  background-position: -612px -18px;
+}
+
+/*
+ * Toolbar: Snippetable Region Toolbar
+ *----------------------------------------------------------------------------*/
+/* line 283, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-snippet-toolbar {
+  position: absolute;
+  top: 100px;
+  left: 15px;
+  border: 1px solid #727272;
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+  padding: 3px 7px 1px 7px;
+  /* default buttons */
+}
+/* line 292, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-snippet-toolbar:after {
+  content: '\00a0';
+  display: block;
+  visibility: hidden;
+  clear: both;
+  height: 0;
+}
+/* line 300, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-snippet-toolbar .mercury-separator,
+.mercury-snippet-toolbar .mercury-line-separator {
+  height: 18px;
+  padding: 0;
+  margin: 0 7px 2px;
+}
+/* line 305, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-snippet-toolbar .mercury-separator {
+  margin: 0 3px 2px;
+}
+/* line 308, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-snippet-toolbar .mercury-button-group {
+  white-space: nowrap;
+}
+/* line 310, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-snippet-toolbar .mercury-button-group .mercury-button:first-child {
+  width: 23px;
+}
+/* line 314, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-snippet-toolbar .mercury-button {
+  width: 23px;
+  height: 18px;
+  margin: 0 0 2px;
+  background-image: url(/assets/mercury/toolbar/snippetable/buttons.png);
+}
+/* line 319, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-snippet-toolbar .mercury-button em {
+  background-image: url(/assets/mercury/toolbar/snippetable/buttons.png);
+  display: none;
+}
+/* line 325, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-snippet-toolbar .mercury-editSnippet-button {
+  background-position: -24px 0;
+}
+/* line 326, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-snippet-toolbar .mercury-editSnippet-button.active {
+  background-position: -24px -18px;
+}
+/* line 327, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-snippet-toolbar .mercury-removeSnippet-button {
+  background-position: -48px 0;
+}
+/* line 328, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-snippet-toolbar .mercury-removeSnippet-button.active {
+  background-position: -48px -18px;
+}
+/* line 329, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-snippet-toolbar .mercury-dragsnippet-button {
+  background-position: -72px 0;
+}
+/* line 330, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/toolbar.scss */
+.mercury-snippet-toolbar .mercury-dragsnippet-button.active {
+  background-position: -72px -18px;
+}
+/*
+ * Tooltip
+ *----------------------------------------------------------------------------*/
+/* line 5, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/tooltip.scss */
+.mercury-tooltip {
+  position: absolute;
+  top: 100px;
+  left: 100px;
+  max-width: 400px;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.7);
+  padding: 2px 5px;
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+  -moz-box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+  font: normal normal normal 11px/normal Helvetica, Tahoma, Arial, sans-serif;
+  color: #EEE;
+  word-wrap: break-word;
+}
+/* line 20, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/tooltip.scss */
+.mercury-tooltip a {
+  color: #EEE;
+  text-decoration: none;
+}
+/* line 23, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/tooltip.scss */
+.mercury-tooltip a:hover {
+  color: #FFF;
+}
+/*
+ * Uploader
+ *----------------------------------------------------------------------------*/
+/* line 5, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/uploader.scss */
+.mercury-uploader-overlay {
+  position: absolute;
+  z-index: 10040;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: .95;
+  /*display: none;*/
+  background: rgba(0, 0, 0, 0.65);
+}
+
+/* line 16, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/uploader.scss */
+.mercury-uploader {
+  position: absolute;
+  z-index: 10050;
+  top: 300px;
+  left: 400px;
+  width: 500px;
+  height: 150px;
+  overflow: hidden;
+  padding: 15px;
+  background: rgba(0, 0, 0, 0.7);
+  border-radius: 10px;
+  -moz-border-radius: 10px;
+  font: normal normal normal 12px/normal Helvetica, Tahoma, Arial, sans-serif;
+  color: #CCC;
+}
+/* line 30, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/uploader.scss */
+.mercury-uploader .mercury-uploader-preview {
+  float: left;
+  width: 150px;
+  height: 150px;
+  border: 1px solid #CCC;
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+}
+/* line 37, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/uploader.scss */
+.mercury-uploader .mercury-uploader-preview b {
+  display: table-cell;
+  width: 150px;
+  height: 150px;
+  text-align: center;
+  vertical-align: middle;
+}
+/* line 44, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/uploader.scss */
+.mercury-uploader .mercury-uploader-preview img {
+  margin: 5px;
+  max-width: 140px;
+  max-height: 140px;
+}
+/* line 50, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/uploader.scss */
+.mercury-uploader .mercury-uploader-details {
+  width: 333px;
+  overflow: hidden;
+  float: left;
+  padding-left: 15px;
+}
+/* line 55, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/uploader.scss */
+.mercury-uploader .mercury-uploader-details span {
+  color: #F00;
+}
+/* line 59, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/uploader.scss */
+.mercury-uploader .mercury-uploader-progress {
+  position: absolute;
+  bottom: 15px;
+  right: 15px;
+  width: 333px;
+}
+/* line 64, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/uploader.scss */
+.mercury-uploader .mercury-uploader-progress div.mercury-uploader-indicator {
+  width: 100%;
+  height: 30px;
+  margin: 5px 0 0;
+  position: relative;
+  background-color: #BABABA;
+  border-radius: 35px;
+  -moz-border-radius: 35px;
+  background: -webkit-gradient(linear, left bottom, left top, color-stop(0, #c7c7c7), color-stop(1, #b0b0b0));
+  background: -moz-linear-gradient(#b0b0b0 0%, #c7c7c7 100%);
+  -webkit-box-shadow: inset 0px 1px 2px 0px rgba(0, 0, 0, 0.5), 0px 1px 0px 0px rgba(255, 255, 255, 0.3);
+  -moz-box-shadow: inset 0px 1px 2px 0px rgba(0, 0, 0, 0.5), 0px 1px 0px 0px rgba(255, 255, 255, 0.3);
+  box-shadow: inset 0px 1px 2px 0px rgba(0, 0, 0, 0.5), 0px 1px 0px 0px rgba(255, 255, 255, 0.3);
+}
+/* line 77, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/uploader.scss */
+.mercury-uploader .mercury-uploader-progress div.mercury-uploader-indicator div {
+  min-width: 28px;
+  position: relative;
+  overflow: hidden;
+  height: 28px;
+  border-radius: 35px;
+  width: 0;
+  -moz-border-radius: 35px;
+  -webkit-animation: animate-stripes 2s linear infinite;
+  -webkit-background-size: 44px 44px;
+  background: -webkit-gradient(linear, 0 0, 44 44, color-stop(0, rgba(255, 255, 255, 0.17)), color-stop(0.25, rgba(255, 255, 255, 0.17)), color-stop(0.26, rgba(255, 255, 255, 0)), color-stop(0.5, rgba(255, 255, 255, 0)), color-stop(0.51, rgba(255, 255, 255, 0.17)), color-stop(0.75, rgba(255, 255, 255, 0.17)), color-stop(0.76, rgba(255, 255, 255, 0)), color-stop(1, rgba(255, 255, 255, 0))), -webkit-gradient(linear, left bottom, left top, color-stop(0, rgba(255, 255, 255, 0.1)), color-stop(1, rgba(255, 255, 255, 0.37)));
+  background: -moz-repeating-linear-gradient(top left -30deg, rgba(255, 255, 255, 0.17), rgba(255, 255, 255, 0.17) 15px, rgba(255, 255, 255, 0) 15px, rgba(255, 255, 255, 0) 30px), -moz-linear-gradient(rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.37) 100%);
+  background-color: #09F;
+  box-shadow: inset 0px 1px 0px 0px rgba(255, 255, 255, 0.4), inset 0px -1px 1px rgba(0, 0, 0, 0.2);
+  -moz-box-shadow: inset 0px 1px 0px 0px rgba(255, 255, 255, 0.4), inset 0px -1px 1px rgba(0, 0, 0, 0.2);
+  border: 1px solid #0083DA;
+}
+/* line 97, /Users/jeremyjackson/Documents/mercury/vendor/assets/stylesheets/mercury/uploader.scss */
+.mercury-uploader .mercury-uploader-progress div.mercury-uploader-indicator div b {
+  display: none;
+  position: absolute;
+  right: 0;
+  line-height: 28px;
+  padding-right: 12px;
+  color: rgba(0, 0, 0, 0.6);
+  text-shadow: rgba(255, 255, 255, 0.45) 0 1px 0px;
+  white-space: nowrap;
+}

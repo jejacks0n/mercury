@@ -24,7 +24,7 @@
  *
  */
 
-// ## Default Packages ##
+// ## Default Packages
 //
 // Some default packages are provided for you.  If you want to define your own, feel free to do so before including this
 // script.  These, or your own packages can be specified to the loader in query params (read below for details).
@@ -34,7 +34,7 @@ if (!window.mercuryPackages) window.mercuryPackages = {
 };
 
 
-// ## Mercury Loader ##
+// ## Mercury Loader
 (function() {
   // If the browser isn't supported, we don't try to do anything more.
   if (!document.getElementsByTagName) return;
@@ -113,6 +113,12 @@ if (!window.mercuryPackages) window.mercuryPackages = {
               document.body.style.visibility = 'visible';
               document.body.style.display = 'block';
               new Mercury.PageEditor();
+              // If there's a mercuryLoaded function available, call it.   You can provide one before the loading script
+              // and it will be called after everything is loaded, but before everything is initialized.  You can bind
+              // to the mercury:ready event or use Mercury.bind('ready', function() {}).
+              if (typeof(window.mercuryLoaded) == 'function') {
+                window.mercuryLoaded();
+              }
             } else {
               loadScript(javascripts[loaded]);
             }

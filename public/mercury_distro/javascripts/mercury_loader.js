@@ -48,18 +48,6 @@ if (!window.mercuryPackages) window.mercuryPackages = {
     pack: 'development'
   };
 
-  // Find the loader script and determine what options were provided so the defaults can be overridden.  To provide
-  // options just pass them in as query params (eg. `mercury_loader.js?src=/asset_path&pack=bundled`)
-  var scripts = document.getElementsByTagName('script');
-  for (var i = 0; i <= scripts.length - 1; i += 1) {
-    var match = scripts[i].src.match(/mercury_loader\.js\??(.*)?$/);
-    if (!match || !match[1]) continue;
-
-    match[1].replace(/([^&=]*)=([^&=]*)/g, function (m, attr, value) {
-      options[attr] = value;
-    });
-  }
-
   // Hide the document during loading so there isn't a flicker while mercury is being loaded.
   var head = document.getElementsByTagName("head")[0];
   if (window == top) {
@@ -78,6 +66,19 @@ if (!window.mercuryPackages) window.mercuryPackages = {
     // If the current window is the top window, it means that Mercury hasn't been loaded yet.  So we load it.
     if (window == top) {
       var i;
+
+      // Find the loader script and determine what options were provided so the defaults can be overridden.  To provide
+      // options just pass them in as query params (eg. `mercury_loader.js?src=/asset_path&pack=bundled`)
+      var scripts = document.getElementsByTagName('script');
+      for (i = 0; i <= scripts.length - 1; i += 1) {
+        var match = scripts[i].src.match(/mercury_loader\.js\??(.*)?$/);
+        if (!match || !match[1]) continue;
+
+        match[1].replace(/([^&=]*)=([^&=]*)/g, function (m, attr, value) {
+          options[attr] = value;
+        });
+      }
+
       var pack = window.mercuryPackages[options.pack];
       setTimeout(function() {
         // Once we're ready to load Mercury we clear the document contents, and add in the css and javascript tags.

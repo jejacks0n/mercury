@@ -120,6 +120,7 @@ namespace :mercury do
     task :dialogs => :environment do
       input = Rails.root.join('app/views')
       File.open(Rails.root.join('public/mercury_distro/javascripts/mercury_dialogs.js'), 'w') do |file|
+        file.write "if (!window.Mercury) window.Mercury = {preloadedViews: {}};\n"
         %w[modals palettes panels selects].each do |path|
           file.write "// -- #{path.upcase} --\n"
           Dir[input.join('mercury', path, '*.html')].sort.each do |filename|

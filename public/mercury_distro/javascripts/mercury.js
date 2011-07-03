@@ -24,8 +24,7 @@
  *
  */
 
-if (!window.Mercury) window.Mercury = {};
-jQuery.extend(window.Mercury, {
+window.MercurySetup = {
 
   // # Mercury Configuration
   config: {
@@ -270,8 +269,10 @@ jQuery.extend(window.Mercury, {
   // Turning debug mode on will log events and other various things (using console.debug if available).
   debug: true
 
-});
+};
 
+if (!window.Mercury) window.Mercury = window.MercurySetup;
+else if (jQuery) jQuery.extend(window.Mercury, window.MercurySetup);
 /*!
  * jQuery JavaScript Library v1.6
  * http://jquery.com/

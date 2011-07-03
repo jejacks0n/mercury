@@ -109,7 +109,6 @@ if (!window.mercuryPackages) window.mercuryPackages = {
           head.appendChild(script);
           script.onload = function() {
             loaded += 1;
-            console.debug('loaded', loaded, script.src);
             if (loaded >= javascripts.length) {
               document.body.style.visibility = 'visible';
               document.body.style.display = 'block';

@@ -131,10 +131,18 @@ describe "Mercury.PageEditor", ->
       @pageEditor.initializeFrame()
       expect(@finalizeInterfaceSpy.callCount).toEqual(1)
 
-    it "shows the iframe", ->
+    it "fires the ready event", ->
+      spy = spyOn(Mercury, 'trigger').andCallFake(=>)
       @finalizeInterfaceSpy.andCallFake(=>)
       @pageEditor.initializeFrame()
-      @pageEditor.iframe.css('loaded', true)
+      expect(spy.callCount).toEqual(1)
+      expect(spy.argsForCall[0]).toEqual(['ready'])
+
+    it "shows the iframe", ->
+      @pageEditor.iframe.css({visibility: 'visible'})
+      @finalizeInterfaceSpy.andCallFake(=>)
+      @pageEditor.initializeFrame()
+      expect(@pageEditor.iframe.css('visibility')).toEqual('visible')
 
     it "captures errors and alerts them", ->
       @finalizeInterfaceSpy.andCallFake(=> throw('unknown error' ))

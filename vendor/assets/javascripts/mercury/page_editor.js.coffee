@@ -42,6 +42,7 @@ class @Mercury.PageEditor
       @bindEvents()
       @initializeRegions()
       @finalizeInterface()
+      Mercury.trigger('ready')
 
       @iframe.css({visibility: 'visible'})
     catch error

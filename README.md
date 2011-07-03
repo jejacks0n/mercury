@@ -23,8 +23,10 @@ Supported Browsers:
 
 ## A Demo
 
-Feel free to check out [the demo](http://mercury-demo.herokuapp.com/).  A full walkthrough that details each of the
-common features will be provided shortly.
+Feel free to check out [the demo](http://jejacks0n.github.com/mercury/).  The demo will be updated quite a bit in the
+next weeks, so feel free to check back every now and then.. We'll be adding a full walkthrough that details each of the
+major features shortly.  If you would like to see how Mercury was implemented in the demo check the gh-pages branch,
+it's a useful resource to see how you can integrate the Mercury bundle.
 
 
 ## The Story

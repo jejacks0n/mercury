@@ -1,11 +1,8 @@
 /*!
- * Mercury Editor is a Coffeescript and jQuery based WYSIWYG editor.  Mercury Editor utilizes the HTML5 ContentEditable
- * spec to allow editing sections of a given page (instead of using iframes) and provides an editing experience that's as
- * realistic as possible.  By not using iframes for editable regions it allows CSS to behave naturally.
+ * Mercury Editor is a Coffeescript and jQuery based WYSIWYG editor.  Documentation and other useful information can be
+ * found at https://github.com/jejacks0n/mercury
  *
- * Mercury Editor was written for the future, and doesn't attempt to support legacy implementations of document editing.
- *
- * Currently supported browsers are
+ * Supported browsers:
  *   - Firefox 4+
  *   - Chrome 10+
  *   - Safari 5+
@@ -29,17 +26,9 @@
 
 window.Mercury = {
 
-  // Turning silent mode on will disable asking about unsaved changes before leaving the page.
-  silent: false,
-
-  // Turning debug mode on will log events and other various things (using console.debug if available).
-  debug: true,
-
-  //
-  // Mercury Configuration
-  //
+  // # Mercury Configuration #
   config: {
-    // Pasting (in Chrome/Safari)
+    // ## Pasting (in Chrome/Safari) ##
     //
     // When copying content using webkit, it embeds all the user defined styles (from the css files) into the html
     // style attributes directly.  When pasting this content into HTML5 contentEditable elements it leaves these
@@ -48,7 +37,7 @@ window.Mercury = {
     cleanStylesOnPaste: true,
 
 
-    // Snippet Options and Preview
+    // ## Snippet Options and Preview ##
     //
     // When a user drags a snippet onto the page they'll be prompted to enter options for the given snippet.  The server
     // is expected to respond with a form.  Once the user submits this form, an Ajax request is sent to the server with
@@ -61,12 +50,14 @@ window.Mercury = {
     },
 
 
-    // Image Uploading (in supported regions)
+    // ## Image Uploading ##
     //
     // If you drag images (while pressing shift) from your desktop into regions that support it, it will be uploade
     // to the server and inserted into the region.  This configuration allows you to specify if you want to
     // disable/enable this feature, the accepted mime-types, file size restrictions, and other things related to
     // uploading.
+    //
+    // **Note:** Image uploading is only supported in some region types.
     uploading: {
       enabled: true,
       allowedMimeTypes: ['image/jpeg', 'image/gif', 'image/png'],
@@ -76,52 +67,53 @@ window.Mercury = {
       },
 
 
-    // Toolbars
+    // ## Toolbars ##
     //
     // This is where you can customize the toolbars by adding or removing buttons, or changing them and their
     // behaviors.  Any top level object put here will create a new toolbar.  Buttons are simply nested inside the
     // toolbars, along with button groups.
     //
-    // Buttons can be grouped.  A button group is simply a way to wrap buttons for styling, and can also handle
+    // Some toolbars are custom (the snippetable toolbar for instance), and to denote that use _custom: true.  You can
+    // then build the toolbar yourself with it's own behavior.
+    //
+    // Buttons can be grouped, and a button group is simply a way to wrap buttons for styling -- they can also handle
     // enabling or disabling all the buttons within it by using a context.  The table button group is a good example
     // of this.
     //
-    // The primary toolbar is always visible, but any other toolbar should have a name based on what type of region
-    // it's for.  The toolbar will be enabled/disabled base on what region currently has focus.  Some toolbars are
-    // custom (the snippetable toolbar for instance), and to denote that use _custom: true.  You can then build the
-    // toolbar yourself with it's own behavior.
-    //
     // It's important to note that each of the button names (keys), in each toolbar object must be unique, regardless
-    // of if it's in a button group, or nested, etc.  This is because styling is applied to them by name.
+    // of if it's in a button group, or nested, etc.  This is because styling is applied to them by name, and because
+    // their name is used in the event that's fired when you click on them.
     //
-    // Button format: [label, description, {type: action, type: action, etc}] The available button types are:
+    // Button format: `[label, description, {type: action, type: action, etc}]`
     //
-    // toggle:  toggles on or off when clicked, otherwise behaves like a button
-    // modal:   opens a modal window, expects the action to be one of:
-    //            a string url
-    //            a function that returns a string url
-    // panel:   opens a panel dialog, expects the action to be one of:
-    //            a string url
-    //            a function that returns a string url
-    // palette: opens a palette window, expects the action to be one of:
-    //            a string url
-    //            a function that returns a string url
-    // select:  opens a pulldown style window, expects the action to be one of:
-    //            a string url
-    //            a function that returns a string url
-    // context: calls a callback function, expects the action to be:
-    //            a function that returns a boolean to highlight the button
-    //            note: if a function isn't provided, the key will be passed to the contextHandler, in which case a
-    //                  default context will be used (for more info read the Contexts section below)
-    // mode:    toggle a given mode in the editor, expects the action to be:
-    //            a string, denoting the name of the mode
-    //            note: it's assumed that when a specific mode is turned on, all other modes will be turned off, which
-    //                  happens automatically, thus putting the editor into a specific "state"
-    // regions: allows buttons to be enabled/disabled based on what region type has focus, expects the action to be:
-    //            an array of region types (eg. ['editable', 'markupable']
-    // preload: allows some dialog views to be loaded whtn the button is created instead of on first open, expects:
-    //            a boolean
-    //            note: only used for panels, selects, and palettes
+    // ### The available button types are: ###
+    //
+    // - toggle:  toggles on or off when clicked, otherwise behaves like a button
+    // - modal:   opens a modal window, expects the action to be one of:
+    //   1. a string url
+    //   2. a function that returns a string url
+    // - panel:   opens a panel dialog, expects the action to be one of:
+    //   1. a string url
+    //   2. a function that returns a string url
+    // - palette: opens a palette window, expects the action to be one of:
+    //   1. a string url
+    //   2. a function that returns a string url
+    // - select:  opens a pulldown style window, expects the action to be one of:
+    //   1. a string url
+    //   2. a function that returns a string url
+    // - context: calls a callback function, expects the action to be:
+    //   1. a function that returns a boolean to highlight the button
+    //   note: if a function isn't provided, the key will be passed to the contextHandler, in which case a default
+    //         context will be used (for more info read the Contexts section below)
+    // - mode:    toggle a given mode in the editor, expects the action to be:
+    //   1. a string, denoting the name of the mode
+    //   note: it's assumed that when a specific mode is turned on, all other modes will be turned off, which happens
+    //         automatically, thus putting the editor into a specific "state"
+    // - regions: allows buttons to be enabled/disabled based on what region type has focus, expects the action to be:
+    //   1. an array of region types (eg. ['editable', 'markupable'])
+    // - preload: allows some dialog views to be loaded whtn the button is created instead of on first open, expects:
+    //   1. a boolean true / false
+    //   note: this is only used by panels, selects, and palettes
     //
     // Separators are any "button" that's not an array, and are expected to be a string.  You can use two different
     // separator styles: line ('-'), and spacer (' ').
@@ -228,7 +220,7 @@ window.Mercury = {
       },
 
 
-    // Behaviors
+    // ## Behaviors ##
     //
     // Behaviors are used to change the default behaviors of a given region type when a given button is clicked.  For
     // example, you may prefer to add HR tags using an HR wrapped within a div with a classname (for styling).  You
@@ -242,7 +234,7 @@ window.Mercury = {
       },
 
 
-    // Contexts
+    // ## Contexts ##
     //
     // Contexts are used callback functions used for highlighting and disabling/enabling buttons and buttongroups.
     // When the cursor enters an element within an html region for instance we want to disable or highlight buttons
@@ -253,7 +245,7 @@ window.Mercury = {
     // Mercury.Toolbar.ButtonGroup.contexts
 
 
-    // Styles
+    // ## Styles ##
     //
     // Mercury tries to stay as much out of your code as possible, but because regions appear within your document we
     // need to include a few styles to indicate regions, as well as the different states of them (eg. focused).  These
@@ -265,7 +257,18 @@ window.Mercury = {
       '.mercury-region:focus, .mercury-region.focus, .mercury-textarea.focus { outline: none; -webkit-box-shadow: 0 0 10px #09F, 0 0 1px #045; box-shadow: 0 0 10px #09F, 0 0 1px #045 }' +
       '.mercury-region:after { content: "."; display: block; visibility: hidden; clear: both; height: 0; overflow: hidden; }' +
       '.mercury-region table, .mercury-region td, .mercury-region th { border: 1px dotted red; }'
-  }
+  },
+
+  // ## Silent Mode ##
+  //
+  // Turning silent mode on will disable asking about unsaved changes before leaving the page.
+  silent: false,
+
+  // ## Debug Mode ##
+  //
+  // Turning debug mode on will log events and other various things (using console.debug if available).
+  debug: true
+
 };
 
 /*!

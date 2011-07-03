@@ -23,10 +23,42 @@
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  */
-(function() {
 
+// ## Default Packages ##
+//
+// Some default packages are provided for you.  If you want to define your own, feel free to do so before including this
+// script.  These, or your own packages can be specified to the loader in query params (read below for details).
+if (!window.mercuryPackages) window.mercuryPackages = {
+  development: {javascripts: 'mercury.js', stylesheets: 'mercury.css'},
+  bundled: {javascripts: 'javascripts/mercury.min.js,javascripts/mercury_dialogs.js', stylesheets: 'stylesheets/mercury.bundle.css'}
+};
+
+
+// ## Mercury Loader ##
+(function() {
   // If the browser isn't supported, we don't try to do anything more.
   if (!document.getElementsByTagName) return;
+
+  // Default options, which can be overridden by specifying them in query params to the loader script.
+  var options = {
+    // A path or url from which the javascripts and css should be loaded.
+    src: '/assets',
+    // A value defined in the packages above.  Development is used by default.  If you want to provide your own package
+    // you can just define one before including this script.
+    pack: 'development'
+  };
+
+  // Find the loader script and determine what options were provided so the defaults can be overridden.  To provide
+  // options just pass them in as query params (eg. `mercury_loader.js?src=/asset_path&pack=bundled`)
+  var scripts = document.getElementsByTagName('script');
+  for (var i = 0; i <= scripts.length - 1; i += 1) {
+    var match = scripts[i].src.match(/mercury_loader\.js\??(.*)?$/);
+    if (!match || !match[1]) continue;
+
+    match[1].replace(/([^&=]*)=([^&=]*)/g, function (m, attr, value) {
+      options[attr] = value;
+    });
+  }
 
   // Hide the document during loading so there isn't a flicker while mercury is being loaded.
   var head = document.getElementsByTagName("head")[0];
@@ -43,30 +75,41 @@
     if (timer) window.clearTimeout(timer);
     document.mercuryLoaded = true;
 
+    // If the current window is the top window, it means that Mercury hasn't been loaded yet.  So we load it.
     if (window == top) {
+      var i;
+      var pack = window.mercuryPackages[options.pack];
       setTimeout(function() {
         // Once we're ready to load Mercury we clear the document contents, and add in the css and javascript tags.
         // Once the script has loaded we display the body again, and instantiate a new instance of Mercury.PageEditor.
         document.body.innerHTML = '&nbsp;';
-        for (var i = 0; i <= document.styleSheets.length - 1; i += 1) {
+        for (i = 0; i <= document.styleSheets.length - 1; i += 1) {
           document.styleSheets[i].disabled = true
         }
 
-        var link = document.createElement('link');
-        link.href = '/assets/mercury.css';
-        link.media = 'screen';
-        link.rel = 'stylesheet';
-        link.type = 'text/css';
-        head.appendChild(link);
+        // Load all the stylesheets.
+        var stylesheets = pack.stylesheets.split(',');
+        for (i = 0; i <= stylesheets.length - 1; i += 1) {
+          var link = document.createElement('link');
+          link.href = options.src + '/' + stylesheets[i];
+          link.media = 'screen';
+          link.rel = 'stylesheet';
+          link.type = 'text/css';
+          head.appendChild(link);
+        }
 
-        var script = document.createElement('script');
-        script.src = '/assets/mercury.js';
-        script.type = 'text/javascript';
-        head.appendChild(script);
-        script.onload = function() {
-          document.body.style.visibility = 'visible';
-          document.body.style.display = 'block';
-          new Mercury.PageEditor()
+        // Load all the javascripts.
+        var javascripts = pack.javascripts.split(',');
+        for (i = 0; i <= javascripts.length - 1; i += 1) {
+          var script = document.createElement('script');
+          script.src = options.src + '/' + javascripts[i];
+          script.type = 'text/javascript';
+          head.appendChild(script);
+          script.onload = function() {
+            document.body.style.visibility = 'visible';
+            document.body.style.display = 'block';
+            if (!window.mercuryInstance) try { new Mercury.PageEditor() } catch(e) {}
+          }
         }
       }, 1);
     } else if (top.Mercury) {

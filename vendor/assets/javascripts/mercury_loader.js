@@ -30,7 +30,7 @@
 // script.  These, or your own packages can be specified to the loader in query params (read below for details).
 if (!window.mercuryPackages) window.mercuryPackages = {
   development: {javascripts: 'mercury.js', stylesheets: 'mercury.css'},
-  bundled: {javascripts: 'javascripts/mercury_dialogs.js,javascripts/mercury.min.js', stylesheets: 'stylesheets/mercury.bundle.css'}
+  bundled: {javascripts: 'javascripts/mercury.min.js,javascripts/mercury_dialogs.js', stylesheets: 'stylesheets/mercury.bundle.css'}
 };
 
 
@@ -106,10 +106,12 @@ if (!window.mercuryPackages) window.mercuryPackages = {
           script.src = options.src + '/' + javascripts[i];
           script.type = 'text/javascript';
           head.appendChild(script);
-          script.onload = function() {
-            document.body.style.visibility = 'visible';
-            document.body.style.display = 'block';
-            if (!window.mercuryInstance) try { new Mercury.PageEditor() } catch(e) {}
+          if (i >= javascripts.length - 1) {
+            script.onload = function() {
+              document.body.style.visibility = 'visible';
+              document.body.style.display = 'block';
+              new Mercury.PageEditor();
+            }
           }
         }
       }, 1);

@@ -1,12 +1,15 @@
 class @Mercury.Statusbar
 
   constructor: (@options = {}) ->
+    @visible = @options.visible
     @build()
     @bindEvents()
 
 
   build: ->
-    @element = jQuery('<div>', {class: 'mercury-statusbar'}).appendTo(jQuery(@options.appendTo).get(0) ? 'body')
+    @element = jQuery('<div>', {class: 'mercury-statusbar'})
+    @element.css({visibility: 'hidden', height: 0}) unless @visible
+    @element.appendTo(jQuery(@options.appendTo).get(0) ? 'body')
 
 
   bindEvents: ->
@@ -15,11 +18,11 @@ class @Mercury.Statusbar
 
 
   height: ->
-    return @element.outerHeight()
+    @element.outerHeight()
 
 
   top: ->
-    return @element.offset().top
+    if @visible then @element.offset().top else @element.offset().top + @element.outerHeight()
 
 
   setPath: (elements) ->

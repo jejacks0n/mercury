@@ -3,9 +3,12 @@ class @Mercury.PageEditor
   # options
   # saveStyle: 'form', or 'json' (defaults to json)
   # ignoredLinks: an array containing classes for links to ignore (eg. lightbox or accordian controls)
+  # visible: boolean, if the interface should start visible or not (defaults to true)
   constructor: (@saveUrl = null, @options = {}) ->
     throw "Mercury.PageEditor is unsupported in this client. Supported browsers are chrome 10+, firefix 4+, and safari 5+." unless Mercury.supported
     throw "Mercury.PageEditor can only be instantiated once." if window.mercuryInstance
+
+    @options.visible = true unless @options.visible == false
 
     window.mercuryInstance = @
     @regions = []
@@ -51,6 +54,7 @@ class @Mercury.PageEditor
 
   initializeRegions: ->
     @buildRegion(jQuery(region)) for region in jQuery('.mercury-region', @document)
+    return unless @options.visible
     for region in @regions
       if region.focus
         region.focus()
@@ -71,6 +75,7 @@ class @Mercury.PageEditor
 
     @hijackLinks()
     @resize()
+    Mercury.trigger('mode', {mode: 'preview'}) unless @options.visible
 
 
   bindEvents: ->

@@ -109,7 +109,7 @@ describe "Mercury.SnippetToolbar", ->
 
     beforeEach ->
       Mercury.displayRect = {top: 20}
-      @snippetToolbar = new Mercury.SnippetToolbar($('document'), {appendTo: '#test'})
+      @snippetToolbar = new Mercury.SnippetToolbar($('document'), {appendTo: '#test', visible: true})
       @snippetToolbar.snippet = $('#snippet')
 
     it "positions itself based on the snippet", ->

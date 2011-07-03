@@ -29,25 +29,17 @@ describe "Mercury.Toolbar", ->
       expect(@bindEventsSpy.callCount).toEqual(1)
 
 
-  describe "#height", ->
-
-    beforeEach ->
-      spyOn(Mercury.Toolbar.prototype, 'buildButton').andCallFake(=> $('<div>'))
-      spyOn(Mercury.Toolbar.prototype, 'bindEvents').andCallFake(=>)
-      @toolbar = new Mercury.Toolbar({appendTo: '#test'})
-
-    it "knows it's own height", ->
-      expect(@toolbar.height()).toEqual(200) # styled with css in the template
-
-
   describe "#build", ->
 
     beforeEach ->
       @buildButtonSpy = spyOn(Mercury.Toolbar.prototype, 'buildButton').andCallFake(=> $('<div>'))
-      @toolbar = new Mercury.Toolbar({appendTo: '#toolbar_container'})
+      @toolbar = new Mercury.Toolbar({appendTo: '#toolbar_container', visible: false})
 
     it "builds an element", ->
       expect($('.mercury-toolbar-container').length).toEqual(1)
+
+    it "hides the element if options.visible is false", ->
+      expect($('.mercury-toolbar-container').css('display')).toEqual('none')
 
     it "can append to any element", ->
       expect($('#toolbar_container .mercury-toolbar-container').length).toEqual(1)
@@ -132,14 +124,12 @@ describe "Mercury.Toolbar", ->
         Mercury.trigger('region:focused', {region: {type: 'markupable'}})
         expect($('.mercury.editable-toolbar').hasClass('disabled')).toEqual(false)
 
-
     describe "custom event: region:blurred", ->
 
       it "disables toolbars for the region type", ->
         $('.mercury-editable-toolbar').removeClass('disabled')
         Mercury.trigger('region:blurred', {region: {type: 'editable'}})
         expect($('.mercury-editable-toolbar').hasClass('disabled')).toEqual(true)
-
 
     describe "click", ->
 
@@ -150,3 +140,26 @@ describe "Mercury.Toolbar", ->
 
         expect(spy.callCount).toEqual(1)
         expect(spy.argsForCall[0]).toEqual(['hide:dialogs'])
+
+
+  describe "#height", ->
+
+    beforeEach ->
+      spyOn(Mercury.Toolbar.prototype, 'buildButton').andCallFake(=> $('<div>'))
+      spyOn(Mercury.Toolbar.prototype, 'bindEvents').andCallFake(=>)
+
+    describe "when visible", ->
+
+      beforeEach ->
+        @toolbar = new Mercury.Toolbar({appendTo: '#test', visible: true})
+
+      it "returns the element outerheight", ->
+        expect(@toolbar.height()).toEqual($('.mercury-toolbar-container').outerHeight())
+
+    describe "when not visible", ->
+
+      beforeEach ->
+        @toolbar = new Mercury.Toolbar({appendTo: '#test', visible: false})
+
+      it "returns 0", ->
+        expect(@toolbar.height()).toEqual(0)

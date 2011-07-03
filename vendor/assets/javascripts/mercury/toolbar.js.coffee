@@ -1,12 +1,14 @@
 class @Mercury.Toolbar
 
   constructor: (@options = {}) ->
+    @visible = @options.visible
     @build()
     @bindEvents()
 
 
   build: ->
     @element = jQuery('<div>', {class: 'mercury-toolbar-container', style: 'width:10000px'})
+    @element.css({display: 'none'}) unless @visible
     @element.appendTo(jQuery(@options.appendTo).get(0) ? 'body')
 
     for own toolbarName, buttons of Mercury.config.toolbars
@@ -68,4 +70,4 @@ class @Mercury.Toolbar
 
 
   height: ->
-    @element.outerHeight()
+    if @visible then @element.outerHeight() else 0

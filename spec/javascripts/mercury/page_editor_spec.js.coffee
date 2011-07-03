@@ -41,7 +41,12 @@ describe "Mercury.PageEditor", ->
     it "accepts a saveUrl, and options", ->
       @pageEditor = new Mercury.PageEditor('/foo/1', {foo: 'bar'})
       expect(@pageEditor.saveUrl).toEqual('/foo/1')
-      expect(@pageEditor.options).toEqual({foo: 'bar'})
+      expect(@pageEditor.options).toEqual({foo: 'bar', visible: true})
+
+    it "sets the visible option to true unless it's set", ->
+      @pageEditor = new Mercury.PageEditor('/foo/1', {foo: 'bar', visible: false})
+      expect(@pageEditor.options.visible).toEqual(false)
+
 
     it "calls initializeInterface", ->
       @pageEditor = new Mercury.PageEditor()
@@ -170,6 +175,13 @@ describe "Mercury.PageEditor", ->
       @pageEditor.initializeRegions()
       expect(firstFocusCalled).toEqual(true)
 
+    it "doesn't focus the first region if it's not supposed to be visible", ->
+      firstFocusCalled = false
+      @pageEditor.regions = [{focus: => firstFocusCalled = true}, {}, {}]
+      @pageEditor.options.visible = false
+      @pageEditor.initializeRegions()
+      expect(firstFocusCalled).toEqual(false)
+
 
   describe "#buildRegion", ->
 
@@ -212,6 +224,12 @@ describe "Mercury.PageEditor", ->
     it "calls resize", ->
       @pageEditor.finalizeInterface()
       expect(@resizeSpy.callCount).toEqual(1)
+
+    it "fires a mode event to put things into preview mode if it's not visible yet", ->
+      spy = spyOn(Mercury, 'trigger').andCallFake(=>)
+      @pageEditor.options.visible = false
+      @pageEditor.finalizeInterface()
+      expect(spy.callCount).toEqual(1)
 
 
   describe "observed events", ->

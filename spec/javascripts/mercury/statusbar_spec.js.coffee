@@ -18,10 +18,13 @@ describe "Mercury.Statusbar", ->
     beforeEach ->
       @buildSpy = spyOn(Mercury.Statusbar.prototype, 'build')
       @bindEventsSpy = spyOn(Mercury.Statusbar.prototype, 'bindEvents')
-      @statusbar = new Mercury.Statusbar({appendTo: '#test', foo: 'bar'})
+      @statusbar = new Mercury.Statusbar({appendTo: '#test', foo: 'bar', visible: false})
 
     it "accepts options", ->
       expect(@statusbar.options.foo).toEqual('bar')
+
+    it "sets visible based on options", ->
+      expect(@statusbar.visible).toEqual(false)
 
     it "calls build", ->
       expect(@buildSpy.callCount).toEqual(1)
@@ -30,24 +33,17 @@ describe "Mercury.Statusbar", ->
       expect(@bindEventsSpy.callCount).toEqual(1)
 
 
-  describe "#height", ->
-
-    beforeEach ->
-      spyOn(Mercury.Statusbar.prototype, 'bindEvents').andCallFake(=>)
-      @statusbar = new Mercury.Statusbar({appendTo: '#test'})
-
-    it "knows it's own height", ->
-      expect(@statusbar.height()).toEqual(20) # styled with css in the template
-
-
   describe "#build", ->
 
     beforeEach ->
       spyOn(Mercury.Statusbar.prototype, 'bindEvents').andCallFake(=>)
-      @statusbar = new Mercury.Statusbar({appendTo: '#statusbar_container'})
+      @statusbar = new Mercury.Statusbar({appendTo: '#statusbar_container', visible: false})
 
     it "builds an element", ->
-      expect($('#test .mercury-statusbar').length).toEqual(1)
+      expect($('.mercury-statusbar').length).toEqual(1)
+
+    it "hides the element if it's not supposed to be visible", ->
+      expect($('.mercury-statusbar').css('visibility')).toEqual('hidden')
 
     it "can append to any element", ->
       expect($('#statusbar_container .mercury-statusbar').length).toEqual(1)
@@ -66,6 +62,37 @@ describe "Mercury.Statusbar", ->
 
         Mercury.trigger('region:update', {region: @region})
         expect(spy.callCount).toEqual(1)
+
+
+  describe "#height", ->
+
+    beforeEach ->
+      spyOn(Mercury.Statusbar.prototype, 'bindEvents').andCallFake(=>)
+      @statusbar = new Mercury.Statusbar({appendTo: '#test', visible: true})
+
+    it "knows it's own height", ->
+      expect(@statusbar.height()).toEqual(20) # styled with css in the template
+
+
+  describe "#top", ->
+
+    describe "when visible", ->
+
+      beforeEach ->
+        spyOn(Mercury.Statusbar.prototype, 'bindEvents').andCallFake(=>)
+        @statusbar = new Mercury.Statusbar({appendTo: '#test', visible: true})
+
+      it "returns the offset top of the element", ->
+        expect(@statusbar.top()).toEqual($('.mercury-statusbar').offset().top)
+
+    describe "when not visible", ->
+
+      beforeEach ->
+        spyOn(Mercury.Statusbar.prototype, 'bindEvents').andCallFake(=>)
+        @statusbar = new Mercury.Statusbar({appendTo: '#test', visible: false})
+
+      it "returns the offset top of the element + it's outer height", ->
+        expect(@statusbar.top()).toEqual($('.mercury-statusbar').offset().top + $('.mercury-statusbar').outerHeight())
 
 
   describe "#setPath", ->

@@ -24,7 +24,8 @@
  *
  */
 
-window.Mercury = {
+if (!window.Mercury) window.Mercury = {};
+jQuery.extend(window.Mercury, {
 
   // # Mercury Configuration
   config: {
@@ -269,7 +270,7 @@ window.Mercury = {
   // Turning debug mode on will log events and other various things (using console.debug if available).
   debug: true
 
-};
+});
 
 /*!
  * jQuery JavaScript Library v1.6
@@ -12048,7 +12049,8 @@ Showdown.converter = function() {
 
 };
 (function() {
-  jQuery.extend(Mercury, {
+  this.Mercury || (this.Mercury = {});
+  jQuery.extend(this.Mercury, {
     version: '0.1.3',
     supported: document.getElementById && document.designMode && !jQuery.browser.konqueror && !jQuery.browser.msie,
     Regions: {},

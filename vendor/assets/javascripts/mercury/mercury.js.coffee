@@ -29,8 +29,8 @@
 #= require_tree ./dialogs
 #= require_tree ./modals
 #
-
-jQuery.extend Mercury, {
+@Mercury ||= {}
+jQuery.extend @Mercury, {
   version: '0.1.3'
 
   # No IE support yet because it doesn't follow the W3C standards for HTML5 contentEditable (aka designMode).

@@ -22,10 +22,11 @@
  * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- *= require_self
  *= require mercury/mercury
+ *= require_self
  */
-window.Mercury = {
+if (!window.Mercury) window.Mercury = {};
+jQuery.extend(window.Mercury, {
 
   // # Mercury Configuration
   config: {
@@ -270,5 +271,5 @@ window.Mercury = {
   // Turning debug mode on will log events and other various things (using console.debug if available).
   debug: true
 
-};
+});
 

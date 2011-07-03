@@ -101,18 +101,20 @@ if (!window.mercuryPackages) window.mercuryPackages = {
 
         // Load all the javascripts.
         var javascripts = pack.javascripts.split(',');
+        var loaded = 0;
         for (i = 0; i <= javascripts.length - 1; i += 1) {
           var script = document.createElement('script');
           script.src = options.src + '/' + javascripts[i];
           script.type = 'text/javascript';
-          head.appendChild(script);
-          if (i >= javascripts.length - 1) {
-            script.onload = function() {
+          script.onload = function() {
+            loaded += 1;
+            if (loaded >= javascripts.length) {
               document.body.style.visibility = 'visible';
               document.body.style.display = 'block';
               new Mercury.PageEditor();
             }
-          }
+          };
+          head.appendChild(script);
         }
       }, 1);
     } else if (top.Mercury) {

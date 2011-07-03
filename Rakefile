@@ -110,9 +110,15 @@ Jeweler::RubygemsDotOrgTasks.new
 # Mercury build tasks
 #
 namespace :mercury do
-  desc "Builds Mercury into the distro ready package"
-  task :build => ['build:dialogs', 'build:javascripts', 'build:stylesheets'] do
+
+  desc "Builds the documentation using docco"
+  task :document do
+    `docco vendor/assets/javascripts/**/*.coffee`
+    `docco vendor/assets/javascripts/*.js`
   end
+
+  desc "Builds Mercury into the distro ready package"
+  task :build => ['build:dialogs', 'build:javascripts', 'build:stylesheets']
 
   namespace :build do
 
@@ -146,6 +152,8 @@ namespace :mercury do
       File.open(Rails.root.join('public/mercury_distro/javascripts/mercury.min.js'), 'w') do |file|
         file.write(minified)
       end
+
+      copy_file(Rails.root.join('vendor/assets/javascripts/mercury_loader.js'), Rails.root.join('public/mercury_distro/javascripts/mercury_loader.js'))
     end
 
     desc "Combine stylesheets into mercury.css and mercury.bundle.css (bundling images where possible)"

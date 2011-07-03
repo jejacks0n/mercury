@@ -27,9 +27,9 @@
  */
 window.Mercury = {
 
-  // # Mercury Configuration #
+  // # Mercury Configuration
   config: {
-    // ## Pasting (in Chrome/Safari) ##
+    // ## Pasting (in Chrome/Safari)
     //
     // When copying content using webkit, it embeds all the user defined styles (from the css files) into the html
     // style attributes directly.  When pasting this content into HTML5 contentEditable elements it leaves these
@@ -38,7 +38,7 @@ window.Mercury = {
     cleanStylesOnPaste: true,
 
 
-    // ## Snippet Options and Preview ##
+    // ## Snippet Options and Preview
     //
     // When a user drags a snippet onto the page they'll be prompted to enter options for the given snippet.  The server
     // is expected to respond with a form.  Once the user submits this form, an Ajax request is sent to the server with
@@ -51,7 +51,7 @@ window.Mercury = {
     },
 
 
-    // ## Image Uploading ##
+    // ## Image Uploading
     //
     // If you drag images (while pressing shift) from your desktop into regions that support it, it will be uploade
     // to the server and inserted into the region.  This configuration allows you to specify if you want to
@@ -68,7 +68,7 @@ window.Mercury = {
       },
 
 
-    // ## Toolbars ##
+    // ## Toolbars
     //
     // This is where you can customize the toolbars by adding or removing buttons, or changing them and their
     // behaviors.  Any top level object put here will create a new toolbar.  Buttons are simply nested inside the
@@ -87,7 +87,7 @@ window.Mercury = {
     //
     // Button format: `[label, description, {type: action, type: action, etc}]`
     //
-    // ### The available button types are: ###
+    // ### The available button types are:
     //
     // - toggle:  toggles on or off when clicked, otherwise behaves like a button
     // - modal:   opens a modal window, expects the action to be one of:
@@ -221,7 +221,7 @@ window.Mercury = {
       },
 
 
-    // ## Behaviors ##
+    // ## Behaviors
     //
     // Behaviors are used to change the default behaviors of a given region type when a given button is clicked.  For
     // example, you may prefer to add HR tags using an HR wrapped within a div with a classname (for styling).  You
@@ -235,7 +235,7 @@ window.Mercury = {
       },
 
 
-    // ## Contexts ##
+    // ## Contexts
     //
     // Contexts are used callback functions used for highlighting and disabling/enabling buttons and buttongroups.
     // When the cursor enters an element within an html region for instance we want to disable or highlight buttons
@@ -246,7 +246,7 @@ window.Mercury = {
     // Mercury.Toolbar.ButtonGroup.contexts
 
 
-    // ## Styles ##
+    // ## Styles
     //
     // Mercury tries to stay as much out of your code as possible, but because regions appear within your document we
     // need to include a few styles to indicate regions, as well as the different states of them (eg. focused).  These
@@ -260,12 +260,12 @@ window.Mercury = {
       '.mercury-region table, .mercury-region td, .mercury-region th { border: 1px dotted red; }'
   },
 
-  // ## Silent Mode ##
+  // ## Silent Mode
   //
   // Turning silent mode on will disable asking about unsaved changes before leaving the page.
   silent: false,
 
-  // ## Debug Mode ##
+  // ## Debug Mode
   //
   // Turning debug mode on will log events and other various things (using console.debug if available).
   debug: true

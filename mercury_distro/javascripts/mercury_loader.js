@@ -102,23 +102,24 @@ if (!window.mercuryPackages) window.mercuryPackages = {
         // Load all the javascripts.
         var javascripts = pack.javascripts.split(',');
         var loaded = 0;
-        for (i = 0; i <= javascripts.length - 1; i += 1) {
+        function loadScript(src) {
           var script = document.createElement('script');
-          script.src = options.src + '/' + javascripts[i];
+          script.src = options.src + '/' + src;
           script.type = 'text/javascript';
           head.appendChild(script);
-          (function(script) {
-            script.onload = function() {
-              loaded += 1;
-              console.debug('loaded', loaded, script.src);
-              if (loaded >= javascripts.length) {
-                document.body.style.visibility = 'visible';
-                document.body.style.display = 'block';
-                new Mercury.PageEditor();
-              }
+          script.onload = function() {
+            loaded += 1;
+            console.debug('loaded', loaded, script.src);
+            if (loaded >= javascripts.length) {
+              document.body.style.visibility = 'visible';
+              document.body.style.display = 'block';
+              new Mercury.PageEditor();
+            } else {
+              loadScript(javascripts[loaded]);
             }
-          })(script);
+          }
         }
+        loadScript(javascripts[loaded]);
       }, 1);
     } else if (top.Mercury) {
       // Since this file will be included in the iframe as well, we use it to tell Mercury that the document is ready to

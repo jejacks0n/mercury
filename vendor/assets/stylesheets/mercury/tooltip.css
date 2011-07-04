@@ -16,11 +16,11 @@
   font: normal normal normal 11px/normal Helvetica, Tahoma, Arial, sans-serif;
   color: #EEE;
   word-wrap: break-word;
-  a {
-    color: #EEE;
-    text-decoration: none;
-    &:hover {
-      color: #FFF;
-    }
-  }
+}
+.mercury-tooltip a {
+  color: #EEE;
+  text-decoration: none;
+}
+.mercury-tooltip a:hover {
+  color: #FFF;
 }

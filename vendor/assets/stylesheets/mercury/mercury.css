@@ -1,0 +1,133 @@
+/*
+ *= require_self
+ *= require ./dialog
+ *= require ./modal
+ *= require ./statusbar
+ *= require ./toolbar
+ *= require ./tooltip
+ *= require ./uploader
+ */
+
+
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+
+/*
+ * Forms
+ *---------------------------------------------------------------------------*/
+form,
+form ul,
+form ol,
+form li,
+form fieldset,
+form p,
+.filter {
+  margin: 0;
+  padding: 0;
+}
+form abbr {
+  border: 0;
+  font-variant: normal;
+}
+form fieldset {
+  margin-bottom: 10px;
+  background: #F6F6F6;
+  border: 1px solid #CCC;
+  border-radius: 7px;
+  -moz-border-radius: 7px;
+}
+form fieldset:last-child {
+  margin-bottom: 0;
+}
+form fieldset legend {
+  font-weight: bold;
+  margin-left: 10px;
+  margin-bottom: -4px;
+}
+form ol {
+  margin: 12px 9px;
+}
+form ol li {
+  display: block;
+  margin-bottom: 10px;
+}
+form label {
+  display: block;
+  float: left;
+  width: 23%;
+  margin-right: 9px;
+  text-align: right;
+  line-height: 27px;
+  font-size: 1.1em;
+}
+form label input {
+  width: auto !important;
+  margin: 0 5px 0 -20px !important;
+}
+form select,
+form input[type=text],
+form input[type=password],
+form textarea,
+form input.text {
+  margin: 0;
+  border: 2px solid #CCC;
+  padding: 2px 4px;
+  font-family: Arial, Geneva, sans-serif;
+  font-size: 1.5em;
+  width: 74%;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+}
+form li.boolean {
+  margin-left: 23%;
+  padding-left: 9px;
+}
+form li.boolean label {
+  width: auto;
+}
+form fieldset.buttons {
+  clear: both;
+  padding: 0;
+  background: none;
+  border: none;
+  text-align: left;
+}
+form fieldset.buttons ol {
+  margin: 0 -2px 0 0;
+  float: right;
+}
+form fieldset.buttons ol li {
+  float: left;
+  padding-left: 0.5em;
+  padding-right: 0;
+}
+form fieldset.buttons .commit {
+  margin: 0;
+}
+form fieldset.buttons .commit input {
+  padding: 8px 14px 9px !important;
+  font-family: 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', sans-serif;
+  font-size: 1.3em;
+  background: #222 url(/assets/mercury/button.png) repeat-x;
+  display: inline-block;
+  color: #FFF;
+  text-decoration: none;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+  -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+  text-shadow: 0 -1px 1px rgba(0, 0, 0, 0.25);
+  border: 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+  position: relative;
+  cursor: pointer;
+  line-height: normal;
+}
+form fieldset.buttons .commit input:hover {
+  background-color: #000;
+}

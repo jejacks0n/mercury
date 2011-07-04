@@ -112,7 +112,7 @@ if (!window.mercuryPackages) window.mercuryPackages = {
             if (loaded >= javascripts.length) {
               document.body.style.visibility = 'visible';
               document.body.style.display = 'block';
-              new Mercury.PageEditor();
+              new Mercury.PageEditor(null, {visible: false});
               // If there's a mercuryLoaded function available, call it.   You can provide one before the loading script
               // and it will be called after everything is loaded, but before everything is initialized.  You can bind
               // to the mercury:ready event or use Mercury.bind('ready', function() {}).

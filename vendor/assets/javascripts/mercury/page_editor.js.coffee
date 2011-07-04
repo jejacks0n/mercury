@@ -9,6 +9,7 @@ class @Mercury.PageEditor
     throw "Mercury.PageEditor can only be instantiated once." if window.mercuryInstance
 
     @options.visible = true unless @options.visible == false
+    @visible = @options.visible
 
     window.mercuryInstance = @
     @regions = []
@@ -83,6 +84,8 @@ class @Mercury.PageEditor
     Mercury.bind 'focus:frame', => @iframe.focus()
     Mercury.bind 'focus:window', => setTimeout((=> @focusableElement.focus()), 10)
 
+    Mercury.bind 'toggle:interface', => @toggleInterface()
+
     Mercury.bind 'action', (event, options) =>
        @save() if options.action == 'save'
 
@@ -93,6 +96,19 @@ class @Mercury.PageEditor
 
     jQuery(window).resize => @resize()
     window.onbeforeunload = @beforeUnload
+
+
+  toggleInterface: ->
+    if @visible
+      @visible = false
+      @toolbar.hide()
+      @statusbar.hide()
+      @resize()
+    else
+      @visible = true
+      @toolbar.show()
+      @statusbar.show()
+      @resize()
 
 
   resize: ->

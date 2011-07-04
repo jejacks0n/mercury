@@ -11,6 +11,7 @@ describe "Mercury.PageEditor", ->
     $(document).unbind('mercury:initialize:frame')
     $(document).unbind('mercury:focus:frame')
     $(document).unbind('mercury:focus:window')
+    $(document).unbind('mercury:toggle:interface')
     $(document).unbind('mercury:action')
     $(document).unbind('mousedown')
     $(window).unbind('resize')
@@ -46,7 +47,16 @@ describe "Mercury.PageEditor", ->
     it "sets the visible option to true unless it's set", ->
       @pageEditor = new Mercury.PageEditor('/foo/1', {foo: 'bar', visible: false})
       expect(@pageEditor.options.visible).toEqual(false)
+      window.mercuryInstance = null
+      @pageEditor = new Mercury.PageEditor('/foo/1', {foo: 'bar', visible: true})
+      expect(@pageEditor.options.visible).toEqual(true)
 
+    it "sets visible based on the options", ->
+      @pageEditor = new Mercury.PageEditor('/foo/1', {foo: 'bar', visible: false})
+      expect(@pageEditor.visible).toEqual(false)
+      window.mercuryInstance = null
+      @pageEditor = new Mercury.PageEditor('/foo/1', {foo: 'bar', visible: true})
+      expect(@pageEditor.visible).toEqual(true)
 
     it "calls initializeInterface", ->
       @pageEditor = new Mercury.PageEditor()
@@ -266,6 +276,13 @@ describe "Mercury.PageEditor", ->
         Mercury.trigger('focus:window')
         expect(callCount).toEqual(1)
 
+    describe "custom event: toggle:interface", ->
+
+      it "calls toggleInterface", ->
+        spy = spyOn(Mercury.PageEditor.prototype, 'toggleInterface').andCallFake(=>)
+        Mercury.trigger('toggle:interface')
+        expect(spy.callCount).toEqual(1)
+
     describe "custom event: action", ->
 
       it "calls save if the action was save", ->
@@ -308,6 +325,64 @@ describe "Mercury.PageEditor", ->
         #spy = spyOn(Mercury, 'beforeUnload').andCallFake(=>)
         #window.onbeforeunload()
         #expect(spy.callCount).toEqual(1)
+
+
+  describe "#toggleInterface", ->
+
+    beforeEach ->
+      spec = @
+      spec.toolbarShowCallCount = 0
+      spec.toolbarHideCallCount = 0
+      spec.statusbarShowCallCount = 0
+      spec.statusbarHideCallCount = 0
+      Mercury.Toolbar = -> {toolbar: true, height: (-> 100), show: (=> spec.toolbarShowCallCount += 1), hide: (=> spec.toolbarHideCallCount += 1)}
+      Mercury.Statusbar = -> {statusbar: true, top: (-> 500), show: (=> spec.statusbarShowCallCount += 1), hide: (=> spec.statusbarHideCallCount += 1)}
+      Mercury.PageEditor.prototype.initializeFrame = ->
+      @pageEditor = new Mercury.PageEditor('', {appendTo: $('#test')})
+
+    describe "when visible", ->
+
+      beforeEach ->
+        @pageEditor.visible = true
+
+      it "sets visible to false", ->
+        @pageEditor.toggleInterface()
+        expect(@pageEditor.visible).toEqual(false)
+
+      it "calls hide on the toolbar", ->
+        @pageEditor.toggleInterface()
+        expect(@toolbarHideCallCount).toEqual(1)
+
+      it "calls hide on the statusbar", ->
+        @pageEditor.toggleInterface()
+        expect(@statusbarHideCallCount).toEqual(1)
+
+      it "calls resize", ->
+        spy = spyOn(Mercury.PageEditor.prototype, 'resize').andCallFake(=>)
+        @pageEditor.toggleInterface()
+        expect(spy.callCount).toEqual(1)
+
+    describe "when not visible", ->
+
+      beforeEach ->
+        @pageEditor.visible = false
+
+      it "sets visible to true", ->
+        @pageEditor.toggleInterface()
+        expect(@pageEditor.visible).toEqual(true)
+
+      it "calls show on the toolbar", ->
+        @pageEditor.toggleInterface()
+        expect(@toolbarShowCallCount).toEqual(1)
+
+      it "calls show on the statusbar", ->
+        @pageEditor.toggleInterface()
+        expect(@statusbarShowCallCount).toEqual(1)
+
+      it "calls resize", ->
+        spy = spyOn(Mercury.PageEditor.prototype, 'resize').andCallFake(=>)
+        @pageEditor.toggleInterface()
+        expect(spy.callCount).toEqual(1)
 
 
   describe "#resize", ->

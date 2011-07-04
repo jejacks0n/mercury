@@ -30,3 +30,9 @@ class @Mercury.Statusbar
     path.push("<a>#{element.tagName.toLowerCase()}</a>") for element in elements
 
     @element.html("<span><strong>Path: </strong></span>#{path.reverse().join(' &raquo; ')}")
+
+
+  show: ->
+
+
+  hide: ->

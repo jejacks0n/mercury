@@ -71,3 +71,9 @@ class @Mercury.Toolbar
 
   height: ->
     if @visible then @element.outerHeight() else 0
+
+
+  show: ->
+
+
+  hide: ->

@@ -130,7 +130,7 @@ namespace :mercury do
         %w[modals palettes panels selects].each do |path|
           file.write "// -- #{path.upcase} --\n"
           Dir[input.join('mercury', path, '*.html')].sort.each do |filename|
-            file.write %Q{Mercury.preloadedViews['#{filename.gsub(input.to_s, '').gsub(/\.html$/, '')}'] = "}
+            file.write %Q{Mercury.preloadedViews['#{filename.gsub(input.to_s, '')}'] = "}
             File.foreach(filename) { |line| file.write line.chomp.gsub('"', '\\"') }
             file.write %Q{";\n}
           end

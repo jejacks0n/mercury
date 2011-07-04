@@ -45,8 +45,8 @@ window.MercurySetup = {
     //
     // Name will be replaced with the snippet name (eg. example)
     snippets: {
-      optionsUrl: '/mercury/snippets/:name/options',
-      previewUrl: '/mercury/snippets/:name/preview'
+      optionsUrl: '/mercury/snippets/:name/options.html',
+      previewUrl: '/mercury/snippets/:name/preview.html'
     },
 
 
@@ -127,29 +127,29 @@ window.MercurySetup = {
           redo:                ['Redo', 'Redo your last action'],
           sep:                 ' '
           },
-        insertLink:            ['Link', 'Insert Link', { modal: '/mercury/modals/link', regions: ['editable', 'markupable'] }],
-        insertMedia:           ['Media', 'Insert Media (images and videos)', { modal: '/mercury/modals/media', regions: ['editable', 'markupable'] }],
-        insertTable:           ['Table', 'Insert Table', { modal: '/mercury/modals/table', regions: ['editable', 'markupable'] }],
-        insertCharacter:       ['Character', 'Special Characters', { modal: '/mercury/modals/character', regions: ['editable', 'markupable'] }],
-        snippetPanel:          ['Snippet', 'Snippet Panel', { panel: '/mercury/panels/snippets' }],
+        insertLink:            ['Link', 'Insert Link', { modal: '/mercury/modals/link.html', regions: ['editable', 'markupable'] }],
+        insertMedia:           ['Media', 'Insert Media (images and videos)', { modal: '/mercury/modals/media.html', regions: ['editable', 'markupable'] }],
+        insertTable:           ['Table', 'Insert Table', { modal: '/mercury/modals/table.html', regions: ['editable', 'markupable'] }],
+        insertCharacter:       ['Character', 'Special Characters', { modal: '/mercury/modals/character.html', regions: ['editable', 'markupable'] }],
+        snippetPanel:          ['Snippet', 'Snippet Panel', { panel: '/mercury/panels/snippets.html' }],
         sep2:                  ' ',
-        historyPanel:          ['History', 'Page Version History', { panel: '/mercury/panels/history' }],
+        historyPanel:          ['History', 'Page Version History', { panel: '/mercury/panels/history.html' }],
         sep3:                  ' ',
-        notesPanel:            ['Notes', 'Page Notes', { panel: '/mercury/panels/notes' }]
+        notesPanel:            ['Notes', 'Page Notes', { panel: '/mercury/panels/notes.html' }]
         },
 
       editable: {
         _regions:              ['editable', 'markupable'],
         predefined:            {
-          style:               ['Style', null, { select: '/mercury/selects/style', preload: true }],
+          style:               ['Style', null, { select: '/mercury/selects/style.html', preload: true }],
           sep1:                ' ',
-          formatblock:         ['Block Format', null, { select: '/mercury/selects/formatblock', preload: true }],
+          formatblock:         ['Block Format', null, { select: '/mercury/selects/formatblock.html', preload: true }],
           sep2:                '-'
           },
         colors:                {
-          backColor:           ['Background Color', null, { palette: '/mercury/palettes/backcolor', context: true, preload: true, regions: ['editable'] }],
+          backColor:           ['Background Color', null, { palette: '/mercury/palettes/backcolor.html', context: true, preload: true, regions: ['editable'] }],
           sep1:                ' ',
-          foreColor:           ['Text Color', null, { palette: '/mercury/palettes/forecolor', context: true, preload: true, regions: ['editable'] }],
+          foreColor:           ['Text Color', null, { palette: '/mercury/palettes/forecolor.html', context: true, preload: true, regions: ['editable'] }],
           sep2:                '-'
           },
         decoration:            {
@@ -230,7 +230,7 @@ window.MercurySetup = {
     // callback functions are executed within the scope of the given region, so you have access to all it's methods.
     behaviors: {
       horizontalRule: function(selection) { selection.replace('<hr/>') },
-      htmlEditor: function() { Mercury.modal('/mercury/modals/htmleditor', { title: 'HTML Editor', fullHeight: true, handler: 'htmlEditor' }) }
+      htmlEditor: function() { Mercury.modal('/mercury/modals/htmleditor.html', { title: 'HTML Editor', fullHeight: true, handler: 'htmlEditor' }) }
       },
 
 

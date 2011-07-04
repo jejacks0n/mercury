@@ -1,0 +1,14 @@
+<div class="tweets" id="tweets"></div>
+
+<script type="text/javascript">
+  var newId = 'tweets_' + Math.round((Math.random() * 200000));
+  var element = document.getElementById('tweets');
+  element.id = newId;
+  getTwitters(newId, {
+    id: 'whitehouse',
+    count: 5,
+    enableLinks: true,
+    clearContents: true,
+    template: '<div class="tweet"><img src="%user_profile_image_url%" width="40" height="40" align="left"/><span>%text%<br/><a href="http://twitter.com/%user_screen_name%/statuses/%id_str%/">%time%</a></span></div>'
+  });
+</script>

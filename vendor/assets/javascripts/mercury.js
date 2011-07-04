@@ -46,6 +46,7 @@ window.MercurySetup = {
     //
     // Name will be replaced with the snippet name (eg. example)
     snippets: {
+      method: 'POST',
       optionsUrl: '/mercury/snippets/:name/options.html',
       previewUrl: '/mercury/snippets/:name/preview.html'
     },

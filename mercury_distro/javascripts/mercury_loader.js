@@ -40,6 +40,8 @@ if (!window.mercuryPackages) window.mercuryPackages = {
   if (!document.getElementsByTagName) return;
 
   // Default options, which can be overridden by specifying them in query params to the loader script.
+  // You can provide any additional options to the loader, and they will be passed to the PageEditor instance when it's
+  // created, so for instance you could put `visible=false`, and the editor be hidden after it's created.
   var options = {
     // A path or url from which the javascripts and css should be loaded.
     src: '/assets',
@@ -112,7 +114,8 @@ if (!window.mercuryPackages) window.mercuryPackages = {
             if (loaded >= javascripts.length) {
               document.body.style.visibility = 'visible';
               document.body.style.display = 'block';
-              new Mercury.PageEditor();
+              // Instantiate the PageEditor, passing in the options that were provided to the loader.
+              new Mercury.PageEditor(null, {visible: true});
               // If there's a mercuryLoaded function available, call it.   You can provide one before the loading script
               // and it will be called after everything is loaded, but before everything is initialized.  You can bind
               // to the mercury:ready event or use Mercury.bind('ready', function() {}).

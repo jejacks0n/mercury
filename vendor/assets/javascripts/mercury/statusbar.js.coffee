@@ -2,6 +2,7 @@ class @Mercury.Statusbar
 
   constructor: (@options = {}) ->
     @visible = @options.visible
+    @projectLink = '<a href="http://jejacks0n.github.com/mercury" target="_blank" class="mercury-project-link">Mercury Editor v' + Mercury.version + '</a>'
     @build()
     @bindEvents()
 
@@ -31,7 +32,7 @@ class @Mercury.Statusbar
     path = []
     path.push("<a>#{element.tagName.toLowerCase()}</a>") for element in elements
 
-    @element.html("<span><strong>Path: </strong></span>#{path.reverse().join(' &raquo; ')}")
+    @element.html("<span><strong>Path: </strong>#{path.reverse().join(' &raquo; ')}</span>#{@projectLink}")
 
 
   show: ->

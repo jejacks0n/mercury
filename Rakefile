@@ -127,7 +127,7 @@ namespace :mercury do
     end
   end
 
-  desc "Builds Mercury into the distro ready package"
+  desc "Builds Mercury into the distribution ready package"
   task :build => ['build:dialogs', 'build:javascripts', 'build:stylesheets']
 
   namespace :build do
@@ -135,7 +135,7 @@ namespace :mercury do
     desc "Combines all dialog and model views into a js file"
     task :dialogs => :environment do
       input = Rails.root.join('app/views')
-      File.open(Rails.root.join('public/mercury_distro/javascripts/mercury_dialogs.js'), 'w') do |file|
+      File.open(Rails.root.join('public/mercury/javascripts/mercury_dialogs.js'), 'w') do |file|
         file.write "if (!window.Mercury) window.Mercury = {preloadedViews: {}};\n"
         %w[modals palettes panels selects].each do |path|
           file.write "// -- #{path.upcase} --\n"
@@ -154,22 +154,22 @@ namespace :mercury do
       Sprockets::Helpers::RailsHelper
       Rails.application.assets.precompile('mercury.js')
       Dir[Rails.root.join('public/assets/mercury-*.js')].each do |filename|
-        copy_file(filename, Rails.root.join('public/mercury_distro/javascripts/mercury.js'))
+        copy_file(filename, Rails.root.join('public/mercury/javascripts/mercury.js'))
         remove(filename)
       end
 
       Rails.application.assets.precompile('mercury/mercury.js')
       Dir[Rails.root.join('public/assets/mercury/mercury-*.js')].each do |filename|
-        copy_file(filename, Rails.root.join('public/mercury_distro/javascripts/mercury.min.js'))
+        copy_file(filename, Rails.root.join('public/mercury/javascripts/mercury.min.js'))
         remove(filename)
-        minified = Uglifier.compile(File.read(Rails.root.join('public/mercury_distro/javascripts/mercury.min.js')))
-        File.open(Rails.root.join('public/mercury_distro/javascripts/mercury.min.js'), 'w') do |file|
+        minified = Uglifier.compile(File.read(Rails.root.join('public/mercury/javascripts/mercury.min.js')))
+        File.open(Rails.root.join('public/mercury/javascripts/mercury.min.js'), 'w') do |file|
           file.write(File.read(Rails.root.join('vendor/assets/javascripts/mercury.js')))
           file.write(minified)
         end
       end
 
-      copy_file(Rails.root.join('vendor/assets/javascripts/mercury_loader.js'), Rails.root.join('public/mercury_distro/javascripts/mercury_loader.js'))
+      copy_file(Rails.root.join('vendor/assets/javascripts/mercury_loader.js'), Rails.root.join('public/mercury/javascripts/mercury_loader.js'))
     end
 
     desc "Combine stylesheets into mercury.css and mercury.bundle.css (bundling images where possible)"
@@ -180,11 +180,11 @@ namespace :mercury do
       Rails.application.assets.precompile('mercury.css')
 
       Dir[Rails.root.join('public/assets/mercury-*.css')].each do |filename|
-        copy_file(filename, Rails.root.join('public/mercury_distro/stylesheets/mercury.css'))
+        copy_file(filename, Rails.root.join('public/mercury/stylesheets/mercury.css'))
         remove(filename)
       end
 
-      bundled = File.read(Rails.root.join('public/mercury_distro/stylesheets/mercury.css'))
+      bundled = File.read(Rails.root.join('public/mercury/stylesheets/mercury.css'))
 
       # import image files using: url(data:image/gif;base64,XEQA7)
       bundled.gsub!(/url\(\/assets\/(.*?)\)/ix) do |m|
@@ -203,7 +203,7 @@ namespace :mercury do
       bundled.gsub!(/ \*/, "\n *")
       bundled.gsub!(/ \*\//, " */\n")
 
-      File.open(Rails.root.join('public/mercury_distro/stylesheets/mercury.bundle.css'), 'wb') do |file|
+      File.open(Rails.root.join('public/mercury/stylesheets/mercury.bundle.css'), 'wb') do |file|
         file.write(bundled)
       end
     end

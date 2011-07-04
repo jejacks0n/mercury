@@ -87,8 +87,8 @@ This generator puts the mercury base file (configuration) into your project in /
 ### For Other Frameworks / Languages
 
 Get the distro files by downloading them from github using the downloads feature, or pull them out of the project
-manually (the files are in /public/mercury_distro).  Copy the files into your project, and if you adjust where they're
-located (eg. not within mercury_distro/javascripts or mercury_distro/stylesheets) make sure you update the
+manually (the files are in /public/mercury).  Copy the files into your project, and if you adjust where they're
+located (eg. not within mercury/javascripts or mercury/stylesheets) make sure you update the
 mercury_loader.js file to reflect this.
 
 Images are bundled into the CSS if you use the mercury.bundle.css file, but if you'd rather not use the bundled CSS

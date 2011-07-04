@@ -12053,7 +12053,7 @@ Showdown.converter = function() {
 (function() {
   this.Mercury || (this.Mercury = {});
   jQuery.extend(this.Mercury, {
-    version: '0.1.3',
+    version: '0.1.4',
     supported: document.getElementById && document.designMode && !jQuery.browser.konqueror && !jQuery.browser.msie,
     Regions: {},
     modalHandlers: {},

@@ -12158,6 +12158,10 @@ Showdown.converter = function() {
       if (window.mercuryInstance) {
         throw "Mercury.PageEditor can only be instantiated once.";
       }
+      if (this.options.visible !== false) {
+        this.options.visible = true;
+      }
+      this.visible = this.options.visible;
       window.mercuryInstance = this;
       this.regions = [];
       this.initializeInterface();
@@ -12222,6 +12226,9 @@ Showdown.converter = function() {
         region = _ref[_i];
         this.buildRegion(jQuery(region));
       }
+      if (!this.options.visible) {
+        return;
+      }
       _ref2 = this.regions;
       _results = [];
       for (_j = 0, _len2 = _ref2.length; _j < _len2; _j++) {
@@ -12248,7 +12255,12 @@ Showdown.converter = function() {
     PageEditor.prototype.finalizeInterface = function() {
       this.snippetToolbar = new Mercury.SnippetToolbar(this.document);
       this.hijackLinks();
-      return this.resize();
+      this.resize();
+      if (!this.options.visible) {
+        return Mercury.trigger('mode', {
+          mode: 'preview'
+        });
+      }
     };
     PageEditor.prototype.bindEvents = function() {
       Mercury.bind('initialize:frame', __bind(function() {
@@ -12261,6 +12273,9 @@ Showdown.converter = function() {
         return setTimeout((__bind(function() {
           return this.focusableElement.focus();
         }, this)), 10);
+      }, this));
+      Mercury.bind('toggle:interface', __bind(function() {
+        return this.toggleInterface();
       }, this));
       Mercury.bind('action', __bind(function(event, options) {
         if (options.action === 'save') {
@@ -12279,6 +12294,21 @@ Showdown.converter = function() {
         return this.resize();
       }, this));
       return window.onbeforeunload = this.beforeUnload;
+    };
+    PageEditor.prototype.toggleInterface = function() {
+      if (this.visible) {
+        this.visible = false;
+        this.toolbar.hide();
+        this.statusbar.hide();
+      } else {
+        this.visible = true;
+        this.toolbar.show();
+        this.statusbar.show();
+      }
+      Mercury.trigger('mode', {
+        mode: 'preview'
+      });
+      return this.resize();
     };
     PageEditor.prototype.resize = function() {
       var height, toolbarHeight, width;
@@ -13406,14 +13436,21 @@ Showdown.converter = function() {
   this.Mercury.Statusbar = (function() {
     function Statusbar(options) {
       this.options = options != null ? options : {};
+      this.visible = this.options.visible;
       this.build();
       this.bindEvents();
     }
     Statusbar.prototype.build = function() {
       var _ref;
-      return this.element = jQuery('<div>', {
+      this.element = jQuery('<div>', {
         "class": 'mercury-statusbar'
-      }).appendTo((_ref = jQuery(this.options.appendTo).get(0)) != null ? _ref : 'body');
+      });
+      if (!this.visible) {
+        this.element.css({
+          visibility: 'hidden'
+        });
+      }
+      return this.element.appendTo((_ref = jQuery(this.options.appendTo).get(0)) != null ? _ref : 'body');
     };
     Statusbar.prototype.bindEvents = function() {
       return Mercury.bind('region:update', __bind(function(event, options) {
@@ -13426,7 +13463,14 @@ Showdown.converter = function() {
       return this.element.outerHeight();
     };
     Statusbar.prototype.top = function() {
-      return this.element.offset().top;
+      var currentTop, top;
+      top = this.element.offset().top;
+      currentTop = parseInt(this.element.css('bottom')) < 0 ? top - this.element.outerHeight() : top;
+      if (this.visible) {
+        return currentTop;
+      } else {
+        return top + this.element.outerHeight();
+      }
     };
     Statusbar.prototype.setPath = function(elements) {
       var element, path, _i, _len;
@@ -13437,6 +13481,22 @@ Showdown.converter = function() {
       }
       return this.element.html("<span><strong>Path: </strong></span>" + (path.reverse().join(' &raquo; ')));
     };
+    Statusbar.prototype.show = function() {
+      this.visible = true;
+      this.element.css({
+        opacity: 0,
+        visibility: 'visible'
+      });
+      return this.element.animate({
+        opacity: 1
+      }, 200, 'easeInOutSine');
+    };
+    Statusbar.prototype.hide = function() {
+      this.visible = false;
+      return this.element.css({
+        visibility: 'hidden'
+      });
+    };
     return Statusbar;
   })();
 }).call(this);
@@ -13445,6 +13505,7 @@ Showdown.converter = function() {
   this.Mercury.Toolbar = (function() {
     function Toolbar(options) {
       this.options = options != null ? options : {};
+      this.visible = this.options.visible;
       this.build();
       this.bindEvents();
     }
@@ -13454,6 +13515,11 @@ Showdown.converter = function() {
         "class": 'mercury-toolbar-container',
         style: 'width:10000px'
       });
+      if (!this.visible) {
+        this.element.css({
+          display: 'none'
+        });
+      }
       this.element.appendTo((_ref = jQuery(this.options.appendTo).get(0)) != null ? _ref : 'body');
       _ref2 = Mercury.config.toolbars;
       for (toolbarName in _ref2) {
@@ -13558,7 +13624,25 @@ Showdown.converter = function() {
       });
     };
     Toolbar.prototype.height = function() {
-      return this.element.outerHeight();
+      if (this.visible) {
+        return this.element.outerHeight();
+      } else {
+        return 0;
+      }
+    };
+    Toolbar.prototype.show = function() {
+      this.visible = true;
+      this.element.css({
+        top: -this.element.outerHeight(),
+        display: 'block'
+      });
+      return this.element.animate({
+        top: 0
+      }, 200, 'easeInOutSine');
+    };
+    Toolbar.prototype.hide = function() {
+      this.visible = false;
+      return this.element.hide();
     };
     return Toolbar;
   })();

@@ -1,21 +1,27 @@
 # # Mercury Dialog
 #
-# Dialog is a base class that's used by Palette, Select, Panel, and though Palette, the Toolbar.Expander.  It's basic
+# Dialog is a base class that's used by Palette, Select, Panel, and through Palette, the Toolbar.Expander.  It's basic
 # function is to provide an interface element that can be opened, interacted with, and then closed.
 #
 class @Mercury.Dialog
 
-  # The constructor expects a url to load, a name, and options.  The `url` is used to load the contents, either using
-  # Ajax or by pulling content from preloadedViews.  `name` is used in building of the element, and is assigned as part
-  # of the elements class (eg. `mercury-[name]-dialog`).
+  # The constructor expects a url to load, a name, and options.
   #
-  # **Supported Options**
+  # @url _string_ used to load the contents, either using Ajax or by pulling content from preloadedViews
   #
-  # - `for:`      Toolbar.Button - an instance of Toolbar.Button, so the dialog can be shown/hidden based on button
-  #               interactions.
-  # - `preload:`  boolean - if true, the view for this dialog will be loaded prior to being shown, otherwise the view
-  #               will be loaded the first time it's shown, and cached for all future interactions.
-  # - `appendTo:` element - you can append a dialog to any element by providing this option.
+  # @name _string_ used in building of the element, and is assigned as part of the elements class (eg.
+  #     `mercury-[name]-dialog`)
+  #
+  # @options _object_
+  #
+  # **Options**
+  #
+  # @for _Toolbar.Button_ used so the dialog can be shown/hidden based on button interactions.
+  #
+  # @preload _boolean_ if true, the view for this dialog will be loaded prior to being shown, otherwise the view will be
+  #     loaded the first time it's shown, and cached for all future interactions.
+  #
+  # @appendTo _element_ you can append a dialog to any element by providing this option.
   constructor: (@url, @name, @options = {}) ->
     @button = @options.for
 
@@ -56,7 +62,7 @@ class @Mercury.Dialog
   # ## #toggle
   #
   # Toggle the dialog based on current visibility.
-  toggle: (element) ->
+  toggle: ->
     if @visible then @hide() else @show()
 
 
@@ -87,8 +93,9 @@ class @Mercury.Dialog
 
   # ## #position
   #
-  # Interface method.  Implemenations are expected to position the dialog themselves.  The `keepVisible` argument is a
-  # boolean that specifies if the element should stay visible if it's already visible.
+  # Interface method.  Implemenations are expected to position the dialog themselves.
+  #
+  # @keepVisible _boolean_ specifies if the element should stay visible if it's already visible.
   position: (keepVisible) ->
 
 
@@ -112,8 +119,9 @@ class @Mercury.Dialog
 
   # ## #load
   #
-  # Fetches the content that will be loaded into the dialog.  A `callback` can be provided and will be called after the
-  # content is loaded.
+  # Fetches the content that will be loaded into the dialog.
+  #
+  # @callback _function_ will be called after the content is loaded.
   load: (callback) ->
     return unless @url
     if Mercury.preloadedViews[@url]
@@ -140,8 +148,9 @@ class @Mercury.Dialog
 
   # ## #loadContent
   #
-  # Loads content into the element, and removes the loading class.  `data` is expected to be a string or jQuery object
-  # that can be inserted into the dialog.
+  # Loads content into the element, and removes the loading class.
+  #
+  # @data _mixed_ a string or jQuery object that can be inserted into the dialog.
   loadContent: (data) ->
     @loaded = true
     @element.removeClass('loading')

@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <title>inserttable.js.coffee</title>
+  <link rel="stylesheet" href="http://jashkenas.github.com/docco/resources/docco.css">
+</head>
+<body>
+<div id='container'>
+  <div id="background"></div>
+  <div id="jump_to">
+    Jump To &hellip;
+    <div id="jump_wrapper">
+      <div id="jump_page">
+          <a class="source" href="../../mercury.html">mercury.js</a>
+          <a class="source" href="../dialog.js.html">dialog.js.coffee</a>
+          <a class="source" href="../dialogs/backcolor.js.html">backcolor.js.coffee</a>
+          <a class="source" href="../dialogs/forecolor.js.html">forecolor.js.coffee</a>
+          <a class="source" href="../dialogs/formatblock.js.html">formatblock.js.coffee</a>
+          <a class="source" href="../dialogs/objectspanel.js.html">objectspanel.js.coffee</a>
+          <a class="source" href="../dialogs/style.js.html">style.js.coffee</a>
+          <a class="source" href="../history_buffer.js.html">history_buffer.js.coffee</a>
+          <a class="source" href="../mercury.js.html">mercury.js.coffee</a>
+          <a class="source" href="../modal.js.html">modal.js.coffee</a>
+          <a class="source" href="htmleditor.js.html">htmleditor.js.coffee</a>
+          <a class="source" href="insertcharacter.js.html">insertcharacter.js.coffee</a>
+          <a class="source" href="insertlink.js.html">insertlink.js.coffee</a>
+          <a class="source" href="insertmedia.js.html">insertmedia.js.coffee</a>
+          <a class="source" href="insertsnippet.js.html">insertsnippet.js.coffee</a>
+          <a class="source" href="inserttable.js.html">inserttable.js.coffee</a>
+          <a class="source" href="../native_extensions.js.html">native_extensions.js.coffee</a>
+          <a class="source" href="../page_editor.js.html">page_editor.js.coffee</a>
+          <a class="source" href="../palette.js.html">palette.js.coffee</a>
+          <a class="source" href="../panel.js.html">panel.js.coffee</a>
+          <a class="source" href="../region.js.html">region.js.coffee</a>
+          <a class="source" href="../regions/editable.js.html">editable.js.coffee</a>
+          <a class="source" href="../regions/markupable.js.html">markupable.js.coffee</a>
+          <a class="source" href="../regions/snippetable.js.html">snippetable.js.coffee</a>
+          <a class="source" href="../select.js.html">select.js.coffee</a>
+          <a class="source" href="../snippet.js.html">snippet.js.coffee</a>
+          <a class="source" href="../snippet_toolbar.js.html">snippet_toolbar.js.coffee</a>
+          <a class="source" href="../statusbar.js.html">statusbar.js.coffee</a>
+          <a class="source" href="../table_editor.js.html">table_editor.js.coffee</a>
+          <a class="source" href="../toolbar.button.js.html">toolbar.button.js.coffee</a>
+          <a class="source" href="../toolbar.button_group.js.html">toolbar.button_group.js.coffee</a>
+          <a class="source" href="../toolbar.expander.js.html">toolbar.expander.js.coffee</a>
+          <a class="source" href="../toolbar.js.html">toolbar.js.coffee</a>
+          <a class="source" href="../tooltip.js.html">tooltip.js.coffee</a>
+          <a class="source" href="../uploader.js.html">uploader.js.coffee</a>
+          <a class="source" href="../../mercury_loader.html">mercury_loader.js</a>
+      </div>
+    </div>
+  </div>
+  <table cellspacing=0 cellpadding=0>
+  <thead>
+    <tr>
+      <th class=docs><h1>inserttable.js.coffee</h1></th>
+      <th class=code></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr id='section-1'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-1">&#182;</a>
+        </div>
+        
+      </td>
+      <td class=code>
+        <div class='highlight'><pre><span class="vi">@Mercury.modalHandlers.insertTable = </span><span class="o">-&gt;</span>
+  <span class="nv">table = </span><span class="nx">@element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;#table_display table&#39;</span><span class="p">)</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-2'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-2">&#182;</a>
+        </div>
+        <p>make td&rsquo;s selectable</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>  <span class="nx">table</span><span class="p">.</span><span class="nx">click</span> <span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="o">=&gt;</span>
+    <span class="nv">cell = </span><span class="nx">jQuery</span><span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">target</span><span class="p">)</span>
+    <span class="nv">table = </span><span class="nx">cell</span><span class="p">.</span><span class="nx">closest</span><span class="p">(</span><span class="s1">&#39;table&#39;</span><span class="p">)</span>
+    <span class="nx">table</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;.selected&#39;</span><span class="p">).</span><span class="nx">removeClass</span><span class="p">(</span><span class="s1">&#39;selected&#39;</span><span class="p">)</span>
+    <span class="nx">cell</span><span class="p">.</span><span class="nx">addClass</span><span class="p">(</span><span class="s1">&#39;selected&#39;</span><span class="p">)</span>
+    <span class="nx">Mercury</span><span class="p">.</span><span class="nx">tableEditor</span><span class="p">(</span><span class="nx">table</span><span class="p">,</span> <span class="nx">cell</span><span class="p">,</span> <span class="s1">&#39;&amp;nbsp;&#39;</span><span class="p">)</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-3'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-3">&#182;</a>
+        </div>
+        <p>select the first td</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>  <span class="nv">firstCell = </span><span class="nx">table</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;td, th&#39;</span><span class="p">).</span><span class="nx">first</span><span class="p">()</span>
+  <span class="nx">firstCell</span><span class="p">.</span><span class="nx">addClass</span><span class="p">(</span><span class="s1">&#39;selected&#39;</span><span class="p">)</span>
+  <span class="nx">Mercury</span><span class="p">.</span><span class="nx">tableEditor</span><span class="p">(</span><span class="nx">table</span><span class="p">,</span> <span class="nx">firstCell</span><span class="p">,</span> <span class="s1">&#39;&amp;nbsp;&#39;</span><span class="p">)</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-4'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-4">&#182;</a>
+        </div>
+        <p>make the buttons work</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>  <span class="nx">@element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;input.action&#39;</span><span class="p">).</span><span class="nx">click</span> <span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="o">=&gt;</span>
+    <span class="nv">action = </span><span class="nx">jQuery</span><span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">target</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">)</span>
+    <span class="k">switch</span> <span class="nx">action</span>
+      <span class="k">when</span> <span class="s1">&#39;insertRowBefore&#39;</span> <span class="k">then</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">tableEditor</span><span class="p">.</span><span class="nx">addRow</span><span class="p">(</span><span class="s1">&#39;before&#39;</span><span class="p">)</span>
+      <span class="k">when</span> <span class="s1">&#39;insertRowAfter&#39;</span> <span class="k">then</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">tableEditor</span><span class="p">.</span><span class="nx">addRow</span><span class="p">(</span><span class="s1">&#39;after&#39;</span><span class="p">)</span>
+      <span class="k">when</span> <span class="s1">&#39;deleteRow&#39;</span> <span class="k">then</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">tableEditor</span><span class="p">.</span><span class="nx">removeRow</span><span class="p">()</span>
+      <span class="k">when</span> <span class="s1">&#39;insertColumnBefore&#39;</span> <span class="k">then</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">tableEditor</span><span class="p">.</span><span class="nx">addColumn</span><span class="p">(</span><span class="s1">&#39;before&#39;</span><span class="p">)</span>
+      <span class="k">when</span> <span class="s1">&#39;insertColumnAfter&#39;</span> <span class="k">then</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">tableEditor</span><span class="p">.</span><span class="nx">addColumn</span><span class="p">(</span><span class="s1">&#39;after&#39;</span><span class="p">)</span>
+      <span class="k">when</span> <span class="s1">&#39;deleteColumn&#39;</span> <span class="k">then</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">tableEditor</span><span class="p">.</span><span class="nx">removeColumn</span><span class="p">()</span>
+      <span class="k">when</span> <span class="s1">&#39;increaseColspan&#39;</span> <span class="k">then</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">tableEditor</span><span class="p">.</span><span class="nx">increaseColspan</span><span class="p">()</span>
+      <span class="k">when</span> <span class="s1">&#39;decreaseColspan&#39;</span> <span class="k">then</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">tableEditor</span><span class="p">.</span><span class="nx">decreaseColspan</span><span class="p">()</span>
+      <span class="k">when</span> <span class="s1">&#39;increaseRowspan&#39;</span> <span class="k">then</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">tableEditor</span><span class="p">.</span><span class="nx">increaseRowspan</span><span class="p">()</span>
+      <span class="k">when</span> <span class="s1">&#39;decreaseRowspan&#39;</span> <span class="k">then</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">tableEditor</span><span class="p">.</span><span class="nx">decreaseRowspan</span><span class="p">()</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-5'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-5">&#182;</a>
+        </div>
+        <p>set the alignment</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>  <span class="nx">@element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;#table_alignment&#39;</span><span class="p">).</span><span class="nx">change</span> <span class="o">=&gt;</span>
+    <span class="nx">table</span><span class="p">.</span><span class="nx">attr</span><span class="p">({</span><span class="nv">align: </span><span class="nx">@element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;#table_alignment&#39;</span><span class="p">).</span><span class="nx">val</span><span class="p">()})</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-6'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-6">&#182;</a>
+        </div>
+        <p>set the border</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>  <span class="nx">@element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;#table_border&#39;</span><span class="p">).</span><span class="nx">keyup</span> <span class="o">=&gt;</span>
+    <span class="nx">table</span><span class="p">.</span><span class="nx">attr</span><span class="p">({</span><span class="nv">border: </span><span class="nb">parseInt</span><span class="p">(</span><span class="nx">@element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;#table_border&#39;</span><span class="p">).</span><span class="nx">val</span><span class="p">())})</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-7'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-7">&#182;</a>
+        </div>
+        <p>set the cellspacing</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>  <span class="nx">@element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;#table_spacing&#39;</span><span class="p">).</span><span class="nx">keyup</span> <span class="o">=&gt;</span>
+    <span class="nx">table</span><span class="p">.</span><span class="nx">attr</span><span class="p">({</span><span class="nv">cellspacing: </span><span class="nb">parseInt</span><span class="p">(</span><span class="nx">@element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;#table_spacing&#39;</span><span class="p">).</span><span class="nx">val</span><span class="p">())})</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-8'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-8">&#182;</a>
+        </div>
+        <p>build the table on form submission</p>
+
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>  <span class="nx">@element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;form&#39;</span><span class="p">).</span><span class="nx">submit</span> <span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="o">=&gt;</span>
+    <span class="nx">event</span><span class="p">.</span><span class="nx">preventDefault</span><span class="p">()</span>
+    <span class="nx">table</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;.selected&#39;</span><span class="p">).</span><span class="nx">removeClass</span><span class="p">(</span><span class="s1">&#39;selected&#39;</span><span class="p">)</span>
+    <span class="nx">table</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;td, th&#39;</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="s1">&#39;&amp;nbsp;&#39;</span><span class="p">)</span>
+
+    <span class="nv">html = </span><span class="nx">jQuery</span><span class="p">(</span><span class="s1">&#39;&lt;div&gt;&#39;</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="nx">table</span><span class="p">).</span><span class="nx">html</span><span class="p">()</span>
+    <span class="nv">value = </span><span class="nx">html</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/^\s+|\n/gm</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">).</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/(&lt;\/.*?&gt;|&lt;table.*?&gt;|&lt;tbody&gt;|&lt;tr&gt;)/g</span><span class="p">,</span> <span class="s1">&#39;$1\n&#39;</span><span class="p">)</span>
+
+    <span class="nx">Mercury</span><span class="p">.</span><span class="nx">trigger</span><span class="p">(</span><span class="s1">&#39;action&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nv">action: </span><span class="s1">&#39;insertHTML&#39;</span><span class="p">,</span> <span class="nv">value: </span><span class="nx">value</span><span class="p">})</span>
+    <span class="nx">@hide</span><span class="p">()</span></pre></div>
+      </td>
+    </tr>
+  </table>
+</div>
+</body>

@@ -113,8 +113,17 @@ namespace :mercury do
 
   desc "Builds the documentation using docco"
   task :document do
-    `docco vendor/assets/javascripts/**/*.coffee`
-    `docco vendor/assets/javascripts/*.js`
+    require 'rocco'
+    output_dir = Rails.root.join('docs').to_s
+    sources = Dir[Rails.root.join('vendor/assets/javascripts/*.js').to_s]
+    sources += Dir[Rails.root.join('vendor/assets/javascripts/**/*.coffee').to_s]
+    sources.each do |filename|
+      rocco = Rocco.new(filename, sources, {:template_file => nil, :docblocks => true})
+      dest = File.join(output_dir, filename.sub(Regexp.new("^#{Rails.root.join('vendor/assets/javascripts')}"), '').sub(Regexp.new("#{File.extname(filename)}$"),".html"))
+      puts "rocco: #{filename} -> #{dest}"
+      FileUtils.mkdir_p File.dirname(dest)
+      File.open(dest, 'wb') { |fd| fd.write(rocco.to_html) }
+    end
   end
 
   desc "Builds Mercury into the distro ready package"

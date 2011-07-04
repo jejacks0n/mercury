@@ -12,6 +12,7 @@ gem 'sass-rails', "~> 3.1.0.rc"
 gem 'coffee-script'
 
 group :development, :test do
+  gem 'rocco'
   gem 'uglifier'
   gem 'jquery-rails'
   gem 'jeweler'

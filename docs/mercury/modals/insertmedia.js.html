@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <title>insertmedia.js.coffee</title>
+  <link rel="stylesheet" href="http://jashkenas.github.com/docco/resources/docco.css">
+</head>
+<body>
+<div id='container'>
+  <div id="background"></div>
+  <div id="jump_to">
+    Jump To &hellip;
+    <div id="jump_wrapper">
+      <div id="jump_page">
+          <a class="source" href="../../mercury.html">mercury.js</a>
+          <a class="source" href="../dialog.js.html">dialog.js.coffee</a>
+          <a class="source" href="../dialogs/backcolor.js.html">backcolor.js.coffee</a>
+          <a class="source" href="../dialogs/forecolor.js.html">forecolor.js.coffee</a>
+          <a class="source" href="../dialogs/formatblock.js.html">formatblock.js.coffee</a>
+          <a class="source" href="../dialogs/objectspanel.js.html">objectspanel.js.coffee</a>
+          <a class="source" href="../dialogs/style.js.html">style.js.coffee</a>
+          <a class="source" href="../history_buffer.js.html">history_buffer.js.coffee</a>
+          <a class="source" href="../mercury.js.html">mercury.js.coffee</a>
+          <a class="source" href="../modal.js.html">modal.js.coffee</a>
+          <a class="source" href="htmleditor.js.html">htmleditor.js.coffee</a>
+          <a class="source" href="insertcharacter.js.html">insertcharacter.js.coffee</a>
+          <a class="source" href="insertlink.js.html">insertlink.js.coffee</a>
+          <a class="source" href="insertmedia.js.html">insertmedia.js.coffee</a>
+          <a class="source" href="insertsnippet.js.html">insertsnippet.js.coffee</a>
+          <a class="source" href="inserttable.js.html">inserttable.js.coffee</a>
+          <a class="source" href="../native_extensions.js.html">native_extensions.js.coffee</a>
+          <a class="source" href="../page_editor.js.html">page_editor.js.coffee</a>
+          <a class="source" href="../palette.js.html">palette.js.coffee</a>
+          <a class="source" href="../panel.js.html">panel.js.coffee</a>
+          <a class="source" href="../region.js.html">region.js.coffee</a>
+          <a class="source" href="../regions/editable.js.html">editable.js.coffee</a>
+          <a class="source" href="../regions/markupable.js.html">markupable.js.coffee</a>
+          <a class="source" href="../regions/snippetable.js.html">snippetable.js.coffee</a>
+          <a class="source" href="../select.js.html">select.js.coffee</a>
+          <a class="source" href="../snippet.js.html">snippet.js.coffee</a>
+          <a class="source" href="../snippet_toolbar.js.html">snippet_toolbar.js.coffee</a>
+          <a class="source" href="../statusbar.js.html">statusbar.js.coffee</a>
+          <a class="source" href="../table_editor.js.html">table_editor.js.coffee</a>
+          <a class="source" href="../toolbar.button.js.html">toolbar.button.js.coffee</a>
+          <a class="source" href="../toolbar.button_group.js.html">toolbar.button_group.js.coffee</a>
+          <a class="source" href="../toolbar.expander.js.html">toolbar.expander.js.coffee</a>
+          <a class="source" href="../toolbar.js.html">toolbar.js.coffee</a>
+          <a class="source" href="../tooltip.js.html">tooltip.js.coffee</a>
+          <a class="source" href="../uploader.js.html">uploader.js.coffee</a>
+          <a class="source" href="../../mercury_loader.html">mercury_loader.js</a>
+      </div>
+    </div>
+  </div>
+  <table cellspacing=0 cellpadding=0>
+  <thead>
+    <tr>
+      <th class=docs><h1>insertmedia.js.coffee</h1></th>
+      <th class=code></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr id='section-1'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-1">&#182;</a>
+        </div>
+        
+      </td>
+      <td class=code>
+        <div class='highlight'><pre><span class="vi">@Mercury.modalHandlers.insertMedia = </span><span class="o">-&gt;</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-2'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-2">&#182;</a>
+        </div>
+        <p>make the inputs work with the radio buttons, and options</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>  <span class="nx">@element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;label input&#39;</span><span class="p">).</span><span class="nx">click</span> <span class="nf">(event) -&gt;</span>
+    <span class="nx">jQuery</span><span class="p">(</span><span class="err">@</span><span class="p">).</span><span class="nx">closest</span><span class="p">(</span><span class="s1">&#39;label&#39;</span><span class="p">).</span><span class="nx">next</span><span class="p">(</span><span class="s1">&#39;.selectable&#39;</span><span class="p">).</span><span class="nx">focus</span><span class="p">()</span>
+
+  <span class="nx">@element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;.selectable&#39;</span><span class="p">).</span><span class="nx">focus</span> <span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="o">=&gt;</span>
+    <span class="nv">element = </span><span class="nx">jQuery</span><span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">target</span><span class="p">)</span>
+    <span class="nx">element</span><span class="p">.</span><span class="nx">prev</span><span class="p">(</span><span class="s1">&#39;label&#39;</span><span class="p">).</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;input[type=radio]&#39;</span><span class="p">).</span><span class="nx">prop</span><span class="p">(</span><span class="s2">&quot;checked&quot;</span><span class="p">,</span> <span class="kc">true</span><span class="p">)</span>
+
+    <span class="nx">@element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s2">&quot;.media-options&quot;</span><span class="p">).</span><span class="nx">hide</span><span class="p">()</span>
+    <span class="nx">@element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s2">&quot;##{element.attr(&#39;id&#39;).replace(&#39;media_&#39;, &#39;&#39;)}&quot;</span><span class="p">).</span><span class="nx">show</span><span class="p">()</span>
+    <span class="nx">@resize</span><span class="p">(</span><span class="kc">true</span><span class="p">)</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-3'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-3">&#182;</a>
+        </div>
+        <p>get the selection and initialize its information into the form</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>  <span class="k">if</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">region</span> <span class="o">&amp;&amp;</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">region</span><span class="p">.</span><span class="nx">selection</span>
+    <span class="nv">selection = </span><span class="nx">Mercury</span><span class="p">.</span><span class="nx">region</span><span class="p">.</span><span class="nx">selection</span><span class="p">()</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-4'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-4">&#182;</a>
+        </div>
+        <p>if we&rsquo;re editing an image prefill the information</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>    <span class="k">if</span> <span class="nx">selection</span><span class="p">.</span><span class="o">is</span> <span class="o">&amp;&amp;</span> <span class="nv">image = </span><span class="nx">selection</span><span class="p">.</span><span class="o">is</span><span class="p">(</span><span class="s1">&#39;img&#39;</span><span class="p">)</span>
+      <span class="nx">@element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;#media_image_url&#39;</span><span class="p">).</span><span class="nx">val</span><span class="p">(</span><span class="nx">image</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s1">&#39;src&#39;</span><span class="p">))</span>
+      <span class="nx">@element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;#media_image_alignment&#39;</span><span class="p">).</span><span class="nx">val</span><span class="p">(</span><span class="nx">image</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s1">&#39;align&#39;</span><span class="p">))</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-5'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-5">&#182;</a>
+        </div>
+        <p>if we&rsquo;re editing an iframe (assume it&rsquo;s a video for now)</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>    <span class="k">if</span> <span class="nx">selection</span><span class="p">.</span><span class="o">is</span> <span class="o">&amp;&amp;</span> <span class="nv">iframe = </span><span class="nx">selection</span><span class="p">.</span><span class="o">is</span><span class="p">(</span><span class="s1">&#39;iframe&#39;</span><span class="p">)</span>
+      <span class="nv">src = </span><span class="nx">iframe</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s1">&#39;src&#39;</span><span class="p">)</span>
+      <span class="k">if</span> <span class="nx">src</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s1">&#39;http://www.youtube.com&#39;</span><span class="p">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-6'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-6">&#182;</a>
+        </div>
+        <p>it&rsquo;s a youtube video</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>        <span class="nx">@element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;#media_youtube_url&#39;</span><span class="p">).</span><span class="nx">val</span><span class="p">(</span><span class="s2">&quot;http://youtu.be/#{src.match(/\/embed\/(\w+)/)[1]}&quot;</span><span class="p">)</span>
+        <span class="nx">@element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;#media_youtube_width&#39;</span><span class="p">).</span><span class="nx">val</span><span class="p">(</span><span class="nx">iframe</span><span class="p">.</span><span class="nx">width</span><span class="p">())</span>
+        <span class="nx">@element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;#media_youtube_height&#39;</span><span class="p">).</span><span class="nx">val</span><span class="p">(</span><span class="nx">iframe</span><span class="p">.</span><span class="nx">height</span><span class="p">())</span>
+        <span class="nx">@element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;#media_youtube_url&#39;</span><span class="p">).</span><span class="nx">focus</span><span class="p">()</span>
+      <span class="k">else</span> <span class="k">if</span> <span class="nx">src</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s1">&#39;http://player.vimeo.com&#39;</span><span class="p">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-7'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-7">&#182;</a>
+        </div>
+        <p>it&rsquo;s a vimeo video</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>        <span class="nx">@element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;#media_vimeo_url&#39;</span><span class="p">).</span><span class="nx">val</span><span class="p">(</span><span class="s2">&quot;http://vimeo.com/#{src.match(/\/video\/(\w+)/)[1]}&quot;</span><span class="p">)</span>
+        <span class="nx">@element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;#media_vimeo_width&#39;</span><span class="p">).</span><span class="nx">val</span><span class="p">(</span><span class="nx">iframe</span><span class="p">.</span><span class="nx">width</span><span class="p">())</span>
+        <span class="nx">@element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;#media_vimeo_height&#39;</span><span class="p">).</span><span class="nx">val</span><span class="p">(</span><span class="nx">iframe</span><span class="p">.</span><span class="nx">height</span><span class="p">())</span>
+        <span class="nx">@element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;#media_vimeo_url&#39;</span><span class="p">).</span><span class="nx">focus</span><span class="p">()</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-8'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-8">&#182;</a>
+        </div>
+        <p>build the image or youtube embed on form submission</p>
+
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>  <span class="nx">@element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;form&#39;</span><span class="p">).</span><span class="nx">submit</span> <span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="o">=&gt;</span>
+    <span class="nx">event</span><span class="p">.</span><span class="nx">preventDefault</span><span class="p">()</span>
+
+    <span class="nv">type = </span><span class="nx">@element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;input[name=media_type]:checked&#39;</span><span class="p">).</span><span class="nx">val</span><span class="p">()</span>
+
+    <span class="k">switch</span> <span class="nx">type</span>
+      <span class="k">when</span> <span class="s1">&#39;image_url&#39;</span>
+        <span class="nv">attrs = </span><span class="p">{</span><span class="nv">src: </span><span class="nx">@element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;#media_image_url&#39;</span><span class="p">).</span><span class="nx">val</span><span class="p">()}</span>
+        <span class="nx">attrs</span><span class="p">[</span><span class="s1">&#39;align&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nx">alignment</span> <span class="k">if</span> <span class="nv">alignment = </span><span class="nx">@element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;#media_image_alignment&#39;</span><span class="p">).</span><span class="nx">val</span><span class="p">()</span>
+        <span class="nx">Mercury</span><span class="p">.</span><span class="nx">trigger</span><span class="p">(</span><span class="s1">&#39;action&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nv">action: </span><span class="s1">&#39;insertImage&#39;</span><span class="p">,</span> <span class="nv">value: </span><span class="nx">attrs</span><span class="p">})</span>
+
+      <span class="k">when</span> <span class="s1">&#39;youtube_url&#39;</span>
+        <span class="nv">code = </span><span class="nx">@element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;#media_youtube_url&#39;</span><span class="p">).</span><span class="nx">val</span><span class="p">().</span><span class="nx">replace</span><span class="p">(</span><span class="s1">&#39;http://youtu.be/&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="nv">value = </span><span class="nx">jQuery</span><span class="p">(</span><span class="s1">&#39;&lt;iframe&gt;&#39;</span><span class="p">,</span> <span class="p">{</span>
+          <span class="nv">width: </span><span class="nx">@element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;#media_youtube_width&#39;</span><span class="p">).</span><span class="nx">val</span><span class="p">()</span> <span class="o">||</span> <span class="mi">560</span><span class="p">,</span>
+          <span class="nv">height: </span><span class="nx">@element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;#media_youtube_height&#39;</span><span class="p">).</span><span class="nx">val</span><span class="p">()</span> <span class="o">||</span> <span class="mi">349</span><span class="p">,</span>
+          <span class="nv">src: </span><span class="s2">&quot;http://www.youtube.com/embed/#{code}?wmode=transparent&quot;</span><span class="p">,</span>
+          <span class="nv">frameborder: </span><span class="mi">0</span><span class="p">,</span>
+          <span class="nv">allowfullscreen: </span><span class="s1">&#39;true&#39;</span>
+        <span class="p">})</span>
+        <span class="nx">Mercury</span><span class="p">.</span><span class="nx">trigger</span><span class="p">(</span><span class="s1">&#39;action&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nv">action: </span><span class="s1">&#39;insertHTML&#39;</span><span class="p">,</span> <span class="nv">value: </span><span class="nx">value</span><span class="p">})</span>
+
+      <span class="k">when</span> <span class="s1">&#39;vimeo_url&#39;</span>
+        <span class="nv">code = </span><span class="nx">@element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;#media_vimeo_url&#39;</span><span class="p">).</span><span class="nx">val</span><span class="p">().</span><span class="nx">replace</span><span class="p">(</span><span class="s1">&#39;http://vimeo.com/&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="nv">value = </span><span class="nx">jQuery</span><span class="p">(</span><span class="s1">&#39;&lt;iframe&gt;&#39;</span><span class="p">,</span> <span class="p">{</span>
+          <span class="nv">width: </span><span class="nx">@element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;#media_vimeo_width&#39;</span><span class="p">).</span><span class="nx">val</span><span class="p">()</span> <span class="o">||</span> <span class="mi">400</span><span class="p">,</span>
+          <span class="nv">height: </span><span class="nx">@element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;#media_vimeo_height&#39;</span><span class="p">).</span><span class="nx">val</span><span class="p">()</span> <span class="o">||</span> <span class="mi">225</span><span class="p">,</span>
+          <span class="nv">src: </span><span class="s2">&quot;http://player.vimeo.com/video/#{code}?title=1&amp;byline=1&amp;portrait=0&amp;color=ffffff&quot;</span><span class="p">,</span>
+          <span class="nv">frameborder: </span><span class="mi">0</span><span class="p">,</span>
+        <span class="p">})</span>
+        <span class="nx">Mercury</span><span class="p">.</span><span class="nx">trigger</span><span class="p">(</span><span class="s1">&#39;action&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nv">action: </span><span class="s1">&#39;insertHTML&#39;</span><span class="p">,</span> <span class="nv">value: </span><span class="nx">value</span><span class="p">})</span>
+
+    <span class="nx">@hide</span><span class="p">()</span></pre></div>
+      </td>
+    </tr>
+  </table>
+</div>
+</body>

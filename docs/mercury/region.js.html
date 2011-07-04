@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <title>region.js.coffee</title>
+  <link rel="stylesheet" href="http://jashkenas.github.com/docco/resources/docco.css">
+</head>
+<body>
+<div id='container'>
+  <div id="background"></div>
+  <div id="jump_to">
+    Jump To &hellip;
+    <div id="jump_wrapper">
+      <div id="jump_page">
+          <a class="source" href="../mercury.html">mercury.js</a>
+          <a class="source" href="dialog.js.html">dialog.js.coffee</a>
+          <a class="source" href="dialogs/backcolor.js.html">backcolor.js.coffee</a>
+          <a class="source" href="dialogs/forecolor.js.html">forecolor.js.coffee</a>
+          <a class="source" href="dialogs/formatblock.js.html">formatblock.js.coffee</a>
+          <a class="source" href="dialogs/objectspanel.js.html">objectspanel.js.coffee</a>
+          <a class="source" href="dialogs/style.js.html">style.js.coffee</a>
+          <a class="source" href="history_buffer.js.html">history_buffer.js.coffee</a>
+          <a class="source" href="mercury.js.html">mercury.js.coffee</a>
+          <a class="source" href="modal.js.html">modal.js.coffee</a>
+          <a class="source" href="modals/htmleditor.js.html">htmleditor.js.coffee</a>
+          <a class="source" href="modals/insertcharacter.js.html">insertcharacter.js.coffee</a>
+          <a class="source" href="modals/insertlink.js.html">insertlink.js.coffee</a>
+          <a class="source" href="modals/insertmedia.js.html">insertmedia.js.coffee</a>
+          <a class="source" href="modals/insertsnippet.js.html">insertsnippet.js.coffee</a>
+          <a class="source" href="modals/inserttable.js.html">inserttable.js.coffee</a>
+          <a class="source" href="native_extensions.js.html">native_extensions.js.coffee</a>
+          <a class="source" href="page_editor.js.html">page_editor.js.coffee</a>
+          <a class="source" href="palette.js.html">palette.js.coffee</a>
+          <a class="source" href="panel.js.html">panel.js.coffee</a>
+          <a class="source" href="region.js.html">region.js.coffee</a>
+          <a class="source" href="regions/editable.js.html">editable.js.coffee</a>
+          <a class="source" href="regions/markupable.js.html">markupable.js.coffee</a>
+          <a class="source" href="regions/snippetable.js.html">snippetable.js.coffee</a>
+          <a class="source" href="select.js.html">select.js.coffee</a>
+          <a class="source" href="snippet.js.html">snippet.js.coffee</a>
+          <a class="source" href="snippet_toolbar.js.html">snippet_toolbar.js.coffee</a>
+          <a class="source" href="statusbar.js.html">statusbar.js.coffee</a>
+          <a class="source" href="table_editor.js.html">table_editor.js.coffee</a>
+          <a class="source" href="toolbar.button.js.html">toolbar.button.js.coffee</a>
+          <a class="source" href="toolbar.button_group.js.html">toolbar.button_group.js.coffee</a>
+          <a class="source" href="toolbar.expander.js.html">toolbar.expander.js.coffee</a>
+          <a class="source" href="toolbar.js.html">toolbar.js.coffee</a>
+          <a class="source" href="tooltip.js.html">tooltip.js.coffee</a>
+          <a class="source" href="uploader.js.html">uploader.js.coffee</a>
+          <a class="source" href="../mercury_loader.html">mercury_loader.js</a>
+      </div>
+    </div>
+  </div>
+  <table cellspacing=0 cellpadding=0>
+  <thead>
+    <tr>
+      <th class=docs><h1>region.js.coffee</h1></th>
+      <th class=code></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr id='section-1'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-1">&#182;</a>
+        </div>
+        
+      </td>
+      <td class=code>
+        <div class='highlight'><pre><span class="k">class</span> <span class="nx">@Mercury</span><span class="p">.</span><span class="nx">Region</span>
+  <span class="nv">type = </span><span class="s1">&#39;region&#39;</span>
+
+  <span class="nv">constructor: </span><span class="nf">(@element, @window, @options = {}) -&gt;</span>
+    <span class="vi">@type = </span><span class="s1">&#39;region&#39;</span> <span class="nx">unless</span> <span class="nx">@type</span>
+    <span class="nx">Mercury</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;building #{@type}&quot;</span><span class="p">,</span> <span class="nx">@element</span><span class="p">,</span> <span class="nx">@options</span><span class="p">)</span>
+
+    <span class="vi">@document = </span><span class="nx">@window</span><span class="p">.</span><span class="nb">document</span>
+    <span class="vi">@name = </span><span class="nx">@element</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s1">&#39;id&#39;</span><span class="p">)</span>
+    <span class="vi">@history = </span><span class="k">new</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">HistoryBuffer</span><span class="p">()</span>
+    <span class="nx">@build</span><span class="p">()</span>
+    <span class="nx">@bindEvents</span><span class="p">()</span>
+    <span class="nx">@pushHistory</span><span class="p">()</span>
+
+
+  <span class="nv">build: </span><span class="o">-&gt;</span>
+
+
+  <span class="nv">focus: </span><span class="o">-&gt;</span>
+
+
+  <span class="nv">bindEvents: </span><span class="o">-&gt;</span>
+    <span class="nx">Mercury</span><span class="p">.</span><span class="nx">bind</span> <span class="s1">&#39;mode&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">event</span><span class="p">,</span> <span class="nx">options</span><span class="p">)</span> <span class="o">=&gt;</span>
+      <span class="nx">@togglePreview</span><span class="p">()</span> <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">mode</span> <span class="o">==</span> <span class="s1">&#39;preview&#39;</span>
+
+    <span class="nx">Mercury</span><span class="p">.</span><span class="nx">bind</span> <span class="s1">&#39;focus:frame&#39;</span><span class="p">,</span> <span class="o">=&gt;</span>
+      <span class="k">return</span> <span class="k">if</span> <span class="nx">@previewing</span>
+      <span class="k">return</span> <span class="nx">unless</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">region</span> <span class="o">==</span> <span class="err">@</span>
+      <span class="nx">@focus</span><span class="p">()</span>
+
+    <span class="nx">Mercury</span><span class="p">.</span><span class="nx">bind</span> <span class="s1">&#39;action&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">event</span><span class="p">,</span> <span class="nx">options</span><span class="p">)</span> <span class="o">=&gt;</span>
+      <span class="k">return</span> <span class="k">if</span> <span class="nx">@previewing</span>
+      <span class="k">return</span> <span class="nx">unless</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">region</span> <span class="o">==</span> <span class="err">@</span>
+      <span class="nx">@execCommand</span><span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">action</span><span class="p">,</span> <span class="nx">options</span><span class="p">)</span> <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">action</span>
+
+    <span class="nx">@element</span><span class="p">.</span><span class="nx">mousemove</span> <span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="o">=&gt;</span>
+      <span class="k">return</span> <span class="k">if</span> <span class="nx">@previewing</span>
+      <span class="k">return</span> <span class="nx">unless</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">region</span> <span class="o">==</span> <span class="err">@</span>
+      <span class="nv">snippet = </span><span class="nx">jQuery</span><span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">target</span><span class="p">).</span><span class="nx">closest</span><span class="p">(</span><span class="s1">&#39;.mercury-snippet&#39;</span><span class="p">)</span>
+      <span class="k">if</span> <span class="nx">snippet</span><span class="p">.</span><span class="nx">length</span>
+        <span class="vi">@snippet = </span><span class="nx">snippet</span>
+        <span class="nx">Mercury</span><span class="p">.</span><span class="nx">trigger</span><span class="p">(</span><span class="s1">&#39;show:toolbar&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nv">type: </span><span class="s1">&#39;snippet&#39;</span><span class="p">,</span> <span class="nv">snippet: </span><span class="nx">@snippet</span><span class="p">})</span>
+
+    <span class="nx">@element</span><span class="p">.</span><span class="nx">mouseout</span> <span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="o">=&gt;</span>
+      <span class="k">return</span> <span class="k">if</span> <span class="nx">@previewing</span>
+      <span class="nx">Mercury</span><span class="p">.</span><span class="nx">trigger</span><span class="p">(</span><span class="s1">&#39;hide:toolbar&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nv">type: </span><span class="s1">&#39;snippet&#39;</span><span class="p">,</span> <span class="nv">immediately: </span><span class="kc">false</span><span class="p">})</span>
+
+
+  <span class="nv">content: </span><span class="nf">(value = null, filterSnippets = false) -&gt;</span>
+    <span class="k">if</span> <span class="nx">value</span> <span class="o">!=</span> <span class="kc">null</span>
+      <span class="nx">@element</span><span class="p">.</span><span class="nx">html</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span>
+    <span class="k">else</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-2'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-2">&#182;</a>
+        </div>
+        <p>sanitize the html before we return it</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>      <span class="nv">container = </span><span class="nx">jQuery</span><span class="p">(</span><span class="s1">&#39;&lt;div&gt;&#39;</span><span class="p">).</span><span class="nx">appendTo</span><span class="p">(</span><span class="nx">@document</span><span class="p">.</span><span class="nx">createDocumentFragment</span><span class="p">())</span>
+      <span class="nx">container</span><span class="p">.</span><span class="nx">html</span><span class="p">(</span><span class="nx">@element</span><span class="p">.</span><span class="nx">html</span><span class="p">().</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/^\s+|\s+$/g</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">))</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-3'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-3">&#182;</a>
+        </div>
+        <p>replace snippet contents to be an identifier</p>
+
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>      <span class="k">if</span> <span class="nx">filterSnippets</span> <span class="k">then</span> <span class="k">for</span> <span class="nx">snippet</span><span class="p">,</span> <span class="nx">index</span> <span class="k">in</span> <span class="nx">container</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;.mercury-snippet&#39;</span><span class="p">)</span>
+        <span class="nv">snippet = </span><span class="nx">jQuery</span><span class="p">(</span><span class="nx">snippet</span><span class="p">)</span>
+        <span class="nx">snippet</span><span class="p">.</span><span class="nx">attr</span><span class="p">({</span><span class="nv">contenteditable: </span><span class="kc">null</span><span class="p">,</span> <span class="s1">&#39;data-version&#39;</span><span class="o">:</span> <span class="kc">null</span><span class="p">})</span>
+        <span class="nx">snippet</span><span class="p">.</span><span class="nx">html</span><span class="p">(</span><span class="s2">&quot;[#{snippet.data(&#39;snippet&#39;)}]&quot;</span><span class="p">)</span>
+
+      <span class="k">return</span> <span class="nx">container</span><span class="p">.</span><span class="nx">html</span><span class="p">()</span>
+
+
+  <span class="nv">togglePreview: </span><span class="o">-&gt;</span>
+    <span class="k">if</span> <span class="nx">@previewing</span>
+      <span class="vi">@previewing = </span><span class="kc">false</span>
+      <span class="nx">@element</span><span class="p">.</span><span class="nx">addClass</span><span class="p">(</span><span class="s1">&#39;mercury-region&#39;</span><span class="p">).</span><span class="nx">removeClass</span><span class="p">(</span><span class="s1">&#39;mercury-region-preview&#39;</span><span class="p">)</span>
+      <span class="nx">@focus</span><span class="p">()</span> <span class="k">if</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">region</span> <span class="o">==</span> <span class="err">@</span>
+    <span class="k">else</span>
+      <span class="vi">@previewing = </span><span class="kc">true</span>
+      <span class="nx">@element</span><span class="p">.</span><span class="nx">addClass</span><span class="p">(</span><span class="s1">&#39;mercury-region-preview&#39;</span><span class="p">).</span><span class="nx">removeClass</span><span class="p">(</span><span class="s1">&#39;mercury-region&#39;</span><span class="p">)</span>
+      <span class="nx">Mercury</span><span class="p">.</span><span class="nx">trigger</span><span class="p">(</span><span class="s1">&#39;region:blurred&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nv">region: </span><span class="err">@</span><span class="p">})</span>
+
+
+  <span class="nv">execCommand: </span><span class="nf">(action, options = {}) -&gt;</span>
+    <span class="nx">@focus</span><span class="p">()</span>
+    <span class="nx">@pushHistory</span><span class="p">()</span> <span class="nx">unless</span> <span class="nx">action</span> <span class="o">==</span> <span class="s1">&#39;redo&#39;</span>
+
+    <span class="nx">Mercury</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;execCommand&#39;</span><span class="p">,</span> <span class="nx">action</span><span class="p">,</span> <span class="nx">options</span><span class="p">.</span><span class="nx">value</span><span class="p">)</span>
+    <span class="nv">Mercury.changes = </span><span class="kc">true</span>
+
+
+  <span class="nv">pushHistory: </span><span class="o">-&gt;</span>
+    <span class="nx">@history</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">@content</span><span class="p">())</span>
+
+
+  <span class="nv">snippets: </span><span class="o">-&gt;</span>
+    <span class="nv">snippets = </span><span class="p">{}</span>
+    <span class="k">for</span> <span class="nx">element</span> <span class="k">in</span> <span class="nx">@element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;[data-snippet]&#39;</span><span class="p">)</span>
+      <span class="nv">snippet = </span><span class="nx">Mercury</span><span class="p">.</span><span class="nx">Snippet</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="nx">jQuery</span><span class="p">(</span><span class="nx">element</span><span class="p">).</span><span class="nx">data</span><span class="p">(</span><span class="s1">&#39;snippet&#39;</span><span class="p">))</span>
+      <span class="nx">snippet</span><span class="p">.</span><span class="nx">setVersion</span><span class="p">(</span><span class="nx">jQuery</span><span class="p">(</span><span class="nx">element</span><span class="p">).</span><span class="nx">data</span><span class="p">(</span><span class="s1">&#39;version&#39;</span><span class="p">))</span>
+      <span class="nx">snippets</span><span class="p">[</span><span class="nx">snippet</span><span class="p">.</span><span class="nx">identity</span><span class="p">]</span> <span class="o">=</span> <span class="nx">snippet</span><span class="p">.</span><span class="nx">serialize</span><span class="p">()</span>
+    <span class="k">return</span> <span class="nx">snippets</span>
+
+
+  <span class="nv">serialize: </span><span class="o">-&gt;</span>
+    <span class="k">return</span> <span class="p">{</span>
+      <span class="nv">type: </span><span class="nx">@type</span>
+      <span class="nv">value: </span><span class="nx">@content</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="kc">true</span><span class="p">)</span>
+      <span class="nv">snippets: </span><span class="nx">@snippets</span><span class="p">()</span>
+    <span class="p">}</span></pre></div>
+      </td>
+    </tr>
+  </table>
+</div>
+</body>

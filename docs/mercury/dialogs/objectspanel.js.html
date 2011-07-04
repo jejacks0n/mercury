@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <title>objectspanel.js.coffee</title>
+  <link rel="stylesheet" href="http://jashkenas.github.com/docco/resources/docco.css">
+</head>
+<body>
+<div id='container'>
+  <div id="background"></div>
+  <div id="jump_to">
+    Jump To &hellip;
+    <div id="jump_wrapper">
+      <div id="jump_page">
+          <a class="source" href="../../mercury.html">mercury.js</a>
+          <a class="source" href="../dialog.js.html">dialog.js.coffee</a>
+          <a class="source" href="backcolor.js.html">backcolor.js.coffee</a>
+          <a class="source" href="forecolor.js.html">forecolor.js.coffee</a>
+          <a class="source" href="formatblock.js.html">formatblock.js.coffee</a>
+          <a class="source" href="objectspanel.js.html">objectspanel.js.coffee</a>
+          <a class="source" href="style.js.html">style.js.coffee</a>
+          <a class="source" href="../history_buffer.js.html">history_buffer.js.coffee</a>
+          <a class="source" href="../mercury.js.html">mercury.js.coffee</a>
+          <a class="source" href="../modal.js.html">modal.js.coffee</a>
+          <a class="source" href="../modals/htmleditor.js.html">htmleditor.js.coffee</a>
+          <a class="source" href="../modals/insertcharacter.js.html">insertcharacter.js.coffee</a>
+          <a class="source" href="../modals/insertlink.js.html">insertlink.js.coffee</a>
+          <a class="source" href="../modals/insertmedia.js.html">insertmedia.js.coffee</a>
+          <a class="source" href="../modals/insertsnippet.js.html">insertsnippet.js.coffee</a>
+          <a class="source" href="../modals/inserttable.js.html">inserttable.js.coffee</a>
+          <a class="source" href="../native_extensions.js.html">native_extensions.js.coffee</a>
+          <a class="source" href="../page_editor.js.html">page_editor.js.coffee</a>
+          <a class="source" href="../palette.js.html">palette.js.coffee</a>
+          <a class="source" href="../panel.js.html">panel.js.coffee</a>
+          <a class="source" href="../region.js.html">region.js.coffee</a>
+          <a class="source" href="../regions/editable.js.html">editable.js.coffee</a>
+          <a class="source" href="../regions/markupable.js.html">markupable.js.coffee</a>
+          <a class="source" href="../regions/snippetable.js.html">snippetable.js.coffee</a>
+          <a class="source" href="../select.js.html">select.js.coffee</a>
+          <a class="source" href="../snippet.js.html">snippet.js.coffee</a>
+          <a class="source" href="../snippet_toolbar.js.html">snippet_toolbar.js.coffee</a>
+          <a class="source" href="../statusbar.js.html">statusbar.js.coffee</a>
+          <a class="source" href="../table_editor.js.html">table_editor.js.coffee</a>
+          <a class="source" href="../toolbar.button.js.html">toolbar.button.js.coffee</a>
+          <a class="source" href="../toolbar.button_group.js.html">toolbar.button_group.js.coffee</a>
+          <a class="source" href="../toolbar.expander.js.html">toolbar.expander.js.coffee</a>
+          <a class="source" href="../toolbar.js.html">toolbar.js.coffee</a>
+          <a class="source" href="../tooltip.js.html">tooltip.js.coffee</a>
+          <a class="source" href="../uploader.js.html">uploader.js.coffee</a>
+          <a class="source" href="../../mercury_loader.html">mercury_loader.js</a>
+      </div>
+    </div>
+  </div>
+  <table cellspacing=0 cellpadding=0>
+  <thead>
+    <tr>
+      <th class=docs><h1>objectspanel.js.coffee</h1></th>
+      <th class=code></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr id='section-1'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-1">&#182;</a>
+        </div>
+        
+      </td>
+      <td class=code>
+        <div class='highlight'><pre><span class="vi">@Mercury.dialogHandlers.snippetPanel = </span><span class="o">-&gt;</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-2'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-2">&#182;</a>
+        </div>
+        <p>make the filter work</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>  <span class="nx">@element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;input.filter&#39;</span><span class="p">).</span><span class="nx">keyup</span> <span class="o">=&gt;</span>
+    <span class="nv">value = </span><span class="nx">@element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;input.filter&#39;</span><span class="p">).</span><span class="nx">val</span><span class="p">()</span>
+    <span class="k">for</span> <span class="nx">snippet</span> <span class="k">in</span> <span class="nx">@element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;li[data-filter]&#39;</span><span class="p">)</span>
+      <span class="k">if</span> <span class="nx">LiquidMetal</span><span class="p">.</span><span class="nx">score</span><span class="p">(</span><span class="nx">jQuery</span><span class="p">(</span><span class="nx">snippet</span><span class="p">).</span><span class="nx">data</span><span class="p">(</span><span class="s1">&#39;filter&#39;</span><span class="p">),</span> <span class="nx">value</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">then</span> <span class="nx">jQuery</span><span class="p">(</span><span class="nx">snippet</span><span class="p">).</span><span class="nx">hide</span><span class="p">()</span> <span class="k">else</span> <span class="nx">jQuery</span><span class="p">(</span><span class="nx">snippet</span><span class="p">).</span><span class="nx">show</span><span class="p">()</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-3'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-3">&#182;</a>
+        </div>
+        <p>when an element is dragged, set it so we have a global object</p>
+
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>  <span class="nx">@element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;img[data-snippet]&#39;</span><span class="p">).</span><span class="nx">bind</span> <span class="s1">&#39;dragstart&#39;</span><span class="p">,</span> <span class="nf">(event) -&gt;</span>
+    <span class="nv">Mercury.snippet = </span><span class="nx">jQuery</span><span class="p">(</span><span class="err">@</span><span class="p">).</span><span class="nx">data</span><span class="p">(</span><span class="s1">&#39;snippet&#39;</span><span class="p">)</span></pre></div>
+      </td>
+    </tr>
+  </table>
+</div>
+</body>

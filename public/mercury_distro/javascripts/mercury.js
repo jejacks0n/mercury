@@ -45,6 +45,7 @@ window.MercurySetup = {
     //
     // Name will be replaced with the snippet name (eg. example)
     snippets: {
+      method: 'POST',
       optionsUrl: '/mercury/snippets/:name/options.html',
       previewUrl: '/mercury/snippets/:name/preview.html'
     },
@@ -12820,7 +12821,7 @@ Showdown.converter = function() {
         return this.load();
       }
     };
-    Dialog.prototype.toggle = function(element) {
+    Dialog.prototype.toggle = function() {
       if (this.visible) {
         return this.hide();
       } else {
@@ -12839,11 +12840,10 @@ Showdown.converter = function() {
           height: 'auto'
         });
         this.position(this.visible);
-        return this.appear();
       } else {
         this.position();
-        return this.appear();
       }
+      return this.appear();
     };
     Dialog.prototype.position = function(keepVisible) {};
     Dialog.prototype.appear = function() {
@@ -13437,6 +13437,7 @@ Showdown.converter = function() {
     function Statusbar(options) {
       this.options = options != null ? options : {};
       this.visible = this.options.visible;
+      this.projectLink = '<a href="http://jejacks0n.github.com/mercury" target="_blank" class="mercury-project-link">Mercury Editor v' + Mercury.version + '</a>';
       this.build();
       this.bindEvents();
     }
@@ -13479,7 +13480,7 @@ Showdown.converter = function() {
         element = elements[_i];
         path.push("<a>" + (element.tagName.toLowerCase()) + "</a>");
       }
-      return this.element.html("<span><strong>Path: </strong></span>" + (path.reverse().join(' &raquo; ')));
+      return this.element.html("<span><strong>Path: </strong>" + (path.reverse().join(' &raquo; ')) + "</span>" + this.projectLink);
     };
     Statusbar.prototype.show = function() {
       this.visible = true;
@@ -14172,7 +14173,7 @@ Showdown.converter = function() {
         callback = null;
       }
       return jQuery.ajax(Mercury.config.snippets.previewUrl.replace(':name', this.name), {
-        type: 'POST',
+        type: Mercury.config.snippets.method,
         data: this.options,
         success: __bind(function(data) {
           this.data = data;

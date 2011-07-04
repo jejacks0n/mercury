@@ -5,6 +5,7 @@ describe "Mercury.Toolbar", ->
   template 'mercury/toolbar.html'
 
   beforeEach ->
+    $.fx.off = true
     ajaxSpy = spyOn($, 'ajax').andCallFake (url, options) =>
       options.success('data') if options.success
 
@@ -163,3 +164,44 @@ describe "Mercury.Toolbar", ->
 
       it "returns 0", ->
         expect(@toolbar.height()).toEqual(0)
+
+
+  describe "#show", ->
+
+    beforeEach ->
+      spyOn(Mercury.Toolbar.prototype, 'buildButton').andCallFake(=> $('<div>'))
+      spyOn(Mercury.Toolbar.prototype, 'bindEvents').andCallFake(=>)
+      @toolbar = new Mercury.Toolbar({appendTo: '#test', visible: false})
+
+    it "sets visible to true", ->
+      @toolbar.visible = false
+      @toolbar.show()
+      expect(@toolbar.visible).toEqual(true)
+
+    it "displays the element", ->
+      $('.mercury-toolbar-container').css({display: 'none'})
+      @toolbar.show()
+      expect($('.mercury-toolbar-container').css('display')).toEqual('block')
+
+    it "sets the top of the element", ->
+      $('.mercury-toolbar-container').css({top: '-20px'})
+      @toolbar.show()
+      expect($('.mercury-toolbar-container').css('top')).toEqual('0px')
+
+
+  describe "#hide", ->
+
+    beforeEach ->
+      spyOn(Mercury.Toolbar.prototype, 'buildButton').andCallFake(=> $('<div>'))
+      spyOn(Mercury.Toolbar.prototype, 'bindEvents').andCallFake(=>)
+      @toolbar = new Mercury.Toolbar({appendTo: '#test', visible: true})
+
+    it "sets visible to false", ->
+      @toolbar.visible = true
+      @toolbar.hide()
+      expect(@toolbar.visible).toEqual(false)
+
+    it "hides the element", ->
+      $('.mercury-toolbar-container').css({display: 'block'})
+      @toolbar.hide()
+      expect($('.mercury-toolbar-container').css('display')).toEqual('none')

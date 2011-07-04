@@ -103,12 +103,12 @@ class @Mercury.PageEditor
       @visible = false
       @toolbar.hide()
       @statusbar.hide()
-      @resize()
     else
       @visible = true
       @toolbar.show()
       @statusbar.show()
-      @resize()
+    Mercury.trigger('mode', {mode: 'preview'})
+    @resize()
 
 
   resize: ->

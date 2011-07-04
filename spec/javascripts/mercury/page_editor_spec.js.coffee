@@ -340,6 +340,18 @@ describe "Mercury.PageEditor", ->
       Mercury.PageEditor.prototype.initializeFrame = ->
       @pageEditor = new Mercury.PageEditor('', {appendTo: $('#test')})
 
+    it "calls resize", ->
+      spy = spyOn(Mercury.PageEditor.prototype, 'resize').andCallFake(=>)
+      @pageEditor.toggleInterface()
+      expect(spy.callCount).toEqual(1)
+
+    it "triggers the mode event to toggle preview mode", ->
+      spy = spyOn(Mercury, 'trigger').andCallFake(=>)
+      @pageEditor.toggleInterface()
+      expect(spy.callCount).toEqual(2)
+      expect(spy.argsForCall[0]).toEqual(['mode', {mode: 'preview'}])
+      expect(spy.argsForCall[1]).toEqual(['resize'])
+
     describe "when visible", ->
 
       beforeEach ->
@@ -357,11 +369,6 @@ describe "Mercury.PageEditor", ->
         @pageEditor.toggleInterface()
         expect(@statusbarHideCallCount).toEqual(1)
 
-      it "calls resize", ->
-        spy = spyOn(Mercury.PageEditor.prototype, 'resize').andCallFake(=>)
-        @pageEditor.toggleInterface()
-        expect(spy.callCount).toEqual(1)
-
     describe "when not visible", ->
 
       beforeEach ->
@@ -378,11 +385,6 @@ describe "Mercury.PageEditor", ->
       it "calls show on the statusbar", ->
         @pageEditor.toggleInterface()
         expect(@statusbarShowCallCount).toEqual(1)
-
-      it "calls resize", ->
-        spy = spyOn(Mercury.PageEditor.prototype, 'resize').andCallFake(=>)
-        @pageEditor.toggleInterface()
-        expect(spy.callCount).toEqual(1)
 
 
   describe "#resize", ->

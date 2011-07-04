@@ -74,6 +74,11 @@ class @Mercury.Toolbar
 
 
   show: ->
+    @visible = true
+    @element.css({top: -@element.outerHeight(), display: 'block'})
+    @element.animate({top: 0}, 200, 'easeInOutSine')
 
 
   hide: ->
+    @visible = false
+    @element.hide()

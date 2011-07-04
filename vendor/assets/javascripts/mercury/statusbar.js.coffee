@@ -8,7 +8,7 @@ class @Mercury.Statusbar
 
   build: ->
     @element = jQuery('<div>', {class: 'mercury-statusbar'})
-    @element.css({visibility: 'hidden', height: 0}) unless @visible
+    @element.css({visibility: 'hidden'}) unless @visible
     @element.appendTo(jQuery(@options.appendTo).get(0) ? 'body')
 
 
@@ -22,7 +22,9 @@ class @Mercury.Statusbar
 
 
   top: ->
-    if @visible then @element.offset().top else @element.offset().top + @element.outerHeight()
+    top =  @element.offset().top
+    currentTop = if parseInt(@element.css('bottom')) < 0 then top - @element.outerHeight() else top
+    if @visible then currentTop else top + @element.outerHeight()
 
 
   setPath: (elements) ->
@@ -33,6 +35,11 @@ class @Mercury.Statusbar
 
 
   show: ->
+    @visible = true
+    @element.css({opacity: 0, visibility: 'visible'})
+    @element.animate({opacity: 1}, 200, 'easeInOutSine')
 
 
   hide: ->
+    @visible = false
+    @element.css({visibility: 'hidden'})

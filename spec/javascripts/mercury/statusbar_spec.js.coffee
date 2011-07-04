@@ -5,6 +5,7 @@ describe "Mercury.Statusbar", ->
   template 'mercury/statusbar.html'
 
   beforeEach ->
+    $.fx.off = true
     @region = {
       path: -> [{tagName: 'A'}, {tagName: 'B'}, {tagName: 'C'}]
     }
@@ -103,3 +104,40 @@ describe "Mercury.Statusbar", ->
     it "builds a path and displays it", ->
       @statusbar.setPath(@region.path())
       expect($('.mercury-statusbar').html()).toEqual('<span><strong>Path: </strong></span><a>c</a> » <a>b</a> » <a>a</a>')
+
+
+  describe "#show", ->
+
+    beforeEach ->
+      @statusbar = new Mercury.Statusbar({appendTo: '#test', visible: false})
+
+    it "sets visible to true", ->
+      @statusbar.visible = false
+      @statusbar.show()
+      expect(@statusbar.visible).toEqual(true)
+
+    it "displays the element", ->
+      $('.mercury-statusbar').css({visibility: 'hidden'})
+      @statusbar.show()
+      expect($('.mercury-statusbar').css('visibility')).toEqual('visible')
+
+    it "sets the opacity of the element", ->
+      $('.mercury-statusbar').css({opacity: 0})
+      @statusbar.show()
+      expect($('.mercury-statusbar').css('opacity')).toEqual('1')
+
+
+  describe "#hide", ->
+
+    beforeEach ->
+      @statusbar = new Mercury.Statusbar({appendTo: '#test', visible: true})
+
+    it "sets visible to false", ->
+      @statusbar.visible = true
+      @statusbar.hide()
+      expect(@statusbar.visible).toEqual(false)
+
+    it "hides the element", ->
+      $('.mercury-statusbar').css({visibility: 'visible'})
+      @statusbar.hide()
+      expect($('.mercury-statusbar').css('visibility')).toEqual('hidden')

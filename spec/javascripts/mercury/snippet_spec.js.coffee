@@ -76,7 +76,7 @@ describe "Mercury.Snippet", ->
       @ajaxSpy.andCallFake(=>)
       @snippet.loadPreview()
       expect(@ajaxSpy.callCount).toEqual(1)
-      expect(@ajaxSpy.argsForCall[0][0]).toEqual("/mercury/snippets/foo/preview")
+      expect(@ajaxSpy.argsForCall[0][0]).toEqual("/mercury/snippets/foo/preview.html")
       expect(@ajaxSpy.argsForCall[0][1]['data']).toEqual({foo: 'bar'})
       expect(@ajaxSpy.argsForCall[0][1]['type']).toEqual('POST')
 
@@ -195,7 +195,7 @@ describe "Mercury.Snippet class methods", ->
     it "opens a modal with the name in the url", ->
       Mercury.Snippet.displayOptionsFor('foo')
       expect(@modalSpy.callCount).toEqual(1)
-      expect(@modalSpy.argsForCall[0]).toEqual(["/mercury/snippets/foo/options", {title: 'Snippet Options', handler: 'insertSnippet', snippetName: 'foo'}])
+      expect(@modalSpy.argsForCall[0]).toEqual(["/mercury/snippets/foo/options.html", {title: 'Snippet Options', handler: 'insertSnippet', snippetName: 'foo'}])
 
     it "sets the snippet back to nothing", ->
       Mercury.snippet = 'foo'

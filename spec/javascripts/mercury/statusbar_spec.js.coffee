@@ -103,7 +103,7 @@ describe "Mercury.Statusbar", ->
 
     it "builds a path and displays it", ->
       @statusbar.setPath(@region.path())
-      expect($('.mercury-statusbar').html()).toEqual('<span><strong>Path: </strong></span><a>c</a> » <a>b</a> » <a>a</a>')
+      expect($('.mercury-statusbar').html()).toContain('<span><strong>Path: </strong><a>c</a> » <a>b</a> » <a>a</a></span>')
 
 
   describe "#show", ->

@@ -39,6 +39,7 @@ class @Mercury.PageEditor
       # jquery: make jQuery evaluate scripts within the context of the iframe window -- note that this means that we
       # can't use eval in mercury (eg. script tags in ajax responses) because it will eval in the wrong context (you can
       # use top.Mercury though, if you keep it in mind)
+      # todo: look into `context` options for ajax as an alternative
       iframeWindow = @iframe.get(0).contentWindow
       jQuery.globalEval = (data) -> (iframeWindow.execScript || (data) -> iframeWindow["eval"].call(iframeWindow, data))(data) if (data && /\S/.test(data))
       iframeWindow.Mercury = Mercury

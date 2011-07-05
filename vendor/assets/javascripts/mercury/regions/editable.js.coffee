@@ -352,6 +352,44 @@ class @Mercury.Regions.Editable extends Mercury.Region
 
   # Custom actions (eg. things that execCommand doesn't do, or doesn't do well)
   @actions: {
+#    bold: (selection) ->
+#      unless selection.collapsed
+#        @document.execCommand('bold', false, null)
+#      else
+##        selection.selectWordByCursor()
+##        @document.execCommand('bold', false, null)
+#
+#        selection.placeMarker()
+#        node = @element.find('.mercury-marker').get(0)
+#        prev = node.previousSibling
+#        selection.removeMarker()
+#        next = prev.nextSibling
+#        console.debug(prev, next)
+##        if prev.textContent[prev.textContent.length - 1] != ' ' &&
+
+
+#[some]| content
+# textContent = some, wholeText = some
+# textContent = '', wholeText = some
+#content |[some]
+#content [s|ome]
+#co|ntent [some]
+#|content [some]
+
+
+#
+#        console.debug(commonAncestor)
+#        beforeText = commonAncestor.textContent
+#        afterText = commonAncestor.wholeText.substring(commonAncestor.wholeText.lastIndexOf(beforeText) + beforeText.length, commonAncestor.wholeText.length)
+#        if beforeText && afterText && (beforeChar = beforeText[beforeText.length - 1]) != ' ' && (afterChar = afterText[0]) != ' '
+#          console.debug('bolding word', beforeChar, afterChar)
+#        else
+#          @document.execCommand('bold', false, null)
+#
+##          selection.selectWord()
+##      commonAncestor.wholeText, commonAncestor.textContent
+#      else
+
     insertRowBefore: -> Mercury.tableEditor.addRow('before')
 
     insertRowAfter: -> Mercury.tableEditor.addRow('after')
@@ -423,6 +461,7 @@ class Mercury.Regions.Editable.Selection
     @range = @selection.getRangeAt(0)
     @fragment = @range.cloneContents()
     @clone = @range.cloneRange()
+    @collapsed = @selection.isCollapsed
 
 
   commonAncestor: (onlyTag = false) ->

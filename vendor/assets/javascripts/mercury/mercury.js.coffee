@@ -1,10 +1,11 @@
-#
+# ## Require all the dependencies
 #= require mercury_dependencies/jquery-1.6
 #= require mercury_dependencies/jquery-ui-1.8.13.custom
 #= require mercury_dependencies/jquery.additions
 #= require mercury_dependencies/liquidmetal
 #= require mercury_dependencies/showdown
 #
+# ## Require all mercury files
 #= require_self
 #= require ./native_extensions
 #= require ./page_editor

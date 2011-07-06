@@ -3,7 +3,7 @@
 html {
   overflow-y: scroll;
 }
-* html body {
+body {
   background: #F5F5FF url(../images/background.gif) repeat-y;
 }
 body, html {

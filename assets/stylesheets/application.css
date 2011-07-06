@@ -391,6 +391,24 @@ body .il { color: #666666 }                     /* Literal.Number.Integer.Long *
   background-color: #29BD29;
 }
 
+dl dt {
+  float: left;
+  width: 30%;
+}
+dl dd {
+  float: left;
+  margin: 0;
+  width: 70%;
+}
+dl:after {
+  content: '\00a0';
+  display: block;
+  visibility: hidden;
+  clear: both;
+  height: 0;
+}
+
+
 /* Additional styles
  *----------------------------------------------------------------------------*/
 .tweets ul {

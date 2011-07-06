@@ -155,8 +155,8 @@ h1#logo a {
   padding: 14px 25px 16px 25px;
 }
 #secondary {
-  margin-top: 240px;
-  padding: 10px 25px 1px 50px;
+  padding: 10px 10px 1px 10px;
+  margin: 240px 15px 0 40px;
   width: 450px;
   position: absolute;
   top: 0;
@@ -299,30 +299,32 @@ body .il { color: #666666 }                     /* Literal.Number.Integer.Long *
 
 /* Intro Page
  *-------------*/
+#primary.intro {
+  margin-top: 90px;
+}
 #primary.intro hr {
   margin: 40px 0;
 }
 #primary.intro #aspects {
   list-style: none;
-  margin: 20px 0 0 0;
   padding: 0;
+  margin: 0;
 }
 #primary.intro #aspects li {
   float: left;
   width: 50%;
   margin: 15px 0;
-  height: 50px;
+  min-height: 50px;
+  font-size: .9em;
+  padding-left: 60px;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
 }
-#primary.intro #aspects li strong {
+#primary.intro #aspects li strong,
+#primary.intro #aspects li b {
   display: block;
   font-size: 1.3em;
-  margin-left: 60px;
   font-weight: 600;
-}
-#primary.intro #aspects li span {
-  display: block;
-  margin: 5px 20px 0 60px;
-  font-size: .9em;
 }
 #primary.intro #aspects li.simple {
   background: url(../images/aspect-simple.png) no-repeat top left;

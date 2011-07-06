@@ -37,7 +37,11 @@ if (!window.mercuryPackages) window.mercuryPackages = {
 // ## Mercury Loader
 (function() {
   // If the browser isn't supported, we don't try to do anything more.
-  if (!document.getElementsByTagName) return;
+  if (document.getElementsByTagName && document.getElementById && document.designMode && !jQuery.browser.konqueror && !jQuery.browser.msie) {
+    // supported
+  } else {
+    return;
+  }
 
   // Default options, which can be overridden by specifying them in query params to the loader script.
   // You can provide any additional options to the loader, and they will be passed to the PageEditor instance when it's
@@ -54,7 +58,10 @@ if (!window.mercuryPackages) window.mercuryPackages = {
   var head = document.getElementsByTagName("head")[0];
   if (window == top) {
     var style = document.createElement('style');
-    style.innerText = 'body{visibility:hidden;display:none}';
+    var rules = document.createTextNode('body{visibility:hidden;display:none}');
+    style.type = 'text/css';
+    if (style.styleSheet) style.styleSheet.cssText = rules.nodeValue;
+    else style.appendChild(rules);
     head.appendChild(style);
   }
 

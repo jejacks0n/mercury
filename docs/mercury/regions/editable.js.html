@@ -2,55 +2,28 @@
 <html>
 <head>
   <meta http-equiv="content-type" content="text/html;charset=utf-8">
-  <title>editable.js.coffee</title>
-  <link rel="stylesheet" href="http://jashkenas.github.com/docco/resources/docco.css">
+  <title>Mercury Editor - Docs editable.js.coffee</title>
+  <link href="/mercury/assets/stylesheets/application.css" media="screen" rel="stylesheet" type="text/css"/>
+  <script src="/mercury/assets/javascripts/application.js" type="text/javascript"></script>
+  <!--[if lt IE 7]>
+    <script type="text/javascript" src="/mercury/assets/javascripts/unitpngfix.js"></script>
+  <![endif]-->
 </head>
 <body>
-<div id='container'>
+
   <div id="background"></div>
-  <div id="jump_to">
-    Jump To &hellip;
-    <div id="jump_wrapper">
-      <div id="jump_page">
-          <a class="source" href="../../mercury.html">mercury.js</a>
-          <a class="source" href="../dialog.js.html">dialog.js.coffee</a>
-          <a class="source" href="../dialogs/backcolor.js.html">backcolor.js.coffee</a>
-          <a class="source" href="../dialogs/forecolor.js.html">forecolor.js.coffee</a>
-          <a class="source" href="../dialogs/formatblock.js.html">formatblock.js.coffee</a>
-          <a class="source" href="../dialogs/objectspanel.js.html">objectspanel.js.coffee</a>
-          <a class="source" href="../dialogs/style.js.html">style.js.coffee</a>
-          <a class="source" href="../history_buffer.js.html">history_buffer.js.coffee</a>
-          <a class="source" href="../mercury.js.html">mercury.js.coffee</a>
-          <a class="source" href="../modal.js.html">modal.js.coffee</a>
-          <a class="source" href="../modals/htmleditor.js.html">htmleditor.js.coffee</a>
-          <a class="source" href="../modals/insertcharacter.js.html">insertcharacter.js.coffee</a>
-          <a class="source" href="../modals/insertlink.js.html">insertlink.js.coffee</a>
-          <a class="source" href="../modals/insertmedia.js.html">insertmedia.js.coffee</a>
-          <a class="source" href="../modals/insertsnippet.js.html">insertsnippet.js.coffee</a>
-          <a class="source" href="../modals/inserttable.js.html">inserttable.js.coffee</a>
-          <a class="source" href="../native_extensions.js.html">native_extensions.js.coffee</a>
-          <a class="source" href="../page_editor.js.html">page_editor.js.coffee</a>
-          <a class="source" href="../palette.js.html">palette.js.coffee</a>
-          <a class="source" href="../panel.js.html">panel.js.coffee</a>
-          <a class="source" href="../region.js.html">region.js.coffee</a>
-          <a class="source" href="editable.js.html">editable.js.coffee</a>
-          <a class="source" href="markupable.js.html">markupable.js.coffee</a>
-          <a class="source" href="snippetable.js.html">snippetable.js.coffee</a>
-          <a class="source" href="../select.js.html">select.js.coffee</a>
-          <a class="source" href="../snippet.js.html">snippet.js.coffee</a>
-          <a class="source" href="../snippet_toolbar.js.html">snippet_toolbar.js.coffee</a>
-          <a class="source" href="../statusbar.js.html">statusbar.js.coffee</a>
-          <a class="source" href="../table_editor.js.html">table_editor.js.coffee</a>
-          <a class="source" href="../toolbar.button.js.html">toolbar.button.js.coffee</a>
-          <a class="source" href="../toolbar.button_group.js.html">toolbar.button_group.js.coffee</a>
-          <a class="source" href="../toolbar.expander.js.html">toolbar.expander.js.coffee</a>
-          <a class="source" href="../toolbar.js.html">toolbar.js.coffee</a>
-          <a class="source" href="../tooltip.js.html">tooltip.js.coffee</a>
-          <a class="source" href="../uploader.js.html">uploader.js.coffee</a>
-          <a class="source" href="../../mercury_loader.html">mercury_loader.js</a>
-      </div>
-    </div>
-  </div>
+
+  <h1 id="logo"><a href="/mercury">Mercury Editor</a></h1>
+
+  <ul id="navigation">
+    <li><a href="/mercury/demo.html">Demo</a></li>
+    <li><a href="/mercury/downloads.html">Downloads</a></li>
+    <li><a href="/mercury/walkthrough.html">Walkthrough</a></li>
+    <li><a href="/mercury/docs.html">Docs</a></li>
+    <li><a href="/mercury/plugins.html">Plugins</a></li>
+    <li><a href="/mercury/source.html">Annotated Source</a></li>
+  </ul>
+
   <table cellspacing=0 cellpadding=0>
   <thead>
     <tr>
@@ -737,8 +710,77 @@ all other times it should store if there&rsquo;s a 1 second pause</p>
         <p>Custom actions (eg. things that execCommand doesn&rsquo;t do, or doesn&rsquo;t do well)</p>
       </td>
       <td class=code>
-        <div class='highlight'><pre>  <span class="vi">@actions: </span><span class="p">{</span>
-    <span class="nv">insertRowBefore: </span><span class="o">-&gt;</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">tableEditor</span><span class="p">.</span><span class="nx">addRow</span><span class="p">(</span><span class="s1">&#39;before&#39;</span><span class="p">)</span>
+        <div class='highlight'><pre>  <span class="vi">@actions: </span><span class="p">{</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-selection.selectWordByCursor()'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-selection.selectWordByCursor()">&#182;</a>
+        </div>
+        <p>bold: (selection) &ndash;&gt;
+  unless selection.collapsed
+    @document.execCommand(&lsquo;bold&rsquo;, false, null)
+  else</p>
+
+<h1>selection.selectWordByCursor()</h1>
+
+<h1>@document.execCommand(&lsquo;bold&rsquo;, false, null)</h1>
+
+<pre><code>selection.placeMarker()
+node = @element.find(&lsquo;.mercury-marker&rsquo;).get(0)
+prev = node.previousSibling
+selection.removeMarker()
+next = prev.nextSibling
+console.debug(prev, next)
+</code></pre>
+
+<h1>if prev.textContent[prev.textContent.length &ndash; 1] != &lsquo; &rsquo; &amp;&amp;</h1>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre></pre></div>
+      </td>
+    </tr>
+    <tr id='section-41'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-41">&#182;</a>
+        </div>
+        <p>[some]| content
+textContent = some, wholeText = some
+textContent = &ldquo;, wholeText = some
+content |[some]
+content [s|ome]
+co|ntent [some]
+|content [some]</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre></pre></div>
+      </td>
+    </tr>
+    <tr id='section-selection.selectWord()'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-selection.selectWord()">&#182;</a>
+        </div>
+        <pre><code>   console.debug(commonAncestor)
+   beforeText = commonAncestor.textContent
+   afterText = commonAncestor.wholeText.substring(commonAncestor.wholeText.lastIndexOf(beforeText) + beforeText.length, commonAncestor.wholeText.length)
+   if beforeText &amp;&amp; afterText &amp;&amp; (beforeChar = beforeText[beforeText.length &ndash; 1]) != &lsquo; &rsquo; &amp;&amp; (afterChar = afterText[0]) != &lsquo; &rsquo;
+     console.debug(&lsquo;bolding word&rsquo;, beforeChar, afterChar)
+   else
+     @document.execCommand(&lsquo;bold&rsquo;, false, null)
+</code></pre>
+
+<h1>selection.selectWord()</h1>
+
+<h1>commonAncestor.wholeText, commonAncestor.textContent</h1>
+
+<pre><code> else
+</code></pre>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>    <span class="nv">insertRowBefore: </span><span class="o">-&gt;</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">tableEditor</span><span class="p">.</span><span class="nx">addRow</span><span class="p">(</span><span class="s1">&#39;before&#39;</span><span class="p">)</span>
 
     <span class="nv">insertRowAfter: </span><span class="o">-&gt;</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">tableEditor</span><span class="p">.</span><span class="nx">addRow</span><span class="p">(</span><span class="s1">&#39;after&#39;</span><span class="p">)</span>
 
@@ -801,10 +843,10 @@ all other times it should store if there&rsquo;s a 1 second pause</p>
   <span class="p">}</span></pre></div>
       </td>
     </tr>
-    <tr id='section-40'>
+    <tr id='section-43'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-40">&#182;</a>
+          <a class="pilcrow" href="#section-43">&#182;</a>
         </div>
         <p>Helper class for managing selection and getting information from it</p>
       </td>
@@ -816,6 +858,7 @@ all other times it should store if there&rsquo;s a 1 second pause</p>
     <span class="vi">@range = </span><span class="nx">@selection</span><span class="p">.</span><span class="nx">getRangeAt</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
     <span class="vi">@fragment = </span><span class="nx">@range</span><span class="p">.</span><span class="nx">cloneContents</span><span class="p">()</span>
     <span class="vi">@clone = </span><span class="nx">@range</span><span class="p">.</span><span class="nx">cloneRange</span><span class="p">()</span>
+    <span class="vi">@collapsed = </span><span class="nx">@selection</span><span class="p">.</span><span class="nx">isCollapsed</span>
 
 
   <span class="nv">commonAncestor: </span><span class="nf">(onlyTag = false) -&gt;</span>
@@ -850,12 +893,12 @@ all other times it should store if there&rsquo;s a 1 second pause</p>
     <span class="nv">range = </span><span class="nx">@context</span><span class="p">.</span><span class="nx">createRange</span><span class="p">()</span></pre></div>
       </td>
     </tr>
-    <tr id='section-41'>
+    <tr id='section-44'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-41">&#182;</a>
+          <a class="pilcrow" href="#section-44">&#182;</a>
         </div>
-        <p>todo: the \00 thing breaks when using uglifier, and is escapped to &ldquo;0&rdquo;.. it&rsquo;s been fixed, but isn&rsquo;t available yet
+        <p>todo: the \00 thing breaks when using uglifier, and is escapped to &quot;0&rdquo;.. it&rsquo;s been fixed, but isn&rsquo;t available yet
 https://github.com/lautis/uglifier/issues/11</p>
       </td>
       <td class=code>
@@ -898,10 +941,10 @@ https://github.com/lautis/uglifier/issues/11</p>
     <span class="vi">@endMarker = </span><span class="nx">jQuery</span><span class="p">(</span><span class="s1">&#39;&lt;em class=&quot;mercury-marker&quot;/&gt;&#39;</span><span class="p">,</span> <span class="nx">@context</span><span class="p">).</span><span class="nx">get</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span></pre></div>
       </td>
     </tr>
-    <tr id='section-42'>
+    <tr id='section-45'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-42">&#182;</a>
+          <a class="pilcrow" href="#section-45">&#182;</a>
         </div>
         <p>put a single marker (the end)</p>
       </td>
@@ -913,10 +956,10 @@ https://github.com/lautis/uglifier/issues/11</p>
     <span class="nx">unless</span> <span class="nx">@range</span><span class="p">.</span><span class="nx">collapsed</span></pre></div>
       </td>
     </tr>
-    <tr id='section-43'>
+    <tr id='section-46'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-43">&#182;</a>
+          <a class="pilcrow" href="#section-46">&#182;</a>
         </div>
         <p>put a start marker</p>
 
@@ -970,5 +1013,13 @@ https://github.com/lautis/uglifier/issues/11</p>
       </td>
     </tr>
   </table>
-</div>
+
+  <div id="footer">
+    <hr>
+    Copyright 2011 Jeremy Jackson. All rights reserved.
+  </div>
+
 </body>
+</html>
+
+

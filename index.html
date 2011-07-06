@@ -6,122 +6,108 @@
   <script src="assets/javascripts/application.js" type="text/javascript"></script>
   <script src="mercury/javascripts/mercury_loader.js?src=mercury&pack=bundled" type="text/javascript"></script>
   <script src="http://twitterjs.googlecode.com/svn/trunk/src/twitter.min.js" type="text/javascript"></script>
+  <!--[if lt IE 7]>
+    <script type="text/javascript" src="assets/javascripts/unitpngfix.js"></script>
+  <![endif]-->
 </head>
 <body>
 
+  <div id="background"></div>
+
   <h1 id="logo"><a href="/mercury">Mercury Editor</a></h1>
+
   <ul id="navigation">
-    <li><a href="">Demo</a></li>
-    <li><a href="">Downloads</a></li>
-    <li><a href="">Walkthrough</a></li>
-    <li><a href="">Documentation</a></li>
-    <li><a href="">Plugins</a></li>
-    <li><a href="">Annotated Source</a></li>
+    <li><a href="/mercury/demo.html">Demo</a></li>
+    <li><a href="/mercury/downloads.html">Downloads</a></li>
+    <li><a href="/mercury/walkthrough.html">Walkthrough</a></li>
+    <li><a href="/mercury/docs.html">Docs</a></li>
+    <li><a href="/mercury/plugins.html">Plugins</a></li>
+    <li><a href="/mercury/source.html">Annotated Source</a></li>
   </ul>
 
-  <div id="primary_column">
-    primary content
+  <div id="primary" class="intro">
+    <ul id="aspects">
+      <li class="simple">
+        <strong>Simple</strong>
+        <span>Mercury comes bundled as a Rails Engine, so just include it in your Gemfile.  Or grab the package if you're not using Rails.</span>
+      </li>
+      <li class="unobtrusive">
+        <strong>Unobtrusive</strong>
+        <span>We don't put any code in your page so you're free to use whatever frameworks you want without having to worry.</span>
+      </li>
+      <li class="configurable">
+        <strong>Configurable</strong>
+        <span>Easily add or remove toolbar items. Any toolbar item can be tied to an action using behaviors and the command pattern.</span>
+      </li>
+      <li class="extendable">
+        <strong>Extendable</strong>
+        <span>HTML and Markdown is supported by default, but you can just extend the base regions to build your own types.</span>
+      </li>
+    </ul>
+
+    <hr/>
+
+    <div id="actions">
+      <h2 class="brief">Mercury is built to handle your content needs.</h2>
+
+      <div class="action">
+        <a class="button green" href="https://github.com/downloads/jejacks0n/mercury/mercury-v0.1.4.zip">Download now</a>
+        Download the package.
+      </div>
+
+      <div class="action">
+        <a class="button blue" href="#" onclick="Mercury.trigger('toggle:interface')">Test it out</a>
+        Check out all the features.
+      </div>
+    </div>
+
+    <hr/>
+
+    <div id="features">
+      <h2>Core features</h2>
+      <ul>
+        <li><strong>Previewing<br/></strong>Preview content while you're working to see exactly how it'll look.</li>
+        <li><strong>Link Tools<br/></strong>Insert and edit links, including TOC/Bookmark links.</li>
+        <li><strong>Media Tools<br/></strong>Insert and edit images, youtube videos, and vimeo videos.</li>
+        <li><strong>Image Uploading<br/></strong>Drag images from your desktop to automatically uploaded and insert them.</li>
+        <li><strong>Table Editing<br/></strong>Advanced table editing and creation.</li>
+        <li><strong>Snippets<br/></strong>Insert and edit predefined and reusable bits of markup/code using drag and drop.</li>
+        <li><strong>Notes<br/></strong>Attach notes to any page and communicate with other content authors.</li>
+        <li><strong>Colaborative Editing<br/></strong>Edit any page that others are editing at the same time and see their changes in real time.</li>
+      </ul>
+    </div>
   </div>
 
-  content here
+  <div id="secondary">
+    <h2>Mercury is a <strong>full featured</strong> HTML5 editor. It was built from the ground up to help your team <strong>get the most</strong> out of <strong>content editing</strong> in modern browsers.</h2>
 
+    <h2>Supported Browsers</h2>
+    <p>To keep Mercury simple, we support all browsers that have implemented the complete <a href="http://www.w3.org/TR/2008/WD-html5-20080610/editing.html" target="_blank">W3C contentEditable specification</a>.</p>
+    <ul>
+      <li>Firefox 4+</li>
+      <li>Chrome 10+</li>
+      <li>Safari 5+</li>
+    </ul>
+    <br/>
 
-  <!--<div id="header">-->
-    <!--<div class="intro">-->
+    <h2>More information?</h2>
+    <p>For more information, including all the nerdy details check out the <a href="/mercury/walkthrough.html">full walkthrough</a> of all the features.</p>
+    <p>If you're looking for the source code and all that developer friendly stuff, check out <a href="https://github.com/jejacks0n/mercury">the project on github.</a></p>
+    <br/>
 
-      <!--<div class="logo"><em>Mercury Editor</em></div>-->
+    <!--<h2>Mercury was built using</h2>-->
+    <!--<a href="http://jquery.com"><img alt="jQuery" src="assets/images/logo-jquery.png"/></a>-->
+    <!--<a href="http://jashkenas.github.com/coffee-script/"><img alt="CoffeeScript" src="assets/images/logo-coffeescript.png"/></a>-->
+    <!--<a href="http://nodejs.org/"><img alt="Node.JS" src="assets/images/logo-nodejs.png"/></a>-->
+    <!--<a href="http://cukes.info/"><img alt="Cucumber BDD" src="assets/images/logo-cucumber.png"/></a>-->
+    <!--<a href="http://rubyonrails.org/"><img alt="Ruby on Rails" src="assets/images/logo-rails.png"/></a>-->
+    <!--<a href="http://dev.w3.org/html5/spec/Overview.html"><img alt="HTML5" src="assets/images/logo-html5.png"/></a>-->
+  </div>
 
-      <!--<h1>Finally, managing content is <strong>easy</strong> and <strong>reliable</strong></h1>-->
-
-      <!--<h2>Mercury is a <strong>full featured</strong> HTML5 editor. It was built from the ground up to help your team <strong>get the most</strong> out of <strong>content editing</strong> in modern browsers.</h2>-->
-
-      <!--<div class="action">-->
-        <!--<a class="button green" href="https://github.com/downloads/jejacks0n/mercury/mercury-v0.1.4.zip">Download now</a>-->
-        <!--Download the package.-->
-      <!--</div>-->
-
-      <!--<div class="action">-->
-        <!--<a class="button blue" href="#" onclick="Mercury.trigger('toggle:interface')">Test it out</a>-->
-        <!--Check out all the features.-->
-      <!--</div>-->
-
-    <!--</div>-->
-    <!--<hr>-->
-  <!--</div>-->
-
-  <!--<div id="intro_content">-->
-    <!--<div id="aspects">-->
-      <!--<div class="aspect simple">-->
-        <!--<h3>Simple</h3>-->
-        <!--<h4>Mercury comes bundled as a Rails Engine, so just include it in your Gemfile.</h4>-->
-      <!--</div>-->
-      <!--<div class="aspect unobtrusive">-->
-        <!--<h3>Unobtrusive</h3>-->
-        <!--<h4>We don't put any code in your page so you're free to use whatever frameworks you want without having to-->
-          <!--worry.</h4>-->
-      <!--</div>-->
-      <!--<div class="aspect configurable">-->
-        <!--<h3>Configurable</h3>-->
-        <!--<h4>Easily add or remove toolbar items. Any toolbar item can be tied to an action using behaviors.</h4>-->
-      <!--</div>-->
-      <!--<div class="aspect extendable">-->
-        <!--<h3>Extendable</h3>-->
-        <!--<h4>HTML and Markdown is supported by default, but you can just extend the base regions to build your own-->
-          <!--types.</h4>-->
-      <!--</div>-->
-    <!--</div>-->
-
-    <!--<hr>-->
-    <!--<h2 class="brief">Mercury is built to handle your content needs.</h2>-->
-    <!--<hr>-->
-
-    <!--<div class="mercury-region" data-type="editable" id="primary">-->
-      <!--<h2>Supported Browsers</h2>-->
-
-      <!--<p>To keep Mercury simple, we support all browsers that have implemented the complete <a href="http://www.w3.org/TR/2008/WD-html5-20080610/editing.html" target="_blank">W3C contentEditable specification</a>.</p>-->
-      <!--<ul>-->
-        <!--<li>Firefox 4+</li>-->
-        <!--<li>Chrome 10+</li>-->
-        <!--<li>Safari 5+</li>-->
-      <!--</ul>-->
-      <!--<br>-->
-
-      <!--<h2>Core features</h2>-->
-      <!--<ul>-->
-        <!--<li><strong>Previewing<br/></strong>Preview content while you're working to see exactly how it'll look.</li>-->
-        <!--<li><strong>Link Tools<br/></strong>Insert and edit links, including TOC/Bookmark links.</li>-->
-        <!--<li><strong>Media Tools<br/></strong>Insert and edit images, youtube videos, and vimeo videos.</li>-->
-        <!--<li><strong>Image Uploading<br/></strong>Drag images from your desktop and they'll be automatically uploaded and inserted.</li>-->
-        <!--<li><strong>Table Editing<br/></strong>Advanced table editing and creation.</li>-->
-        <!--<li><strong>Snippets<br/></strong>Insert and edit predefined and reusable bits of markup/code using drag and drop.</li>-->
-        <!--<li><strong>Notes<br/></strong>Attach notes to any page and communicate with other content authors.</li>-->
-        <!--<li><strong>Colaborative Editing<br/></strong>Edit any page that others are editing at the same time and see their changes in real time.</li>-->
-      <!--</ul>-->
-      <!--<hr>-->
-
-      <!--<h2>More information?</h2>-->
-      <!--For more information, including all the nerdy details check out the full walkthrough of all the features.-->
-      <!--<div style="text-align:center">-->
-        <!--<a class="more-info" href="/content/walkthrough">Full walkthrough</a>-->
-      <!--</div>-->
-    <!--</div>-->
-
-    <!--<div class="container mercury-region" data-type="editable" id="tech">-->
-      <!--<h2>Mercury was built using</h2>-->
-      <!--<a href="http://jquery.com"><img alt="jQuery" src="assets/images/logo-jquery.png"/></a>-->
-      <!--<a href="http://jashkenas.github.com/coffee-script/"><img alt="CoffeeScript" src="assets/images/logo-coffeescript.png"/></a>-->
-      <!--<a href="http://rubyonrails.org/"><img alt="Ruby on Rails" src="assets/images/logo-rails.png"/></a>-->
-      <!--<a href="http://nodejs.org/"><img alt="Node.JS" src="assets/images/logo-nodejs.png"/></a>-->
-      <!--<a href="http://cukes.info/"><img alt="Cucumber BDD" src="assets/images/logo-cucumber.png"/></a>-->
-      <!--<a href="http://dev.w3.org/html5/spec/Overview.html"><img alt="HTML5" src="assets/images/logo-html5.png"/></a>-->
-    <!--</div>-->
-
-  <!--</div>-->
-
-  <!--<div id="footer">-->
-    <!--<hr>-->
-    <!--Copyright 2011 Jeremy Jackson. All rights reserved.-->
-  <!--</div>-->
+  <div id="footer">
+    <hr>
+    Copyright 2011 Jeremy Jackson. All rights reserved.
+  </div>
 
 </body>
 </html>

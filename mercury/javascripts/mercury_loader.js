@@ -36,8 +36,23 @@ if (!window.mercuryPackages) window.mercuryPackages = {
 
 // ## Mercury Loader
 (function() {
-  // If the browser isn't supported, we don't try to do anything more.
-  if (document.getElementsByTagName && document.getElementById && document.designMode && !jQuery.browser.konqueror && !jQuery.browser.msie) {
+	// Useragent detection, which we use to determine if the client is supported.  We do this method instead of checking
+  // features because many of the features are supported in IE, but aren't implemented to the W3C spec.
+  var browser = {
+    webkit: /(webkit)[ \/]([\w.]+)/,
+    opera: /(opera)(?:.*version)?[ \/]([\w.]+)/,
+    msie: /(msie) ([\w.]+)/,
+    mozilla: /(mozilla)(?:.*? rv:([\w.]+))?/
+  };
+
+  var ua = navigator.userAgent.toLowerCase();
+  var match = browser.webkit.exec(ua) || browser.opera.exec(ua) || msie.exec(ua) || ua.indexOf("compatible") < 0 && mozilla.exec(ua) || [];
+  browser = {version: match[2] || "0" };
+  browser[match[1] || ""] = true;
+
+  // If the browser isn't supported, we don't try to do anything more.  We do direct userAgent detection here because IE
+  // thinks it's supported but isn't -- in part because it has it's own implementation of the contentEditable spec.
+  if (document.getElementsByTagName && document.getElementById && document.designMode && !browser.konqueror && !browser.msie) {
     // supported
   } else {
     return;

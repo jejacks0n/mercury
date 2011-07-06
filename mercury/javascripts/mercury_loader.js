@@ -46,7 +46,7 @@ if (!window.mercuryPackages) window.mercuryPackages = {
   };
 
   var ua = navigator.userAgent.toLowerCase();
-  var match = browser.webkit.exec(ua) || browser.opera.exec(ua) || msie.exec(ua) || ua.indexOf("compatible") < 0 && mozilla.exec(ua) || [];
+  var match = browser.webkit.exec(ua) || browser.opera.exec(ua) || browser.msie.exec(ua) || ua.indexOf("compatible") < 0 && browser.mozilla.exec(ua) || [];
   browser = {version: match[2] || "0" };
   browser[match[1] || ""] = true;
 

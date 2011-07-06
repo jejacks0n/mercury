@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <title>Mercury Editor - Annotated Source - page_editor.js.coffee</title>
+  <link href="/mercury/assets/stylesheets/application.css" media="screen" rel="stylesheet" type="text/css"/>
+  <script src="/mercury/assets/javascripts/application.js" type="text/javascript"></script>
+  <!--[if lt IE 7]>
+    <script type="text/javascript" src="/mercury/assets/javascripts/unitpngfix.js"></script>
+  <![endif]-->
+</head>
+<body>
+
+  <div id="background"></div>
+
+  <h1 id="logo"><a href="/mercury">Mercury Editor</a></h1>
+
+  <ul id="navigation">
+    <li><a href="/mercury">Home</a></li>
+    <li><a href="/mercury/downloads">Downloads</a></li>
+    <li><a href="/mercury/walkthrough">Walkthrough</a></li>
+    <li><a href="/mercury/documentation">Documentation</a></li>
+    <li class="active"><a href="/mercury/annotated_source">Annotated Source</a></li>
+  </ul>
+
+  <table cellspacing=0 cellpadding=0>
+  <thead>
+    <tr>
+      <th class=docs><h1>page_editor.js.coffee</h1></th>
+      <th class=code></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr id='section-1'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-1">&#182;</a>
+        </div>
+        
+      </td>
+      <td class=code>
+        <div class='highlight'><pre><span class="k">class</span> <span class="nx">@Mercury</span><span class="p">.</span><span class="nx">PageEditor</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-2'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-2">&#182;</a>
+        </div>
+        <p>options
+saveStyle: &lsquo;form&rsquo;, or &lsquo;json&rsquo; (defaults to json)
+ignoredLinks: an array containing classes for links to ignore (eg. lightbox or accordian controls)
+visible: boolean, if the interface should start visible or not (defaults to true)</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>  <span class="nv">constructor: </span><span class="nf">(@saveUrl = null, @options = {}) -&gt;</span>
+    <span class="k">throw</span> <span class="s2">&quot;Mercury.PageEditor is unsupported in this client. Supported browsers are chrome 10+, firefix 4+, and safari 5+.&quot;</span> <span class="nx">unless</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">supported</span>
+    <span class="k">throw</span> <span class="s2">&quot;Mercury.PageEditor can only be instantiated once.&quot;</span> <span class="k">if</span> <span class="nb">window</span><span class="p">.</span><span class="nx">mercuryInstance</span>
+
+    <span class="vi">@options.visible = </span><span class="kc">true</span> <span class="nx">unless</span> <span class="nx">@options</span><span class="p">.</span><span class="nx">visible</span> <span class="o">==</span> <span class="kc">false</span>
+    <span class="vi">@visible = </span><span class="nx">@options</span><span class="p">.</span><span class="nx">visible</span>
+
+    <span class="nb">window</span><span class="p">.</span><span class="nv">mercuryInstance = </span><span class="err">@</span>
+    <span class="vi">@regions = </span><span class="p">[]</span>
+    <span class="nx">@initializeInterface</span><span class="p">()</span>
+    <span class="nv">Mercury.csrfToken = </span><span class="nx">token</span> <span class="k">if</span> <span class="nv">token = </span><span class="nx">jQuery</span><span class="p">(</span><span class="s1">&#39;meta[name=&quot;csrf-token&quot;]&#39;</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="s1">&#39;content&#39;</span><span class="p">)</span>
+
+
+  <span class="nv">initializeInterface: </span><span class="o">-&gt;</span>
+    <span class="vi">@focusableElement = </span><span class="nx">jQuery</span><span class="p">(</span><span class="s1">&#39;&lt;input&gt;&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nv">type: </span><span class="s1">&#39;text&#39;</span><span class="p">,</span> <span class="nv">style: </span><span class="s1">&#39;position:absolute;opacity:0&#39;</span><span class="p">}).</span><span class="nx">appendTo</span><span class="p">(</span><span class="nx">@options</span><span class="p">.</span><span class="nx">appendTo</span> <span class="o">?</span> <span class="s1">&#39;body&#39;</span><span class="p">)</span>
+    <span class="vi">@iframe = </span><span class="nx">jQuery</span><span class="p">(</span><span class="s1">&#39;&lt;iframe&gt;&#39;</span><span class="p">,</span> <span class="p">{</span><span class="k">class</span><span class="o">:</span> <span class="s1">&#39;mercury-iframe&#39;</span><span class="p">,</span> <span class="nv">seamless: </span><span class="s1">&#39;true&#39;</span><span class="p">,</span> <span class="nv">frameborder: </span><span class="s1">&#39;0&#39;</span><span class="p">,</span> <span class="nv">src: </span><span class="s1">&#39;about:blank&#39;</span><span class="p">,</span> <span class="nv">style: </span><span class="s1">&#39;position:absolute;top:0;width:100%;visibility:hidden&#39;</span><span class="p">})</span>
+    <span class="nx">@iframe</span><span class="p">.</span><span class="nx">appendTo</span><span class="p">(</span><span class="nx">jQuery</span><span class="p">(</span><span class="nx">@options</span><span class="p">.</span><span class="nx">appendTo</span><span class="p">).</span><span class="nx">get</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">?</span> <span class="s1">&#39;body&#39;</span><span class="p">)</span>
+
+    <span class="nx">@iframe</span><span class="p">.</span><span class="nx">load</span> <span class="o">=&gt;</span> <span class="nx">@initializeFrame</span><span class="p">()</span>
+    <span class="nx">@iframe</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span><span class="nv">contentWindow.document.location.href = </span><span class="nx">@iframeSrc</span><span class="p">()</span>
+
+    <span class="vi">@toolbar = </span><span class="k">new</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">Toolbar</span><span class="p">(</span><span class="nx">@options</span><span class="p">)</span>
+    <span class="vi">@statusbar = </span><span class="k">new</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">Statusbar</span><span class="p">(</span><span class="nx">@options</span><span class="p">)</span>
+
+
+  <span class="nv">initializeFrame: </span><span class="o">-&gt;</span>
+    <span class="k">try</span>
+      <span class="k">return</span> <span class="k">if</span> <span class="nx">@iframe</span><span class="p">.</span><span class="nx">data</span><span class="p">(</span><span class="s1">&#39;loaded&#39;</span><span class="p">)</span>
+      <span class="nx">@iframe</span><span class="p">.</span><span class="nx">data</span><span class="p">(</span><span class="s1">&#39;loaded&#39;</span><span class="p">,</span> <span class="kc">true</span><span class="p">)</span>
+      <span class="vi">@document = </span><span class="nx">jQuery</span><span class="p">(</span><span class="nx">@iframe</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span><span class="nx">contentWindow</span><span class="p">.</span><span class="nb">document</span><span class="p">)</span>
+      <span class="nx">jQuery</span><span class="p">(</span><span class="s2">&quot;&lt;style mercury-styles=\&quot;true\&quot;&gt;&quot;</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="nx">Mercury</span><span class="p">.</span><span class="nx">config</span><span class="p">.</span><span class="nx">injectedStyles</span><span class="p">).</span><span class="nx">appendTo</span><span class="p">(</span><span class="nx">@document</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;head&#39;</span><span class="p">))</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-3'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-3">&#182;</a>
+        </div>
+        <p>jquery: make jQuery evaluate scripts within the context of the iframe window &mdash; note that this means that we
+can&rsquo;t use eval in mercury (eg. script tags in ajax responses) because it will eval in the wrong context (you can
+use top.Mercury though, if you keep it in mind)
+todo: look into <code>context</code> options for ajax as an alternative</p>
+
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>      <span class="nv">iframeWindow = </span><span class="nx">@iframe</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span><span class="nx">contentWindow</span>
+      <span class="nv">jQuery.globalEval = </span><span class="nf">(data) -&gt;</span> <span class="p">(</span><span class="nx">iframeWindow</span><span class="p">.</span><span class="nx">execScript</span> <span class="o">||</span> <span class="nf">(data) -&gt;</span> <span class="nx">iframeWindow</span><span class="p">[</span><span class="s2">&quot;eval&quot;</span><span class="p">].</span><span class="nx">call</span><span class="p">(</span><span class="nx">iframeWindow</span><span class="p">,</span> <span class="nx">data</span><span class="p">))(</span><span class="nx">data</span><span class="p">)</span> <span class="k">if</span> <span class="p">(</span><span class="nx">data</span> <span class="o">&amp;&amp;</span> <span class="sr">/\S/</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="nx">data</span><span class="p">))</span>
+      <span class="nv">iframeWindow.Mercury = </span><span class="nx">Mercury</span>
+
+      <span class="nx">@bindEvents</span><span class="p">()</span>
+      <span class="nx">@initializeRegions</span><span class="p">()</span>
+      <span class="nx">@finalizeInterface</span><span class="p">()</span>
+      <span class="nx">Mercury</span><span class="p">.</span><span class="nx">trigger</span><span class="p">(</span><span class="s1">&#39;ready&#39;</span><span class="p">)</span>
+
+      <span class="nx">@iframe</span><span class="p">.</span><span class="nx">css</span><span class="p">({</span><span class="nv">visibility: </span><span class="s1">&#39;visible&#39;</span><span class="p">})</span>
+    <span class="k">catch</span> <span class="nx">error</span>
+      <span class="nx">alert</span><span class="p">(</span><span class="s2">&quot;Mercury.PageEditor failed to load: #{error}\n\nPlease try refreshing.&quot;</span><span class="p">)</span>
+
+
+  <span class="nv">initializeRegions: </span><span class="o">-&gt;</span>
+    <span class="nx">@buildRegion</span><span class="p">(</span><span class="nx">jQuery</span><span class="p">(</span><span class="nx">region</span><span class="p">))</span> <span class="k">for</span> <span class="nx">region</span> <span class="k">in</span> <span class="nx">jQuery</span><span class="p">(</span><span class="s1">&#39;.mercury-region&#39;</span><span class="p">,</span> <span class="nx">@document</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nx">unless</span> <span class="nx">@options</span><span class="p">.</span><span class="nx">visible</span>
+    <span class="k">for</span> <span class="nx">region</span> <span class="k">in</span> <span class="nx">@regions</span>
+      <span class="k">if</span> <span class="nx">region</span><span class="p">.</span><span class="nx">focus</span>
+        <span class="nx">region</span><span class="p">.</span><span class="nx">focus</span><span class="p">()</span>
+        <span class="k">break</span>
+
+
+  <span class="nv">buildRegion: </span><span class="nf">(region) -&gt;</span>
+    <span class="k">try</span>
+      <span class="nv">type = </span><span class="nx">region</span><span class="p">.</span><span class="nx">data</span><span class="p">(</span><span class="s1">&#39;type&#39;</span><span class="p">).</span><span class="nx">titleize</span><span class="p">()</span>
+      <span class="nx">@regions</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="k">new</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">Regions</span><span class="p">[</span><span class="nx">type</span><span class="p">](</span><span class="nx">region</span><span class="p">,</span> <span class="nx">@iframe</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span><span class="nx">contentWindow</span><span class="p">))</span>
+    <span class="k">catch</span> <span class="nx">error</span>
+      <span class="nx">alert</span><span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="k">if</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">debug</span>
+      <span class="nx">alert</span><span class="p">(</span><span class="s2">&quot;Region type is malformed, no data-type provided, or \&quot;#{type}\&quot; is unknown.&quot;</span><span class="p">)</span>
+
+
+  <span class="nv">finalizeInterface: </span><span class="o">-&gt;</span>
+    <span class="vi">@snippetToolbar = </span><span class="k">new</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">SnippetToolbar</span><span class="p">(</span><span class="nx">@document</span><span class="p">)</span>
+
+    <span class="nx">@hijackLinks</span><span class="p">()</span>
+    <span class="nx">@resize</span><span class="p">()</span>
+    <span class="nx">Mercury</span><span class="p">.</span><span class="nx">trigger</span><span class="p">(</span><span class="s1">&#39;mode&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nv">mode: </span><span class="s1">&#39;preview&#39;</span><span class="p">})</span> <span class="nx">unless</span> <span class="nx">@options</span><span class="p">.</span><span class="nx">visible</span>
+
+
+  <span class="nv">bindEvents: </span><span class="o">-&gt;</span>
+    <span class="nx">Mercury</span><span class="p">.</span><span class="nx">bind</span> <span class="s1">&#39;initialize:frame&#39;</span><span class="p">,</span> <span class="o">=&gt;</span> <span class="nx">setTimeout</span><span class="p">(</span><span class="nx">@initializeFrame</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span>
+    <span class="nx">Mercury</span><span class="p">.</span><span class="nx">bind</span> <span class="s1">&#39;focus:frame&#39;</span><span class="p">,</span> <span class="o">=&gt;</span> <span class="nx">@iframe</span><span class="p">.</span><span class="nx">focus</span><span class="p">()</span>
+    <span class="nx">Mercury</span><span class="p">.</span><span class="nx">bind</span> <span class="s1">&#39;focus:window&#39;</span><span class="p">,</span> <span class="o">=&gt;</span> <span class="nx">setTimeout</span><span class="p">((</span><span class="o">=&gt;</span> <span class="nx">@focusableElement</span><span class="p">.</span><span class="nx">focus</span><span class="p">()),</span> <span class="mi">10</span><span class="p">)</span>
+
+    <span class="nx">Mercury</span><span class="p">.</span><span class="nx">bind</span> <span class="s1">&#39;toggle:interface&#39;</span><span class="p">,</span> <span class="o">=&gt;</span> <span class="nx">@toggleInterface</span><span class="p">()</span>
+
+    <span class="nx">Mercury</span><span class="p">.</span><span class="nx">bind</span> <span class="s1">&#39;action&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">event</span><span class="p">,</span> <span class="nx">options</span><span class="p">)</span> <span class="o">=&gt;</span>
+       <span class="nx">@save</span><span class="p">()</span> <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">action</span> <span class="o">==</span> <span class="s1">&#39;save&#39;</span>
+
+    <span class="nx">@document</span><span class="p">.</span><span class="nx">mousedown</span> <span class="nf">(event) -&gt;</span>
+      <span class="nx">Mercury</span><span class="p">.</span><span class="nx">trigger</span><span class="p">(</span><span class="s1">&#39;hide:dialogs&#39;</span><span class="p">)</span>
+      <span class="k">if</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">region</span>
+        <span class="nx">Mercury</span><span class="p">.</span><span class="nx">trigger</span><span class="p">(</span><span class="s1">&#39;unfocus:regions&#39;</span><span class="p">)</span> <span class="nx">unless</span> <span class="nx">jQuery</span><span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">target</span><span class="p">).</span><span class="nx">closest</span><span class="p">(</span><span class="s1">&#39;.mercury-region&#39;</span><span class="p">).</span><span class="nx">get</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">==</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">region</span><span class="p">.</span><span class="nx">element</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="nx">jQuery</span><span class="p">(</span><span class="nb">window</span><span class="p">).</span><span class="nx">resize</span> <span class="o">=&gt;</span> <span class="nx">@resize</span><span class="p">()</span>
+    <span class="nb">window</span><span class="p">.</span><span class="nv">onbeforeunload = </span><span class="nx">@beforeUnload</span>
+
+
+  <span class="nv">toggleInterface: </span><span class="o">-&gt;</span>
+    <span class="k">if</span> <span class="nx">@visible</span>
+      <span class="vi">@visible = </span><span class="kc">false</span>
+      <span class="nx">@toolbar</span><span class="p">.</span><span class="nx">hide</span><span class="p">()</span>
+      <span class="nx">@statusbar</span><span class="p">.</span><span class="nx">hide</span><span class="p">()</span>
+    <span class="k">else</span>
+      <span class="vi">@visible = </span><span class="kc">true</span>
+      <span class="nx">@toolbar</span><span class="p">.</span><span class="nx">show</span><span class="p">()</span>
+      <span class="nx">@statusbar</span><span class="p">.</span><span class="nx">show</span><span class="p">()</span>
+    <span class="nx">Mercury</span><span class="p">.</span><span class="nx">trigger</span><span class="p">(</span><span class="s1">&#39;mode&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nv">mode: </span><span class="s1">&#39;preview&#39;</span><span class="p">})</span>
+    <span class="nx">@resize</span><span class="p">()</span>
+
+
+  <span class="nv">resize: </span><span class="o">-&gt;</span>
+    <span class="nv">width = </span><span class="nx">jQuery</span><span class="p">(</span><span class="nb">window</span><span class="p">).</span><span class="nx">width</span><span class="p">()</span>
+    <span class="nv">height = </span><span class="nx">@statusbar</span><span class="p">.</span><span class="nx">top</span><span class="p">()</span>
+    <span class="nv">toolbarHeight = </span><span class="nx">@toolbar</span><span class="p">.</span><span class="nx">height</span><span class="p">()</span>
+
+    <span class="nv">Mercury.displayRect = </span><span class="p">{</span><span class="nv">top: </span><span class="nx">toolbarHeight</span><span class="p">,</span> <span class="nv">left: </span><span class="mi">0</span><span class="p">,</span> <span class="nv">width: </span><span class="nx">width</span><span class="p">,</span> <span class="nv">height: </span><span class="nx">height</span> <span class="o">-</span> <span class="nx">toolbarHeight</span><span class="p">,</span> <span class="nv">fullHeight: </span><span class="nx">height</span><span class="p">}</span>
+
+    <span class="nx">@iframe</span><span class="p">.</span><span class="nx">css</span> <span class="p">{</span>
+      <span class="nv">top: </span><span class="nx">toolbarHeight</span>
+      <span class="nv">left: </span><span class="mi">0</span>
+      <span class="nv">height: </span><span class="nx">height</span> <span class="o">-</span> <span class="nx">toolbarHeight</span>
+    <span class="p">}</span>
+
+    <span class="nx">Mercury</span><span class="p">.</span><span class="nx">trigger</span><span class="p">(</span><span class="s1">&#39;resize&#39;</span><span class="p">)</span>
+
+
+  <span class="nv">iframeSrc: </span><span class="nf">(url = null) -&gt;</span>
+    <span class="p">(</span><span class="nx">url</span> <span class="o">?</span> <span class="nb">window</span><span class="p">.</span><span class="nx">location</span><span class="p">.</span><span class="nx">href</span><span class="p">).</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/([http|https]:\/\/.[^\/]*)\/editor\/?(.*)/i</span><span class="p">,</span> <span class="s2">&quot;$1/$2&quot;</span><span class="p">)</span>
+
+
+  <span class="nv">hijackLinks: </span><span class="o">-&gt;</span>
+    <span class="k">for</span> <span class="nx">link</span> <span class="k">in</span> <span class="nx">jQuery</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="nx">@document</span><span class="p">)</span>
+      <span class="nv">ignored = </span><span class="kc">false</span>
+      <span class="k">for</span> <span class="nx">classname</span> <span class="k">in</span> <span class="nx">@options</span><span class="p">.</span><span class="nx">ignoredLinks</span> <span class="o">||</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="nx">jQuery</span><span class="p">(</span><span class="nx">link</span><span class="p">).</span><span class="nx">hasClass</span><span class="p">(</span><span class="nx">classname</span><span class="p">)</span>
+          <span class="nv">ignored = </span><span class="kc">true</span>
+          <span class="k">continue</span>
+      <span class="k">if</span> <span class="o">!</span><span class="nx">ignored</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="nx">link</span><span class="p">.</span><span class="nx">target</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span> <span class="o">||</span> <span class="nx">link</span><span class="p">.</span><span class="nx">target</span> <span class="o">==</span> <span class="s1">&#39;_self&#39;</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">jQuery</span><span class="p">(</span><span class="nx">link</span><span class="p">).</span><span class="nx">closest</span><span class="p">(</span><span class="s1">&#39;.mercury-region&#39;</span><span class="p">).</span><span class="nx">length</span>
+        <span class="nx">jQuery</span><span class="p">(</span><span class="nx">link</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="s1">&#39;target&#39;</span><span class="p">,</span> <span class="s1">&#39;_top&#39;</span><span class="p">)</span>
+
+
+  <span class="nv">beforeUnload: </span><span class="o">-&gt;</span>
+    <span class="k">if</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">changes</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">Mercury</span><span class="p">.</span><span class="nx">silent</span>
+      <span class="k">return</span> <span class="s2">&quot;You have unsaved changes.  Are you sure you want to leave without saving them first?&quot;</span>
+    <span class="k">return</span> <span class="kc">null</span>
+
+
+  <span class="nv">save: </span><span class="o">-&gt;</span>
+    <span class="nv">url = </span><span class="nx">@saveUrl</span> <span class="o">?</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">saveURL</span> <span class="o">?</span> <span class="nx">@iframeSrc</span><span class="p">()</span>
+    <span class="nv">data = </span><span class="nx">@serialize</span><span class="p">()</span>
+    <span class="nx">Mercury</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;saving&#39;</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span>
+    <span class="nv">data = </span><span class="nx">jQuery</span><span class="p">.</span><span class="nx">toJSON</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="nx">unless</span> <span class="nx">@options</span><span class="p">.</span><span class="nx">saveStyle</span> <span class="o">==</span> <span class="s1">&#39;form&#39;</span>
+    <span class="nx">jQuery</span><span class="p">.</span><span class="nx">ajax</span> <span class="nx">url</span><span class="p">,</span> <span class="p">{</span>
+      <span class="nv">type: </span><span class="s1">&#39;POST&#39;</span>
+      <span class="nv">data: </span><span class="p">{</span><span class="nv">content: </span><span class="nx">data</span><span class="p">}</span>
+      <span class="nv">success: </span><span class="o">=&gt;</span>
+        <span class="nv">Mercury.changes = </span><span class="kc">false</span>
+      <span class="nv">error: </span><span class="o">=&gt;</span>
+        <span class="nx">alert</span><span class="p">(</span><span class="s2">&quot;Mercury was unable to save to the url: #{url}&quot;</span><span class="p">)</span>
+    <span class="p">}</span>
+
+
+  <span class="nv">serialize: </span><span class="o">-&gt;</span>
+    <span class="nv">serialized = </span><span class="p">{}</span>
+    <span class="nx">serialized</span><span class="p">[</span><span class="nx">region</span><span class="p">.</span><span class="nx">name</span><span class="p">]</span> <span class="o">=</span> <span class="nx">region</span><span class="p">.</span><span class="nx">serialize</span><span class="p">()</span> <span class="k">for</span> <span class="nx">region</span> <span class="k">in</span> <span class="nx">@regions</span>
+    <span class="k">return</span> <span class="nx">serialized</span></pre></div>
+      </td>
+    </tr>
+  </table>
+
+  <div id="footer">
+    <hr>
+    Copyright 2011 Jeremy Jackson. All rights reserved.
+  </div>
+
+</body>
+</html>
+
+

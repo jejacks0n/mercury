@@ -115,11 +115,11 @@ namespace :mercury do
   desc "Builds the documentation using docco"
   task :document do
     require 'rocco'
-    output_dir = Rails.root.join('docs').to_s
+    output_dir = Rails.root.join('annotated_source').to_s
     sources = Dir[Rails.root.join('vendor/assets/javascripts/*.js').to_s]
     sources += Dir[Rails.root.join('vendor/assets/javascripts/**/*.coffee').to_s]
     sources.each do |filename|
-      rocco = Rocco.new(filename, sources, {:template_file => Rails.root.join('docs.template'), :docblocks => true})
+      rocco = Rocco.new(filename, sources, {:template_file => Rails.root.join('annotated_source.template'), :docblocks => true})
       dest = File.join(output_dir, filename.sub(Regexp.new("^#{Rails.root.join('vendor/assets/javascripts')}"), '').sub(Regexp.new("#{File.extname(filename)}$"),".html"))
       puts "rocco: #{filename} -> #{dest}"
       FileUtils.mkdir_p File.dirname(dest)

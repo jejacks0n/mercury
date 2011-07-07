@@ -1,6 +1,9 @@
 /*
  * Uploader
  *----------------------------------------------------------------------------*/
+[draggable=true] {
+  -khtml-user-drag: element;
+}
 .mercury-uploader-overlay {
   position: absolute;
   z-index: 10040;

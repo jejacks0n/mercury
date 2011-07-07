@@ -25,6 +25,9 @@ jQuery.extend Mercury.tooltip, {
   bindEvents: ->
     Mercury.bind 'resize', => @position() if @visible
     @document.scroll => @position() if @visible
+    for parent in @forElement.parentsUntil(jQuery('body', @document))
+      if parent.scrollHeight > parent.clientHeight
+        jQuery(parent).scroll => @position() if @visible
     @element.mousedown (event) ->
       event.preventDefault()
       event.stopPropagation()

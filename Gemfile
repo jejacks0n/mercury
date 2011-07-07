@@ -23,6 +23,7 @@ group :development, :test do
 end
 
 group :test do
+  gem 'selenium-webdriver', '0.2.2'
   gem 'cucumber-rails'
   gem 'capybara-firebug'
   gem 'capybara'

@@ -90,17 +90,23 @@ jQuery.extend Mercury.uploader, {
     jQuery.each ['onloadstart', 'onprogress', 'onload', 'onabort', 'onerror'], (index, eventName) =>
       xhr.upload[eventName] = (event) => @uploaderEvents[eventName].call(@, event)
     xhr.onload = (event) =>
-      try
-        response =
-          if Mercury.config.uploading.handler
-            Mercury.config.uploading.handler(event.target.responseText)
-          else
-            jQuery.parseJSON(event.target.responseText)
-        response = jQuery.parseJSON(event.target.responseText)
-
-        Mercury.trigger('action', {action: 'insertImage', value: {src: response.image.url}})
-      catch error
-        @updateStatus('Unable to process response')
+      console.debug(event)
+      if (event.currentTarget.status >= 400)
+        @updateStatus('Error: Unable to upload the file')
+        alert("#{event.currentTarget.status}: Unable to process response")
+        @hide()
+      else
+        try
+          response =
+            if Mercury.config.uploading.handler
+              Mercury.config.uploading.handler(event.target.responseText)
+            else
+              jQuery.parseJSON(event.target.responseText)
+          Mercury.trigger('action', {action: 'insertImage', value: {src: response.image.url}})
+        catch error
+          @updateStatus('Error: Unable to upload the file')
+          alert("Unable to process response: #{error}")
+          @hide()
 
     xhr.open('post', Mercury.config.uploading.url, true)
     xhr.setRequestHeader('Accept', 'application/json, text/javascript, text/html, application/xml, text/xml, */*')
@@ -161,7 +167,7 @@ jQuery.extend Mercury.uploader, {
 
     onerror: ->
       @updateStatus('Error: Unable to upload the file')
-      @hide(1)
+      @hide(3)
 }
 
 

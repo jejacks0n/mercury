@@ -240,6 +240,7 @@ describe "Mercury.uploader", ->
 
   describe "#upload", ->
 
+    # todo: test this
     it "", ->
 
 
@@ -378,6 +379,7 @@ describe "Mercury.uploader", ->
       it "calls hide", ->
         @events.onerror.call(Mercury.uploader)
         expect(@hideSpy.callCount).toEqual(1)
+        expect(@hideSpy.argsForCall[0]).toEqual([3])
 
 
 

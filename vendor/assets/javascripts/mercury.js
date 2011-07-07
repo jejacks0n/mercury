@@ -42,17 +42,14 @@ window.MercurySetup = {
     //
     // When a user drags a snippet onto the page they'll be prompted to enter options for the given snippet.  The server
     // is expected to respond with a form.  Once the user submits this form, an Ajax request is sent to the server with
-    // the options provided; this preview request is expected to respond with the rendered markup for the snippet.  You
-    // can optionally privide a handler function that takes the response from the server and returns an object:
-    // {image: {url: '[your provided url]'}
+    // the options provided; this preview request is expected to respond with the rendered markup for the snippet.
     //
     // Name will be replaced with the snippet name (eg. example)
     snippets: {
       method: 'POST',
       optionsUrl: '/mercury/snippets/:name/options.html',
       previewUrl: '/mercury/snippets/:name/preview.html',
-      handler: false
-    },
+      },
 
 
     // ## Image Uploading
@@ -60,7 +57,8 @@ window.MercurySetup = {
     // If you drag images (while pressing shift) from your desktop into regions that support it, it will be uploade
     // to the server and inserted into the region.  This configuration allows you to specify if you want to
     // disable/enable this feature, the accepted mime-types, file size restrictions, and other things related to
-    // uploading.
+    // uploading.  You can optionally privide a handler function that takes the response from the server and returns an
+    // object: {image: {url: '[your provided url]'}
     //
     // **Note:** Image uploading is only supported in some region types.
     uploading: {
@@ -68,7 +66,8 @@ window.MercurySetup = {
       allowedMimeTypes: ['image/jpeg', 'image/gif', 'image/png'],
       maxFileSize: 1235242880,
       inputName: 'image[image]',
-      url: '/images'
+      url: '/images',
+      handler: false
       },
 
 

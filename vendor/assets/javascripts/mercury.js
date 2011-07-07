@@ -42,13 +42,16 @@ window.MercurySetup = {
     //
     // When a user drags a snippet onto the page they'll be prompted to enter options for the given snippet.  The server
     // is expected to respond with a form.  Once the user submits this form, an Ajax request is sent to the server with
-    // the options provided; this preview request is expected to respond with the rendered markup for the snippet.
+    // the options provided; this preview request is expected to respond with the rendered markup for the snippet.  You
+    // can optionally privide a handler function that takes the response from the server and returns an object:
+    // {image: {url: '[your provided url]'}
     //
     // Name will be replaced with the snippet name (eg. example)
     snippets: {
       method: 'POST',
       optionsUrl: '/mercury/snippets/:name/options.html',
-      previewUrl: '/mercury/snippets/:name/preview.html'
+      previewUrl: '/mercury/snippets/:name/preview.html',
+      handler: false
     },
 
 

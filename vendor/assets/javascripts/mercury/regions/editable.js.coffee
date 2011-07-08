@@ -56,13 +56,16 @@ class @Mercury.Regions.Editable extends Mercury.Region
 
     @element.bind 'dragenter', (event) =>
       return if @previewing
-      event.preventDefault()
+      event.preventDefault() unless Mercury.snippet
       event.originalEvent.dataTransfer.dropEffect = 'copy'
 
     @element.bind 'dragover', (event) =>
       return if @previewing
-      event.preventDefault()
+      event.preventDefault() unless Mercury.snippet
       event.originalEvent.dataTransfer.dropEffect = 'copy'
+      if jQuery.browser.webkit
+        clearTimeout(@dropTimeout)
+        @dropTimeout = setTimeout((=> @element.trigger('possible:drop')), 10)
 
     @element.bind 'drop', (event) =>
       return if @previewing
@@ -76,6 +79,18 @@ class @Mercury.Regions.Editable extends Mercury.Region
       event.preventDefault()
       @focus()
       Mercury.uploader(event.originalEvent.dataTransfer.files[0])
+
+    # possible:drop custom event: we have to do this because webkit doesn't fire the drop event unless both dragover and
+    # dragstart default behaviors are canceled.. but when we do that and observe the drop event, the default behavior
+    # isn't handled (eg, putting the image where it was dropped,) so to allow the browser to do it's thing, and also do
+    # our thing we have this little hack.  *sigh*
+    # read: http://www.quirksmode.org/blog/archives/2009/09/the_html5_drag.html
+    @element.bind 'possible:drop', (event) =>
+      return if @previewing
+      if snippet = @element.find('img[data-snippet]').get(0)
+        @focus()
+        Mercury.Snippet.displayOptionsFor(jQuery(snippet).data('snippet'))
+        @document.execCommand('undo', false, null)
 
     # custom paste handling: we have to do some hackery to get the pasted content since it's not exposed normally
     # through a clipboard in firefox (heaven forbid), and to keep the behavior across all browsers, we manually detect

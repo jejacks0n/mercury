@@ -16,6 +16,7 @@
 #= require ./select
 #= require ./panel
 #= require ./modal
+#= require ./lightview
 #= require ./statusbar
 #= require ./toolbar
 #= require ./toolbar.button

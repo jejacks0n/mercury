@@ -1,6 +1,7 @@
 /*
  *= require_self
  *= require ./dialog
+ *= require ./lightview
  *= require ./modal
  *= require ./statusbar
  *= require ./toolbar

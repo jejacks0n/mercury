@@ -153,7 +153,6 @@
 .mercury-select-options div[data-tag=pre] {
   font-family: monospace;
 }
-
 /*
  * Specific Panels (eg. snippets, notes, todos)
  *----------------------------------------------------------------------------*/
@@ -192,4 +191,9 @@
 }
 .mercury-snippet-panel ul li h4 {
   margin-bottom: 5px;
+}
+/* history / notes */
+.mercury-history-panel,
+.mercury-notes-panel {
+  width: 250px;
 }

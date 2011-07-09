@@ -49,7 +49,11 @@
         Mercury.trigger('action', {action: 'insertImage', value: attrs})
 
       when 'youtube_url'
-        code = @element.find('#media_youtube_url').val().replace('http://youtu.be/', '')
+        url = @element.find('#media_youtube_url').val()
+        unless /^http:\/\/youtu.be\//.match(url)
+          alert('Error: The provided youtube share url was invalid.')
+          return
+        code = url.replace('http://youtu.be/', '')
         value = jQuery('<iframe>', {
           width: @element.find('#media_youtube_width').val() || 560,
           height: @element.find('#media_youtube_height').val() || 349,
@@ -60,7 +64,11 @@
         Mercury.trigger('action', {action: 'insertHTML', value: value})
 
       when 'vimeo_url'
-        code = @element.find('#media_vimeo_url').val().replace('http://vimeo.com/', '')
+        url = @element.find('#media_vimeo_url').val()
+        unless /^http:\/\/vimeo.com\//.match(url)
+          alert('Error: The provided vimeo url was invalid.')
+          return
+        code = url.replace('http://vimeo.com/', '')
         value = jQuery('<iframe>', {
           width: @element.find('#media_vimeo_width').val() || 400,
           height: @element.find('#media_vimeo_height').val() || 225,

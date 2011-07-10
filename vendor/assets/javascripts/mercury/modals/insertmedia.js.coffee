@@ -50,7 +50,7 @@
 
       when 'youtube_url'
         url = @element.find('#media_youtube_url').val()
-        unless /^http:\/\/youtu.be\//.match(url)
+        unless /^http:\/\/youtu.be\//.test(url)
           alert('Error: The provided youtube share url was invalid.')
           return
         code = url.replace('http://youtu.be/', '')
@@ -65,7 +65,7 @@
 
       when 'vimeo_url'
         url = @element.find('#media_vimeo_url').val()
-        unless /^http:\/\/vimeo.com\//.match(url)
+        unless /^http:\/\/vimeo.com\//.test(url)
           alert('Error: The provided vimeo url was invalid.')
           return
         code = url.replace('http://vimeo.com/', '')

@@ -47,8 +47,8 @@ window.MercurySetup = {
     snippets: {
       method: 'POST',
       optionsUrl: '/mercury/snippets/:name/options.html',
-      previewUrl: '/mercury/snippets/:name/preview.html'
-    },
+      previewUrl: '/mercury/snippets/:name/preview.html',
+      },
 
 
     // ## Image Uploading
@@ -56,7 +56,8 @@ window.MercurySetup = {
     // If you drag images (while pressing shift) from your desktop into regions that support it, it will be uploade
     // to the server and inserted into the region.  This configuration allows you to specify if you want to
     // disable/enable this feature, the accepted mime-types, file size restrictions, and other things related to
-    // uploading.
+    // uploading.  You can optionally privide a handler function that takes the response from the server and returns an
+    // object: {image: {url: '[your provided url]'}
     //
     // **Note:** Image uploading is only supported in some region types.
     uploading: {
@@ -64,7 +65,8 @@ window.MercurySetup = {
       allowedMimeTypes: ['image/jpeg', 'image/gif', 'image/png'],
       maxFileSize: 1235242880,
       inputName: 'image[image]',
-      url: '/images'
+      url: '/images',
+      handler: false
       },
 
 
@@ -210,6 +212,7 @@ window.MercurySetup = {
           htmlEditor:          ['Edit HTML', 'Edit the HTML content', { regions: ['editable'] }]
           }
         },
+
       snippetable: {
         _custom:               true,
         actions:               {
@@ -268,7 +271,7 @@ window.MercurySetup = {
   // ## Debug Mode
   //
   // Turning debug mode on will log events and other various things (using console.debug if available).
-  debug: true
+  debug: false
 
 };
 
@@ -12057,6 +12060,7 @@ Showdown.converter = function() {
     supported: document.getElementById && document.designMode && !jQuery.browser.konqueror && !jQuery.browser.msie,
     Regions: {},
     modalHandlers: {},
+    lightviewHandlers: {},
     dialogHandlers: {},
     preloadedViews: {},
     bind: function(eventName, callback) {
@@ -13238,8 +13242,13 @@ Showdown.converter = function() {
       this.overlay.click(__bind(function() {
         return this.hide();
       }, this));
-      return this.titleElement.find('a').click(__bind(function() {
+      this.titleElement.find('a').click(__bind(function() {
         return this.hide();
+      }, this));
+      return jQuery(document).bind('keydown', __bind(function(event) {
+        if (event.keyCode === 27 && this.visible) {
+          return this.hide();
+        }
       }, this));
     },
     appear: function() {
@@ -13371,8 +13380,11 @@ Showdown.converter = function() {
       return this.load();
     },
     load: function() {
-      this.element.addClass('loading');
       this.setTitle();
+      if (!this.url) {
+        return;
+      }
+      this.element.addClass('loading');
       if (Mercury.preloadedViews[this.url]) {
         return setTimeout((__bind(function() {
           return this.loadContent(Mercury.preloadedViews[this.url]);
@@ -13433,11 +13445,248 @@ Showdown.converter = function() {
 }).call(this);
 (function() {
   var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+  this.Mercury.lightview = function(url, options) {
+    if (options == null) {
+      options = {};
+    }
+    Mercury.lightview.show(url, options);
+    return Mercury.lightview;
+  };
+  jQuery.extend(Mercury.lightview, {
+    minWidth: 400,
+    show: function(url, options) {
+      this.url = url;
+      this.options = options != null ? options : {};
+      Mercury.trigger('focus:window');
+      this.initialize();
+      if (this.visible) {
+        return this.update();
+      } else {
+        return this.appear();
+      }
+    },
+    initialize: function() {
+      if (this.initialized) {
+        return;
+      }
+      this.build();
+      this.bindEvents();
+      return this.initialized = true;
+    },
+    build: function() {
+      var _ref, _ref2;
+      this.element = jQuery('<div>', {
+        "class": 'mercury-lightview loading'
+      });
+      this.element.html('<h1 class="mercury-lightview-title"><span></span></h1>');
+      this.element.append('<div class="mercury-lightview-content"></div>');
+      this.overlay = jQuery('<div>', {
+        "class": 'mercury-lightview-overlay'
+      });
+      this.titleElement = this.element.find('.mercury-lightview-title');
+      this.contentElement = this.element.find('.mercury-lightview-content');
+      this.element.appendTo((_ref = jQuery(this.options.appendTo).get(0)) != null ? _ref : 'body');
+      this.overlay.appendTo((_ref2 = jQuery(this.options.appendTo).get(0)) != null ? _ref2 : 'body');
+      return this.titleElement.find('span').html(this.options.title);
+    },
+    bindEvents: function() {
+      Mercury.bind('refresh', __bind(function() {
+        return this.resize(true);
+      }, this));
+      Mercury.bind('resize', __bind(function() {
+        if (this.visible) {
+          return this.position();
+        }
+      }, this));
+      this.overlay.click(__bind(function() {
+        return this.hide();
+      }, this));
+      return jQuery(document).bind('keydown', __bind(function(event) {
+        if (event.keyCode === 27 && this.visible) {
+          return this.hide();
+        }
+      }, this));
+    },
+    appear: function() {
+      this.position();
+      this.overlay.show().css({
+        opacity: 0
+      });
+      return this.overlay.animate({
+        opacity: 1
+      }, 200, 'easeInOutSine', __bind(function() {
+        console.debug(this.overlay.css('opacity'));
+        this.setTitle();
+        this.element.show().css({
+          opacity: 0
+        });
+        return this.element.animate({
+          opacity: 1
+        }, 200, 'easeInOutSine', __bind(function() {
+          this.visible = true;
+          return this.load();
+        }, this));
+      }, this));
+    },
+    resize: function(keepVisible) {
+      var height, viewportHeight, viewportWidth, width;
+      viewportWidth = Mercury.displayRect.width;
+      viewportHeight = Mercury.displayRect.fullHeight;
+      this.element.css({
+        overflow: 'hidden'
+      });
+      this.contentElement.css({
+        visibility: 'hidden',
+        display: 'none',
+        width: 'auto',
+        height: 'auto'
+      });
+      width = this.contentElement.outerWidth() + 40 + 2;
+      if (width > viewportWidth - 40 || this.options.fullSize) {
+        width = viewportWidth - 40;
+      }
+      height = this.contentElement.outerHeight() + this.titleElement.outerHeight() + 30;
+      if (height > viewportHeight - 20 || this.options.fullSize) {
+        height = viewportHeight - 20;
+      }
+      if (width < 300) {
+        width = 300;
+      }
+      if (height < 150) {
+        height = 150;
+      }
+      return this.element.stop().animate({
+        top: ((viewportHeight - height) / 2) + 10,
+        left: (Mercury.displayRect.width - width) / 2,
+        width: width,
+        height: height
+      }, 200, 'easeInOutSine', __bind(function() {
+        this.contentElement.css({
+          visibility: 'visible',
+          display: 'block',
+          opacity: 0
+        });
+        this.contentElement.stop().animate({
+          opacity: 1
+        }, 200, 'easeInOutSine');
+        return this.element.css({
+          overflow: 'auto'
+        });
+      }, this));
+    },
+    position: function() {
+      var height, viewportHeight, viewportWidth, width;
+      viewportWidth = Mercury.displayRect.width;
+      viewportHeight = Mercury.displayRect.fullHeight;
+      this.contentElement.css({
+        position: 'absolute',
+        width: 'auto',
+        height: 'auto'
+      });
+      width = this.contentElement.width() + 40 + 2;
+      if (width > viewportWidth - 40 || this.options.fullSize) {
+        width = viewportWidth - 40;
+      }
+      height = this.contentElement.height() + this.titleElement.outerHeight() + 30;
+      if (height > viewportHeight - 20 || this.options.fullSize) {
+        height = viewportHeight - 20;
+      }
+      this.contentElement.css({
+        position: 'relative'
+      });
+      if (width < 300) {
+        width = 300;
+      }
+      if (height < 150) {
+        height = 150;
+      }
+      this.element.css({
+        top: ((viewportHeight - height) / 2) + 10,
+        left: (viewportWidth - width) / 2,
+        width: width,
+        height: height,
+        overflow: 'auto'
+      });
+      if (this.visible) {
+        return this.contentElement.css({
+          width: width - 40,
+          height: height - 30 - this.titleElement.outerHeight()
+        });
+      }
+    },
+    update: function() {
+      this.reset();
+      this.resize();
+      return this.load();
+    },
+    load: function() {
+      this.setTitle();
+      if (!this.url) {
+        return;
+      }
+      this.element.addClass('loading');
+      if (Mercury.preloadedViews[this.url]) {
+        return setTimeout((__bind(function() {
+          return this.loadContent(Mercury.preloadedViews[this.url]);
+        }, this)), 10);
+      } else {
+        return jQuery.ajax(this.url, {
+          type: this.options.loadType || 'get',
+          data: this.options.loadData,
+          success: __bind(function(data) {
+            return this.loadContent(data);
+          }, this),
+          error: __bind(function() {
+            this.hide();
+            return alert("Mercury was unable to load " + this.url + " for the lightview.");
+          }, this)
+        });
+      }
+    },
+    loadContent: function(data, options) {
+      if (options == null) {
+        options = null;
+      }
+      this.initialize();
+      this.options = options || this.options;
+      this.setTitle();
+      this.loaded = true;
+      this.element.removeClass('loading');
+      this.contentElement.html(data);
+      this.contentElement.css({
+        display: 'none',
+        visibility: 'hidden'
+      });
+      if (this.options.afterLoad) {
+        this.options.afterLoad.call(this);
+      }
+      if (this.options.handler && Mercury.lightviewHandlers[this.options.handler]) {
+        Mercury.lightviewHandlers[this.options.handler].call(this);
+      }
+      return this.resize();
+    },
+    setTitle: function() {
+      return this.titleElement.find('span').html(this.options.title);
+    },
+    reset: function() {
+      this.titleElement.find('span').html('');
+      return this.contentElement.html('');
+    },
+    hide: function() {
+      Mercury.trigger('focus:frame');
+      this.element.hide();
+      this.overlay.hide();
+      this.reset();
+      return this.visible = false;
+    }
+  });
+}).call(this);
+(function() {
+  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
   this.Mercury.Statusbar = (function() {
     function Statusbar(options) {
       this.options = options != null ? options : {};
       this.visible = this.options.visible;
-      this.projectLink = '<a href="http://jejacks0n.github.com/mercury" target="_blank" class="mercury-project-link">Mercury Editor v' + Mercury.version + '</a>';
       this.build();
       this.bindEvents();
     }
@@ -13446,6 +13695,12 @@ Showdown.converter = function() {
       this.element = jQuery('<div>', {
         "class": 'mercury-statusbar'
       });
+      this.aboutElement = jQuery('<a>', {
+        "class": "mercury-statusbar-about"
+      }).appendTo(this.element).html("Mercury Editor v" + Mercury.version);
+      this.pathElement = jQuery('<div>', {
+        "class": 'mercury-statusbar-path'
+      }).appendTo(this.element);
       if (!this.visible) {
         this.element.css({
           visibility: 'hidden'
@@ -13454,10 +13709,15 @@ Showdown.converter = function() {
       return this.element.appendTo((_ref = jQuery(this.options.appendTo).get(0)) != null ? _ref : 'body');
     };
     Statusbar.prototype.bindEvents = function() {
-      return Mercury.bind('region:update', __bind(function(event, options) {
+      Mercury.bind('region:update', __bind(function(event, options) {
         if (options.region && jQuery.type(options.region.path) === 'function') {
           return this.setPath(options.region.path());
         }
+      }, this));
+      return this.aboutElement.click(__bind(function() {
+        return Mercury.lightview('/mercury/lightviews/about.html', {
+          title: "About Mercury Editor v" + Mercury.version
+        });
       }, this));
     };
     Statusbar.prototype.height = function() {
@@ -13480,7 +13740,7 @@ Showdown.converter = function() {
         element = elements[_i];
         path.push("<a>" + (element.tagName.toLowerCase()) + "</a>");
       }
-      return this.element.html("<span><strong>Path: </strong>" + (path.reverse().join(' &raquo; ')) + "</span>" + this.projectLink);
+      return this.pathElement.html("<span><strong>Path: </strong>" + (path.reverse().join(' &raquo; ')) + "</span>");
     };
     Statusbar.prototype.show = function() {
       this.visible = true;
@@ -14045,6 +14305,7 @@ Showdown.converter = function() {
       return this.element.appendTo((_ref = jQuery(this.options.appendTo).get(0)) != null ? _ref : 'body');
     },
     bindEvents: function() {
+      var parent, _i, _len, _ref;
       Mercury.bind('resize', __bind(function() {
         if (this.visible) {
           return this.position();
@@ -14055,6 +14316,17 @@ Showdown.converter = function() {
           return this.position();
         }
       }, this));
+      _ref = this.forElement.parentsUntil(jQuery('body', this.document));
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        parent = _ref[_i];
+        if (parent.scrollHeight > parent.clientHeight) {
+          jQuery(parent).scroll(__bind(function() {
+            if (this.visible) {
+              return this.position();
+            }
+          }, this));
+        }
+      }
       return this.element.mousedown(function(event) {
         event.preventDefault();
         return event.stopPropagation();
@@ -14608,16 +14880,25 @@ Showdown.converter = function() {
       }, this));
       xhr.onload = __bind(function(event) {
         var response;
-        try {
-          response = jQuery.parseJSON(event.target.responseText);
-          return Mercury.trigger('action', {
-            action: 'insertImage',
-            value: {
-              src: response.image.url
-            }
-          });
-        } catch (error) {
-          return this.updateStatus('Unable to process response');
+        console.debug(event);
+        if (event.currentTarget.status >= 400) {
+          this.updateStatus('Error: Unable to upload the file');
+          alert("" + event.currentTarget.status + ": Unable to process response");
+          return this.hide();
+        } else {
+          try {
+            response = Mercury.config.uploading.handler ? Mercury.config.uploading.handler(event.target.responseText) : jQuery.parseJSON(event.target.responseText);
+            return Mercury.trigger('action', {
+              action: 'insertImage',
+              value: {
+                src: response.image.url
+              }
+            });
+          } catch (error) {
+            this.updateStatus('Error: Unable to upload the file');
+            alert("Unable to process response: " + error);
+            return this.hide();
+          }
         }
       }, this);
       xhr.open('post', Mercury.config.uploading.url, true);
@@ -14688,7 +14969,7 @@ Showdown.converter = function() {
       },
       onerror: function() {
         this.updateStatus('Error: Unable to upload the file');
-        return this.hide(1);
+        return this.hide(3);
       }
     }
   });
@@ -14848,7 +15129,7 @@ Showdown.converter = function() {
         if (this.previewing) {
           return;
         }
-        if (event.shiftKey) {
+        if (!Mercury.snippet) {
           event.preventDefault();
         }
         return event.originalEvent.dataTransfer.dropEffect = 'copy';
@@ -14857,7 +15138,7 @@ Showdown.converter = function() {
         if (this.previewing) {
           return;
         }
-        if (event.shiftKey) {
+        if (!Mercury.snippet) {
           event.preventDefault();
         }
         event.originalEvent.dataTransfer.dropEffect = 'copy';
@@ -15337,6 +15618,7 @@ Showdown.converter = function() {
       this.range = this.selection.getRangeAt(0);
       this.fragment = this.range.cloneContents();
       this.clone = this.range.cloneRange();
+      this.collapsed = this.selection.isCollapsed;
     }
     Selection.prototype.commonAncestor = function(onlyTag) {
       var ancestor;
@@ -16467,7 +16749,7 @@ Showdown.converter = function() {
       }
     }
     return this.element.find('form').submit(__bind(function(event) {
-      var alignment, attrs, code, type, value;
+      var alignment, attrs, code, type, url, value;
       event.preventDefault();
       type = this.element.find('input[name=media_type]:checked').val();
       switch (type) {
@@ -16484,7 +16766,12 @@ Showdown.converter = function() {
           });
           break;
         case 'youtube_url':
-          code = this.element.find('#media_youtube_url').val().replace('http://youtu.be/', '');
+          url = this.element.find('#media_youtube_url').val();
+          if (!/^http:\/\/youtu.be\//.test(url)) {
+            alert('Error: The provided youtube share url was invalid.');
+            return;
+          }
+          code = url.replace('http://youtu.be/', '');
           value = jQuery('<iframe>', {
             width: this.element.find('#media_youtube_width').val() || 560,
             height: this.element.find('#media_youtube_height').val() || 349,
@@ -16498,7 +16785,12 @@ Showdown.converter = function() {
           });
           break;
         case 'vimeo_url':
-          code = this.element.find('#media_vimeo_url').val().replace('http://vimeo.com/', '');
+          url = this.element.find('#media_vimeo_url').val();
+          if (!/^http:\/\/vimeo.com\//.test(url)) {
+            alert('Error: The provided vimeo url was invalid.');
+            return;
+          }
+          code = url.replace('http://vimeo.com/', '');
           value = jQuery('<iframe>', {
             width: this.element.find('#media_vimeo_width').val() || 400,
             height: this.element.find('#media_vimeo_height').val() || 225,

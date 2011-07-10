@@ -347,6 +347,104 @@ form fieldset.buttons .commit input:hover {
 .mercury-snippet-panel ul li h4 {
   margin-bottom: 5px;
 }
+/* history / notes */
+.mercury-history-panel,
+.mercury-notes-panel {
+  width: 250px;
+}
+/*
+ * Lightview
+ *----------------------------------------------------------------------------*/
+
+.mercury-lightview-overlay {
+  position: fixed;
+  z-index: 10030;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  display: none;
+  background: rgba(0, 0, 0, .65);
+}
+.mercury-lightview {
+  position: fixed;
+  z-index: 10040;
+  top: 20px;
+  background: #000;
+  opacity: 0;
+  overflow: hidden;
+  display: none;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+  -moz-box-shadow: 0 0 40px rgba(0, 0, 0, .9);
+  box-shadow: 0 0 40px rgba(0, 0, 0, .9);
+  font: normal normal normal 12px/normal Helvetica, Tahoma, Arial, sans-serif;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  color: #CCC;
+}
+.mercury-lightview.loading {
+  background: #000 url(/assets/mercury/loading-dark.gif) no-repeat center;
+}
+.mercury-lightview .mercury-lightview-content {
+  margin: 10px 20px 20px;
+}
+.mercury-lightview h1.mercury-lightview-title {
+  margin: 0;
+  padding: 10px 20px 8px;
+  border-bottom: 1px solid #222;
+  color: #FFF;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  font-size: 10pt;
+  white-space: nowrap;
+  text-shadow: 1px 1px 2px rgba(100, 100, 100, .5);
+}
+/*
+ * Forms
+ *----------------------------------------------------------------------------*/
+.mercury-lightview form fieldset {
+  background: #111;
+  border: 1px solid #333;
+}
+.mercury-lightview form fieldset.buttons {
+  background: none;
+  border: none;
+}
+.mercury-lightview form select,
+.mercury-lightview form input[type="text"],
+.mercury-lightview form input[type="password"],
+.mercury-lightview form textarea,
+.mercury-lightview form input.text {
+  background: #000;
+  color: #FFF;
+  border: 2px solid #555;
+}
+/*
+ * Specific Lightviews
+ *----------------------------------------------------------------------------*/
+/* about mercury */
+.mercury-about-lightview {
+  width: 200px;
+  min-height: 100px;
+  padding-left: 130px;
+  background: url(/assets/mercury/temp-logo.png) no-repeat left center;
+  font-size: .9em;
+}
+.mercury-about-lightview ul {
+  list-style: none;
+  padding: 0;
+  margin: 20px 0 0 0;
+}
+.mercury-about-lightview a {
+  color: #09F;
+}
+.mercury-about-lightview a:hover {
+  color: #FFF;
+}
 /*
  * Modal
  *----------------------------------------------------------------------------*/
@@ -456,6 +554,9 @@ form fieldset.buttons .commit input:hover {
   border-top: 1px solid #CCC;
   text-align: right;
 }
+/*
+ * Forms
+ *----------------------------------------------------------------------------*/
 .mercury-modal textarea {
   resize: none;
   padding: 0;
@@ -521,6 +622,7 @@ form fieldset.buttons .commit input:hover {
   border: 1px solid #CCC;
   border-radius: 7px;
   -moz-border-radius: 7px;
+  overflow:  auto;
 }
 #mercury_table #table_display table {
   width: 100%;
@@ -534,6 +636,7 @@ form fieldset.buttons .commit input:hover {
   float: left;
   margin-left: 10px;
 }
+
 /*
  * Statusbar
  *----------------------------------------------------------------------------*/
@@ -560,13 +663,12 @@ form fieldset.buttons .commit input:hover {
   line-height: 23px;
   color: #222;
 }
-.mercury-statusbar .mercury-project-link {
+.mercury-statusbar .mercury-statusbar-about {
   display: block;
   float: right;
   color: #333;
   text-shadow: #EEE 0 1px 0;
   text-decoration: none;
-  text-transform: uppercase;
 }
 /*
  * Toolbar
@@ -929,6 +1031,9 @@ form fieldset.buttons .commit input:hover {
  * Uploader
  *----------------------------------------------------------------------------*/
 
+[draggable=true] {
+  -khtml-user-drag: element;
+}
 .mercury-uploader-overlay {
   position: absolute;
   z-index: 10040;
@@ -937,7 +1042,7 @@ form fieldset.buttons .commit input:hover {
   width: 100%;
   height: 100%;
   opacity: .95;
-  background: rgba(0,0,0, .65);
+  background: rgba(0, 0, 0, .65);
 }
 .mercury-uploader {
   position: absolute;
@@ -951,6 +1056,8 @@ form fieldset.buttons .commit input:hover {
   background: rgba(0,0,0, .70);
   border-radius: 10px;
   -moz-border-radius: 10px;
+  -moz-box-shadow: 0 0 40px rgba(0, 0, 0, .9);
+  box-shadow: 0 0 40px rgba(0, 0, 0, .9);
   font: normal normal normal 12px/normal Helvetica, Tahoma, Arial, sans-serif;
   color: #CCC;
 }

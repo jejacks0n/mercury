@@ -36,7 +36,7 @@ if (!window.mercuryPackages) window.mercuryPackages = {
 
 // ## Mercury Loader
 (function() {
-	// Useragent detection, which we use to determine if the client is supported.  We do this method instead of checking
+  // Useragent detection, which we use to determine if the client is supported.  We do this method instead of checking
   // features because many of the features are supported in IE, but aren't implemented to the W3C spec.
   var browser = {
     webkit: /(webkit)[ \/]([\w.]+)/,

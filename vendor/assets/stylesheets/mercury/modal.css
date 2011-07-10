@@ -106,6 +106,9 @@
   border-top: 1px solid #CCC;
   text-align: right;
 }
+/*
+ * Forms
+ *----------------------------------------------------------------------------*/
 .mercury-modal textarea {
   resize: none;
   padding: 0;

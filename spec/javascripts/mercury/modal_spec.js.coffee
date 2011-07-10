@@ -13,6 +13,7 @@ describe "Mercury.modal", ->
     Mercury.modal.visible = false
     $(document).unbind('mercury:refresh')
     $(document).unbind('mercury:resize')
+    $(document).unbind('keydown')
 
   describe "singleton method", ->
 
@@ -99,7 +100,7 @@ describe "Mercury.modal", ->
     it "creates a titleElement", ->
       Mercury.modal.build()
       expect($('#test .mercury-modal-title').length).toEqual(1)
-      expect($('#test .mercury-modal-title').html()).toEqual('<span></span><a>×</a>')
+      expect($('#test .mercury-modal-title').html()).toMatch(/<span><\/span><a>.+<\/a>/)
       expect(Mercury.modal.titleElement).toBeDefined()
 
     it "creates a contentContainerElement", ->
@@ -157,6 +158,16 @@ describe "Mercury.modal", ->
       it "calls hide", ->
         spy = spyOn(Mercury.modal, 'hide').andCallFake(=>)
         jasmine.simulate.click($('.mercury-modal-title a').get(0))
+        expect(spy.callCount).toEqual(1)
+
+    describe "pressing esc on document", ->
+
+      beforeEach ->
+        Mercury.modal.visible = true
+      
+      it "calls hide", ->
+        spy = spyOn(Mercury.modal, 'hide').andCallFake(=>)
+        jasmine.simulate.keydown(document, {keyCode: 27})
         expect(spy.callCount).toEqual(1)
 
 
@@ -239,6 +250,7 @@ describe "Mercury.modal", ->
     beforeEach ->
       spyOn(Mercury.modal, 'appear').andCallFake(=>)
 
+    # todo: test this
     it "positions the element", ->
 
 
@@ -266,6 +278,12 @@ describe "Mercury.modal", ->
       spyOn(Mercury.modal, 'appear').andCallFake(=>)
       @ajaxSpy = spyOn($, 'ajax')
       Mercury.modal('/evergreen/responses/blank.html', {appendTo: $('#test')})
+
+    it "does nothing if there's no url", ->
+      Mercury.modal.url = null
+      $('.mercury-modal').removeClass('loading')
+      Mercury.modal.load()
+      expect($('.mercury-modal').hasClass('loading')).toEqual(false)
 
     it "sets the loading class on the element", ->
       Mercury.modal.load()

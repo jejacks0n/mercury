@@ -44,6 +44,9 @@ jQuery.extend Mercury.modal, {
 
     @titleElement.find('a').click => @hide()
 
+    jQuery(document).bind 'keydown', (event) =>
+       @hide() if event.keyCode == 27 && @visible
+
 
   appear: ->
     @position()
@@ -122,8 +125,9 @@ jQuery.extend Mercury.modal, {
 
 
   load: ->
-    @element.addClass('loading')
     @setTitle()
+    return unless @url
+    @element.addClass('loading')
     if Mercury.preloadedViews[@url]
       setTimeout((=> @loadContent(Mercury.preloadedViews[@url])), 10)
     else

@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Jeremy Jackson"]
-  s.date = %q{2011-07-04}
+  s.date = %q{2011-07-10}
   s.description = %q{A fully featured and advanced HTML5 WYSIWYG editor written in CoffeeScript on top of Rails 3.1}
   s.email = %q{jejacks0n@gmail.com}
   s.extra_rdoc_files = [
@@ -20,10 +20,13 @@ Gem::Specification.new do |s|
     "LICENSE",
     "README.md",
     "VERSION",
+    "annotated_source.template",
     "app/controllers/images_controller.rb",
     "app/controllers/mercury_controller.rb",
     "app/models/image.rb",
     "app/views/layouts/mercury.html.erb",
+    "app/views/mercury/lightviews/about.html",
+    "app/views/mercury/lightviews/imageprocessor.html",
     "app/views/mercury/modals/character.html",
     "app/views/mercury/modals/htmleditor.html",
     "app/views/mercury/modals/link.html",
@@ -58,6 +61,7 @@ Gem::Specification.new do |s|
     "spec/javascripts/mercury/dialogs/snippetpanel_spec.js.coffee",
     "spec/javascripts/mercury/dialogs/style_spec.js.coffee",
     "spec/javascripts/mercury/history_buffer_spec.js.coffee",
+    "spec/javascripts/mercury/lightview_spec.js.coffee",
     "spec/javascripts/mercury/mercury_spec.js.coffee",
     "spec/javascripts/mercury/modal_spec.js.coffee",
     "spec/javascripts/mercury/modals/htmleditor_spec.js.coffee",
@@ -93,6 +97,7 @@ Gem::Specification.new do |s|
     "spec/javascripts/templates/mercury/dialogs/formatblock.html",
     "spec/javascripts/templates/mercury/dialogs/snippetpanel.html",
     "spec/javascripts/templates/mercury/dialogs/style.html",
+    "spec/javascripts/templates/mercury/lightview.html",
     "spec/javascripts/templates/mercury/modal.html",
     "spec/javascripts/templates/mercury/modals/htmleditor.html",
     "spec/javascripts/templates/mercury/modals/insertcharacter.html",
@@ -123,6 +128,7 @@ Gem::Specification.new do |s|
     "vendor/assets/images/mercury/loading-dark.gif",
     "vendor/assets/images/mercury/loading-light.gif",
     "vendor/assets/images/mercury/search-icon.png",
+    "vendor/assets/images/mercury/temp-logo.png",
     "vendor/assets/images/mercury/toolbar/editable/buttons.png",
     "vendor/assets/images/mercury/toolbar/primary/_expander.png",
     "vendor/assets/images/mercury/toolbar/primary/_pressed.png",
@@ -147,6 +153,8 @@ Gem::Specification.new do |s|
     "vendor/assets/javascripts/mercury/dialogs/objectspanel.js.coffee",
     "vendor/assets/javascripts/mercury/dialogs/style.js.coffee",
     "vendor/assets/javascripts/mercury/history_buffer.js.coffee",
+    "vendor/assets/javascripts/mercury/image_processor.js.coffee",
+    "vendor/assets/javascripts/mercury/lightview.js.coffee",
     "vendor/assets/javascripts/mercury/mercury.js.coffee",
     "vendor/assets/javascripts/mercury/modal.js.coffee",
     "vendor/assets/javascripts/mercury/modals/htmleditor.js.coffee",
@@ -182,6 +190,7 @@ Gem::Specification.new do |s|
     "vendor/assets/javascripts/mercury_loader.js",
     "vendor/assets/stylesheets/mercury.css",
     "vendor/assets/stylesheets/mercury/dialog.css",
+    "vendor/assets/stylesheets/mercury/lightview.css",
     "vendor/assets/stylesheets/mercury/mercury.css",
     "vendor/assets/stylesheets/mercury/modal.css",
     "vendor/assets/stylesheets/mercury/statusbar.css",

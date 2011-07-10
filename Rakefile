@@ -89,7 +89,7 @@ Jeweler::Tasks.new do |gem|
     'config/evergreen.rb',
     'db/*.sqlite3',
     'db/schema.rb',
-    'docs/**/*',
+    'annotated_source/**/*',
     'lib/tasks/*',
     'public/**/*',
     'script/*',

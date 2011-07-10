@@ -49,7 +49,7 @@ jQuery.extend Mercury.lightview, {
     @position()
 
     @overlay.show().css({opacity: 0})
-    @overlay.animate {opacity: 1}, 2000, 'easeInOutSine', =>
+    @overlay.animate {opacity: 1}, 200, 'easeInOutSine', =>
       console.debug(@overlay.css('opacity'))
       @setTitle()
       @element.show().css({opacity: 0})
@@ -95,7 +95,7 @@ jQuery.extend Mercury.lightview, {
     height = 150 if height < 150
 
     @element.css({top: ((viewportHeight - height) / 2) + 10, left: (viewportWidth - width) / 2, width: width, height: height, overflow: 'auto'})
-    @contentElement.css({width: width - 40, height: height - 30 - @titleElement.outerHeight()})
+    @contentElement.css({width: width - 40, height: height - 30 - @titleElement.outerHeight()}) if @visible
 
 
   update:  ->

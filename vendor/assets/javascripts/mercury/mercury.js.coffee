@@ -41,6 +41,7 @@ jQuery.extend @Mercury, {
   # Mercury object namespaces
   Regions: {}
   modalHandlers: {}
+  lightviewHandlers: {}
   dialogHandlers: {}
   preloadedViews: {}
 

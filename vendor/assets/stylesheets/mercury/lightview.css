@@ -16,7 +16,6 @@
   position: fixed;
   z-index: 10040;
   top: 20px;
-  padding: 20px;
   background: #000;
   opacity: 0;
   overflow: hidden;
@@ -29,18 +28,47 @@
   font: normal normal normal 12px/normal Helvetica, Tahoma, Arial, sans-serif;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
+  color: #CCC;
 }
 .mercury-lightview.loading {
   background: #000 url(/assets/mercury/loading-dark.gif) no-repeat center;
 }
+.mercury-lightview .mercury-lightview-content {
+  margin: 10px 20px 20px;
+}
 .mercury-lightview h1.mercury-lightview-title {
-  margin: -20px -20px 10px;
+  margin: 0;
   padding: 10px 20px 8px;
+  border-bottom: 1px solid #222;
   color: #FFF;
   -webkit-user-select: none;
   -moz-user-select: none;
   user-select: none;
   font-size: 10pt;
   white-space: nowrap;
-  text-shadow: 1px 1px 2px rgba(0,0,0, .9);
+  text-shadow: 1px 1px 2px rgba(100, 100, 100, .5);
 }
+/*
+ * Forms
+ *----------------------------------------------------------------------------*/
+.mercury-lightview form fieldset {
+  background: #111;
+  border: 1px solid #333;
+}
+.mercury-lightview form fieldset.buttons {
+  background: none;
+  border: none;
+}
+.mercury-lightview form select,
+.mercury-lightview form input[type="text"],
+.mercury-lightview form input[type="password"],
+.mercury-lightview form textarea,
+.mercury-lightview form input.text {
+  background: #000;
+  color: #FFF;
+  border: 2px solid #555;
+}
+/*
+ * Specific Lightviews
+ *----------------------------------------------------------------------------*/
+/* about mercury */

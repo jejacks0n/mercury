@@ -37,25 +37,65 @@ jQuery.extend Mercury.lightview, {
 
   bindEvents: ->
     Mercury.bind 'refresh', => @resize(true)
-    Mercury.bind 'resize', => @position()
+    Mercury.bind 'resize', => @position() if @visible
+
+    @overlay.click => @hide()
+
+    jQuery(document).bind 'keydown', (event) =>
+       @hide() if event.keyCode == 27 && @visible
 
 
   appear: ->
     @position()
 
-    @overlay.show()
-    @overlay.animate {opacity: 1}, 200, 'easeInOutSine', =>
+    @overlay.show().css({opacity: 0})
+    @overlay.animate {opacity: 1}, 2000, 'easeInOutSine', =>
+      console.debug(@overlay.css('opacity'))
       @setTitle()
-      @element.show()
+      @element.show().css({opacity: 0})
       @element.animate {opacity: 1}, 200, 'easeInOutSine', =>
         @visible = true
         @load()
 
 
   resize: (keepVisible) ->
+    viewportWidth = Mercury.displayRect.width
+    viewportHeight = Mercury.displayRect.fullHeight
+
+    @element.css({overflow: 'hidden'})
+    @contentElement.css({visibility: 'hidden', display: 'none', width: 'auto', height: 'auto'})
+
+    width = @contentElement.outerWidth() + 40 + 2
+    width = viewportWidth - 40 if width > viewportWidth - 40 || @options.fullSize
+    height = @contentElement.outerHeight() + @titleElement.outerHeight() + 30
+    height = viewportHeight - 20 if height > viewportHeight - 20 || @options.fullSize
+
+    width = 300 if width < 300
+    height = 150 if height < 150
+
+    @element.stop().animate {top: ((viewportHeight - height) / 2) + 10, left: (Mercury.displayRect.width - width) / 2, width: width, height: height}, 200, 'easeInOutSine', =>
+      @contentElement.css({visibility: 'visible', display: 'block', opacity: 0})
+      @contentElement.stop().animate({opacity: 1}, 200, 'easeInOutSine')
+      @element.css({overflow: 'auto'})
 
 
   position: ->
+    viewportWidth = Mercury.displayRect.width
+    viewportHeight = Mercury.displayRect.fullHeight
+
+    @contentElement.css({position: 'absolute', width: 'auto', height: 'auto'})
+    width = @contentElement.width() + 40 + 2
+    width = viewportWidth - 40 if width > viewportWidth - 40 || @options.fullSize
+
+    height = @contentElement.height() + @titleElement.outerHeight() + 30
+    height = viewportHeight - 20 if height > viewportHeight - 20 || @options.fullSize
+    @contentElement.css({position: 'relative'})
+
+    width = 300 if width < 300
+    height = 150 if height < 150
+
+    @element.css({top: ((viewportHeight - height) / 2) + 10, left: (viewportWidth - width) / 2, width: width, height: height, overflow: 'auto'})
+    @contentElement.css({width: width - 40, height: height - 30 - @titleElement.outerHeight()})
 
 
   update:  ->
@@ -65,8 +105,9 @@ jQuery.extend Mercury.lightview, {
 
 
   load: ->
-    @element.addClass('loading')
     @setTitle()
+    return unless @url
+    @element.addClass('loading')
     if Mercury.preloadedViews[@url]
       setTimeout((=> @loadContent(Mercury.preloadedViews[@url])), 10)
     else

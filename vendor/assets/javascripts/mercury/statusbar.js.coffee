@@ -2,13 +2,15 @@ class @Mercury.Statusbar
 
   constructor: (@options = {}) ->
     @visible = @options.visible
-    @projectLink = '<a href="http://jejacks0n.github.com/mercury" target="_blank" class="mercury-project-link">Mercury Editor v' + Mercury.version + '</a>'
     @build()
     @bindEvents()
 
 
   build: ->
     @element = jQuery('<div>', {class: 'mercury-statusbar'})
+    @aboutElement = jQuery('<a>', {class: "mercury-statusbar-about"}).appendTo(@element).html("Mercury Editor v#{Mercury.version}")
+    @pathElement = jQuery('<div>', {class: 'mercury-statusbar-path'}).appendTo(@element)
+
     @element.css({visibility: 'hidden'}) unless @visible
     @element.appendTo(jQuery(@options.appendTo).get(0) ? 'body')
 
@@ -16,6 +18,9 @@ class @Mercury.Statusbar
   bindEvents: ->
     Mercury.bind 'region:update', (event, options) =>
       @setPath(options.region.path()) if options.region && jQuery.type(options.region.path) == 'function'
+
+    @aboutElement.click =>
+      Mercury.lightview('/mercury/lightviews/about.html', {title: "About Mercury Editor v#{Mercury.version}"})
 
 
   height: ->
@@ -32,7 +37,7 @@ class @Mercury.Statusbar
     path = []
     path.push("<a>#{element.tagName.toLowerCase()}</a>") for element in elements
 
-    @element.html("<span><strong>Path: </strong>#{path.reverse().join(' &raquo; ')}</span>#{@projectLink}")
+    @pathElement.html("<span><strong>Path: </strong>#{path.reverse().join(' &raquo; ')}</span>")
 
 
   show: ->

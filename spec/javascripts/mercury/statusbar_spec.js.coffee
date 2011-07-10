@@ -43,6 +43,10 @@ describe "Mercury.Statusbar", ->
     it "builds an element", ->
       expect($('.mercury-statusbar').length).toEqual(1)
 
+    it "builds an about element", ->
+      expect($('.mercury-statusbar-about').length).toEqual(1)
+      expect(@statusbar.aboutElement).toBeDefined()
+
     it "hides the element if it's not supposed to be visible", ->
       expect($('.mercury-statusbar').css('visibility')).toEqual('hidden')
 
@@ -53,15 +57,20 @@ describe "Mercury.Statusbar", ->
   describe "observed events ", ->
 
     beforeEach ->
-      spyOn(Mercury.Statusbar.prototype, 'build').andCallFake(=>)
       @statusbar = new Mercury.Statusbar({appendTo: '#test'})
 
     describe "custom event: region:update", ->
 
       it "calls setPath if a region was provided", ->
         spy = spyOn(Mercury.Statusbar.prototype, 'setPath').andCallFake(=>)
-
         Mercury.trigger('region:update', {region: @region})
+        expect(spy.callCount).toEqual(1)
+
+    describe "clicking on the about element", ->
+
+      it "opens a lightview", ->
+        spy = spyOn(Mercury, 'lightview').andCallFake(=>)
+        jasmine.simulate.click($('.mercury-statusbar-about').get(0))
         expect(spy.callCount).toEqual(1)
 
 
@@ -103,7 +112,7 @@ describe "Mercury.Statusbar", ->
 
     it "builds a path and displays it", ->
       @statusbar.setPath(@region.path())
-      expect($('.mercury-statusbar').html()).toContain('<span><strong>Path: </strong><a>c</a> » <a>b</a> » <a>a</a></span>')
+      expect($('.mercury-statusbar').html()).toMatch(/<span><strong>Path: <\/strong><a>c<\/a> .+ <a>b<\/a> .+ <a>a<\/a><\/span>/)
 
 
   describe "#show", ->

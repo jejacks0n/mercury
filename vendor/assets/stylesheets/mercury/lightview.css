@@ -72,3 +72,21 @@
  * Specific Lightviews
  *----------------------------------------------------------------------------*/
 /* about mercury */
+.mercury-about-lightview {
+  width: 200px;
+  height: 100px;
+  padding-left: 130px;
+  background: url(/assets/mercury/temp-logo.png) no-repeat left center;
+  font-size: .9em;
+}
+.mercury-about-lightview ul {
+  list-style: none;
+  padding: 0;
+  margin: 20px 0 0 0;
+}
+.mercury-about-lightview a {
+  color: #09F;
+}
+.mercury-about-lightview a:hover {
+  color: #FFF;
+}

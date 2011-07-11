@@ -1,5 +1,5 @@
 /*!
- * Mercury Editor is a Coffeescript and jQuery based WYSIWYG editor.  Documentation and other useful information can be
+ * Mercury Editor is a CoffeeScript and jQuery based WYSIWYG editor.  Documentation and other useful information can be
  * found at https://github.com/jejacks0n/mercury
  *
  * Supported browsers:
@@ -56,7 +56,7 @@ window.MercurySetup = {
     // If you drag images (while pressing shift) from your desktop into regions that support it, it will be uploaded
     // to the server and inserted into the region.  This configuration allows you to specify if you want to
     // disable/enable this feature, the accepted mime-types, file size restrictions, and other things related to
-    // uploading.  You can optionally privide a handler function that takes the response from the server and returns an
+    // uploading.  You can optionally provide a handler function that takes the response from the server and returns an
     // object: {image: {url: '[your provided url]'}
     //
     // **Note:** Image uploading is only supported in some region types.
@@ -114,7 +114,7 @@ window.MercurySetup = {
     //         automatically, thus putting the editor into a specific "state"
     // - regions: allows buttons to be enabled/disabled based on what region type has focus, expects the action to be:
     //   1. an array of region types (eg. ['editable', 'markupable'])
-    // - preload: allows some dialog views to be loaded whtn the button is created instead of on first open, expects:
+    // - preload: allows some dialog views to be loaded when the button is created instead of on first open, expects:
     //   1. a boolean true / false
     //   note: this is only used by panels, selects, and palettes
     //
@@ -14464,7 +14464,7 @@ Showdown.converter = function() {
       return Mercury.modal(Mercury.config.snippets.optionsUrl.replace(':name', this.name), {
         title: 'Snippet Options',
         handler: 'insertSnippet',
-        loadType: 'post',
+        loadType: Mercury.config.snippets.method,
         loadData: this.options
       });
     };

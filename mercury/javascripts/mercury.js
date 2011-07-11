@@ -45,15 +45,15 @@ window.MercurySetup = {
     //
     // Name will be replaced with the snippet name (eg. example)
     snippets: {
-      method: 'POST',
+      method: 'GET',
       optionsUrl: '/mercury/snippets/:name/options.html',
-      previewUrl: '/mercury/snippets/:name/preview.html',
+      previewUrl: '/mercury/snippets/:name/preview.html'
       },
 
 
     // ## Image Uploading
     //
-    // If you drag images (while pressing shift) from your desktop into regions that support it, it will be uploade
+    // If you drag images (while pressing shift) from your desktop into regions that support it, it will be uploaded
     // to the server and inserted into the region.  This configuration allows you to specify if you want to
     // disable/enable this feature, the accepted mime-types, file size restrictions, and other things related to
     // uploading.  You can optionally privide a handler function that takes the response from the server and returns an

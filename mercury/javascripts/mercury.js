@@ -13515,7 +13515,6 @@ Showdown.converter = function() {
       return this.overlay.animate({
         opacity: 1
       }, 200, 'easeInOutSine', __bind(function() {
-        console.debug(this.overlay.css('opacity'));
         this.setTitle();
         this.element.show().css({
           opacity: 0

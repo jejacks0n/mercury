@@ -68,7 +68,7 @@ class @Mercury.Snippet
     Mercury.modal Mercury.config.snippets.optionsUrl.replace(':name', @name), {
       title: 'Snippet Options',
       handler: 'insertSnippet',
-      loadType: 'post',
+      loadType: Mercury.config.snippets.method,
       loadData: @options
     }
 

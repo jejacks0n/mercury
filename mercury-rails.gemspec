@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Jeremy Jackson"]
-  s.date = %q{2011-07-10}
+  s.date = %q{2011-07-11}
   s.description = %q{A fully featured and advanced HTML5 WYSIWYG editor written in CoffeeScript on top of Rails 3.1}
   s.email = %q{jejacks0n@gmail.com}
   s.extra_rdoc_files = [
@@ -153,8 +153,8 @@ Gem::Specification.new do |s|
     "vendor/assets/javascripts/mercury/dialogs/objectspanel.js.coffee",
     "vendor/assets/javascripts/mercury/dialogs/style.js.coffee",
     "vendor/assets/javascripts/mercury/history_buffer.js.coffee",
-    "vendor/assets/javascripts/mercury/image_processor.js.coffee",
     "vendor/assets/javascripts/mercury/lightview.js.coffee",
+    "vendor/assets/javascripts/mercury/lightviews/imageprocessor.js.coffee",
     "vendor/assets/javascripts/mercury/mercury.js.coffee",
     "vendor/assets/javascripts/mercury/modal.js.coffee",
     "vendor/assets/javascripts/mercury/modals/htmleditor.js.coffee",

@@ -50,7 +50,6 @@ jQuery.extend Mercury.lightview, {
 
     @overlay.show().css({opacity: 0})
     @overlay.animate {opacity: 1}, 200, 'easeInOutSine', =>
-      console.debug(@overlay.css('opacity'))
       @setTitle()
       @element.show().css({opacity: 0})
       @element.animate {opacity: 1}, 200, 'easeInOutSine', =>

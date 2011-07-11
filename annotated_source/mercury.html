@@ -113,8 +113,8 @@ the options provided; this preview request is expected to respond with the rende
         <div class='highlight'><pre>    <span class="nx">snippets</span><span class="o">:</span> <span class="p">{</span>
       <span class="nx">method</span><span class="o">:</span> <span class="s1">&#39;POST&#39;</span><span class="p">,</span>
       <span class="nx">optionsUrl</span><span class="o">:</span> <span class="s1">&#39;/mercury/snippets/:name/options.html&#39;</span><span class="p">,</span>
-      <span class="nx">previewUrl</span><span class="o">:</span> <span class="s1">&#39;/mercury/snippets/:name/preview.html&#39;</span>
-    <span class="p">},</span></pre></div>
+      <span class="nx">previewUrl</span><span class="o">:</span> <span class="s1">&#39;/mercury/snippets/:name/preview.html&#39;</span><span class="p">,</span>
+      <span class="p">},</span></pre></div>
       </td>
     </tr>
     <tr id='section-Image_Uploading'>
@@ -127,7 +127,8 @@ the options provided; this preview request is expected to respond with the rende
 <p>If you drag images (while pressing shift) from your desktop into regions that support it, it will be uploade
 to the server and inserted into the region.  This configuration allows you to specify if you want to
 disable/enable this feature, the accepted mime-types, file size restrictions, and other things related to
-uploading.</p>
+uploading.  You can optionally privide a handler function that takes the response from the server and returns an
+object: {image: {url: &lsquo;[your provided url]&rsquo;}</p>
 
 <p><strong>Note:</strong> Image uploading is only supported in some region types.</p>
       </td>
@@ -137,7 +138,8 @@ uploading.</p>
       <span class="nx">allowedMimeTypes</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;image/jpeg&#39;</span><span class="p">,</span> <span class="s1">&#39;image/gif&#39;</span><span class="p">,</span> <span class="s1">&#39;image/png&#39;</span><span class="p">],</span>
       <span class="nx">maxFileSize</span><span class="o">:</span> <span class="mi">1235242880</span><span class="p">,</span>
       <span class="nx">inputName</span><span class="o">:</span> <span class="s1">&#39;image[image]&#39;</span><span class="p">,</span>
-      <span class="nx">url</span><span class="o">:</span> <span class="s1">&#39;/images&#39;</span>
+      <span class="nx">url</span><span class="o">:</span> <span class="s1">&#39;/images&#39;</span><span class="p">,</span>
+      <span class="nx">handler</span><span class="o">:</span> <span class="kc">false</span>
       <span class="p">},</span></pre></div>
       </td>
     </tr>
@@ -316,6 +318,7 @@ separator styles: line (&lsquo;&ndash;&rsquo;), and spacer (&lsquo; &rsquo;).</p
           <span class="nx">htmlEditor</span><span class="o">:</span>          <span class="p">[</span><span class="s1">&#39;Edit HTML&#39;</span><span class="p">,</span> <span class="s1">&#39;Edit the HTML content&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">regions</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;editable&#39;</span><span class="p">]</span> <span class="p">}]</span>
           <span class="p">}</span>
         <span class="p">},</span>
+
       <span class="nx">snippetable</span><span class="o">:</span> <span class="p">{</span>
         <span class="nx">_custom</span><span class="o">:</span>               <span class="kc">true</span><span class="p">,</span>
         <span class="nx">actions</span><span class="o">:</span>               <span class="p">{</span>
@@ -413,7 +416,7 @@ so here.</p>
 
       </td>
       <td class=code>
-        <div class='highlight'><pre>  <span class="nx">debug</span><span class="o">:</span> <span class="kc">true</span>
+        <div class='highlight'><pre>  <span class="nx">debug</span><span class="o">:</span> <span class="kc">false</span>
 
 <span class="p">};</span>
 

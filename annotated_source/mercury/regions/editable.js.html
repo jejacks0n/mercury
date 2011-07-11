@@ -164,12 +164,12 @@ mozilla: this makes double clicking in textareas fail: https://bugzilla.mozilla.
 
     <span class="nx">@element</span><span class="p">.</span><span class="nx">bind</span> <span class="s1">&#39;dragenter&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="o">=&gt;</span>
       <span class="k">return</span> <span class="k">if</span> <span class="nx">@previewing</span>
-      <span class="nx">event</span><span class="p">.</span><span class="nx">preventDefault</span><span class="p">()</span> <span class="k">if</span> <span class="nx">event</span><span class="p">.</span><span class="nx">shiftKey</span>
+      <span class="nx">event</span><span class="p">.</span><span class="nx">preventDefault</span><span class="p">()</span> <span class="nx">unless</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">snippet</span>
       <span class="nv">event.originalEvent.dataTransfer.dropEffect = </span><span class="s1">&#39;copy&#39;</span>
 
     <span class="nx">@element</span><span class="p">.</span><span class="nx">bind</span> <span class="s1">&#39;dragover&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="o">=&gt;</span>
       <span class="k">return</span> <span class="k">if</span> <span class="nx">@previewing</span>
-      <span class="nx">event</span><span class="p">.</span><span class="nx">preventDefault</span><span class="p">()</span> <span class="k">if</span> <span class="nx">event</span><span class="p">.</span><span class="nx">shiftKey</span>
+      <span class="nx">event</span><span class="p">.</span><span class="nx">preventDefault</span><span class="p">()</span> <span class="nx">unless</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">snippet</span>
       <span class="nv">event.originalEvent.dataTransfer.dropEffect = </span><span class="s1">&#39;copy&#39;</span>
       <span class="k">if</span> <span class="nx">jQuery</span><span class="p">.</span><span class="nx">browser</span><span class="p">.</span><span class="nx">webkit</span>
         <span class="nx">clearTimeout</span><span class="p">(</span><span class="nx">@dropTimeout</span><span class="p">)</span>

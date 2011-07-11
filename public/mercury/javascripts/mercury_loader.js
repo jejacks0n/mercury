@@ -36,8 +36,27 @@ if (!window.mercuryPackages) window.mercuryPackages = {
 
 // ## Mercury Loader
 (function() {
-  // If the browser isn't supported, we don't try to do anything more.
-  if (!document.getElementsByTagName) return;
+  // Useragent detection, which we use to determine if the client is supported.  We do this method instead of checking
+  // features because many of the features are supported in IE, but aren't implemented to the W3C spec.
+  var browser = {
+    webkit: /(webkit)[ \/]([\w.]+)/,
+    opera: /(opera)(?:.*version)?[ \/]([\w.]+)/,
+    msie: /(msie) ([\w.]+)/,
+    mozilla: /(mozilla)(?:.*? rv:([\w.]+))?/
+  };
+
+  var ua = navigator.userAgent.toLowerCase();
+  var match = browser.webkit.exec(ua) || browser.opera.exec(ua) || browser.msie.exec(ua) || ua.indexOf("compatible") < 0 && browser.mozilla.exec(ua) || [];
+  browser = {version: match[2] || "0" };
+  browser[match[1] || ""] = true;
+
+  // If the browser isn't supported, we don't try to do anything more.  We do direct userAgent detection here because IE
+  // thinks it's supported but isn't -- in part because it has it's own implementation of the contentEditable spec.
+  if (document.getElementsByTagName && document.getElementById && document.designMode && !browser.konqueror && !browser.msie) {
+    // supported
+  } else {
+    return;
+  }
 
   // Default options, which can be overridden by specifying them in query params to the loader script.
   // You can provide any additional options to the loader, and they will be passed to the PageEditor instance when it's
@@ -54,7 +73,10 @@ if (!window.mercuryPackages) window.mercuryPackages = {
   var head = document.getElementsByTagName("head")[0];
   if (window == top) {
     var style = document.createElement('style');
-    style.innerText = 'body{visibility:hidden;display:none}';
+    var rules = document.createTextNode('body{visibility:hidden;display:none}');
+    style.type = 'text/css';
+    if (style.styleSheet) style.styleSheet.cssText = rules.nodeValue;
+    else style.appendChild(rules);
     head.appendChild(style);
   }
 

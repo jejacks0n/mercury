@@ -64,14 +64,7 @@ hr {
 /* Layout and Typography -- partly taken from docco css
  *----------------------------------------------------------------------------*/
 #background {
-  position: fixed;
-  top: 0;
-  left: 525px;
-  right: 0;
-  bottom: 0;
-  background: #F5F5FF;
-  border-left: 1px solid #E5E5EE;
-  z-index: -1;
+  display: none;
 }
 h1#logo {
   position: absolute;

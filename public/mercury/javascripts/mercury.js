@@ -13515,7 +13515,6 @@ Showdown.converter = function() {
       return this.overlay.animate({
         opacity: 1
       }, 200, 'easeInOutSine', __bind(function() {
-        console.debug(this.overlay.css('opacity'));
         this.setTitle();
         this.element.show().css({
           opacity: 0
@@ -15184,13 +15183,15 @@ Showdown.converter = function() {
           return;
         }
         Mercury.changes = true;
-        content = this.content();
         if (this.specialContainer) {
           event.preventDefault();
+          return;
         }
-        return setTimeout((__bind(function() {
+        content = this.content();
+        clearTimeout(this.handlePasteTimeout);
+        return this.handlePasteTimeout = setTimeout((__bind(function() {
           return this.handlePaste(content);
-        }, this)), 1);
+        }, this)), 100);
       }, this));
       this.element.focus(__bind(function() {
         if (this.previewing) {

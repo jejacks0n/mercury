@@ -100,9 +100,12 @@ class @Mercury.Regions.Editable extends Mercury.Region
       return if @previewing
       return unless Mercury.region == @
       Mercury.changes = true
+      if @specialContainer
+        event.preventDefault()
+        return
       content = @content()
-      event.preventDefault() if @specialContainer
-      setTimeout((=> @handlePaste(content)), 1)
+      clearTimeout(@handlePasteTimeout)
+      @handlePasteTimeout = setTimeout((=> @handlePaste(content)), 100)
 
     @element.focus =>
       return if @previewing

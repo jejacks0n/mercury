@@ -28,7 +28,11 @@ module Evergreen
           require 'sprockets'
           sprockets = Sprockets::Environment.new(suite.root)
           sprockets.static_root = File.join(suite.root, 'public', assets.prefix)
-          sprockets.paths.concat paths
+          if sprockets.respond_to?(:append_path)
+            paths.each { |path| sprockets.append_path(path) }
+          else
+            sprockets.paths.concat paths
+          end
           sprockets.js_compressor = nil
           run sprockets
         end

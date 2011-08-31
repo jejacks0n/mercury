@@ -23,17 +23,16 @@ module Evergreen
 
       app.map "/assets" do
         assets = Rails.application.config.assets
-        paths = %W{app/assets/javascripts lib/assets/javascripts vendor/assets/javascripts}.map{ |p| File.join(suite.root, p) }
         if assets.enabled
+          paths = %W{app/assets/javascripts lib/assets/javascripts vendor/assets/javascripts}.map{ |p| File.join(suite.root, p) }
+
           require 'sprockets'
-          sprockets = Sprockets::Environment.new(suite.root)
-          sprockets.static_root = File.join(suite.root, 'public', assets.prefix)
-          if sprockets.respond_to?(:append_path)
-            paths.each { |path| sprockets.append_path(path) }
-          else
-            sprockets.paths.concat paths
+
+          sprockets = Sprockets::Environment.new(suite.root) do |env|
+            paths.each { |path| env.append_path(path) }
+            env.js_compressor = nil
           end
-          sprockets.js_compressor = nil
+
           run sprockets
         end
       end

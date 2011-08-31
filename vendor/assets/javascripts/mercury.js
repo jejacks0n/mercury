@@ -277,4 +277,4 @@ window.MercurySetup = {
 };
 
 if (!window.Mercury) window.Mercury = window.MercurySetup;
-else if (jQuery) jQuery.extend(window.Mercury, window.MercurySetup);
+else if (typeof(jQuery) !== 'undefined') jQuery.extend(window.Mercury, window.MercurySetup);

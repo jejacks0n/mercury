@@ -10,6 +10,7 @@ module NavigationHelpers
 
     when 'an edit page' then '/edit'
 
+    when /the root( page)?/ then '/'
     when /the home\s?page/ then '/'
     when /the url: "(.*)"/ then url_for($1)
 

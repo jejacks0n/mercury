@@ -465,4 +465,10 @@ describe "Mercury.modal", ->
       Mercury.modal.hide()
       expect(Mercury.modal.visible).toEqual(false)
 
+    it "does nothing if the modal is still in the process of showing", ->
+      spy = spyOn(Mercury.modal, 'reset').andCallFake(=>)
+      Mercury.modal.showing = true
+      Mercury.modal.hide()
+      expect(spy.callCount).toEqual(0)
+
 

@@ -49,6 +49,7 @@ jQuery.extend Mercury.modal, {
 
 
   appear: ->
+    @showing = true
     @position()
 
     @overlay.show()
@@ -58,6 +59,7 @@ jQuery.extend Mercury.modal, {
       @element.show()
       @element.animate {top: 0}, 200, 'easeInOutSine', =>
         @visible = true
+        @showing = false
         @load()
 
 
@@ -171,6 +173,8 @@ jQuery.extend Mercury.modal, {
 
 
   hide: ->
+    return if @showing
+
     Mercury.trigger('focus:frame')
     @element.hide()
     @overlay.hide()

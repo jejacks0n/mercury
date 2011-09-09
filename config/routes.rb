@@ -10,6 +10,6 @@ Rails.application.routes.draw do
   end
 
   if defined?(Mercury::Application)
-    root :to => "application#show"
+    match '/test_post' => "mercury#post"
   end
 end

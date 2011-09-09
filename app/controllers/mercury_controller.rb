@@ -17,4 +17,8 @@ class MercuryController < ActionController::Base
     render :action => "/snippets/#{params[:name]}", :layout => false
   end
 
+  def post
+    render :json => params
+  end
+
 end

@@ -150,15 +150,33 @@ namespace :mercury do
 
     desc "Combine javascripts into mercury.js and mercury.min.js"
     task :javascripts => :environment do
-      require 'action_view/helpers/asset_tag_helpers/asset_paths.rb'
-      Sprockets::Helpers::RailsHelper
-      Rails.application.assets.precompile('mercury.js')
+      config = Rails.application.config
+      env    = Rails.application.assets
+      target = Pathname.new(File.join(Rails.public_path, config.assets.prefix))
+      manifest = {}
+
+      ['mercury.js', 'mercury/mercury.js'].each do |path|
+        env.each_logical_path do |logical_path|
+          if path.is_a?(Regexp)
+            next unless path.match(logical_path)
+          else
+            next unless File.fnmatch(path.to_s, logical_path)
+          end
+
+          if asset = env.find_asset(logical_path)
+            manifest[logical_path] = asset.digest_path
+            filename = target.join(asset.digest_path)
+            mkdir_p filename.dirname
+            asset.write_to(filename)
+          end
+        end
+      end
+
       Dir[Rails.root.join('public/assets/mercury-*.js')].each do |filename|
         copy_file(filename, Rails.root.join('public/mercury/javascripts/mercury.js'))
         remove(filename)
       end
 
-      Rails.application.assets.precompile('mercury/mercury.js')
       Dir[Rails.root.join('public/assets/mercury/mercury-*.js')].each do |filename|
         copy_file(filename, Rails.root.join('public/mercury/javascripts/mercury.min.js'))
         remove(filename)
@@ -174,10 +192,27 @@ namespace :mercury do
 
     desc "Combine stylesheets into mercury.css and mercury.bundle.css (bundling images where possible)"
     task :stylesheets => :environment do
-      require 'base64'
-      require 'action_view/helpers/asset_tag_helpers/asset_paths.rb'
-      Sprockets::Helpers::RailsHelper
-      Rails.application.assets.precompile('mercury.css')
+      config = Rails.application.config
+      env    = Rails.application.assets
+      target = Pathname.new(File.join(Rails.public_path, config.assets.prefix))
+      manifest = {}
+
+      ['mercury.css'].each do |path|
+        env.each_logical_path do |logical_path|
+          if path.is_a?(Regexp)
+            next unless path.match(logical_path)
+          else
+            next unless File.fnmatch(path.to_s, logical_path)
+          end
+
+          if asset = env.find_asset(logical_path)
+            manifest[logical_path] = asset.digest_path
+            filename = target.join(asset.digest_path)
+            mkdir_p filename.dirname
+            asset.write_to(filename)
+          end
+        end
+      end
 
       Dir[Rails.root.join('public/assets/mercury-*.css')].each do |filename|
         copy_file(filename, Rails.root.join('public/mercury/stylesheets/mercury.css'))

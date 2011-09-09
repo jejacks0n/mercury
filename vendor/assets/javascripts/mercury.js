@@ -45,8 +45,11 @@ window.MercurySetup = {
     //
     // Some server frameworks require that you provide a specific header for Ajax requests.  The values for these CSRF
     // tokens are typically stored in the rendered DOM.  By default, Mercury will look for the Rails specific meta tag,
-    // but you can modify this configuration if the system you're using doesn't follow the same standard.
+    // and provide the X-CSRF-Token header on Ajax requests, but you can modify this configuration if the system you're
+    // using doesn't follow the same standard.
     csrfSelector: 'meta[name="csrf-token"]',
+    csrfHeader: 'X-CSRF-Token',
+
 
     // ## Pasting (in Chrome/Safari)
     //

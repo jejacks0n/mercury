@@ -165,7 +165,9 @@ class @Mercury.PageEditor
 
 
   saveHeaders: ->
-    return {'X-CSRF-Token': Mercury.csrfToken}
+    headers = {}
+    headers[Mercury.config.csrfHeader] = Mercury.csrfToken
+    return headers
 
 
   serialize: ->

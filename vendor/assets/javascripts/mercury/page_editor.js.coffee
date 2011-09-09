@@ -2,7 +2,6 @@ class @Mercury.PageEditor
 
   # options
   # saveStyle: 'form', or 'json' (defaults to json)
-  # ignoredLinks: an array containing classes for links to ignore (eg. lightbox or accordian controls)
   # visible: boolean, if the interface should start visible or not (defaults to true)
   constructor: (@saveUrl = null, @options = {}) ->
     throw "Mercury.PageEditor is unsupported in this client. Supported browsers are chrome 10+, firefix 4+, and safari 5+." unless Mercury.supported
@@ -75,7 +74,7 @@ class @Mercury.PageEditor
   finalizeInterface: ->
     @snippetToolbar = new Mercury.SnippetToolbar(@document)
 
-    @hijackLinks()
+    @hijackLinksAndForms()
     @resize()
     Mercury.trigger('mode', {mode: 'preview'}) unless @options.visible
 
@@ -132,15 +131,15 @@ class @Mercury.PageEditor
     (url ? window.location.href).replace(/([http|https]:\/\/.[^\/]*)\/editor\/?(.*)/i, "$1/$2")
 
 
-  hijackLinks: ->
-    for link in jQuery('a', @document)
+  hijackLinksAndForms: ->
+    for element in jQuery('a, form', @document)
       ignored = false
-      for classname in @options.ignoredLinks || []
-        if jQuery(link).hasClass(classname)
+      for classname in Mercury.config.nonHijackableClasses || []
+        if jQuery(element).hasClass(classname)
           ignored = true
           continue
-      if !ignored && (link.target == '' || link.target == '_self') && !jQuery(link).closest('.mercury-region').length
-        jQuery(link).attr('target', '_top')
+      if !ignored && (element.target == '' || element.target == '_self') && !jQuery(element).closest('.mercury-region').length
+        jQuery(element).attr('target', '_top')
 
 
   beforeUnload: ->

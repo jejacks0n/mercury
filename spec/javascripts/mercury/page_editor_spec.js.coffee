@@ -220,16 +220,16 @@ describe "Mercury.PageEditor", ->
       Mercury.PageEditor.prototype.initializeFrame = ->
       Mercury.SnippetToolbar = -> {snippetToolbar: true}
       @pageEditor = new Mercury.PageEditor('', {appendTo: $('#test')})
-      @highjackLinksSpy = spyOn(Mercury.PageEditor.prototype, 'hijackLinks').andCallFake(=>)
+      @highjackLinksAndFormsSpy = spyOn(Mercury.PageEditor.prototype, 'hijackLinksAndForms').andCallFake(=>)
       @resizeSpy = spyOn(Mercury.PageEditor.prototype, 'resize').andCallFake(=>)
 
     it "it builds a snippetToolbar", ->
       @pageEditor.finalizeInterface()
       expect(@pageEditor.snippetToolbar).toEqual({snippetToolbar: true})
 
-    it "calls hijackLinks", ->
+    it "calls hijackLinksAndForms", ->
       @pageEditor.finalizeInterface()
-      expect(@highjackLinksSpy.callCount).toEqual(1)
+      expect(@highjackLinksAndFormsSpy.callCount).toEqual(1)
 
     it "calls resize", ->
       @pageEditor.finalizeInterface()
@@ -421,31 +421,49 @@ describe "Mercury.PageEditor", ->
       expect(@pageEditor.iframeSrc('http://foo.com/editor/path')).toEqual('http://foo.com/path')
 
 
-  describe "#hijackLinks", ->
+  describe "#hijackLinksAndForms", ->
 
     beforeEach ->
+      Mercury.config.nonHijackableClasses = ['lightview']
+
       Mercury.PageEditor.prototype.initializeFrame = ->
       @pageEditor = new Mercury.PageEditor('', {appendTo: $('#test')})
-      @pageEditor.options.ignoredLinks = ['lightview']
       @pageEditor.document = $(document)
 
-    it "finds links and set their target to top if it's not already set", ->
-      @pageEditor.hijackLinks()
+    afterEach ->
+      Mercury.config.nonHijackableClasses = []
+
+    it "finds links and forms and sets their target to top if it's not already set", ->
+      @pageEditor.hijackLinksAndForms()
       expect($('#anchor1').attr('target')).toEqual('_top')
       expect($('#anchor2').attr('target')).toEqual('_blank')
       expect($('#anchor3').attr('target')).toEqual('_top')
       expect($('#anchor4').attr('target')).toEqual('_top')
+      expect($('#form1').attr('target')).toEqual('_top')
+      expect($('#form2').attr('target')).toEqual('_blank')
+      expect($('#form3').attr('target')).toEqual('_top')
+      expect($('#form4').attr('target')).toEqual('_top')
 
     it "ignores links in regions", ->
-      @pageEditor.hijackLinks()
+      @pageEditor.hijackLinksAndForms()
       expect($('#anchor1r').attr('target')).toEqual('_top')
       expect($('#anchor2r').attr('target')).toEqual('_blank')
       expect($('#anchor3r').attr('target')).toEqual('_self')
       expect($('#anchor4r').attr('target')).toBeUndefined()
+      expect($('#form1r').attr('target')).toEqual('_top')
+      expect($('#form2r').attr('target')).toEqual('_blank')
+      expect($('#form3r').attr('target')).toEqual('_self')
+      expect($('#form4r').attr('target')).toBeUndefined()
 
-    it "ignores links that are in the config to be ignored (by class)", ->
-      @pageEditor.hijackLinks()
+    it "ignores links and forms that are in the config to be ignored (by class)", ->
+      @pageEditor.hijackLinksAndForms()
       expect($('#anchor5').attr('target')).toEqual('_self')
+      expect($('#form5').attr('target')).toEqual('_self')
+
+    it "doesn't change targets of links and forms that are set to anything besides _self", ->
+      @pageEditor.hijackLinksAndForms()
+      expect($('#anchor6').attr('target')).toEqual('foo')
+      expect($('#form6').attr('target')).toEqual('foo')
 
 
   describe "#beforeUnload", ->

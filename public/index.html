@@ -104,6 +104,13 @@
       <li><a href="#" onclick="Mercury.trigger('toggle:interface')">Toggle Interface</a></li>
     </ul>
 
+    <h1>Form (Method: POST)</h1>
+    <form action="/test_post" method="post">
+      <input type="text" value="value1" name="name1"/>
+      <input type="text" value="value2" name="name2"/>
+      <input type="submit" value="Submit">
+    </form>
+
     <h1>Editable region</h1>
     <div id="editable1" class="mercury-region" data-type="editable">
       If the first line of content isn't wrapped in an element you can't set justification (mozilla only bug).

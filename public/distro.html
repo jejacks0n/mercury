@@ -99,7 +99,15 @@
 
     <ul id="controls">
       <li><a href="#" onclick="alert(Mercury.version)">Mercury Version</a></li>
+      <li><a href="#" onclick="Mercury.trigger('toggle:interface')">Toggle Interface</a></li>
     </ul>
+
+    <h1>Form (Method: POST)</h1>
+    <form action="/test_post" method="post">
+      <input type="text" value="value1" name="name1"/>
+      <input type="text" value="value2" name="name2"/>
+      <input type="submit" value="Submit">
+    </form>
 
     <h1>Editable region</h1>
     <div id="editable1" class="mercury-region" data-type="editable">
@@ -282,7 +290,7 @@ Turkey corned beef ham, chuck ham hock **venison _drumstick_ ** tongue ribeye. B
     <h1>Editable region (fixed width/height and overflow)</h1>
     <div id="editable3" class="mercury-region" data-type="editable" style="width:200px;height:90px;">
       wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
-      <br/>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11<br/>12<br/>13<br/>14<br/>15
+      <br/>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/><a href="#offset_test">8</a><br/>9<br/>10<br/>11<br/>12<br/>13<br/>14<br/>15
     </div>
 
     <h1>Snippetable region (iframe snippet that contains flash)</h1>
@@ -292,6 +300,6 @@ Turkey corned beef ham, chuck ham hock **venison _drumstick_ ** tongue ribeye. B
       <iframe class="mercury-snippet" data-snippet="snippet_14"  width="560" height="349" src="http://www.youtube.com/embed/0pXYp72dwl0?wmode=transparent" frameborder="0" allowfullscreen="true"></iframe>
     </div>
   </div>
-
+  
   </body>
 </html>

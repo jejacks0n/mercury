@@ -28,6 +28,17 @@ window.MercurySetup = {
 
   // # Mercury Configuration
   config: {
+    // ## Hijacking Links & Forms
+    // Mercury will hijack links and forms that don't have a target set, or the target is set to _self and will set it
+    // to _top.  This is because the target must be set properly for Mercury to not get in the way of some
+    // functionality, like proper page loads on form submissions etc.  Mercury doesn't do this to links or forms that
+    // are within editable regions because it doesn't want to impact the html that's saved.  With that being explained,
+    // you can add classes to links or forms that you don't want this behavior added to.  Let's say you have links that
+    // open a lightbox style window, and you don't want the targets of these to be set to _top.  You can add classes to
+    // this array, and they will be ignored when the hijacking is applied.
+    nonHijackableClasses: [],
+
+
     // ## Pasting (in Chrome/Safari)
     //
     // When copying content using webkit, it embeds all the user defined styles (from the css files) into the html
@@ -276,7 +287,7 @@ window.MercurySetup = {
 };
 
 if (!window.Mercury) window.Mercury = window.MercurySetup;
-else if (jQuery) jQuery.extend(window.Mercury, window.MercurySetup);
+else if (typeof(jQuery) !== 'undefined') jQuery.extend(window.Mercury, window.MercurySetup);
 /*!
  * jQuery JavaScript Library v1.6
  * http://jquery.com/
@@ -12259,7 +12270,7 @@ Showdown.converter = function() {
     };
     PageEditor.prototype.finalizeInterface = function() {
       this.snippetToolbar = new Mercury.SnippetToolbar(this.document);
-      this.hijackLinks();
+      this.hijackLinksAndForms();
       this.resize();
       if (!this.options.visible) {
         return Mercury.trigger('mode', {
@@ -12340,22 +12351,22 @@ Showdown.converter = function() {
       }
       return (url != null ? url : window.location.href).replace(/([http|https]:\/\/.[^\/]*)\/editor\/?(.*)/i, "$1/$2");
     };
-    PageEditor.prototype.hijackLinks = function() {
-      var classname, ignored, link, _i, _j, _len, _len2, _ref, _ref2, _results;
-      _ref = jQuery('a', this.document);
+    PageEditor.prototype.hijackLinksAndForms = function() {
+      var classname, element, ignored, _i, _j, _len, _len2, _ref, _ref2, _results;
+      _ref = jQuery('a, form', this.document);
       _results = [];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        link = _ref[_i];
+        element = _ref[_i];
         ignored = false;
-        _ref2 = this.options.ignoredLinks || [];
+        _ref2 = Mercury.config.nonHijackableClasses || [];
         for (_j = 0, _len2 = _ref2.length; _j < _len2; _j++) {
           classname = _ref2[_j];
-          if (jQuery(link).hasClass(classname)) {
+          if (jQuery(element).hasClass(classname)) {
             ignored = true;
             continue;
           }
         }
-        _results.push(!ignored && (link.target === '' || link.target === '_self') && !jQuery(link).closest('.mercury-region').length ? jQuery(link).attr('target', '_top') : void 0);
+        _results.push(!ignored && (element.target === '' || element.target === '_self') && !jQuery(element).closest('.mercury-region').length ? jQuery(element).attr('target', '_top') : void 0);
       }
       return _results;
     };
@@ -13252,6 +13263,7 @@ Showdown.converter = function() {
       }, this));
     },
     appear: function() {
+      this.showing = true;
       this.position();
       this.overlay.show();
       return this.overlay.animate({
@@ -13266,6 +13278,7 @@ Showdown.converter = function() {
           top: 0
         }, 200, 'easeInOutSine', __bind(function() {
           this.visible = true;
+          this.showing = false;
           return this.load();
         }, this));
       }, this));
@@ -13435,6 +13448,9 @@ Showdown.converter = function() {
       return this.contentElement.html('');
     },
     hide: function() {
+      if (this.showing) {
+        return;
+      }
       Mercury.trigger('focus:frame');
       this.element.hide();
       this.overlay.hide();

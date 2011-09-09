@@ -13,7 +13,7 @@ class @Mercury.PageEditor
     window.mercuryInstance = @
     @regions = []
     @initializeInterface()
-    Mercury.csrfToken = token if token = jQuery('meta[name="csrf-token"]').attr('content')
+    Mercury.csrfToken = token if token = jQuery(Mercury.config.csrfSelector).attr('content')
 
 
   initializeInterface: ->
@@ -155,12 +155,17 @@ class @Mercury.PageEditor
     data = jQuery.toJSON(data) unless @options.saveStyle == 'form'
     jQuery.ajax url, {
       type: 'POST'
+      headers: @saveHeaders()
       data: {content: data}
       success: =>
         Mercury.changes = false
       error: =>
         alert("Mercury was unable to save to the url: #{url}")
     }
+
+
+  saveHeaders: ->
+    return {'X-CSRF-Token': Mercury.csrfToken}
 
 
   serialize: ->

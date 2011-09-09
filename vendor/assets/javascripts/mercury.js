@@ -30,6 +30,7 @@ window.MercurySetup = {
   // # Mercury Configuration
   config: {
     // ## Hijacking Links & Forms
+    //
     // Mercury will hijack links and forms that don't have a target set, or the target is set to _self and will set it
     // to _top.  This is because the target must be set properly for Mercury to not get in the way of some
     // functionality, like proper page loads on form submissions etc.  Mercury doesn't do this to links or forms that
@@ -39,6 +40,13 @@ window.MercurySetup = {
     // this array, and they will be ignored when the hijacking is applied.
     nonHijackableClasses: [],
 
+
+    // ## Ajax and CSRF Headers
+    //
+    // Some server frameworks require that you provide a specific header for Ajax requests.  The values for these CSRF
+    // tokens are typically stored in the rendered DOM.  By default, Mercury will look for the Rails specific meta tag,
+    // but you can modify this configuration if the system you're using doesn't follow the same standard.
+    csrfSelector: 'meta[name="csrf-token"]',
 
     // ## Pasting (in Chrome/Safari)
     //

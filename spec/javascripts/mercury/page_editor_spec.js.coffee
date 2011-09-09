@@ -517,16 +517,23 @@ describe "Mercury.PageEditor", ->
     it "serializes the data in json", ->
       @ajaxSpy.andCallFake(=>)
       Mercury.config.saveStyle = 'json'
-      spy = spyOn(Mercury.PageEditor.prototype, 'serialize').andCallFake(=> {region1: 'region1'})
+      spyOn(Mercury.PageEditor.prototype, 'serialize').andCallFake(=> {region1: 'region1'})
       @pageEditor.save()
       expect(@ajaxSpy.argsForCall[0][1]['data']).toEqual({content: '{"region1":"region1"}' })
 
     it "can serialize as form values", ->
       @ajaxSpy.andCallFake(=>)
       @pageEditor.options.saveStyle = 'form'
-      spy = spyOn(Mercury.PageEditor.prototype, 'serialize').andCallFake(=> {region1: 'region1'})
+      spyOn(Mercury.PageEditor.prototype, 'serialize').andCallFake(=> {region1: 'region1'})
       @pageEditor.save()
       expect(@ajaxSpy.argsForCall[0][1]['data']).toEqual({content: {region1: 'region1'}})
+
+    it "sets headers by calling #saveHeaders", ->
+      @ajaxSpy.andCallFake(=>)
+      spyOn(Mercury.PageEditor.prototype, 'serialize').andCallFake(=> {region1: 'region1'})
+      spy = spyOn(Mercury.PageEditor.prototype, 'saveHeaders').andCallFake(=> {'X-CSRFToken': 'f00'})
+      @pageEditor.save()
+      expect(@ajaxSpy.argsForCall[0][1]['headers']).toEqual({'X-CSRFToken': 'f00'})
 
     describe "on successful ajax request", ->
 

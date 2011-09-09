@@ -240,9 +240,12 @@ content back.  This is possible, so it doesn&rsquo;t make sense why it wouldn&rs
       <span class="k">return</span> <span class="k">if</span> <span class="nx">@previewing</span>
       <span class="k">return</span> <span class="nx">unless</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">region</span> <span class="o">==</span> <span class="err">@</span>
       <span class="nv">Mercury.changes = </span><span class="kc">true</span>
+      <span class="k">if</span> <span class="nx">@specialContainer</span>
+        <span class="nx">event</span><span class="p">.</span><span class="nx">preventDefault</span><span class="p">()</span>
+        <span class="k">return</span>
       <span class="nv">content = </span><span class="nx">@content</span><span class="p">()</span>
-      <span class="nx">event</span><span class="p">.</span><span class="nx">preventDefault</span><span class="p">()</span> <span class="k">if</span> <span class="nx">@specialContainer</span>
-      <span class="nx">setTimeout</span><span class="p">((</span><span class="o">=&gt;</span> <span class="nx">@handlePaste</span><span class="p">(</span><span class="nx">content</span><span class="p">)),</span> <span class="mi">1</span><span class="p">)</span>
+      <span class="nx">clearTimeout</span><span class="p">(</span><span class="nx">@handlePasteTimeout</span><span class="p">)</span>
+      <span class="vi">@handlePasteTimeout = </span><span class="nx">setTimeout</span><span class="p">((</span><span class="o">=&gt;</span> <span class="nx">@handlePaste</span><span class="p">(</span><span class="nx">content</span><span class="p">)),</span> <span class="mi">100</span><span class="p">)</span>
 
     <span class="nx">@element</span><span class="p">.</span><span class="nx">focus</span> <span class="o">=&gt;</span>
       <span class="k">return</span> <span class="k">if</span> <span class="nx">@previewing</span>

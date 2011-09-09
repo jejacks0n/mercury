@@ -49,7 +49,6 @@
         </div>
         <p>options
 saveStyle: &lsquo;form&rsquo;, or &lsquo;json&rsquo; (defaults to json)
-ignoredLinks: an array containing classes for links to ignore (eg. lightbox or accordian controls)
 visible: boolean, if the interface should start visible or not (defaults to true)</p>
       </td>
       <td class=code>
@@ -133,7 +132,7 @@ todo: look into <code>context</code> options for ajax as an alternative</p>
   <span class="nv">finalizeInterface: </span><span class="o">-&gt;</span>
     <span class="vi">@snippetToolbar = </span><span class="k">new</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">SnippetToolbar</span><span class="p">(</span><span class="nx">@document</span><span class="p">)</span>
 
-    <span class="nx">@hijackLinks</span><span class="p">()</span>
+    <span class="nx">@hijackLinksAndForms</span><span class="p">()</span>
     <span class="nx">@resize</span><span class="p">()</span>
     <span class="nx">Mercury</span><span class="p">.</span><span class="nx">trigger</span><span class="p">(</span><span class="s1">&#39;mode&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nv">mode: </span><span class="s1">&#39;preview&#39;</span><span class="p">})</span> <span class="nx">unless</span> <span class="nx">@options</span><span class="p">.</span><span class="nx">visible</span>
 
@@ -190,15 +189,15 @@ todo: look into <code>context</code> options for ajax as an alternative</p>
     <span class="p">(</span><span class="nx">url</span> <span class="o">?</span> <span class="nb">window</span><span class="p">.</span><span class="nx">location</span><span class="p">.</span><span class="nx">href</span><span class="p">).</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/([http|https]:\/\/.[^\/]*)\/editor\/?(.*)/i</span><span class="p">,</span> <span class="s2">&quot;$1/$2&quot;</span><span class="p">)</span>
 
 
-  <span class="nv">hijackLinks: </span><span class="o">-&gt;</span>
-    <span class="k">for</span> <span class="nx">link</span> <span class="k">in</span> <span class="nx">jQuery</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="nx">@document</span><span class="p">)</span>
+  <span class="nv">hijackLinksAndForms: </span><span class="o">-&gt;</span>
+    <span class="k">for</span> <span class="nx">element</span> <span class="k">in</span> <span class="nx">jQuery</span><span class="p">(</span><span class="s1">&#39;a, form&#39;</span><span class="p">,</span> <span class="nx">@document</span><span class="p">)</span>
       <span class="nv">ignored = </span><span class="kc">false</span>
-      <span class="k">for</span> <span class="nx">classname</span> <span class="k">in</span> <span class="nx">@options</span><span class="p">.</span><span class="nx">ignoredLinks</span> <span class="o">||</span> <span class="p">[]</span>
-        <span class="k">if</span> <span class="nx">jQuery</span><span class="p">(</span><span class="nx">link</span><span class="p">).</span><span class="nx">hasClass</span><span class="p">(</span><span class="nx">classname</span><span class="p">)</span>
+      <span class="k">for</span> <span class="nx">classname</span> <span class="k">in</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">config</span><span class="p">.</span><span class="nx">nonHijackableClasses</span> <span class="o">||</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="nx">jQuery</span><span class="p">(</span><span class="nx">element</span><span class="p">).</span><span class="nx">hasClass</span><span class="p">(</span><span class="nx">classname</span><span class="p">)</span>
           <span class="nv">ignored = </span><span class="kc">true</span>
           <span class="k">continue</span>
-      <span class="k">if</span> <span class="o">!</span><span class="nx">ignored</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="nx">link</span><span class="p">.</span><span class="nx">target</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span> <span class="o">||</span> <span class="nx">link</span><span class="p">.</span><span class="nx">target</span> <span class="o">==</span> <span class="s1">&#39;_self&#39;</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">jQuery</span><span class="p">(</span><span class="nx">link</span><span class="p">).</span><span class="nx">closest</span><span class="p">(</span><span class="s1">&#39;.mercury-region&#39;</span><span class="p">).</span><span class="nx">length</span>
-        <span class="nx">jQuery</span><span class="p">(</span><span class="nx">link</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="s1">&#39;target&#39;</span><span class="p">,</span> <span class="s1">&#39;_top&#39;</span><span class="p">)</span>
+      <span class="k">if</span> <span class="o">!</span><span class="nx">ignored</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="nx">element</span><span class="p">.</span><span class="nx">target</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span> <span class="o">||</span> <span class="nx">element</span><span class="p">.</span><span class="nx">target</span> <span class="o">==</span> <span class="s1">&#39;_self&#39;</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">jQuery</span><span class="p">(</span><span class="nx">element</span><span class="p">).</span><span class="nx">closest</span><span class="p">(</span><span class="s1">&#39;.mercury-region&#39;</span><span class="p">).</span><span class="nx">length</span>
+        <span class="nx">jQuery</span><span class="p">(</span><span class="nx">element</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="s1">&#39;target&#39;</span><span class="p">,</span> <span class="s1">&#39;_top&#39;</span><span class="p">)</span>
 
 
   <span class="nv">beforeUnload: </span><span class="o">-&gt;</span>

@@ -12236,6 +12236,7 @@ Showdown.converter = function() {
         };
         iframeWindow.Mercury = Mercury;
         this.bindEvents();
+        this.resize();
         this.initializeRegions();
         this.finalizeInterface();
         Mercury.trigger('ready');
@@ -12282,7 +12283,6 @@ Showdown.converter = function() {
     PageEditor.prototype.finalizeInterface = function() {
       this.snippetToolbar = new Mercury.SnippetToolbar(this.document);
       this.hijackLinksAndForms();
-      this.resize();
       if (!this.options.visible) {
         return Mercury.trigger('mode', {
           mode: 'preview'
@@ -14937,7 +14937,7 @@ Showdown.converter = function() {
       xhr.open('post', Mercury.config.uploading.url, true);
       xhr.setRequestHeader('Accept', 'application/json, text/javascript, text/html, application/xml, text/xml, */*');
       xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-      xhr.setRequestHeader('X-CSRF-Token', Mercury.csrfToken);
+      xhr.setRequestHeader(Mercury.config.csrfHeader, Mercury.csrfToken);
       return this.file.readAsBinaryString(__bind(function(result) {
         var multipart;
         multipart = new Mercury.uploader.MultiPartPost(Mercury.config.uploading.inputName, this.file, result);

@@ -99,6 +99,7 @@ describe "Mercury.PageEditor", ->
   describe "#initializeFrame", ->
 
     beforeEach ->
+      @resizeSpy = spyOn(Mercury.PageEditor.prototype, 'resize').andCallFake(=>)
       @bindEventsSpy = spyOn(Mercury.PageEditor.prototype, 'bindEvents').andCallFake(=>)
       @initializeRegionsSpy = spyOn(Mercury.PageEditor.prototype, 'initializeRegions').andCallFake(=>)
       @finalizeInterfaceSpy = spyOn(Mercury.PageEditor.prototype, 'finalizeInterface')
@@ -135,6 +136,11 @@ describe "Mercury.PageEditor", ->
       @finalizeInterfaceSpy.andCallFake(=>)
       @pageEditor.initializeFrame()
       expect(@bindEventsSpy.callCount).toEqual(1)
+
+    it "calls resize", ->
+      @finalizeInterfaceSpy.andCallFake(=>)
+      @pageEditor.initializeFrame()
+      expect(@resizeSpy.callCount).toEqual(1)
 
     it "calls initializeRegions", ->
       @finalizeInterfaceSpy.andCallFake(=>)
@@ -221,7 +227,6 @@ describe "Mercury.PageEditor", ->
       Mercury.SnippetToolbar = -> {snippetToolbar: true}
       @pageEditor = new Mercury.PageEditor('', {appendTo: $('#test')})
       @highjackLinksAndFormsSpy = spyOn(Mercury.PageEditor.prototype, 'hijackLinksAndForms').andCallFake(=>)
-      @resizeSpy = spyOn(Mercury.PageEditor.prototype, 'resize').andCallFake(=>)
 
     it "it builds a snippetToolbar", ->
       @pageEditor.finalizeInterface()
@@ -230,10 +235,6 @@ describe "Mercury.PageEditor", ->
     it "calls hijackLinksAndForms", ->
       @pageEditor.finalizeInterface()
       expect(@highjackLinksAndFormsSpy.callCount).toEqual(1)
-
-    it "calls resize", ->
-      @pageEditor.finalizeInterface()
-      expect(@resizeSpy.callCount).toEqual(1)
 
     it "fires a mode event to put things into preview mode if it's not visible yet", ->
       spy = spyOn(Mercury, 'trigger').andCallFake(=>)

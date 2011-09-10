@@ -44,6 +44,7 @@ class @Mercury.PageEditor
       iframeWindow.Mercury = Mercury
 
       @bindEvents()
+      @resize()
       @initializeRegions()
       @finalizeInterface()
       Mercury.trigger('ready')
@@ -75,7 +76,6 @@ class @Mercury.PageEditor
     @snippetToolbar = new Mercury.SnippetToolbar(@document)
 
     @hijackLinksAndForms()
-    @resize()
     Mercury.trigger('mode', {mode: 'preview'}) unless @options.visible
 
 

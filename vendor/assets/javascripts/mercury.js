@@ -55,9 +55,15 @@ window.MercurySetup = {
     //
     // When copying content using webkit, it embeds all the user defined styles (from the css files) into the html
     // style attributes directly.  When pasting this content into HTML5 contentEditable elements it leaves these
-    // intact.  This can be a desired feature, or an annoyance, so you can enable it or disable it here.  Keep in mind
-    // this will only change the behavior in webkit, as mozilla doesn't do this.
-    cleanStylesOnPaste: true,
+    // intact.  This can be a desired feature, or an annoyance, so you can enable it or disable it here.  This means
+    // that copying something from a webkit based browser and pasting it into something like firefox will also result in
+    // these extra style attributes.  Cleaning the styles out impacts performance when pasting, and because of browser
+    // restrictions on getting pasted content (which is stupid) we have to fall back to a less performant method off
+    // figuring out what was pasted.  This seems to cause issues if you try and paste several things in a row, which
+    // seems to happen a lot when people are testing the demo.  Because of this it's disabled by default, but is
+    // recommended if you're using webkit.
+    // Go signin and vote to change this: http://www.google.com/support/forum/p/Chrome/thread?tid=3399afd053d5a29c&hl=en
+    cleanStylesOnPaste: false,
 
 
     // ## Snippet Options and Preview

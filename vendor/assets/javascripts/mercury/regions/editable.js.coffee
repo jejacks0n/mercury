@@ -99,13 +99,14 @@ class @Mercury.Regions.Editable extends Mercury.Region
     @element.bind 'paste', =>
       return if @previewing
       return unless Mercury.region == @
-      Mercury.changes = true
       if @specialContainer
         event.preventDefault()
         return
-      content = @content()
+      return if @pasting
+      Mercury.changes = true
+      content = @element.html().replace(/^\s+|\s+$/g, '')
       clearTimeout(@handlePasteTimeout)
-      @handlePasteTimeout = setTimeout((=> @handlePaste(content)), 100)
+      @handlePasteTimeout = setTimeout((=> @handlePaste(content)), 400)
 
     @element.focus =>
       return if @previewing
@@ -321,6 +322,7 @@ class @Mercury.Regions.Editable extends Mercury.Region
 
 
   handlePaste: (prePasteContent) ->
+    @pasting = true
     prePasteContent = prePasteContent.replace(/^\<br\>/, '')
 
     # remove any regions that might have been pasted
@@ -351,47 +353,11 @@ class @Mercury.Regions.Editable extends Mercury.Region
 
       @document.execCommand('undo', false, null)
       @execCommand('insertHTML', {value: container.html()})
+    @pasting = false
 
 
   # Custom actions (eg. things that execCommand doesn't do, or doesn't do well)
   @actions: {
-#    bold: (selection) ->
-#      unless selection.collapsed
-#        @document.execCommand('bold', false, null)
-#      else
-##        selection.selectWordByCursor()
-##        @document.execCommand('bold', false, null)
-#
-#        selection.placeMarker()
-#        node = @element.find('.mercury-marker').get(0)
-#        prev = node.previousSibling
-#        selection.removeMarker()
-#        next = prev.nextSibling
-#        console.debug(prev, next)
-##        if prev.textContent[prev.textContent.length - 1] != ' ' &&
-
-
-#[some]| content
-# textContent = some, wholeText = some
-# textContent = '', wholeText = some
-#content |[some]
-#content [s|ome]
-#co|ntent [some]
-#|content [some]
-
-
-#
-#        console.debug(commonAncestor)
-#        beforeText = commonAncestor.textContent
-#        afterText = commonAncestor.wholeText.substring(commonAncestor.wholeText.lastIndexOf(beforeText) + beforeText.length, commonAncestor.wholeText.length)
-#        if beforeText && afterText && (beforeChar = beforeText[beforeText.length - 1]) != ' ' && (afterChar = afterText[0]) != ' '
-#          console.debug('bolding word', beforeChar, afterChar)
-#        else
-#          @document.execCommand('bold', false, null)
-#
-##          selection.selectWord()
-##      commonAncestor.wholeText, commonAncestor.textContent
-#      else
 
     insertRowBefore: -> Mercury.tableEditor.addRow('before')
 

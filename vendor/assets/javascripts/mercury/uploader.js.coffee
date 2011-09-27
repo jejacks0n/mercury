@@ -90,7 +90,6 @@ jQuery.extend Mercury.uploader, {
     jQuery.each ['onloadstart', 'onprogress', 'onload', 'onabort', 'onerror'], (index, eventName) =>
       xhr.upload[eventName] = (event) => @uploaderEvents[eventName].call(@, event)
     xhr.onload = (event) =>
-      console.debug(event)
       if (event.currentTarget.status >= 400)
         @updateStatus('Error: Unable to upload the file')
         alert("#{event.currentTarget.status}: Unable to process response")

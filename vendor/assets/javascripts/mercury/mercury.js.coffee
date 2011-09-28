@@ -33,7 +33,7 @@
 #
 @Mercury ||= {}
 jQuery.extend @Mercury, {
-  version: '0.2.0'
+  version: '0.2.1'
 
   # No IE support yet because it doesn't follow the W3C standards for HTML5 contentEditable (aka designMode).
   supported: document.getElementById && document.designMode && !jQuery.browser.konqueror && !jQuery.browser.msie

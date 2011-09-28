@@ -62,7 +62,6 @@ The feature list is actually pretty long, so here's a short list that need highl
 - Table Editing: Advanced table editing and creation.
 - Snippets: Insert and edit predefined and reusable bits of markup/code using drag and drop.
 - Notes: Attach notes to any page and communicate with other content authors.
-- Colaborative Editing: Edit any page that others are editing at the same time and see their changes in real time.
 
 
 ## Installation
@@ -202,7 +201,7 @@ default it will use JSON, that JSON looks like:
             }
           }
         }
-      },
+      }
     }
 
 Where it gets saved to is also up to you.. by default it submits a post to the current url, but you can adjust this by

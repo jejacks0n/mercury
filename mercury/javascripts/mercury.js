@@ -28,6 +28,28 @@ window.MercurySetup = {
 
   // # Mercury Configuration
   config: {
+    // ## Hijacking Links & Forms
+    //
+    // Mercury will hijack links and forms that don't have a target set, or the target is set to _self and will set it
+    // to _top.  This is because the target must be set properly for Mercury to not get in the way of some
+    // functionality, like proper page loads on form submissions etc.  Mercury doesn't do this to links or forms that
+    // are within editable regions because it doesn't want to impact the html that's saved.  With that being explained,
+    // you can add classes to links or forms that you don't want this behavior added to.  Let's say you have links that
+    // open a lightbox style window, and you don't want the targets of these to be set to _top.  You can add classes to
+    // this array, and they will be ignored when the hijacking is applied.
+    nonHijackableClasses: [],
+
+
+    // ## Ajax and CSRF Headers
+    //
+    // Some server frameworks require that you provide a specific header for Ajax requests.  The values for these CSRF
+    // tokens are typically stored in the rendered DOM.  By default, Mercury will look for the Rails specific meta tag,
+    // and provide the X-CSRF-Token header on Ajax requests, but you can modify this configuration if the system you're
+    // using doesn't follow the same standard.
+    csrfSelector: 'meta[name="csrf-token"]',
+    csrfHeader: 'X-CSRF-Token',
+
+
     // ## Pasting (in Chrome/Safari)
     //
     // When copying content using webkit, it embeds all the user defined styles (from the css files) into the html
@@ -45,7 +67,7 @@ window.MercurySetup = {
     //
     // Name will be replaced with the snippet name (eg. example)
     snippets: {
-      method: 'GET',
+      method: 'POST',
       optionsUrl: '/mercury/snippets/:name/options.html',
       previewUrl: '/mercury/snippets/:name/preview.html'
       },
@@ -276,7 +298,7 @@ window.MercurySetup = {
 };
 
 if (!window.Mercury) window.Mercury = window.MercurySetup;
-else if (jQuery) jQuery.extend(window.Mercury, window.MercurySetup);
+else if (typeof(jQuery) !== 'undefined') jQuery.extend(window.Mercury, window.MercurySetup);
 /*!
  * jQuery JavaScript Library v1.6
  * http://jquery.com/
@@ -12056,7 +12078,7 @@ Showdown.converter = function() {
 (function() {
   this.Mercury || (this.Mercury = {});
   jQuery.extend(this.Mercury, {
-    version: '0.1.4',
+    version: '0.2.0',
     supported: document.getElementById && document.designMode && !jQuery.browser.konqueror && !jQuery.browser.msie,
     Regions: {},
     modalHandlers: {},
@@ -12170,7 +12192,7 @@ Showdown.converter = function() {
       window.mercuryInstance = this;
       this.regions = [];
       this.initializeInterface();
-      if (token = jQuery('meta[name="csrf-token"]').attr('content')) {
+      if (token = jQuery(Mercury.config.csrfSelector).attr('content')) {
         Mercury.csrfToken = token;
       }
     }
@@ -12214,6 +12236,7 @@ Showdown.converter = function() {
         };
         iframeWindow.Mercury = Mercury;
         this.bindEvents();
+        this.resize();
         this.initializeRegions();
         this.finalizeInterface();
         Mercury.trigger('ready');
@@ -12259,8 +12282,7 @@ Showdown.converter = function() {
     };
     PageEditor.prototype.finalizeInterface = function() {
       this.snippetToolbar = new Mercury.SnippetToolbar(this.document);
-      this.hijackLinks();
-      this.resize();
+      this.hijackLinksAndForms();
       if (!this.options.visible) {
         return Mercury.trigger('mode', {
           mode: 'preview'
@@ -12340,22 +12362,22 @@ Showdown.converter = function() {
       }
       return (url != null ? url : window.location.href).replace(/([http|https]:\/\/.[^\/]*)\/editor\/?(.*)/i, "$1/$2");
     };
-    PageEditor.prototype.hijackLinks = function() {
-      var classname, ignored, link, _i, _j, _len, _len2, _ref, _ref2, _results;
-      _ref = jQuery('a', this.document);
+    PageEditor.prototype.hijackLinksAndForms = function() {
+      var classname, element, ignored, _i, _j, _len, _len2, _ref, _ref2, _results;
+      _ref = jQuery('a, form', this.document);
       _results = [];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        link = _ref[_i];
+        element = _ref[_i];
         ignored = false;
-        _ref2 = this.options.ignoredLinks || [];
+        _ref2 = Mercury.config.nonHijackableClasses || [];
         for (_j = 0, _len2 = _ref2.length; _j < _len2; _j++) {
           classname = _ref2[_j];
-          if (jQuery(link).hasClass(classname)) {
+          if (jQuery(element).hasClass(classname)) {
             ignored = true;
             continue;
           }
         }
-        _results.push(!ignored && (link.target === '' || link.target === '_self') && !jQuery(link).closest('.mercury-region').length ? jQuery(link).attr('target', '_top') : void 0);
+        _results.push(!ignored && (element.target === '' || element.target === '_self') && !jQuery(element).closest('.mercury-region').length ? jQuery(element).attr('target', '_top') : void 0);
       }
       return _results;
     };
@@ -12375,6 +12397,7 @@ Showdown.converter = function() {
       }
       return jQuery.ajax(url, {
         type: 'POST',
+        headers: this.saveHeaders(),
         data: {
           content: data
         },
@@ -12385,6 +12408,12 @@ Showdown.converter = function() {
           return alert("Mercury was unable to save to the url: " + url);
         }, this)
       });
+    };
+    PageEditor.prototype.saveHeaders = function() {
+      var headers;
+      headers = {};
+      headers[Mercury.config.csrfHeader] = Mercury.csrfToken;
+      return headers;
     };
     PageEditor.prototype.serialize = function() {
       var region, serialized, _i, _len, _ref;
@@ -13252,6 +13281,7 @@ Showdown.converter = function() {
       }, this));
     },
     appear: function() {
+      this.showing = true;
       this.position();
       this.overlay.show();
       return this.overlay.animate({
@@ -13266,6 +13296,7 @@ Showdown.converter = function() {
           top: 0
         }, 200, 'easeInOutSine', __bind(function() {
           this.visible = true;
+          this.showing = false;
           return this.load();
         }, this));
       }, this));
@@ -13435,6 +13466,9 @@ Showdown.converter = function() {
       return this.contentElement.html('');
     },
     hide: function() {
+      if (this.showing) {
+        return;
+      }
       Mercury.trigger('focus:frame');
       this.element.hide();
       this.overlay.hide();
@@ -14903,7 +14937,7 @@ Showdown.converter = function() {
       xhr.open('post', Mercury.config.uploading.url, true);
       xhr.setRequestHeader('Accept', 'application/json, text/javascript, text/html, application/xml, text/xml, */*');
       xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-      xhr.setRequestHeader('X-CSRF-Token', Mercury.csrfToken);
+      xhr.setRequestHeader(Mercury.config.csrfHeader, Mercury.csrfToken);
       return this.file.readAsBinaryString(__bind(function(result) {
         var multipart;
         multipart = new Mercury.uploader.MultiPartPost(Mercury.config.uploading.inputName, this.file, result);

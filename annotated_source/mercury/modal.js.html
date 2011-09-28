@@ -90,6 +90,7 @@
 
 
   <span class="nv">appear: </span><span class="o">-&gt;</span>
+    <span class="vi">@showing = </span><span class="kc">true</span>
     <span class="nx">@position</span><span class="p">()</span>
 
     <span class="nx">@overlay</span><span class="p">.</span><span class="nx">show</span><span class="p">()</span>
@@ -99,6 +100,7 @@
       <span class="nx">@element</span><span class="p">.</span><span class="nx">show</span><span class="p">()</span>
       <span class="nx">@element</span><span class="p">.</span><span class="nx">animate</span> <span class="p">{</span><span class="nv">top: </span><span class="mi">0</span><span class="p">},</span> <span class="mi">200</span><span class="p">,</span> <span class="s1">&#39;easeInOutSine&#39;</span><span class="p">,</span> <span class="o">=&gt;</span>
         <span class="vi">@visible = </span><span class="kc">true</span>
+        <span class="vi">@showing = </span><span class="kc">false</span>
         <span class="nx">@load</span><span class="p">()</span>
 
 
@@ -221,6 +223,8 @@
 
 
   <span class="nv">hide: </span><span class="o">-&gt;</span>
+    <span class="k">return</span> <span class="k">if</span> <span class="nx">@showing</span>
+
     <span class="nx">Mercury</span><span class="p">.</span><span class="nx">trigger</span><span class="p">(</span><span class="s1">&#39;focus:frame&#39;</span><span class="p">)</span>
     <span class="nx">@element</span><span class="p">.</span><span class="nx">hide</span><span class="p">()</span>
     <span class="nx">@overlay</span><span class="p">.</span><span class="nx">hide</span><span class="p">()</span>

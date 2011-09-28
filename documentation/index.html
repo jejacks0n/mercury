@@ -68,13 +68,15 @@
     functionality, etc.) so here's a list of some other editors that you might want to check out:</p>
 
     <ul>
-    <li><a href="http://www.aloha-editor.org/">Aloha Editor</a></li>
-    <li><a href="http://jhtmlarea.codeplex.com/">jHtmlArea</a></li>
-    <li><a href="http://markitup.jaysalvat.com/home/">MarkItUp</a></li>
-    <li><a href="http://tinymce.moxiecode.com/">TinyMCE</a></li>
-    <li><a href="http://ckeditor.com/">CKEditor</a></li>
-    <li><a href="http://nicedit.com/">NicEdit</a></li>
-    </ul><h2>Features</h2>
+    <li><a href="http://www.aloha-editor.org/" target="_blank">Aloha Editor</a></li>
+    <li><a href="http://jhtmlarea.codeplex.com/" target="_blank">jHtmlArea</a></li>
+    <li><a href="http://markitup.jaysalvat.com/home/" target="_blank">MarkItUp</a></li>
+    <li><a href="http://tinymce.moxiecode.com/" target="_blank">TinyMCE</a></li>
+    <li><a href="http://ckeditor.com/" target="_blank">CKEditor</a></li>
+    <li><a href="http://nicedit.com/" target="_blank">NicEdit</a></li>
+    </ul>
+
+    <h2>Features</h2>
 
     <p>The feature list is actually pretty long, so here's a short list that need highlighting.</p>
 
@@ -86,8 +88,9 @@
     <li>Table Editing: Advanced table editing and creation.</li>
     <li>Snippets: Insert and edit predefined and reusable bits of markup/code using drag and drop.</li>
     <li>Notes: Attach notes to any page and communicate with other content authors.</li>
-    <li>Colaborative Editing: Edit any page that others are editing at the same time and see their changes in real time.</li>
-    </ul><h2>Installation</h2>
+    </ul>
+
+    <h2>Installation</h2>
 
     <h3>For Rails</h3>
 
@@ -153,8 +156,9 @@
     <p>Include the mercury_loader.js file.  The loader will reload the page and enable Mercury in full page editing mode, so
     you may want to wrap this in conditional logic (eg. only admins or something).</p>
 
-    <pre><code>javascript_include_tag 'mercury_loader.js'
-    </code></pre>
+    <pre>
+      javascript_include_tag 'mercury_loader.js'
+    </pre>
 
     <p>Even though many efforts have been made to keep conflicts with javascript libraries from happening, we can't avoid all
     of them.  If you use this method, understand that there may be conflicts with javascript and css.  You should use the
@@ -234,7 +238,7 @@
               }
             }
           }
-        },
+        }
       }
     </pre>
 
@@ -258,7 +262,7 @@
     <p>I'm interested in what solutions people are looking for and end up using for this, so feel free to shoot me a line if
     you write something (eg. a middleware layer, an nginx module, or just something simple to get the job done).</p>
 
-    <h2>Project Details</h2>a
+    <h2>Project Details</h2>
 
     <h3>WYSIWYG Editors Suck</h3>
 

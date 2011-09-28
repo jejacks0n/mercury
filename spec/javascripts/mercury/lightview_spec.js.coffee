@@ -119,47 +119,75 @@ describe "Mercury.lightview", ->
       Mercury.lightview.build()
       expect($('#test .mercury-lightview-title span').html()).toEqual('title')
 
+    it "creates a close button if asked to in the options", ->
+      Mercury.lightview.options.closeButton = true
+      Mercury.lightview.build()
+      expect($('#test .mercury-lightview-close').length).toEqual(1)
+
 
   describe "observed events", ->
 
     beforeEach ->
       spyOn(Mercury.lightview, 'appear').andCallFake(=>)
-      Mercury.lightview('/foo', {appendTo: $('#test')})
 
-    describe "custom event: refresh", ->
-
-      it "calls resize telling it stay visible", ->
-        spy = spyOn(Mercury.lightview, 'resize').andCallFake(=>)
-        Mercury.trigger('refresh')
-        expect(spy.callCount).toEqual(1)
-        expect(spy.argsForCall[0]).toEqual([true])
-
-    describe "custom event: resize", ->
+    describe "without a close button", ->
 
       beforeEach ->
-        Mercury.lightview.visible = true
+        Mercury.lightview('/foo', {appendTo: $('#test')})
 
-      it "calls position", ->
-        spy = spyOn(Mercury.lightview, 'position').andCallFake(=>)
-        Mercury.trigger('resize')
-        expect(spy.callCount).toEqual(1)
+      describe "custom event: refresh", ->
 
-    describe "clicking on the overlay", ->
+        it "calls resize telling it stay visible", ->
+          spy = spyOn(Mercury.lightview, 'resize').andCallFake(=>)
+          Mercury.trigger('refresh')
+          expect(spy.callCount).toEqual(1)
+          expect(spy.argsForCall[0]).toEqual([true])
 
-      it "calls hide", ->
-        spy = spyOn(Mercury.lightview, 'hide').andCallFake(=>)
-        jasmine.simulate.click($('.mercury-lightview-overlay').get(0))
-        expect(spy.callCount).toEqual(1)
+      describe "custom event: resize", ->
 
-    describe "pressing esc on document", ->
+        beforeEach ->
+          Mercury.lightview.visible = true
+
+        it "calls position", ->
+          spy = spyOn(Mercury.lightview, 'position').andCallFake(=>)
+          Mercury.trigger('resize')
+          expect(spy.callCount).toEqual(1)
+
+      describe "clicking on the overlay", ->
+
+        it "calls hide", ->
+          spy = spyOn(Mercury.lightview, 'hide').andCallFake(=>)
+          jasmine.simulate.click($('.mercury-lightview-overlay').get(0))
+          expect(spy.callCount).toEqual(1)
+
+      describe "pressing esc on document", ->
+
+        beforeEach ->
+          Mercury.lightview.visible = true
+
+        it "calls hide", ->
+          spy = spyOn(Mercury.lightview, 'hide').andCallFake(=>)
+          jasmine.simulate.keydown(document, {keyCode: 27})
+          expect(spy.callCount).toEqual(1)
+
+    describe "with a close button", ->
 
       beforeEach ->
-        Mercury.lightview.visible = true
+        Mercury.lightview('/foo', {appendTo: $('#test'), closeButton: true})
 
-      it "calls hide", ->
-        spy = spyOn(Mercury.lightview, 'hide').andCallFake(=>)
-        jasmine.simulate.keydown(document, {keyCode: 27})
-        expect(spy.callCount).toEqual(1)
+      describe "clicking on the close button", ->
+
+        it "calls hide", ->
+          spy = spyOn(Mercury.lightview, 'hide').andCallFake(=>)
+          jasmine.simulate.click($('.mercury-lightview-close').get(0))
+          expect(spy.callCount).toEqual(1)
+
+      describe "clicking on the overlay", ->
+
+        it "doesn't call hide", ->
+          spy = spyOn(Mercury.lightview, 'hide').andCallFake(=>)
+          jasmine.simulate.click($('.mercury-lightview-overlay').get(0))
+          expect(spy.callCount).toEqual(0)
 
 
   describe "#appear", ->

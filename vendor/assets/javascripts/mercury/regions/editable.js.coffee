@@ -149,7 +149,7 @@ class @Mercury.Regions.Editable extends Mercury.Region
             event.preventDefault()
             @document.execCommand('insertLineBreak', false, null)
           else if @specialContainer
-            # mozilla: pressing enter in any elemeny besides a div handles strangely
+            # mozilla: pressing enter in any element besides a div handles strangely
             event.preventDefault()
             @document.execCommand('insertHTML', false, '<br/>')
 

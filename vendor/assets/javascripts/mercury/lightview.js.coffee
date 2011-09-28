@@ -27,6 +27,8 @@ jQuery.extend Mercury.lightview, {
     @overlay = jQuery('<div>', {class: 'mercury-lightview-overlay'})
 
     @titleElement = @element.find('.mercury-lightview-title')
+    @titleElement.append('<a class="mercury-lightview-close"></a>') if @options.closeButton
+
     @contentElement = @element.find('.mercury-lightview-content')
 
     @element.appendTo(jQuery(@options.appendTo).get(0) ? 'body')
@@ -39,7 +41,8 @@ jQuery.extend Mercury.lightview, {
     Mercury.bind 'refresh', => @resize(true)
     Mercury.bind 'resize', => @position() if @visible
 
-    @overlay.click => @hide()
+    @overlay.click => @hide() unless @options.closeButton
+    @titleElement.find('.mercury-lightview-close').click => @hide()
 
     jQuery(document).bind 'keydown', (event) =>
        @hide() if event.keyCode == 27 && @visible
@@ -52,7 +55,7 @@ jQuery.extend Mercury.lightview, {
     @overlay.animate {opacity: 1}, 200, 'easeInOutSine', =>
       @setTitle()
       @element.show().css({opacity: 0})
-      @element.animate {opacity: 1}, 200, 'easeInOutSine', =>
+      @element.stop().animate {opacity: 1}, 200, 'easeInOutSine', =>
         @visible = true
         @load()
 

@@ -54,9 +54,15 @@ window.MercurySetup = {
     //
     // When copying content using webkit, it embeds all the user defined styles (from the css files) into the html
     // style attributes directly.  When pasting this content into HTML5 contentEditable elements it leaves these
-    // intact.  This can be a desired feature, or an annoyance, so you can enable it or disable it here.  Keep in mind
-    // this will only change the behavior in webkit, as mozilla doesn't do this.
-    cleanStylesOnPaste: true,
+    // intact.  This can be a desired feature, or an annoyance, so you can enable it or disable it here.  This means
+    // that copying something from a webkit based browser and pasting it into something like firefox will also result in
+    // these extra style attributes.  Cleaning the styles out impacts performance when pasting, and because of browser
+    // restrictions on getting pasted content (which is stupid) we have to fall back to a less performant method off
+    // figuring out what was pasted.  This seems to cause issues if you try and paste several things in a row, which
+    // seems to happen a lot when people are testing the demo.  Because of this it's disabled by default, but is
+    // recommended if you're using webkit.
+    // Go signin and vote to change this: http://www.google.com/support/forum/p/Chrome/thread?tid=3399afd053d5a29c&hl=en
+    cleanStylesOnPaste: false,
 
 
     // ## Snippet Options and Preview
@@ -13518,6 +13524,9 @@ Showdown.converter = function() {
         "class": 'mercury-lightview-overlay'
       });
       this.titleElement = this.element.find('.mercury-lightview-title');
+      if (this.options.closeButton) {
+        this.titleElement.append('<a class="mercury-lightview-close"></a>');
+      }
       this.contentElement = this.element.find('.mercury-lightview-content');
       this.element.appendTo((_ref = jQuery(this.options.appendTo).get(0)) != null ? _ref : 'body');
       this.overlay.appendTo((_ref2 = jQuery(this.options.appendTo).get(0)) != null ? _ref2 : 'body');
@@ -13533,6 +13542,11 @@ Showdown.converter = function() {
         }
       }, this));
       this.overlay.click(__bind(function() {
+        if (!this.options.closeButton) {
+          return this.hide();
+        }
+      }, this));
+      this.titleElement.find('.mercury-lightview-close').click(__bind(function() {
         return this.hide();
       }, this));
       return jQuery(document).bind('keydown', __bind(function(event) {
@@ -13553,7 +13567,7 @@ Showdown.converter = function() {
         this.element.show().css({
           opacity: 0
         });
-        return this.element.animate({
+        return this.element.stop().animate({
           opacity: 1
         }, 200, 'easeInOutSine', __bind(function() {
           this.visible = true;
@@ -14913,7 +14927,6 @@ Showdown.converter = function() {
       }, this));
       xhr.onload = __bind(function(event) {
         var response;
-        console.debug(event);
         if (event.currentTarget.status >= 400) {
           this.updateStatus('Error: Unable to upload the file');
           alert("" + event.currentTarget.status + ": Unable to process response");
@@ -15216,16 +15229,19 @@ Showdown.converter = function() {
         if (Mercury.region !== this) {
           return;
         }
-        Mercury.changes = true;
         if (this.specialContainer) {
           event.preventDefault();
           return;
         }
-        content = this.content();
+        if (this.pasting) {
+          return;
+        }
+        Mercury.changes = true;
+        content = this.element.html().replace(/^\s+|\s+$/g, '');
         clearTimeout(this.handlePasteTimeout);
         return this.handlePasteTimeout = setTimeout((__bind(function() {
           return this.handlePaste(content);
-        }, this)), 100);
+        }, this)), 400);
       }, this));
       this.element.focus(__bind(function() {
         if (this.previewing) {
@@ -15515,6 +15531,7 @@ Showdown.converter = function() {
     };
     Editable.prototype.handlePaste = function(prePasteContent) {
       var cleaned, container, content, pasted;
+      this.pasting = true;
       prePasteContent = prePasteContent.replace(/^\<br\>/, '');
       this.element.find('.mercury-region').remove();
       content = this.content();
@@ -15522,12 +15539,12 @@ Showdown.converter = function() {
         cleaned = prePasteContent.singleDiff(this.content()).sanitizeHTML();
         try {
           this.document.execCommand('undo', false, null);
-          return this.execCommand('insertHTML', {
+          this.execCommand('insertHTML', {
             value: cleaned
           });
         } catch (error) {
           this.content(prePasteContent);
-          return Mercury.modal('/mercury/modals/sanitizer', {
+          Mercury.modal('/mercury/modals/sanitizer', {
             title: 'HTML Sanitizer (Starring Clippy)',
             afterLoad: function() {
               return this.element.find('textarea').val(cleaned.replace(/<br\/>/g, '\n'));
@@ -15541,10 +15558,11 @@ Showdown.converter = function() {
           style: null
         });
         this.document.execCommand('undo', false, null);
-        return this.execCommand('insertHTML', {
+        this.execCommand('insertHTML', {
           value: container.html()
         });
       }
+      return this.pasting = false;
     };
     Editable.actions = {
       insertRowBefore: function() {

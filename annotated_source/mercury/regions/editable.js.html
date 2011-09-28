@@ -239,13 +239,14 @@ content back.  This is possible, so it doesn&rsquo;t make sense why it wouldn&rs
         <div class='highlight'><pre>    <span class="nx">@element</span><span class="p">.</span><span class="nx">bind</span> <span class="s1">&#39;paste&#39;</span><span class="p">,</span> <span class="o">=&gt;</span>
       <span class="k">return</span> <span class="k">if</span> <span class="nx">@previewing</span>
       <span class="k">return</span> <span class="nx">unless</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">region</span> <span class="o">==</span> <span class="err">@</span>
-      <span class="nv">Mercury.changes = </span><span class="kc">true</span>
       <span class="k">if</span> <span class="nx">@specialContainer</span>
         <span class="nx">event</span><span class="p">.</span><span class="nx">preventDefault</span><span class="p">()</span>
         <span class="k">return</span>
-      <span class="nv">content = </span><span class="nx">@content</span><span class="p">()</span>
+      <span class="k">return</span> <span class="k">if</span> <span class="nx">@pasting</span>
+      <span class="nv">Mercury.changes = </span><span class="kc">true</span>
+      <span class="nv">content = </span><span class="nx">@element</span><span class="p">.</span><span class="nx">html</span><span class="p">().</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/^\s+|\s+$/g</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
       <span class="nx">clearTimeout</span><span class="p">(</span><span class="nx">@handlePasteTimeout</span><span class="p">)</span>
-      <span class="vi">@handlePasteTimeout = </span><span class="nx">setTimeout</span><span class="p">((</span><span class="o">=&gt;</span> <span class="nx">@handlePaste</span><span class="p">(</span><span class="nx">content</span><span class="p">)),</span> <span class="mi">100</span><span class="p">)</span>
+      <span class="vi">@handlePasteTimeout = </span><span class="nx">setTimeout</span><span class="p">((</span><span class="o">=&gt;</span> <span class="nx">@handlePaste</span><span class="p">(</span><span class="nx">content</span><span class="p">)),</span> <span class="mi">400</span><span class="p">)</span>
 
     <span class="nx">@element</span><span class="p">.</span><span class="nx">focus</span> <span class="o">=&gt;</span>
       <span class="k">return</span> <span class="k">if</span> <span class="nx">@previewing</span>
@@ -295,7 +296,7 @@ content back.  This is possible, so it doesn&rsquo;t make sense why it wouldn&rs
         <div class="pilwrap">
           <a class="pilcrow" href="#section-14">&#182;</a>
         </div>
-        <p>mozilla: pressing enter in any elemeny besides a div handles strangely</p>
+        <p>mozilla: pressing enter in any element besides a div handles strangely</p>
       </td>
       <td class=code>
         <div class='highlight'><pre>            <span class="nx">event</span><span class="p">.</span><span class="nx">preventDefault</span><span class="p">()</span>
@@ -620,6 +621,7 @@ all other times it should store if there&rsquo;s a 1 second pause</p>
 
 
   <span class="nv">handlePaste: </span><span class="nf">(prePasteContent) -&gt;</span>
+    <span class="vi">@pasting = </span><span class="kc">true</span>
     <span class="nv">prePasteContent = </span><span class="nx">prePasteContent</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/^\&lt;br\&gt;/</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span></pre></div>
       </td>
     </tr>
@@ -701,7 +703,8 @@ all other times it should store if there&rsquo;s a 1 second pause</p>
       <span class="nx">container</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;[style]&#39;</span><span class="p">).</span><span class="nx">attr</span><span class="p">({</span><span class="nv">style: </span><span class="kc">null</span><span class="p">})</span>
 
       <span class="nx">@document</span><span class="p">.</span><span class="nx">execCommand</span><span class="p">(</span><span class="s1">&#39;undo&#39;</span><span class="p">,</span> <span class="kc">false</span><span class="p">,</span> <span class="kc">null</span><span class="p">)</span>
-      <span class="nx">@execCommand</span><span class="p">(</span><span class="s1">&#39;insertHTML&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nv">value: </span><span class="nx">container</span><span class="p">.</span><span class="nx">html</span><span class="p">()})</span></pre></div>
+      <span class="nx">@execCommand</span><span class="p">(</span><span class="s1">&#39;insertHTML&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nv">value: </span><span class="nx">container</span><span class="p">.</span><span class="nx">html</span><span class="p">()})</span>
+    <span class="vi">@pasting = </span><span class="kc">false</span></pre></div>
       </td>
     </tr>
     <tr id='section-39'>
@@ -712,77 +715,9 @@ all other times it should store if there&rsquo;s a 1 second pause</p>
         <p>Custom actions (eg. things that execCommand doesn&rsquo;t do, or doesn&rsquo;t do well)</p>
       </td>
       <td class=code>
-        <div class='highlight'><pre>  <span class="vi">@actions: </span><span class="p">{</span></pre></div>
-      </td>
-    </tr>
-    <tr id='section-selection.selectWordByCursor()'>
-      <td class=docs>
-        <div class="pilwrap">
-          <a class="pilcrow" href="#section-selection.selectWordByCursor()">&#182;</a>
-        </div>
-        <p>bold: (selection) &ndash;&gt;
-  unless selection.collapsed
-    @document.execCommand(&lsquo;bold&rsquo;, false, null)
-  else</p>
+        <div class='highlight'><pre>  <span class="vi">@actions: </span><span class="p">{</span>
 
-<h1>selection.selectWordByCursor()</h1>
-
-<h1>@document.execCommand(&lsquo;bold&rsquo;, false, null)</h1>
-
-<pre><code>selection.placeMarker()
-node = @element.find(&lsquo;.mercury-marker&rsquo;).get(0)
-prev = node.previousSibling
-selection.removeMarker()
-next = prev.nextSibling
-console.debug(prev, next)
-</code></pre>
-
-<h1>if prev.textContent[prev.textContent.length &ndash; 1] != &lsquo; &rsquo; &amp;&amp;</h1>
-      </td>
-      <td class=code>
-        <div class='highlight'><pre></pre></div>
-      </td>
-    </tr>
-    <tr id='section-41'>
-      <td class=docs>
-        <div class="pilwrap">
-          <a class="pilcrow" href="#section-41">&#182;</a>
-        </div>
-        <p>[some]| content
-textContent = some, wholeText = some
-textContent = &ldquo;, wholeText = some
-content |[some]
-content [s|ome]
-co|ntent [some]
-|content [some]</p>
-      </td>
-      <td class=code>
-        <div class='highlight'><pre></pre></div>
-      </td>
-    </tr>
-    <tr id='section-selection.selectWord()'>
-      <td class=docs>
-        <div class="pilwrap">
-          <a class="pilcrow" href="#section-selection.selectWord()">&#182;</a>
-        </div>
-        <pre><code>   console.debug(commonAncestor)
-   beforeText = commonAncestor.textContent
-   afterText = commonAncestor.wholeText.substring(commonAncestor.wholeText.lastIndexOf(beforeText) + beforeText.length, commonAncestor.wholeText.length)
-   if beforeText &amp;&amp; afterText &amp;&amp; (beforeChar = beforeText[beforeText.length &ndash; 1]) != &lsquo; &rsquo; &amp;&amp; (afterChar = afterText[0]) != &lsquo; &rsquo;
-     console.debug(&lsquo;bolding word&rsquo;, beforeChar, afterChar)
-   else
-     @document.execCommand(&lsquo;bold&rsquo;, false, null)
-</code></pre>
-
-<h1>selection.selectWord()</h1>
-
-<h1>commonAncestor.wholeText, commonAncestor.textContent</h1>
-
-<pre><code> else
-</code></pre>
-      </td>
-      <td class=code>
-        <div class='highlight'><pre>    <span class="nv">insertRowBefore: </span><span class="o">-&gt;</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">tableEditor</span><span class="p">.</span><span class="nx">addRow</span><span class="p">(</span><span class="s1">&#39;before&#39;</span><span class="p">)</span>
+    <span class="nv">insertRowBefore: </span><span class="o">-&gt;</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">tableEditor</span><span class="p">.</span><span class="nx">addRow</span><span class="p">(</span><span class="s1">&#39;before&#39;</span><span class="p">)</span>
 
     <span class="nv">insertRowAfter: </span><span class="o">-&gt;</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">tableEditor</span><span class="p">.</span><span class="nx">addRow</span><span class="p">(</span><span class="s1">&#39;after&#39;</span><span class="p">)</span>
 
@@ -845,10 +780,10 @@ co|ntent [some]
   <span class="p">}</span></pre></div>
       </td>
     </tr>
-    <tr id='section-43'>
+    <tr id='section-40'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-43">&#182;</a>
+          <a class="pilcrow" href="#section-40">&#182;</a>
         </div>
         <p>Helper class for managing selection and getting information from it</p>
       </td>
@@ -895,12 +830,12 @@ co|ntent [some]
     <span class="nv">range = </span><span class="nx">@context</span><span class="p">.</span><span class="nx">createRange</span><span class="p">()</span></pre></div>
       </td>
     </tr>
-    <tr id='section-44'>
+    <tr id='section-41'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-44">&#182;</a>
+          <a class="pilcrow" href="#section-41">&#182;</a>
         </div>
-        <p>todo: the \00 thing breaks when using uglifier, and is escapped to &quot;0&rdquo;.. it&rsquo;s been fixed, but isn&rsquo;t available yet
+        <p>todo: the \00 thing breaks when using uglifier, and is escapped to &ldquo;0&rdquo;.. it&rsquo;s been fixed, but isn&rsquo;t available yet
 https://github.com/lautis/uglifier/issues/11</p>
       </td>
       <td class=code>
@@ -943,10 +878,10 @@ https://github.com/lautis/uglifier/issues/11</p>
     <span class="vi">@endMarker = </span><span class="nx">jQuery</span><span class="p">(</span><span class="s1">&#39;&lt;em class=&quot;mercury-marker&quot;/&gt;&#39;</span><span class="p">,</span> <span class="nx">@context</span><span class="p">).</span><span class="nx">get</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span></pre></div>
       </td>
     </tr>
-    <tr id='section-45'>
+    <tr id='section-42'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-45">&#182;</a>
+          <a class="pilcrow" href="#section-42">&#182;</a>
         </div>
         <p>put a single marker (the end)</p>
       </td>
@@ -958,10 +893,10 @@ https://github.com/lautis/uglifier/issues/11</p>
     <span class="nx">unless</span> <span class="nx">@range</span><span class="p">.</span><span class="nx">collapsed</span></pre></div>
       </td>
     </tr>
-    <tr id='section-46'>
+    <tr id='section-43'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-46">&#182;</a>
+          <a class="pilcrow" href="#section-43">&#182;</a>
         </div>
         <p>put a start marker</p>
 

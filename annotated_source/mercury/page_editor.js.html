@@ -62,7 +62,7 @@ visible: boolean, if the interface should start visible or not (defaults to true
     <span class="nb">window</span><span class="p">.</span><span class="nv">mercuryInstance = </span><span class="err">@</span>
     <span class="vi">@regions = </span><span class="p">[]</span>
     <span class="nx">@initializeInterface</span><span class="p">()</span>
-    <span class="nv">Mercury.csrfToken = </span><span class="nx">token</span> <span class="k">if</span> <span class="nv">token = </span><span class="nx">jQuery</span><span class="p">(</span><span class="s1">&#39;meta[name=&quot;csrf-token&quot;]&#39;</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="s1">&#39;content&#39;</span><span class="p">)</span>
+    <span class="nv">Mercury.csrfToken = </span><span class="nx">token</span> <span class="k">if</span> <span class="nv">token = </span><span class="nx">jQuery</span><span class="p">(</span><span class="nx">Mercury</span><span class="p">.</span><span class="nx">config</span><span class="p">.</span><span class="nx">csrfSelector</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="s1">&#39;content&#39;</span><span class="p">)</span>
 
 
   <span class="nv">initializeInterface: </span><span class="o">-&gt;</span>
@@ -102,6 +102,7 @@ todo: look into <code>context</code> options for ajax as an alternative</p>
       <span class="nv">iframeWindow.Mercury = </span><span class="nx">Mercury</span>
 
       <span class="nx">@bindEvents</span><span class="p">()</span>
+      <span class="nx">@resize</span><span class="p">()</span>
       <span class="nx">@initializeRegions</span><span class="p">()</span>
       <span class="nx">@finalizeInterface</span><span class="p">()</span>
       <span class="nx">Mercury</span><span class="p">.</span><span class="nx">trigger</span><span class="p">(</span><span class="s1">&#39;ready&#39;</span><span class="p">)</span>
@@ -133,7 +134,6 @@ todo: look into <code>context</code> options for ajax as an alternative</p>
     <span class="vi">@snippetToolbar = </span><span class="k">new</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">SnippetToolbar</span><span class="p">(</span><span class="nx">@document</span><span class="p">)</span>
 
     <span class="nx">@hijackLinksAndForms</span><span class="p">()</span>
-    <span class="nx">@resize</span><span class="p">()</span>
     <span class="nx">Mercury</span><span class="p">.</span><span class="nx">trigger</span><span class="p">(</span><span class="s1">&#39;mode&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nv">mode: </span><span class="s1">&#39;preview&#39;</span><span class="p">})</span> <span class="nx">unless</span> <span class="nx">@options</span><span class="p">.</span><span class="nx">visible</span>
 
 
@@ -213,12 +213,19 @@ todo: look into <code>context</code> options for ajax as an alternative</p>
     <span class="nv">data = </span><span class="nx">jQuery</span><span class="p">.</span><span class="nx">toJSON</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="nx">unless</span> <span class="nx">@options</span><span class="p">.</span><span class="nx">saveStyle</span> <span class="o">==</span> <span class="s1">&#39;form&#39;</span>
     <span class="nx">jQuery</span><span class="p">.</span><span class="nx">ajax</span> <span class="nx">url</span><span class="p">,</span> <span class="p">{</span>
       <span class="nv">type: </span><span class="s1">&#39;POST&#39;</span>
+      <span class="nv">headers: </span><span class="nx">@saveHeaders</span><span class="p">()</span>
       <span class="nv">data: </span><span class="p">{</span><span class="nv">content: </span><span class="nx">data</span><span class="p">}</span>
       <span class="nv">success: </span><span class="o">=&gt;</span>
         <span class="nv">Mercury.changes = </span><span class="kc">false</span>
       <span class="nv">error: </span><span class="o">=&gt;</span>
         <span class="nx">alert</span><span class="p">(</span><span class="s2">&quot;Mercury was unable to save to the url: #{url}&quot;</span><span class="p">)</span>
     <span class="p">}</span>
+
+
+  <span class="nv">saveHeaders: </span><span class="o">-&gt;</span>
+    <span class="nv">headers = </span><span class="p">{}</span>
+    <span class="nx">headers</span><span class="p">[</span><span class="nx">Mercury</span><span class="p">.</span><span class="nx">config</span><span class="p">.</span><span class="nx">csrfHeader</span><span class="p">]</span> <span class="o">=</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">csrfToken</span>
+    <span class="k">return</span> <span class="nx">headers</span>
 
 
   <span class="nv">serialize: </span><span class="o">-&gt;</span>

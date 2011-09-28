@@ -99,6 +99,23 @@ this array, and they will be ignored when the hijacking is applied.</p>
         <div class='highlight'><pre>    <span class="nx">nonHijackableClasses</span><span class="o">:</span> <span class="p">[],</span></pre></div>
       </td>
     </tr>
+    <tr id='section-Ajax_and_CSRF_Headers'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-Ajax_and_CSRF_Headers">&#182;</a>
+        </div>
+        <h2>Ajax and CSRF Headers</h2>
+
+<p>Some server frameworks require that you provide a specific header for Ajax requests.  The values for these CSRF
+tokens are typically stored in the rendered DOM.  By default, Mercury will look for the Rails specific meta tag,
+and provide the X-CSRF-Token header on Ajax requests, but you can modify this configuration if the system you&rsquo;re
+using doesn&rsquo;t follow the same standard.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>    <span class="nx">csrfSelector</span><span class="o">:</span> <span class="s1">&#39;meta[name=&quot;csrf-token&quot;]&#39;</span><span class="p">,</span>
+    <span class="nx">csrfHeader</span><span class="o">:</span> <span class="s1">&#39;X-CSRF-Token&#39;</span><span class="p">,</span></pre></div>
+      </td>
+    </tr>
     <tr id='section-Pasting_(in_Chrome/Safari)'>
       <td class=docs>
         <div class="pilwrap">
@@ -108,11 +125,17 @@ this array, and they will be ignored when the hijacking is applied.</p>
 
 <p>When copying content using webkit, it embeds all the user defined styles (from the css files) into the html
 style attributes directly.  When pasting this content into HTML5 contentEditable elements it leaves these
-intact.  This can be a desired feature, or an annoyance, so you can enable it or disable it here.  Keep in mind
-this will only change the behavior in webkit, as mozilla doesn&rsquo;t do this.</p>
+intact.  This can be a desired feature, or an annoyance, so you can enable it or disable it here.  This means
+that copying something from a webkit based browser and pasting it into something like firefox will also result in
+these extra style attributes.  Cleaning the styles out impacts performance when pasting, and because of browser
+restrictions on getting pasted content (which is stupid) we have to fall back to a less performant method off
+figuring out what was pasted.  This seems to cause issues if you try and paste several things in a row, which
+seems to happen a lot when people are testing the demo.  Because of this it&rsquo;s disabled by default, but is
+recommended if you&rsquo;re using webkit.
+Go signin and vote to change this: http://www.google.com/support/forum/p/Chrome/thread?tid=3399afd053d5a29c&amp;hl=en</p>
       </td>
       <td class=code>
-        <div class='highlight'><pre>    <span class="nx">cleanStylesOnPaste</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span></pre></div>
+        <div class='highlight'><pre>    <span class="nx">cleanStylesOnPaste</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span></pre></div>
       </td>
     </tr>
     <tr id='section-Snippet_Options_and_Preview'>

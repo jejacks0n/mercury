@@ -3,3 +3,5 @@ tmp
 log
 db
 public
+pkg
+vendor

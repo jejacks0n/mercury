@@ -156,7 +156,9 @@ class @Mercury.PageEditor
     data = jQuery.toJSON(data) unless @options.saveStyle == 'form'
     method = 'PUT' if @options.saveMethod == 'PUT'
     jQuery.ajax url, {
-      type: 'POST'
+      type: method || 'POST'
+      contentType: 'application/json'
+      dataType: 'json'
       headers: @saveHeaders()
       data: {content: data, _method: method}
       success: =>

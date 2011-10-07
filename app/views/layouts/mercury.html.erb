@@ -3,12 +3,18 @@
   <head>
     <%= csrf_meta_tags %>
     <title>Mercury Editor</title>
-    <link href="/assets/mercury.css" media="screen" rel="stylesheet" type="text/css" />
-    <script src="/assets/mercury.js" type="text/javascript"></script>
+    <%= stylesheet_link_tag    'mercury', 'mercury_overrides' %>
+    <%= javascript_include_tag 'mercury' %>
   </head>
   <body>
     <script type="text/javascript">
-      new Mercury.PageEditor()
+      var saveUrl = null;
+      var options = {
+        saveStyle: null,  // 'form', or 'json' (default json)
+        saveMethod: null, // 'POST', or 'PUT', (create, vs. update -- default POST)
+        visible: null     // if the interface should start visible or not (default true)
+      };
+      new Mercury.PageEditor(saveUrl, options)
     </script>
   </body>
 </html>

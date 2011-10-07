@@ -20,6 +20,7 @@ Gem::Specification.new do |s|
     "LICENSE",
     "README.md",
     "VERSION",
+    "POST_INSTALL",
     "annotated_source.template",
     "app/controllers/images_controller.rb",
     "app/controllers/mercury_controller.rb",

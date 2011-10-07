@@ -1,6 +1,7 @@
 <html>
   <head>
     <!-- add prototype and styles to ensure that libraries don't collide and css doesn't conflict -->
+    <title>Mercury Editor Regression Testing</title>
     <script src="/prototype.js" type="text/javascript"></script>
     <style type="text/css">
       body { border: 1px dotted #000; padding: 10px; }
@@ -15,6 +16,7 @@
     <script type="text/javascript">
       // it's worth mentioning that mercury is not loaded in the first request, but should be loaded in the second.
       if (top.Mercury) {
+        window.history = top.history;
         top.Mercury.saveURL = '/contents';
         top.Mercury.Snippet.load({
           snippet_1:  {name: 'example', options: {'options[favorite_beer]': "Bells Hopslam", 'options[first_name]': "01"}},
@@ -68,10 +70,11 @@
         -webkit-border-radius: 3px;
         list-style-type: none;
       }
-      #controls a {
+      #controls div {
         color: #333;
         text-transform: lowercase;
         text-decoration: none;
+        cursor: pointer;
       }
       .mercury-snippet {
         background: rgba(0, 0, 0, 0.5);
@@ -100,8 +103,10 @@
   <div id="content">
 
     <ul id="controls">
-      <li><a href="#" onclick="alert(Mercury.version)">Mercury Version</a></li>
-      <li><a href="#" onclick="Mercury.trigger('toggle:interface')">Toggle Interface</a></li>
+      <li><div onclick="alert(Mercury.version)">Mercury Version</div></li>
+      <li><div onclick="Mercury.trigger('toggle:interface')">Toggle Interface</div></li>
+      <li><div onclick="top.history.pushState({}, 'Mercury Editor -- With history.pushState!', 'http://localhost:3000/pushstate');">top.history.pushState</div></li>
+      <li><div onclick="history.pushState({}, 'Mercury Editor -- With history.pushState!', 'http://localhost:3000/pushstate');">history.pushState</div></li>
     </ul>
 
     <h1>Form (Method: POST)</h1>

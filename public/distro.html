@@ -1,6 +1,7 @@
 <html>
   <head>
     <!-- add prototype and styles to ensure that libraries don't collide and css doesn't conflict -->
+    <title>Mercury Editor Regression Testing</title>
     <script src="/prototype.js" type="text/javascript"></script>
     <style type="text/css">
       body { border: 1px dotted #000; padding: 10px; }
@@ -14,23 +15,26 @@
     <!-- preload snippets -->
     <script type="text/javascript">
       // it's worth mentioning that mercury is not loaded in the first request, but should be loaded in the second.
-      if (top.Mercury) top.Mercury.saveURL = '/contents';
-      if (top.Mercury) top.Mercury.Snippet.load({
-        snippet_1:  {name: 'example', options: {'options[favorite_beer]': "Bells Hopslam", 'options[first_name]': "01"}},
-        snippet_2:  {name: 'example', options: {'options[favorite_beer]': "Bells Hopslam", 'options[first_name]': "02"}},
-        snippet_3:  {name: 'example', options: {'options[favorite_beer]': "Bells Hopslam", 'options[first_name]': "03"}},
-        snippet_4:  {name: 'example', options: {'options[favorite_beer]': "Bells Hopslam", 'options[first_name]': "04"}},
-        snippet_5:  {name: 'example', options: {'options[favorite_beer]': "Bells Hopslam", 'options[first_name]': "05"}},
-        snippet_6:  {name: 'example', options: {'options[favorite_beer]': "Bells Hopslam", 'options[first_name]': "06"}},
-        snippet_7:  {name: 'example', options: {'options[favorite_beer]': "Bells Hopslam", 'options[first_name]': "07"}},
-        snippet_8:  {name: 'example', options: {'options[favorite_beer]': "Bells Hopslam", 'options[first_name]': "08"}},
-        snippet_9:  {name: 'example', options: {'options[favorite_beer]': "Bells Hopslam", 'options[first_name]': "09"}},
-        snippet_10: {name: 'example', options: {'options[favorite_beer]': "Bells Hopslam", 'options[first_name]': "10"}},
-        snippet_11: {name: 'example', options: {'options[favorite_beer]': "Bells Hopslam", 'options[first_name]': "11"}},
-        snippet_12: {name: 'example', options: {'options[favorite_beer]': "Bells Hopslam", 'options[first_name]': "12"}},
-        snippet_13: {name: 'example', options: {'options[favorite_beer]': "Bells Hopslam", 'options[first_name]': "13"}},
-        snippet_14: {name: 'example', options: {'options[favorite_beer]': "Bells Hopslam", 'options[first_name]': "14"}}
-      });
+      if (top.Mercury) {
+        window.history = top.history;
+        top.Mercury.saveURL = '/contents';
+        top.Mercury.Snippet.load({
+          snippet_1:  {name: 'example', options: {'options[favorite_beer]': "Bells Hopslam", 'options[first_name]': "01"}},
+          snippet_2:  {name: 'example', options: {'options[favorite_beer]': "Bells Hopslam", 'options[first_name]': "02"}},
+          snippet_3:  {name: 'example', options: {'options[favorite_beer]': "Bells Hopslam", 'options[first_name]': "03"}},
+          snippet_4:  {name: 'example', options: {'options[favorite_beer]': "Bells Hopslam", 'options[first_name]': "04"}},
+          snippet_5:  {name: 'example', options: {'options[favorite_beer]': "Bells Hopslam", 'options[first_name]': "05"}},
+          snippet_6:  {name: 'example', options: {'options[favorite_beer]': "Bells Hopslam", 'options[first_name]': "06"}},
+          snippet_7:  {name: 'example', options: {'options[favorite_beer]': "Bells Hopslam", 'options[first_name]': "07"}},
+          snippet_8:  {name: 'example', options: {'options[favorite_beer]': "Bells Hopslam", 'options[first_name]': "08"}},
+          snippet_9:  {name: 'example', options: {'options[favorite_beer]': "Bells Hopslam", 'options[first_name]': "09"}},
+          snippet_10: {name: 'example', options: {'options[favorite_beer]': "Bells Hopslam", 'options[first_name]': "10"}},
+          snippet_11: {name: 'example', options: {'options[favorite_beer]': "Bells Hopslam", 'options[first_name]': "11"}},
+          snippet_12: {name: 'example', options: {'options[favorite_beer]': "Bells Hopslam", 'options[first_name]': "12"}},
+          snippet_13: {name: 'example', options: {'options[favorite_beer]': "Bells Hopslam", 'options[first_name]': "13"}},
+          snippet_14: {name: 'example', options: {'options[favorite_beer]': "Bells Hopslam", 'options[first_name]': "14"}}
+        });
+      }
     </script>
 
     <!-- styles for the content layout -->
@@ -66,10 +70,11 @@
         -webkit-border-radius: 3px;
         list-style-type: none;
       }
-      #controls a {
+      #controls div {
         color: #333;
         text-transform: lowercase;
         text-decoration: none;
+        cursor: pointer;
       }
       .mercury-snippet {
         background: rgba(0, 0, 0, 0.5);
@@ -98,8 +103,10 @@
   <div id="content">
 
     <ul id="controls">
-      <li><a href="#" onclick="alert(Mercury.version)">Mercury Version</a></li>
-      <li><a href="#" onclick="Mercury.trigger('toggle:interface')">Toggle Interface</a></li>
+      <li><div onclick="alert(Mercury.version)">Mercury Version</div></li>
+      <li><div onclick="Mercury.trigger('toggle:interface')">Toggle Interface</div></li>
+      <li><div onclick="top.history.pushState({}, 'Mercury Editor -- With history.pushState!', 'http://localhost:3000/pushstate');">top.history.pushState</div></li>
+      <li><div onclick="history.pushState({}, 'Mercury Editor -- With history.pushState!', 'http://localhost:3000/pushstate');">history.pushState</div></li>
     </ul>
 
     <h1>Form (Method: POST)</h1>
@@ -300,6 +307,6 @@ Turkey corned beef ham, chuck ham hock **venison _drumstick_ ** tongue ribeye. B
       <iframe class="mercury-snippet" data-snippet="snippet_14"  width="560" height="349" src="http://www.youtube.com/embed/0pXYp72dwl0?wmode=transparent" frameborder="0" allowfullscreen="true"></iframe>
     </div>
   </div>
-  
+
   </body>
 </html>

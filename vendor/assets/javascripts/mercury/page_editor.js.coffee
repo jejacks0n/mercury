@@ -2,6 +2,7 @@ class @Mercury.PageEditor
 
   # options
   # saveStyle: 'form', or 'json' (defaults to json)
+  # saveMethod: 'POST', or 'PUT', create or update actions on save (defaults to POST)
   # visible: boolean, if the interface should start visible or not (defaults to true)
   constructor: (@saveUrl = null, @options = {}) ->
     throw "Mercury.PageEditor is unsupported in this client. Supported browsers are chrome 10+, firefix 4+, and safari 5+." unless Mercury.supported
@@ -153,10 +154,11 @@ class @Mercury.PageEditor
     data = @serialize()
     Mercury.log('saving', data)
     data = jQuery.toJSON(data) unless @options.saveStyle == 'form'
+    method = 'PUT' if @options.saveMethod == 'PUT'
     jQuery.ajax url, {
       type: 'POST'
       headers: @saveHeaders()
-      data: {content: data}
+      data: {content: data, _method: method}
       success: =>
         Mercury.changes = false
       error: =>

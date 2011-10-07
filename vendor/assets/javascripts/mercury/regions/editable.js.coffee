@@ -28,11 +28,14 @@ class @Mercury.Regions.Editable extends Mercury.Region
 
     # add the basic editor settings to the document (only once)
     unless @document.mercuryEditing
-      @document.execCommand('styleWithCSS', false, false)
-      @document.execCommand('insertBROnReturn', false, true)
-      @document.execCommand('enableInlineTableEditing', false, false)
-      @document.execCommand('enableObjectResizing', false, false)
       @document.mercuryEditing = true
+      try
+        @document.execCommand('styleWithCSS', false, false)
+        @document.execCommand('insertBROnReturn', false, true)
+        @document.execCommand('enableInlineTableEditing', false, false)
+        @document.execCommand('enableObjectResizing', false, false)
+      catch e
+        # intentionally do nothing if any of these fail, to broaden support for Opera
 
 
   bindEvents: ->

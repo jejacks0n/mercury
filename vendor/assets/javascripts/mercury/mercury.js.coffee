@@ -1,9 +1,9 @@
 # ## Require all the dependencies
-#= require mercury_dependencies/jquery-1.6
-#= require mercury_dependencies/jquery-ui-1.8.13.custom
-#= require mercury_dependencies/jquery.additions
-#= require mercury_dependencies/liquidmetal
-#= require mercury_dependencies/showdown
+#= require mercury/dependencies/jquery-1.6
+#= require mercury/dependencies/jquery-ui-1.8.13.custom
+#= require mercury/dependencies/jquery.additions
+#= require mercury/dependencies/liquidmetal
+#= require mercury/dependencies/showdown
 #
 # ## Require all mercury files
 #= require_self
@@ -47,12 +47,12 @@ jQuery.extend @Mercury, {
 
   # Custom event and logging methods
   bind: (eventName, callback) ->
-    jQuery(document).bind("mercury:#{eventName}", callback)
+    jQuery(top).bind("mercury:#{eventName}", callback)
 
 
   trigger: (eventName, options) ->
     Mercury.log(eventName, options)
-    jQuery(document).trigger("mercury:#{eventName}", options)
+    jQuery(top).trigger("mercury:#{eventName}", options)
 
 
   log: ->

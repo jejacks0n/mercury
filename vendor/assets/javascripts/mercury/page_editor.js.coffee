@@ -44,7 +44,7 @@ class @Mercury.PageEditor
       jQuery.globalEval = (data) -> (iframeWindow.execScript || (data) -> iframeWindow["eval"].call(iframeWindow, data))(data) if (data && /\S/.test(data))
 
       iframeWindow.Mercury = Mercury
-      iframeWindow.History = History if History && History.Adapter
+      iframeWindow.History = History if window.History && History.Adapter
 
       @bindEvents()
       @resize()
@@ -52,7 +52,7 @@ class @Mercury.PageEditor
       @finalizeInterface()
       Mercury.trigger('ready')
       jQuery(iframeWindow).trigger('mercury:ready')
-      iframeWindow.Event.fire(iframeWindow, 'mercury:ready') if iframeWindow.Event
+      iframeWindow.Event.fire(iframeWindow, 'mercury:ready') if iframeWindow.Event && iframeWindow.Event.fire
       iframeWindow.onMercuryReady() if iframeWindow.onMercuryReady
 
       @iframe.css({visibility: 'visible'})

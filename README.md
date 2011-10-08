@@ -7,6 +7,11 @@ block elements, instead of iframes, which allows for CSS to be applied in ways t
 
 Mercury has been written using CoffeeScript and jQuery for the Javascript portions, and is written on top of Rails 3.1.
 
+## Awesomeness
+
+Mercury has been added as a Feature Project on Pivotal Tracker!  If you're interested in what's planned, check out the
+project: https://www.pivotaltracker.com/projects/295823
+
 
 ## Browser Support
 

@@ -10,14 +10,20 @@
     </style>
 
     <!-- include the loader -->
+    <script src="/assets/mercury/support/history.js" type="text/javascript"></script>
     <script src="/assets/mercury_loader.js" type="text/javascript"></script>
 
     <!-- preload snippets -->
     <script type="text/javascript">
       // it's worth mentioning that mercury is not loaded in the first request, but should be loaded in the second.
-      if (top.Mercury) {
-        top.Mercury.saveURL = '/contents';
-        top.Mercury.Snippet.load({
+      History.Adapter.bind(window, 'statechange', function() {
+        var state = History.getState();
+        console.debug(state.data, state.title, state.url);
+      });
+
+      Event.observe(window, "mercury:ready", function() {
+        Mercury.saveURL = '/contents';
+        Mercury.Snippet.load({
           snippet_1:  {name: 'example', options: {'options[favorite_beer]': "Bells Hopslam", 'options[first_name]': "01"}},
           snippet_2:  {name: 'example', options: {'options[favorite_beer]': "Bells Hopslam", 'options[first_name]': "02"}},
           snippet_3:  {name: 'example', options: {'options[favorite_beer]': "Bells Hopslam", 'options[first_name]': "03"}},
@@ -33,7 +39,7 @@
           snippet_13: {name: 'example', options: {'options[favorite_beer]': "Bells Hopslam", 'options[first_name]': "13"}},
           snippet_14: {name: 'example', options: {'options[favorite_beer]': "Bells Hopslam", 'options[first_name]': "14"}}
         });
-      }
+      })
     </script>
 
     <!-- styles for the content layout -->
@@ -104,10 +110,10 @@
     <ul id="controls">
       <li><div onclick="alert(Mercury.version)">Mercury Version</div></li>
       <li><div onclick="Mercury.trigger('toggle:interface')">Toggle Interface</div></li>
-      <li><div onclick="history.pushState({}, 'Mercury Editor -- With history.pushState!', 'http://localhost:3000/pushstate1');">history.pushState</div></li>
-      <li><div onclick="history.go(-1);">history.go(-1)</div></li>
-      <li><div onclick="history.back();">history.back()</div></li>
-      <li><div onclick="history.forward();">history.forward()</div></li>
+      <li><div onclick="var num = 1; History.pushState({state: num}, 'Mercury Editor -- With history.pushState!', '?pushstate=' + num);">history.pushState</div></li>
+      <li><div onclick="History.go(-1);">History.go(-1)</div></li>
+      <li><div onclick="History.back();">History.back()</div></li>
+      <li><div onclick="History.forward();">History.forward()</div></li>
     </ul>
 
     <h1>Form (Method: POST)</h1>

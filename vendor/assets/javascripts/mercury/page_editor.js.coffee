@@ -42,8 +42,9 @@ class @Mercury.PageEditor
       # todo: look into `context` options for ajax as an alternative
       iframeWindow = @iframe.get(0).contentWindow
       jQuery.globalEval = (data) -> (iframeWindow.execScript || (data) -> iframeWindow["eval"].call(iframeWindow, data))(data) if (data && /\S/.test(data))
+
       iframeWindow.Mercury = Mercury
-      iframeWindow["eval"].call(iframeWindow, "try{ (History ? History.prototype : history).pushState = function(args, title, url) { top.history.pushState(args, title, url) } }catch(e){}")
+      iframeWindow.History = History if History && History.Adapter
 
       @bindEvents()
       @resize()

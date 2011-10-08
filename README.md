@@ -9,8 +9,8 @@ Mercury has been written using CoffeeScript and jQuery for the Javascript portio
 
 ## Awesomeness
 
-Mercury has been added as a Feature Project on Pivotal Tracker!  If you're interested in what's planned, check out the
-project: https://www.pivotaltracker.com/projects/295823
+Mercury has been added as a Featured Project on Pivotal Tracker!  If you're interested in what's planned, check out the
+public project at: https://www.pivotaltracker.com/projects/295823
 
 
 ## Browser Support

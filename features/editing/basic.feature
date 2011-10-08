@@ -9,3 +9,4 @@ Feature:
     Then I should see "Save" within the toolbar
     And I should see "Preview" within the toolbar
     And I should see "Bold" within the toolbar
+    And I should see "Editable region" in the content frame

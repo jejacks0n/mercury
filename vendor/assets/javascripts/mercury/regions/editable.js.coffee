@@ -150,7 +150,7 @@ class @Mercury.Regions.Editable extends Mercury.Region
         when 13 # enter
           if jQuery.browser.webkit && @selection().commonAncestor().closest('li, ul', @element).length == 0
             event.preventDefault()
-            @document.execCommand('insertLineBreak', false, null)
+            @document.execCommand('insertParagraph')
           else if @specialContainer
             # mozilla: pressing enter in any element besides a div handles strangely
             event.preventDefault()

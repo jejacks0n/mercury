@@ -12084,7 +12084,7 @@ Showdown.converter = function() {
 (function() {
   this.Mercury || (this.Mercury = {});
   jQuery.extend(this.Mercury, {
-    version: '0.2.0',
+    version: '0.2.1',
     supported: document.getElementById && document.designMode && !jQuery.browser.konqueror && !jQuery.browser.msie,
     Regions: {},
     modalHandlers: {},
@@ -12209,6 +12209,7 @@ Showdown.converter = function() {
         style: 'position:absolute;opacity:0'
       }).appendTo((_ref = this.options.appendTo) != null ? _ref : 'body');
       this.iframe = jQuery('<iframe>', {
+        id: 'mercury_iframe',
         "class": 'mercury-iframe',
         seamless: 'true',
         frameborder: '0',
@@ -12241,6 +12242,7 @@ Showdown.converter = function() {
           }
         };
         iframeWindow.Mercury = Mercury;
+        iframeWindow["eval"].call(iframeWindow, "history.pushState = function(obj, title, url) { top.history.pushState(obj, title, url) }");
         this.bindEvents();
         this.resize();
         this.initializeRegions();
@@ -12394,18 +12396,24 @@ Showdown.converter = function() {
       return null;
     };
     PageEditor.prototype.save = function() {
-      var data, url, _ref, _ref2;
+      var data, method, url, _ref, _ref2;
       url = (_ref = (_ref2 = this.saveUrl) != null ? _ref2 : Mercury.saveURL) != null ? _ref : this.iframeSrc();
       data = this.serialize();
       Mercury.log('saving', data);
       if (this.options.saveStyle !== 'form') {
         data = jQuery.toJSON(data);
       }
+      if (this.options.saveMethod === 'PUT') {
+        method = 'PUT';
+      }
       return jQuery.ajax(url, {
-        type: 'POST',
+        type: method || 'POST',
+        contentType: 'application/json',
+        dataType: 'json',
         headers: this.saveHeaders(),
         data: {
-          content: data
+          content: data,
+          _method: method
         },
         success: __bind(function() {
           return Mercury.changes = false;
@@ -15026,7 +15034,7 @@ Showdown.converter = function() {
       this.size = this.file.size;
       this.fullSize = this.file.size;
       this.readableSize = this.file.size.toBytes();
-      this.name = this.file.fileName || this.file.name;
+      this.name = this.file.fileName;
       this.type = this.file.type;
       errors = [];
       if (this.size >= Mercury.config.uploading.maxFileSize) {
@@ -15135,11 +15143,15 @@ Showdown.converter = function() {
         jQuery(element).attr('data-version', '1');
       }
       if (!this.document.mercuryEditing) {
-        this.document.execCommand('styleWithCSS', false, false);
-        this.document.execCommand('insertBROnReturn', false, true);
-        this.document.execCommand('enableInlineTableEditing', false, false);
-        this.document.execCommand('enableObjectResizing', false, false);
-        return this.document.mercuryEditing = true;
+        this.document.mercuryEditing = true;
+        try {
+          this.document.execCommand('styleWithCSS', false, false);
+          this.document.execCommand('insertBROnReturn', false, true);
+          this.document.execCommand('enableInlineTableEditing', false, false);
+          return this.document.execCommand('enableObjectResizing', false, false);
+        } catch (e) {
+
+        }
       }
     };
     Editable.prototype.bindEvents = function() {

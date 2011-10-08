@@ -695,6 +695,7 @@ form fieldset.buttons .commit input:hover {
   -webkit-user-select: none;
   -moz-user-select: none;
   user-select: none;
+  background: #DDD;
   background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0, rgb(198,198,198)), color-stop(1, rgb(226,225,226)));
   background-image: -moz-linear-gradient(center bottom, rgb(198,198,198) 0%, rgb(226,225,226) 100%);
   border-bottom: 1px solid #727272;

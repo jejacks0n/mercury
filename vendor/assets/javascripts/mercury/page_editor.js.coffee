@@ -33,6 +33,7 @@ class @Mercury.PageEditor
     try
       return if @iframe.data('loaded')
       @iframe.data('loaded', true)
+      alert("Opera isn't a fully supported browser, your results may not be optimal.") if jQuery.browser.opera
       @document = jQuery(@iframe.get(0).contentWindow.document)
       jQuery("<style mercury-styles=\"true\">").html(Mercury.config.injectedStyles).appendTo(@document.find('head'))
 

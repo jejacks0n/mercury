@@ -16,7 +16,6 @@
     <script type="text/javascript">
       // it's worth mentioning that mercury is not loaded in the first request, but should be loaded in the second.
       if (top.Mercury) {
-        window.history = top.history;
         top.Mercury.saveURL = '/contents';
         top.Mercury.Snippet.load({
           snippet_1:  {name: 'example', options: {'options[favorite_beer]': "Bells Hopslam", 'options[first_name]': "01"}},
@@ -105,8 +104,10 @@
     <ul id="controls">
       <li><div onclick="alert(Mercury.version)">Mercury Version</div></li>
       <li><div onclick="Mercury.trigger('toggle:interface')">Toggle Interface</div></li>
-      <li><div onclick="top.history.pushState({}, 'Mercury Editor -- With history.pushState!', 'http://localhost:3000/pushstate');">top.history.pushState</div></li>
-      <li><div onclick="history.pushState({}, 'Mercury Editor -- With history.pushState!', 'http://localhost:3000/pushstate');">history.pushState</div></li>
+      <li><div onclick="history.pushState({}, 'Mercury Editor -- With history.pushState!', 'http://localhost:3000/pushstate1');">history.pushState</div></li>
+      <li><div onclick="history.go(-1);">history.go(-1)</div></li>
+      <li><div onclick="history.back();">history.back()</div></li>
+      <li><div onclick="history.forward();">history.forward()</div></li>
     </ul>
 
     <h1>Form (Method: POST)</h1>

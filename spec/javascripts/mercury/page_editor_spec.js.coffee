@@ -132,6 +132,11 @@ describe "Mercury.PageEditor", ->
       @pageEditor.initializeFrame()
       expect(@pageEditor.iframe.get(0).contentWindow.Mercury).toEqual(Mercury)
 
+    it "hijacks history.pushState for the iframe", ->
+      @finalizeInterfaceSpy.andCallFake(=>)
+      @pageEditor.initializeFrame()
+      expect(@pageEditor.iframe.get(0).contentWindow.history.pushState.toString()).toContain('obj, title, url')
+
     it "calls bindEvents", ->
       @finalizeInterfaceSpy.andCallFake(=>)
       @pageEditor.initializeFrame()

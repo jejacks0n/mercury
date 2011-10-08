@@ -50,6 +50,9 @@ class @Mercury.PageEditor
       @initializeRegions()
       @finalizeInterface()
       Mercury.trigger('ready')
+      jQuery(iframeWindow).trigger('mercury:ready')
+      iframeWindow.Event.fire(iframeWindow, 'mercury:ready') if iframeWindow.Event
+      iframeWindow.onMercuryReady() if iframeWindow.onMercuryReady
 
       @iframe.css({visibility: 'visible'})
     catch error

@@ -138,12 +138,10 @@ if (!window.mercuryPackages) window.mercuryPackages = {
               document.body.style.display = 'block';
               // Instantiate the PageEditor, passing in the options that were provided to the loader.
               new Mercury.PageEditor(null, {visible: true});
-              // If there's a mercuryLoaded function available, call it.   You can provide one before the loading script
-              // and it will be called after everything is loaded, but before everything is initialized.  You can bind
-              // to the mercury:ready event or use Mercury.bind('ready', function() {}).
-              if (typeof(window.mercuryLoaded) == 'function') {
-                window.mercuryLoaded();
-              }
+              // Mercury fires a ready event when it's done loading.  You can bind to the mercury:ready event to do
+              // whatever additional setup you may need after Mercury has been loaded (fired as jQuery and Prototype
+              // Events).  If you're using a different framework you can just define an onMercuryReady function that'll
+              // be called instead.
             } else {
               loadScript(javascripts[loaded]);
             }

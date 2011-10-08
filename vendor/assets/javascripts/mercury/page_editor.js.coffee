@@ -43,7 +43,7 @@ class @Mercury.PageEditor
       iframeWindow = @iframe.get(0).contentWindow
       jQuery.globalEval = (data) -> (iframeWindow.execScript || (data) -> iframeWindow["eval"].call(iframeWindow, data))(data) if (data && /\S/.test(data))
       iframeWindow.Mercury = Mercury
-      iframeWindow["eval"].call(iframeWindow, "history.pushState = function(obj, title, url) { top.history.pushState(obj, title, url) }")
+      iframeWindow["eval"].call(iframeWindow, "try{ (History ? History.prototype : history).pushState = function(args, title, url) { top.history.pushState(args, title, url) } }catch(e){}")
 
       @bindEvents()
       @resize()

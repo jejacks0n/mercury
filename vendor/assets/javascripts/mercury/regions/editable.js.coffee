@@ -467,18 +467,16 @@ class Mercury.Regions.Editable.Selection
     return unless jQuery.browser.webkit
     range = @context.createRange()
 
-    # todo: the \00 thing breaks when using uglifier, and is escapped to "0".. it's been fixed, but isn't available yet
-    # https://github.com/lautis/uglifier/issues/11
     if @range
       if @commonAncestor(true).closest('.mercury-snippet').length
-        lastChild = @context.createTextNode('\00') #\00
+        lastChild = @context.createTextNode('\00')
         element.appendChild(lastChild)
     else
       if element.lastChild && element.lastChild.nodeType == 3 && element.lastChild.textContent.replace(/^[\s+|\n+]|[\s+|\n+]$/, '') == ''
         lastChild = element.lastChild
-        element.lastChild.textContent = '\00' #\00
+        element.lastChild.textContent = '\00'
       else
-        lastChild = @context.createTextNode(' ') #\00
+        lastChild = @context.createTextNode('\00')
         element.appendChild(lastChild)
 
     if lastChild
@@ -551,7 +549,7 @@ class Mercury.Regions.Editable.Selection
     @selection.addRange(@range)
 
 
-  replace: (element) ->
+  replace: (element, collapse) ->
     element = element.get(0) if element.get
     element = jQuery(element, @context).get(0) if jQuery.type(element) == 'string'
 
@@ -559,3 +557,4 @@ class Mercury.Regions.Editable.Selection
     @range.insertNode(element)
     @range.selectNodeContents(element)
     @selection.addRange(@range)
+    @range.collapse(false) if collapse

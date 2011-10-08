@@ -11,8 +11,8 @@ describe "Mercury.Panel", ->
   afterEach ->
     @panel = null
     delete(@panel)
-    $(document).unbind('mercury:resize')
-    $(document).unbind('mercury:hide:panels')
+    $(window).unbind('mercury:resize')
+    $(window).unbind('mercury:hide:panels')
 
   describe "#build", ->
 

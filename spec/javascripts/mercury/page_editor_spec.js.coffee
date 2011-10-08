@@ -8,13 +8,13 @@ describe "Mercury.PageEditor", ->
     @pageEditor = null
     delete(@pageEditor)
     window.mercuryInstance = null
-    $(document).unbind('mercury:initialize:frame')
-    $(document).unbind('mercury:focus:frame')
-    $(document).unbind('mercury:focus:window')
-    $(document).unbind('mercury:toggle:interface')
-    $(document).unbind('mercury:action')
-    $(document).unbind('mousedown')
+    $(window).unbind('mercury:initialize:frame')
+    $(window).unbind('mercury:focus:frame')
+    $(window).unbind('mercury:focus:window')
+    $(window).unbind('mercury:toggle:interface')
+    $(window).unbind('mercury:action')
     $(window).unbind('resize')
+    $(document).unbind('mousedown')
 
   describe "constructor", ->
 
@@ -130,12 +130,13 @@ describe "Mercury.PageEditor", ->
     it "injects mercury namespace into the iframe", ->
       @finalizeInterfaceSpy.andCallFake(=>)
       @pageEditor.initializeFrame()
-      expect(@pageEditor.iframe.get(0).contentWindow.Mercury).toEqual(Mercury)
+      expect(@pageEditor.iframe.get(0).contentWindow.Mercury).toEqual(window.Mercury)
 
-    it "hijacks history.pushState for the iframe", ->
+    it "provides the iframe with History (history.js)", ->
       @finalizeInterfaceSpy.andCallFake(=>)
+      window.History = {Adapter: 'foo'}
       @pageEditor.initializeFrame()
-      expect(@pageEditor.iframe.get(0).contentWindow.history.pushState.toString()).toContain('obj, title, url')
+      expect(@pageEditor.iframe.get(0).contentWindow.History).toEqual(window.History)
 
     it "calls bindEvents", ->
       @finalizeInterfaceSpy.andCallFake(=>)
@@ -157,12 +158,36 @@ describe "Mercury.PageEditor", ->
       @pageEditor.initializeFrame()
       expect(@finalizeInterfaceSpy.callCount).toEqual(1)
 
-    it "fires the ready event", ->
+    it "fires the ready event (Mercury.trigger)", ->
       spy = spyOn(Mercury, 'trigger').andCallFake(=>)
       @finalizeInterfaceSpy.andCallFake(=>)
       @pageEditor.initializeFrame()
       expect(spy.callCount).toEqual(1)
       expect(spy.argsForCall[0]).toEqual(['ready'])
+
+    it "fires the ready event (jQuery.trigger)", ->
+      spy = spyOn(jQuery.fn, 'trigger').andCallFake(=>)
+      @finalizeInterfaceSpy.andCallFake(=>)
+      @pageEditor.initializeFrame()
+      expect(spy.callCount).toEqual(2)
+      expect(spy.argsForCall[0]).toEqual(['mercury:ready', undefined])
+
+    it "fires the ready event (Event.fire)", ->
+      @finalizeInterfaceSpy.andCallFake(=>)
+      iframeWindow = @pageEditor.iframe.get(0).contentWindow
+      iframeWindow.Event = {fire: ->}
+      spy = spyOn(iframeWindow.Event, 'fire').andCallFake(=>)
+      @pageEditor.initializeFrame()
+      expect(spy.callCount).toEqual(1)
+      expect(spy.argsForCall[0][1]).toEqual('mercury:ready')
+
+    it "calls onMercuryReady in the iframe", ->
+      @finalizeInterfaceSpy.andCallFake(=>)
+      iframeWindow = @pageEditor.iframe.get(0).contentWindow
+      iframeWindow.onMercuryReady = ->
+      spy = spyOn(iframeWindow, 'onMercuryReady').andCallFake(=>)
+      @pageEditor.initializeFrame()
+      expect(spy.callCount).toEqual(1)
 
     it "shows the iframe", ->
       @pageEditor.iframe.css({visibility: 'visible'})

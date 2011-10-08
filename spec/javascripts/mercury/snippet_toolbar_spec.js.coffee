@@ -10,8 +10,8 @@ describe "Mercury.SnippetToolbar", ->
   afterEach ->
     @snippetToolbar = null
     delete(@snippetToolbar)
-    $(document).unbind('mercury:hide:toolbar')
-    $(document).unbind('mercury:show:toolbar')
+    $(window).unbind('mercury:hide:toolbar')
+    $(window).unbind('mercury:show:toolbar')
 
   describe "constructor", ->
 

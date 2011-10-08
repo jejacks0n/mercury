@@ -10,7 +10,7 @@ describe "Mercury.Toolbar.Expander", ->
   afterEach ->
     @expander = null
     delete(@expander)
-    $(document).unbind('mercury:resize')
+    $(window).unbind('mercury:resize')
 
   describe "constructor", ->
 

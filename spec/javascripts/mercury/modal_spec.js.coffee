@@ -11,8 +11,8 @@ describe "Mercury.modal", ->
   afterEach ->
     Mercury.modal.initialized = false
     Mercury.modal.visible = false
-    $(document).unbind('mercury:refresh')
-    $(document).unbind('mercury:resize')
+    $(window).unbind('mercury:refresh')
+    $(window).unbind('mercury:resize')
     $(document).unbind('keydown')
 
   describe "singleton method", ->

@@ -14,7 +14,7 @@ describe "Mercury.Toolbar.ButtonGroup", ->
   afterEach ->
     @buttonGroup = null
     delete(@buttonGroup)
-    $(document).unbind('mercury:region:update')
+    $(window).unbind('mercury:region:update')
 
   describe "constructor", ->
 

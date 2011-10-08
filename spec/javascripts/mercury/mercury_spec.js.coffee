@@ -12,16 +12,16 @@ describe "Mercury", ->
 
   describe "#bind", ->
 
-    it "binds an event prefixed with 'mercury:' to document", ->
+    it "binds an event prefixed with 'mercury:' to the top window", ->
       callCount = 0
       Mercury.bind('test', -> callCount += 1)
-      $(document).trigger("mercury:test")
+      $(top).trigger("mercury:test")
       expect(callCount).toEqual(1)
 
 
   describe "#trigger", ->
 
-    it "triggers an event prefixed with 'mercury:' on document", ->
+    it "triggers an event prefixed with 'mercury:' on the top window", ->
       argsForCall = []
       callCount = 0
       Mercury.bind('test', -> argsForCall[callCount] = arguments; callCount += 1)

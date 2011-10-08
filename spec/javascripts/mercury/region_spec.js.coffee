@@ -7,9 +7,9 @@ describe "Mercury.Region", ->
   afterEach ->
     @region = null
     delete(@region)
-    $(document).unbind('mercury:mode')
-    $(document).unbind('mercury:focus:frame')
-    $(document).unbind('mercury:action')
+    $(window).unbind('mercury:mode')
+    $(window).unbind('mercury:focus:frame')
+    $(window).unbind('mercury:action')
 
   describe "constructor", ->
 

@@ -7,6 +7,23 @@ block elements, instead of iframes, which allows for CSS to be applied in ways t
 
 Mercury has been written using CoffeeScript and jQuery for the Javascript portions, and is written on top of Rails 3.1.
 
+
+## Translations
+
+Hey international open source contributors, want to contribute to the Mercury Editor project without having to do much
+coding?  We're looking for good translations.  If you have a good grasp of english, another common language, and have
+the desire and time to do a translation for the project it would be awesome to hear from you.  Just shoot me a message
+or email and I'll provide more details.  While any translation would be a good thing, the languages that seem like they
+would give the most value are:
+
+- French
+- German
+- Spanish
+- Japanese
+- Chinese
+- Dutch
+
+
 ## Awesomeness
 
 Mercury has been added as a Featured Project on Pivotal Tracker!  If you're interested in what's planned, check out the

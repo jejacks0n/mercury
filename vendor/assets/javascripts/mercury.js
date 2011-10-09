@@ -23,8 +23,15 @@
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  *= require_self
+ *
+ * Add all requires for the support libraries that integrate nicely with Mercury Editor.
  * require mercury/support/history
+ *
+ * Require Mercury Editor itself.
  *= require mercury/mercury
+ *
+ * Add all requires for plugins that extend or change the behavior of Mercury Editor.
+ * require mercury/plugins/save_as_xml/plugin.js
  */
 window.MercurySetup = {
 

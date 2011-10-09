@@ -4,30 +4,29 @@
 # -*- encoding: utf-8 -*-
 
 Gem::Specification.new do |s|
-  s.name = %q{mercury-rails}
+  s.name = "mercury-rails"
   s.version = "0.2.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Jeremy Jackson"]
-  s.date = %q{2011-09-25}
-  s.description = %q{A fully featured and advanced HTML5 WYSIWYG editor written in CoffeeScript on top of Rails 3.1}
-  s.email = %q{jejacks0n@gmail.com}
+  s.date = "2011-10-09"
+  s.description = "A fully featured and advanced HTML5 WYSIWYG editor written in CoffeeScript on top of Rails 3.1"
+  s.email = "jejacks0n@gmail.com"
   s.extra_rdoc_files = [
     "LICENSE",
     "README.md"
   ]
   s.files = [
     "LICENSE",
+    "POST_INSTALL",
     "README.md",
     "VERSION",
-    "POST_INSTALL",
     "annotated_source.template",
     "app/controllers/images_controller.rb",
     "app/controllers/mercury_controller.rb",
     "app/models/image.rb",
     "app/views/layouts/mercury.html.erb",
     "app/views/mercury/lightviews/about.html",
-    "app/views/mercury/lightviews/imageprocessor.html",
     "app/views/mercury/modals/character.html",
     "app/views/mercury/modals/htmleditor.html",
     "app/views/mercury/modals/link.html",
@@ -41,12 +40,13 @@ Gem::Specification.new do |s|
     "app/views/mercury/panels/snippets.html",
     "app/views/mercury/selects/formatblock.html",
     "app/views/mercury/selects/style.html",
-    "app/views/mercury/snippets/example.html.erb",
-    "app/views/mercury/snippets/example_options.html.erb",
+    "app/views/mercury/snippets/example/options.html.erb",
+    "app/views/mercury/snippets/example/preview.html.erb",
     "config/engine.rb",
     "config/routes.rb",
     "db/migrate/20110526035601_create_images.rb",
     "features/editing/basic.feature",
+    "features/step_definitions/custom_web_steps.rb",
     "features/step_definitions/debug_steps.rb",
     "features/step_definitions/web_steps.rb",
     "features/support/env.rb",
@@ -125,6 +125,7 @@ Gem::Specification.new do |s|
     "spec/javascripts/templates/mercury/uploader.html",
     "vendor/assets/images/mercury/button.png",
     "vendor/assets/images/mercury/clippy.png",
+    "vendor/assets/images/mercury/close.png",
     "vendor/assets/images/mercury/default-snippet.png",
     "vendor/assets/images/mercury/loading-dark.gif",
     "vendor/assets/images/mercury/loading-light.gif",
@@ -147,6 +148,11 @@ Gem::Specification.new do |s|
     "vendor/assets/images/mercury/toolbar/primary/undo.png",
     "vendor/assets/images/mercury/toolbar/snippetable/buttons.png",
     "vendor/assets/javascripts/mercury.js",
+    "vendor/assets/javascripts/mercury/dependencies/jquery-1.6.js",
+    "vendor/assets/javascripts/mercury/dependencies/jquery-ui-1.8.13.custom.js",
+    "vendor/assets/javascripts/mercury/dependencies/jquery.additions.js",
+    "vendor/assets/javascripts/mercury/dependencies/liquidmetal.js",
+    "vendor/assets/javascripts/mercury/dependencies/showdown.js",
     "vendor/assets/javascripts/mercury/dialog.js.coffee",
     "vendor/assets/javascripts/mercury/dialogs/backcolor.js.coffee",
     "vendor/assets/javascripts/mercury/dialogs/forecolor.js.coffee",
@@ -168,6 +174,8 @@ Gem::Specification.new do |s|
     "vendor/assets/javascripts/mercury/page_editor.js.coffee",
     "vendor/assets/javascripts/mercury/palette.js.coffee",
     "vendor/assets/javascripts/mercury/panel.js.coffee",
+    "vendor/assets/javascripts/mercury/plugins/save_as_xml/mercury/page_editor.js.coffee",
+    "vendor/assets/javascripts/mercury/plugins/save_as_xml/plugin.js",
     "vendor/assets/javascripts/mercury/region.js.coffee",
     "vendor/assets/javascripts/mercury/regions/editable.js.coffee",
     "vendor/assets/javascripts/mercury/regions/markupable.js.coffee",
@@ -176,6 +184,7 @@ Gem::Specification.new do |s|
     "vendor/assets/javascripts/mercury/snippet.js.coffee",
     "vendor/assets/javascripts/mercury/snippet_toolbar.js.coffee",
     "vendor/assets/javascripts/mercury/statusbar.js.coffee",
+    "vendor/assets/javascripts/mercury/support/history.js",
     "vendor/assets/javascripts/mercury/table_editor.js.coffee",
     "vendor/assets/javascripts/mercury/toolbar.button.js.coffee",
     "vendor/assets/javascripts/mercury/toolbar.button_group.js.coffee",
@@ -183,12 +192,6 @@ Gem::Specification.new do |s|
     "vendor/assets/javascripts/mercury/toolbar.js.coffee",
     "vendor/assets/javascripts/mercury/tooltip.js.coffee",
     "vendor/assets/javascripts/mercury/uploader.js.coffee",
-    "vendor/assets/javascripts/mercury/dependencies/jquery-1.6.js",
-    "vendor/assets/javascripts/mercury/dependencies/jquery-ui-1.8.13.custom.js",
-    "vendor/assets/javascripts/mercury/dependencies/jquery.additions.js",
-    "vendor/assets/javascripts/mercury/dependencies/liquidmetal.js",
-    "vendor/assets/javascripts/mercury/dependencies/showdown.js",
-    "vendor/assets/javascripts/mercury/support/history.js",
     "vendor/assets/javascripts/mercury_loader.js",
     "vendor/assets/stylesheets/mercury.css",
     "vendor/assets/stylesheets/mercury/dialog.css",
@@ -198,13 +201,14 @@ Gem::Specification.new do |s|
     "vendor/assets/stylesheets/mercury/statusbar.css",
     "vendor/assets/stylesheets/mercury/toolbar.css",
     "vendor/assets/stylesheets/mercury/tooltip.css",
-    "vendor/assets/stylesheets/mercury/uploader.css"
+    "vendor/assets/stylesheets/mercury/uploader.css",
+    "vendor/assets/stylesheets/mercury_overrides.css"
   ]
-  s.homepage = %q{http://github.com/jejacks0n/mercury}
+  s.homepage = "http://github.com/jejacks0n/mercury"
   s.licenses = ["MIT"]
   s.require_paths = ["lib"]
-  s.rubygems_version = %q{1.6.2}
-  s.summary = %q{A fully featured and advanced HTML5 WYSIWYG editor written in CoffeeScript on top of Rails 3.1}
+  s.rubygems_version = "1.8.10"
+  s.summary = "A fully featured and advanced HTML5 WYSIWYG editor written in CoffeeScript on top of Rails 3.1"
 
   if s.respond_to? :specification_version then
     s.specification_version = 3

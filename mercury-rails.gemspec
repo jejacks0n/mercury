@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Jeremy Jackson"]
-  s.date = "2011-10-09"
+  s.date = "2011-10-10"
   s.description = "A fully featured and advanced HTML5 WYSIWYG editor written in CoffeeScript on top of Rails 3.1"
   s.email = "jejacks0n@gmail.com"
   s.extra_rdoc_files = [
@@ -45,11 +45,35 @@ Gem::Specification.new do |s|
     "config/engine.rb",
     "config/routes.rb",
     "db/migrate/20110526035601_create_images.rb",
-    "features/editing/basic.feature",
-    "features/step_definitions/custom_web_steps.rb",
+    "features/loading/loading.feature",
+    "features/loading/user_interface.feature",
+    "features/regions/editable/advanced_editing.feature",
+    "features/regions/editable/basic_editing.feature",
+    "features/regions/editable/inserting_links.feature",
+    "features/regions/editable/inserting_media.feature",
+    "features/regions/editable/inserting_snippets.feature",
+    "features/regions/editable/inserting_special_characters.feature",
+    "features/regions/editable/inserting_tables.feature",
+    "features/regions/editable/pasting.feature",
+    "features/regions/editable/uploading_images.feature",
+    "features/regions/markupable/advanced_editing.feature",
+    "features/regions/markupable/basic_editing.feature",
+    "features/regions/markupable/inserting_links.feature",
+    "features/regions/markupable/inserting_media.feature",
+    "features/regions/markupable/inserting_snippets.feature",
+    "features/regions/markupable/inserting_special_characters.feature",
+    "features/regions/markupable/inserting_tables.feature",
+    "features/regions/markupable/uploading_images.feature",
+    "features/regions/snippetable/advanced_editing.feature",
+    "features/regions/snippetable/basic_editing.feature",
+    "features/regions/snippetable/inserting_snippets.feature",
+    "features/saving/saving.feature",
     "features/step_definitions/debug_steps.rb",
+    "features/step_definitions/mercury_steps.rb",
     "features/step_definitions/web_steps.rb",
     "features/support/env.rb",
+    "features/support/mercury_contents.rb",
+    "features/support/mercury_selectors.rb",
     "features/support/paths.rb",
     "features/support/selectors.rb",
     "lib/generators/mercury/install/install_generator.rb",

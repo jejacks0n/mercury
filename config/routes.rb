@@ -10,6 +10,6 @@ Rails.application.routes.draw do
   end
 
   if defined?(Mercury::Application)
-    match '/test_post' => "mercury#post"
+    match 'mercury/test_page' => "mercury#test_page"
   end
 end

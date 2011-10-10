@@ -6,10 +6,12 @@ module HtmlSelectorsHelpers
   # step definitions in web_steps.rb
   #
   def selector_for(locator)
-    case locator
 
-      when 'the toolbar'
-        '.mercury-toolbar-container'
+    # add in for mercury support
+    result = mercury_selector_for(locator)
+    return result if result.present?
+
+    case locator
 
       when /the page/
         "html > body"

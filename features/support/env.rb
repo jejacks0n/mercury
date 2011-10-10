@@ -9,7 +9,7 @@ require 'capybara/firebug'
 
 # You can enable firebug in your tests by tagging them @firebug.
 # To change the version of firebug use the FIREBUG_VERSION environment variable.
-# For firefox 4 use 1.7.0
+# For firefox 4+ use 1.7.0
 # For firefox 3 use 1.6.2
 Selenium::WebDriver::Firefox::Profile.firebug_version = ENV['FIREBUG_VERSION'] || '1.7.0'
 
@@ -18,6 +18,7 @@ Selenium::WebDriver::Firefox::Profile.firebug_version = ENV['FIREBUG_VERSION'] |
 # prefer to use XPath just remove this line and adjust any selectors in your
 # steps to use the XPath syntax.
 Capybara.default_selector = :css
+Capybara.ignore_hidden_elements = true
 
 # By default, any exception happening in your Rails application will bubble up
 # to Cucumber so that your scenario will fail. This is a different from how
@@ -43,4 +44,3 @@ begin
 rescue NameError
   raise "You need to add database_cleaner to your Gemfile (in the :test group) if you wish to use it."
 end
-

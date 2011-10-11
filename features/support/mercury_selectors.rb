@@ -35,6 +35,8 @@ module MercurySelectorsHelpers
       when 'the heading 2 block' then '.mercury-select-options h2'
 
       when 'the color red' then '.mercury-palette .picker:nth-child(22n)'
+      when 'the link content input' then '.mercury-modal-content #link_text'
+      when 'the sweet snowman' then '.mercury-modal-content .character:nth-child(247n)'
 
     end
   end

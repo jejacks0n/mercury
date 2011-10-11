@@ -75,21 +75,22 @@ When /^(?:|I )(?:change|set) the contents? of (.*?) to (.*?)$/ do |region_select
 end
 
 When /^(?:|I )(?:make|have) a selection$/ do
-  # assume the first span in the first editable region if nothing was provided
-  When("I have a selection in the editable region")
+  When(%Q{I have a selection for "span"})
 end
 
-When /^(?:|I )(?:make|have) a selection in (.*?)$/ do |region_selector|
-  region_id = region_id_for(region_selector, false)
+When /^(?:|I )(?:make|have) a selection (?:in (.*?) )?for "([^"]*)"$/ do |region_selector, selector|
+  # assume the first editable region if one wasn't provided'
+  region_id = region_id_for(region_selector || 'the editable region', false)
   page.driver.within_frame('mercury_iframe') do
     find("##{region_id}", :message => "Unable to locate a region named '#{region_id}'")
+    find("##{region_id} #{selector}", :message => "Unable to locate a match for the '#{selector}' selector")
     page.driver.execute_script <<-JAVASCRIPT
       element = document.getElementById('#{region_id}')
       if (element.getAttribute('data-type') == 'markupable') {
         alert('unimplemented')
       } else {
         selection = new top.Mercury.Regions.Editable.Selection(window.getSelection(), document)
-        selection.selectNode(element.getElementsByTagName('span')[0]);
+        selection.selectNode(top.jQuery(element).find('#{selector}').get(0));
       }
     JAVASCRIPT
   end

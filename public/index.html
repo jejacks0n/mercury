@@ -24,6 +24,7 @@
       Event.observe(window, "mercury:ready", function() {
         Mercury.saveURL = '/contents';
         Mercury.Snippet.load({
+          snippet_0:  {name: 'example', options: {'options[favorite_beer]': "Bells Hopslam", 'options[first_name]': "00"}},
           snippet_1:  {name: 'example', options: {'options[favorite_beer]': "Bells Hopslam", 'options[first_name]': "01"}},
           snippet_2:  {name: 'example', options: {'options[favorite_beer]': "Bells Hopslam", 'options[first_name]': "02"}},
           snippet_3:  {name: 'example', options: {'options[favorite_beer]': "Bells Hopslam", 'options[first_name]': "03"}},
@@ -36,8 +37,7 @@
           snippet_10: {name: 'example', options: {'options[favorite_beer]': "Bells Hopslam", 'options[first_name]': "10"}},
           snippet_11: {name: 'example', options: {'options[favorite_beer]': "Bells Hopslam", 'options[first_name]': "11"}},
           snippet_12: {name: 'example', options: {'options[favorite_beer]': "Bells Hopslam", 'options[first_name]': "12"}},
-          snippet_13: {name: 'example', options: {'options[favorite_beer]': "Bells Hopslam", 'options[first_name]': "13"}},
-          snippet_14: {name: 'example', options: {'options[favorite_beer]': "Bells Hopslam", 'options[first_name]': "14"}}
+          snippet_13: {name: 'example', options: {'options[favorite_beer]': "Bells Hopslam", 'options[first_name]': "13"}}
         });
       })
     </script>
@@ -235,7 +235,7 @@
       <img alt="Clippy" src="/assets/mercury/clippy.png"><a href="#bookmark1">link for #bookmark1</a>
 
       <h2>snippet that's pre-loaded</h2>
-      <div class="mercury-snippet" data-snippet="snippet_1">snippet1</div>
+      <div class="mercury-snippet" data-snippet="snippet_0">snippet0</div>
 
       <h2>bookmark links</h2>
       <a name="bookmark1">Bookmark1</a><br/><a name="bookmark2">Bookmark2</a>
@@ -271,7 +271,7 @@
 ![add alt text](/assets/mercury/clippy.png)
 
 ## snippet that's pre-loaded ##
-[--snippet_2--]
+[--snippet_1--]
 
 ## code ##
     <a href="/foo">this html will not be escaped</a>
@@ -286,6 +286,7 @@ Turkey corned beef ham, chuck ham hock **venison _drumstick_ ** tongue ribeye. B
 
     <h1>Snippetable region</h1>
     <div id="snippetable1" class="mercury-region" data-type="snippetable">
+      <div class="mercury-snippet" data-snippet="snippet_2">snippet2</div>
       <div class="mercury-snippet" data-snippet="snippet_3">snippet3</div>
       <div class="mercury-snippet" data-snippet="snippet_4">snippet4</div>
       <div class="mercury-snippet" data-snippet="snippet_5">snippet5</div>
@@ -293,12 +294,11 @@ Turkey corned beef ham, chuck ham hock **venison _drumstick_ ** tongue ribeye. B
       <div class="mercury-snippet" data-snippet="snippet_7">snippet7</div>
       <div class="mercury-snippet" data-snippet="snippet_8">snippet8</div>
       <div class="mercury-snippet" data-snippet="snippet_9">snippet9</div>
-      <div class="mercury-snippet" data-snippet="snippet_10">snippet10</div>
     </div>
 
     <h1>Editable region (single snippet and no content)</h1>
     <div id="editable2" class="mercury-region" data-type="editable">
-      <div class="mercury-snippet" data-snippet="snippet_11">snippet11</div>
+      <div class="mercury-snippet" data-snippet="snippet_10">snippet10</div>
     </div>
 
     <h1>Editable region (fixed width/height and overflow)</h1>
@@ -309,9 +309,9 @@ Turkey corned beef ham, chuck ham hock **venison _drumstick_ ** tongue ribeye. B
 
     <h1>Snippetable region (iframe snippet that contains flash)</h1>
     <div id="snippetable2" class="mercury-region" data-type="snippetable">
+      <div class="mercury-snippet" data-snippet="snippet_11">snippet11</div>
       <div class="mercury-snippet" data-snippet="snippet_12">snippet12</div>
-      <div class="mercury-snippet" data-snippet="snippet_13">snippet13</div>
-      <iframe class="mercury-snippet" data-snippet="snippet_14"  width="560" height="349" src="http://www.youtube.com/embed/0pXYp72dwl0?wmode=transparent" frameborder="0" allowfullscreen="true"></iframe>
+      <iframe class="mercury-snippet" data-snippet="snippet_13"  width="560" height="349" src="http://www.youtube.com/embed/0pXYp72dwl0?wmode=transparent" frameborder="0" allowfullscreen="true"></iframe>
     </div>
   </div>
 

@@ -11,7 +11,7 @@ require 'capybara/firebug'
 # To change the version of firebug use the FIREBUG_VERSION environment variable.
 # For firefox 4+ use 1.7.0
 # For firefox 3 use 1.6.2
-Selenium::WebDriver::Firefox::Profile.firebug_version = ENV['FIREBUG_VERSION'] || '1.7.0'
+Selenium::WebDriver::Firefox::Profile.firebug_version = ENV['FIREBUG_VERSION'] || '1.8.3'
 
 # Capybara defaults to XPath selectors rather than Webrat's default of CSS3. In
 # order to ease the transition to Capybara we set the default here. If you'd

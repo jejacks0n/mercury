@@ -61,7 +61,7 @@ Feature:
     Then the contents of the editable region should be "this is <a href='javascript:void(window.open('http://google.com', 'popup_window', 'width=500,height=200,menubar=no,toolbar=no'))'>simple</a> <b>content</b>"
 
     When I click on the "Insert Link" button
-    And the "Popup Width" field should contain "500"
+    Then the "Popup Width" field should contain "500"
     And the "Popup Height" field should contain "200"
 
 

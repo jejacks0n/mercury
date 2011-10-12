@@ -19,3 +19,10 @@ Feature:
     When I set the content of the markupable region to "new content"
     And I click on the "Save" button
     Then the save should have "new content" for the markupable region
+
+
+  Scenario: A user can put snippets into an editable region and get the options on save
+    # todo: finish
+
+  Scenario: A user can put snippets into a markupable region and get the options on save
+    # todo: finish

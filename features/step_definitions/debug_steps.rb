@@ -6,7 +6,7 @@ When /^(?:|I )sleep for (\d+) seconds?$/ do |seconds|
 end
 
 When /^I debug$/ do
-  put 'Debugging...'
+  puts 'Debugging...'
   unless ENV['RUBYMINE'].present?
     require 'debug'
     debugger

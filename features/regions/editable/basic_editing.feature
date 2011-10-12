@@ -11,7 +11,7 @@ Feature:
   Scenario: A user can expect all this!
 
 
-  #Scenario: A user can set and unset bold content
+#  Scenario: A user can set and unset bold content
     Given the content of the editable region is simple content
     And I make a selection
 
@@ -87,7 +87,7 @@ Feature:
 
 #  Scenario: A user can justify content to the left, center, right, or fully justified
     # firefox: this isn't possible on the first line due to a bug in gecko, so we have special content for it
-    Given the content of the editable region is justifiable content
+    Given the content of the editable region has justifiable content
     And I make a selection
 
     When I click on the justify left editor button
@@ -124,7 +124,7 @@ Feature:
 
 #  Scenario: A user can indent and outdent content
     # firefox: this isn't possible on the first line due to a bug in gecko, so we have special content for it
-    Given the content of the editable region is justifiable content
+    Given the content of the editable region has justifiable content
     And I make a selection
 
     When I click on the indent editor button
@@ -152,7 +152,7 @@ Feature:
 
 
 #  Scenario: A user can clean/remove formatting on their selection
-    Given the content of the editable region is wrapped content
+    Given the content of the editable region has wrapped content
     And I make a selection
 
     When I click on the remove formatting editor button

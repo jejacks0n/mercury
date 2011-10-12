@@ -88,7 +88,7 @@ class @Mercury.Regions.Editable extends Mercury.Region
     # isn't handled (eg, putting the image where it was dropped,) so to allow the browser to do it's thing, and also do
     # our thing we have this little hack.  *sigh*
     # read: http://www.quirksmode.org/blog/archives/2009/09/the_html5_drag.html
-    @element.bind 'possible:drop', (event) =>
+    @element.bind 'possible:drop', =>
       return if @previewing
       if snippet = @element.find('img[data-snippet]').get(0)
         @focus()

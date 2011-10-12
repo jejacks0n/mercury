@@ -5,7 +5,7 @@
   table.click (event) =>
     cell = jQuery(event.target)
     table = cell.closest('table')
-    table.find('.selected').removeClass('selected')
+    table.find('.selected').removeAttr('class')
     cell.addClass('selected')
     Mercury.tableEditor(table, cell, '&nbsp;')
 
@@ -44,7 +44,7 @@
   # build the table on form submission
   @element.find('form').submit (event) =>
     event.preventDefault()
-    table.find('.selected').removeClass('selected')
+    table.find('.selected').removeAttr('class')
     table.find('td, th').html('&nbsp;')
 
     html = jQuery('<div>').html(table).html()

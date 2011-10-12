@@ -155,6 +155,12 @@ class @Mercury.PageEditor
     return null
 
 
+  getRegionByName: (id) ->
+    for region in @regions
+      return region if region.name == id
+    return null
+
+
   save: ->
     url = @saveUrl ? Mercury.saveURL ? @iframeSrc()
     data = @serialize()

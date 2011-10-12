@@ -516,6 +516,24 @@ describe "Mercury.PageEditor", ->
       expect(@pageEditor.beforeUnload()).toEqual(null)
 
 
+  describe "#getRegionByName", ->
+
+    beforeEach ->
+      Mercury.PageEditor.prototype.initializeInterface = ->
+      @pageEditor = new Mercury.PageEditor('', {appendTo: $('#test')})
+      @iframeSrcSpy = spyOn(Mercury.PageEditor.prototype, 'iframeSrc').andCallFake(=> '/foo/baz')
+      @ajaxSpy = spyOn($, 'ajax')
+
+    it "returns the region if a match is found", ->
+      @pageEditor.regions = [{name: 'foo'}, {name: 'bar'}, {name: 'baz'}]
+      expect(@pageEditor.getRegionByName('foo')).toEqual(@pageEditor.regions[0])
+      expect(@pageEditor.getRegionByName('baz')).toEqual(@pageEditor.regions[2])
+
+    it "returns null if no match was found", ->
+      @pageEditor.regions = [{name: 'bar'}]
+      expect(@pageEditor.getRegionByName('foo')).toEqual(null)
+
+
   describe "#save", ->
 
     describe "POST", ->

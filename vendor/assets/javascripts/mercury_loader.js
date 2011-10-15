@@ -107,7 +107,7 @@ if (!window.mercuryPackages) window.mercuryPackages = {
       setTimeout(function() {
         // Once we're ready to load Mercury we clear the document contents, and add in the css and javascript tags.
         // Once the script has loaded we display the body again, and instantiate a new instance of Mercury.PageEditor.
-        document.body.innerHTML = '&nbsp;';
+        document.body.innerHTML = '<div style="height:0;overflow:hidden;">Mercury</div>';
         for (i = 0; i <= document.styleSheets.length - 1; i += 1) {
           document.styleSheets[i].disabled = true
         }

@@ -16,6 +16,13 @@ html, body {
   overflow: hidden;
 }
 
+.mercury-iframe {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  visibility: hidden;
+}
+
 
 /*
  * Forms

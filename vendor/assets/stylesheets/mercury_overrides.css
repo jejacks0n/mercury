@@ -6,6 +6,11 @@
  * includes an example button style, should you ever need to add new ones yourself.  Read the toolbar configuration in
  * mercury.js for more on how to add your own buttons to the toolbar.
  */
+
+/* Disable text sizing in webkit (ipad/iphone etc -- should apply to mercury only) */
+html { -webkit-text-size-adjust: none; }
+
+/* Button example */
 .mercury-primary-toolbar .mercury-inspector-button em,
 .mercury-expander-button[data-button="inspector"] em {
   background-image: url(/assets/mercury/toolbar/primary/inspectorpanel.png);

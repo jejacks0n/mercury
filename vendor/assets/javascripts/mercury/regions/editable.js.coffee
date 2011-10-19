@@ -338,7 +338,7 @@ class @Mercury.Regions.Editable extends Mercury.Region
           sanitizer.find('[style]').attr({style: null})
           sanitizer.find('[class]').attr({class: null})
           sanitizer.find('[id]').attr({id: null})
-          sanitizer.find('.mercury-region').remove()
+          sanitizer.find(".#{Mercury.config.regionClass}").remove()
 
           # move cursor back to original element & position
           selection.selectMarker(@element)

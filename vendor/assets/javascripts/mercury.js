@@ -71,7 +71,7 @@ window.MercurySetup = {
     // seems to happen a lot when people are testing the demo.  Because of this it's disabled by default, but is
     // recommended if you're using webkit.
     // Go signin and vote to change this: http://www.google.com/support/forum/p/Chrome/thread?tid=3399afd053d5a29c&hl=en
-    cleanStylesOnPaste: false,
+    cleanStylesOnPaste: true,
 
 
     // ## Snippet Options and Preview

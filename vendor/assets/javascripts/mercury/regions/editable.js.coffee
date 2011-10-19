@@ -459,7 +459,7 @@ class Mercury.Regions.Editable.Selection
 
   is: (elementType) ->
     content = @content()
-    return jQuery(content.firstChild) if content.childNodes.length == 1 && jQuery(content.firstChild).is(elementType)
+    return jQuery(content.firstChild) if jQuery(content).length == 1 && jQuery(content.firstChild).is(elementType)
     return false
 
 

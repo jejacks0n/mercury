@@ -81,6 +81,7 @@ class @Mercury.PageEditor
 
   finalizeInterface: ->
     @snippetToolbar = new Mercury.SnippetToolbar(@document)
+    jQuery('<div>', { id: 'mercury-sanitizer', contenteditable: 'true', style: 'position:absolute;top:-1000px;left:-1000px;opacity:0;' }).appendTo(@document.find('body'))
 
     @hijackLinksAndForms()
     Mercury.trigger('mode', {mode: 'preview'}) unless @options.visible

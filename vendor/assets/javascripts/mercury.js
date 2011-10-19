@@ -67,10 +67,13 @@ window.MercurySetup = {
     // that copying something from a webkit based browser and pasting it into something like firefox will also result in
     // these extra style attributes.  Cleaning the styles out impacts performance when pasting, and because of browser
     // restrictions on getting pasted content (which is stupid) we have to fall back to a less performant method off
-    // figuring out what was pasted.  This seems to cause issues if you try and paste several things in a row, which
-    // seems to happen a lot when people are testing the demo.  Because of this it's disabled by default, but is
-    // recommended if you're using webkit.
+    // figuring out what was pasted.
     // Go signin and vote to change this: http://www.google.com/support/forum/p/Chrome/thread?tid=3399afd053d5a29c&hl=en
+    //
+    // ### options:
+    // - false: no cleaning is done
+    // - true: classes, styles and id's are stripped
+    // - "nohtml": all html is stripped before pasting
     cleanStylesOnPaste: true,
 
 

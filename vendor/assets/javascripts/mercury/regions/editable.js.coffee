@@ -99,7 +99,7 @@ class @Mercury.Regions.Editable extends Mercury.Region
     # through a clipboard in firefox (heaven forbid), and to keep the behavior across all browsers, we manually detect
     # what was pasted by running a quick diff, removing it by calling undo, making our adjustments, and then putting the
     # content back.  This is possible, so it doesn't make sense why it wouldn't be exposed in a sensible way.  *sigh*
-    @element.bind 'paste', =>
+    @element.bind 'paste', (event) =>
       return if @previewing
       return unless Mercury.region == @
       if @specialContainer
@@ -107,7 +107,7 @@ class @Mercury.Regions.Editable extends Mercury.Region
         return
       return if @pasting
       Mercury.changes = true
-      @handlePaste()
+      @handlePaste(event)
 
     @element.focus =>
       return if @previewing
@@ -322,8 +322,13 @@ class @Mercury.Regions.Editable extends Mercury.Region
     return element
 
 
-  handlePaste: ->
-    if Mercury.config.cleanStylesOnPaste
+  handlePaste: (event) ->
+    if Mercury.config.cleanStylesOnPaste == "nohtml"
+      @execCommand('insertHTML', {value: event.originalEvent.clipboardData.getData("text/plain")})
+      event.preventDefault()
+      return
+
+    else if Mercury.config.cleanStylesOnPaste == true
       # get current selection & range
       selection = @selection()
       selection.placeMarker()

@@ -333,35 +333,30 @@ class @Mercury.Regions.Editable extends Mercury.Region
       return
 
     else if Mercury.config.cleanStylesOnPaste == true
-      element = @element
-
       # get current selection & range
-      selection = element.selection()
+      selection = @selection()
       selection.placeMarker()
 
       sanitizer = jQuery(@document).find('#mercury-sanitizer')
+      sanitizer.focus()
 
-      sanitizer.bind 'focus', =>
+      # set 1ms timeout to allow paste event to complete
+      setTimeout(=>
+        # sanitize the pasted html
+        sanitizer.find('[style]').attr({style: null})
+        sanitizer.find('[class]').attr({class: null})
+        sanitizer.find('[id]').attr({id: null})
+        sanitizer.find(".#{Mercury.config.regionClass}").remove()
+        sanitizer.find('img').remove()
 
-        # set 1ms timeout to allow paste event to complete
-        setTimeout(=>
-          # sanitize the pasted html
-          sanitizer.find('[style]').attr({style: null})
-          sanitizer.find('[class]').attr({class: null})
-          sanitizer.find('[id]').attr({id: null})
-          sanitizer.find(".#{Mercury.config.regionClass}").remove()
+        # move cursor back to original element & position
+        selection.selectMarker(@element)
+        selection.removeMarker()
 
-          # move cursor back to original element & position
-          selection.selectMarker(element)
-          selection.removeMarker()
-
-          # paste sanitized content
-          @execCommand('insertHTML', {value: sanitizer.html()})
-          sanitizer.html('')
-
-        , 1)
-
-      sanitizer.html('').focus()
+        # paste sanitized content
+        @execCommand('insertHTML', {value: sanitizer.html()})
+        sanitizer.html('')
+      , 1)
 
 
   # Custom actions (eg. things that execCommand doesn't do, or doesn't do well)

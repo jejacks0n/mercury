@@ -59,6 +59,9 @@
         margin: 15px 0 0 0;
         border-bottom: 1px solid #CCC;
       }
+      #forms form {
+        display: inline;
+      }
       #content {
         min-width: 500px;
         width: 70%;
@@ -118,12 +121,37 @@
       <li><div onclick="History.forward();">History.forward()</div></li>
     </ul>
 
-    <h1>Form (Method: POST)</h1>
-    <form action="/mercury/test_page" method="post">
-      <input type="text" value="value1" name="name1"/>
-      <input type="text" value="value2" name="name2"/>
-      <input type="submit" value="Submit">
-    </form>
+    <h1>Forms (with various methods and targets)</h1>
+    <div id="forms">
+      <form id="form1" action="/mercury/test_page" method="post" target="_top">
+        <input type="submit" name="commit" value="post _top">
+      </form>
+      <form id="form2" action="/mercury/test_page" method="get" target="_blank">
+        <input type="submit" name="commit" value="post _blank">
+      </form>
+      <form id="form3" action="/mercury/test_page" method="post" target="_self">
+        <input type="submit" name="commit" value="post _self">
+      </form>
+      <form id="form4" action="/mercury/test_page" method="get">
+        <input type="submit" name="commit" value="get [none]">
+      </form>
+      <form id="form5" action="/mercury/test_page" method="post" class="lightview" target="_self">
+        <input type="submit" name="commit" value="post _self .lightview">
+      </form>
+      <form id="form6" action="/mercury/test_page" method="get" target="foo">
+        <input type="submit" name="commit" value="get foo">
+      </form>
+    </div>
+
+    <h1>Links (With various targets)</h1>
+    <div id="links">
+      <a id="anchor1" href="/mercury/test_page" target="_top">_top</a>
+      <a id="anchor2" href="/mercury/test_page" target="_blank">_blank</a>
+      <a id="anchor3" href="/mercury/test_page" target="_self">_self</a>
+      <a id="anchor4" href="/mercury/test_page">[none]</a>
+      <a id="anchor5" href="/mercury/test_page" class="lightview" target="_self">_self .lightview</a>
+      <a id="anchor6" href="/mercury/test_page" target="foo">foo</a>
+    </div>
 
     <h1>Editable region</h1>
     <div id="editable1" class="mercury-region" data-type="editable">

@@ -8,6 +8,10 @@
     <%= javascript_include_tag 'mercury' %>
   </head>
   <body>
+    <% if Rails.application.config.respond_to?(:mercury_config) %>
+      <%= javascript_tag("jQuery.extend(Mercury.config, #{Rails.application.config.mercury_config});") %>
+    <% end -%>
+
     <script type="text/javascript">
       var saveUrl = null;
       var options = {

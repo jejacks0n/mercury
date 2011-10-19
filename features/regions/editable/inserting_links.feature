@@ -92,3 +92,7 @@ Feature:
     Then the contents of the editable region should be "this is <a name='test-bookmark2'>simple</a> <a href='#test-bookmark1'>content</a>"
 
     # todo: when I change the name of a bookmark, and bookmarks that are pointing to me should also be updated (on this page)
+
+
+  Scenario: A user can navigate links inside of regions
+    # todo: finish

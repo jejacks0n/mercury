@@ -18,7 +18,7 @@ class MercuryController < ActionController::Base
   end
 
   def test_page
-    render :json => params
+    render :text => params
   end
 
 end

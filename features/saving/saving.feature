@@ -24,5 +24,10 @@ Feature:
   Scenario: A user can put snippets into an editable region and get the options on save
     # todo: finish
 
+
+  Scenario: A user can expect the right version of the snippet options to be saved
+    # todo: finish
+
+
   Scenario: A user can put snippets into a markupable region and get the options on save
     # todo: finish

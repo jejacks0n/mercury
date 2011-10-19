@@ -333,8 +333,10 @@ class @Mercury.Regions.Editable extends Mercury.Region
       return
 
     else if Mercury.config.cleanStylesOnPaste == true
+      element = @element
+
       # get current selection & range
-      selection = @selection()
+      selection = element.selection()
       selection.placeMarker()
 
       sanitizer = jQuery(@document).find('#mercury-sanitizer')
@@ -350,7 +352,7 @@ class @Mercury.Regions.Editable extends Mercury.Region
           sanitizer.find(".#{Mercury.config.regionClass}").remove()
 
           # move cursor back to original element & position
-          selection.selectMarker(@element)
+          selection.selectMarker(element)
           selection.removeMarker()
 
           # paste sanitized content

@@ -217,7 +217,7 @@ Given /^the options for the (.*?) snippet "([^"]*)" are (.*?)$/ do |snippet_name
 end
 
 # dragging/dropping
-When /^(?:|I )(?:drag|drop) ((|^an image)*?) (?:into|on) (.*?)$/ do |snippet_locator, region_locator|
+When /^(?:|I )(?:drag|drop) (.*?) (?:into|on) (.*?)$/ do |snippet_locator, region_locator|
   snippet_name = snippet_name_for(snippet_locator)
   region_id = region_selector_for(region_locator).gsub('#', '')
   page.driver.within_frame('mercury_iframe') do
@@ -263,23 +263,22 @@ end
 
 ## Dropping image specific steps
 #------------------------------------------------------------------------------
-When /^(?:|I )drop an image into (.*?) from a different browser/ do |region_locator|
-  Given(%Q{I can simulate complex javascript events})
-  region_selector = region_selector_for(region_locator || 'the editable region')
-  page.driver.within_frame('mercury_iframe') do
-    find("#{region_selector}", :message => "Unable to locate a region matching '#{region_selector}'")
-    page.driver.execute_script <<-JAVASCRIPT
-      var element = top.jQuery(document).find('#{region_selector}');
-      if (element.data('type') == 'markupable') {
-        alert('unimplemented');
-        throw('unimplemented');
-      } else {
-        element.find('#{region_selector}').simulate('drop', {'text/html': '<img src="testing.gif"/>'});
-      }
-    JAVASCRIPT
-  end
-
-end
+#When /^(?:|I )drop an image into (.*?) from a different browser/ do |region_locator|
+#  Given(%Q{I can simulate complex javascript events})
+#  region_selector = region_selector_for(region_locator || 'the editable region')
+#  page.driver.within_frame('mercury_iframe') do
+#    find("#{region_selector}", :message => "Unable to locate a region matching '#{region_selector}'")
+#    page.driver.execute_script <<-JAVASCRIPT
+#      var element = top.jQuery(document).find('#{region_selector}');
+#      if (element.data('type') == 'markupable') {
+#        alert('unimplemented');
+#        throw('unimplemented');
+#      } else {
+#        element.find('#{region_selector}').simulate('drop', {'text/html': '<img src="testing.gif"/>'});
+#      }
+#    JAVASCRIPT
+#  end
+#end
 
 
 ## Javascript event simulation steps

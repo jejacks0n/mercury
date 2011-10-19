@@ -107,9 +107,7 @@ class @Mercury.Regions.Editable extends Mercury.Region
         return
       return if @pasting
       Mercury.changes = true
-      content = @element.html().replace(/^\s+|\s+$/g, '')
-      clearTimeout(@handlePasteTimeout)
-      @handlePasteTimeout = setTimeout((=> @handlePaste(content)), 400)
+      @handlePaste()
 
     @element.focus =>
       return if @previewing
@@ -324,39 +322,35 @@ class @Mercury.Regions.Editable extends Mercury.Region
     return element
 
 
-  handlePaste: (prePasteContent) ->
-    @pasting = true
-    prePasteContent = prePasteContent.replace(/^\<br\>/, '')
+  handlePaste: ->
+    if Mercury.config.cleanStylesOnPaste
+      # get current selection & range
+      selection = @selection()
+      selection.placeMarker()
 
-    # remove any regions that might have been pasted
-    @element.find('.mercury-region').remove()
+      sanitizer = jQuery(@document).find('#mercury-sanitizer')
 
-    # handle pasting from ms office etc
-    content = @content()
-    if content.indexOf('<!--StartFragment-->') > -1 || content.indexOf('="mso-') > -1 || content.indexOf('<o:') > -1 || content.indexOf('="Mso') > -1
-      # clean out all the tags from the pasted contents
-      cleaned = prePasteContent.singleDiff(@content()).sanitizeHTML()
-      try
-        # try to undo and put the cleaned html where the selection was
-        @document.execCommand('undo', false, null)
-        @execCommand('insertHTML', {value: cleaned})
-      catch error
-        # remove the pasted html and load up the cleaned contents into a modal
-        @content(prePasteContent)
-        Mercury.modal '/mercury/modals/sanitizer', {
-          title: 'HTML Sanitizer (Starring Clippy)',
-          afterLoad: -> @element.find('textarea').val(cleaned.replace(/<br\/>/g, '\n'))
-        }
-    else if Mercury.config.cleanStylesOnPaste
-      # strip styles
-      pasted = prePasteContent.singleDiff(@content())
+      sanitizer.bind 'focus', =>
 
-      container = jQuery('<div>').appendTo(@document.createDocumentFragment()).html(pasted)
-      container.find('[style]').attr({style: null})
+        # set 1ms timeout to allow paste event to complete
+        setTimeout(=>
+          # sanitize the pasted html
+          sanitizer.find('[style]').attr({style: null})
+          sanitizer.find('[class]').attr({class: null})
+          sanitizer.find('[id]').attr({id: null})
+          sanitizer.find('.mercury-region').remove()
 
-      @document.execCommand('undo', false, null)
-      @execCommand('insertHTML', {value: container.html()})
-    @pasting = false
+          # move cursor back to original element & position
+          selection.selectMarker(@element)
+          selection.removeMarker()
+
+          # paste sanitized content
+          @execCommand('insertHTML', {value: sanitizer.html()})
+          sanitizer.html('')
+
+        , 1)
+
+      sanitizer.html('').focus()
 
 
   # Custom actions (eg. things that execCommand doesn't do, or doesn't do well)

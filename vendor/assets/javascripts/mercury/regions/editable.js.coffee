@@ -99,7 +99,7 @@ class @Mercury.Regions.Editable extends Mercury.Region
     # through a clipboard in firefox (heaven forbid), and to keep the behavior across all browsers, we manually detect
     # what was pasted by running a quick diff, removing it by calling undo, making our adjustments, and then putting the
     # content back.  This is possible, so it doesn't make sense why it wouldn't be exposed in a sensible way.  *sigh*
-    @element.bind 'paste', (event) =>
+    @element.bind 'paste' =>
       return if @previewing
       return unless Mercury.region == @
       if @specialContainer
@@ -107,7 +107,7 @@ class @Mercury.Regions.Editable extends Mercury.Region
         return
       return if @pasting
       Mercury.changes = true
-      @handlePaste(event)
+      @handlePaste() if Mercury.config.cleanStylesOnPaste
 
     @element.focus =>
       return if @previewing
@@ -322,25 +322,20 @@ class @Mercury.Regions.Editable extends Mercury.Region
     return element
 
 
-  handlePaste: (event) ->
-    if Mercury.config.cleanStylesOnPaste == "nohtml"
-      @execCommand('insertHTML', {value: event.originalEvent.clipboardData.getData("text/plain")})
-      event.preventDefault()
-      return
+  handlePaste: ->
+    # get current selection & range
+    selection = @selection()
+    selection.placeMarker()
 
-    else if Mercury.config.cleanStylesOnPaste == true
-      # get current selection & range
-      selection = @selection()
-      selection.placeMarker()
+    sanitizer = jQuery(@document).find('#mercury-sanitizer')
+    sanitizer.focus()
 
-      sanitizer = jQuery(@document).find('#mercury-sanitizer')
-      sanitizer.focus()
-
-      # set 1ms timeout to allow paste event to complete
-      setTimeout(=>
-        # sanitize the pasted html
-        sanitizer.find(".mercury-region").remove()
-
+    # set 1ms timeout to allow paste event to complete
+    setTimeout(=>
+      if Mercury.config.whiteListTags.length < 1
+        content = sanitizer.text()
+      else
+        sanitizer.find(".mercury-region").remove() 
         sanitizer.find('*').map ->
           element = this
           allowed = false
@@ -354,14 +349,16 @@ class @Mercury.Regions.Editable extends Mercury.Region
 
           jQuery(element).replaceWith(jQuery(element).contents()) unless allowed
 
-        # move cursor back to original element & position
-        selection.selectMarker(@element)
-        selection.removeMarker()
+        content = sanitizer.html()
 
-        # paste sanitized content
-        @execCommand('insertHTML', {value: sanitizer.html()})
-        sanitizer.html('')
-      , 1)
+      # move cursor back to original element & position
+      selection.selectMarker(@element)
+      selection.removeMarker()
+
+      # paste sanitized content
+      @execCommand('insertHTML', {value: content})
+      sanitizer.html('')
+    , 1)
 
 
   # Custom actions (eg. things that execCommand doesn't do, or doesn't do well)

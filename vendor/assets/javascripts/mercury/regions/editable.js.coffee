@@ -148,7 +148,7 @@ class @Mercury.Regions.Editable extends Mercury.Region
           return
 
         when 13 # enter
-          if jQuery.browser.webkit && @selection().commonAncestor().closest('li, ul', @element).length == 0
+          if jQuery.browser.webkit && @selection().commonAncestor().closest('li, ul, ol', @element).length == 0
             event.preventDefault()
             @document.execCommand('insertParagraph', false, null)
           else if @specialContainer || jQuery.browser.opera
@@ -164,7 +164,11 @@ class @Mercury.Regions.Editable extends Mercury.Region
           # indent when inside of an li
           if container.closest('li', @element).length
             handled = true
-            if event.shiftKey then @execCommand('outdent') else @execCommand('indent')
+            if ! event.shiftKey
+              @execCommand('indent')
+            # do not outdent on last ul/ol parent, or we break out of the list
+            else if container.parents('ul, ol').length > 1
+              @execCommand('outdent')
 
           @execCommand('insertHTML', {value: '&nbsp; '}) unless handled
 

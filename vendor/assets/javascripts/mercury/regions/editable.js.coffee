@@ -339,7 +339,7 @@ class @Mercury.Regions.Editable extends Mercury.Region
       # set 1ms timeout to allow paste event to complete
       setTimeout(=>
         # sanitize the pasted html
-        sanitizer.find(".#{Mercury.config.regionClass}").remove()
+        sanitizer.find(".mercury-region").remove()
 
         sanitizer.find('*').map ->
           element = this

@@ -62,7 +62,7 @@ class @Mercury.PageEditor
 
 
   initializeRegions: ->
-    @buildRegion(jQuery(region)) for region in jQuery('.mercury-region', @document)
+    @buildRegion(jQuery(region)) for region in jQuery(".#{Mercury.config.regionClass}", @document)
     return unless @options.visible
     for region in @regions
       if region.focus
@@ -99,7 +99,7 @@ class @Mercury.PageEditor
     @document.mousedown (event) ->
       Mercury.trigger('hide:dialogs')
       if Mercury.region
-        Mercury.trigger('unfocus:regions') unless jQuery(event.target).closest('.mercury-region').get(0) == Mercury.region.element.get(0)
+        Mercury.trigger('unfocus:regions') unless jQuery(event.target).closest(".#{Mercury.config.regionClass}").get(0) == Mercury.region.element.get(0)
 
     jQuery(window).resize => @resize()
     window.onbeforeunload = @beforeUnload
@@ -145,7 +145,7 @@ class @Mercury.PageEditor
         if jQuery(element).hasClass(classname)
           ignored = true
           continue
-      if !ignored && (element.target == '' || element.target == '_self') && !jQuery(element).closest('.mercury-region').length
+      if !ignored && (element.target == '' || element.target == '_self') && !jQuery(element).closest(".#{Mercury.config.regionClass}").length
         jQuery(element).attr('target', '_top')
 
 

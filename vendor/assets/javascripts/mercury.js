@@ -288,6 +288,14 @@ window.MercurySetup = {
     // and
     // Mercury.Toolbar.ButtonGroup.contexts
 
+    // ## Region Class
+    //
+    // Mercury identifies editable regions by a region class. This class has to be set in your HTML
+    // in advance. This class is the only real Mercury code/naming exposed to the person implementing
+    // Mercury into their code (you, or your customers using your editor). To allow the code to be 
+    // as much whitelable as possible, you can set the name of the class here. If you change this
+    // value, be sure to change the naming in `injectedStyles` as well.
+    regionClass: 'mercury-region',
 
     // ## Styles
     //

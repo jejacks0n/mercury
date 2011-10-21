@@ -109,7 +109,7 @@ if (!window.mercuryPackages) window.mercuryPackages = {
         // Once the script has loaded we display the body again, and instantiate a new instance of Mercury.PageEditor.
         document.body.innerHTML = '<div style="height:0;overflow:hidden;">Mercury</div>';
         for (i = 0; i <= document.styleSheets.length - 1; i += 1) {
-          document.styleSheets[i].disabled = true
+          document.styleSheets[i].disabled = true;
         }
 
         // Load all the stylesheets.
@@ -137,7 +137,7 @@ if (!window.mercuryPackages) window.mercuryPackages = {
               document.body.style.visibility = 'visible';
               document.body.style.display = 'block';
               // Instantiate the PageEditor, passing in the options that were provided to the loader.
-              new Mercury.PageEditor(null, {visible: true});
+              new Mercury.PageEditor(null, options);
               // If there's a mercuryLoaded function available, call it.   You can provide one before the loading script
               // and it will be called after everything is loaded, but before everything is initialized.  You can bind
               // to the mercury:ready event or use Mercury.bind('ready', function() {}).
@@ -147,7 +147,7 @@ if (!window.mercuryPackages) window.mercuryPackages = {
             } else {
               loadScript(javascripts[loaded]);
             }
-          }
+          };
         }
         loadScript(javascripts[loaded]);
       }, 1);

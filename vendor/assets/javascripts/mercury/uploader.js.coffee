@@ -101,7 +101,26 @@ jQuery.extend Mercury.uploader, {
               Mercury.config.uploading.handler(event.target.responseText)
             else
               jQuery.parseJSON(event.target.responseText)
-          Mercury.trigger('action', {action: 'insertImage', value: {src: response.image.url}})
+          if ['image/jpeg', 'image/gif', 'image/png'].indexOf(@file.type) > -1
+            Mercury.trigger('action', {action: 'insertImage', value: {src: response.document.url}})
+          else
+            attrs = {href: response.document.url}
+            content = jQuery('<img>', {src: response.document.img})
+            selection = Mercury.region.selection()
+
+            if selection.range.collapsed is false
+              if selection.commonAncestor && selection.commonAncestor(true).find('img').length > 0 
+                content = selection.commonAncestor(true).find('img')[0]
+              else
+                content = selection.fragment.textContent
+
+              container = selection.commonAncestor(true).closest('a') if selection && selection.commonAncestor
+  
+            if container && container.length
+              Mercury.trigger('action', {action: 'replaceLink', value: {tagName: 'a', attrs: attrs, content: content}, node: container.get(0)})
+            else
+              Mercury.trigger('action', {action: 'insertLink', value: {tagName: 'a', attrs: attrs, content: content}})
+
         catch error
           @updateStatus('Error: Unable to upload the file')
           alert("Unable to process response: #{error}")

@@ -26,8 +26,6 @@ class @Mercury.Toolbar
         expander = new Mercury.Toolbar.Expander(toolbarName, {appendTo: toolbar, for: container})
         expander.appendTo(@element)
 
-      toolbar.addClass('disabled') unless toolbarName == 'primary'
-
     @element.css({width: '100%'})
 
 

@@ -2,6 +2,7 @@ class @Mercury.PageEditor
 
   # options
   # saveStyle: 'form', or 'json' (defaults to json)
+  # saveDataType: 'xml', 'json', 'jsonp', 'script', 'text', 'html' (defaults to json)
   # saveMethod: 'POST', or 'PUT', create or update actions on save (defaults to POST)
   # visible: boolean, if the interface should start visible or not (defaults to true)
   constructor: (@saveUrl = null, @options = {}) ->
@@ -62,7 +63,7 @@ class @Mercury.PageEditor
 
 
   initializeRegions: ->
-    @buildRegion(jQuery(region)) for region in jQuery('.mercury-region', @document)
+    @buildRegion(jQuery(region)) for region in jQuery(".#{Mercury.config.regionClass}", @document)
     return unless @options.visible
     for region in @regions
       if region.focus
@@ -81,6 +82,7 @@ class @Mercury.PageEditor
 
   finalizeInterface: ->
     @snippetToolbar = new Mercury.SnippetToolbar(@document)
+    jQuery('<div>', { id: 'mercury-sanitizer', contenteditable: 'true', style: 'position:absolute;top:-1000px;left:-1000px;opacity:0;' }).appendTo(@document.find('body'))
 
     @hijackLinksAndForms()
     Mercury.trigger('mode', {mode: 'preview'}) unless @options.visible
@@ -99,7 +101,7 @@ class @Mercury.PageEditor
     @document.mousedown (event) ->
       Mercury.trigger('hide:dialogs')
       if Mercury.region
-        Mercury.trigger('unfocus:regions') unless jQuery(event.target).closest('.mercury-region').get(0) == Mercury.region.element.get(0)
+        Mercury.trigger('unfocus:regions') unless jQuery(event.target).closest(".#{Mercury.config.regionClass}").get(0) == Mercury.region.element.get(0)
 
     jQuery(window).resize => @resize()
     window.onbeforeunload = @beforeUnload
@@ -145,7 +147,7 @@ class @Mercury.PageEditor
         if jQuery(element).hasClass(classname)
           ignored = true
           continue
-      if !ignored && (element.target == '' || element.target == '_self') && !jQuery(element).closest('.mercury-region').length
+      if !ignored && (element.target == '' || element.target == '_self') && !jQuery(element).closest(".#{Mercury.config.regionClass}").length
         jQuery(element).attr('target', '_top')
 
 
@@ -157,7 +159,7 @@ class @Mercury.PageEditor
 
   getRegionByName: (id) ->
     for region in @regions
-      return region if region.name == id
+      return region if jQuery(region.element).attr(Mercury.config.regionIdentifier) == id
     return null
 
 
@@ -169,7 +171,7 @@ class @Mercury.PageEditor
     method = 'PUT' if @options.saveMethod == 'PUT'
     jQuery.ajax url, {
       type: method || 'POST'
-      dataType: 'json'
+      dataType: @options.saveDataType || 'json'
       headers: @saveHeaders()
       data: {content: data, _method: method}
       success: =>
@@ -187,5 +189,5 @@ class @Mercury.PageEditor
 
   serialize: ->
     serialized = {}
-    serialized[region.name] = region.serialize() for region in @regions
+    serialized[jQuery(region.element).attr(Mercury.config.regionIdentifier)] = region.serialize() for region in @regions
     return serialized

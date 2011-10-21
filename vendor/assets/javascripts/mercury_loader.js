@@ -109,7 +109,7 @@ if (!window.mercuryPackages) window.mercuryPackages = {
         // Once the script has loaded we display the body again, and instantiate a new instance of Mercury.PageEditor.
         document.body.innerHTML = '<div style="height:0;overflow:hidden;">Mercury</div>';
         for (i = 0; i <= document.styleSheets.length - 1; i += 1) {
-          document.styleSheets[i].disabled = true
+          document.styleSheets[i].disabled = true;
         }
 
         // Load all the stylesheets.
@@ -147,7 +147,7 @@ if (!window.mercuryPackages) window.mercuryPackages = {
             } else {
               loadScript(javascripts[loaded]);
             }
-          }
+          };
         }
         loadScript(javascripts[loaded]);
       }, 1);

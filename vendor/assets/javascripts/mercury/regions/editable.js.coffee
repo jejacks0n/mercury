@@ -343,11 +343,20 @@ class @Mercury.Regions.Editable extends Mercury.Region
       # set 1ms timeout to allow paste event to complete
       setTimeout(=>
         # sanitize the pasted html
-        sanitizer.find('[style]').attr({style: null})
-        sanitizer.find('[class]').attr({class: null})
-        sanitizer.find('[id]').attr({id: null})
         sanitizer.find(".#{Mercury.config.regionClass}").remove()
-        sanitizer.find('img').remove()
+
+        sanitizer.find('*').map ->
+          element = this
+          allowed = false
+          jQuery.each Mercury.config.whiteListTags, (index, allowedTag) ->
+            if typeof(allowedTag) is "string" and element.tagName.toLowerCase() is allowedTag.toLowerCase()
+              allowed = true
+              allowedAttributes = Mercury.config.whiteListTags[index+1]
+              if allowedAttributes instanceof Array
+                jQuery.each jQuery(element.attributes), (index, attr) ->
+                  jQuery(element).attr(attr.name, null) unless attr.name in allowedAttributes
+
+          jQuery(element).replaceWith(jQuery(element).contents()) unless allowed
 
         # move cursor back to original element & position
         selection.selectMarker(@element)

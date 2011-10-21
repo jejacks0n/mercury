@@ -135,6 +135,7 @@ jQuery.extend Mercury.modal, {
     else
       jQuery.ajax @url, {
         type: @options.loadType || 'get'
+        headers: @options.loadHeaders
         data: @options.loadData
         success: (data) => @loadContent(data)
         error: =>

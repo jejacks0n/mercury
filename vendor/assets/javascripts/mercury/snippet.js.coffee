@@ -53,6 +53,7 @@ class @Mercury.Snippet
   loadPreview: (element, callback = null) ->
     jQuery.ajax Mercury.config.snippets.previewUrl.replace(':name', @name), {
       type: Mercury.config.snippets.method
+      headers: @saveHeaders()
       data: @options
       success: (data) =>
         @data = data
@@ -63,12 +64,19 @@ class @Mercury.Snippet
     }
 
 
+  saveHeaders: ->
+    headers = {}
+    headers[Mercury.config.csrfHeader] = Mercury.csrfToken
+    return headers
+
+
   displayOptions: ->
     Mercury.snippet = @
     Mercury.modal Mercury.config.snippets.optionsUrl.replace(':name', @name), {
       title: 'Snippet Options',
       handler: 'insertSnippet',
       loadType: Mercury.config.snippets.method,
+      loadHeaders: @saveHeaders(),
       loadData: @options
     }
 

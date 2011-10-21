@@ -64,12 +64,10 @@ window.MercurySetup = {
     // When pasting content in a Mercury region, the content might contain HTML markup tags and attributes.
     // This markup is used to style the content and makes the pasted content look (ane behave) the same as
     // the original content.  This can be a desired feature, or an annoyance, so you can enable the cleaning
-    // of that content to fit your needs.  This means that copying something into a Mercury editable region
-    // can be modified in the following ways:
+    // of that content to fit your needs.
     //
     // ### options:
     // - false: no cleaning is done, the content is pasted in the exact same way as it was copied by the user
-    // - "nohtml": all html markup is stripped before pasting, leaving only the raw text
     // - true: the content is cleaned using the settings specific in whiteListTags, as described below.
     cleanStylesOnPaste: true,
 
@@ -80,6 +78,7 @@ window.MercurySetup = {
     // represents the attributes that are allowed on this tag. If there is no array with attributes behind a tag
     // then all attributes are automatically removed. If a tag is not present in this list, the tag is removed,
     // without removing any of the text or tags inside it (unless a tag inside it is also not in this list).
+    // If you set this as an empty array, all HTML is stripped and only text is pasted.
     // 
     // **Note:** whiteListTags is only used when the `cleanStylesOnPaste` option is set to `true`.
     whiteListTags: [

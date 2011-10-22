@@ -164,7 +164,7 @@ class @Mercury.Regions.Editable extends Mercury.Region
           # indent when inside of an li
           if container.closest('li', @element).length
             handled = true
-            if ! event.shiftKey
+            unless event.shiftKey
               @execCommand('indent')
             # do not outdent on last ul/ol parent, or we break out of the list
             else if container.parents('ul, ol').length > 1

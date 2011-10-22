@@ -2,6 +2,7 @@ class @Mercury.PageEditor
 
   # options
   # saveStyle: 'form', or 'json' (defaults to json)
+  # saveDataType: 'xml', 'json', 'jsonp', 'script', 'text', 'html' (defaults to json)
   # saveMethod: 'POST', or 'PUT', create or update actions on save (defaults to POST)
   # visible: boolean, if the interface should start visible or not (defaults to true)
   constructor: (@saveUrl = null, @options = {}) ->
@@ -169,7 +170,7 @@ class @Mercury.PageEditor
     method = 'PUT' if @options.saveMethod == 'PUT'
     jQuery.ajax url, {
       type: method || 'POST'
-      dataType: 'json'
+      dataType: @options.saveDataType || 'json'
       headers: @saveHeaders()
       data: {content: data, _method: method}
       success: =>

@@ -4,6 +4,9 @@ describe "Mercury.PageEditor", ->
 
   template 'mercury/page_editor.html'
 
+  beforeEach ->
+    Mercury.config.regionClass = 'custom-region-class'
+
   afterEach ->
     @pageEditor = null
     delete(@pageEditor)
@@ -433,7 +436,6 @@ describe "Mercury.PageEditor", ->
 
     it "resizes the iframe", ->
       @pageEditor.resize()
-      expect($('.mercury-iframe').css('top')).toEqual('100px')
       expect($('.mercury-iframe').css('height')).toEqual("#{500 - 100}px")
 
     it "triggers a resize event", ->

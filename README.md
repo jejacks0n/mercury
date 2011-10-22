@@ -129,10 +129,10 @@ the Usage portion of this documentation.
 ## Usage
 
 Mercury has an expectation that content regions will be on the page (not required, but probably useful).  To define
-content regions that Mercury will make editable you need to add a `mercury-region` class attribute to a div.  Then
-specify what region type by using the `data-type` attribute -- which can be *editable*, *markupable*, or *snippetable*.
-It's important for saving that an id attribute be set on regions, you should always include.  Region types are outlined
-below.
+content regions that Mercury will make editable you need to add a `mercury-region` class attribute to a div (this is
+configurable).  Then specify what region type by using the `data-type` attribute -- which can be *editable*,
+*markupable*, or *snippetable*. It's important for saving that an id attribute be set on regions, you should always
+include.  Region types are outlined below.
 
     <div id="primary" class="mercury-region" data-type="editable">
       default content

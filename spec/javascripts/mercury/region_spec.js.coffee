@@ -4,6 +4,9 @@ describe "Mercury.Region", ->
 
   template 'mercury/region.html'
 
+  beforeEach ->
+    Mercury.config.regionClass = 'custom-region-class'
+
   afterEach ->
     @region = null
     delete(@region)
@@ -185,8 +188,8 @@ describe "Mercury.Region", ->
         expect(@region.previewing).toEqual(true)
 
       it "swaps classes on the element", ->
-        expect(@region.element.hasClass('mercury-region')).toEqual(false)
-        expect(@region.element.hasClass('mercury-region-preview')).toEqual(true)
+        expect(@region.element.hasClass('custom-region-class')).toEqual(false)
+        expect(@region.element.hasClass('custom-region-class-preview')).toEqual(true)
 
       it "triggers a blur event", ->
         expect(@triggerSpy.callCount).toEqual(1)
@@ -202,8 +205,8 @@ describe "Mercury.Region", ->
         expect(@region.previewing).toEqual(false)
 
       it "swaps classes on the element", ->
-        expect(@region.element.hasClass('mercury-region-preview')).toEqual(false)
-        expect(@region.element.hasClass('mercury-region')).toEqual(true)
+        expect(@region.element.hasClass('custom-region-class-preview')).toEqual(false)
+        expect(@region.element.hasClass('custom-region-class')).toEqual(true)
 
       it "calls focus if it's the active region", ->
         expect(@focusSpy.callCount).toEqual(1)

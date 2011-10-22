@@ -288,27 +288,32 @@ window.MercurySetup = {
     // and
     // Mercury.Toolbar.ButtonGroup.contexts
 
+    
     // ## Region Class
     //
-    // Mercury identifies editable regions by a region class. This class has to be set in your HTML
-    // in advance. This class is the only real Mercury code/naming exposed to the person implementing
-    // Mercury into their code (you, or your customers using your editor). To allow the code to be 
-    // as much whitelable as possible, you can set the name of the class here. If you change this
-    // value, be sure to change the naming in `injectedStyles` as well.
+    // Mercury identifies editable regions by a region class.  This class has to be added in your HTML in advance, and
+    // is the only real Mercury code/naming exposed in the implementation of Mercury.  To allow this to be as
+    // configurable as possible, you can set the name of the class here.  When switching to preview mode, this
+    // configuration is used to generate a class to indicate that Mercury is in preview mode -- which will be this
+    // class with '-preview' appended (so, mercury-region-preview by default)
     regionClass: 'mercury-region',
 
+    
     // ## Styles
     //
     // Mercury tries to stay as much out of your code as possible, but because regions appear within your document we
     // need to include a few styles to indicate regions, as well as the different states of them (eg. focused).  These
     // styles are injected into your document, and as simple as they might be, you may want to change them.  You can do
-    // so here.
+    // so here.  {{regionClass}} will be automatically replaced with whatever you have set in the regionClass
+    // configuration directive.
     injectedStyles: '' +
-      '.mercury-region, .mercury-textarea { min-height: 10px; outline: 1px dotted #09F }' +
+      '.{{regionClass}} { min-height: 10px; outline: 1px dotted #09F } ' +
+      '.{{regionClass}}:focus, .{{regionClass}}.focus { outline: none; -webkit-box-shadow: 0 0 10px #09F, 0 0 1px #045; box-shadow: 0 0 10px #09F, 0 0 1px #045 }' +
+      '.{{regionClass}}:after { content: "."; display: block; visibility: hidden; clear: both; height: 0; overflow: hidden; }' +
+      '.{{regionClass}} table, .{{regionClass}} td, .{{regionClass}} th { border: 1px dotted red; }' +
       '.mercury-textarea { box-sizing: border-box; -moz-box-sizing: border-box; -webkit-box-sizing: border-box; resize: vertical; }' +
-      '.mercury-region:focus, .mercury-region.focus, .mercury-textarea.focus { outline: none; -webkit-box-shadow: 0 0 10px #09F, 0 0 1px #045; box-shadow: 0 0 10px #09F, 0 0 1px #045 }' +
-      '.mercury-region:after { content: "."; display: block; visibility: hidden; clear: both; height: 0; overflow: hidden; }' +
-      '.mercury-region table, .mercury-region td, .mercury-region th { border: 1px dotted red; }'
+      '.mercury-textarea { min-height: 10px; outline: 1px dotted #09F }' +
+      '.mercury-textarea:focus, .mercury-textarea.focus { outline: none; -webkit-box-shadow: 0 0 10px #09F, 0 0 1px #045; box-shadow: 0 0 10px #09F, 0 0 1px #045 }'
   },
 
   // ## Silent Mode

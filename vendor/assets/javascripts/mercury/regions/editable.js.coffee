@@ -333,7 +333,7 @@ class @Mercury.Regions.Editable extends Mercury.Region
     prePasteContent = prePasteContent.replace(/^\<br\>/, '')
 
     # remove any regions that might have been pasted
-    @element.find('.mercury-region').remove()
+    @element.find(".#{Mercury.config.regionClass}").remove()
 
     # handle pasting from ms office etc
     content = @content()

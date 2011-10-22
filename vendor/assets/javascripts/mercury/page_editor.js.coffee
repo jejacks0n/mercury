@@ -163,7 +163,7 @@ class @Mercury.PageEditor
 
   getRegionByName: (id) ->
     for region in @regions
-      return region if region.name == id
+      return region if jQuery(region.element).attr(Mercury.config.regionIdentifier) == id
     return null
 
 
@@ -193,5 +193,5 @@ class @Mercury.PageEditor
 
   serialize: ->
     serialized = {}
-    serialized[region.name] = region.serialize() for region in @regions
+    serialized[jQuery(region.element).attr(Mercury.config.regionIdentifier)] = region.serialize() for region in @regions
     return serialized

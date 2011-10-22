@@ -99,7 +99,7 @@ class @Mercury.Regions.Editable extends Mercury.Region
     # through a clipboard in firefox (heaven forbid), and to keep the behavior across all browsers, we manually detect
     # what was pasted by running a quick diff, removing it by calling undo, making our adjustments, and then putting the
     # content back.  This is possible, so it doesn't make sense why it wouldn't be exposed in a sensible way.  *sigh*
-    @element.bind 'paste' =>
+    @element.bind 'paste', =>
       return if @previewing
       return unless Mercury.region == @
       if @specialContainer

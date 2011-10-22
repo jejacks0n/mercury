@@ -390,6 +390,8 @@ class @Mercury.Regions.Editable extends Mercury.Region
 
     redo: -> @content(@history.redo())
 
+    horizontalRule: -> this.execCommand('insertHorizontalRule')
+
     removeFormatting: (selection) -> selection.insertTextNode(selection.textContent())
 
     backColor: (selection, options) -> selection.wrap("<span style=\"background-color:#{options.value.toHex()}\">", true)

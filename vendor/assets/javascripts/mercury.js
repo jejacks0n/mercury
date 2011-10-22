@@ -269,12 +269,10 @@ window.MercurySetup = {
     //
     // You can see how the behavior matches up directly with the button names.  It's also important to note that the
     // callback functions are executed within the scope of the given region, so you have access to all it's methods.
+    // Here's some examples to help you get started.
     behaviors: {
-      horizontalRule: function(selection) {
-        //selection.replace('<hr/>', true);
-        this.execCommand('insertHorizontalRule');
-      },
-      htmlEditor: function() { Mercury.modal('/mercury/modals/htmleditor.html', { title: 'HTML Editor', fullHeight: true, handler: 'htmlEditor' }) }
+      //foreColor: function(selection, options) { selection.wrap('<span style="color:' + options.value.toHex() + '">', true) },
+      htmlEditor: function() { Mercury.modal('/mercury/modals/htmleditor.html', { title: 'HTML Editor', fullHeight: true, handler: 'htmlEditor' }); }
       },
 
 

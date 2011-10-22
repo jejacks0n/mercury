@@ -99,7 +99,7 @@ class @Mercury.Regions.Editable extends Mercury.Region
     # through a clipboard in firefox (heaven forbid), and to keep the behavior across all browsers, we manually detect
     # what was pasted by running a quick diff, removing it by calling undo, making our adjustments, and then putting the
     # content back.  This is possible, so it doesn't make sense why it wouldn't be exposed in a sensible way.  *sigh*
-    @element.bind 'paste', =>
+    @element.bind 'paste' =>
       return if @previewing
       return unless Mercury.region == @
       if @specialContainer
@@ -107,9 +107,7 @@ class @Mercury.Regions.Editable extends Mercury.Region
         return
       return if @pasting
       Mercury.changes = true
-      content = @element.html().replace(/^\s+|\s+$/g, '')
-      clearTimeout(@handlePasteTimeout)
-      @handlePasteTimeout = setTimeout((=> @handlePaste(content)), 400)
+      @handlePaste() if Mercury.config.cleanStylesOnPaste
 
     @element.focus =>
       return if @previewing
@@ -328,39 +326,43 @@ class @Mercury.Regions.Editable extends Mercury.Region
     return element
 
 
-  handlePaste: (prePasteContent) ->
-    @pasting = true
-    prePasteContent = prePasteContent.replace(/^\<br\>/, '')
+  handlePaste: ->
+    # get current selection & range
+    selection = @selection()
+    selection.placeMarker()
 
-    # remove any regions that might have been pasted
-    @element.find('.mercury-region').remove()
+    sanitizer = jQuery(@document).find('#mercury-sanitizer')
+    sanitizer.focus()
 
-    # handle pasting from ms office etc
-    content = @content()
-    if content.indexOf('<!--StartFragment-->') > -1 || content.indexOf('="mso-') > -1 || content.indexOf('<o:') > -1 || content.indexOf('="Mso') > -1
-      # clean out all the tags from the pasted contents
-      cleaned = prePasteContent.singleDiff(@content()).sanitizeHTML()
-      try
-        # try to undo and put the cleaned html where the selection was
-        @document.execCommand('undo', false, null)
-        @execCommand('insertHTML', {value: cleaned})
-      catch error
-        # remove the pasted html and load up the cleaned contents into a modal
-        @content(prePasteContent)
-        Mercury.modal '/mercury/modals/sanitizer', {
-          title: 'HTML Sanitizer (Starring Clippy)',
-          afterLoad: -> @element.find('textarea').val(cleaned.replace(/<br\/>/g, '\n'))
-        }
-    else if Mercury.config.cleanStylesOnPaste
-      # strip styles
-      pasted = prePasteContent.singleDiff(@content())
+    # set 1ms timeout to allow paste event to complete
+    setTimeout(=>
+      if Mercury.config.whiteListTags.length < 1
+        content = sanitizer.text()
+      else
+        sanitizer.find(".mercury-region").remove() 
+        sanitizer.find('*').map ->
+          element = this
+          allowed = false
+          jQuery.each Mercury.config.whiteListTags, (index, allowedTag) ->
+            if typeof(allowedTag) is "string" and element.tagName.toLowerCase() is allowedTag.toLowerCase()
+              allowed = true
+              allowedAttributes = Mercury.config.whiteListTags[index+1]
+              if allowedAttributes instanceof Array
+                jQuery.each jQuery(element.attributes), (index, attr) ->
+                  jQuery(element).attr(attr.name, null) unless attr.name in allowedAttributes
 
-      container = jQuery('<div>').appendTo(@document.createDocumentFragment()).html(pasted)
-      container.find('[style]').attr({style: null})
+          jQuery(element).replaceWith(jQuery(element).contents()) unless allowed
 
-      @document.execCommand('undo', false, null)
-      @execCommand('insertHTML', {value: container.html()})
-    @pasting = false
+        content = sanitizer.html()
+
+      # move cursor back to original element & position
+      selection.selectMarker(@element)
+      selection.removeMarker()
+
+      # paste sanitized content
+      @execCommand('insertHTML', {value: content})
+      sanitizer.html('')
+    , 1)
 
 
   # Custom actions (eg. things that execCommand doesn't do, or doesn't do well)

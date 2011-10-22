@@ -59,19 +59,41 @@ window.MercurySetup = {
     csrfHeader: 'X-CSRF-Token',
 
 
-    // ## Pasting (in Chrome/Safari)
+    // ## Pasting & Cleaning
     //
-    // When copying content using webkit, it embeds all the user defined styles (from the css files) into the html
-    // style attributes directly.  When pasting this content into HTML5 contentEditable elements it leaves these
-    // intact.  This can be a desired feature, or an annoyance, so you can enable it or disable it here.  This means
-    // that copying something from a webkit based browser and pasting it into something like firefox will also result in
-    // these extra style attributes.  Cleaning the styles out impacts performance when pasting, and because of browser
-    // restrictions on getting pasted content (which is stupid) we have to fall back to a less performant method off
-    // figuring out what was pasted.  This seems to cause issues if you try and paste several things in a row, which
-    // seems to happen a lot when people are testing the demo.  Because of this it's disabled by default, but is
-    // recommended if you're using webkit.
-    // Go signin and vote to change this: http://www.google.com/support/forum/p/Chrome/thread?tid=3399afd053d5a29c&hl=en
-    cleanStylesOnPaste: false,
+    // When pasting content in a Mercury region, the content might contain HTML markup tags and attributes.
+    // This markup is used to style the content and makes the pasted content look (ane behave) the same as
+    // the original content.  This can be a desired feature, or an annoyance, so you can enable the cleaning
+    // of that content to fit your needs.
+    //
+    // ### options:
+    // - false: no cleaning is done, the content is pasted in the exact same way as it was copied by the user
+    // - true: the content is cleaned using the settings specific in whiteListTags, as described below.
+    cleanStylesOnPaste: true,
+
+    // ## Allowed Tags and Attributes
+    //
+    // The below array accepts tags and attributes that should be kept when cleaning out styles from the pasted
+    // content. The first item on each line represents the tag that is allowed, the array behind the tag
+    // represents the attributes that are allowed on this tag. If there is no array with attributes behind a tag
+    // then all attributes are automatically removed. If a tag is not present in this list, the tag is removed,
+    // without removing any of the text or tags inside it (unless a tag inside it is also not in this list).
+    // If you set this as an empty array, all HTML is stripped and only text is pasted.
+    // 
+    // **Note:** whiteListTags is only used when the `cleanStylesOnPaste` option is set to `true`.
+    whiteListTags: [
+      'b',
+      'bold',
+      'i',
+      'em',
+      'u',
+      'strike',
+      'br',
+      'p',
+      'hr',
+      'a', ['href', 'target', 'title'],
+      'img', ['src', 'title', 'alt']
+    ],
 
 
     // ## Snippet Options and Preview

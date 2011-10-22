@@ -541,7 +541,7 @@ describe "Mercury.PageEditor", ->
     describe "POST", ->
       beforeEach ->
         Mercury.PageEditor.prototype.initializeInterface = ->
-        @pageEditor = new Mercury.PageEditor('', {appendTo: $('#test')})
+        @pageEditor = new Mercury.PageEditor('', {appendTo: $('#test'), saveDataType: 'text'})
         @iframeSrcSpy = spyOn(Mercury.PageEditor.prototype, 'iframeSrc').andCallFake(=> '/foo/baz')
         @ajaxSpy = spyOn($, 'ajax')
 
@@ -592,6 +592,12 @@ describe "Mercury.PageEditor", ->
         spy = spyOn(Mercury.PageEditor.prototype, 'saveHeaders').andCallFake(=> {'X-CSRFToken': 'f00'})
         @pageEditor.save()
         expect(@ajaxSpy.argsForCall[0][1]['headers']).toEqual({'X-CSRFToken': 'f00'})
+
+      it "sets the data type from options", ->
+        @ajaxSpy.andCallFake(=>)
+        spyOn(Mercury.PageEditor.prototype, 'serialize').andCallFake(=> {region1: 'region1'})
+        @pageEditor.save()
+        expect(@ajaxSpy.argsForCall[0][1]['dataType']).toEqual('text')
 
       describe "on successful ajax request", ->
 

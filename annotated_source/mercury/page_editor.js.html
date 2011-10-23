@@ -49,6 +49,8 @@
         </div>
         <p>options
 saveStyle: &lsquo;form&rsquo;, or &lsquo;json&rsquo; (defaults to json)
+saveDataType: &lsquo;xml&rsquo;, &lsquo;json&rsquo;, &lsquo;jsonp&rsquo;, &lsquo;script&rsquo;, &lsquo;text&rsquo;, &lsquo;html&rsquo; (defaults to json)
+saveMethod: &lsquo;POST&rsquo;, or &lsquo;PUT&rsquo;, create or update actions on save (defaults to POST)
 visible: boolean, if the interface should start visible or not (defaults to true)</p>
       </td>
       <td class=code>
@@ -66,8 +68,9 @@ visible: boolean, if the interface should start visible or not (defaults to true
 
 
   <span class="nv">initializeInterface: </span><span class="o">-&gt;</span>
-    <span class="vi">@focusableElement = </span><span class="nx">jQuery</span><span class="p">(</span><span class="s1">&#39;&lt;input&gt;&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nv">type: </span><span class="s1">&#39;text&#39;</span><span class="p">,</span> <span class="nv">style: </span><span class="s1">&#39;position:absolute;opacity:0&#39;</span><span class="p">}).</span><span class="nx">appendTo</span><span class="p">(</span><span class="nx">@options</span><span class="p">.</span><span class="nx">appendTo</span> <span class="o">?</span> <span class="s1">&#39;body&#39;</span><span class="p">)</span>
-    <span class="vi">@iframe = </span><span class="nx">jQuery</span><span class="p">(</span><span class="s1">&#39;&lt;iframe&gt;&#39;</span><span class="p">,</span> <span class="p">{</span><span class="k">class</span><span class="o">:</span> <span class="s1">&#39;mercury-iframe&#39;</span><span class="p">,</span> <span class="nv">seamless: </span><span class="s1">&#39;true&#39;</span><span class="p">,</span> <span class="nv">frameborder: </span><span class="s1">&#39;0&#39;</span><span class="p">,</span> <span class="nv">src: </span><span class="s1">&#39;about:blank&#39;</span><span class="p">,</span> <span class="nv">style: </span><span class="s1">&#39;position:absolute;top:0;width:100%;visibility:hidden&#39;</span><span class="p">})</span>
+    <span class="vi">@focusableElement = </span><span class="nx">jQuery</span><span class="p">(</span><span class="s1">&#39;&lt;input&gt;&#39;</span><span class="p">,</span> <span class="p">{</span><span class="k">class</span><span class="o">:</span> <span class="s1">&#39;mercury-focusable&#39;</span><span class="p">,</span> <span class="nv">type: </span><span class="s1">&#39;text&#39;</span><span class="p">}).</span><span class="nx">appendTo</span><span class="p">(</span><span class="nx">@options</span><span class="p">.</span><span class="nx">appendTo</span> <span class="o">?</span> <span class="s1">&#39;body&#39;</span><span class="p">)</span>
+
+    <span class="vi">@iframe = </span><span class="nx">jQuery</span><span class="p">(</span><span class="s1">&#39;&lt;iframe&gt;&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nv">id: </span><span class="s1">&#39;mercury_iframe&#39;</span><span class="p">,</span> <span class="k">class</span><span class="o">:</span> <span class="s1">&#39;mercury-iframe&#39;</span><span class="p">,</span> <span class="nv">seamless: </span><span class="s1">&#39;true&#39;</span><span class="p">,</span> <span class="nv">frameborder: </span><span class="s1">&#39;0&#39;</span><span class="p">,</span> <span class="nv">src: </span><span class="s1">&#39;about:blank&#39;</span><span class="p">})</span>
     <span class="nx">@iframe</span><span class="p">.</span><span class="nx">appendTo</span><span class="p">(</span><span class="nx">jQuery</span><span class="p">(</span><span class="nx">@options</span><span class="p">.</span><span class="nx">appendTo</span><span class="p">).</span><span class="nx">get</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">?</span> <span class="s1">&#39;body&#39;</span><span class="p">)</span>
 
     <span class="nx">@iframe</span><span class="p">.</span><span class="nx">load</span> <span class="o">=&gt;</span> <span class="nx">@initializeFrame</span><span class="p">()</span>
@@ -81,8 +84,10 @@ visible: boolean, if the interface should start visible or not (defaults to true
     <span class="k">try</span>
       <span class="k">return</span> <span class="k">if</span> <span class="nx">@iframe</span><span class="p">.</span><span class="nx">data</span><span class="p">(</span><span class="s1">&#39;loaded&#39;</span><span class="p">)</span>
       <span class="nx">@iframe</span><span class="p">.</span><span class="nx">data</span><span class="p">(</span><span class="s1">&#39;loaded&#39;</span><span class="p">,</span> <span class="kc">true</span><span class="p">)</span>
+      <span class="nx">alert</span><span class="p">(</span><span class="s2">&quot;Opera isn&#39;t a fully supported browser, your results may not be optimal.&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="nx">jQuery</span><span class="p">.</span><span class="nx">browser</span><span class="p">.</span><span class="nx">opera</span>
       <span class="vi">@document = </span><span class="nx">jQuery</span><span class="p">(</span><span class="nx">@iframe</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span><span class="nx">contentWindow</span><span class="p">.</span><span class="nb">document</span><span class="p">)</span>
-      <span class="nx">jQuery</span><span class="p">(</span><span class="s2">&quot;&lt;style mercury-styles=\&quot;true\&quot;&gt;&quot;</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="nx">Mercury</span><span class="p">.</span><span class="nx">config</span><span class="p">.</span><span class="nx">injectedStyles</span><span class="p">).</span><span class="nx">appendTo</span><span class="p">(</span><span class="nx">@document</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;head&#39;</span><span class="p">))</span></pre></div>
+      <span class="nv">stylesToInject = </span><span class="nx">Mercury</span><span class="p">.</span><span class="nx">config</span><span class="p">.</span><span class="nx">injectedStyles</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/{{regionClass}}/g</span><span class="p">,</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">config</span><span class="p">.</span><span class="nx">regionClass</span><span class="p">)</span>
+      <span class="nx">jQuery</span><span class="p">(</span><span class="s2">&quot;&lt;style mercury-styles=\&quot;true\&quot;&gt;&quot;</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="nx">stylesToInject</span><span class="p">).</span><span class="nx">appendTo</span><span class="p">(</span><span class="nx">@document</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;head&#39;</span><span class="p">))</span></pre></div>
       </td>
     </tr>
     <tr id='section-3'>
@@ -99,13 +104,18 @@ todo: look into <code>context</code> options for ajax as an alternative</p>
       <td class=code>
         <div class='highlight'><pre>      <span class="nv">iframeWindow = </span><span class="nx">@iframe</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span><span class="nx">contentWindow</span>
       <span class="nv">jQuery.globalEval = </span><span class="nf">(data) -&gt;</span> <span class="p">(</span><span class="nx">iframeWindow</span><span class="p">.</span><span class="nx">execScript</span> <span class="o">||</span> <span class="nf">(data) -&gt;</span> <span class="nx">iframeWindow</span><span class="p">[</span><span class="s2">&quot;eval&quot;</span><span class="p">].</span><span class="nx">call</span><span class="p">(</span><span class="nx">iframeWindow</span><span class="p">,</span> <span class="nx">data</span><span class="p">))(</span><span class="nx">data</span><span class="p">)</span> <span class="k">if</span> <span class="p">(</span><span class="nx">data</span> <span class="o">&amp;&amp;</span> <span class="sr">/\S/</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="nx">data</span><span class="p">))</span>
+
       <span class="nv">iframeWindow.Mercury = </span><span class="nx">Mercury</span>
+      <span class="nv">iframeWindow.History = </span><span class="nx">History</span> <span class="k">if</span> <span class="nb">window</span><span class="p">.</span><span class="nx">History</span> <span class="o">&amp;&amp;</span> <span class="nx">History</span><span class="p">.</span><span class="nx">Adapter</span>
 
       <span class="nx">@bindEvents</span><span class="p">()</span>
       <span class="nx">@resize</span><span class="p">()</span>
       <span class="nx">@initializeRegions</span><span class="p">()</span>
       <span class="nx">@finalizeInterface</span><span class="p">()</span>
       <span class="nx">Mercury</span><span class="p">.</span><span class="nx">trigger</span><span class="p">(</span><span class="s1">&#39;ready&#39;</span><span class="p">)</span>
+      <span class="nx">jQuery</span><span class="p">(</span><span class="nx">iframeWindow</span><span class="p">).</span><span class="nx">trigger</span><span class="p">(</span><span class="s1">&#39;mercury:ready&#39;</span><span class="p">)</span>
+      <span class="nx">iframeWindow</span><span class="p">.</span><span class="nx">Event</span><span class="p">.</span><span class="nx">fire</span><span class="p">(</span><span class="nx">iframeWindow</span><span class="p">,</span> <span class="s1">&#39;mercury:ready&#39;</span><span class="p">)</span> <span class="k">if</span> <span class="nx">iframeWindow</span><span class="p">.</span><span class="nx">Event</span> <span class="o">&amp;&amp;</span> <span class="nx">iframeWindow</span><span class="p">.</span><span class="nx">Event</span><span class="p">.</span><span class="nx">fire</span>
+      <span class="nx">iframeWindow</span><span class="p">.</span><span class="nx">onMercuryReady</span><span class="p">()</span> <span class="k">if</span> <span class="nx">iframeWindow</span><span class="p">.</span><span class="nx">onMercuryReady</span>
 
       <span class="nx">@iframe</span><span class="p">.</span><span class="nx">css</span><span class="p">({</span><span class="nv">visibility: </span><span class="s1">&#39;visible&#39;</span><span class="p">})</span>
     <span class="k">catch</span> <span class="nx">error</span>
@@ -113,7 +123,7 @@ todo: look into <code>context</code> options for ajax as an alternative</p>
 
 
   <span class="nv">initializeRegions: </span><span class="o">-&gt;</span>
-    <span class="nx">@buildRegion</span><span class="p">(</span><span class="nx">jQuery</span><span class="p">(</span><span class="nx">region</span><span class="p">))</span> <span class="k">for</span> <span class="nx">region</span> <span class="k">in</span> <span class="nx">jQuery</span><span class="p">(</span><span class="s1">&#39;.mercury-region&#39;</span><span class="p">,</span> <span class="nx">@document</span><span class="p">)</span>
+    <span class="nx">@buildRegion</span><span class="p">(</span><span class="nx">jQuery</span><span class="p">(</span><span class="nx">region</span><span class="p">))</span> <span class="k">for</span> <span class="nx">region</span> <span class="k">in</span> <span class="nx">jQuery</span><span class="p">(</span><span class="s2">&quot;.#{Mercury.config.regionClass}&quot;</span><span class="p">,</span> <span class="nx">@document</span><span class="p">)</span>
     <span class="k">return</span> <span class="nx">unless</span> <span class="nx">@options</span><span class="p">.</span><span class="nx">visible</span>
     <span class="k">for</span> <span class="nx">region</span> <span class="k">in</span> <span class="nx">@regions</span>
       <span class="k">if</span> <span class="nx">region</span><span class="p">.</span><span class="nx">focus</span>
@@ -131,6 +141,9 @@ todo: look into <code>context</code> options for ajax as an alternative</p>
 
 
   <span class="nv">finalizeInterface: </span><span class="o">-&gt;</span>
+    <span class="vi">@santizerElement = </span><span class="nx">jQuery</span><span class="p">(</span><span class="s1">&#39;&lt;div&gt;&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nv">id: </span><span class="s1">&#39;mercury_sanitizer&#39;</span><span class="p">,</span> <span class="nv">contenteditable: </span><span class="s1">&#39;true&#39;</span><span class="p">,</span> <span class="nv">style: </span><span class="s1">&#39;position:fixed;width:100px;height:100px;top:-100px;left:-100px;opacity:0&#39;</span><span class="p">})</span>
+    <span class="nx">@santizerElement</span><span class="p">.</span><span class="nx">appendTo</span><span class="p">(</span><span class="nx">@options</span><span class="p">.</span><span class="nx">appendTo</span> <span class="o">?</span> <span class="nx">@document</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;body&#39;</span><span class="p">))</span>
+
     <span class="vi">@snippetToolbar = </span><span class="k">new</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">SnippetToolbar</span><span class="p">(</span><span class="nx">@document</span><span class="p">)</span>
 
     <span class="nx">@hijackLinksAndForms</span><span class="p">()</span>
@@ -150,7 +163,7 @@ todo: look into <code>context</code> options for ajax as an alternative</p>
     <span class="nx">@document</span><span class="p">.</span><span class="nx">mousedown</span> <span class="nf">(event) -&gt;</span>
       <span class="nx">Mercury</span><span class="p">.</span><span class="nx">trigger</span><span class="p">(</span><span class="s1">&#39;hide:dialogs&#39;</span><span class="p">)</span>
       <span class="k">if</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">region</span>
-        <span class="nx">Mercury</span><span class="p">.</span><span class="nx">trigger</span><span class="p">(</span><span class="s1">&#39;unfocus:regions&#39;</span><span class="p">)</span> <span class="nx">unless</span> <span class="nx">jQuery</span><span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">target</span><span class="p">).</span><span class="nx">closest</span><span class="p">(</span><span class="s1">&#39;.mercury-region&#39;</span><span class="p">).</span><span class="nx">get</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">==</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">region</span><span class="p">.</span><span class="nx">element</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="nx">Mercury</span><span class="p">.</span><span class="nx">trigger</span><span class="p">(</span><span class="s1">&#39;unfocus:regions&#39;</span><span class="p">)</span> <span class="nx">unless</span> <span class="nx">jQuery</span><span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">target</span><span class="p">).</span><span class="nx">closest</span><span class="p">(</span><span class="s2">&quot;.#{Mercury.config.regionClass}&quot;</span><span class="p">).</span><span class="nx">get</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">==</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">region</span><span class="p">.</span><span class="nx">element</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 
     <span class="nx">jQuery</span><span class="p">(</span><span class="nb">window</span><span class="p">).</span><span class="nx">resize</span> <span class="o">=&gt;</span> <span class="nx">@resize</span><span class="p">()</span>
     <span class="nb">window</span><span class="p">.</span><span class="nv">onbeforeunload = </span><span class="nx">@beforeUnload</span>
@@ -196,7 +209,7 @@ todo: look into <code>context</code> options for ajax as an alternative</p>
         <span class="k">if</span> <span class="nx">jQuery</span><span class="p">(</span><span class="nx">element</span><span class="p">).</span><span class="nx">hasClass</span><span class="p">(</span><span class="nx">classname</span><span class="p">)</span>
           <span class="nv">ignored = </span><span class="kc">true</span>
           <span class="k">continue</span>
-      <span class="k">if</span> <span class="o">!</span><span class="nx">ignored</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="nx">element</span><span class="p">.</span><span class="nx">target</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span> <span class="o">||</span> <span class="nx">element</span><span class="p">.</span><span class="nx">target</span> <span class="o">==</span> <span class="s1">&#39;_self&#39;</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">jQuery</span><span class="p">(</span><span class="nx">element</span><span class="p">).</span><span class="nx">closest</span><span class="p">(</span><span class="s1">&#39;.mercury-region&#39;</span><span class="p">).</span><span class="nx">length</span>
+      <span class="k">if</span> <span class="o">!</span><span class="nx">ignored</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="nx">element</span><span class="p">.</span><span class="nx">target</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span> <span class="o">||</span> <span class="nx">element</span><span class="p">.</span><span class="nx">target</span> <span class="o">==</span> <span class="s1">&#39;_self&#39;</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">jQuery</span><span class="p">(</span><span class="nx">element</span><span class="p">).</span><span class="nx">closest</span><span class="p">(</span><span class="s2">&quot;.#{Mercury.config.regionClass}&quot;</span><span class="p">).</span><span class="nx">length</span>
         <span class="nx">jQuery</span><span class="p">(</span><span class="nx">element</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="s1">&#39;target&#39;</span><span class="p">,</span> <span class="s1">&#39;_top&#39;</span><span class="p">)</span>
 
 
@@ -206,15 +219,23 @@ todo: look into <code>context</code> options for ajax as an alternative</p>
     <span class="k">return</span> <span class="kc">null</span>
 
 
+  <span class="nv">getRegionByName: </span><span class="nf">(id) -&gt;</span>
+    <span class="k">for</span> <span class="nx">region</span> <span class="k">in</span> <span class="nx">@regions</span>
+      <span class="k">return</span> <span class="nx">region</span> <span class="k">if</span> <span class="nx">region</span><span class="p">.</span><span class="nx">name</span> <span class="o">==</span> <span class="nx">id</span>
+    <span class="k">return</span> <span class="kc">null</span>
+
+
   <span class="nv">save: </span><span class="o">-&gt;</span>
     <span class="nv">url = </span><span class="nx">@saveUrl</span> <span class="o">?</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">saveURL</span> <span class="o">?</span> <span class="nx">@iframeSrc</span><span class="p">()</span>
     <span class="nv">data = </span><span class="nx">@serialize</span><span class="p">()</span>
     <span class="nx">Mercury</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;saving&#39;</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span>
     <span class="nv">data = </span><span class="nx">jQuery</span><span class="p">.</span><span class="nx">toJSON</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="nx">unless</span> <span class="nx">@options</span><span class="p">.</span><span class="nx">saveStyle</span> <span class="o">==</span> <span class="s1">&#39;form&#39;</span>
+    <span class="nv">method = </span><span class="s1">&#39;PUT&#39;</span> <span class="k">if</span> <span class="nx">@options</span><span class="p">.</span><span class="nx">saveMethod</span> <span class="o">==</span> <span class="s1">&#39;PUT&#39;</span>
     <span class="nx">jQuery</span><span class="p">.</span><span class="nx">ajax</span> <span class="nx">url</span><span class="p">,</span> <span class="p">{</span>
-      <span class="nv">type: </span><span class="s1">&#39;POST&#39;</span>
+      <span class="nv">type: </span><span class="nx">method</span> <span class="o">||</span> <span class="s1">&#39;POST&#39;</span>
+      <span class="nv">dataType: </span><span class="nx">@options</span><span class="p">.</span><span class="nx">saveDataType</span> <span class="o">||</span> <span class="s1">&#39;json&#39;</span>
       <span class="nv">headers: </span><span class="nx">@saveHeaders</span><span class="p">()</span>
-      <span class="nv">data: </span><span class="p">{</span><span class="nv">content: </span><span class="nx">data</span><span class="p">}</span>
+      <span class="nv">data: </span><span class="p">{</span><span class="nv">content: </span><span class="nx">data</span><span class="p">,</span> <span class="nv">_method: </span><span class="nx">method</span><span class="p">}</span>
       <span class="nv">success: </span><span class="o">=&gt;</span>
         <span class="nv">Mercury.changes = </span><span class="kc">false</span>
       <span class="nv">error: </span><span class="o">=&gt;</span>

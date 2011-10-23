@@ -1,6 +1,8 @@
 @Mercury.modalHandlers.htmlEditor = ->
   # fill the text area with the content
-  @element.find('textarea').val(Mercury.region.content(null, true, false))
+  content = Mercury.region.content(null, true, false)
+#  content = jQuery.htmlClean(content, {format: true, replace: [], allowedClasses: ['mercury-snippet']})
+  @element.find('textarea').val(content)
 
   # replace the contents on form submit
   @element.find('form').submit (event) =>

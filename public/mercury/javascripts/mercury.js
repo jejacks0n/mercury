@@ -22,82 +22,20 @@
  * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
+ *
+ * Add all requires for the support libraries that integrate nicely with Mercury Editor.
+ * require mercury/support/history
+ *
+ * Require Mercury Editor itself.
+ *
+ * Add all requires for plugins that extend or change the behavior of Mercury Editor.
+ * require mercury/plugins/save_as_xml/plugin.js
  */
 
 window.MercurySetup = {
 
   // # Mercury Configuration
   config: {
-    // ## Hijacking Links & Forms
-    //
-    // Mercury will hijack links and forms that don't have a target set, or the target is set to _self and will set it
-    // to _top.  This is because the target must be set properly for Mercury to not get in the way of some
-    // functionality, like proper page loads on form submissions etc.  Mercury doesn't do this to links or forms that
-    // are within editable regions because it doesn't want to impact the html that's saved.  With that being explained,
-    // you can add classes to links or forms that you don't want this behavior added to.  Let's say you have links that
-    // open a lightbox style window, and you don't want the targets of these to be set to _top.  You can add classes to
-    // this array, and they will be ignored when the hijacking is applied.
-    nonHijackableClasses: [],
-
-
-    // ## Ajax and CSRF Headers
-    //
-    // Some server frameworks require that you provide a specific header for Ajax requests.  The values for these CSRF
-    // tokens are typically stored in the rendered DOM.  By default, Mercury will look for the Rails specific meta tag,
-    // and provide the X-CSRF-Token header on Ajax requests, but you can modify this configuration if the system you're
-    // using doesn't follow the same standard.
-    csrfSelector: 'meta[name="csrf-token"]',
-    csrfHeader: 'X-CSRF-Token',
-
-
-    // ## Pasting (in Chrome/Safari)
-    //
-    // When copying content using webkit, it embeds all the user defined styles (from the css files) into the html
-    // style attributes directly.  When pasting this content into HTML5 contentEditable elements it leaves these
-    // intact.  This can be a desired feature, or an annoyance, so you can enable it or disable it here.  This means
-    // that copying something from a webkit based browser and pasting it into something like firefox will also result in
-    // these extra style attributes.  Cleaning the styles out impacts performance when pasting, and because of browser
-    // restrictions on getting pasted content (which is stupid) we have to fall back to a less performant method off
-    // figuring out what was pasted.  This seems to cause issues if you try and paste several things in a row, which
-    // seems to happen a lot when people are testing the demo.  Because of this it's disabled by default, but is
-    // recommended if you're using webkit.
-    // Go signin and vote to change this: http://www.google.com/support/forum/p/Chrome/thread?tid=3399afd053d5a29c&hl=en
-    cleanStylesOnPaste: false,
-
-
-    // ## Snippet Options and Preview
-    //
-    // When a user drags a snippet onto the page they'll be prompted to enter options for the given snippet.  The server
-    // is expected to respond with a form.  Once the user submits this form, an Ajax request is sent to the server with
-    // the options provided; this preview request is expected to respond with the rendered markup for the snippet.
-    //
-    // Name will be replaced with the snippet name (eg. example)
-    snippets: {
-      method: 'POST',
-      optionsUrl: '/mercury/snippets/:name/options.html',
-      previewUrl: '/mercury/snippets/:name/preview.html'
-      },
-
-
-    // ## Image Uploading
-    //
-    // If you drag images (while pressing shift) from your desktop into regions that support it, it will be uploaded
-    // to the server and inserted into the region.  This configuration allows you to specify if you want to
-    // disable/enable this feature, the accepted mime-types, file size restrictions, and other things related to
-    // uploading.  You can optionally provide a handler function that takes the response from the server and returns an
-    // object: {image: {url: '[your provided url]'}
-    //
-    // **Note:** Image uploading is only supported in some region types.
-    uploading: {
-      enabled: true,
-      allowedMimeTypes: ['image/jpeg', 'image/gif', 'image/png'],
-      maxFileSize: 1235242880,
-      inputName: 'image[image]',
-      url: '/images',
-      handler: false
-      },
-
-
     // ## Toolbars
     //
     // This is where you can customize the toolbars by adding or removing buttons, or changing them and their
@@ -252,17 +190,127 @@ window.MercurySetup = {
       },
 
 
+    // ## Hijacking Links & Forms
+    //
+    // Mercury will hijack links and forms that don't have a target set, or the target is set to _self and will set it
+    // to _top.  This is because the target must be set properly for Mercury to not get in the way of some
+    // functionality, like proper page loads on form submissions etc.  Mercury doesn't do this to links or forms that
+    // are within editable regions because it doesn't want to impact the html that's saved.  With that being explained,
+    // you can add classes to links or forms that you don't want this behavior added to.  Let's say you have links that
+    // open a lightbox style window, and you don't want the targets of these to be set to _top.  You can add classes to
+    // this array, and they will be ignored when the hijacking is applied.
+    nonHijackableClasses: [],
+
+
+    // ## Ajax and CSRF Headers
+    //
+    // Some server frameworks require that you provide a specific header for Ajax requests.  The values for these CSRF
+    // tokens are typically stored in the rendered DOM.  By default, Mercury will look for the Rails specific meta tag,
+    // and provide the X-CSRF-Token header on Ajax requests, but you can modify this configuration if the system you're
+    // using doesn't follow the same standard.
+    csrfSelector: 'meta[name="csrf-token"]',
+    csrfHeader: 'X-CSRF-Token',
+
+
+    // ## Pasting & Sanitizing
+    //
+    // When pasting content into Mercury it may sometimes contain HTML tags and attributes.  This markup is used to
+    // style the content and makes the pasted content look (and behave) the same as the original content.  This can be a
+    // desired feature or an annoyance, so you can enable various sanitizing methods to clean the content when it's
+    // pasted.
+    //
+    // ### Sanitizing options:
+    // - false: no sanitizing is done, the content is pasted the exact same as it was copied by the user
+    // - 'whitelist': content is cleaned using the settings specified in the tag white list (described below)
+    // - 'text': all html is stripped before pasting, leaving only the raw text
+    //
+    // ### Using the whitelist configuration
+    //
+    // The white list allows you to specify tags and attributes that are allowed when pasting content.  Each item in
+    // this object should contain the allowed tag, and an array of attributes that are allowed on that tag.  If the
+    // allowed attributes array is empty, all attributes will be removed.  If a tag is not present in this list, it will
+    // be removed, but without removing any of the text or tags inside it.
+    //
+    // **Note:** Content is *always* sanitized if looks like it's from MS Word or similar editors regardless of this
+    // configuration.
+    pasting: {
+      sanitize: 'whitelist',
+      whitelist: {
+        h1:     [],
+        h2:     [],
+        h3:     [],
+        h4:     [],
+        h5:     [],
+        h6:     [],
+        table:  [],
+        thead:  [],
+        tbody:  [],
+        tfoot:  [],
+        tr:     [],
+        th:     ['colspan', 'rowspan'],
+        td:     ['colspan', 'rowspan'],
+        div:    ['class'],
+        span:   ['class'],
+        b:      [],
+        bold:   [],
+        i:      [],
+        em:     [],
+        u:      [],
+        strike: [],
+        br:     [],
+        p:      [],
+        hr:     [],
+        a:      ['href', 'target', 'title', 'name'],
+        img:    ['src', 'title', 'alt']
+        }
+      },
+
+
+    // ## Snippet Options and Preview
+    //
+    // When a user drags a snippet onto the page they'll be prompted to enter options for the given snippet.  The server
+    // is expected to respond with a form.  Once the user submits this form, an Ajax request is sent to the server with
+    // the options provided; this preview request is expected to respond with the rendered markup for the snippet.
+    //
+    // Name will be replaced with the snippet name (eg. example)
+    snippets: {
+      method: 'POST',
+      optionsUrl: '/mercury/snippets/:name/options.html',
+      previewUrl: '/mercury/snippets/:name/preview.html'
+      },
+
+
+    // ## Image Uploading
+    //
+    // If you drag images (while pressing shift) from your desktop into regions that support it, it will be uploaded
+    // to the server and inserted into the region.  This configuration allows you to specify if you want to
+    // disable/enable this feature, the accepted mime-types, file size restrictions, and other things related to
+    // uploading.  You can optionally provide a handler function that takes the response from the server and returns an
+    // object: {image: {url: '[your provided url]'}
+    //
+    // **Note:** Image uploading is only supported in some region types, and some browsers.
+    uploading: {
+      enabled: true,
+      allowedMimeTypes: ['image/jpeg', 'image/gif', 'image/png'],
+      maxFileSize: 1235242880,
+      inputName: 'image[image]',
+      url: '/images',
+      handler: false
+      },
+
+
     // ## Behaviors
     //
     // Behaviors are used to change the default behaviors of a given region type when a given button is clicked.  For
     // example, you may prefer to add HR tags using an HR wrapped within a div with a classname (for styling).  You
     // can add your own complex behaviors here.
     //
-    // You can see how the behavior matches up directly with the button name.  It's also important to note that the
+    // You can see how the behavior matches up directly with the button names.  It's also important to note that the
     // callback functions are executed within the scope of the given region, so you have access to all it's methods.
+    // Here's some examples to help you get started.
     behaviors: {
-      horizontalRule: function(selection) { selection.replace('<hr/>') },
-      htmlEditor: function() { Mercury.modal('/mercury/modals/htmleditor.html', { title: 'HTML Editor', fullHeight: true, handler: 'htmlEditor' }) }
+      //foreColor: function(selection, options) { selection.wrap('<span style="color:' + options.value.toHex() + '">', true) },
+      htmlEditor: function() { Mercury.modal('/mercury/modals/htmleditor.html', { title: 'HTML Editor', fullHeight: true, handler: 'htmlEditor' }); }
       },
 
 
@@ -276,19 +324,32 @@ window.MercurySetup = {
     // and
     // Mercury.Toolbar.ButtonGroup.contexts
 
+    
+    // ## Region Class
+    //
+    // Mercury identifies editable regions by a region class.  This class has to be added in your HTML in advance, and
+    // is the only real Mercury code/naming exposed in the implementation of Mercury.  To allow this to be as
+    // configurable as possible, you can set the name of the class here.  When switching to preview mode, this
+    // configuration is used to generate a class to indicate that Mercury is in preview mode -- which will be this
+    // class with '-preview' appended (so, mercury-region-preview by default)
+    regionClass: 'mercury-region',
 
+    
     // ## Styles
     //
     // Mercury tries to stay as much out of your code as possible, but because regions appear within your document we
     // need to include a few styles to indicate regions, as well as the different states of them (eg. focused).  These
     // styles are injected into your document, and as simple as they might be, you may want to change them.  You can do
-    // so here.
+    // so here.  {{regionClass}} will be automatically replaced with whatever you have set in the regionClass
+    // configuration directive.
     injectedStyles: '' +
-      '.mercury-region, .mercury-textarea { min-height: 10px; outline: 1px dotted #09F }' +
+      '.{{regionClass}} { min-height: 10px; outline: 1px dotted #09F } ' +
+      '.{{regionClass}}:focus, .{{regionClass}}.focus { outline: none; -webkit-box-shadow: 0 0 10px #09F, 0 0 1px #045; box-shadow: 0 0 10px #09F, 0 0 1px #045 }' +
+      '.{{regionClass}}:after { content: "."; display: block; visibility: hidden; clear: both; height: 0; overflow: hidden; }' +
+      '.{{regionClass}} table, .{{regionClass}} td, .{{regionClass}} th { border: 1px dotted red; }' +
       '.mercury-textarea { box-sizing: border-box; -moz-box-sizing: border-box; -webkit-box-sizing: border-box; resize: vertical; }' +
-      '.mercury-region:focus, .mercury-region.focus, .mercury-textarea.focus { outline: none; -webkit-box-shadow: 0 0 10px #09F, 0 0 1px #045; box-shadow: 0 0 10px #09F, 0 0 1px #045 }' +
-      '.mercury-region:after { content: "."; display: block; visibility: hidden; clear: both; height: 0; overflow: hidden; }' +
-      '.mercury-region table, .mercury-region td, .mercury-region th { border: 1px dotted red; }'
+      '.mercury-textarea { min-height: 10px; outline: 1px dotted #09F }' +
+      '.mercury-textarea:focus, .mercury-textarea.focus { outline: none; -webkit-box-shadow: 0 0 10px #09F, 0 0 1px #045; box-shadow: 0 0 10px #09F, 0 0 1px #045 }'
   },
 
   // ## Silent Mode
@@ -10653,6 +10714,534 @@ jQuery.extend(jQuery.easing, {
   var _meta = {'\b': '\\b', '\t': '\\t', '\n': '\\n', '\f': '\\f', '\r': '\\r', '"' : '\\"', '\\': '\\\\'};
 })(jQuery);
 /*
+ HTML Clean for jQuery
+ Anthony Johnston
+ http://www.antix.co.uk
+
+ version 1.2.3
+
+ $Revision: 51 $
+
+ requires jQuery http://jquery.com
+
+ Use and distibution http://www.opensource.org/licenses/bsd-license.php
+
+ 2010-04-02 allowedTags/removeTags added (white/black list) thanks to David Wartian (Dwartian)
+ 2010-06-30 replaceStyles added for replacement of bold, italic, super and sub styles on a tag
+ 2010-07-01 notRenderedTags added, where tags are to be removed but their contents are kept
+ */
+
+(function ($) {
+  $.fn.htmlClean = function (options) {
+    // iterate and html clean each matched element
+    return this.each(function () {
+      if (this.value) {
+        this.value = $.htmlClean(this.value, options);
+      } else {
+        this.innerHTML = $.htmlClean(this.innerHTML, options);
+      }
+    });
+  };
+
+  // clean the passed html
+  $.htmlClean = function (html, options) {
+    options = $.extend({}, $.htmlClean.defaults, options);
+
+    var tagsRE = /<(\/)?(\w+:)?([\w]+)([^>]*)>/gi;
+    var attrsRE = /(\w+)=(".*?"|'.*?'|[^\s>]*)/gi;
+
+    var tagMatch;
+    var root = new Element();
+    var stack = [root];
+    var container = root;
+
+    if (options.bodyOnly) {
+      // check for body tag
+      if (tagMatch = /<body[^>]*>((\n|.)*)<\/body>/i.exec(html)) {
+        html = tagMatch[1];
+      }
+    }
+    html = html.concat("<xxx>"); // ensure last element/text is found
+    var lastIndex;
+
+    while (tagMatch = tagsRE.exec(html)) {
+      var tag = new Tag(tagMatch[3], tagMatch[1], tagMatch[4], options);
+
+      // add the text
+      var text = html.substring(lastIndex, tagMatch.index);
+      if (text.length > 0) {
+        var child = container.children[container.children.length - 1];
+        if (container.children.length > 0 && isText(child = container.children[container.children.length - 1])) {
+          // merge text
+          container.children[container.children.length - 1] = child.concat(text);
+        } else {
+          container.children.push(text);
+        }
+      }
+      lastIndex = tagsRE.lastIndex;
+
+      if (tag.isClosing) {
+        // find matching container
+        if (pop(stack, [tag.name])) {
+          stack.pop();
+          container = stack[stack.length - 1];
+        }
+      } else {
+        // create a new element
+        var element = new Element(tag);
+
+        // add attributes
+        var attrMatch;
+        while (attrMatch = attrsRE.exec(tag.rawAttributes)) {
+          // check style attribute and do replacements
+          if (attrMatch[1].toLowerCase() == "style" && options.replaceStyles) {
+
+            var renderParent = !tag.isInline;
+            for (var i = 0; i < options.replaceStyles.length; i++) {
+              if (options.replaceStyles[i][0].test(attrMatch[2])) {
+
+                if (!renderParent) {
+                  tag.render = false;
+                  renderParent = true;
+                }
+                container.children.push(element); // assumes not replaced
+                stack.push(element);
+                container = element; // assumes replacement is a container
+                // create new tag and element
+                tag = new Tag(options.replaceStyles[i][1], "", "", options);
+                element = new Element(tag);
+              }
+            }
+          }
+
+          if (tag.allowedAttributes != null
+            && (tag.allowedAttributes.length == 0
+            || $.inArray(attrMatch[1], tag.allowedAttributes) > -1)) {
+            element.attributes.push(new Attribute(attrMatch[1], attrMatch[2]));
+          }
+        }
+
+        // add required empty ones
+        $.each(tag.requiredAttributes, function () {
+          var name = this.toString();
+          if (!element.hasAttribute(name)) element.attributes.push(new Attribute(name, ""));
+        });
+
+        // check for replacements
+        for (var repIndex = 0; repIndex < options.replace.length; repIndex++) {
+          for (var tagIndex = 0; tagIndex < options.replace[repIndex][0].length; tagIndex++) {
+            var byName = typeof (options.replace[repIndex][0][tagIndex]) == "string";
+            if ((byName && options.replace[repIndex][0][tagIndex] == tag.name)
+              || (!byName && options.replace[repIndex][0][tagIndex].test(tagMatch))) {
+              // don't render this tag
+              tag.render = false;
+              container.children.push(element);
+              stack.push(element);
+              container = element;
+
+              // render new tag, keep attributes
+              tag = new Tag(options.replace[repIndex][1], tagMatch[1], tagMatch[4], options);
+              element = new Element(tag);
+              element.attributes = container.attributes;
+
+              repIndex = options.replace.length; // break out of both loops
+              break;
+            }
+          }
+        }
+
+        // check container rules
+        var add = true;
+        if (!container.isRoot) {
+          if (container.tag.isInline && !tag.isInline) {
+            add = false;
+          } else if (container.tag.disallowNest && tag.disallowNest
+            && !tag.requiredParent) {
+            add = false;
+          } else if (tag.requiredParent) {
+            if (add = pop(stack, tag.requiredParent)) {
+              container = stack[stack.length - 1];
+            }
+          }
+        }
+
+        if (add) {
+          container.children.push(element);
+
+          if (tag.toProtect) {
+            // skip to closing tag
+            var tagMatch2 = null;
+            while (tagMatch2 = tagsRE.exec(html)) {
+              var tag2 = new Tag(tagMatch2[3], tagMatch2[1], tagMatch2[4], options);
+              if (tag2.isClosing && tag2.name == tag.name) {
+                element.children.push(RegExp.leftContext.substring(lastIndex));
+                lastIndex = tagsRE.lastIndex;
+                break;
+              }
+            }
+          } else {
+            // set as current container element
+            if (!tag.isSelfClosing && !tag.isNonClosing) {
+              stack.push(element);
+              container = element;
+            }
+          }
+        }
+      }
+    }
+
+    // render doc
+    return render(root, options).join("");
+  };
+
+  // defaults
+  $.htmlClean.defaults = {
+    // only clean the body tagbody
+    bodyOnly: true,
+    // only allow tags in this array, (white list), contents still rendered
+    allowedTags: [],
+    // remove tags in this array, (black list), contents still rendered
+    removeTags: ["basefont", "center", "dir", "font", "frame", "frameset", "iframe", "isindex", "menu", "noframes", "s", "strike", "u"],
+    // array of attribute names to remove on all elements in addition to those not in tagAttributes e.g ["width", "height"]
+    removeAttrs: [],
+    // array of [className], [optional array of allowed on elements] e.g. [["class"], ["anotherClass", ["p", "dl"]]]
+    allowedClasses: [],
+    // tags not rendered, contents remain
+    notRenderedTags: [],
+    // format the result
+    format: false,
+    // format indent to start on
+    formatIndent: 0,
+    // tags to replace, and what to replace with, tag name or regex to match the tag and attributes
+    replace: [
+      [
+        ["b", "big"],
+        "strong"
+      ],
+      [
+        ["i"],
+        "em"
+      ]
+    ],
+    // styles to replace with tags, multiple style matches supported, inline tags are replaced by the first match blocks are retained
+    replaceStyles: [
+      [/font-weight:\s*bold/i, "strong"],
+      [/font-style:\s*italic/i, "em"],
+      [/vertical-align:\s*super/i, "sup"],
+      [/vertical-align:\s*sub/i, "sub"]
+    ]
+  };
+
+  function applyFormat(element, options, output, indent) {
+    if (!element.tag.isInline && output.length > 0) {
+      output.push("\n");
+      for (var i = 0; i < indent; i++) output.push("\t");
+    }
+  }
+
+  function render(element, options) {
+    var output = [],
+        empty = element.attributes.length == 0,
+        indent = 0,
+        outputChildren = null;
+
+    // don't render if not in allowedTags or in removeTags
+    var renderTag
+      = element.tag.render
+      && (options.allowedTags.length == 0 || $.inArray(element.tag.name, options.allowedTags) > -1)
+      && (options.removeTags.length == 0 || $.inArray(element.tag.name, options.removeTags) == -1);
+
+    if (!element.isRoot && renderTag) {
+      // render opening tag
+      output.push("<");
+      output.push(element.tag.name);
+      $.each(element.attributes, function () {
+        if ($.inArray(this.name, options.removeAttrs) == -1) {
+          var m = new RegExp(/^(['"]?)(.*?)['"]?$/).exec(this.value);
+          var value = m[2];
+          var valueQuote = m[1] || "'";
+
+          // check for classes allowed
+          if (this.name == "class") {
+            value =
+              $.grep(value.split(" "), function (c) {
+                return $.grep(options.allowedClasses,
+                  function (a) {
+                    return a[0] == c && (a.length == 1 || $.inArray(element.tag.name, a[1]) > -1);
+                  }).length > 0;
+              })
+                .join(" ");
+            valueQuote = "'";
+          }
+
+          if (value != null && (value.length > 0 || $.inArray(this.name, element.tag.requiredAttributes) > -1)) {
+            output.push(" ");
+            output.push(this.name);
+            output.push("=");
+            output.push(valueQuote);
+            output.push(value);
+            output.push(valueQuote);
+          }
+        }
+      });
+    }
+
+    if (element.tag.isSelfClosing) {
+      // self closing
+      if (renderTag) output.push(" />");
+      empty = false;
+    } else if (element.tag.isNonClosing) {
+      empty = false;
+    } else {
+      if (!element.isRoot && renderTag) {
+        // close
+        output.push(">");
+      }
+
+      indent = options.formatIndent++;
+
+      // render children
+      if (element.tag.toProtect) {
+        outputChildren = $.htmlClean.trim(element.children.join("")).replace(/<br>/ig, "\n");
+        output.push(outputChildren);
+        empty = outputChildren.length == 0;
+        options.formatIndent--;
+      } else {
+        outputChildren = [];
+        for (var i = 0; i < element.children.length; i++) {
+          var child = element.children[i];
+          var text = $.htmlClean.trim(textClean(isText(child) ? child : child.childrenToString()));
+          if (isInline(child)) {
+            if (i > 0 && text.length > 0
+              && (startsWithWhitespace(child) || endsWithWhitespace(element.children[i - 1]))) {
+              outputChildren.push(" ");
+            }
+          }
+          if (isText(child)) {
+            if (text.length > 0) {
+              outputChildren.push(text);
+            }
+          } else {
+            // don't allow a break to be the last child
+            if (i != element.children.length - 1 || child.tag.name != "br") {
+              if (options.format) applyFormat(child, options, outputChildren, indent);
+              outputChildren = outputChildren.concat(render(child, options));
+            }
+          }
+        }
+        options.formatIndent--;
+
+        if (outputChildren.length > 0) {
+          if (options.format && outputChildren[0] != "\n") applyFormat(element, options, output, indent);
+          output = output.concat(outputChildren);
+          empty = false;
+        }
+      }
+
+      if (!element.isRoot && renderTag) {
+        // render the closing tag
+        if (options.format) applyFormat(element, options, output, indent - 1);
+        output.push("</");
+        output.push(element.tag.name);
+        output.push(">");
+      }
+    }
+
+    // check for empty tags
+    if (!element.tag.allowEmpty && empty) {
+      return [];
+    }
+
+    return output;
+  }
+
+  // find a matching tag, and pop to it, if not do nothing
+  function pop(stack, tagNameArray, index) {
+    index = index || 1;
+    if ($.inArray(stack[stack.length - index].tag.name, tagNameArray) > -1) {
+      return true;
+    } else if (stack.length - (index + 1) > 0
+      && pop(stack, tagNameArray, index + 1)) {
+      stack.pop();
+      return true;
+    }
+    return false;
+  }
+
+  // Element Object
+  function Element(tag) {
+    if (tag) {
+      this.tag = tag;
+      this.isRoot = false;
+    } else {
+      this.tag = new Tag("root");
+      this.isRoot = true;
+    }
+    this.attributes = [];
+    this.children = [];
+
+    this.hasAttribute = function (name) {
+      for (var i = 0; i < this.attributes.length; i++) {
+        if (this.attributes[i].name == name) return true;
+      }
+      return false;
+    };
+
+    this.childrenToString = function () {
+      return this.children.join("");
+    };
+
+    return this;
+  }
+
+  // Attribute Object
+  function Attribute(name, value) {
+    this.name = name;
+    this.value = value;
+
+    return this;
+  }
+
+  // Tag object
+  function Tag(name, close, rawAttributes, options) {
+    this.name = name.toLowerCase();
+
+    this.isSelfClosing = $.inArray(this.name, tagSelfClosing) > -1;
+    this.isNonClosing = $.inArray(this.name, tagNonClosing) > -1;
+    this.isClosing = (close != undefined && close.length > 0);
+
+    this.isInline = $.inArray(this.name, tagInline) > -1;
+    this.disallowNest = $.inArray(this.name, tagDisallowNest) > -1;
+    this.requiredParent = tagRequiredParent[$.inArray(this.name, tagRequiredParent) + 1];
+    this.allowEmpty = $.inArray(this.name, tagAllowEmpty) > -1;
+
+    this.toProtect = $.inArray(this.name, tagProtect) > -1;
+
+    this.rawAttributes = rawAttributes;
+    this.allowedAttributes = tagAttributes[$.inArray(this.name, tagAttributes) + 1];
+    this.requiredAttributes = tagAttributesRequired[$.inArray(this.name, tagAttributesRequired) + 1];
+
+    this.render = options && $.inArray(this.name, options.notRenderedTags) == -1;
+
+    return this;
+  }
+
+  function startsWithWhitespace(item) {
+    while (isElement(item) && item.children.length > 0) {
+      item = item.children[0]
+    }
+    return isText(item) && item.length > 0 && $.htmlClean.isWhitespace(item.charAt(0));
+  }
+
+  function endsWithWhitespace(item) {
+    while (isElement(item) && item.children.length > 0) {
+      item = item.children[item.children.length - 1]
+    }
+    return isText(item) && item.length > 0 && $.htmlClean.isWhitespace(item.charAt(item.length - 1));
+  }
+
+  function isText(item) {
+    return item.constructor == String;
+  }
+
+  function isInline(item) {
+    return isText(item) || item.tag.isInline;
+  }
+
+  function isElement(item) {
+    return item.constructor == Element;
+  }
+
+  function textClean(text) {
+    return text.replace(/&nbsp;|\n/g, " ").replace(/\s\s+/g, " ");
+  }
+
+  // trim off white space, doesn't use regex
+  $.htmlClean.trim = function (text) {
+    return $.htmlClean.trimStart($.htmlClean.trimEnd(text));
+  };
+  $.htmlClean.trimStart = function (text) {
+    return text.substring($.htmlClean.trimStartIndex(text));
+  };
+  $.htmlClean.trimStartIndex = function (text) {
+    for (var start = 0; start < text.length - 1 && $.htmlClean.isWhitespace(text.charAt(start)); start++);
+    return start;
+  };
+  $.htmlClean.trimEnd = function (text) {
+    return text.substring(0, $.htmlClean.trimEndIndex(text));
+  };
+  $.htmlClean.trimEndIndex = function (text) {
+    for (var end = text.length - 1; end >= 0 && $.htmlClean.isWhitespace(text.charAt(end)); end--);
+    return end + 1;
+  };
+  // checks a char is white space or not
+  $.htmlClean.isWhitespace = function (c) {
+    return $.inArray(c, whitespace) != -1;
+  };
+
+  // tags which are inline
+  var tagInline = [
+    "a", "abbr", "acronym", "address", "b", "big", "br", "button",
+    "caption", "cite", "code", "del", "em", "font",
+    "hr", "i", "input", "img", "ins", "label", "legend", "map", "q",
+    "samp", "select", "small", "span", "strong", "sub", "sup",
+    "tt", "var"];
+  var tagDisallowNest = ["h1", "h2", "h3", "h4", "h5", "h6", "p", "th", "td"];
+  var tagAllowEmpty = ["th", "td"];
+  var tagRequiredParent = [
+    null,
+    "li", ["ul", "ol"],
+    "dt", ["dl"],
+    "dd", ["dl"],
+    "td", ["tr"],
+    "th", ["tr"],
+    "tr", ["table", "thead", "tbody", "tfoot"],
+    "thead", ["table"],
+    "tbody", ["table"],
+    "tfoot", ["table"]
+  ];
+  var tagProtect = ["script", "style", "pre", "code"];
+  // tags which self close e.g. <br />
+  var tagSelfClosing = ["br", "hr", "img", "link", "meta"];
+  // tags which do not close
+  var tagNonClosing = ["!doctype", "?xml"];
+  // attributes allowed on tags
+  var tagAttributes = [
+    ["class"], // default, for all tags not mentioned
+    "?xml", [],
+    "!doctype", [],
+    "a", ["accesskey", "class", "href", "name", "title", "rel", "rev", "type", "tabindex"],
+    "abbr", ["class", "title"],
+    "acronym", ["class", "title"],
+    "blockquote", ["cite", "class"],
+    "button", ["class", "disabled", "name", "type", "value"],
+    "del", ["cite", "class", "datetime"],
+    "form", ["accept", "action", "class", "enctype", "method", "name"],
+    "input", ["accept", "accesskey", "alt", "checked", "class", "disabled", "ismap", "maxlength", "name", "size", "readonly", "src", "tabindex", "type", "usemap", "value"],
+    "img", ["alt", "class", "height", "src", "width"],
+    "ins", ["cite", "class", "datetime"],
+    "label", ["accesskey", "class", "for"],
+    "legend", ["accesskey", "class"],
+    "link", ["href", "rel", "type"],
+    "meta", ["content", "http-equiv", "name", "scheme"],
+    "map", ["name"],
+    "optgroup", ["class", "disabled", "label"],
+    "option", ["class", "disabled", "label", "selected", "value"],
+    "q", ["class", "cite"],
+    "td", ["colspan", "rowspan"],
+    "th", ["colspan", "rowspan"],
+    "script", ["src", "type"],
+    "select", ["class", "disabled", "multiple", "name", "size", "tabindex"],
+    "style", ["type"],
+    "table", ["class", "summary"],
+    "textarea", ["accesskey", "class", "cols", "disabled", "name", "readonly", "rows", "tabindex"]
+  ];
+  var tagAttributesRequired = [[], "img", ["alt"]];
+  // white space chars
+  var whitespace = [" ", " ", "\t", "\n", "\r", "\f"];
+
+})(jQuery);
+/*
  * LiquidMetal, version: 0.1 (2009-02-05)
  *
  * A mimetic poly-alloy of Quicksilver's scoring algorithm, essentially
@@ -12084,7 +12673,7 @@ Showdown.converter = function() {
 (function() {
   this.Mercury || (this.Mercury = {});
   jQuery.extend(this.Mercury, {
-    version: '0.2.1',
+    version: '0.2.3',
     supported: document.getElementById && document.designMode && !jQuery.browser.konqueror && !jQuery.browser.msie,
     Regions: {},
     modalHandlers: {},
@@ -12092,11 +12681,11 @@ Showdown.converter = function() {
     dialogHandlers: {},
     preloadedViews: {},
     bind: function(eventName, callback) {
-      return jQuery(document).bind("mercury:" + eventName, callback);
+      return jQuery(top).bind("mercury:" + eventName, callback);
     },
     trigger: function(eventName, options) {
       Mercury.log(eventName, options);
-      return jQuery(document).trigger("mercury:" + eventName, options);
+      return jQuery(top).trigger("mercury:" + eventName, options);
     },
     log: function() {
       if (Mercury.debug && console) {
@@ -12123,28 +12712,6 @@ Showdown.converter = function() {
     return this.replace(/rgba?\((\d+)[\s|\,]?\s(\d+)[\s|\,]?\s(\d+)\)/gi, function(a, r, g, b) {
       return "#" + (parseInt(r).toHex()) + (parseInt(g).toHex()) + (parseInt(b).toHex());
     });
-  };
-  String.prototype.singleDiff = function(that) {
-    var char, diff, index, re, _len;
-    diff = '';
-    for (index = 0, _len = that.length; index < _len; index++) {
-      char = that[index];
-      if (char === 'each') {
-        break;
-      }
-      if (char !== this[index]) {
-        re = new RegExp(this.substr(index).regExpEscape().replace(/^\s+|^(&nbsp;)+/g, '') + '$', 'm');
-        diff = that.substr(index).replace(re, '');
-        break;
-      }
-    }
-    return diff;
-  };
-  String.prototype.regExpEscape = function() {
-    var escaped, specials;
-    specials = ['/', '.', '*', '+', '?', '|', '(', ')', '[', ']', '{', '}', '\\'];
-    escaped = new RegExp('(\\' + specials.join('|\\') + ')', 'g');
-    return this.replace(escaped, '\\$1');
   };
   String.prototype.sanitizeHTML = function() {
     var content, element;
@@ -12177,6 +12744,14 @@ Showdown.converter = function() {
       return "" + bytes + " bytes";
     }
   };
+  window.originalSetTimeout = window.setTimeout;
+  window.setTimeout = function(arg1, arg2) {
+    if (typeof arg1 === 'number') {
+      return window.originalSetTimeout(arg2, arg1);
+    } else {
+      return window.originalSetTimeout(arg1, arg2);
+    }
+  };
 }).call(this);
 (function() {
   var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
@@ -12205,16 +12780,15 @@ Showdown.converter = function() {
     PageEditor.prototype.initializeInterface = function() {
       var _ref, _ref2;
       this.focusableElement = jQuery('<input>', {
-        type: 'text',
-        style: 'position:absolute;opacity:0'
+        "class": 'mercury-focusable',
+        type: 'text'
       }).appendTo((_ref = this.options.appendTo) != null ? _ref : 'body');
       this.iframe = jQuery('<iframe>', {
         id: 'mercury_iframe',
         "class": 'mercury-iframe',
         seamless: 'true',
         frameborder: '0',
-        src: 'about:blank',
-        style: 'position:absolute;top:0;width:100%;visibility:hidden'
+        src: 'about:blank'
       });
       this.iframe.appendTo((_ref2 = jQuery(this.options.appendTo).get(0)) != null ? _ref2 : 'body');
       this.iframe.load(__bind(function() {
@@ -12225,14 +12799,18 @@ Showdown.converter = function() {
       return this.statusbar = new Mercury.Statusbar(this.options);
     };
     PageEditor.prototype.initializeFrame = function() {
-      var iframeWindow;
+      var iframeWindow, stylesToInject;
       try {
         if (this.iframe.data('loaded')) {
           return;
         }
         this.iframe.data('loaded', true);
+        if (jQuery.browser.opera) {
+          alert("Opera isn't a fully supported browser, your results may not be optimal.");
+        }
         this.document = jQuery(this.iframe.get(0).contentWindow.document);
-        jQuery("<style mercury-styles=\"true\">").html(Mercury.config.injectedStyles).appendTo(this.document.find('head'));
+        stylesToInject = Mercury.config.injectedStyles.replace(/{{regionClass}}/g, Mercury.config.regionClass);
+        jQuery("<style mercury-styles=\"true\">").html(stylesToInject).appendTo(this.document.find('head'));
         iframeWindow = this.iframe.get(0).contentWindow;
         jQuery.globalEval = function(data) {
           if (data && /\S/.test(data)) {
@@ -12242,12 +12820,21 @@ Showdown.converter = function() {
           }
         };
         iframeWindow.Mercury = Mercury;
-        iframeWindow["eval"].call(iframeWindow, "history.pushState = function(obj, title, url) { top.history.pushState(obj, title, url) }");
+        if (window.History && History.Adapter) {
+          iframeWindow.History = History;
+        }
         this.bindEvents();
         this.resize();
         this.initializeRegions();
         this.finalizeInterface();
         Mercury.trigger('ready');
+        jQuery(iframeWindow).trigger('mercury:ready');
+        if (iframeWindow.Event && iframeWindow.Event.fire) {
+          iframeWindow.Event.fire(iframeWindow, 'mercury:ready');
+        }
+        if (iframeWindow.onMercuryReady) {
+          iframeWindow.onMercuryReady();
+        }
         return this.iframe.css({
           visibility: 'visible'
         });
@@ -12257,7 +12844,7 @@ Showdown.converter = function() {
     };
     PageEditor.prototype.initializeRegions = function() {
       var region, _i, _j, _len, _len2, _ref, _ref2, _results;
-      _ref = jQuery('.mercury-region', this.document);
+      _ref = jQuery("." + Mercury.config.regionClass, this.document);
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         region = _ref[_i];
         this.buildRegion(jQuery(region));
@@ -12289,6 +12876,13 @@ Showdown.converter = function() {
       }
     };
     PageEditor.prototype.finalizeInterface = function() {
+      var _ref;
+      this.santizerElement = jQuery('<div>', {
+        id: 'mercury_sanitizer',
+        contenteditable: 'true',
+        style: 'position:fixed;width:100px;height:100px;top:-100px;left:-100px;opacity:0'
+      });
+      this.santizerElement.appendTo((_ref = this.options.appendTo) != null ? _ref : this.document.find('body'));
       this.snippetToolbar = new Mercury.SnippetToolbar(this.document);
       this.hijackLinksAndForms();
       if (!this.options.visible) {
@@ -12320,7 +12914,7 @@ Showdown.converter = function() {
       this.document.mousedown(function(event) {
         Mercury.trigger('hide:dialogs');
         if (Mercury.region) {
-          if (jQuery(event.target).closest('.mercury-region').get(0) !== Mercury.region.element.get(0)) {
+          if (jQuery(event.target).closest("." + Mercury.config.regionClass).get(0) !== Mercury.region.element.get(0)) {
             return Mercury.trigger('unfocus:regions');
           }
         }
@@ -12385,13 +12979,24 @@ Showdown.converter = function() {
             continue;
           }
         }
-        _results.push(!ignored && (element.target === '' || element.target === '_self') && !jQuery(element).closest('.mercury-region').length ? jQuery(element).attr('target', '_top') : void 0);
+        _results.push(!ignored && (element.target === '' || element.target === '_self') && !jQuery(element).closest("." + Mercury.config.regionClass).length ? jQuery(element).attr('target', '_top') : void 0);
       }
       return _results;
     };
     PageEditor.prototype.beforeUnload = function() {
       if (Mercury.changes && !Mercury.silent) {
         return "You have unsaved changes.  Are you sure you want to leave without saving them first?";
+      }
+      return null;
+    };
+    PageEditor.prototype.getRegionByName = function(id) {
+      var region, _i, _len, _ref;
+      _ref = this.regions;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        region = _ref[_i];
+        if (region.name === id) {
+          return region;
+        }
       }
       return null;
     };
@@ -12408,8 +13013,7 @@ Showdown.converter = function() {
       }
       return jQuery.ajax(url, {
         type: method || 'POST',
-        contentType: 'application/json',
-        dataType: 'json',
+        dataType: this.options.saveDataType || 'json',
         headers: this.saveHeaders(),
         data: {
           content: data,
@@ -14770,13 +15374,13 @@ Showdown.converter = function() {
     Region.prototype.togglePreview = function() {
       if (this.previewing) {
         this.previewing = false;
-        this.element.addClass('mercury-region').removeClass('mercury-region-preview');
+        this.element.addClass(Mercury.config.regionClass).removeClass("" + Mercury.config.regionClass + "-preview");
         if (Mercury.region === this) {
           return this.focus();
         }
       } else {
         this.previewing = true;
-        this.element.addClass('mercury-region-preview').removeClass('mercury-region');
+        this.element.addClass("" + Mercury.config.regionClass + "-preview").removeClass(Mercury.config.regionClass);
         return Mercury.trigger('region:blurred', {
           region: this
         });
@@ -15222,7 +15826,7 @@ Showdown.converter = function() {
         this.focus();
         return Mercury.uploader(event.originalEvent.dataTransfer.files[0]);
       }, this));
-      this.element.bind('possible:drop', __bind(function(event) {
+      this.element.bind('possible:drop', __bind(function() {
         var snippet;
         if (this.previewing) {
           return;
@@ -15233,8 +15837,7 @@ Showdown.converter = function() {
           return this.document.execCommand('undo', false, null);
         }
       }, this));
-      this.element.bind('paste', __bind(function() {
-        var content;
+      this.element.bind('paste', __bind(function(event) {
         if (this.previewing) {
           return;
         }
@@ -15249,11 +15852,7 @@ Showdown.converter = function() {
           return;
         }
         Mercury.changes = true;
-        content = this.element.html().replace(/^\s+|\s+$/g, '');
-        clearTimeout(this.handlePasteTimeout);
-        return this.handlePasteTimeout = setTimeout((__bind(function() {
-          return this.handlePaste(content);
-        }, this)), 400);
+        return this.handlePaste(event.originalEvent);
       }, this));
       this.element.focus(__bind(function() {
         if (this.previewing) {
@@ -15304,7 +15903,7 @@ Showdown.converter = function() {
         });
       }, this));
       this.element.keydown(__bind(function(event) {
-        var container, handled;
+        var container;
         if (this.previewing) {
           return;
         }
@@ -15322,10 +15921,10 @@ Showdown.converter = function() {
             }
             return;
           case 13:
-            if (jQuery.browser.webkit && this.selection().commonAncestor().closest('li, ul', this.element).length === 0) {
+            if (jQuery.browser.webkit && this.selection().commonAncestor().closest('li, ul, ol', this.element).length === 0) {
               event.preventDefault();
-              this.document.execCommand('insertLineBreak', false, null);
-            } else if (this.specialContainer) {
+              this.document.execCommand('insertParagraph', false, null);
+            } else if (this.specialContainer || jQuery.browser.opera) {
               event.preventDefault();
               this.document.execCommand('insertHTML', false, '<br/>');
             }
@@ -15333,16 +15932,13 @@ Showdown.converter = function() {
           case 9:
             event.preventDefault();
             container = this.selection().commonAncestor();
-            handled = false;
             if (container.closest('li', this.element).length) {
-              handled = true;
-              if (event.shiftKey) {
-                this.execCommand('outdent');
-              } else {
+              if (!event.shiftKey) {
                 this.execCommand('indent');
+              } else if (container.parents('ul, ol').length > 1) {
+                this.execCommand('outdent');
               }
-            }
-            if (!handled) {
+            } else {
               this.execCommand('insertHTML', {
                 value: '&nbsp; '
               });
@@ -15541,40 +16137,77 @@ Showdown.converter = function() {
       }
       return element;
     };
-    Editable.prototype.handlePaste = function(prePasteContent) {
-      var cleaned, container, content, pasted;
-      this.pasting = true;
-      prePasteContent = prePasteContent.replace(/^\<br\>/, '');
-      this.element.find('.mercury-region').remove();
-      content = this.content();
-      if (content.indexOf('<!--StartFragment-->') > -1 || content.indexOf('="mso-') > -1 || content.indexOf('<o:') > -1 || content.indexOf('="Mso') > -1) {
-        cleaned = prePasteContent.singleDiff(this.content()).sanitizeHTML();
-        try {
-          this.document.execCommand('undo', false, null);
-          this.execCommand('insertHTML', {
-            value: cleaned
-          });
-        } catch (error) {
-          this.content(prePasteContent);
-          Mercury.modal('/mercury/modals/sanitizer', {
-            title: 'HTML Sanitizer (Starring Clippy)',
-            afterLoad: function() {
-              return this.element.find('textarea').val(cleaned.replace(/<br\/>/g, '\n'));
-            }
-          });
-        }
-      } else if (Mercury.config.cleanStylesOnPaste) {
-        pasted = prePasteContent.singleDiff(this.content());
-        container = jQuery('<div>').appendTo(this.document.createDocumentFragment()).html(pasted);
-        container.find('[style]').attr({
-          style: null
-        });
-        this.document.execCommand('undo', false, null);
+    Editable.prototype.handlePaste = function(event) {
+      var sanitizer, selection;
+      if (Mercury.config.pasting.sanitize === 'text' && event.clipboardData) {
         this.execCommand('insertHTML', {
-          value: container.html()
+          value: event.clipboardData.getData('text/plain')
         });
+        event.preventDefault();
+      } else {
+        console.debug('testing');
+        selection = this.selection();
+        selection.placeMarker();
+        sanitizer = jQuery('#mercury_sanitizer', this.document).focus();
+        return setTimeout(1, __bind(function() {
+          var content;
+          content = this.sanitize(sanitizer);
+          selection.selectMarker(this.element);
+          selection.removeMarker();
+          this.element.focus();
+          return this.execCommand('insertHTML', {
+            value: content
+          });
+        }, this));
       }
-      return this.pasting = false;
+    };
+    Editable.prototype.sanitize = function(sanitizer) {
+      var allowed, allowedAttributes, allowedTag, attr, content, element, index, _i, _len, _len2, _ref, _ref2, _ref3;
+      sanitizer.find("." + Mercury.config.regionClass).remove();
+      if (Mercury.config.pasting.sanitize) {
+        switch (Mercury.config.pasting.sanitize) {
+          case 'blacklist':
+            sanitizer.find('[style]').removeAttr('style');
+            sanitizer.find('[class="Apple-style-span"]').removeClass('Apple-style-span');
+            content = sanitizer.html();
+            break;
+          case 'whitelist':
+            _ref = sanitizer.find('*');
+            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+              element = _ref[_i];
+              allowed = false;
+              _ref2 = Mercury.config.pasting.whitelist;
+              for (allowedTag in _ref2) {
+                allowedAttributes = _ref2[allowedTag];
+                if (element.tagName.toLowerCase() === allowedTag.toLowerCase()) {
+                  allowed = true;
+                  _ref3 = element.attributes;
+                  for (index = 0, _len2 = _ref3.length; index < _len2; index++) {
+                    attr = _ref3[index];
+                    if (attr && allowedAttributes.indexOf(attr.name) === -1) {
+                      jQuery(element).attr(attr.name, null);
+                    }
+                  }
+                  break;
+                }
+              }
+              if (!allowed) {
+                jQuery(element).replaceWith(jQuery(element).contents());
+              }
+            }
+            content = sanitizer.html();
+            break;
+          default:
+            content = sanitizer.text();
+        }
+      } else {
+        content = sanitizer.html();
+        if (content.indexOf('<!--StartFragment-->') > -1 || content.indexOf('="mso-') > -1 || content.indexOf('<o:') > -1 || content.indexOf('="Mso') > -1) {
+          content = sanitizer.text();
+        }
+      }
+      sanitizer.html('');
+      return content;
     };
     Editable.actions = {
       insertRowBefore: function() {
@@ -15612,6 +16245,9 @@ Showdown.converter = function() {
       },
       redo: function() {
         return this.content(this.history.redo());
+      },
+      horizontalRule: function() {
+        return this.execCommand('insertHorizontalRule');
       },
       removeFormatting: function(selection) {
         return selection.insertTextNode(selection.textContent());
@@ -15718,7 +16354,7 @@ Showdown.converter = function() {
     Selection.prototype.is = function(elementType) {
       var content;
       content = this.content();
-      if (content.childNodes.length === 1 && jQuery(content.firstChild).is(elementType)) {
+      if (jQuery(content).length === 1 && jQuery(content.firstChild).is(elementType)) {
         return jQuery(content.firstChild);
       }
       return false;
@@ -15739,7 +16375,7 @@ Showdown.converter = function() {
           lastChild = element.lastChild;
           element.lastChild.textContent = '\00';
         } else {
-          lastChild = this.context.createTextNode(' ');
+          lastChild = this.context.createTextNode('\00');
           element.appendChild(lastChild);
         }
       }
@@ -15816,7 +16452,7 @@ Showdown.converter = function() {
       }
       return this.selection.addRange(this.range);
     };
-    Selection.prototype.replace = function(element) {
+    Selection.prototype.replace = function(element, collapse) {
       if (element.get) {
         element = element.get(0);
       }
@@ -15826,7 +16462,10 @@ Showdown.converter = function() {
       this.range.deleteContents();
       this.range.insertNode(element);
       this.range.selectNodeContents(element);
-      return this.selection.addRange(this.range);
+      this.selection.addRange(this.range);
+      if (collapse) {
+        return this.range.collapse(false);
+      }
     };
     return Selection;
   })();
@@ -15869,7 +16508,7 @@ Showdown.converter = function() {
         fontSize: '14px'
       });
       this.element.empty().append(this.textarea);
-      this.element.removeClass('mercury-region');
+      this.element.removeClass(Mercury.config.regionClass);
       this.previewElement = jQuery('<div>', this.document);
       this.element.append(this.previewElement);
       this.element = this.textarea;
@@ -16637,7 +17276,9 @@ Showdown.converter = function() {
 (function() {
   var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
   this.Mercury.modalHandlers.htmlEditor = function() {
-    this.element.find('textarea').val(Mercury.region.content(null, true, false));
+    var content;
+    content = Mercury.region.content(null, true, false);
+    this.element.find('textarea').val(content);
     return this.element.find('form').submit(__bind(function(event) {
       var value;
       event.preventDefault();
@@ -16902,7 +17543,7 @@ Showdown.converter = function() {
       var cell;
       cell = jQuery(event.target);
       table = cell.closest('table');
-      table.find('.selected').removeClass('selected');
+      table.find('.selected').removeAttr('class');
       cell.addClass('selected');
       return Mercury.tableEditor(table, cell, '&nbsp;');
     }, this));
@@ -16953,7 +17594,7 @@ Showdown.converter = function() {
     return this.element.find('form').submit(__bind(function(event) {
       var html, value;
       event.preventDefault();
-      table.find('.selected').removeClass('selected');
+      table.find('.selected').removeAttr('class');
       table.find('td, th').html('&nbsp;');
       html = jQuery('<div>').html(table).html();
       value = html.replace(/^\s+|\n/gm, '').replace(/(<\/.*?>|<table.*?>|<tbody>|<tr>)/g, '$1\n');

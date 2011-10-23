@@ -52,29 +52,11 @@
           <a class="pilcrow" href="#section-2">&#182;</a>
         </div>
         <p>todo: we should handle alpha as well</p>
-
       </td>
       <td class=code>
         <div class='highlight'><pre>  <span class="k">return</span> <span class="err">@</span> <span class="k">if</span> <span class="err">@</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;#&#39;</span>
   <span class="nx">@replace</span> <span class="sr">/rgba?\((\d+)[\s|\,]?\s(\d+)[\s|\,]?\s(\d+)\)/gi</span><span class="p">,</span> <span class="nf">(a, r, g, b) -&gt;</span>
     <span class="s2">&quot;##{parseInt(r).toHex()}#{parseInt(g).toHex()}#{parseInt(b).toHex()}&quot;</span>
-
-
-<span class="nb">String</span><span class="o">::</span><span class="nv">singleDiff = </span><span class="nf">(that) -&gt;</span>
-  <span class="nv">diff = </span><span class="s1">&#39;&#39;</span>
-  <span class="k">for</span> <span class="nx">char</span><span class="p">,</span> <span class="nx">index</span> <span class="k">in</span> <span class="nx">that</span>
-    <span class="k">break</span> <span class="k">if</span> <span class="nx">char</span> <span class="o">==</span> <span class="s1">&#39;each&#39;</span>
-    <span class="k">if</span> <span class="nx">char</span> <span class="o">!=</span> <span class="err">@</span><span class="p">[</span><span class="nx">index</span><span class="p">]</span>
-      <span class="nv">re = </span><span class="k">new</span> <span class="nb">RegExp</span><span class="p">(</span><span class="nx">@substr</span><span class="p">(</span><span class="nx">index</span><span class="p">).</span><span class="nx">regExpEscape</span><span class="p">().</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/^\s+|^(&amp;nbsp;)+/g</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;$&#39;</span><span class="p">,</span> <span class="s1">&#39;m&#39;</span><span class="p">)</span>
-      <span class="nv">diff = </span><span class="nx">that</span><span class="p">.</span><span class="nx">substr</span><span class="p">(</span><span class="nx">index</span><span class="p">).</span><span class="nx">replace</span><span class="p">(</span><span class="nx">re</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
-      <span class="k">break</span>
-  <span class="k">return</span> <span class="nx">diff</span>
-
-
-<span class="nb">String</span><span class="o">::</span><span class="nv">regExpEscape = </span><span class="o">-&gt;</span>
-  <span class="nv">specials = </span><span class="p">[</span><span class="s1">&#39;/&#39;</span><span class="p">,</span><span class="s1">&#39;.&#39;</span><span class="p">,</span><span class="s1">&#39;*&#39;</span><span class="p">,</span><span class="s1">&#39;+&#39;</span><span class="p">,</span><span class="s1">&#39;?&#39;</span><span class="p">,</span><span class="s1">&#39;|&#39;</span><span class="p">,</span><span class="s1">&#39;(&#39;</span><span class="p">,</span><span class="s1">&#39;)&#39;</span><span class="p">,</span><span class="s1">&#39;[&#39;</span><span class="p">,</span><span class="s1">&#39;]&#39;</span><span class="p">,</span><span class="s1">&#39;{&#39;</span><span class="p">,</span><span class="s1">&#39;}&#39;</span><span class="p">,</span><span class="s1">&#39;\\&#39;</span><span class="p">]</span>
-  <span class="nv">escaped = </span><span class="k">new</span> <span class="nb">RegExp</span><span class="p">(</span><span class="s1">&#39;(\\&#39;</span> <span class="o">+</span> <span class="nx">specials</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="s1">&#39;|\\&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;)&#39;</span><span class="p">,</span> <span class="s1">&#39;g&#39;</span><span class="p">)</span>
-  <span class="k">return</span> <span class="nx">@replace</span><span class="p">(</span><span class="nx">escaped</span><span class="p">,</span> <span class="s1">&#39;\\$1&#39;</span><span class="p">)</span>
 
 
 <span class="nb">String</span><span class="o">::</span><span class="nv">sanitizeHTML = </span><span class="o">-&gt;</span>
@@ -97,6 +79,20 @@
     <span class="nx">bytes</span> <span class="err">/= 1024</span>
     <span class="nx">i</span> <span class="o">+=</span> <span class="mi">1</span>
   <span class="k">return</span> <span class="k">if</span> <span class="nx">i</span> <span class="k">then</span> <span class="s2">&quot;#{bytes.toFixed(2)}#{[&#39;&#39;, &#39; kb&#39;, &#39; Mb&#39;, &#39; Gb&#39;, &#39; Tb&#39;, &#39; Pb&#39;, &#39; Eb&#39;][i]}&quot;</span> <span class="k">else</span> <span class="s2">&quot;#{bytes} bytes&quot;</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-3'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-3">&#182;</a>
+        </div>
+        <p>make setTimeout not suck for coffeescript</p>
+
+      </td>
+      <td class=code>
+        <div class='highlight'><pre><span class="nb">window</span><span class="p">.</span><span class="nv">originalSetTimeout = </span><span class="nb">window</span><span class="p">.</span><span class="nx">setTimeout</span>
+<span class="nb">window</span><span class="p">.</span><span class="nv">setTimeout = </span><span class="nf">(arg1, arg2) -&gt;</span>
+  <span class="k">if</span> <span class="k">typeof</span><span class="p">(</span><span class="nx">arg1</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;number&#39;</span> <span class="k">then</span> <span class="nb">window</span><span class="p">.</span><span class="nx">originalSetTimeout</span><span class="p">(</span><span class="nx">arg2</span><span class="p">,</span> <span class="nx">arg1</span><span class="p">)</span> <span class="k">else</span> <span class="nb">window</span><span class="p">.</span><span class="nx">originalSetTimeout</span><span class="p">(</span><span class="nx">arg1</span><span class="p">,</span> <span class="nx">arg2</span><span class="p">)</span></pre></div>
       </td>
     </tr>
   </table>

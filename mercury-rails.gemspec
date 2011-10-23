@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "mercury-rails"
-  s.version = "0.2.0"
+  s.version = "0.2.3"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Jeremy Jackson"]
-  s.date = "2011-10-10"
+  s.date = "2011-10-23"
   s.description = "A fully featured and advanced HTML5 WYSIWYG editor written in CoffeeScript on top of Rails 3.1"
   s.email = "jejacks0n@gmail.com"
   s.extra_rdoc_files = [
@@ -31,7 +31,6 @@ Gem::Specification.new do |s|
     "app/views/mercury/modals/htmleditor.html",
     "app/views/mercury/modals/link.html",
     "app/views/mercury/modals/media.html",
-    "app/views/mercury/modals/sanitizer.html",
     "app/views/mercury/modals/table.html",
     "app/views/mercury/palettes/backcolor.html",
     "app/views/mercury/palettes/forecolor.html",
@@ -46,6 +45,7 @@ Gem::Specification.new do |s|
     "config/routes.rb",
     "db/migrate/20110526035601_create_images.rb",
     "features/loading/loading.feature",
+    "features/loading/navigating.feature",
     "features/loading/user_interface.feature",
     "features/regions/editable/advanced_editing.feature",
     "features/regions/editable/basic_editing.feature",
@@ -148,7 +148,6 @@ Gem::Specification.new do |s|
     "spec/javascripts/templates/mercury/tooltip.html",
     "spec/javascripts/templates/mercury/uploader.html",
     "vendor/assets/images/mercury/button.png",
-    "vendor/assets/images/mercury/clippy.png",
     "vendor/assets/images/mercury/close.png",
     "vendor/assets/images/mercury/default-snippet.png",
     "vendor/assets/images/mercury/loading-dark.gif",
@@ -175,6 +174,7 @@ Gem::Specification.new do |s|
     "vendor/assets/javascripts/mercury/dependencies/jquery-1.6.js",
     "vendor/assets/javascripts/mercury/dependencies/jquery-ui-1.8.13.custom.js",
     "vendor/assets/javascripts/mercury/dependencies/jquery.additions.js",
+    "vendor/assets/javascripts/mercury/dependencies/jquery.htmlClean.js",
     "vendor/assets/javascripts/mercury/dependencies/liquidmetal.js",
     "vendor/assets/javascripts/mercury/dependencies/showdown.js",
     "vendor/assets/javascripts/mercury/dialog.js.coffee",

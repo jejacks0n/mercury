@@ -19,14 +19,14 @@ Feature:
     Then the modal window should be visible
     And I should see "Insert Media (images and videos)" within the modal title
 
-    When I fill in "URL" with "/assets/mercury/clippy.png"
+    When I fill in "URL" with "/assets/mercury/temp-logo.png"
     And press "Insert Media"
-    Then the contents of the editable region should be "this is <img src='/assets/mercury/clippy.png'> <b>content</b>"
+    Then the contents of the editable region should be "this is <img src='/assets/mercury/temp-logo.png'> <b>content</b>"
     And the modal window should not be visible
 
     When I make a selection for "img"
     And click on the "Insert Media" button
-    Then the "media_image_url" field should contain "/assets/mercury/clippy.png"
+    Then the "media_image_url" field should contain "/assets/mercury/temp-logo.png"
 
     When I fill in "URL" with "/assets/mercury/default-snippet.png"
     And press "Insert Media"
@@ -38,16 +38,16 @@ Feature:
     And I make a selection
 
     When I click on the "Insert Media" button
-    When I fill in "media_image_url" with "/assets/mercury/clippy.png"
+    When I fill in "media_image_url" with "/assets/mercury/temp-logo.png"
     And select "Right" from "Alignment"
     And press "Insert Media"
-    Then the contents of the editable region should be "this is <img src='/assets/mercury/clippy.png' align='right'> <b>content</b>"
+    Then the contents of the editable region should be "this is <img src='/assets/mercury/temp-logo.png' align='right'> <b>content</b>"
 
     When I make a selection for "img"
     And click on the "Insert Media" button
     And select "Absolute Middle" from "Alignment"
     And press "Insert Media"
-    Then the contents of the editable region should be "this is <img src='/assets/mercury/clippy.png' align='absmiddle'> <b>content</b>"
+    Then the contents of the editable region should be "this is <img src='/assets/mercury/temp-logo.png' align='absmiddle'> <b>content</b>"
 
 
   Scenario: A user can edit an image by double clicking it
@@ -56,7 +56,7 @@ Feature:
     When I double click on the first image in the editable region
     Then the modal window should be visible
     And I should see "Insert Media (images and videos)" within the modal title
-    And the "media_image_url" field should contain "/assets/mercury/clippy.png"
+    And the "media_image_url" field should contain "/assets/mercury/temp-logo.png"
 
     When I fill in "URL" with "/assets/mercury/default-snippet.png"
     And select "Absolute Middle" from "Alignment"

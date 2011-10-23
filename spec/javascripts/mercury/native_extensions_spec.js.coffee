@@ -15,30 +15,6 @@ describe "String", ->
       expect('rgb(255, 255, 0)'.toHex()).toEqual('#FFFF00')
 
 
-  describe "#singleDiff", ->
-
-    it "takes a string to compare against, and returns the first diff it comes to", ->
-      expect('abcdefg'.singleDiff('ab[diff]cdefg')).toEqual('[diff]')
-      expect('abcd/e\\f.g'.singleDiff('ab[diff]cd/e\\f.g')).toEqual('[diff]')
-
-
-  describe "#regExpEscape", ->
-
-    it "escapes characters used in regular expressions", ->
-      expect('/.*+?|()[]{}\\'.regExpEscape()).toEqual('\\/\\.\\*\\+\\?\\|\\(\\)\\[\\]\\{\\}\\\\')
-
-  describe "#sanitizeHTML", ->
-
-    it "removes style tags", ->
-      expect('123<style></style>456'.sanitizeHTML()).toEqual('123456')
-
-    it "removes comment tags", ->
-      expect('123<!--this is a comment-->456'.sanitizeHTML()).toEqual('123456')
-
-    it "replaces new lines with br tags", ->
-      expect('123\n456'.sanitizeHTML()).toEqual('123<br/>456')
-
-
 describe "Number", ->
 
   describe "#toHex", ->

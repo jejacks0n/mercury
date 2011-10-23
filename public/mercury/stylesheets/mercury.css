@@ -36,6 +36,18 @@ html, body {
   overflow: hidden;
 }
 
+.mercury-iframe {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  visibility: hidden;
+}
+
+.mercury-focusable {
+  position: absolute;
+  opacity: 0;
+}
+
 
 /*
  * Forms
@@ -585,18 +597,6 @@ form fieldset.buttons .commit input:hover {
 #mercury_html_editor .mercury-modal-controls {
   border: 0;
   margin-top: -2px;
-}
-/* html sanitizer (when pasting from msword) */
-#mercury_sanitizer .information {
-  background: url(/assets/mercury/clippy.png) no-repeat top left;
-  min-height: 65px;
-  padding-left: 50px;
-  margin-bottom: 10px;
-}
-#mercury_sanitizer textarea {
-  width: 100%;
-  font-family: monospace;
-  white-space: pre;
 }
 /* character */
 #mercury_character .character {

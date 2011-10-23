@@ -261,7 +261,7 @@ window.MercurySetup = {
         br:     [],
         p:      [],
         hr:     [],
-        a:      ['href', 'target', 'title'],
+        a:      ['href', 'target', 'title', 'name'],
         img:    ['src', 'title', 'alt']
         }
       },

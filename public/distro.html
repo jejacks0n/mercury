@@ -9,6 +9,8 @@
       .mercury-toolbar-container { display: none !important }
     </style>
 
+    <meta name="viewport" content="width=device-width, maximum-scale=1.0, initial-scale=1.0">
+
     <!-- include the loader -->
     <script src="/assets/mercury/support/history.js" type="text/javascript"></script>
     <script src="/mercury/javascripts/mercury_loader.js?pack=bundled&src=/mercury" type="text/javascript"></script>
@@ -56,6 +58,9 @@
         font-weight: 200;
         margin: 15px 0 0 0;
         border-bottom: 1px solid #CCC;
+      }
+      #forms form {
+        display: inline;
       }
       #content {
         min-width: 500px;
@@ -116,12 +121,37 @@
       <li><div onclick="History.forward();">History.forward()</div></li>
     </ul>
 
-    <h1>Form (Method: POST)</h1>
-    <form action="/mercury/test_page" method="post">
-      <input type="text" value="value1" name="name1"/>
-      <input type="text" value="value2" name="name2"/>
-      <input type="submit" value="Submit">
-    </form>
+    <h1>Forms (with various methods and targets)</h1>
+    <div id="forms">
+      <form id="form1" action="/mercury/test_page" method="post" target="_top">
+        <input type="submit" name="commit" value="post _top">
+      </form>
+      <form id="form2" action="/mercury/test_page" method="get" target="_blank">
+        <input type="submit" name="commit" value="post _blank">
+      </form>
+      <form id="form3" action="/mercury/test_page" method="post" target="_self">
+        <input type="submit" name="commit" value="post _self">
+      </form>
+      <form id="form4" action="/mercury/test_page" method="get">
+        <input type="submit" name="commit" value="get [none]">
+      </form>
+      <form id="form5" action="/mercury/test_page" method="post" class="lightview" target="_self">
+        <input type="submit" name="commit" value="post _self .lightview">
+      </form>
+      <form id="form6" action="/mercury/test_page" method="get" target="foo">
+        <input type="submit" name="commit" value="get foo">
+      </form>
+    </div>
+
+    <h1>Links (With various targets)</h1>
+    <div id="links">
+      <a id="anchor1" href="/mercury/test_page" target="_top">_top</a>
+      <a id="anchor2" href="/mercury/test_page" target="_blank">_blank</a>
+      <a id="anchor3" href="/mercury/test_page" target="_self">_self</a>
+      <a id="anchor4" href="/mercury/test_page">[none]</a>
+      <a id="anchor5" href="/mercury/test_page" class="lightview" target="_self">_self .lightview</a>
+      <a id="anchor6" href="/mercury/test_page" target="foo">foo</a>
+    </div>
 
     <h1>Editable region</h1>
     <div id="editable1" class="mercury-region" data-type="editable">
@@ -134,7 +164,7 @@
       <a href="/foo1">l<div>ink with a div in</div> it</a>
 
       <h2>image wrapped in an anchor</h2>
-      <a href="/foo2"><img alt="clippy" src="/assets/mercury/clippy.png"></a>123
+      <a href="/foo2"><img alt="logo" src="/assets/mercury/temp-logo.png"></a>123
 
       <h2>table with header and definition cells</h2>
       <table border="1">
@@ -232,7 +262,7 @@
       <style type="text/css">img { border: 2px solid red}</style>
 
       <h2>image next to content wrapped in an anchor</h2>
-      <img alt="Clippy" src="/assets/mercury/clippy.png"><a href="#bookmark1">link for #bookmark1</a>
+      <img alt="logo" src="/assets/mercury/temp-logo.png"><a href="#bookmark1">link for #bookmark1</a>
 
       <h2>snippet that's pre-loaded</h2>
       <div class="mercury-snippet" data-snippet="snippet_0">snippet0</div>
@@ -244,8 +274,8 @@
       Additional content not wrapped in anything
 
       <h2>youtube and vimeo iframes with content surrounding it</h2>
-      123<iframe style="width: 560px; height: 349px; " src="http://www.youtube.com/embed/0pXYp72dwl0?wmode=transparent" frameborder="0" allowfullscreen="true"></iframe>123321
-      <iframe style="width: 400px; height: 225px; " src="http://player.vimeo.com/video/615344?title=1&amp;byline=1&amp;portrait=0&amp;color=ffffff" frameborder="0"></iframe>123
+      <!--123<iframe style="width: 560px; height: 349px; " src="http://www.youtube.com/embed/0pXYp72dwl0?wmode=transparent" frameborder="0" allowfullscreen="true"></iframe>123321-->
+      <!--<iframe style="width: 400px; height: 225px; " src="http://player.vimeo.com/video/615344?title=1&amp;byline=1&amp;portrait=0&amp;color=ffffff" frameborder="0"></iframe>123-->
     </div>
 
     <h1>Markupable region (with markdown)</h1>
@@ -268,7 +298,7 @@
 [this is a link](foo 'optional title')
 
 ## image ##
-![add alt text](/assets/mercury/clippy.png)
+![add alt text](/assets/mercury/temp-logo.png)
 
 ## snippet that's pre-loaded ##
 [--snippet_1--]

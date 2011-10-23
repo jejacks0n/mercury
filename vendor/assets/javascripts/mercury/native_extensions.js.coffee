@@ -9,23 +9,6 @@ String::toHex = ->
     "##{parseInt(r).toHex()}#{parseInt(g).toHex()}#{parseInt(b).toHex()}"
 
 
-String::singleDiff = (that) ->
-  diff = ''
-  for char, index in that
-    break if char == 'each'
-    if char != @[index]
-      re = new RegExp(@substr(index).regExpEscape().replace(/^\s+|^(&nbsp;)+/g, '') + '$', 'm')
-      diff = that.substr(index).replace(re, '')
-      break
-  return diff
-
-
-String::regExpEscape = ->
-  specials = ['/','.','*','+','?','|','(',')','[',']','{','}','\\']
-  escaped = new RegExp('(\\' + specials.join('|\\') + ')', 'g')
-  return @replace(escaped, '\\$1')
-
-
 String::sanitizeHTML = ->
   element = jQuery('<div>').html(@.toString())
   element.find('style').remove()
@@ -46,3 +29,9 @@ Number::toBytes = ->
     bytes /= 1024
     i += 1
   return if i then "#{bytes.toFixed(2)}#{['', ' kb', ' Mb', ' Gb', ' Tb', ' Pb', ' Eb'][i]}" else "#{bytes} bytes"
+
+
+# make setTimeout not suck for coffeescript
+window.originalSetTimeout = window.setTimeout
+window.setTimeout = (arg1, arg2) ->
+  if typeof(arg1) == 'number' then window.originalSetTimeout(arg2, arg1) else window.originalSetTimeout(arg1, arg2)

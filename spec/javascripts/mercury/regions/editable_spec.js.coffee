@@ -326,26 +326,6 @@ describe "Mercury.Regions.Editable", ->
 
   describe "#handlePaste", ->
 
-    it "removes any regions that might have been pasted", ->
-
-    describe "when it looks like MS word content", ->
-
-      it "calls the native undo to remove the pasted content", ->
-
-      it "inserts the cleaned content (which is the text version of what was pasted)", ->
-
-      describe "when undo throws an exception", ->
-
-        it "sets the content to what it was before the paste", ->
-
-        it "opens a modal (featuring clippy)", ->
-
-    describe "when it's configured to strip styles", ->
-
-      it "calls the native undo to remove the pasted content", ->
-
-      it "strips style attributes from the pasted content and inserts the cleaned html", ->
-
 
 
 describe "Mercury.Regions.Editable.actions", ->

@@ -64,7 +64,15 @@
 <span class="cm"> * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</span>
 <span class="cm"> *</span>
 <span class="cm"> *= require_self</span>
+<span class="cm"> *</span>
+<span class="cm"> * Add all requires for the support libraries that integrate nicely with Mercury Editor.</span>
+<span class="cm"> * require mercury/support/history</span>
+<span class="cm"> *</span>
+<span class="cm"> * Require Mercury Editor itself.</span>
 <span class="cm"> *= require mercury/mercury</span>
+<span class="cm"> *</span>
+<span class="cm"> * Add all requires for plugins that extend or change the behavior of Mercury Editor.</span>
+<span class="cm"> * require mercury/plugins/save_as_xml/plugin.js</span>
 <span class="cm"> */</span>
 <span class="nb">window</span><span class="p">.</span><span class="nx">MercurySetup</span> <span class="o">=</span> <span class="p">{</span></pre></div>
       </td>
@@ -78,111 +86,6 @@
       </td>
       <td class=code>
         <div class='highlight'><pre>  <span class="nx">config</span><span class="o">:</span> <span class="p">{</span></pre></div>
-      </td>
-    </tr>
-    <tr id='section-Hijacking_Links_&amp;amp;_Forms'>
-      <td class=docs>
-        <div class="pilwrap">
-          <a class="pilcrow" href="#section-Hijacking_Links_&amp;amp;_Forms">&#182;</a>
-        </div>
-        <h2>Hijacking Links &amp; Forms</h2>
-
-<p>Mercury will hijack links and forms that don&rsquo;t have a target set, or the target is set to _self and will set it
-to _top.  This is because the target must be set properly for Mercury to not get in the way of some
-functionality, like proper page loads on form submissions etc.  Mercury doesn&rsquo;t do this to links or forms that
-are within editable regions because it doesn&rsquo;t want to impact the html that&rsquo;s saved.  With that being explained,
-you can add classes to links or forms that you don&rsquo;t want this behavior added to.  Let&rsquo;s say you have links that
-open a lightbox style window, and you don&rsquo;t want the targets of these to be set to _top.  You can add classes to
-this array, and they will be ignored when the hijacking is applied.</p>
-      </td>
-      <td class=code>
-        <div class='highlight'><pre>    <span class="nx">nonHijackableClasses</span><span class="o">:</span> <span class="p">[],</span></pre></div>
-      </td>
-    </tr>
-    <tr id='section-Ajax_and_CSRF_Headers'>
-      <td class=docs>
-        <div class="pilwrap">
-          <a class="pilcrow" href="#section-Ajax_and_CSRF_Headers">&#182;</a>
-        </div>
-        <h2>Ajax and CSRF Headers</h2>
-
-<p>Some server frameworks require that you provide a specific header for Ajax requests.  The values for these CSRF
-tokens are typically stored in the rendered DOM.  By default, Mercury will look for the Rails specific meta tag,
-and provide the X-CSRF-Token header on Ajax requests, but you can modify this configuration if the system you&rsquo;re
-using doesn&rsquo;t follow the same standard.</p>
-      </td>
-      <td class=code>
-        <div class='highlight'><pre>    <span class="nx">csrfSelector</span><span class="o">:</span> <span class="s1">&#39;meta[name=&quot;csrf-token&quot;]&#39;</span><span class="p">,</span>
-    <span class="nx">csrfHeader</span><span class="o">:</span> <span class="s1">&#39;X-CSRF-Token&#39;</span><span class="p">,</span></pre></div>
-      </td>
-    </tr>
-    <tr id='section-Pasting_(in_Chrome/Safari)'>
-      <td class=docs>
-        <div class="pilwrap">
-          <a class="pilcrow" href="#section-Pasting_(in_Chrome/Safari)">&#182;</a>
-        </div>
-        <h2>Pasting (in Chrome/Safari)</h2>
-
-<p>When copying content using webkit, it embeds all the user defined styles (from the css files) into the html
-style attributes directly.  When pasting this content into HTML5 contentEditable elements it leaves these
-intact.  This can be a desired feature, or an annoyance, so you can enable it or disable it here.  This means
-that copying something from a webkit based browser and pasting it into something like firefox will also result in
-these extra style attributes.  Cleaning the styles out impacts performance when pasting, and because of browser
-restrictions on getting pasted content (which is stupid) we have to fall back to a less performant method off
-figuring out what was pasted.  This seems to cause issues if you try and paste several things in a row, which
-seems to happen a lot when people are testing the demo.  Because of this it&rsquo;s disabled by default, but is
-recommended if you&rsquo;re using webkit.
-Go signin and vote to change this: http://www.google.com/support/forum/p/Chrome/thread?tid=3399afd053d5a29c&amp;hl=en</p>
-      </td>
-      <td class=code>
-        <div class='highlight'><pre>    <span class="nx">cleanStylesOnPaste</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span></pre></div>
-      </td>
-    </tr>
-    <tr id='section-Snippet_Options_and_Preview'>
-      <td class=docs>
-        <div class="pilwrap">
-          <a class="pilcrow" href="#section-Snippet_Options_and_Preview">&#182;</a>
-        </div>
-        <h2>Snippet Options and Preview</h2>
-
-<p>When a user drags a snippet onto the page they&rsquo;ll be prompted to enter options for the given snippet.  The server
-is expected to respond with a form.  Once the user submits this form, an Ajax request is sent to the server with
-the options provided; this preview request is expected to respond with the rendered markup for the snippet.</p>
-
-<p>Name will be replaced with the snippet name (eg. example)</p>
-      </td>
-      <td class=code>
-        <div class='highlight'><pre>    <span class="nx">snippets</span><span class="o">:</span> <span class="p">{</span>
-      <span class="nx">method</span><span class="o">:</span> <span class="s1">&#39;POST&#39;</span><span class="p">,</span>
-      <span class="nx">optionsUrl</span><span class="o">:</span> <span class="s1">&#39;/mercury/snippets/:name/options.html&#39;</span><span class="p">,</span>
-      <span class="nx">previewUrl</span><span class="o">:</span> <span class="s1">&#39;/mercury/snippets/:name/preview.html&#39;</span>
-      <span class="p">},</span></pre></div>
-      </td>
-    </tr>
-    <tr id='section-Image_Uploading'>
-      <td class=docs>
-        <div class="pilwrap">
-          <a class="pilcrow" href="#section-Image_Uploading">&#182;</a>
-        </div>
-        <h2>Image Uploading</h2>
-
-<p>If you drag images (while pressing shift) from your desktop into regions that support it, it will be uploaded
-to the server and inserted into the region.  This configuration allows you to specify if you want to
-disable/enable this feature, the accepted mime-types, file size restrictions, and other things related to
-uploading.  You can optionally provide a handler function that takes the response from the server and returns an
-object: {image: {url: &lsquo;[your provided url]&rsquo;}</p>
-
-<p><strong>Note:</strong> Image uploading is only supported in some region types.</p>
-      </td>
-      <td class=code>
-        <div class='highlight'><pre>    <span class="nx">uploading</span><span class="o">:</span> <span class="p">{</span>
-      <span class="nx">enabled</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
-      <span class="nx">allowedMimeTypes</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;image/jpeg&#39;</span><span class="p">,</span> <span class="s1">&#39;image/gif&#39;</span><span class="p">,</span> <span class="s1">&#39;image/png&#39;</span><span class="p">],</span>
-      <span class="nx">maxFileSize</span><span class="o">:</span> <span class="mi">1235242880</span><span class="p">,</span>
-      <span class="nx">inputName</span><span class="o">:</span> <span class="s1">&#39;image[image]&#39;</span><span class="p">,</span>
-      <span class="nx">url</span><span class="o">:</span> <span class="s1">&#39;/images&#39;</span><span class="p">,</span>
-      <span class="nx">handler</span><span class="o">:</span> <span class="kc">false</span>
-      <span class="p">},</span></pre></div>
       </td>
     </tr>
     <tr id='section-Toolbars'>
@@ -372,6 +275,153 @@ separator styles: line (&lsquo;&ndash;&rsquo;), and spacer (&lsquo; &rsquo;).</p
       <span class="p">},</span></pre></div>
       </td>
     </tr>
+    <tr id='section-Hijacking_Links_&amp;amp;_Forms'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-Hijacking_Links_&amp;amp;_Forms">&#182;</a>
+        </div>
+        <h2>Hijacking Links &amp; Forms</h2>
+
+<p>Mercury will hijack links and forms that don&rsquo;t have a target set, or the target is set to _self and will set it
+to _top.  This is because the target must be set properly for Mercury to not get in the way of some
+functionality, like proper page loads on form submissions etc.  Mercury doesn&rsquo;t do this to links or forms that
+are within editable regions because it doesn&rsquo;t want to impact the html that&rsquo;s saved.  With that being explained,
+you can add classes to links or forms that you don&rsquo;t want this behavior added to.  Let&rsquo;s say you have links that
+open a lightbox style window, and you don&rsquo;t want the targets of these to be set to _top.  You can add classes to
+this array, and they will be ignored when the hijacking is applied.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>    <span class="nx">nonHijackableClasses</span><span class="o">:</span> <span class="p">[],</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-Ajax_and_CSRF_Headers'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-Ajax_and_CSRF_Headers">&#182;</a>
+        </div>
+        <h2>Ajax and CSRF Headers</h2>
+
+<p>Some server frameworks require that you provide a specific header for Ajax requests.  The values for these CSRF
+tokens are typically stored in the rendered DOM.  By default, Mercury will look for the Rails specific meta tag,
+and provide the X-CSRF-Token header on Ajax requests, but you can modify this configuration if the system you&rsquo;re
+using doesn&rsquo;t follow the same standard.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>    <span class="nx">csrfSelector</span><span class="o">:</span> <span class="s1">&#39;meta[name=&quot;csrf-token&quot;]&#39;</span><span class="p">,</span>
+    <span class="nx">csrfHeader</span><span class="o">:</span> <span class="s1">&#39;X-CSRF-Token&#39;</span><span class="p">,</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-Pasting_&amp;amp;_Sanitizing'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-Pasting_&amp;amp;_Sanitizing">&#182;</a>
+        </div>
+        <h2>Pasting &amp; Sanitizing</h2>
+
+<p>When pasting content into Mercury it may sometimes contain HTML tags and attributes.  This markup is used to
+style the content and makes the pasted content look (and behave) the same as the original content.  This can be a
+desired feature or an annoyance, so you can enable various sanitizing methods to clean the content when it&rsquo;s
+pasted.</p>
+
+<h3>Sanitizing options:</h3>
+
+<ul>
+<li>false: no sanitizing is done, the content is pasted the exact same as it was copied by the user</li>
+<li>&lsquo;whitelist&rsquo;: content is cleaned using the settings specified in the tag white list (described below)</li>
+<li>&lsquo;text&rsquo;: all html is stripped before pasting, leaving only the raw text</li>
+</ul>
+
+<h3>Using the whitelist configuration</h3>
+
+<p>The white list allows you to specify tags and attributes that are allowed when pasting content.  Each item in
+this object should contain the allowed tag, and an array of attributes that are allowed on that tag.  If the
+allowed attributes array is empty, all attributes will be removed.  If a tag is not present in this list, it will
+be removed, but without removing any of the text or tags inside it.</p>
+
+<p><strong>Note:</strong> Content is <em>always</em> sanitized if looks like it&rsquo;s from MS Word or similar editors regardless of this
+configuration.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>    <span class="nx">pasting</span><span class="o">:</span> <span class="p">{</span>
+      <span class="nx">sanitize</span><span class="o">:</span> <span class="s1">&#39;whitelist&#39;</span><span class="p">,</span>
+      <span class="nx">whitelist</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">h1</span><span class="o">:</span>     <span class="p">[],</span>
+        <span class="nx">h2</span><span class="o">:</span>     <span class="p">[],</span>
+        <span class="nx">h3</span><span class="o">:</span>     <span class="p">[],</span>
+        <span class="nx">h4</span><span class="o">:</span>     <span class="p">[],</span>
+        <span class="nx">h5</span><span class="o">:</span>     <span class="p">[],</span>
+        <span class="nx">h6</span><span class="o">:</span>     <span class="p">[],</span>
+        <span class="nx">table</span><span class="o">:</span>  <span class="p">[],</span>
+        <span class="nx">thead</span><span class="o">:</span>  <span class="p">[],</span>
+        <span class="nx">tbody</span><span class="o">:</span>  <span class="p">[],</span>
+        <span class="nx">tfoot</span><span class="o">:</span>  <span class="p">[],</span>
+        <span class="nx">tr</span><span class="o">:</span>     <span class="p">[],</span>
+        <span class="nx">th</span><span class="o">:</span>     <span class="p">[</span><span class="s1">&#39;colspan&#39;</span><span class="p">,</span> <span class="s1">&#39;rowspan&#39;</span><span class="p">],</span>
+        <span class="nx">td</span><span class="o">:</span>     <span class="p">[</span><span class="s1">&#39;colspan&#39;</span><span class="p">,</span> <span class="s1">&#39;rowspan&#39;</span><span class="p">],</span>
+        <span class="nx">div</span><span class="o">:</span>    <span class="p">[</span><span class="s1">&#39;class&#39;</span><span class="p">],</span>
+        <span class="nx">span</span><span class="o">:</span>   <span class="p">[</span><span class="s1">&#39;class&#39;</span><span class="p">],</span>
+        <span class="nx">b</span><span class="o">:</span>      <span class="p">[],</span>
+        <span class="nx">bold</span><span class="o">:</span>   <span class="p">[],</span>
+        <span class="nx">i</span><span class="o">:</span>      <span class="p">[],</span>
+        <span class="nx">em</span><span class="o">:</span>     <span class="p">[],</span>
+        <span class="nx">u</span><span class="o">:</span>      <span class="p">[],</span>
+        <span class="nx">strike</span><span class="o">:</span> <span class="p">[],</span>
+        <span class="nx">br</span><span class="o">:</span>     <span class="p">[],</span>
+        <span class="nx">p</span><span class="o">:</span>      <span class="p">[],</span>
+        <span class="nx">hr</span><span class="o">:</span>     <span class="p">[],</span>
+        <span class="nx">a</span><span class="o">:</span>      <span class="p">[</span><span class="s1">&#39;href&#39;</span><span class="p">,</span> <span class="s1">&#39;target&#39;</span><span class="p">,</span> <span class="s1">&#39;title&#39;</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">],</span>
+        <span class="nx">img</span><span class="o">:</span>    <span class="p">[</span><span class="s1">&#39;src&#39;</span><span class="p">,</span> <span class="s1">&#39;title&#39;</span><span class="p">,</span> <span class="s1">&#39;alt&#39;</span><span class="p">]</span>
+        <span class="p">}</span>
+      <span class="p">},</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-Snippet_Options_and_Preview'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-Snippet_Options_and_Preview">&#182;</a>
+        </div>
+        <h2>Snippet Options and Preview</h2>
+
+<p>When a user drags a snippet onto the page they&rsquo;ll be prompted to enter options for the given snippet.  The server
+is expected to respond with a form.  Once the user submits this form, an Ajax request is sent to the server with
+the options provided; this preview request is expected to respond with the rendered markup for the snippet.</p>
+
+<p>Name will be replaced with the snippet name (eg. example)</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>    <span class="nx">snippets</span><span class="o">:</span> <span class="p">{</span>
+      <span class="nx">method</span><span class="o">:</span> <span class="s1">&#39;POST&#39;</span><span class="p">,</span>
+      <span class="nx">optionsUrl</span><span class="o">:</span> <span class="s1">&#39;/mercury/snippets/:name/options.html&#39;</span><span class="p">,</span>
+      <span class="nx">previewUrl</span><span class="o">:</span> <span class="s1">&#39;/mercury/snippets/:name/preview.html&#39;</span>
+      <span class="p">},</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-Image_Uploading'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-Image_Uploading">&#182;</a>
+        </div>
+        <h2>Image Uploading</h2>
+
+<p>If you drag images (while pressing shift) from your desktop into regions that support it, it will be uploaded
+to the server and inserted into the region.  This configuration allows you to specify if you want to
+disable/enable this feature, the accepted mime-types, file size restrictions, and other things related to
+uploading.  You can optionally provide a handler function that takes the response from the server and returns an
+object: {image: {url: &lsquo;[your provided url]&rsquo;}</p>
+
+<p><strong>Note:</strong> Image uploading is only supported in some region types, and some browsers.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>    <span class="nx">uploading</span><span class="o">:</span> <span class="p">{</span>
+      <span class="nx">enabled</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+      <span class="nx">allowedMimeTypes</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;image/jpeg&#39;</span><span class="p">,</span> <span class="s1">&#39;image/gif&#39;</span><span class="p">,</span> <span class="s1">&#39;image/png&#39;</span><span class="p">],</span>
+      <span class="nx">maxFileSize</span><span class="o">:</span> <span class="mi">1235242880</span><span class="p">,</span>
+      <span class="nx">inputName</span><span class="o">:</span> <span class="s1">&#39;image[image]&#39;</span><span class="p">,</span>
+      <span class="nx">url</span><span class="o">:</span> <span class="s1">&#39;/images&#39;</span><span class="p">,</span>
+      <span class="nx">handler</span><span class="o">:</span> <span class="kc">false</span>
+      <span class="p">},</span></pre></div>
+      </td>
+    </tr>
     <tr id='section-Behaviors'>
       <td class=docs>
         <div class="pilwrap">
@@ -383,13 +433,23 @@ separator styles: line (&lsquo;&ndash;&rsquo;), and spacer (&lsquo; &rsquo;).</p
 example, you may prefer to add HR tags using an HR wrapped within a div with a classname (for styling).  You
 can add your own complex behaviors here.</p>
 
-<p>You can see how the behavior matches up directly with the button name.  It&rsquo;s also important to note that the
-callback functions are executed within the scope of the given region, so you have access to all it&rsquo;s methods.</p>
+<p>You can see how the behavior matches up directly with the button names.  It&rsquo;s also important to note that the
+callback functions are executed within the scope of the given region, so you have access to all it&rsquo;s methods.
+Here&rsquo;s some examples to help you get started.</p>
       </td>
       <td class=code>
-        <div class='highlight'><pre>    <span class="nx">behaviors</span><span class="o">:</span> <span class="p">{</span>
-      <span class="nx">horizontalRule</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">selection</span><span class="p">)</span> <span class="p">{</span> <span class="nx">selection</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="s1">&#39;&lt;hr/&gt;&#39;</span><span class="p">)</span> <span class="p">},</span>
-      <span class="nx">htmlEditor</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">modal</span><span class="p">(</span><span class="s1">&#39;/mercury/modals/htmleditor.html&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">title</span><span class="o">:</span> <span class="s1">&#39;HTML Editor&#39;</span><span class="p">,</span> <span class="nx">fullHeight</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span> <span class="nx">handler</span><span class="o">:</span> <span class="s1">&#39;htmlEditor&#39;</span> <span class="p">})</span> <span class="p">}</span>
+        <div class='highlight'><pre>    <span class="nx">behaviors</span><span class="o">:</span> <span class="p">{</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-10'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-10">&#182;</a>
+        </div>
+        <p>foreColor: function(selection, options) { selection.wrap(&lsquo;<span style="color:' + options.value.toHex() + '">&rsquo;, true) },</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>      <span class="nx">htmlEditor</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">modal</span><span class="p">(</span><span class="s1">&#39;/mercury/modals/htmleditor.html&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">title</span><span class="o">:</span> <span class="s1">&#39;HTML Editor&#39;</span><span class="p">,</span> <span class="nx">fullHeight</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span> <span class="nx">handler</span><span class="o">:</span> <span class="s1">&#39;htmlEditor&#39;</span> <span class="p">});</span> <span class="p">}</span>
       <span class="p">},</span></pre></div>
       </td>
     </tr>
@@ -409,7 +469,26 @@ and
 Mercury.Toolbar.ButtonGroup.contexts</p>
       </td>
       <td class=code>
-        <div class='highlight'><pre></pre></div>
+        <div class='highlight'><pre>    </pre></div>
+      </td>
+    </tr>
+    <tr id='section-Region_Class'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-Region_Class">&#182;</a>
+        </div>
+        <h2>Region Class</h2>
+
+<p>Mercury identifies editable regions by a region class.  This class has to be added in your HTML in advance, and
+is the only real Mercury code/naming exposed in the implementation of Mercury.  To allow this to be as
+configurable as possible, you can set the name of the class here.  When switching to preview mode, this
+configuration is used to generate a class to indicate that Mercury is in preview mode &mdash; which will be this
+class with &lsquo;-preview&rsquo; appended (so, mercury-region-preview by default)</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>    <span class="nx">regionClass</span><span class="o">:</span> <span class="s1">&#39;mercury-region&#39;</span><span class="p">,</span>
+
+    </pre></div>
       </td>
     </tr>
     <tr id='section-Styles'>
@@ -422,15 +501,18 @@ Mercury.Toolbar.ButtonGroup.contexts</p>
 <p>Mercury tries to stay as much out of your code as possible, but because regions appear within your document we
 need to include a few styles to indicate regions, as well as the different states of them (eg. focused).  These
 styles are injected into your document, and as simple as they might be, you may want to change them.  You can do
-so here.</p>
+so here.  {{regionClass}} will be automatically replaced with whatever you have set in the regionClass
+configuration directive.</p>
       </td>
       <td class=code>
         <div class='highlight'><pre>    <span class="nx">injectedStyles</span><span class="o">:</span> <span class="s1">&#39;&#39;</span> <span class="o">+</span>
-      <span class="s1">&#39;.mercury-region, .mercury-textarea { min-height: 10px; outline: 1px dotted #09F }&#39;</span> <span class="o">+</span>
+      <span class="s1">&#39;.{{regionClass}} { min-height: 10px; outline: 1px dotted #09F } &#39;</span> <span class="o">+</span>
+      <span class="s1">&#39;.{{regionClass}}:focus, .{{regionClass}}.focus { outline: none; -webkit-box-shadow: 0 0 10px #09F, 0 0 1px #045; box-shadow: 0 0 10px #09F, 0 0 1px #045 }&#39;</span> <span class="o">+</span>
+      <span class="s1">&#39;.{{regionClass}}:after { content: &quot;.&quot;; display: block; visibility: hidden; clear: both; height: 0; overflow: hidden; }&#39;</span> <span class="o">+</span>
+      <span class="s1">&#39;.{{regionClass}} table, .{{regionClass}} td, .{{regionClass}} th { border: 1px dotted red; }&#39;</span> <span class="o">+</span>
       <span class="s1">&#39;.mercury-textarea { box-sizing: border-box; -moz-box-sizing: border-box; -webkit-box-sizing: border-box; resize: vertical; }&#39;</span> <span class="o">+</span>
-      <span class="s1">&#39;.mercury-region:focus, .mercury-region.focus, .mercury-textarea.focus { outline: none; -webkit-box-shadow: 0 0 10px #09F, 0 0 1px #045; box-shadow: 0 0 10px #09F, 0 0 1px #045 }&#39;</span> <span class="o">+</span>
-      <span class="s1">&#39;.mercury-region:after { content: &quot;.&quot;; display: block; visibility: hidden; clear: both; height: 0; overflow: hidden; }&#39;</span> <span class="o">+</span>
-      <span class="s1">&#39;.mercury-region table, .mercury-region td, .mercury-region th { border: 1px dotted red; }&#39;</span>
+      <span class="s1">&#39;.mercury-textarea { min-height: 10px; outline: 1px dotted #09F }&#39;</span> <span class="o">+</span>
+      <span class="s1">&#39;.mercury-textarea:focus, .mercury-textarea.focus { outline: none; -webkit-box-shadow: 0 0 10px #09F, 0 0 1px #045; box-shadow: 0 0 10px #09F, 0 0 1px #045 }&#39;</span>
   <span class="p">},</span></pre></div>
       </td>
     </tr>

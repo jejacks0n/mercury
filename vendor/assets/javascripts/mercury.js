@@ -37,76 +37,6 @@ window.MercurySetup = {
 
   // # Mercury Configuration
   config: {
-    // ## Hijacking Links & Forms
-    //
-    // Mercury will hijack links and forms that don't have a target set, or the target is set to _self and will set it
-    // to _top.  This is because the target must be set properly for Mercury to not get in the way of some
-    // functionality, like proper page loads on form submissions etc.  Mercury doesn't do this to links or forms that
-    // are within editable regions because it doesn't want to impact the html that's saved.  With that being explained,
-    // you can add classes to links or forms that you don't want this behavior added to.  Let's say you have links that
-    // open a lightbox style window, and you don't want the targets of these to be set to _top.  You can add classes to
-    // this array, and they will be ignored when the hijacking is applied.
-    nonHijackableClasses: [],
-
-
-    // ## Ajax and CSRF Headers
-    //
-    // Some server frameworks require that you provide a specific header for Ajax requests.  The values for these CSRF
-    // tokens are typically stored in the rendered DOM.  By default, Mercury will look for the Rails specific meta tag,
-    // and provide the X-CSRF-Token header on Ajax requests, but you can modify this configuration if the system you're
-    // using doesn't follow the same standard.
-    csrfSelector: 'meta[name="csrf-token"]',
-    csrfHeader: 'X-CSRF-Token',
-
-
-    // ## Pasting (in Chrome/Safari)
-    //
-    // When copying content using webkit, it embeds all the user defined styles (from the css files) into the html
-    // style attributes directly.  When pasting this content into HTML5 contentEditable elements it leaves these
-    // intact.  This can be a desired feature, or an annoyance, so you can enable it or disable it here.  This means
-    // that copying something from a webkit based browser and pasting it into something like firefox will also result in
-    // these extra style attributes.  Cleaning the styles out impacts performance when pasting, and because of browser
-    // restrictions on getting pasted content (which is stupid) we have to fall back to a less performant method off
-    // figuring out what was pasted.  This seems to cause issues if you try and paste several things in a row, which
-    // seems to happen a lot when people are testing the demo.  Because of this it's disabled by default, but is
-    // recommended if you're using webkit.
-    // Go signin and vote to change this: http://www.google.com/support/forum/p/Chrome/thread?tid=3399afd053d5a29c&hl=en
-    cleanStylesOnPaste: false,
-
-
-    // ## Snippet Options and Preview
-    //
-    // When a user drags a snippet onto the page they'll be prompted to enter options for the given snippet.  The server
-    // is expected to respond with a form.  Once the user submits this form, an Ajax request is sent to the server with
-    // the options provided; this preview request is expected to respond with the rendered markup for the snippet.
-    //
-    // Name will be replaced with the snippet name (eg. example)
-    snippets: {
-      method: 'POST',
-      optionsUrl: '/mercury/snippets/:name/options.html',
-      previewUrl: '/mercury/snippets/:name/preview.html'
-      },
-
-
-    // ## Image Uploading
-    //
-    // If you drag images (while pressing shift) from your desktop into regions that support it, it will be uploaded
-    // to the server and inserted into the region.  This configuration allows you to specify if you want to
-    // disable/enable this feature, the accepted mime-types, file size restrictions, and other things related to
-    // uploading.  You can optionally provide a handler function that takes the response from the server and returns an
-    // object: {image: {url: '[your provided url]'}
-    //
-    // **Note:** Image uploading is only supported in some region types.
-    uploading: {
-      enabled: true,
-      allowedMimeTypes: ['image/jpeg', 'image/gif', 'image/png'],
-      maxFileSize: 1235242880,
-      inputName: 'image[image]',
-      url: '/images',
-      handler: false
-      },
-
-
     // ## Toolbars
     //
     // This is where you can customize the toolbars by adding or removing buttons, or changing them and their
@@ -258,6 +188,115 @@ window.MercurySetup = {
           removeSnippet:       ['Remove Snippet', null]
           }
         }
+      },
+
+
+    // ## Hijacking Links & Forms
+    //
+    // Mercury will hijack links and forms that don't have a target set, or the target is set to _self and will set it
+    // to _top.  This is because the target must be set properly for Mercury to not get in the way of some
+    // functionality, like proper page loads on form submissions etc.  Mercury doesn't do this to links or forms that
+    // are within editable regions because it doesn't want to impact the html that's saved.  With that being explained,
+    // you can add classes to links or forms that you don't want this behavior added to.  Let's say you have links that
+    // open a lightbox style window, and you don't want the targets of these to be set to _top.  You can add classes to
+    // this array, and they will be ignored when the hijacking is applied.
+    nonHijackableClasses: [],
+
+
+    // ## Ajax and CSRF Headers
+    //
+    // Some server frameworks require that you provide a specific header for Ajax requests.  The values for these CSRF
+    // tokens are typically stored in the rendered DOM.  By default, Mercury will look for the Rails specific meta tag,
+    // and provide the X-CSRF-Token header on Ajax requests, but you can modify this configuration if the system you're
+    // using doesn't follow the same standard.
+    csrfSelector: 'meta[name="csrf-token"]',
+    csrfHeader: 'X-CSRF-Token',
+
+
+    // ## Pasting & Sanitizing
+    //
+    // When pasting content into Mercury it may sometimes contain HTML tags and attributes.  This markup is used to
+    // style the content and makes the pasted content look (and behave) the same as the original content.  This can be a
+    // desired feature or an annoyance, so you can enable various sanitizing methods to clean the content when it's
+    // pasted.
+    //
+    // ### Sanitizing options:
+    // - false: no sanitizing is done, the content is pasted the exact same as it was copied by the user
+    // - 'whitelist': content is cleaned using the settings specified in the tag white list (described below)
+    // - 'text': all html is stripped before pasting, leaving only the raw text
+    //
+    // ### Using the whitelist configuration
+    //
+    // The white list allows you to specify tags and attributes that are allowed when pasting content.  Each item in
+    // this object should contain the allowed tag, and an array of attributes that are allowed on that tag.  If the
+    // allowed attributes array is empty, all attributes will be removed.  If a tag is not present in this list, it will
+    // be removed, but without removing any of the text or tags inside it.
+    //
+    // **Note:** Content is *always* sanitized if looks like it's from MS Word or similar editors regardless of this
+    // configuration.
+    pasting: {
+      sanitize: 'whitelist',
+      whitelist: {
+        h1:     [],
+        h2:     [],
+        h3:     [],
+        h4:     [],
+        h5:     [],
+        h6:     [],
+        table:  [],
+        thead:  [],
+        tbody:  [],
+        tfoot:  [],
+        tr:     [],
+        th:     ['colspan', 'rowspan'],
+        td:     ['colspan', 'rowspan'],
+        div:    ['class'],
+        span:   ['class'],
+        b:      [],
+        bold:   [],
+        i:      [],
+        em:     [],
+        u:      [],
+        strike: [],
+        br:     [],
+        p:      [],
+        hr:     [],
+        a:      ['href', 'target', 'title'],
+        img:    ['src', 'title', 'alt']
+        }
+      },
+
+
+    // ## Snippet Options and Preview
+    //
+    // When a user drags a snippet onto the page they'll be prompted to enter options for the given snippet.  The server
+    // is expected to respond with a form.  Once the user submits this form, an Ajax request is sent to the server with
+    // the options provided; this preview request is expected to respond with the rendered markup for the snippet.
+    //
+    // Name will be replaced with the snippet name (eg. example)
+    snippets: {
+      method: 'POST',
+      optionsUrl: '/mercury/snippets/:name/options.html',
+      previewUrl: '/mercury/snippets/:name/preview.html'
+      },
+
+
+    // ## Image Uploading
+    //
+    // If you drag images (while pressing shift) from your desktop into regions that support it, it will be uploaded
+    // to the server and inserted into the region.  This configuration allows you to specify if you want to
+    // disable/enable this feature, the accepted mime-types, file size restrictions, and other things related to
+    // uploading.  You can optionally provide a handler function that takes the response from the server and returns an
+    // object: {image: {url: '[your provided url]'}
+    //
+    // **Note:** Image uploading is only supported in some region types, and some browsers.
+    uploading: {
+      enabled: true,
+      allowedMimeTypes: ['image/jpeg', 'image/gif', 'image/png'],
+      maxFileSize: 1235242880,
+      inputName: 'image[image]',
+      url: '/images',
+      handler: false
       },
 
 

@@ -2,6 +2,7 @@
 #= require mercury/dependencies/jquery-1.6
 #= require mercury/dependencies/jquery-ui-1.8.13.custom
 #= require mercury/dependencies/jquery.additions
+#= require mercury/dependencies/jquery.htmlClean
 #= require mercury/dependencies/liquidmetal
 #= require mercury/dependencies/showdown
 #

@@ -19,7 +19,8 @@ class @Mercury.PageEditor
 
 
   initializeInterface: ->
-    @focusableElement = jQuery('<input>', {type: 'text', style: 'position:absolute;opacity:0'}).appendTo(@options.appendTo ? 'body')
+    @focusableElement = jQuery('<input>', {class: 'mercury-focusable', type: 'text'}).appendTo(@options.appendTo ? 'body')
+
     @iframe = jQuery('<iframe>', {id: 'mercury_iframe', class: 'mercury-iframe', seamless: 'true', frameborder: '0', src: 'about:blank'})
     @iframe.appendTo(jQuery(@options.appendTo).get(0) ? 'body')
 
@@ -82,6 +83,9 @@ class @Mercury.PageEditor
 
 
   finalizeInterface: ->
+    @santizerElement = jQuery('<div>', {id: 'mercury_sanitizer', contenteditable: 'true', style: 'position:fixed;width:100px;height:100px;top:-100px;left:-100px;opacity:0'})
+    @santizerElement.appendTo(@options.appendTo ? @document.find('body'))
+
     @snippetToolbar = new Mercury.SnippetToolbar(@document)
 
     @hijackLinksAndForms()

@@ -79,7 +79,7 @@ describe "Mercury.PageEditor", ->
 
     it "builds a focusable element (so we can get focus off the iframe)", ->
       @pageEditor = new Mercury.PageEditor('', {appendTo: $('#test')})
-      expect($('input[type=text]').length).toEqual(1)
+      expect($('input.mercury-focusable[type=text]').length).toEqual(1)
 
     it "builds an iframe", ->
       @pageEditor = new Mercury.PageEditor('', {appendTo: $('#test')})
@@ -261,7 +261,11 @@ describe "Mercury.PageEditor", ->
       @pageEditor = new Mercury.PageEditor('', {appendTo: $('#test')})
       @highjackLinksAndFormsSpy = spyOn(Mercury.PageEditor.prototype, 'hijackLinksAndForms').andCallFake(=>)
 
-    it "it builds a snippetToolbar", ->
+    it "injects an sanitizing element used for sanitizing content", ->
+      @pageEditor.finalizeInterface()
+      expect($('#mercury_sanitizer[contenteditable]').length).toEqual(1)
+
+    it "builds a snippetToolbar", ->
       @pageEditor.finalizeInterface()
       expect(@pageEditor.snippetToolbar).toEqual({snippetToolbar: true})
 

@@ -23,6 +23,11 @@ html, body {
   visibility: hidden;
 }
 
+.mercury-focusable {
+  position: absolute;
+  opacity: 0;
+}
+
 
 /*
  * Forms

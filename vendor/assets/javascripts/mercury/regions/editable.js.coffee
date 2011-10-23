@@ -99,7 +99,7 @@ class @Mercury.Regions.Editable extends Mercury.Region
     # through a clipboard in firefox (heaven forbid), and to keep the behavior across all browsers, we manually detect
     # what was pasted by running a quick diff, removing it by calling undo, making our adjustments, and then putting the
     # content back.  This is possible, so it doesn't make sense why it wouldn't be exposed in a sensible way.  *sigh*
-    @element.bind 'paste', =>
+    @element.bind 'paste', (event) =>
       return if @previewing
       return unless Mercury.region == @
       if @specialContainer
@@ -107,9 +107,7 @@ class @Mercury.Regions.Editable extends Mercury.Region
         return
       return if @pasting
       Mercury.changes = true
-      content = @element.html().replace(/^\s+|\s+$/g, '')
-      clearTimeout(@handlePasteTimeout)
-      @handlePasteTimeout = setTimeout((=> @handlePaste(content)), 400)
+      @handlePaste(event.originalEvent)
 
     @element.focus =>
       return if @previewing
@@ -326,39 +324,65 @@ class @Mercury.Regions.Editable extends Mercury.Region
     return element
 
 
-  handlePaste: (prePasteContent) ->
-    @pasting = true
-    prePasteContent = prePasteContent.replace(/^\<br\>/, '')
+  handlePaste: (event) ->
+    # get the text content from the clipboard and fall back to using the sanitizer if unavailable
+    if Mercury.config.pasting.sanitize == 'text' && event.clipboardData
+      @execCommand('insertHTML', {value: event.clipboardData.getData('text/plain')})
+      event.preventDefault()
+      return
+    else
+      console.debug('testing')
+      # get current selection & range
+      selection = @selection()
+      selection.placeMarker()
 
-    # remove any regions that might have been pasted
-    @element.find(".#{Mercury.config.regionClass}").remove()
+      sanitizer = jQuery('#mercury_sanitizer', @document).focus()
 
-    # handle pasting from ms office etc
-    content = @content()
-    if content.indexOf('<!--StartFragment-->') > -1 || content.indexOf('="mso-') > -1 || content.indexOf('<o:') > -1 || content.indexOf('="Mso') > -1
-      # clean out all the tags from the pasted contents
-      cleaned = prePasteContent.singleDiff(@content()).sanitizeHTML()
-      try
-        # try to undo and put the cleaned html where the selection was
-        @document.execCommand('undo', false, null)
-        @execCommand('insertHTML', {value: cleaned})
-      catch error
-        # remove the pasted html and load up the cleaned contents into a modal
-        @content(prePasteContent)
-        Mercury.modal '/mercury/modals/sanitizer', {
-          title: 'HTML Sanitizer (Starring Clippy)',
-          afterLoad: -> @element.find('textarea').val(cleaned.replace(/<br\/>/g, '\n'))
-        }
-    else if Mercury.config.cleanStylesOnPaste
-      # strip styles
-      pasted = prePasteContent.singleDiff(@content())
+      # set 1ms timeout to allow paste event to complete
+      setTimeout 1, =>
+        # sanitize the content
+        content = @sanitize(sanitizer)
 
-      container = jQuery('<div>').appendTo(@document.createDocumentFragment()).html(pasted)
-      container.find('[style]').attr({style: null})
+        # move cursor back to original element & position
+        selection.selectMarker(@element)
+        selection.removeMarker()
 
-      @document.execCommand('undo', false, null)
-      @execCommand('insertHTML', {value: container.html()})
-    @pasting = false
+        # paste sanitized content
+        @element.focus()
+        @execCommand('insertHTML', {value: content})
+
+
+  sanitize: (sanitizer) ->
+    # always remove nested regions
+    sanitizer.find(".#{Mercury.config.regionClass}").remove()
+
+    if Mercury.config.pasting.sanitize
+      switch Mercury.config.pasting.sanitize
+        when 'blacklist'
+          # todo: finish writing black list functionality
+          sanitizer.find('[style]').removeAttr('style')
+          sanitizer.find('[class="Apple-style-span"]').removeClass('Apple-style-span')
+          content = sanitizer.html()
+        when 'whitelist'
+          for element in sanitizer.find('*')
+            allowed = false
+            for allowedTag, allowedAttributes of Mercury.config.pasting.whitelist
+              if element.tagName.toLowerCase() == allowedTag.toLowerCase()
+                allowed = true
+                for attr, index in element.attributes
+                  jQuery(element).attr(attr.name, null) if attr && allowedAttributes.indexOf(attr.name) == -1
+                break
+            jQuery(element).replaceWith(jQuery(element).contents()) unless allowed
+          content = sanitizer.html()
+        else content = sanitizer.text()
+    else
+      # force text if it looks like it's from word/pages, even if there's no sanitizing requested
+      content = sanitizer.html()
+      if content.indexOf('<!--StartFragment-->') > -1 || content.indexOf('="mso-') > -1 || content.indexOf('<o:') > -1 || content.indexOf('="Mso') > -1
+        content = sanitizer.text()
+
+    sanitizer.html('')
+    return content
 
 
   # Custom actions (eg. things that execCommand doesn't do, or doesn't do well)

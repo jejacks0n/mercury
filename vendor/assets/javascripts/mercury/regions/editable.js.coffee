@@ -159,18 +159,16 @@ class @Mercury.Regions.Editable extends Mercury.Region
         when 9 # tab
           event.preventDefault()
           container = @selection().commonAncestor()
-          handled = false
 
           # indent when inside of an li
           if container.closest('li', @element).length
-            handled = true
             unless event.shiftKey
               @execCommand('indent')
             # do not outdent on last ul/ol parent, or we break out of the list
             else if container.parents('ul, ol').length > 1
               @execCommand('outdent')
-
-          @execCommand('insertHTML', {value: '&nbsp; '}) unless handled
+          else
+            @execCommand('insertHTML', {value: '&nbsp; '})
 
       if event.metaKey
         switch event.keyCode

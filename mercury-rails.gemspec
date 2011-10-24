@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Jeremy Jackson"]
-  s.date = "2011-10-23"
+  s.date = "2011-10-24"
   s.description = "A fully featured and advanced HTML5 WYSIWYG editor written in CoffeeScript on top of Rails 3.1"
   s.email = "jejacks0n@gmail.com"
   s.extra_rdoc_files = [

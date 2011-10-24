@@ -167,7 +167,7 @@ class @Mercury.PageEditor
     return null
 
 
-  save: ->
+  save: (callback) ->
     url = @saveUrl ? Mercury.saveURL ? @iframeSrc()
     data = @serialize()
     Mercury.log('saving', data)
@@ -179,7 +179,9 @@ class @Mercury.PageEditor
       headers: @saveHeaders()
       data: {content: data, _method: method}
       success: =>
+        callback() if callback
         Mercury.changes = false
+        Mercury.trigger('saved')
       error: =>
         alert("Mercury was unable to save to the url: #{url}")
     }

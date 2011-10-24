@@ -416,6 +416,8 @@ class @Mercury.Regions.Editable extends Mercury.Region
 
     removeFormatting: (selection) -> selection.insertTextNode(selection.textContent())
 
+    foreColor: (selection, options) -> selection.wrap("<span style=\"color:#{options.value.toHex()}\">", true)
+
     backColor: (selection, options) -> selection.wrap("<span style=\"background-color:#{options.value.toHex()}\">", true)
 
     overline: (selection) -> selection.wrap('<span style="text-decoration:overline">', true)

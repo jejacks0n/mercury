@@ -99,7 +99,7 @@ Make sure you get the migrations that you'll need.
     rake mercury_engine:install:migrations
     rake db:migrate
 
-You can also get the configuration file by running the generator.
+You can also get the configuration file, css, and routes by running the generator.
 
     rails generate mercury:install
 

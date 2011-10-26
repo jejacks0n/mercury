@@ -12,7 +12,11 @@ module Mercury
         copy_file 'vendor/assets/javascripts/mercury.js', 'app/assets/javascripts/mercury.js'
       end
 
-     def copy_layout_and_css_overrides
+      def add_routes
+        route %Q{Mercury::Engine.routes}
+      end
+
+      def copy_layout_and_css_overrides
         if options[:full] || yes?("Install the layout and CSS overrides files? [yN]")
           copy_file 'app/views/layouts/mercury.html.erb', 'app/views/layouts/mercury.html.erb'
           copy_file 'vendor/assets/stylesheets/mercury_overrides.css', 'app/assets/stylesheets/mercury_overrides.css'

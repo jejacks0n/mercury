@@ -1,1 +1,1 @@
-
+Mercury::Engine.routes

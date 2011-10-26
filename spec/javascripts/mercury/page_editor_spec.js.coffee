@@ -613,6 +613,18 @@ describe "Mercury.PageEditor", ->
           @pageEditor.save()
           expect(Mercury.changes).toEqual(false)
 
+        it "calls a callback if one was provided", ->
+          callback = -> callback.callCount += 1
+          callback.callCount = 0;
+          @pageEditor.save(callback)
+          expect(callback.callCount).toEqual(1)
+
+        it "fires an event", ->
+          spy = spyOn(Mercury, 'trigger').andCallFake(=>)
+          @pageEditor.save()
+          expect(spy.callCount).toEqual(1)
+          expect(spy.argsForCall[0]).toEqual(['saved'])
+
       describe "on failed ajax request", ->
 
         beforeEach ->

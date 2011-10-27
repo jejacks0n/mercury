@@ -32,36 +32,53 @@ describe "Mercury.Toolbar", ->
 
   describe "#build", ->
 
-    beforeEach ->
-      @buildButtonSpy = spyOn(Mercury.Toolbar.prototype, 'buildButton').andCallFake(=> $('<div>'))
-      @toolbar = new Mercury.Toolbar({appendTo: '#toolbar_container', visible: false})
+    describe "with a primary toolbar", ->
 
-    it "builds an element", ->
-      expect($('.mercury-toolbar-container').length).toEqual(1)
+      beforeEach ->
+        @buildButtonSpy = spyOn(Mercury.Toolbar.prototype, 'buildButton').andCallFake(=> $('<div>'))
+        @toolbar = new Mercury.Toolbar({appendTo: '#toolbar_container', visible: false})
 
-    it "hides the element if options.visible is false", ->
-      expect($('.mercury-toolbar-container').css('display')).toEqual('none')
+      it "builds an element", ->
+        expect($('.mercury-toolbar-container').length).toEqual(1)
 
-    it "can append to any element", ->
-      expect($('#toolbar_container .mercury-toolbar-container').length).toEqual(1)
+      it "hides the element if options.visible is false", ->
+        expect($('.mercury-toolbar-container').css('display')).toEqual('none')
 
-    it "builds out toolbar elements from the configuration", ->
-      expect($('.mercury-primary-toolbar').length).toEqual(1)
-      expect($('.mercury-editable-toolbar').length).toEqual(1)
-      expect($('.mercury-editable-toolbar').data('regions')).toEqual('editable,markupable')
+      it "can append to any element", ->
+        expect($('#toolbar_container .mercury-toolbar-container').length).toEqual(1)
 
-    it "builds buttons etc.", ->
-      expect(@buildButtonSpy.callCount).toBeGreaterThan(10)
+      it "builds out toolbar elements from the configuration", ->
+        expect($('.mercury-primary-toolbar').length).toEqual(1)
+        expect($('.mercury-editable-toolbar').length).toEqual(1)
+        expect($('.mercury-editable-toolbar').data('regions')).toEqual('editable,markupable')
 
-    it "sets it's width back to 100%", ->
-      expect(@toolbar.element.get(0).style.width).toEqual('100%')
+      it "builds buttons etc.", ->
+        expect(@buildButtonSpy.callCount).toBeGreaterThan(10)
 
-    it "disables all but the primary toolbar", ->
-      expect($('.mercury-editable-toolbar').hasClass('disabled')).toEqual(true)
+      it "sets it's width back to 100%", ->
+        expect(@toolbar.element.get(0).style.width).toEqual('100%')
 
-    it "adds an expander when white-space: nowrap (meaning the toolbar shouldn't wrap)", ->
-      expect($('.mercury-toolbar-button-container').length).toBeGreaterThan(1)
-      expect($('.mercury-toolbar-expander').length).toEqual(1)
+      it "disables all but the primary toolbar", ->
+        expect($('.mercury-editable-toolbar').hasClass('disabled')).toEqual(true)
+
+      it "adds an expander when white-space: nowrap (meaning the toolbar shouldn't wrap)", ->
+        expect($('.mercury-toolbar-button-container').length).toBeGreaterThan(1)
+        expect($('.mercury-toolbar-expander').length).toEqual(1)
+
+    describe "without a primary toolbar", ->
+
+      beforeEach ->
+        @primaryToolbar = Mercury.config.toolbars.primary
+        delete(Mercury.config.toolbars.primary)
+        @buildButtonSpy = spyOn(Mercury.Toolbar.prototype, 'buildButton').andCallFake(=> $('<div>'))
+        @toolbar = new Mercury.Toolbar({appendTo: '#toolbar_container', visible: false})
+
+      afterEach ->
+        Mercury.config.toolbars.primary = @primaryToolbar
+
+      it "doesn't disable the toolbars", ->
+        expect($('.mercury-editable-toolbar').hasClass('disabled')).toEqual(false)
+
 
 
   describe "#buildButton", ->

@@ -28,4 +28,5 @@ group :test do
   gem 'capybara-firebug'
   gem 'capybara'
   gem 'database_cleaner'
+  gem 'fuubar-cucumber'
 end

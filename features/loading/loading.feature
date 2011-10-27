@@ -19,4 +19,4 @@ Feature:
 
 
   Scenario: A user can expect to see the status bar
-    Then I should see "Mercury Editor v0.2.1" within the statusbar
+    Then I should see "Mercury Editor v0.2.3" within the statusbar

@@ -214,17 +214,23 @@ describe "Mercury.PageEditor", ->
       Mercury.PageEditor.prototype.initializeFrame = ->
       @pageEditor = new Mercury.PageEditor('', {appendTo: $('#test')})
       @pageEditor.document = $(document)
-      @buildRegionSpy = spyOn(Mercury.PageEditor.prototype, 'buildRegion').andCallFake(=>)
 
     it "it calls buildRegion for all the regions found in a document", ->
+      spy = spyOn(Mercury.PageEditor.prototype, 'buildRegion').andCallFake(=>)
       @pageEditor.initializeRegions()
-      expect(@buildRegionSpy.callCount).toEqual(3)
+      expect(spy.callCount).toEqual(3)
 
     it "focuses the first region", ->
-      firstFocusCalled = false
-      @pageEditor.regions = [{focus: => firstFocusCalled = true}, {}, {}]
+      regionIndex = 0
+      regionFocusCall = null;
+      spy = spyOn(Mercury.PageEditor.prototype, 'buildRegion').andCallFake ->
+        @regions.push({focus: ->
+          regionIndex += 1
+          regionFocusCall = regionIndex
+        })
       @pageEditor.initializeRegions()
-      expect(firstFocusCalled).toEqual(true)
+      expect(spy.callCount).toEqual(3)
+      expect(regionFocusCall).toEqual(1)
 
     it "doesn't focus the first region if it's not supposed to be visible", ->
       firstFocusCalled = false
@@ -252,7 +258,7 @@ describe "Mercury.PageEditor", ->
       spy = spyOn(window, 'alert').andCallFake(=>)
       @pageEditor.buildRegion($('#region2'))
       expect(spy.callCount).toEqual(1)
-      expect(spy.argsForCall[0]).toEqual(['Region type is malformed, no data-type provided, or "Editable" is unknown.'])
+      expect(spy.argsForCall[0]).toEqual(['Region type is malformed, no data-type provided, or "Editable" is unknown for "unknown".'])
 
     it "doesn't re-instantiate the region if the element's already initialized", ->
       $('#region2').data('region', {foo: 'bar'})

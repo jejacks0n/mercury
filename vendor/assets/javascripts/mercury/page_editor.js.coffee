@@ -83,7 +83,7 @@ class @Mercury.PageEditor
       @regions.push(region)
     catch error
       alert(error) if Mercury.debug
-      alert("Region type is malformed, no data-type provided, or \"#{type}\" is unknown.")
+      alert("Region type is malformed, no data-type provided, or \"#{type}\" is unknown for \"#{region.id || 'unknown'}\".")
 
 
   finalizeInterface: ->

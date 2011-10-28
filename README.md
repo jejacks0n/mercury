@@ -81,9 +81,8 @@ The feature list is actually pretty long, so here's a short list that need highl
 - Link Tools: Insert and edit links, including TOC/Bookmark links.
 - Media Tools: Insert and edit images, youtube videos, and vimeo videos.
 - Image Uploading: Drag images from your desktop and they'll be automatically uploaded and inserted.
-- Table Editing: Advanced table editing and creation.
+- Table Editing: Advanced table editing and creation, including support for multiple column and rows spans.
 - Snippets: Insert and edit predefined and reusable bits of markup/code using drag and drop.
-- Notes: Attach notes to any page and communicate with other content authors.
 
 
 ## Installation
@@ -190,26 +189,26 @@ defined by a developer and placed into content regions later.  More on this belo
 
 When Mercury loads it will fire an event telling the document that it's initialized, available and ready.  You can do
 several things once Mercury is loaded, and we expose as many ways to do this as possible.  You can bind to the event
-using jQuery, Prototype, or Mercury directly.  And if you'd prefer you can just create a method and Mercury will call
+using jQuery, Prototype, or Mercury directly.  Or if you'd prefer you can just create a method and Mercury will call
 that when it's ready.
 
 #### jQuery
 
-    jQuery(window).bind('mercury:ready', function() { /* .. load snippets, set save url, etc .. */ });
+    jQuery(window).bind('mercury:ready', function() { Mercury.saveUrl = '/content'; });
 
 #### Prototype
 
-    Event.observe(window, 'mercury:ready', function() { /* .. load snippets, set save url, etc .. */});
+    Event.observe(window, 'mercury:ready', function() { Mercury.saveUrl = '/content'; });
 
 #### Mercury
 
     if (top.Mercury) {
-      top.Mercury.bind('ready', function() { /* .. load snippets, set save url, etc .. */ });
+      top.Mercury.bind('ready', function() { Mercury.saveUrl = '/content'; });
     }
 
 #### Function Declaration
 
-    function onMercuryReady() { /* .. load snippets, set save url, etc .. */ }
+    function onMercuryReady() { Mercury.saveUrl = '/content'; }
 
 
 ## Snippets

@@ -113,13 +113,13 @@ describe "Mercury.tooltip", ->
 
     describe "document scrolling", ->
 
+      # untestable
       it "calls position if visible", ->
-        # untestable
 
     describe "element mousedown", ->
 
+      # untestable
       it "stops the event", ->
-        # untestable
 
 
   describe "#appear", ->

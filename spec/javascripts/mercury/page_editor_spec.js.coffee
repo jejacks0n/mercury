@@ -394,16 +394,16 @@ describe "Mercury.PageEditor", ->
 
     describe "window resize", ->
 
+      # untestable
       it "calls resize", ->
-        # untestable
         #spy = spyOn(Mercury.PageEditor.prototype, 'resize').andCallFake(=>)
         #resizeTo($(window).width() - 1, $(window).height() - 1)
         #expect(spy.callCount).toEqual(1)
 
     describe "onbeforeunload", ->
 
+      # untestable
       it "calls Mercury.beforeUnload", ->
-        # untestable
         #spy = spyOn(Mercury, 'beforeUnload').andCallFake(=>)
         #window.onbeforeunload()
         #expect(spy.callCount).toEqual(1)

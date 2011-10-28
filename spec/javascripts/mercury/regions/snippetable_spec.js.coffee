@@ -166,13 +166,13 @@ describe "Mercury.Regions.Snippetable", ->
 
     describe "dragover", ->
 
-      # todo: I'd like to find a nice way to test these things
+      # untestable
       it "prevents the default event", ->
       it "does nothing if previewing", ->
 
     describe "drop", ->
 
-      # todo: I'd like to find a nice way to test these things
+      # untestable
       it "calls focus", ->
       it "prevents the default event", ->
       it "displays the options for the snippet that was dropped", ->

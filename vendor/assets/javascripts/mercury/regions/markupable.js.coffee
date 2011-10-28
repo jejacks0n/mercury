@@ -20,7 +20,7 @@ class @Mercury.Regions.Markupable extends Mercury.Region
     @element.removeClass(Mercury.config.regionClass)
     @textarea = jQuery('<textarea>', @document).val(value)
     @textarea.attr('class', @element.attr('class')).addClass('mercury-textarea')
-    @textarea.css({border: 0, background: 'transparent', display: 'block', width: width, height: height, fontFamily: '"Courier New", Courier, monospace', fontSize: '14px'})
+    @textarea.css({border: 0, background: 'transparent', display: 'block', 'overflow-y': 'hidden', width: width, height: height, fontFamily: '"Courier New", Courier, monospace'})
     @element.addClass(Mercury.config.regionClass)
     @element.empty().append(@textarea)
 
@@ -138,6 +138,7 @@ class @Mercury.Regions.Markupable extends Mercury.Region
 
     @element.keyup =>
       return if @previewing
+      @resize()
       Mercury.trigger('region:update', {region: @})
 
     @element.mouseup =>
@@ -214,9 +215,8 @@ class @Mercury.Regions.Markupable extends Mercury.Region
 
 
   resize: ->
-    # todo: get this working if possible, and it seems to be useful
-    # adjustedHeight = Math.max(@textarea.get(0).scrollHeight, @textarea.get(0).clientHeight)
-    # @textarea.height(adjustedHeight) if adjustedHeight >= @textarea.get(0).clientHeight
+    @element.css({height: @element.get(0).scrollHeight - 100})
+    @element.css({height: @element.get(0).scrollHeight});
 
 
   snippets: ->

@@ -11,6 +11,7 @@ class @Mercury.Region
     @build()
     @bindEvents()
     @pushHistory()
+    @element.data('region', @)
 
 
   build: ->
@@ -41,7 +42,7 @@ class @Mercury.Region
         @snippet = snippet
         Mercury.trigger('show:toolbar', {type: 'snippet', snippet: @snippet})
 
-    @element.mouseout (event) =>
+    @element.mouseout =>
       return if @previewing
       Mercury.trigger('hide:toolbar', {type: 'snippet', immediately: false})
 
@@ -55,7 +56,7 @@ class @Mercury.Region
       container.html(@element.html().replace(/^\s+|\s+$/g, ''))
 
       # replace snippet contents to be an identifier
-      if filterSnippets then for snippet, index in container.find('.mercury-snippet')
+      if filterSnippets then for snippet in container.find('.mercury-snippet')
         snippet = jQuery(snippet)
         snippet.attr({contenteditable: null, 'data-version': null})
         snippet.html("[#{snippet.data('snippet')}]")

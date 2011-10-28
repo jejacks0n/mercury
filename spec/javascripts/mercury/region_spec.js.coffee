@@ -46,6 +46,10 @@ describe "Mercury.Region", ->
       @region = new Mercury.Region($('#region'), window, {foo: 'bar'})
       expect(@pushHistorySpy.callCount).toEqual(1)
 
+    it "sets the instance of the region into data for the element", ->
+      @region = new Mercury.Region($('#region'), window, {foo: 'bar'})
+      expect(@region.element.data('region')).toEqual(@region)
+
 
   describe "#build", ->
 

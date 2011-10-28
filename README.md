@@ -186,6 +186,32 @@ be the way to go with complex markup and functionality.  Snippets are basically 
 defined by a developer and placed into content regions later.  More on this below.
 
 
+## Loading / Ready State
+
+When Mercury loads it will fire an event telling the document that it's initialized, available and ready.  You can do
+several things once Mercury is loaded, and we expose as many ways to do this as possible.  You can bind to the event
+using jQuery, Prototype, or Mercury directly.  And if you'd prefer you can just create a method and Mercury will call
+that when it's ready.
+
+#### jQuery
+
+    jQuery(window).bind('mercury:ready', function() { /* .. load snippets, set save url, etc .. */ });
+
+#### Prototype
+
+    Event.observe(window, 'mercury:ready', function() { /* .. load snippets, set save url, etc .. */});
+
+#### Mercury
+
+    if (top.Mercury) {
+      top.Mercury.bind('ready', function() { /* .. load snippets, set save url, etc .. */ });
+    }
+
+#### Function Declaration
+
+    function onMercuryReady() { /* .. load snippets, set save url, etc .. */ }
+
+
 ## Snippets
 
 Snippets are reusable and configurable chunks of markup.  They can be defined by developers, and then placed anywhere in
@@ -196,9 +222,26 @@ edited or removed.
 Mercury does very little to save content and snippets for you, but it does provide the ability to load snippets from
 your own storage implementation.  Here's an example of loading existing snippet options back into Mercury.
 
-    if (top.Mercury) top.Mercury.Snippet.load({
-      snippet_1: {name: 'example', options: {'options[favorite_beer]': "Bells Hopslam", 'options[first_name]': "Jeremy"}}
+    jQuery(window).bind('mercury:ready', function() {
+      Mercury.Snippet.load({
+        snippet_1: {name: 'example', options: {'options[favorite_beer]': "Bells Hopslam", 'options[first_name]': "Jeremy"}}
+      });
     });
+
+
+## Reinitializing Regions
+
+If you're using things like history.pushState, pjax, or just simply dynamically replacing / loading new content into
+your pages, you can reinitialize regions afterwards by using:
+
+    Mercury.trigger('reinitialize')
+
+This will find any new regions and initialize them, leaving the existing ones intact.  There's more details that you'll
+need to understand before taking advantage of all the possible features, but this will likely work for most cases.
+
+In more advanced cases, you may want to load new snippets, and potentially prompt to save the contents before loading
+the new content -- so content isn't lost.  The handling of these aspects is up to you, as Mercury can't know if an ajax
+request will try to dynamically replace or load new content.
 
 
 ## Saving Content / Rendering Content
@@ -231,7 +274,9 @@ setting Mercury.saveURL, or passing it into the Mercury.PageEditor constructor..
 you're using loading mercury (via the loader, or by using the route method).  In both situations setting Mercury.saveURL
 is the most consistent.
 
-    top.Mercury.saveURL = '/contents';
+    jQuery(window).bind('mercury:ready', function() {
+      Mercury.saveURL = '/contents';
+    });
 
 Assuming you have a ContentsController and a RESTful route, this will make it through to the create action.  Where you
 can store the content in whatever way you think is appropriate for your project.

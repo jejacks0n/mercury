@@ -9,12 +9,10 @@ String::toHex = ->
     "##{parseInt(r).toHex()}#{parseInt(g).toHex()}#{parseInt(b).toHex()}"
 
 
-String::sanitizeHTML = ->
-  element = jQuery('<div>').html(@.toString())
-  element.find('style').remove()
-  content = element.text()
-  content = content.replace(/\n+/g, '<br/>').replace(/.*<!--.*-->/g, '').replace(/^(<br\/>)+|(<br\/>\s*)+$/g, '')
-  return content
+String::regExpEscape = ->
+  specials = ['/','.','*','+','?','|','(',')','[',']','{','}','\\']
+  escaped = new RegExp('(\\' + specials.join('|\\') + ')', 'g')
+  return @replace(escaped, '\\$1')
 
 
 Number::toHex = ->

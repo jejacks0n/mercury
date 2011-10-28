@@ -15,6 +15,12 @@ describe "String", ->
       expect('rgb(255, 255, 0)'.toHex()).toEqual('#FFFF00')
 
 
+  describe "#regExpEscape", ->
+
+    it "escapes characters used in regular expressions", ->
+      expect('/.*+?|()[]{}\\'.regExpEscape()).toEqual('\\/\\.\\*\\+\\?\\|\\(\\)\\[\\]\\{\\}\\\\')
+
+
 describe "Number", ->
 
   describe "#toHex", ->

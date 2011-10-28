@@ -12,6 +12,7 @@ describe "Mercury.Toolbar.Button", ->
       element: $('<div class="mercury-region">')
       currentElement: -> $('<div>')
     }
+    Mercury.preloadedViews['/nothing'] = 'nothing'
 
   afterEach ->
     @button = null

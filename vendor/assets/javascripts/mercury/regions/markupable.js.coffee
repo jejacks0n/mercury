@@ -17,11 +17,11 @@ class @Mercury.Regions.Markupable extends Mercury.Region
     height = @element.height()
 
     value = @element.html().replace(/^\s+|\s+$/g, '').replace('&gt;', '>')
+    @element.removeClass(Mercury.config.regionClass)
     @textarea = jQuery('<textarea>', @document).val(value)
     @textarea.attr('class', @element.attr('class')).addClass('mercury-textarea')
     @textarea.css({border: 0, background: 'transparent', display: 'block', width: width, height: height, fontFamily: '"Courier New", Courier, monospace', fontSize: '14px'})
     @element.empty().append(@textarea)
-    @element.removeClass(Mercury.config.regionClass)
 
     @previewElement = jQuery('<div>', @document)
     @element.append(@previewElement)
@@ -163,14 +163,17 @@ class @Mercury.Regions.Markupable extends Mercury.Region
 
   togglePreview: ->
     if @previewing
+      @previewing = false
       @previewElement.hide()
       @element.show()
+      @focus() if Mercury.region == @
     else
+      @previewing = true
       value = @converter.makeHtml(@element.val())
       @previewElement.html(value)
       @previewElement.show()
       @element.hide()
-    super
+      Mercury.trigger('region:blurred', {region: @})
 
 
   execCommand: (action, options = {}) ->

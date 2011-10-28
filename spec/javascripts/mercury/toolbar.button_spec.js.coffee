@@ -118,6 +118,15 @@ describe "Mercury.Toolbar.Button", ->
         Mercury.trigger('button', {action: 'foo'})
         expect(spy.callCount).toEqual(1)
 
+    describe "custom event: mode", ->
+
+      it "toggles a button when that mode is triggered and the button is toggleable", ->
+        @button = new Mercury.Toolbar.Button('foo', 'title', 'summary', {mode: 'preview', toggle: true})
+        spy = spyOn(Mercury.Toolbar.Button.prototype, 'togglePressed').andCallFake(=>)
+
+        Mercury.trigger('mode', {mode: 'preview'})
+        expect(spy.callCount).toEqual(1)
+
     describe "custom event: region:update", ->
 
       it "calls contexts if one is available and set", ->

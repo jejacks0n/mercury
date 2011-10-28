@@ -10,7 +10,7 @@ class @Mercury.Toolbar.Button
     @element = jQuery('<div>', {title: @summary ? @title, class: "mercury-button mercury-#{@name}-button"}).html("<em>#{@title}</em>")
     @element.data('expander', "<div class=\"mercury-expander-button\" data-button=\"#{@name}\"><em></em><span>#{@title}</span></div>")
 
-    @handled = []
+    @handled = {}
     dialogOptions = {title: @summary || @title, preload: @types.preload, appendTo: @options.appendDialogsTo || 'body', for: @element}
     for own type, mixed of @types
       switch type
@@ -55,6 +55,9 @@ class @Mercury.Toolbar.Button
     Mercury.bind 'button', (event, options) =>
       @element.click() if options.action == @name
 
+    Mercury.bind 'mode', (event, options) =>
+      @togglePressed() if @handled.mode == options.mode && @handled.toggle
+
     Mercury.bind 'region:update', (event, options) =>
       if @handled.context && options.region && jQuery.type(options.region.currentElement) == 'function'
         element = options.region.currentElement()
@@ -88,7 +91,7 @@ class @Mercury.Toolbar.Button
       for own type, mixed of @handled
         switch type
           when 'toggle'
-            @togglePressed()
+            @togglePressed() unless @handled.mode
 
           when 'mode'
             handled = true

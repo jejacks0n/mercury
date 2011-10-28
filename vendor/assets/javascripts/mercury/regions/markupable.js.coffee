@@ -21,10 +21,13 @@ class @Mercury.Regions.Markupable extends Mercury.Region
     @textarea = jQuery('<textarea>', @document).val(value)
     @textarea.attr('class', @element.attr('class')).addClass('mercury-textarea')
     @textarea.css({border: 0, background: 'transparent', display: 'block', width: width, height: height, fontFamily: '"Courier New", Courier, monospace', fontSize: '14px'})
+    @element.addClass(Mercury.config.regionClass)
     @element.empty().append(@textarea)
 
     @previewElement = jQuery('<div>', @document)
     @element.append(@previewElement)
+    @container = @element
+    @container.data('region', @)
     @element = @textarea
     @resize()
 
@@ -51,7 +54,7 @@ class @Mercury.Regions.Markupable extends Mercury.Region
       return if @previewing
       return unless Mercury.region == @
       @element.blur()
-      @element.removeClass('focus')
+      @container.removeClass('focus')
       Mercury.trigger('region:blurred', {region: @})
 
     @element.bind 'dragenter', (event) =>
@@ -82,7 +85,7 @@ class @Mercury.Regions.Markupable extends Mercury.Region
     @element.focus =>
       return if @previewing
       Mercury.region = @
-      @element.addClass('focus')
+      @container.addClass('focus')
       Mercury.trigger('region:focused', {region: @})
 
     @element.keydown (event) =>

@@ -48,8 +48,9 @@
       var regionTypes = ['editable', 'markupable', 'snippetable'];
       function addRegion() {
         if (newRegionType >= regionTypes.length) newRegionType = 0;
-        var region = new Element('div', {id: 'new_editable' + newRegionIndex, 'class': 'mercury-region', 'data-type': regionTypes[newRegionType]}).update('new <b>' + regionTypes[newRegionType] + '</b> region ' + newRegionIndex);
-        $('content').insertBefore(region, $('editable1'));
+        var container = new Element('div', {style: 'position:relative;margin-bottom:20px;'});
+        container.update('<div class="remove" onclick="this.up().remove()">&times;</div><div class="mercury-region" id="new_' + regionTypes[newRegionType] + '_' + newRegionIndex + '" data-type="' + regionTypes[newRegionType] + '">new <b>' + regionTypes[newRegionType] + '</b> region ' + newRegionIndex + '</div>');
+        $('content').insertBefore(container, $('dynamic_regions'));
         Mercury.trigger('reinitialize');
         newRegionIndex += 1;
         newRegionType += 1;
@@ -118,6 +119,22 @@
         width: 33%;
         border: 1px solid #000;
       }
+      div.remove {
+        position: absolute;
+        right: 0;
+        top: -10px;
+        border: 1px solid red;
+        border-radius: 50px;
+        -moz-border-radius: 50px;
+        -webkit-border-radius: 50px;
+        background: #600;
+        color: #FFF;
+        width: 20px;
+        height: 20px;
+        line-height: 18px;
+        text-align: center;
+        cursor: pointer;
+      }
     </style>
   </head>
   <body>
@@ -165,6 +182,9 @@
       <a id="anchor5" href="/mercury/test_page" class="lightview" target="_self">_self .lightview</a>
       <a id="anchor6" href="/mercury/test_page" target="foo">foo</a>
     </div>
+
+    <h1>Dynamic Regions</h1>
+    <div id="dynamic_regions"></div>
 
     <h1>Editable region</h1>
     <div id="editable1" class="mercury-region" data-type="editable">

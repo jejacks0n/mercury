@@ -72,11 +72,14 @@ class @Mercury.PageEditor
 
 
   buildRegion: (region) ->
+    @regions = []
     try
-      return if region.data('region')
-      type = region.data('type').titleize()
-      region = new Mercury.Regions[type](region, @iframe.get(0).contentWindow)
-      region.togglePreview() if @previewing
+      if region.data('region')
+        region = region.data('region')
+      else
+        type = region.data('type').titleize()
+        region = new Mercury.Regions[type](region, @iframe.get(0).contentWindow)
+        region.togglePreview() if @previewing
       @regions.push(region)
     catch error
       alert(error) if Mercury.debug

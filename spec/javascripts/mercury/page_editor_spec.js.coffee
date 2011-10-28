@@ -257,7 +257,8 @@ describe "Mercury.PageEditor", ->
     it "doesn't re-instantiate the region if the element's already initialized", ->
       $('#region2').data('region', {foo: 'bar'})
       @pageEditor.buildRegion($('#region2'))
-      expect(@pageEditor.regions.length).toEqual(0)
+      expect(@pageEditor.regions.length).toEqual(1)
+      expect(@pageEditor.regions[0]).toEqual({foo: 'bar'})
 
     it "calls togglePreview on the region if in preview mode", ->
       callCount = 0

@@ -63,6 +63,7 @@ class @Mercury.PageEditor
 
 
   initializeRegions: ->
+    @regions = []
     @buildRegion(jQuery(region)) for region in jQuery(".#{Mercury.config.regionClass}", @document)
     return unless @options.visible
     for region in @regions
@@ -72,7 +73,6 @@ class @Mercury.PageEditor
 
 
   buildRegion: (region) ->
-    @regions = []
     try
       if region.data('region')
         region = region.data('region')

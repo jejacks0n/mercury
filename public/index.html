@@ -41,7 +41,19 @@
           snippet_12: {name: 'example', options: {'options[favorite_beer]': "Bells Hopslam", 'options[first_name]': "12"}},
           snippet_13: {name: 'example', options: {'options[favorite_beer]': "Bells Hopslam", 'options[first_name]': "13"}}
         });
-      })
+      });
+
+      var newRegionIndex = 1;
+      var newRegionType = 0;
+      var regionTypes = ['editable', 'markupable', 'snippetable'];
+      function addRegion() {
+        if (newRegionType >= regionTypes.length) newRegionType = 0;
+        var region = new Element('div', {id: 'new_editable' + newRegionIndex, 'class': 'mercury-region', 'data-type': regionTypes[newRegionType]}).update('new <b>' + regionTypes[newRegionType] + '</b> region ' + newRegionIndex);
+        $('content').insertBefore(region, $('editable1'));
+        Mercury.trigger('reinitialize');
+        newRegionIndex += 1;
+        newRegionType += 1;
+      }
     </script>
 
     <!-- styles for the content layout -->
@@ -115,6 +127,7 @@
     <ul id="controls">
       <li><div onclick="alert(Mercury.version)">Mercury Version</div></li>
       <li><div onclick="Mercury.trigger('toggle:interface')">Toggle Interface</div></li>
+      <li><div onclick="addRegion()">Add & Reinitialize Regions</div></li>
       <li><div onclick="var num = 1; History.pushState({state: num}, 'Mercury Editor -- With history.pushState!', '?pushstate=' + num);">history.pushState</div></li>
       <li><div onclick="History.go(-1);">History.go(-1)</div></li>
       <li><div onclick="History.back();">History.back()</div></li>
@@ -278,6 +291,30 @@
       <!--<iframe style="width: 400px; height: 225px; " src="http://player.vimeo.com/video/615344?title=1&amp;byline=1&amp;portrait=0&amp;color=ffffff" frameborder="0"></iframe>123-->
     </div>
 
+    <h1>Snippetable region</h1>
+    <div id="snippetable1" class="mercury-region" data-type="snippetable">
+      <div class="mercury-snippet" data-snippet="snippet_2">snippet2</div>
+      <div class="mercury-snippet" data-snippet="snippet_3">snippet3</div>
+      <div class="mercury-snippet" data-snippet="snippet_4">snippet4</div>
+      <div class="mercury-snippet" data-snippet="snippet_5">snippet5</div>
+      <div class="mercury-snippet" data-snippet="snippet_6">snippet6</div>
+      <div class="mercury-snippet" data-snippet="snippet_7">snippet7</div>
+      <div class="mercury-snippet" data-snippet="snippet_8">snippet8</div>
+      <div class="mercury-snippet" data-snippet="snippet_9">snippet9</div>
+    </div>
+
+    <h1>Editable region (single snippet and no content)</h1>
+    <div id="editable2" class="mercury-region" data-type="editable">
+      <div class="mercury-snippet" data-snippet="snippet_10">snippet10</div>
+    </div>
+
+    <h1>Snippetable region (iframe snippet that contains flash)</h1>
+    <div id="snippetable2" class="mercury-region" data-type="snippetable">
+      <div class="mercury-snippet" data-snippet="snippet_11">snippet11</div>
+      <div class="mercury-snippet" data-snippet="snippet_12">snippet12</div>
+      <iframe class="mercury-snippet" data-snippet="snippet_13"  width="560" height="349" src="http://www.youtube.com/embed/0pXYp72dwl0?wmode=transparent" frameborder="0" allowfullscreen="true"></iframe>
+    </div>
+
     <h1>Markupable region (with markdown)</h1>
     <div id="markupable1" class="mercury-region" data-type="markupable">
 ## notes ##
@@ -314,35 +351,12 @@
 Turkey corned beef ham, chuck ham hock **venison _drumstick_ ** tongue ribeye. Beef tongue pancetta, short ribs meatball headcheese jowl bacon swine t-bone shoulder venison. Hamburger short loin turkey flank short ribs tail. Chicken tri-tip sausage, bresaola sirloin turkey hamburger <sub>headcheese</sub> shank rump. Pork ground round t-bone, ham hock sirloin biltong chicken fatback pork belly pastrami pancetta jowl tail. Cow ribeye pork chop, flank sirloin tail short loin pork loin chicken boudin pastrami. Boudin chuck shankle, spare ribs pancetta <sup>fatback</sup> bresaola.
     </div>
 
-    <h1>Snippetable region</h1>
-    <div id="snippetable1" class="mercury-region" data-type="snippetable">
-      <div class="mercury-snippet" data-snippet="snippet_2">snippet2</div>
-      <div class="mercury-snippet" data-snippet="snippet_3">snippet3</div>
-      <div class="mercury-snippet" data-snippet="snippet_4">snippet4</div>
-      <div class="mercury-snippet" data-snippet="snippet_5">snippet5</div>
-      <div class="mercury-snippet" data-snippet="snippet_6">snippet6</div>
-      <div class="mercury-snippet" data-snippet="snippet_7">snippet7</div>
-      <div class="mercury-snippet" data-snippet="snippet_8">snippet8</div>
-      <div class="mercury-snippet" data-snippet="snippet_9">snippet9</div>
-    </div>
-
-    <h1>Editable region (single snippet and no content)</h1>
-    <div id="editable2" class="mercury-region" data-type="editable">
-      <div class="mercury-snippet" data-snippet="snippet_10">snippet10</div>
-    </div>
-
     <h1>Editable region (fixed width/height and overflow)</h1>
     <div id="editable3" class="mercury-region" data-type="editable" style="width:200px;height:90px;">
       wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
       <br/>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/><a href="#offset_test">8</a><br/>9<br/>10<br/>11<br/>12<br/>13<br/>14<br/>15
     </div>
 
-    <h1>Snippetable region (iframe snippet that contains flash)</h1>
-    <div id="snippetable2" class="mercury-region" data-type="snippetable">
-      <div class="mercury-snippet" data-snippet="snippet_11">snippet11</div>
-      <div class="mercury-snippet" data-snippet="snippet_12">snippet12</div>
-      <iframe class="mercury-snippet" data-snippet="snippet_13"  width="560" height="349" src="http://www.youtube.com/embed/0pXYp72dwl0?wmode=transparent" frameborder="0" allowfullscreen="true"></iframe>
-    </div>
   </div>
 
   </body>

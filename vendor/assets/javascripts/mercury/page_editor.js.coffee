@@ -40,10 +40,8 @@ class @Mercury.PageEditor
       stylesToInject = Mercury.config.injectedStyles.replace(/{{regionClass}}/g, Mercury.config.regionClass)
       jQuery("<style mercury-styles=\"true\">").html(stylesToInject).appendTo(@document.find('head'))
 
-      # jquery: make jQuery evaluate scripts within the context of the iframe window -- note that this means that we
-      # can't use eval in mercury (eg. script tags in ajax responses) because it will eval in the wrong context (you can
-      # use top.Mercury though, if you keep it in mind)
-      # todo: look into `context` options for ajax as an alternative
+      # jquery: make jQuery evaluate scripts within the context of the iframe window
+      # todo: look into `context` options for ajax as an alternative -- didn't seem to work in the initial tests
       iframeWindow = @iframe.get(0).contentWindow
       jQuery.globalEval = (data) -> (iframeWindow.execScript || (data) -> iframeWindow["eval"].call(iframeWindow, data))(data) if (data && /\S/.test(data))
 
@@ -75,8 +73,11 @@ class @Mercury.PageEditor
 
   buildRegion: (region) ->
     try
+      return if region.data('region')
       type = region.data('type').titleize()
-      @regions.push(new Mercury.Regions[type](region, @iframe.get(0).contentWindow))
+      region = new Mercury.Regions[type](region, @iframe.get(0).contentWindow)
+      region.togglePreview() if @previewing
+      @regions.push(region)
     catch error
       alert(error) if Mercury.debug
       alert("Region type is malformed, no data-type provided, or \"#{type}\" is unknown.")
@@ -96,8 +97,11 @@ class @Mercury.PageEditor
     Mercury.bind 'initialize:frame', => setTimeout(@initializeFrame, 1000)
     Mercury.bind 'focus:frame', => @iframe.focus()
     Mercury.bind 'focus:window', => setTimeout((=> @focusableElement.focus()), 10)
-
     Mercury.bind 'toggle:interface', => @toggleInterface()
+    Mercury.bind 'reinitialize', => @initializeRegions()
+
+    Mercury.bind 'mode', (event, options) =>
+      @previewing = !@previewing if options.mode == 'preview'
 
     Mercury.bind 'action', (event, options) =>
        @save() if options.action == 'save'
@@ -113,6 +117,7 @@ class @Mercury.PageEditor
 
   toggleInterface: ->
     if @visible
+      Mercury.trigger('mode', {mode: 'preview'}) if @previewing
       @visible = false
       @toolbar.hide()
       @statusbar.hide()

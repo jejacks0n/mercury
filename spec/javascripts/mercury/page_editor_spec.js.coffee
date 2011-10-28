@@ -15,6 +15,8 @@ describe "Mercury.PageEditor", ->
     $(window).unbind('mercury:focus:frame')
     $(window).unbind('mercury:focus:window')
     $(window).unbind('mercury:toggle:interface')
+    $(window).unbind('mercury:reinitialize')
+    $(window).unbind('mercury:mode')
     $(window).unbind('mercury:action')
     $(window).unbind('resize')
     $(document).unbind('mousedown')
@@ -252,6 +254,24 @@ describe "Mercury.PageEditor", ->
       expect(spy.callCount).toEqual(1)
       expect(spy.argsForCall[0]).toEqual(['Region type is malformed, no data-type provided, or "Editable" is unknown.'])
 
+    it "doesn't re-instantiate the region if the element's already initialized", ->
+      $('#region2').data('region', {foo: 'bar'})
+      @pageEditor.buildRegion($('#region2'))
+      expect(@pageEditor.regions.length).toEqual(0)
+
+    it "calls togglePreview on the region if in preview mode", ->
+      callCount = 0
+      Mercury.Regions.Editable = -> {region: true, togglePreview: -> callCount += 1 }
+      @pageEditor.previewing = true
+      @pageEditor.buildRegion($('#region2'))
+      expect(callCount).toEqual(1)
+
+    it "doesn't call togglePreview if not in preview mode", ->
+      callCount = 0
+      Mercury.Regions.Editable = -> {region: true, togglePreview: -> callCount += 1 }
+      @pageEditor.buildRegion($('#region2'))
+      expect(callCount).toEqual(0)
+
 
   describe "#finalizeInterface", ->
 
@@ -319,6 +339,23 @@ describe "Mercury.PageEditor", ->
       it "calls toggleInterface", ->
         spy = spyOn(Mercury.PageEditor.prototype, 'toggleInterface').andCallFake(=>)
         Mercury.trigger('toggle:interface')
+        expect(spy.callCount).toEqual(1)
+
+    describe "custom event: mode", ->
+
+      it "toggles preview mode if needed", ->
+        Mercury.trigger('mode', {mode: 'preview'})
+        expect(@pageEditor.previewing).toEqual(true)
+        Mercury.trigger('mode', {mode: 'preview'})
+        expect(@pageEditor.previewing).toEqual(false)
+        Mercury.trigger('mode', {mode: 'foo'})
+        expect(@pageEditor.previewing).toEqual(false)
+
+    describe "custom event: reinitialize", ->
+
+      it "calls initializeRegions", ->
+        spy = spyOn(Mercury.PageEditor.prototype, 'initializeRegions').andCallFake(=>)
+        Mercury.trigger('reinitialize')
         expect(spy.callCount).toEqual(1)
 
     describe "custom event: action", ->
@@ -394,6 +431,14 @@ describe "Mercury.PageEditor", ->
 
       beforeEach ->
         @pageEditor.visible = true
+
+      it "triggers an extra preview mode event if currently previewing", ->
+        @pageEditor.previewing = true
+        spy = spyOn(Mercury, 'trigger').andCallFake(=>)
+        @pageEditor.toggleInterface()
+        expect(spy.callCount).toEqual(3)
+        expect(spy.argsForCall[0]).toEqual(['mode', {mode: 'preview'}])
+        expect(spy.argsForCall[1]).toEqual(['mode', {mode: 'preview'}])
 
       it "sets visible to false", ->
         @pageEditor.toggleInterface()

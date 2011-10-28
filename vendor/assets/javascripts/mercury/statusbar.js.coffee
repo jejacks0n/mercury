@@ -20,7 +20,7 @@ class @Mercury.Statusbar
       @setPath(options.region.path()) if options.region && jQuery.type(options.region.path) == 'function'
 
     @aboutElement.click =>
-      Mercury.lightview('/mercury/lightviews/about.html', {title: "About Mercury Editor v#{Mercury.version}"})
+      Mercury.lightview('/mercury/lightviews/about.html', {title: "About Mercury Editor v#{Mercury.version}", closeButton: true})
 
 
   height: ->

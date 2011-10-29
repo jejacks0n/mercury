@@ -274,27 +274,29 @@ describe "Mercury.uploader", ->
       @setTimeoutSpy.andCallFake(=>)
       Mercury.uploader.hide(1)
       expect(@setTimeoutSpy.callCount).toEqual(1)
-      expect(@setTimeoutSpy.argsForCall[0][1]).toEqual(1000)
+      expect(@setTimeoutSpy.argsForCall[0][0]).toEqual(1000)
 
     it "hides the overlay and element", ->
-      @setTimeoutSpy.andCallFake((callback) => callback())
+      @setTimeoutSpy.andCallFake((timeout, callback) =>
+        console.debug(arguments)
+        callback())
       Mercury.uploader.hide()
       expect($('#test .mercury-uploader').css('opacity')).toEqual('0')
       expect($('#test .mercury-uploader-overlay').css('opacity')).toEqual('0')
 
     it "calls reset", ->
-      @setTimeoutSpy.andCallFake((callback) => callback())
+      @setTimeoutSpy.andCallFake((timeout, callback) => callback())
       spy = spyOn(Mercury.uploader, 'reset').andCallFake(=>)
       Mercury.uploader.hide()
       expect(spy.callCount).toEqual(1)
 
     it "sets visible to false", ->
-      @setTimeoutSpy.andCallFake((callback) => callback())
+      @setTimeoutSpy.andCallFake((timeout, callback) => callback())
       Mercury.uploader.hide()
       expect(Mercury.uploader.visible).toEqual(false)
 
     it "focuses the frame", ->
-      @setTimeoutSpy.andCallFake((callback) => callback())
+      @setTimeoutSpy.andCallFake((timeout, callback) => callback())
       spy = spyOn(Mercury, 'trigger').andCallFake(=>)
       Mercury.uploader.hide()
       expect(spy.callCount).toEqual(1)
@@ -363,11 +365,7 @@ describe "Mercury.uploader", ->
       it "updates the status to 'Successfully uploaded' and passes the total file size", ->
         @events.onload.call(Mercury.uploader)
         expect(@updateStatusSpy.callCount).toEqual(1)
-        expect(@updateStatusSpy.argsForCall[0]).toEqual(['Successfully uploaded', 1024])
-
-      it "calls hide", ->
-        @events.onload.call(Mercury.uploader)
-        expect(@hideSpy.callCount).toEqual(1)
+        expect(@updateStatusSpy.argsForCall[0]).toEqual(['Successfully uploaded...', 1024])
 
     describe ".onerror", ->
 

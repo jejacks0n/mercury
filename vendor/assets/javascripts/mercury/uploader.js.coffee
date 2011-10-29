@@ -102,6 +102,7 @@ jQuery.extend Mercury.uploader, {
             else
               jQuery.parseJSON(event.target.responseText)
           Mercury.trigger('action', {action: 'insertImage', value: {src: response.image.url}})
+          @hide()
         catch error
           @updateStatus('Error: Unable to upload the file')
           alert("Unable to process response: #{error}")
@@ -133,7 +134,7 @@ jQuery.extend Mercury.uploader, {
 
 
   hide: (delay = 0) ->
-    setTimeout((=>
+    setTimeout delay * 1000, =>
       @element.animate {opacity: 0}, 200, 'easeInOutSine', =>
         @overlay.animate {opacity: 0}, 200, 'easeInOutSine', =>
           @overlay.hide()
@@ -141,14 +142,13 @@ jQuery.extend Mercury.uploader, {
           @reset()
           @visible = false
           Mercury.trigger('focus:frame')
-    ), delay * 1000)
 
 
   reset: ->
     @element.find('.mercury-uploader-preview b').html('')
     @element.find('.mercury-uploader-indicator div').css({width: 0})
     @element.find('.mercury-uploader-indicator b').html('0%').hide()
-    @updateStatus('Processing...',)
+    @updateStatus('Processing...')
 
 
   uploaderEvents:
@@ -161,8 +161,7 @@ jQuery.extend Mercury.uploader, {
       @hide(1)
 
     onload: ->
-      @updateStatus('Successfully uploaded', @file.size)
-      @hide(1)
+      @updateStatus('Successfully uploaded...', @file.size)
 
     onerror: ->
       @updateStatus('Error: Unable to upload the file')

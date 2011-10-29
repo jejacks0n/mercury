@@ -331,7 +331,6 @@ class @Mercury.Regions.Editable extends Mercury.Region
       event.preventDefault()
       return
     else
-      console.debug('testing')
       # get current selection & range
       selection = @selection()
       selection.placeMarker()
@@ -369,8 +368,8 @@ class @Mercury.Regions.Editable extends Mercury.Region
             for allowedTag, allowedAttributes of Mercury.config.pasting.whitelist
               if element.tagName.toLowerCase() == allowedTag.toLowerCase()
                 allowed = true
-                for attr, index in element.attributes
-                  jQuery(element).attr(attr.name, null) if attr && allowedAttributes.indexOf(attr.name) == -1
+                for attr in jQuery(element.attributes)
+                  jQuery(element).removeAttr(attr.name) unless attr.name in allowedAttributes
                 break
             jQuery(element).replaceWith(jQuery(element).contents()) unless allowed
           content = sanitizer.html()

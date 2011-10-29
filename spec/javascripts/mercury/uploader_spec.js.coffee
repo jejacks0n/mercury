@@ -277,9 +277,7 @@ describe "Mercury.uploader", ->
       expect(@setTimeoutSpy.argsForCall[0][0]).toEqual(1000)
 
     it "hides the overlay and element", ->
-      @setTimeoutSpy.andCallFake((timeout, callback) =>
-        console.debug(arguments)
-        callback())
+      @setTimeoutSpy.andCallFake((timeout, callback) => callback())
       Mercury.uploader.hide()
       expect($('#test .mercury-uploader').css('opacity')).toEqual('0')
       expect($('#test .mercury-uploader-overlay').css('opacity')).toEqual('0')

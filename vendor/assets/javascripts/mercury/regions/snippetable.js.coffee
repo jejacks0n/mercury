@@ -31,7 +31,6 @@ class @Mercury.Regions.Snippetable extends Mercury.Region
     jQuery(@document).keydown (event) =>
       return if @previewing
       return unless Mercury.region == @
-      Mercury.changes = true
       switch event.keyCode
         when 90 # undo / redo
           return unless event.metaKey
@@ -42,6 +41,11 @@ class @Mercury.Regions.Snippetable extends Mercury.Region
             @execCommand('undo')
 
           return
+
+    jQuery(@document).keydown (event) =>
+      return if @previewing
+      return unless Mercury.region == @
+      Mercury.changes = true
 
     @element.mouseup =>
       return if @previewing

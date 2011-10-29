@@ -137,7 +137,6 @@ class @Mercury.Regions.Editable extends Mercury.Region
 
     @element.keydown (event) =>
       return if @previewing
-      Mercury.changes = true
       switch event.keyCode
         when 90 # undo / redo
           return unless event.metaKey
@@ -187,6 +186,7 @@ class @Mercury.Regions.Editable extends Mercury.Region
     @element.keyup =>
       return if @previewing
       Mercury.trigger('region:update', {region: @})
+      Mercury.changes = true
 
 
   focus: ->

@@ -90,7 +90,6 @@ class @Mercury.Regions.Markupable extends Mercury.Region
 
     @element.keydown (event) =>
       return if @previewing
-      Mercury.changes = true
       @resize()
       switch event.keyCode
         when 90 # undo / redo
@@ -138,6 +137,7 @@ class @Mercury.Regions.Markupable extends Mercury.Region
 
     @element.keyup =>
       return if @previewing
+      Mercury.changes = true
       @resize()
       Mercury.trigger('region:update', {region: @})
 

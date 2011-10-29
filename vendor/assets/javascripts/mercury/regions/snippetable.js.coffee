@@ -42,7 +42,7 @@ class @Mercury.Regions.Snippetable extends Mercury.Region
 
           return
 
-    jQuery(@document).keydown (event) =>
+    jQuery(@document).keyup =>
       return if @previewing
       return unless Mercury.region == @
       Mercury.changes = true

@@ -40,11 +40,11 @@ jQuery.extend @Mercury, {
   supported: document.getElementById && document.designMode && !jQuery.browser.konqueror && !jQuery.browser.msie
 
   # Mercury object namespaces
-  Regions: {}
-  modalHandlers: {}
-  lightviewHandlers: {}
-  dialogHandlers: {}
-  preloadedViews: {}
+  Regions: Mercury.Regions || {}
+  modalHandlers: Mercury.modalHandlers || {}
+  lightviewHandlers: Mercury.lightviewHandlers || {}
+  dialogHandlers: Mercury.dialogHandlers || {}
+  preloadedViews: Mercury.preloadedViews || {}
 
   # Custom event and logging methods
   bind: (eventName, callback) ->

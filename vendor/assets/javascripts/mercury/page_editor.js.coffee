@@ -29,6 +29,7 @@ class @Mercury.PageEditor
 
     @toolbar = new Mercury.Toolbar(@options)
     @statusbar = new Mercury.Statusbar(@options)
+    @resize()
 
 
   initializeFrame: ->

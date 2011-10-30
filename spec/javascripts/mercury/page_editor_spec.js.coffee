@@ -75,6 +75,7 @@ describe "Mercury.PageEditor", ->
   describe "#initializeInterface", ->
 
     beforeEach ->
+      @resizeSpy = spyOn(Mercury.PageEditor.prototype, 'resize').andCallFake(=>)
       Mercury.Toolbar = -> {toolbar: true}
       Mercury.Statusbar = -> {statusbar: true}
       @iframeSrcSpy = spyOn(Mercury.PageEditor.prototype, 'iframeSrc').andCallFake(=> '/foo')
@@ -99,6 +100,10 @@ describe "Mercury.PageEditor", ->
     it "instantiates the statusbar", ->
       @pageEditor = new Mercury.PageEditor('', {appendTo: $('#test')})
       expect(@pageEditor.statusbar).toEqual({statusbar: true})
+
+    it "calls resize", ->
+      @pageEditor = new Mercury.PageEditor('', {appendTo: $('#test')})
+      expect(@resizeSpy.callCount).toEqual(1)
 
 
   describe "#initializeFrame", ->
@@ -151,7 +156,7 @@ describe "Mercury.PageEditor", ->
     it "calls resize", ->
       @finalizeInterfaceSpy.andCallFake(=>)
       @pageEditor.initializeFrame()
-      expect(@resizeSpy.callCount).toEqual(1)
+      expect(@resizeSpy.callCount).toEqual(2)
 
     it "calls initializeRegions", ->
       @finalizeInterfaceSpy.andCallFake(=>)
@@ -211,6 +216,7 @@ describe "Mercury.PageEditor", ->
   describe "#initializeRegions", ->
 
     beforeEach ->
+      @resizeSpy = spyOn(Mercury.PageEditor.prototype, 'resize').andCallFake(=>)
       Mercury.PageEditor.prototype.initializeFrame = ->
       @pageEditor = new Mercury.PageEditor('', {appendTo: $('#test')})
       @pageEditor.document = $(document)
@@ -243,6 +249,7 @@ describe "Mercury.PageEditor", ->
   describe "#buildRegion", ->
 
     beforeEach ->
+      @resizeSpy = spyOn(Mercury.PageEditor.prototype, 'resize').andCallFake(=>)
       Mercury.PageEditor.prototype.initializeFrame = ->
       Mercury.Regions.Editable = -> {region: true}
       @pageEditor = new Mercury.PageEditor('', {appendTo: $('#test')})
@@ -283,6 +290,7 @@ describe "Mercury.PageEditor", ->
   describe "#finalizeInterface", ->
 
     beforeEach ->
+      @resizeSpy = spyOn(Mercury.PageEditor.prototype, 'resize').andCallFake(=>)
       Mercury.PageEditor.prototype.initializeFrame = ->
       Mercury.SnippetToolbar = -> {snippetToolbar: true}
       @pageEditor = new Mercury.PageEditor('', {appendTo: $('#test')})

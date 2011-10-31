@@ -168,11 +168,13 @@ class @Mercury.Regions.Markupable extends Mercury.Region
   togglePreview: ->
     if @previewing
       @previewing = false
+      @container.addClass(Mercury.config.regionClass).removeClass("#{Mercury.config.regionClass}-preview")
       @previewElement.hide()
       @element.show()
       @focus() if Mercury.region == @
     else
       @previewing = true
+      @container.addClass("#{Mercury.config.regionClass}-preview").removeClass(Mercury.config.regionClass)
       value = @converter.makeHtml(@element.val())
       @previewElement.html(value)
       @previewElement.show()

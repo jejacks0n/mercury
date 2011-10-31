@@ -52,6 +52,7 @@ class @Mercury.Snippet
 
   loadPreview: (element, callback = null) ->
     jQuery.ajax Mercury.config.snippets.previewUrl.replace(':name', @name), {
+      headers: Mercury.ajaxHeaders()
       type: Mercury.config.snippets.method
       data: @options
       success: (data) =>

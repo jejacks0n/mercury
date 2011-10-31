@@ -650,10 +650,10 @@ describe "Mercury.PageEditor", ->
         @pageEditor.save()
         expect(@ajaxSpy.argsForCall[0][1]['data']).toEqual({content: {region1: 'region1'}})
 
-      it "sets headers by calling #saveHeaders", ->
+      it "sets headers by calling Mercury.ajaxHeaders", ->
         @ajaxSpy.andCallFake(=>)
         spyOn(Mercury.PageEditor.prototype, 'serialize').andCallFake(=> {region1: 'region1'})
-        spy = spyOn(Mercury.PageEditor.prototype, 'saveHeaders').andCallFake(=> {'X-CSRFToken': 'f00'})
+        spyOn(Mercury, 'ajaxHeaders').andCallFake(=> {'X-CSRFToken': 'f00'})
         @pageEditor.save()
         expect(@ajaxSpy.argsForCall[0][1]['headers']).toEqual({'X-CSRFToken': 'f00'})
 

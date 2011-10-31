@@ -7,6 +7,7 @@ class Mercury.PageEditor extends Mercury.PageEditor
     return
     method = 'PUT' if @options.saveMethod == 'PUT'
     jQuery.ajax url, {
+      headers: Mercury.ajaxHeaders()
       type: method || 'POST'
       dataType: 'xml'
       data: data

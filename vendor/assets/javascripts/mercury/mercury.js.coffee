@@ -46,6 +46,13 @@ jQuery.extend @Mercury, {
   dialogHandlers: Mercury.dialogHandlers || {}
   preloadedViews: Mercury.preloadedViews || {}
 
+  # Custom ajax headers
+  ajaxHeaders: ->
+    headers = {}
+    headers[Mercury.config.csrfHeader] = Mercury.csrfToken
+    return headers
+
+
   # Custom event and logging methods
   bind: (eventName, callback) ->
     jQuery(top).bind("mercury:#{eventName}", callback)

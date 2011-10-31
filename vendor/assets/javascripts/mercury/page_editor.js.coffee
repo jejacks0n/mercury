@@ -183,9 +183,9 @@ class @Mercury.PageEditor
     data = jQuery.toJSON(data) unless @options.saveStyle == 'form'
     method = 'PUT' if @options.saveMethod == 'PUT'
     jQuery.ajax url, {
+      headers: Mercury.ajaxHeaders()
       type: method || 'POST'
       dataType: @options.saveDataType || 'json'
-      headers: @saveHeaders()
       data: {content: data, _method: method}
       success: =>
         callback() if callback
@@ -194,12 +194,6 @@ class @Mercury.PageEditor
       error: =>
         alert("Mercury was unable to save to the url: #{url}")
     }
-
-
-  saveHeaders: ->
-    headers = {}
-    headers[Mercury.config.csrfHeader] = Mercury.csrfToken
-    return headers
 
 
   serialize: ->

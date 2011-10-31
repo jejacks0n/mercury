@@ -114,7 +114,8 @@ jQuery.extend Mercury.lightview, {
       setTimeout((=> @loadContent(Mercury.preloadedViews[@url])), 10)
     else
       jQuery.ajax @url, {
-        type: @options.loadType || 'get'
+        headers: Mercury.ajaxHeaders()
+        type: @options.loadType || 'GET'
         data: @options.loadData
         success: (data) => @loadContent(data)
         error: =>

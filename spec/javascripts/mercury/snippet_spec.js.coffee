@@ -74,11 +74,13 @@ describe "Mercury.Snippet", ->
 
     it "makes an ajax request", ->
       @ajaxSpy.andCallFake(=>)
+      spyOn(Mercury, 'ajaxHeaders').andCallFake(=> {'X-CSRFToken': 'f00'})
       @snippet.loadPreview()
       expect(@ajaxSpy.callCount).toEqual(1)
       expect(@ajaxSpy.argsForCall[0][0]).toEqual("/mercury/snippets/foo/preview.html")
       expect(@ajaxSpy.argsForCall[0][1]['data']).toEqual({foo: 'bar'})
       expect(@ajaxSpy.argsForCall[0][1]['type']).toEqual('POST')
+      expect(@ajaxSpy.argsForCall[0][1]['headers']).toEqual({'X-CSRFToken': 'f00'})
 
     describe "ajax success", ->
 

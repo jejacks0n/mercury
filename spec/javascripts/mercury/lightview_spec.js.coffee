@@ -328,8 +328,10 @@ describe "Mercury.lightview", ->
 
       it "makes an ajax request", ->
         @ajaxSpy.andCallFake(=>)
+        spyOn(Mercury, 'ajaxHeaders').andCallFake(=> {'X-CSRFToken': 'f00'})
         Mercury.lightview.load()
         expect(@ajaxSpy.callCount).toEqual(1)
+        expect(@ajaxSpy.argsForCall[0][1]['headers']).toEqual({'X-CSRFToken': 'f00'})
 
       describe "on success", ->
 

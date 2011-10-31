@@ -7,12 +7,12 @@
     table = cell.closest('table')
     table.find('.selected').removeAttr('class')
     cell.addClass('selected')
-    Mercury.tableEditor(table, cell, '&nbsp;')
+    Mercury.tableEditor(table, cell, '<br/>')
 
   # select the first td
   firstCell = table.find('td, th').first()
   firstCell.addClass('selected')
-  Mercury.tableEditor(table, firstCell, '&nbsp;')
+  Mercury.tableEditor(table, firstCell, '<br/>')
 
   # make the buttons work
   @element.find('input.action').click (event) =>

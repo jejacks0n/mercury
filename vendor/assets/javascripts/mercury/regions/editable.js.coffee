@@ -49,7 +49,7 @@ class @Mercury.Regions.Editable extends Mercury.Region
       if currentElement.length
         # setup the table editor if we're inside a table
         table = currentElement.closest('table', @element)
-        Mercury.tableEditor(table, currentElement.closest('tr, td'), '&nbsp;') if table.length
+        Mercury.tableEditor(table, currentElement.closest('tr, td'), '<br/>') if table.length
         # display a tooltip if we're in an anchor
         anchor = currentElement.closest('a', @element)
         if anchor.length && anchor.attr('href')
@@ -165,7 +165,7 @@ class @Mercury.Regions.Editable extends Mercury.Region
             else if container.parents('ul, ol').length > 1
               @execCommand('outdent')
           else
-            @execCommand('insertHTML', {value: '&nbsp; '})
+            @execCommand('insertHTML', {value: '&nbsp;&nbsp;'})
 
       if event.metaKey
         switch event.keyCode

@@ -192,7 +192,10 @@ class @Mercury.Regions.Editable extends Mercury.Region
   focus: ->
     if Mercury.region != @
       @element.focus()
-      @selection().selection.collapseToStart()
+      try
+        @selection().selection.collapseToStart()
+      catch e
+        # intentially do nothing
 
     Mercury.trigger('region:focused', {region: @})
     Mercury.trigger('region:update', {region: @})

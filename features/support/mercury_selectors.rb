@@ -54,6 +54,7 @@ module MercurySelectorsHelpers
       when 'the lightview', 'the lightview window', /^the (.*?) lightview$/ then '.mercury-lightview'
       when 'the lightview overlay' then '.mercury-lightview-overlay'
       when 'the lightview title' then '.mercury-lightview h1.mercury-lightview-title'
+      when 'the lightview close button' then '.mercury-lightview h1.mercury-lightview-title a'
 
       # snippet selectors
       when 'the snippet toolbar' then '.mercury-snippet-toolbar'

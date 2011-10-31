@@ -17,7 +17,7 @@ Feature:
     And I should see "Project Home" within the lightview window
     And I should see "Project Source" within the lightview window
 
-    When I click on the lightview overlay
+    When I click on the lightview close button
     Then the lightview window should not be visible
     And the lightview overlay should not be visible
 

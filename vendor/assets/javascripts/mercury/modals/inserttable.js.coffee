@@ -45,7 +45,7 @@
   @element.find('form').submit (event) =>
     event.preventDefault()
     table.find('.selected').removeAttr('class')
-    table.find('td, th').html('&nbsp;')
+    table.find('td, th').html('<br/>')
 
     html = jQuery('<div>').html(table).html()
     value = html.replace(/^\s+|\n/gm, '').replace(/(<\/.*?>|<table.*?>|<tbody>|<tr>)/g, '$1\n')

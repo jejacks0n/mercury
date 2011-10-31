@@ -152,7 +152,7 @@ describe "Mercury.modalHandlers.insertTable", ->
       value = spy.argsForCall[0][1]['value']
       expect(value).toContain('border="1"')
       expect(value).toContain('cellspacing="0"')
-      expect(value).toContain('<td id="cell2">&nbsp;</td>')
+      expect(value).toContain('<td id="cell2"><br></td>')
 
     it "hides the modal", ->
       spy = spyOn(@modal, 'hide').andCallFake(=>)

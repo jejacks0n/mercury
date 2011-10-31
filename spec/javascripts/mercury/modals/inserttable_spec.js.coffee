@@ -148,7 +148,7 @@ describe "Mercury.modalHandlers.insertTable", ->
       jasmine.simulate.click($('#submit').get(0))
       expect(spy.callCount).toEqual(1)
       expect(spy.argsForCall[0][0]).toEqual('action')
-      expect(spy.argsForCall[0][1]['action']).toEqual('insertHTML')
+      expect(spy.argsForCall[0][1]['action']).toEqual('insertTable')
       value = spy.argsForCall[0][1]['value']
       expect(value).toContain('border="1"')
       expect(value).toContain('cellspacing="0"')

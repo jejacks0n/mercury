@@ -239,6 +239,9 @@ class @Mercury.Regions.Markupable extends Mercury.Region
     insertImage: (selection, options) ->
       selection.replace('![add alt text](' + encodeURI(options.value.src) + ')', true)
 
+    insertTable: (selection, options) ->
+      selection.replace(options.value.replace(/<br>|<br\/>/ig, ''), false, true)
+
     insertLink: (selection, options) ->
       selection.replace("[#{options.value.content}](#{options.value.attrs.href} 'optional title')", true)
 

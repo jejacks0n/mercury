@@ -7,12 +7,12 @@
     table = cell.closest('table')
     table.find('.selected').removeAttr('class')
     cell.addClass('selected')
-    Mercury.tableEditor(table, cell, '<br/>')
+    Mercury.tableEditor(table, cell, '&nbsp;')
 
   # select the first td
   firstCell = table.find('td, th').first()
   firstCell.addClass('selected')
-  Mercury.tableEditor(table, firstCell, '<br/>')
+  Mercury.tableEditor(table, firstCell, '&nbsp;')
 
   # make the buttons work
   @element.find('input.action').click (event) =>
@@ -50,6 +50,6 @@
     html = jQuery('<div>').html(table).html()
     value = html.replace(/^\s+|\n/gm, '').replace(/(<\/.*?>|<table.*?>|<tbody>|<tr>)/g, '$1\n')
 
-    Mercury.trigger('action', {action: 'insertHTML', value: value})
+    Mercury.trigger('action', {action: 'insertTable', value: value})
     @hide()
 

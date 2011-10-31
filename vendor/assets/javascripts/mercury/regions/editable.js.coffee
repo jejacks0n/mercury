@@ -428,6 +428,8 @@ class @Mercury.Regions.Editable extends Mercury.Region
 
     insertImage: (selection, options) -> @execCommand('insertHTML', {value: jQuery('<img/>', options.value)})
 
+    insertTable: (selection, options) -> @execCommand('insertHTML', {value: options.value})
+
     insertLink: (selection, options) ->
       anchor = jQuery("<#{options.value.tagName}>", @document).attr(options.value.attrs).html(options.value.content)
       selection.insertNode(anchor)

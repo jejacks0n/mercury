@@ -72,7 +72,6 @@
     <span class="nx">jQuery</span><span class="p">(</span><span class="nx">@document</span><span class="p">).</span><span class="nx">keydown</span> <span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="o">=&gt;</span>
       <span class="k">return</span> <span class="k">if</span> <span class="nx">@previewing</span>
       <span class="k">return</span> <span class="nx">unless</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">region</span> <span class="o">==</span> <span class="err">@</span>
-      <span class="nv">Mercury.changes = </span><span class="kc">true</span>
       <span class="k">switch</span> <span class="nx">event</span><span class="p">.</span><span class="nx">keyCode</span>
         <span class="k">when</span> <span class="mi">90</span> <span class="c1"># undo / redo</span>
           <span class="k">return</span> <span class="nx">unless</span> <span class="nx">event</span><span class="p">.</span><span class="nx">metaKey</span>
@@ -83,6 +82,11 @@
             <span class="nx">@execCommand</span><span class="p">(</span><span class="s1">&#39;undo&#39;</span><span class="p">)</span>
 
           <span class="k">return</span>
+
+    <span class="nx">jQuery</span><span class="p">(</span><span class="nx">@document</span><span class="p">).</span><span class="nx">keyup</span> <span class="o">=&gt;</span>
+      <span class="k">return</span> <span class="k">if</span> <span class="nx">@previewing</span>
+      <span class="k">return</span> <span class="nx">unless</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">region</span> <span class="o">==</span> <span class="err">@</span>
+      <span class="nv">Mercury.changes = </span><span class="kc">true</span>
 
     <span class="nx">@element</span><span class="p">.</span><span class="nx">mouseup</span> <span class="o">=&gt;</span>
       <span class="k">return</span> <span class="k">if</span> <span class="nx">@previewing</span>

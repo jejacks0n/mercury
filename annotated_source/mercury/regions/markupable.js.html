@@ -56,14 +56,17 @@ nice if we could activate the bold button for instance.</p>
     <span class="nv">height = </span><span class="nx">@element</span><span class="p">.</span><span class="nx">height</span><span class="p">()</span>
 
     <span class="nv">value = </span><span class="nx">@element</span><span class="p">.</span><span class="nx">html</span><span class="p">().</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/^\s+|\s+$/g</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">).</span><span class="nx">replace</span><span class="p">(</span><span class="s1">&#39;&amp;gt;&#39;</span><span class="p">,</span> <span class="s1">&#39;&gt;&#39;</span><span class="p">)</span>
+    <span class="nx">@element</span><span class="p">.</span><span class="nx">removeClass</span><span class="p">(</span><span class="nx">Mercury</span><span class="p">.</span><span class="nx">config</span><span class="p">.</span><span class="nx">regionClass</span><span class="p">)</span>
     <span class="vi">@textarea = </span><span class="nx">jQuery</span><span class="p">(</span><span class="s1">&#39;&lt;textarea&gt;&#39;</span><span class="p">,</span> <span class="nx">@document</span><span class="p">).</span><span class="nx">val</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span>
     <span class="nx">@textarea</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s1">&#39;class&#39;</span><span class="p">,</span> <span class="nx">@element</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s1">&#39;class&#39;</span><span class="p">)).</span><span class="nx">addClass</span><span class="p">(</span><span class="s1">&#39;mercury-textarea&#39;</span><span class="p">)</span>
-    <span class="nx">@textarea</span><span class="p">.</span><span class="nx">css</span><span class="p">({</span><span class="nv">border: </span><span class="mi">0</span><span class="p">,</span> <span class="nv">background: </span><span class="s1">&#39;transparent&#39;</span><span class="p">,</span> <span class="nv">display: </span><span class="s1">&#39;block&#39;</span><span class="p">,</span> <span class="nv">width: </span><span class="nx">width</span><span class="p">,</span> <span class="nv">height: </span><span class="nx">height</span><span class="p">,</span> <span class="nv">fontFamily: </span><span class="s1">&#39;&quot;Courier New&quot;, Courier, monospace&#39;</span><span class="p">,</span> <span class="nv">fontSize: </span><span class="s1">&#39;14px&#39;</span><span class="p">})</span>
+    <span class="nx">@textarea</span><span class="p">.</span><span class="nx">css</span><span class="p">({</span><span class="nv">border: </span><span class="mi">0</span><span class="p">,</span> <span class="nv">background: </span><span class="s1">&#39;transparent&#39;</span><span class="p">,</span> <span class="nv">display: </span><span class="s1">&#39;block&#39;</span><span class="p">,</span> <span class="s1">&#39;overflow-y&#39;</span><span class="o">:</span> <span class="s1">&#39;hidden&#39;</span><span class="p">,</span> <span class="nv">width: </span><span class="nx">width</span><span class="p">,</span> <span class="nv">height: </span><span class="nx">height</span><span class="p">,</span> <span class="nv">fontFamily: </span><span class="s1">&#39;&quot;Courier New&quot;, Courier, monospace&#39;</span><span class="p">})</span>
+    <span class="nx">@element</span><span class="p">.</span><span class="nx">addClass</span><span class="p">(</span><span class="nx">Mercury</span><span class="p">.</span><span class="nx">config</span><span class="p">.</span><span class="nx">regionClass</span><span class="p">)</span>
     <span class="nx">@element</span><span class="p">.</span><span class="nx">empty</span><span class="p">().</span><span class="nx">append</span><span class="p">(</span><span class="nx">@textarea</span><span class="p">)</span>
-    <span class="nx">@element</span><span class="p">.</span><span class="nx">removeClass</span><span class="p">(</span><span class="nx">Mercury</span><span class="p">.</span><span class="nx">config</span><span class="p">.</span><span class="nx">regionClass</span><span class="p">)</span>
 
     <span class="vi">@previewElement = </span><span class="nx">jQuery</span><span class="p">(</span><span class="s1">&#39;&lt;div&gt;&#39;</span><span class="p">,</span> <span class="nx">@document</span><span class="p">)</span>
     <span class="nx">@element</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="nx">@previewElement</span><span class="p">)</span>
+    <span class="vi">@container = </span><span class="nx">@element</span>
+    <span class="nx">@container</span><span class="p">.</span><span class="nx">data</span><span class="p">(</span><span class="s1">&#39;region&#39;</span><span class="p">,</span> <span class="err">@</span><span class="p">)</span>
     <span class="vi">@element = </span><span class="nx">@textarea</span>
     <span class="nx">@resize</span><span class="p">()</span>
 
@@ -90,7 +93,7 @@ nice if we could activate the bold button for instance.</p>
       <span class="k">return</span> <span class="k">if</span> <span class="nx">@previewing</span>
       <span class="k">return</span> <span class="nx">unless</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">region</span> <span class="o">==</span> <span class="err">@</span>
       <span class="nx">@element</span><span class="p">.</span><span class="nx">blur</span><span class="p">()</span>
-      <span class="nx">@element</span><span class="p">.</span><span class="nx">removeClass</span><span class="p">(</span><span class="s1">&#39;focus&#39;</span><span class="p">)</span>
+      <span class="nx">@container</span><span class="p">.</span><span class="nx">removeClass</span><span class="p">(</span><span class="s1">&#39;focus&#39;</span><span class="p">)</span>
       <span class="nx">Mercury</span><span class="p">.</span><span class="nx">trigger</span><span class="p">(</span><span class="s1">&#39;region:blurred&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nv">region: </span><span class="err">@</span><span class="p">})</span>
 
     <span class="nx">@element</span><span class="p">.</span><span class="nx">bind</span> <span class="s1">&#39;dragenter&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="o">=&gt;</span>
@@ -137,12 +140,11 @@ nice if we could activate the bold button for instance.</p>
     <span class="nx">@element</span><span class="p">.</span><span class="nx">focus</span> <span class="o">=&gt;</span>
       <span class="k">return</span> <span class="k">if</span> <span class="nx">@previewing</span>
       <span class="nv">Mercury.region = </span><span class="err">@</span>
-      <span class="nx">@element</span><span class="p">.</span><span class="nx">addClass</span><span class="p">(</span><span class="s1">&#39;focus&#39;</span><span class="p">)</span>
+      <span class="nx">@container</span><span class="p">.</span><span class="nx">addClass</span><span class="p">(</span><span class="s1">&#39;focus&#39;</span><span class="p">)</span>
       <span class="nx">Mercury</span><span class="p">.</span><span class="nx">trigger</span><span class="p">(</span><span class="s1">&#39;region:focused&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nv">region: </span><span class="err">@</span><span class="p">})</span>
 
     <span class="nx">@element</span><span class="p">.</span><span class="nx">keydown</span> <span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="o">=&gt;</span>
       <span class="k">return</span> <span class="k">if</span> <span class="nx">@previewing</span>
-      <span class="nv">Mercury.changes = </span><span class="kc">true</span>
       <span class="nx">@resize</span><span class="p">()</span>
       <span class="k">switch</span> <span class="nx">event</span><span class="p">.</span><span class="nx">keyCode</span>
         <span class="k">when</span> <span class="mi">90</span> <span class="c1"># undo / redo</span>
@@ -190,6 +192,8 @@ nice if we could activate the bold button for instance.</p>
 
     <span class="nx">@element</span><span class="p">.</span><span class="nx">keyup</span> <span class="o">=&gt;</span>
       <span class="k">return</span> <span class="k">if</span> <span class="nx">@previewing</span>
+      <span class="nv">Mercury.changes = </span><span class="kc">true</span>
+      <span class="nx">@resize</span><span class="p">()</span>
       <span class="nx">Mercury</span><span class="p">.</span><span class="nx">trigger</span><span class="p">(</span><span class="s1">&#39;region:update&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nv">region: </span><span class="err">@</span><span class="p">})</span>
 
     <span class="nx">@element</span><span class="p">.</span><span class="nx">mouseup</span> <span class="o">=&gt;</span>
@@ -218,14 +222,19 @@ nice if we could activate the bold button for instance.</p>
 
   <span class="nv">togglePreview: </span><span class="o">-&gt;</span>
     <span class="k">if</span> <span class="nx">@previewing</span>
+      <span class="vi">@previewing = </span><span class="kc">false</span>
+      <span class="nx">@container</span><span class="p">.</span><span class="nx">addClass</span><span class="p">(</span><span class="nx">Mercury</span><span class="p">.</span><span class="nx">config</span><span class="p">.</span><span class="nx">regionClass</span><span class="p">).</span><span class="nx">removeClass</span><span class="p">(</span><span class="s2">&quot;#{Mercury.config.regionClass}-preview&quot;</span><span class="p">)</span>
       <span class="nx">@previewElement</span><span class="p">.</span><span class="nx">hide</span><span class="p">()</span>
       <span class="nx">@element</span><span class="p">.</span><span class="nx">show</span><span class="p">()</span>
+      <span class="nx">@focus</span><span class="p">()</span> <span class="k">if</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">region</span> <span class="o">==</span> <span class="err">@</span>
     <span class="k">else</span>
+      <span class="vi">@previewing = </span><span class="kc">true</span>
+      <span class="nx">@container</span><span class="p">.</span><span class="nx">addClass</span><span class="p">(</span><span class="s2">&quot;#{Mercury.config.regionClass}-preview&quot;</span><span class="p">).</span><span class="nx">removeClass</span><span class="p">(</span><span class="nx">Mercury</span><span class="p">.</span><span class="nx">config</span><span class="p">.</span><span class="nx">regionClass</span><span class="p">)</span>
       <span class="nv">value = </span><span class="nx">@converter</span><span class="p">.</span><span class="nx">makeHtml</span><span class="p">(</span><span class="nx">@element</span><span class="p">.</span><span class="nx">val</span><span class="p">())</span>
       <span class="nx">@previewElement</span><span class="p">.</span><span class="nx">html</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span>
       <span class="nx">@previewElement</span><span class="p">.</span><span class="nx">show</span><span class="p">()</span>
       <span class="nx">@element</span><span class="p">.</span><span class="nx">hide</span><span class="p">()</span>
-    <span class="k">super</span>
+      <span class="nx">Mercury</span><span class="p">.</span><span class="nx">trigger</span><span class="p">(</span><span class="s1">&#39;region:blurred&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nv">region: </span><span class="err">@</span><span class="p">})</span>
 
 
   <span class="nv">execCommand: </span><span class="nf">(action, options = {}) -&gt;</span>
@@ -305,26 +314,18 @@ all other times it should store if there&rsquo;s a 1 second pause</p>
     <span class="k">return</span> <span class="k">new</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">Regions</span><span class="p">.</span><span class="nx">Markupable</span><span class="p">.</span><span class="nx">Selection</span><span class="p">(</span><span class="nx">@element</span><span class="p">)</span>
 
 
-  <span class="nv">resize: </span><span class="o">-&gt;</span></pre></div>
+  <span class="nv">resize: </span><span class="o">-&gt;</span>
+    <span class="nx">@element</span><span class="p">.</span><span class="nx">css</span><span class="p">({</span><span class="nv">height: </span><span class="nx">@element</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span><span class="nx">scrollHeight</span> <span class="o">-</span> <span class="mi">100</span><span class="p">})</span>
+    <span class="nx">@element</span><span class="p">.</span><span class="nx">css</span><span class="p">({</span><span class="nv">height: </span><span class="nx">@element</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span><span class="nx">scrollHeight</span><span class="p">});</span>
+
+
+  <span class="nv">snippets: </span><span class="o">-&gt;</span></pre></div>
       </td>
     </tr>
     <tr id='section-9'>
       <td class=docs>
         <div class="pilwrap">
           <a class="pilcrow" href="#section-9">&#182;</a>
-        </div>
-        <p>todo: get this working if possible, and it seems to be useful
-adjustedHeight = Math.max(@textarea.get(0).scrollHeight, @textarea.get(0).clientHeight)
-@textarea.height(adjustedHeight) if adjustedHeight &gt;= @textarea.get(0).clientHeight  </p>
-      </td>
-      <td class=code>
-        <div class='highlight'><pre>  <span class="nv">snippets: </span><span class="o">-&gt;</span></pre></div>
-      </td>
-    </tr>
-    <tr id='section-10'>
-      <td class=docs>
-        <div class="pilwrap">
-          <a class="pilcrow" href="#section-10">&#182;</a>
         </div>
         <p>Actions</p>
       </td>
@@ -342,6 +343,9 @@ adjustedHeight = Math.max(@textarea.get(0).scrollHeight, @textarea.get(0).client
 
     <span class="nv">insertImage: </span><span class="nf">(selection, options) -&gt;</span>
       <span class="nx">selection</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="s1">&#39;![add alt text](&#39;</span> <span class="o">+</span> <span class="nb">encodeURI</span><span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">value</span><span class="p">.</span><span class="nx">src</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;)&#39;</span><span class="p">,</span> <span class="kc">true</span><span class="p">)</span>
+
+    <span class="nv">insertTable: </span><span class="nf">(selection, options) -&gt;</span>
+      <span class="nx">selection</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">value</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/&lt;br&gt;|&lt;br\/&gt;/ig</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">),</span> <span class="kc">false</span><span class="p">,</span> <span class="kc">true</span><span class="p">)</span>
 
     <span class="nv">insertLink: </span><span class="nf">(selection, options) -&gt;</span>
       <span class="nx">selection</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="s2">&quot;[#{options.value.content}](#{options.value.attrs.href} &#39;optional title&#39;)&quot;</span><span class="p">,</span> <span class="kc">true</span><span class="p">)</span>
@@ -393,10 +397,10 @@ adjustedHeight = Math.max(@textarea.get(0).scrollHeight, @textarea.get(0).client
   <span class="p">}</span></pre></div>
       </td>
     </tr>
-    <tr id='section-11'>
+    <tr id='section-10'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-11">&#182;</a>
+          <a class="pilcrow" href="#section-10">&#182;</a>
         </div>
         <p>Helper class for managing selection and getting information from it</p>
 

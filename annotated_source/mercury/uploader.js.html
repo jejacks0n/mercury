@@ -143,6 +143,7 @@
             <span class="k">else</span>
               <span class="nx">jQuery</span><span class="p">.</span><span class="nx">parseJSON</span><span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">target</span><span class="p">.</span><span class="nx">responseText</span><span class="p">)</span>
           <span class="nx">Mercury</span><span class="p">.</span><span class="nx">trigger</span><span class="p">(</span><span class="s1">&#39;action&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nv">action: </span><span class="s1">&#39;insertImage&#39;</span><span class="p">,</span> <span class="nv">value: </span><span class="p">{</span><span class="nv">src: </span><span class="nx">response</span><span class="p">.</span><span class="nx">image</span><span class="p">.</span><span class="nx">url</span><span class="p">}})</span>
+          <span class="nx">@hide</span><span class="p">()</span>
         <span class="k">catch</span> <span class="nx">error</span>
           <span class="nx">@updateStatus</span><span class="p">(</span><span class="s1">&#39;Error: Unable to upload the file&#39;</span><span class="p">)</span>
           <span class="nx">alert</span><span class="p">(</span><span class="s2">&quot;Unable to process response: #{error}&quot;</span><span class="p">)</span>
@@ -199,7 +200,7 @@
 
 
   <span class="nv">hide: </span><span class="nf">(delay = 0) -&gt;</span>
-    <span class="nx">setTimeout</span><span class="p">((</span><span class="o">=&gt;</span>
+    <span class="nx">setTimeout</span> <span class="nx">delay</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">,</span> <span class="o">=&gt;</span>
       <span class="nx">@element</span><span class="p">.</span><span class="nx">animate</span> <span class="p">{</span><span class="nv">opacity: </span><span class="mi">0</span><span class="p">},</span> <span class="mi">200</span><span class="p">,</span> <span class="s1">&#39;easeInOutSine&#39;</span><span class="p">,</span> <span class="o">=&gt;</span>
         <span class="nx">@overlay</span><span class="p">.</span><span class="nx">animate</span> <span class="p">{</span><span class="nv">opacity: </span><span class="mi">0</span><span class="p">},</span> <span class="mi">200</span><span class="p">,</span> <span class="s1">&#39;easeInOutSine&#39;</span><span class="p">,</span> <span class="o">=&gt;</span>
           <span class="nx">@overlay</span><span class="p">.</span><span class="nx">hide</span><span class="p">()</span>
@@ -207,14 +208,13 @@
           <span class="nx">@reset</span><span class="p">()</span>
           <span class="vi">@visible = </span><span class="kc">false</span>
           <span class="nx">Mercury</span><span class="p">.</span><span class="nx">trigger</span><span class="p">(</span><span class="s1">&#39;focus:frame&#39;</span><span class="p">)</span>
-    <span class="p">),</span> <span class="nx">delay</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">)</span>
 
 
   <span class="nv">reset: </span><span class="o">-&gt;</span>
     <span class="nx">@element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;.mercury-uploader-preview b&#39;</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
     <span class="nx">@element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;.mercury-uploader-indicator div&#39;</span><span class="p">).</span><span class="nx">css</span><span class="p">({</span><span class="nv">width: </span><span class="mi">0</span><span class="p">})</span>
     <span class="nx">@element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;.mercury-uploader-indicator b&#39;</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="s1">&#39;0%&#39;</span><span class="p">).</span><span class="nx">hide</span><span class="p">()</span>
-    <span class="nx">@updateStatus</span><span class="p">(</span><span class="s1">&#39;Processing...&#39;</span><span class="p">,)</span>
+    <span class="nx">@updateStatus</span><span class="p">(</span><span class="s1">&#39;Processing...&#39;</span><span class="p">)</span>
 
 
   <span class="nv">uploaderEvents:</span>
@@ -227,8 +227,7 @@
       <span class="nx">@hide</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 
     <span class="nv">onload: </span><span class="o">-&gt;</span>
-      <span class="nx">@updateStatus</span><span class="p">(</span><span class="s1">&#39;Successfully uploaded&#39;</span><span class="p">,</span> <span class="nx">@file</span><span class="p">.</span><span class="nx">size</span><span class="p">)</span>
-      <span class="nx">@hide</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+      <span class="nx">@updateStatus</span><span class="p">(</span><span class="s1">&#39;Successfully uploaded...&#39;</span><span class="p">,</span> <span class="nx">@file</span><span class="p">.</span><span class="nx">size</span><span class="p">)</span>
 
     <span class="nv">onerror: </span><span class="o">-&gt;</span>
       <span class="nx">@updateStatus</span><span class="p">(</span><span class="s1">&#39;Error: Unable to upload the file&#39;</span><span class="p">)</span>

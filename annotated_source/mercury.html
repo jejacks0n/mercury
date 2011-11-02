@@ -360,8 +360,11 @@ configuration.</p>
         <span class="nx">td</span><span class="o">:</span>     <span class="p">[</span><span class="s1">&#39;colspan&#39;</span><span class="p">,</span> <span class="s1">&#39;rowspan&#39;</span><span class="p">],</span>
         <span class="nx">div</span><span class="o">:</span>    <span class="p">[</span><span class="s1">&#39;class&#39;</span><span class="p">],</span>
         <span class="nx">span</span><span class="o">:</span>   <span class="p">[</span><span class="s1">&#39;class&#39;</span><span class="p">],</span>
+        <span class="nx">ul</span><span class="o">:</span>     <span class="p">[],</span>
+        <span class="nx">ol</span><span class="o">:</span>     <span class="p">[],</span>
+        <span class="nx">li</span><span class="o">:</span>     <span class="p">[],</span>
         <span class="nx">b</span><span class="o">:</span>      <span class="p">[],</span>
-        <span class="nx">bold</span><span class="o">:</span>   <span class="p">[],</span>
+        <span class="nx">strong</span><span class="o">:</span> <span class="p">[],</span>
         <span class="nx">i</span><span class="o">:</span>      <span class="p">[],</span>
         <span class="nx">em</span><span class="o">:</span>     <span class="p">[],</span>
         <span class="nx">u</span><span class="o">:</span>      <span class="p">[],</span>
@@ -509,10 +512,9 @@ configuration directive.</p>
       <span class="s1">&#39;.{{regionClass}} { min-height: 10px; outline: 1px dotted #09F } &#39;</span> <span class="o">+</span>
       <span class="s1">&#39;.{{regionClass}}:focus, .{{regionClass}}.focus { outline: none; -webkit-box-shadow: 0 0 10px #09F, 0 0 1px #045; box-shadow: 0 0 10px #09F, 0 0 1px #045 }&#39;</span> <span class="o">+</span>
       <span class="s1">&#39;.{{regionClass}}:after { content: &quot;.&quot;; display: block; visibility: hidden; clear: both; height: 0; overflow: hidden; }&#39;</span> <span class="o">+</span>
-      <span class="s1">&#39;.{{regionClass}} table, .{{regionClass}} td, .{{regionClass}} th { border: 1px dotted red; }&#39;</span> <span class="o">+</span>
-      <span class="s1">&#39;.mercury-textarea { box-sizing: border-box; -moz-box-sizing: border-box; -webkit-box-sizing: border-box; resize: vertical; }&#39;</span> <span class="o">+</span>
-      <span class="s1">&#39;.mercury-textarea { min-height: 10px; outline: 1px dotted #09F }&#39;</span> <span class="o">+</span>
-      <span class="s1">&#39;.mercury-textarea:focus, .mercury-textarea.focus { outline: none; -webkit-box-shadow: 0 0 10px #09F, 0 0 1px #045; box-shadow: 0 0 10px #09F, 0 0 1px #045 }&#39;</span>
+      <span class="s1">&#39;.{{regionClass}} table, .{{regionClass}} td, .{{regionClass}} th { border: 1px dotted red; min-width: 6px; }&#39;</span> <span class="o">+</span>
+      <span class="s1">&#39;.mercury-textarea { border: 0; box-sizing: border-box; -moz-box-sizing: border-box; -webkit-box-sizing: border-box; resize: none; }&#39;</span> <span class="o">+</span>
+      <span class="s1">&#39;.mercury-textarea:focus { outline: none; }&#39;</span>
   <span class="p">},</span></pre></div>
       </td>
     </tr>

@@ -175,7 +175,8 @@
       <span class="nx">setTimeout</span><span class="p">((</span><span class="o">=&gt;</span> <span class="nx">@loadContent</span><span class="p">(</span><span class="nx">Mercury</span><span class="p">.</span><span class="nx">preloadedViews</span><span class="p">[</span><span class="nx">@url</span><span class="p">])),</span> <span class="mi">10</span><span class="p">)</span>
     <span class="k">else</span>
       <span class="nx">jQuery</span><span class="p">.</span><span class="nx">ajax</span> <span class="nx">@url</span><span class="p">,</span> <span class="p">{</span>
-        <span class="nv">type: </span><span class="nx">@options</span><span class="p">.</span><span class="nx">loadType</span> <span class="o">||</span> <span class="s1">&#39;get&#39;</span>
+        <span class="nv">headers: </span><span class="nx">Mercury</span><span class="p">.</span><span class="nx">ajaxHeaders</span><span class="p">()</span>
+        <span class="nv">type: </span><span class="nx">@options</span><span class="p">.</span><span class="nx">loadType</span> <span class="o">||</span> <span class="s1">&#39;GET&#39;</span>
         <span class="nv">data: </span><span class="nx">@options</span><span class="p">.</span><span class="nx">loadData</span>
         <span class="nv">success: </span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">@loadContent</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span>
         <span class="nv">error: </span><span class="o">=&gt;</span>

@@ -338,6 +338,20 @@ window.MercurySetup = {
     // class with '-preview' appended (so, mercury-region-preview by default)
     regionClass: 'mercury-region',
 
+
+    // When using Mercury with Ruby on Rails and using the route loading method, the method below will be used to
+    // determine the actual URL to use for the iframe src to load the contents of the page.
+    //
+    // The default editor route setup by Mercury uses /editor/about_us to load the editor. Using the method
+    // defined here, Mercury will strip out the 'editor/' portion of the URL and assign 
+    // /about_us as the src for the iframe.
+    //
+    // This function will be passed the url of the current page as the only argument and should
+    // return a valid URL.
+    iframeSrcMethod: function(url) {
+      return url.replace(/([http|https]:\/\/.[^\/]*)\/editor\/?(.*)/i, "$1/$2")
+    },
+    
     
     // ## Styles
     //

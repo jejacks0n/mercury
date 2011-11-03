@@ -150,7 +150,10 @@ class @Mercury.PageEditor
 
 
   iframeSrc: (url = null) ->
-    (url ? window.location.href).replace(/([http|https]:\/\/.[^\/]*)\/editor\/?(.*)/i, "$1/$2")
+    mthd = Mercury.config.iframeSrcMethod || (url) ->
+      url.replace(/([http|https]:\/\/.[^\/]*)\/editor\/?(.*)/i, "$1/$2")
+      
+    mthd(url ? window.location.href);
 
 
   hijackLinksAndForms: ->

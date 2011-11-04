@@ -1,5 +1,4 @@
 # ## Require all the dependencies
-#= require mercury/dependencies/jquery-1.6
 #= require mercury/dependencies/jquery-ui-1.8.13.custom
 #= require mercury/dependencies/jquery.additions
 #= require mercury/dependencies/jquery.htmlClean
@@ -31,6 +30,7 @@
 #= require_tree ./regions
 #= require_tree ./dialogs
 #= require_tree ./modals
+#= require ./finalize
 #
 @Mercury ||= {}
 jQuery.extend @Mercury, {

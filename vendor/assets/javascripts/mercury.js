@@ -22,7 +22,12 @@
  * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
+ *= require mercury/dependencies/jquery-1.6
  *= require_self
+ *
+ * If you want to override Mercury functionality, you can do so in a custom file that binds to the mercury:loaded event,
+ * or do so at the end of the current file (mercury.js).  There's an example that will help you get started.
+ * require mercury_overrides
  *
  * Add all requires for the support libraries that integrate nicely with Mercury Editor.
  * require mercury/support/history
@@ -33,7 +38,7 @@
  * Add all requires for plugins that extend or change the behavior of Mercury Editor.
  * require mercury/plugins/save_as_xml/plugin.js
  */
-window.MercurySetup = {
+window.Mercury = {
 
   // # Mercury Configuration
   config: {
@@ -367,5 +372,9 @@ window.MercurySetup = {
 
 };
 
-if (!window.Mercury) window.Mercury = window.MercurySetup;
-else if (typeof(jQuery) !== 'undefined') jQuery.extend(window.Mercury, window.MercurySetup);
+// The mercury:loaded event is provided in case you want to override default Mercury Editor behavior.  It will fire
+// directly after the Mercury scripts have loaded, but before anything has been initialized.  It's a good place to add
+// or change functionality.
+jQuery(window).bind('mercury:loaded', function() {
+  //Mercury.PageEditor.prototype.iframeSrc = function(url) { return '/testing'; }
+});

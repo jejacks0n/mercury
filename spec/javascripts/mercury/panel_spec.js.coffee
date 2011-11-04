@@ -52,6 +52,19 @@ describe "Mercury.Panel", ->
         Mercury.trigger('hide:panels', @panel)
         expect(@panel.element.css('display')).toEqual('block')
 
+    describe "ajax:beforeSend", ->
+
+      it "sets a success that will load the contents of the response", ->
+        options = {}
+        loadContentSpy = spyOn(Mercury.Panel.prototype, 'loadContent').andCallFake(=>)
+        resizeSpy = spyOn(Mercury.Panel.prototype, 'resize').andCallFake(=>)
+        @panel.element.trigger('ajax:beforeSend', [null, options])
+        expect(options.success).toBeDefined()
+        options.success('new content')
+        expect(loadContentSpy.callCount).toEqual(1)
+        expect(loadContentSpy.argsForCall[0]).toEqual(['new content'])
+        expect(resizeSpy.callCount).toEqual(1)
+
 
   describe "#show", ->
 

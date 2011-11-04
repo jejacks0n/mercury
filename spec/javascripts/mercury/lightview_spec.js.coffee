@@ -189,6 +189,17 @@ describe "Mercury.lightview", ->
           jasmine.simulate.click($('.mercury-lightview-overlay').get(0))
           expect(spy.callCount).toEqual(0)
 
+      describe "ajax:beforeSend", ->
+
+        it "sets a success that will load the contents of the response", ->
+          options = {}
+          spy = spyOn(Mercury.lightview, 'loadContent').andCallFake(=>)
+          Mercury.lightview.element.trigger('ajax:beforeSend', [null, options])
+          expect(options.success).toBeDefined()
+          options.success('new content')
+          expect(spy.callCount).toEqual(1)
+          expect(spy.argsForCall[0]).toEqual(['new content'])
+
 
   describe "#appear", ->
 

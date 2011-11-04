@@ -21,6 +21,11 @@ class @Mercury.Panel extends Mercury.Dialog
 
     @element.mousedown (event) -> event.stopPropagation()
 
+    @element.bind 'ajax:beforeSend', (event, xhr, options) =>
+      options.success = (content) =>
+        @loadContent(content)
+        @resize()
+
     super
 
 

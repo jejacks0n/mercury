@@ -170,6 +170,17 @@ describe "Mercury.modal", ->
         jasmine.simulate.keydown(document, {keyCode: 27})
         expect(spy.callCount).toEqual(1)
 
+    describe "ajax:beforeSend", ->
+
+      it "sets a success that will load the contents of the response", ->
+        options = {}
+        spy = spyOn(Mercury.modal, 'loadContent').andCallFake(=>)
+        Mercury.modal.element.trigger('ajax:beforeSend', [null, options])
+        expect(options.success).toBeDefined()
+        options.success('new content')
+        expect(spy.callCount).toEqual(1)
+        expect(spy.argsForCall[0]).toEqual(['new content'])
+
 
   describe "#appear", ->
 

@@ -47,6 +47,10 @@ jQuery.extend Mercury.lightview, {
     jQuery(document).bind 'keydown', (event) =>
        @hide() if event.keyCode == 27 && @visible
 
+    @element.bind 'ajax:beforeSend', (event, xhr, options) =>
+      options.success = (content) =>
+        @loadContent(content)
+
 
   appear: ->
     @position()

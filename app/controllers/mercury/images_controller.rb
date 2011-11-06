@@ -1,4 +1,5 @@
-class ImagesController < MercuryController
+class Mercury::ImagesController < MercuryController
+  protect_from_forgery
 
   respond_to :json
 

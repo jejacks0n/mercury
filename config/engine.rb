@@ -9,10 +9,10 @@ module Mercury
     #   Mercury::Engine.routes
     def self.routes
       Rails.application.routes.draw do
-
-        resources :images
-
         match '/editor(/*requested_uri)' => "mercury#edit", :as => :mercury_editor
+        namespace :mercury do
+          resources :images
+        end
         scope '/mercury' do
           match ':type/:resource' => "mercury#resource"
           match 'snippets/:name/options' => "mercury#snippet_options"

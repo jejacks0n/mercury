@@ -1,6 +1,7 @@
 class @Mercury.PageEditor
 
   # options
+  # iframeSrc: URL of page to load into editor iframe (defaults to current URL with path prefix "/editor" removed)
   # saveStyle: 'form', or 'json' (defaults to json)
   # saveDataType: 'xml', 'json', 'jsonp', 'script', 'text', 'html' (defaults to json)
   # saveMethod: 'POST', or 'PUT', create or update actions on save (defaults to POST)
@@ -150,7 +151,10 @@ class @Mercury.PageEditor
 
 
   iframeSrc: (url = null) ->
-    (url ? window.location.href).replace(/([http|https]:\/\/.[^\/]*)\/editor\/?(.*)/i, "$1/$2")
+    if @options.iframeSrc?
+      @options.iframeSrc
+    else
+      (url ? window.location.href).replace(/([http|https]:\/\/.[^\/]*)\/editor\/?(.*)/i, "$1/$2")
 
 
   hijackLinksAndForms: ->

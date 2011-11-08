@@ -26,8 +26,12 @@ would give the most value are:
 
 ## Awesomeness
 
+Ryan Bates over at the awesome [railscasts site](http://railscasts.com) has put together a really nice RailsCast that
+walks you through getting Mercury Editor installed, setup and working in a Rails 3.1.1 application.  It's definitely
+worth checking out.  [Watch the RailsCast](http://railscasts.com/episodes/296-mercury-editor)
+
 Mercury has been added as a Featured Project on Pivotal Tracker!  If you're interested in what's planned, check out the
-public project at: https://www.pivotaltracker.com/projects/295823
+[Mercury Tracker Project](https://www.pivotaltracker.com/projects/295823).
 
 
 ## Browser Support
@@ -53,9 +57,9 @@ it's a useful resource to see how you can integrate the Mercury bundle.
 
 ## The Story
 
-I was looking for a fully featured editor that didn't use iframes, and there weren't any decent ones.  My primary goal
-was to have areas that were editable, but that also allowed CSS to flow naturally.  A few have cropped up since then
-(Aloha Editor for instance), and as good as they are, none had all the features I was looking for.
+I was looking for a fully featured editor that didn't use iframes to edit the content, and there weren't any decent
+ones.  My primary goal was to have areas that were editable, but that also allowed CSS to flow naturally.  A few have
+cropped up since then (Aloha Editor for instance), and as good as they are, none had all the features I was looking for.
 
 Mercury was written to be as simple as possible, while also providing an advanced feature set.  Instead of complex
 configuration, we chose a mix of configuration and code simplicity, which should give you a much better chance at
@@ -104,65 +108,40 @@ You can also get the configuration file, css, and routes by running the generato
 
 This generator puts the mercury base file (configuration) into your project in /app/assets/javascripts/mercury.js.
 
-### For Other Frameworks / Languages
-
-Get the distro files by downloading them from github using the downloads feature, or pull them out of the project
-manually (the files are in /public/mercury).  Copy the files into your project, and if you adjust where they're
-located (eg. not within mercury/javascripts or mercury/stylesheets) make sure you update the
-mercury_loader.js file to reflect this.
-
-Images are bundled into the CSS if you use the mercury.bundle.css file, but if you'd rather not use the bundled CSS
-you'll need to grab the images manually and adjust the paths in the css file.
-
-The dialogs (eg. color palettes, modals, and other dialog types) are bundled into the mercury_dialogs.js file.  If you
-would like to customize a view you can remove the view from the mercury_dialogs.js file and adjust the path you want to
-load using the configuration -- your custom view will then load using Ajax.
-
-Bundling snippet options and snippets doesn't work in this way, so you may need to disable snippets or adjust where
-they're loaded from.. We'll see how this pans out and adjust over time if needed, so feedback would be useful here.
-
-If you use the distro instead of using the Rails Engine, you won't be able to utilize the Route usage method outlined in
-the Usage portion of this documentation.
-
 
 ## Usage
 
+There's a glob route that captures everything beginning with `/editor`, so for instance to edit an `/about_us` page, you
+should access it at the `/editor/about_us` path.  You may want to define this route in your own routes file to restrict
+access to it (only admins or something).
+
+For performance reasons you may also want to notify Mercury when the page is ready to be initialized.  To do this just
+trigger the initialize:frame event from within your normal application layouts.  You can do this when the DOM is ready
+to be interacted with (eg. dom:loaded, document.ready), or at the bottom of your body tag.  It's recommended that you do
+this because it gives you some load performance improvements, but it's not required.
+
+    jQuery(top).trigger('initialize:frame');
+
+Or if you're not using jQuery:
+
+    if (top.Mercury) {
+      top.Mercury.trigger('initialize:frame');
+    }
+
 Mercury has an expectation that content regions will be on the page (not required, but probably useful).  To define
-content regions that Mercury will make editable you need to add a `mercury-region` class attribute to a div (this is
-configurable).  Then specify what region type by using the `data-type` attribute -- which can be *editable*,
-*markupable*, or *snippetable*. It's important for saving that an id attribute be set on regions, you should always
-include.  Region types are outlined below.
+content regions that Mercury will make editable you need to add a `mercury-region` class attribute to an element (this
+class is configurable).  Then specify what region type by using the `data-type` attribute -- which can be *editable*,
+*markupable*, or *snippetable*.  It's important for saving that an id attribute be set on regions, you should always
+include one.  Region types are outlined below.
 
     <div id="primary" class="mercury-region" data-type="editable">
       default content
     </div>
 
-There's two methods to initialize Mercury Editor, and each one has it's benefits and drawbacks.
 
-### Script Method
+### Using Mercury without Rails
 
-Include the mercury_loader.js file.  The loader will reload the page and enable Mercury in full page editing mode, so
-you may want to wrap this in conditional logic (eg. only admins or something).
-
-    javascript_include_tag 'mercury_loader.js'
-
-Even though many efforts have been made to keep conflicts with javascript libraries from happening, we can't avoid all
-of them.  If you use this method, understand that there may be conflicts with javascript and css.  You should use the
-route method if you see any issues.
-
-### Route Method
-
-The other way to initialize Mercury, which provides some slight performance improvements to the script method, is to
-access the editor route.  There's a glob route that captures everything beginning with /editor, so for instance to edit
-an /about_us content page, you should access it at the /editor/about_us path.  Again, you may want to define this route
-in your own routes file to restrict access to it.
-
-If you use this method, you may want to notify Mercury when the page is ready to be initialized.  To do this just
-trigger the initialize:frame event.  You can do this when the dom is ready to be interacted with (eg. dom:loaded,
-document.ready), or at the bottom of your body tag.  It's recommended that you do this because it gives you some load
-performance improvements, but it's not required.
-
-    Mercury.trigger('initialize:frame');
+Check this [wiki article](https://github.com/jejacks0n/mercury/wiki/Using-Mercury-without-Rails)
 
 
 ## Region Types

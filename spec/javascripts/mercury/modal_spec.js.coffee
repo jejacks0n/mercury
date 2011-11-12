@@ -146,12 +146,20 @@ describe "Mercury.modal", ->
         Mercury.trigger('resize')
         expect(spy.callCount).toEqual(1)
 
-    describe "clicking on the overlay", ->
+    describe "clicking on the overlay (options.allowHideUsingOverlay = true)", ->
 
       it "calls hide", ->
+        Mercury.modal.options.allowHideUsingOverlay = true
         spy = spyOn(Mercury.modal, 'hide').andCallFake(=>)
         jasmine.simulate.click($('.mercury-modal-overlay').get(0))
         expect(spy.callCount).toEqual(1)
+
+    describe "clicking on the overlay (options.allowHideUsingOverlay = false)", ->
+
+      it "doesn't call hide", ->
+        spy = spyOn(Mercury.modal, 'hide').andCallFake(=>)
+        jasmine.simulate.click($('.mercury-modal-overlay').get(0))
+        expect(spy.callCount).toEqual(0)
 
     describe "clicking on the close button", ->
 

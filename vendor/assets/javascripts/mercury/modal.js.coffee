@@ -40,7 +40,7 @@ jQuery.extend Mercury.modal, {
     Mercury.bind 'refresh', => @resize(true)
     Mercury.bind 'resize', => @position()
 
-    @overlay.click => @hide()
+    @overlay.click => @hide() if @options.allowHideUsingOverlay
 
     @titleElement.find('a').click => @hide()
 

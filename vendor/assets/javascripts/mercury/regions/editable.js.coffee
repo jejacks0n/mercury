@@ -286,6 +286,9 @@ class @Mercury.Regions.Editable extends Mercury.Region
         # todo: mozilla: trying to justify the first line of any contentEditable fails
         @element.prev().remove() if action == 'indent' && @element.prev() != sibling
 
+    # handle any broken images by replacing the source with an alert image
+    @element.find('img').one 'error', -> jQuery(@).attr({src: '/assets/mercury/missing-image.png', title: 'Image not found'})
+
 
   pushHistory: (keyCode) ->
     # when pressing return, delete or backspace it should push to the history

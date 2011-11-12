@@ -22,16 +22,23 @@ describe "Mercury.Panel", ->
       expect(html).toContain('class="mercury-panel loading"')
       expect(html).toContain('style="display:none;"')
       expect(html).toContain('<h1>foo panel</h1><div class="mercury-panel-pane"></div>')
+      expect(html).not.toContain('class="mercury-panel-close"')
 
     it "appends to any element", ->
       @panel = new Mercury.Panel('/evergreen/resources/panel.html', 'foo', {appendTo: '#panel_container', title: 'foo panel'})
       expect($('#panel_container .mercury-panel').length).toEqual(1)
 
+    it "creates a close button if it should", ->
+      @panel = new Mercury.Panel('/evergreen/resources/panel.html', 'foo', {appendTo: '#test', title: 'foo panel', closeButton: true})
+      html = $('<div>').html(@panel.element).html()
+      expect(html).toContain('class="mercury-panel-close"')
+      expect(@panel.element.find('.mercury-panel-close').css('opacity')).toEqual('0')
+
 
   describe "observed events", ->
 
     beforeEach ->
-      @panel = new Mercury.Panel('/evergreen/resources/panel.html', 'foo', {appendTo: '#test', title: 'foo panel', for: $('#button')})
+      @panel = new Mercury.Panel('/evergreen/resources/panel.html', 'foo', {appendTo: '#test', title: 'foo panel', for: $('#button'), closeButton: true})
 
     describe "custom event: resize", ->
 
@@ -64,6 +71,14 @@ describe "Mercury.Panel", ->
         expect(loadContentSpy.callCount).toEqual(1)
         expect(loadContentSpy.argsForCall[0]).toEqual(['new content'])
         expect(resizeSpy.callCount).toEqual(1)
+
+    describe "clicking on the close button", ->
+
+      it "calls hide:panels", ->
+        spy = spyOn(Mercury, 'trigger').andCallFake(=>)
+        jasmine.simulate.click(@panel.element.find('.mercury-panel-close').get(0))
+        expect(spy.callCount).toEqual(1)
+        expect(spy.argsForCall[0]).toEqual(['hide:panels'])
 
 
   describe "#show", ->

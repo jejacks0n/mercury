@@ -11,7 +11,7 @@ class @Mercury.Toolbar.Button
     @element.data('expander', "<div class=\"mercury-expander-button\" data-button=\"#{@name}\"><em></em><span>#{@title}</span></div>")
 
     @handled = {}
-    dialogOptions = {title: @summary || @title, preload: @types.preload, appendTo: @options.appendDialogsTo || 'body', for: @element}
+
     for own type, mixed of @types
       switch type
         when 'preload' then true
@@ -32,18 +32,18 @@ class @Mercury.Toolbar.Button
         when 'palette'
           @element.addClass("mercury-button-palette")
           url = if jQuery.isFunction(mixed) then mixed.call(@, @name) else mixed
-          @handled[type] = new Mercury.Palette(url, @name, dialogOptions)
+          @handled[type] = new Mercury.Palette(url, @name, @defaultDialogOptions())
 
         when 'select'
           @element.addClass("mercury-button-select").find('em').html(@title)
           url = if jQuery.isFunction(mixed) then mixed.call(@, @name) else mixed
-          @handled[type] = new Mercury.Select(url, @name, dialogOptions)
+          @handled[type] = new Mercury.Select(url, @name, @defaultDialogOptions())
 
         when 'panel'
           @element.addClass('mercury-button-panel')
           url = if jQuery.isFunction(mixed) then mixed.call(@, @name) else mixed
           @handled['toggle'] = true
-          @handled[type] = new Mercury.Panel(url, @name, dialogOptions)
+          @handled[type] = new Mercury.Panel(url, @name, @defaultDialogOptions())
 
         when 'modal'
           @handled[type] = if jQuery.isFunction(mixed) then mixed.apply(@, @name) else mixed
@@ -108,6 +108,16 @@ class @Mercury.Toolbar.Button
 
       Mercury.trigger('action', {action: @name}) unless handled
       Mercury.trigger('focus:frame') if @options['regions'] && @options['regions'].length
+
+
+  defaultDialogOptions: ->
+    {
+      title: @summary || @title
+      preload: @types.preload
+      appendTo: @options.appendDialogsTo || 'body'
+      closeButton: true
+      for: @element
+    }
 
 
   togglePressed: ->

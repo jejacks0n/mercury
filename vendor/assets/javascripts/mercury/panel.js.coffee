@@ -9,6 +9,9 @@ class @Mercury.Panel extends Mercury.Dialog
     @titleElement = jQuery("<h1>#{@options.title}</h1>").appendTo(@element)
     @paneElement = jQuery('<div>', {class: 'mercury-panel-pane'}).appendTo(@element)
 
+    if @options.closeButton
+      jQuery('<a/>', {class: 'mercury-panel-close'}).appendTo(@titleElement).css({opacity: 0})
+
     @element.appendTo(jQuery(@options.appendTo).get(0) ? 'body')
 
 
@@ -20,6 +23,10 @@ class @Mercury.Panel extends Mercury.Dialog
         @hide()
 
     @element.mousedown (event) -> event.stopPropagation()
+
+    @titleElement.find('.mercury-panel-close').click (event) ->
+      event.preventDefault()
+      Mercury.trigger('hide:panels')
 
     @element.bind 'ajax:beforeSend', (event, xhr, options) =>
       options.success = (content) =>
@@ -35,6 +42,7 @@ class @Mercury.Panel extends Mercury.Dialog
 
 
   resize: ->
+    @titleElement.find('.mercury-panel-close').css({opacity: 0})
     @paneElement.css({display: 'none'})
     preWidth = @element.width()
 
@@ -44,6 +52,8 @@ class @Mercury.Panel extends Mercury.Dialog
     @paneElement.css({visibility: 'visible', display: 'none'})
     position = @element.offset()
     @element.animate {left: position.left - (postWidth - preWidth), width: postWidth}, 200, 'easeInOutSine', =>
+      @titleElement.find('.mercury-panel-close').animate({opacity: 1}, 100)
+
       @paneElement.css({display: 'block', width: postWidth})
       @makeDraggable()
 

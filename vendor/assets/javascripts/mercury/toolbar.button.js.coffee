@@ -107,7 +107,7 @@ class @Mercury.Toolbar.Button
             @handled[type].toggle()
 
       Mercury.trigger('action', {action: @name}) unless handled
-      Mercury.trigger('focus:frame')
+      Mercury.trigger('focus:frame') if @options['regions'] && @options['regions'].length
 
 
   togglePressed: ->

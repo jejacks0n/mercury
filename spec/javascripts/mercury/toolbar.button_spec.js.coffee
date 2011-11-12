@@ -69,7 +69,7 @@ describe "Mercury.Toolbar.Button", ->
       spy = spyOn(Mercury, 'trigger').andCallFake(=>)
 
       jasmine.simulate.click(@button.get(0))
-      expect(spy.callCount).toEqual(2)
+      expect(spy.callCount).toEqual(1)
       expect(spy.argsForCall[0]).toEqual(['mode', {mode: 'foo'}])
 
     it "builds buttons that understand context", ->
@@ -201,7 +201,7 @@ describe "Mercury.Toolbar.Button", ->
 
       it "triggers a focus:frame event", ->
         spy = spyOn(Mercury, 'trigger').andCallFake(=>)
-        @button = new Mercury.Toolbar.Button('foo', 'title', 'summary')
+        @button = new Mercury.Toolbar.Button('foo', 'title', 'summary', {}, {regions: ['editable']})
 
         jasmine.simulate.click(@button.get(0))
         expect(spy.argsForCall[1]).toEqual(['focus:frame'])

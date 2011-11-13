@@ -14,7 +14,8 @@ Hey international open source contributors, want to contribute to the Mercury Ed
 coding?  We're looking for good translations.  If you have a good grasp of english, another common language, and have
 the desire and time to do a translation for the project it would be awesome to hear from you.  The easiest way to submit
 is to fork the project, create a locale file with your translation, and submit a pull request -- in this way you can get
-full credit for your contributions.
+full credit for your contributions.  There's an [example file](tree/master/vendor/assets/javascripts/mercury/locales)
+provided.
 
 - French (pending)
 - German

@@ -33,7 +33,7 @@ describe "Mercury.tooltip", ->
 
     it "gets the document from the element passed in", ->
       Mercury.tooltip.show(@forElement, 'content')
-      expect(Mercury.tooltip.document.get(0)).toEqual($(document).get(0))
+      expect(Mercury.tooltip.document).toEqual(document)
 
     it "calls initialize", ->
       Mercury.tooltip.show(@forElement, 'content')

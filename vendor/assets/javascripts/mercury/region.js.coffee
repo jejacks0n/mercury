@@ -21,28 +21,24 @@ class @Mercury.Region
 
 
   bindEvents: ->
-    Mercury.bind 'mode', (event, options) =>
-      @togglePreview() if options.mode == 'preview'
+    Mercury.on 'mode', (event, options) => @togglePreview() if options.mode == 'preview'
 
-    Mercury.bind 'focus:frame', =>
-      return if @previewing
-      return unless Mercury.region == @
+    Mercury.on 'focus:frame', =>
+      return if @previewing || Mercury.region != @
       @focus()
 
-    Mercury.bind 'action', (event, options) =>
-      return if @previewing
-      return unless Mercury.region == @
+    Mercury.on 'action', (event, options) =>
+      return if @previewing || Mercury.region != @
       @execCommand(options.action, options) if options.action
 
-    @element.mousemove (event) =>
-      return if @previewing
-      return unless Mercury.region == @
+    @element.on 'mousemove', (event) =>
+      return if @previewing || Mercury.region != @
       snippet = jQuery(event.target).closest('.mercury-snippet')
       if snippet.length
         @snippet = snippet
         Mercury.trigger('show:toolbar', {type: 'snippet', snippet: @snippet})
 
-    @element.mouseout =>
+    @element.on 'mouseout', =>
       return if @previewing
       Mercury.trigger('hide:toolbar', {type: 'snippet', immediately: false})
 

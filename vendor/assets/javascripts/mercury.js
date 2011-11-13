@@ -22,8 +22,8 @@
  * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * Minimum jQuery requirements are 1.6
- *= require mercury/dependencies/jquery-1.6
+ * Minimum jQuery requirements are 1.7
+ *= require mercury/dependencies/jquery-1.7
  *
  * You can include the Rails jQuery ujs script here to get some nicer behaviors in modals, panels and lightviews when
  * using :remote => true within the contents rendered in them.
@@ -41,7 +41,8 @@
  * Require Mercury Editor itself.
  *= require mercury/mercury
  *
- * Require any localizations you wish to support.
+ * Require any localizations you wish to support
+ * Example: es.locale, or fr.locale -- regional dialects are in each language file so never en_US for instance.
  * require mercury/locales/swedish_chef.locale
  *
  * Add all requires for plugins that extend or change the behavior of Mercury Editor.
@@ -207,18 +208,18 @@ window.Mercury = {
 
     // ## Localization / I18n
     //
-    // .. brain dump ..
-    // en, en-US, es, fr, pt, etc..
-    //
     // Include the .locale files you want to support when loading mercury.. the files are always named by the language,
     // and not the regional dialect (eg. en.locale.js) because the regional dialects are nested within the primary
-    // locale file.
-    // The clients locale will be used first, and if no proper locale file is found for their language the
-    // preferedLocale configuration will be used.  If one isn't provided, en is assumed.
+    // locale files.
+    //
+    // The client locale will be used first, and if no proper locale file is found for their language then the fallback
+    // preferredLocale configuration will be used.  If one isn't provided, and the client locale isn't included, the
+    // strings will remain untranslated.
     localization: {
-      enabled: false,
-      preferedLocale: 'swedish_chef-BORK'
+      enabled: true,
+      preferredLocale: 'swedish_chef-BORK'
     },
+
 
     // ## Hijacking Links & Forms
     //

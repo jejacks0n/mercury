@@ -1,9 +1,9 @@
 @Mercury.modalHandlers.insertMedia = ->
   # make the inputs work with the radio buttons, and options
-  @element.find('label input').click (event) ->
+  @element.find('label input').on 'click', ->
     jQuery(@).closest('label').next('.selectable').focus()
 
-  @element.find('.selectable').focus (event) =>
+  @element.find('.selectable').on 'focus', (event) =>
     element = jQuery(event.target)
     element.prev('label').find('input[type=radio]').prop("checked", true)
 
@@ -17,7 +17,7 @@
 
     # if we're editing an image prefill the information
     if selection.is && image = selection.is('img')
-      @element.find('#media_image_url').val(image.attr('src'))
+      @element.find('#media_image_url').val(image.attr('src')).focus()
       @element.find('#media_image_alignment').val(image.attr('align'))
 
     # if we're editing an iframe (assume it's a video for now)
@@ -25,21 +25,18 @@
       src = iframe.attr('src')
       if src.indexOf('http://www.youtube.com') > -1
         # it's a youtube video
-        @element.find('#media_youtube_url').val("http://youtu.be/#{src.match(/\/embed\/(\w+)/)[1]}")
+        @element.find('#media_youtube_url').val("http://youtu.be/#{src.match(/\/embed\/(\w+)/)[1]}").focus()
         @element.find('#media_youtube_width').val(iframe.width())
         @element.find('#media_youtube_height').val(iframe.height())
-        @element.find('#media_youtube_url').focus()
       else if src.indexOf('http://player.vimeo.com') > -1
         # it's a vimeo video
-        @element.find('#media_vimeo_url').val("http://vimeo.com/#{src.match(/\/video\/(\w+)/)[1]}")
+        @element.find('#media_vimeo_url').val("http://vimeo.com/#{src.match(/\/video\/(\w+)/)[1]}").focus()
         @element.find('#media_vimeo_width').val(iframe.width())
         @element.find('#media_vimeo_height').val(iframe.height())
-        @element.find('#media_vimeo_url').focus()
 
   # build the image or youtube embed on form submission
-  @element.find('form').submit (event) =>
+  @element.find('form').on 'submit', (event) =>
     event.preventDefault()
-
     type = @element.find('input[name=media_type]:checked').val()
 
     switch type

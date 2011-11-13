@@ -2,7 +2,7 @@
   Mercury.tableEditor.load(table, cell, cellContent)
   return Mercury.tableEditor
 
-jQuery.extend Mercury.tableEditor, {
+jQuery.extend Mercury.tableEditor,
 
   load: (@table, @cell, @cellContent = '') ->
     @row = @cell.parent('tr')
@@ -263,5 +263,3 @@ jQuery.extend Mercury.tableEditor, {
   # Sets the rowspan of a cell, removing it if it's 1
   setRowspanFor: (cell, value) ->
     jQuery(cell).attr('rowspan', if value > 1 then value else null)
-
-}

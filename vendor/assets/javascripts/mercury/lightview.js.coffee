@@ -2,8 +2,7 @@
   Mercury.lightview.show(url, options)
   return Mercury.lightview
 
-jQuery.extend Mercury.lightview, {
-
+jQuery.extend Mercury.lightview,
   minWidth: 400
 
   show: (@url, @options = {}) ->
@@ -36,18 +35,22 @@ jQuery.extend Mercury.lightview, {
 
 
   bindEvents: ->
-    Mercury.bind 'refresh', => @resize(true)
-    Mercury.bind 'resize', => @position() if @visible
+    Mercury.on 'refresh', => @resize(true)
 
-    @overlay.click => @hide() unless @options.closeButton
-    @titleElement.find('.mercury-lightview-close').click => @hide()
+    Mercury.on 'resize', => @position() if @visible
 
-    jQuery(document).bind 'keydown', (event) =>
-       @hide() if event.keyCode == 27 && @visible
+    @overlay.on 'click', =>
+      @hide() unless @options.closeButton
 
-    @element.bind 'ajax:beforeSend', (event, xhr, options) =>
+    @titleElement.find('.mercury-lightview-close').on 'click', =>
+      @hide()
+
+    @element.on 'ajax:beforeSend', (event, xhr, options) =>
       options.success = (content) =>
         @loadContent(content)
+
+    jQuery(document).on 'keydown', (event) =>
+       @hide() if event.keyCode == 27 && @visible
 
 
   appear: ->
@@ -113,7 +116,7 @@ jQuery.extend Mercury.lightview, {
     return unless @url
     @element.addClass('loading')
     if Mercury.preloadedViews[@url]
-      setTimeout((=> @loadContent(Mercury.preloadedViews[@url])), 10)
+      setTimeout(10, => @loadContent(Mercury.preloadedViews[@url]))
     else
       jQuery.ajax @url, {
         headers: Mercury.ajaxHeaders()
@@ -159,5 +162,3 @@ jQuery.extend Mercury.lightview, {
     @reset()
 
     @visible = false
-
-}

@@ -28,7 +28,7 @@ class @Mercury.PageEditor
     @statusbar = new Mercury.Statusbar(@options)
     @resize()
 
-    @iframe.load => @initializeFrame()
+    @iframe.on 'load', => @initializeFrame()
     @iframe.get(0).contentWindow.document.location.href = @iframeSrc()
 
 
@@ -98,24 +98,22 @@ class @Mercury.PageEditor
 
 
   bindEvents: ->
-    Mercury.bind 'initialize:frame', => setTimeout(@initializeFrame, 1000)
-    Mercury.bind 'focus:frame', => @iframe.focus()
-    Mercury.bind 'focus:window', => setTimeout((=> @focusableElement.focus()), 10)
-    Mercury.bind 'toggle:interface', => @toggleInterface()
-    Mercury.bind 'reinitialize', => @initializeRegions()
+    Mercury.on 'initialize:frame', => setTimeout(100, @initializeFrame)
+    Mercury.on 'focus:frame', => @iframe.focus()
+    Mercury.on 'focus:window', => setTimeout(10, => @focusableElement.focus())
+    Mercury.on 'toggle:interface', => @toggleInterface()
+    Mercury.on 'reinitialize', => @initializeRegions()
+    Mercury.on 'mode', (event, options) => @previewing = !@previewing if options.mode == 'preview'
+    Mercury.on 'action', (event, options) => @save() if options.action == 'save'
 
-    Mercury.bind 'mode', (event, options) =>
-      @previewing = !@previewing if options.mode == 'preview'
-
-    Mercury.bind 'action', (event, options) =>
-       @save() if options.action == 'save'
-
-    @document.mousedown (event) ->
+    @document.on 'mousedown', (event) ->
       Mercury.trigger('hide:dialogs')
       if Mercury.region
         Mercury.trigger('unfocus:regions') unless jQuery(event.target).closest(".#{Mercury.config.regionClass}").get(0) == Mercury.region.element.get(0)
 
-    jQuery(window).resize => @resize()
+    jQuery(window).on 'resize', =>
+      @resize()
+
     window.onbeforeunload = @beforeUnload
 
 

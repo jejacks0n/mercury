@@ -2,7 +2,7 @@ Mercury.I18n['es'] =
   # ## Javascript Strings
 
   # ### Default Configuration
-  "Save": ""
+  "Save": "Ahorrar"
   "Save this page": ""
   "Preview": ""
   "Preview this page": ""

@@ -41,10 +41,9 @@ class @Mercury.Regions.Editable extends Mercury.Region
   bindEvents: ->
     super
 
-    Mercury.bind 'region:update', =>
-      return if @previewing
-      return unless Mercury.region == @
-      setTimeout((=> @selection().forceSelection(@element.get(0))), 1)
+    Mercury.on 'region:update', =>
+      return if @previewing || Mercury.region != @
+      setTimeout(1, => @selection().forceSelection(@element.get(0)))
       currentElement = @currentElement()
       if currentElement.length
         # setup the table editor if we're inside a table
@@ -57,25 +56,25 @@ class @Mercury.Regions.Editable extends Mercury.Region
         else
           Mercury.tooltip.hide()
 
-    @element.bind 'dragenter', (event) =>
+    @element.on 'dragenter', (event) =>
       return if @previewing
       event.preventDefault() unless Mercury.snippet
       event.originalEvent.dataTransfer.dropEffect = 'copy'
 
-    @element.bind 'dragover', (event) =>
+    @element.on 'dragover', (event) =>
       return if @previewing
       event.preventDefault() unless Mercury.snippet
       event.originalEvent.dataTransfer.dropEffect = 'copy'
       if jQuery.browser.webkit
         clearTimeout(@dropTimeout)
-        @dropTimeout = setTimeout((=> @element.trigger('possible:drop')), 10)
+        @dropTimeout = setTimeout(10, => @element.trigger('possible:drop'))
 
-    @element.bind 'drop', (event) =>
+    @element.on 'drop', (event) =>
       return if @previewing
 
       # handle dropping snippets
       clearTimeout(@dropTimeout)
-      @dropTimeout = setTimeout((=> @element.trigger('possible:drop')), 1)
+      @dropTimeout = setTimeout(1, => @element.trigger('possible:drop'))
 
       # handle any files that were dropped
       return unless event.originalEvent.dataTransfer.files.length
@@ -88,7 +87,7 @@ class @Mercury.Regions.Editable extends Mercury.Region
     # isn't handled (eg, putting the image where it was dropped,) so to allow the browser to do it's thing, and also do
     # our thing we have this little hack.  *sigh*
     # read: http://www.quirksmode.org/blog/archives/2009/09/the_html5_drag.html
-    @element.bind 'possible:drop', =>
+    @element.on 'possible:drop', =>
       return if @previewing
       if snippet = @element.find('img[data-snippet]').get(0)
         @focus()
@@ -97,11 +96,11 @@ class @Mercury.Regions.Editable extends Mercury.Region
 
     # custom paste handling: we have to do some hackery to get the pasted content since it's not exposed normally
     # through a clipboard in firefox (heaven forbid), and to keep the behavior across all browsers, we manually detect
-    # what was pasted by running a quick diff, removing it by calling undo, making our adjustments, and then putting the
-    # content back.  This is possible, so it doesn't make sense why it wouldn't be exposed in a sensible way.  *sigh*
-    @element.bind 'paste', (event) =>
-      return if @previewing
-      return unless Mercury.region == @
+    # what was pasted by focusing a different (hidden) region, letting it paste there, making our adjustments, and then
+    # inserting the content where it was intended.  This is possible, so it doesn't make sense why it wouldn't be
+    # exposed in a sensible way.  *sigh*
+    @element.on 'paste', (event) =>
+      return if @previewing || Mercury.region != @
       if @specialContainer
         event.preventDefault()
         return
@@ -109,33 +108,33 @@ class @Mercury.Regions.Editable extends Mercury.Region
       Mercury.changes = true
       @handlePaste(event.originalEvent)
 
-    @element.focus =>
+    @element.on 'focus', =>
       return if @previewing
       Mercury.region = @
-      setTimeout((=> @selection().forceSelection(@element.get(0))), 1)
+      setTimeout(1, => @selection().forceSelection(@element.get(0)))
       Mercury.trigger('region:focused', {region: @})
 
-    @element.blur =>
+    @element.on 'blur', =>
       return if @previewing
       Mercury.trigger('region:blurred', {region: @})
       Mercury.tooltip.hide()
 
-    @element.click (event) =>
+    @element.on 'click', (event) =>
       jQuery(event.target).closest('a').attr('target', '_top') if @previewing
 
-    @element.dblclick (event) =>
+    @element.on 'dblclick', (event) =>
       return if @previewing
       image = jQuery(event.target).closest('img', @element)
       if image.length
         @selection().selectNode(image.get(0), true)
         Mercury.trigger('button', {action: 'insertMedia'})
 
-    @element.mouseup =>
+    @element.on 'mouseup', =>
       return if @previewing
       @pushHistory()
       Mercury.trigger('region:update', {region: @})
 
-    @element.keydown (event) =>
+    @element.on 'keydown', (event) =>
       return if @previewing
       switch event.keyCode
         when 90 # undo / redo
@@ -183,7 +182,7 @@ class @Mercury.Regions.Editable extends Mercury.Region
 
       @pushHistory(event.keyCode)
 
-    @element.keyup =>
+    @element.on 'keyup', =>
       return if @previewing
       Mercury.trigger('region:update', {region: @})
       Mercury.changes = true
@@ -191,13 +190,13 @@ class @Mercury.Regions.Editable extends Mercury.Region
 
   focus: ->
     if Mercury.region != @
-      setTimeout 10, => @element.focus()
+      setTimeout(10, => @element.focus())
       try
         @selection().selection.collapseToStart()
       catch e
         # intentially do nothing
     else
-      setTimeout 10, => @element.focus()
+      setTimeout(10, => @element.focus())
 
     Mercury.trigger('region:focused', {region: @})
     Mercury.trigger('region:update', {region: @})
@@ -305,7 +304,7 @@ class @Mercury.Regions.Editable extends Mercury.Region
       @history.push(@content(null, false, true))
     else if keyCode
       # set a timeout for pushing to the history
-      @historyTimeout = setTimeout((=> @history.push(@content(null, false, true))), waitTime * 1000)
+      @historyTimeout = setTimeout(waitTime * 1000, => @history.push(@content(null, false, true)))
     else
       # push to the history immediately
       @history.push(@content(null, false, true))

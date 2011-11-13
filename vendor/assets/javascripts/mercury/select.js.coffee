@@ -10,9 +10,10 @@ class @Mercury.Select extends Mercury.Dialog
 
 
   bindEvents: ->
-    Mercury.bind 'hide:dialogs', (event, dialog) => @hide() unless dialog == @
+    Mercury.on 'hide:dialogs', (event, dialog) => @hide() unless dialog == @
 
-    @element.mousedown (event) => event.preventDefault()
+    @element.on 'mousedown', (event) =>
+      event.preventDefault()
 
     super
 

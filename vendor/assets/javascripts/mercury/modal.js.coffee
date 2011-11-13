@@ -2,8 +2,7 @@
   Mercury.modal.show(url, options)
   return Mercury.modal
 
-jQuery.extend Mercury.modal, {
-
+jQuery.extend Mercury.modal,
   minWidth: 400
 
   show: (@url, @options = {}) ->
@@ -35,19 +34,21 @@ jQuery.extend Mercury.modal, {
 
 
   bindEvents: ->
-    Mercury.bind 'refresh', => @resize(true)
-    Mercury.bind 'resize', => @position()
+    Mercury.on 'refresh', => @resize(true)
+    Mercury.on 'resize', => @position()
 
-    @overlay.click => @hide() if @options.allowHideUsingOverlay
+    @overlay.on 'click', =>
+      @hide() if @options.allowHideUsingOverlay
 
-    @titleElement.find('a').click => @hide()
+    @titleElement.find('a').on 'click', =>
+      @hide()
 
-    jQuery(document).bind 'keydown', (event) =>
-       @hide() if event.keyCode == 27 && @visible
-
-    @element.bind 'ajax:beforeSend', (event, xhr, options) =>
+    @element.on 'ajax:beforeSend', (event, xhr, options) =>
       options.success = (content) =>
         @loadContent(content)
+
+    jQuery(document).on 'keydown', (event) =>
+       @hide() if event.keyCode == 27 && @visible
 
 
   appear: ->
@@ -133,7 +134,7 @@ jQuery.extend Mercury.modal, {
     return unless @url
     @element.addClass('loading')
     if Mercury.preloadedViews[@url]
-      setTimeout((=> @loadContent(Mercury.preloadedViews[@url])), 10)
+      setTimeout(10, => @loadContent(Mercury.preloadedViews[@url]))
     else
       jQuery.ajax @url, {
         headers: Mercury.ajaxHeaders()
@@ -185,5 +186,3 @@ jQuery.extend Mercury.modal, {
     @reset()
 
     @visible = false
-
-}

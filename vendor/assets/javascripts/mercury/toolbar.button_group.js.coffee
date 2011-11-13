@@ -14,7 +14,7 @@ class @Mercury.Toolbar.ButtonGroup
 
 
   bindEvents: ->
-    Mercury.bind 'region:update', (event, options) =>
+    Mercury.on 'region:update', (event, options) =>
       context = Mercury.Toolbar.ButtonGroup.contexts[@name]
       if context
         if options.region && jQuery.type(options.region.currentElement) == 'function'
@@ -24,14 +24,14 @@ class @Mercury.Toolbar.ButtonGroup
           else
             @element.addClass('disabled')
 
-    Mercury.bind 'region:focused', (event, options) =>
+    Mercury.on 'region:focused', (event, options) =>
       if @regions && options.region && options.region.type
         if @regions.indexOf(options.region.type) > -1
           @element.removeClass('disabled') unless @options._context
         else
           @element.addClass('disabled')
 
-    Mercury.bind 'region:blurred', (event, options) =>
+    Mercury.on 'region:blurred', (event, options) =>
       @element.addClass('disabled') if @options.regions
 
 

@@ -14,19 +14,23 @@ class @Mercury.SnippetToolbar extends Mercury.Toolbar
 
 
   bindEvents: ->
-    Mercury.bind 'show:toolbar', (event, options) =>
+    Mercury.on 'show:toolbar', (event, options) =>
       return unless options.snippet
       options.snippet.mouseout => @hide()
       @show(options.snippet)
 
-    Mercury.bind 'hide:toolbar', (event, options) =>
+    Mercury.on 'hide:toolbar', (event, options) =>
       return unless options.type && options.type == 'snippet'
       @hide(options.immediately)
 
-    jQuery(@document).scroll => @position() if @visible
+    @element.mousemove =>
+      clearTimeout(@hideTimeout)
 
-    @element.mousemove => clearTimeout(@hideTimeout)
-    @element.mouseout => @hide()
+    @element.mouseout =>
+      @hide()
+
+    jQuery(@document).on 'scroll', =>
+      @position() if @visible
 
 
   show: (@snippet) ->
@@ -61,9 +65,8 @@ class @Mercury.SnippetToolbar extends Mercury.Toolbar
       @element.hide()
       @visible = false
     else
-      @hideTimeout = setTimeout((=>
+      @hideTimeout = setTimeout 500, =>
         @element.stop().animate {opacity: 0}, 300, 'easeInOutSine', =>
           @element.hide()
         @visible = false
-      ), 500)
 

@@ -14,55 +14,47 @@ class @Mercury.Regions.Snippetable extends Mercury.Region
   bindEvents: ->
     super
 
-    Mercury.bind 'unfocus:regions', (event) =>
+    Mercury.on 'unfocus:regions', (event) =>
       return if @previewing
       if Mercury.region == @
         @element.removeClass('focus')
         @element.sortable('destroy')
         Mercury.trigger('region:blurred', {region: @})
 
-    Mercury.bind 'focus:window', (event) =>
+    Mercury.on 'focus:window', (event) =>
       return if @previewing
       if Mercury.region == @
         @element.removeClass('focus')
         @element.sortable('destroy')
         Mercury.trigger('region:blurred', {region: @})
 
-    jQuery(@document).keydown (event) =>
-      return if @previewing
-      return unless Mercury.region == @
-      switch event.keyCode
-        when 90 # undo / redo
-          return unless event.metaKey
-          event.preventDefault()
-          if event.shiftKey
-            @execCommand('redo')
-          else
-            @execCommand('undo')
-
-          return
-
-    jQuery(@document).keyup =>
-      return if @previewing
-      return unless Mercury.region == @
-      Mercury.changes = true
-
-    @element.mouseup =>
+    @element.on 'mouseup', =>
       return if @previewing
       @focus()
       Mercury.trigger('region:focused', {region: @})
 
-    @element.bind 'dragover', (event) =>
+    @element.on 'dragover', (event) =>
       return if @previewing
       event.preventDefault()
       event.originalEvent.dataTransfer.dropEffect = 'copy'
 
-    @element.bind 'drop', (event) =>
-      return if @previewing
-      return unless Mercury.snippet
+    @element.on 'drop', (event) =>
+      return if @previewing || ! Mercury.snippet
       @focus()
       event.preventDefault()
       Mercury.Snippet.displayOptionsFor(Mercury.snippet)
+
+    jQuery(@document).on 'keydown', (event) =>
+      return if @previewing || Mercury.region != @
+      switch event.keyCode
+        when 90 # undo / redo
+          return unless event.metaKey
+          event.preventDefault()
+          if event.shiftKey then @execCommand('redo') else @execCommand('undo')
+
+    jQuery(@document).on 'keyup', =>
+      return if @previewing || Mercury.region != @
+      Mercury.changes = true
 
 
   focus: ->
@@ -82,7 +74,6 @@ class @Mercury.Regions.Snippetable extends Mercury.Region
 
   execCommand: (action, options = {}) ->
     super
-
     handler.call(@, options) if handler = Mercury.Regions.Snippetable.actions[action]
 
 
@@ -99,7 +90,7 @@ class @Mercury.Regions.Snippetable extends Mercury.Region
         Mercury.trigger('hide:toolbar', {type: 'snippet', immediately: true})
         return true
       stop: =>
-        setTimeout((=> @pushHistory()), 100)
+        setTimeout(100, => @pushHistory())
         return true
     }
 

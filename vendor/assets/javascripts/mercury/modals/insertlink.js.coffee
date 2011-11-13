@@ -1,13 +1,13 @@
 @Mercury.modalHandlers.insertLink = ->
   # make the inputs work with the radio buttons
-  @element.find('label input').click (event) ->
+  @element.find('label input').on 'click', ->
     jQuery(@).closest('label').next('.selectable').focus()
 
-  @element.find('.selectable').focus ->
+  @element.find('.selectable').on 'focus', ->
     jQuery(@).prev('label').find('input[type=radio]').prop("checked", true)
 
   # show/hide the link target options on target change
-  @element.find('#link_target').change =>
+  @element.find('#link_target').on 'change', =>
     @element.find(".link-target-options").hide()
     @element.find("##{@element.find('#link_target').val()}_options").show()
     @resize(true)
@@ -59,7 +59,7 @@
     @element.find('#link_text').val(selection.textContent()) if selection.textContent
 
   # build the link on form submission
-  @element.find('form').submit (event) =>
+  @element.find('form').on 'submit', (event) =>
     event.preventDefault()
 
     content = @element.find('#link_text').val()

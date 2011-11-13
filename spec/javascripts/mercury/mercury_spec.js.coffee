@@ -11,27 +11,60 @@ describe "Mercury", ->
     it "disallows konqueror and msie", ->
 
 
-  describe "#bind", ->
+  describe ".on", ->
 
     it "binds an event prefixed with 'mercury:' to the top window", ->
       callCount = 0
-      Mercury.bind('test', -> callCount += 1)
+      Mercury.on('test', -> callCount += 1)
       $(top).trigger("mercury:test")
       expect(callCount).toEqual(1)
 
 
-  describe "#trigger", ->
+  describe ".trigger", ->
 
     it "triggers an event prefixed with 'mercury:' on the top window", ->
       argsForCall = []
       callCount = 0
-      Mercury.bind('test', -> argsForCall[callCount] = arguments; callCount += 1)
+      Mercury.on('test', -> argsForCall[callCount] = arguments; callCount += 1)
       Mercury.trigger("test", {foo: 'bar'})
       expect(callCount).toEqual(1)
       expect(argsForCall[0][1]).toEqual({foo: 'bar'})
 
 
-  describe "#log", ->
+  describe ".notify", ->
+
+    beforeEach ->
+      @alertSpy = spyOn(window, 'alert').andCallFake(=>)
+      @i18nSpy = spyOn(Mercury, 'I18n').andCallFake(=>)
+      Mercury.notify('hello world!')
+
+    it "translates the text first by calling Mercury.I18n", ->
+      expect(@i18nSpy.callCount).toEqual(1)
+      expect(@i18nSpy.argsForCall[0]).toEqual(['hello world!'])
+
+    it "alerts the message", ->
+      expect(@alertSpy.callCount).toEqual(1)
+      expect(@i18nSpy.argsForCall[0]).toEqual(['hello world!'])
+
+
+  describe ".warn", ->
+
+    beforeEach ->
+      window.console = {warn: (-> ''), trace: (-> '')}
+      @warnSpy = spyOn(window.console, 'warn').andCallFake(=>)
+      @notifySpy = spyOn(Mercury, 'notify').andCallFake(=>)
+
+    it "calls console.warn", ->
+      Mercury.warn('message', 2)
+      expect(@warnSpy.callCount).toEqual(1)
+
+    it "calls Mercury.notify if there's no console", ->
+      window.console = null
+      Mercury.warn('message', 2)
+      expect(@notifySpy.callCount).toEqual(1)
+
+
+  describe ".log", ->
 
     beforeEach ->
       window.console = {debug: -> ''}
@@ -53,7 +86,7 @@ describe "Mercury", ->
       expect(@debugSpy.callCount).toEqual(0)
 
 
-  describe "#locale", ->
+  describe ".locale", ->
 
     beforeEach ->
       @translationSource = Mercury.I18n['en'] = {
@@ -68,7 +101,7 @@ describe "Mercury", ->
       expect(Mercury.determinedLocale).toEqual({top: @translationSource, sub: @translationSource['_US_']})
 
 
-  describe "#I18n", ->
+  describe ".I18n", ->
 
     beforeEach ->
       Mercury.I18n['foo'] =

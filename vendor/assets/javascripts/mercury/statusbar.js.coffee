@@ -16,10 +16,10 @@ class @Mercury.Statusbar
 
 
   bindEvents: ->
-    Mercury.bind 'region:update', (event, options) =>
+    Mercury.on 'region:update', (event, options) =>
       @setPath(options.region.path()) if options.region && jQuery.type(options.region.path) == 'function'
 
-    @aboutElement.click =>
+    @aboutElement.on 'click', =>
       Mercury.lightview('/mercury/lightviews/about.html', {title: "Mercury Editor v#{Mercury.version}"})
 
 

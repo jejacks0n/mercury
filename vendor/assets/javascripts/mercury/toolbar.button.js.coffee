@@ -55,13 +55,10 @@ class @Mercury.Toolbar.Button
 
 
   bindEvents: ->
-    Mercury.bind 'button', (event, options) =>
-      @element.click() if options.action == @name
+    Mercury.on 'button', (event, options) => @element.click() if options.action == @name
+    Mercury.on 'mode', (event, options) => @togglePressed() if @handled.mode == options.mode && @handled.toggle
 
-    Mercury.bind 'mode', (event, options) =>
-      @togglePressed() if @handled.mode == options.mode && @handled.toggle
-
-    Mercury.bind 'region:update', (event, options) =>
+    Mercury.on 'region:update', (event, options) =>
       if @handled.context && options.region && jQuery.type(options.region.currentElement) == 'function'
         element = options.region.currentElement()
         if element.length && @handled.context.call(@, element, options.region.element)
@@ -71,23 +68,23 @@ class @Mercury.Toolbar.Button
       else
         @element.removeClass('active')
 
-    Mercury.bind 'region:focused', (event, options) =>
+    Mercury.on 'region:focused', (event, options) =>
       if @handled.regions && options.region && options.region.type
         if @handled.regions.indexOf(options.region.type) > -1
           @element.removeClass('disabled')
         else
           @element.addClass('disabled')
 
-    Mercury.bind 'region:blurred', (event, options) =>
+    Mercury.on 'region:blurred', =>
       @element.addClass('disabled') if @handled.regions
 
-    @element.mousedown (event) =>
+    @element.on 'mousedown', =>
       @element.addClass('active')
 
-    @element.mouseup (event) =>
+    @element.on 'mouseup', =>
       @element.removeClass('active')
 
-    @element.click (event) =>
+    @element.on 'click', (event) =>
       if @element.closest('.disabled').length then return
 
       handled = false
@@ -114,7 +111,7 @@ class @Mercury.Toolbar.Button
 
 
   defaultDialogOptions: ->
-    {
+    return {
       title: @summary || @title
       preload: @types.preload
       appendTo: @options.appendDialogsTo || 'body'
@@ -145,7 +142,6 @@ class @Mercury.Toolbar.Button
   # todo: maybe walk up the tree if it's not too expensive?
   overline: (node) -> node.css('text-decoration') == 'overline'
 
-  # todo: this should never check for tags, because they could be styled differently
   strikethrough: (node, region) -> node.css('text-decoration') == 'line-through' || !!node.closest('strike', region).length
 
   underline: (node, region) -> node.css('text-decoration') == 'underline' || !!node.closest('u', region).length

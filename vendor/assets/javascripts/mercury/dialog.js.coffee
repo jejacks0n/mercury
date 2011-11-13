@@ -47,7 +47,8 @@ class @Mercury.Dialog
   # **Note:** By stopping the mousedown event we're limiting what's possible in dialogs, but this is needed to keep
   # focus from being taken away from the active region when different things are clicked on in dialogs.
   bindEvents: ->
-    @element.mousedown (event) -> event.stopPropagation()
+    @element.on 'mousedown', (event) ->
+      event.stopPropagation()
 
 
   # ## #preload

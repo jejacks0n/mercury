@@ -114,7 +114,7 @@ Mercury.I18n['swedish_chef'] =
   "Error: The provided vimeo url was invalid.": "Irrur: Zee prufeeded vimeo url ves infeleed."
 
   # Statusbar
-  "Path:": "Pet"
+  "Path:": "Pet:"
 
 
   # ## HTML / Template Strings

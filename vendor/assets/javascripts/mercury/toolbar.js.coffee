@@ -52,21 +52,23 @@ class @Mercury.Toolbar
 
 
   bindEvents: ->
-    Mercury.bind 'region:focused', (event, options) =>
+    Mercury.on 'region:focused', (event, options) =>
       for toolbar in @element.find(".mercury-toolbar")
         toolbar = jQuery(toolbar)
         if regions = toolbar.data('regions')
           toolbar.removeClass('disabled') if regions.split(',').indexOf(options.region.type) > -1
 
-    Mercury.bind 'region:blurred', (event, options) =>
+    Mercury.on 'region:blurred', (event, options) =>
       for toolbar in @element.find(".mercury-toolbar")
         toolbar = jQuery(toolbar)
         if regions = toolbar.data('regions')
           toolbar.addClass('disabled') if regions.split(',').indexOf(options.region.type) > -1
 
+    @element.on 'click', ->
+      Mercury.trigger('hide:dialogs')
 
-    @element.click -> Mercury.trigger('hide:dialogs')
-    @element.mousedown (event) -> event.preventDefault()
+    @element.on 'mousedown', (event) ->
+      event.preventDefault()
 
 
   height: ->

@@ -15,8 +15,8 @@ class @Mercury.Toolbar.Expander extends Mercury.Palette
 
 
   bindEvents: ->
-    Mercury.bind 'hide:dialogs', (event, dialog) => @hide() unless dialog == @
-    Mercury.bind 'resize', => @windowResize()
+    Mercury.on 'hide:dialogs', (event, dialog) => @hide() unless dialog == @
+    Mercury.on 'resize', => @windowResize()
 
     super
 

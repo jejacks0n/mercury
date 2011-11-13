@@ -325,7 +325,7 @@ describe "Mercury.PageEditor", ->
 
       it "calls initializeFrame", ->
         @initializeFrameSpy = spyOn(Mercury.PageEditor.prototype, 'initializeFrame').andCallFake(=>)
-        @setTimeoutSpy = spyOn(window, 'setTimeout').andCallFake((callback) -> callback())
+        @setTimeoutSpy = spyOn(window, 'setTimeout').andCallFake((timeout, callback) -> callback())
         Mercury.trigger('initialize:frame')
         expect(@initializeFrameSpy.callCount).toEqual(1)
         expect(@setTimeoutSpy.callCount).toEqual(1)
@@ -343,7 +343,7 @@ describe "Mercury.PageEditor", ->
       it "calls focus on a focusable element", ->
         callCount = 0
         @pageEditor.focusableElement = {focus: -> callCount += 1}
-        @setTimeoutSpy = spyOn(window, 'setTimeout').andCallFake((callback) -> callback())
+        @setTimeoutSpy = spyOn(window, 'setTimeout').andCallFake((timeout, callback) -> callback())
         Mercury.trigger('focus:window')
         expect(callCount).toEqual(1)
 

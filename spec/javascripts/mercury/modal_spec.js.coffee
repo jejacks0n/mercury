@@ -313,7 +313,7 @@ describe "Mercury.modal", ->
     describe "on a preloaded view", ->
 
       beforeEach ->
-        @setTimeoutSpy = spyOn(window, 'setTimeout').andCallFake((callback) => callback())
+        @setTimeoutSpy = spyOn(window, 'setTimeout').andCallFake((timeout, callback) => callback())
         Mercury.preloadedViews = {'/evergreen/responses/blank.html': 'this is the preloaded content'}
 
       afterEach ->

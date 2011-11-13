@@ -2,7 +2,7 @@
   Mercury.uploader.show(file, options) if Mercury.config.uploading.enabled
   return Mercury.uploader
 
-jQuery.extend Mercury.uploader, {
+jQuery.extend Mercury.uploader,
 
   show: (file, @options = {}) ->
     @file = new Mercury.uploader.File(file)
@@ -51,7 +51,7 @@ jQuery.extend Mercury.uploader, {
 
 
   bindEvents: ->
-    Mercury.bind 'resize', => @position()
+    Mercury.on 'resize', => @position()
 
 
   appear: ->
@@ -172,7 +172,6 @@ jQuery.extend Mercury.uploader, {
     onerror: ->
       @updateStatus('Error: Unable to upload the file')
       @hide(3)
-}
 
 
 

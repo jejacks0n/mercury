@@ -32,42 +32,31 @@ class @Mercury.Regions.Markupable extends Mercury.Region
     @resize()
 
 
-  focus: ->
-    @element.focus()
-
-
   bindEvents: ->
-    Mercury.bind 'mode', (event, options) =>
-      @togglePreview() if options.mode == 'preview'
+    Mercury.on 'mode', (event, options) => @togglePreview() if options.mode == 'preview'
+    Mercury.on 'focus:frame', => @focus() unless @previewing && Mercury.region != @
 
-    Mercury.bind 'focus:frame', =>
-      return if @previewing
-      return unless Mercury.region == @
-      @focus()
-
-    Mercury.bind 'action', (event, options) =>
-      return if @previewing
-      return unless Mercury.region == @
+    Mercury.on 'action', (event, options) =>
+      return if @previewing || Mercury.region != @
       @execCommand(options.action, options) if options.action
 
-    Mercury.bind 'unfocus:regions', (event) =>
-      return if @previewing
-      return unless Mercury.region == @
+    Mercury.on 'unfocus:regions', =>
+      return if @previewing || Mercury.region != @
       @element.blur()
       @container.removeClass('focus')
       Mercury.trigger('region:blurred', {region: @})
 
-    @element.bind 'dragenter', (event) =>
+    @element.on 'dragenter', (event) =>
       return if @previewing
       event.preventDefault()
       event.originalEvent.dataTransfer.dropEffect = 'copy'
 
-    @element.bind 'dragover', (event) =>
+    @element.on 'dragover', (event) =>
       return if @previewing
       event.preventDefault()
       event.originalEvent.dataTransfer.dropEffect = 'copy'
 
-    @element.bind 'drop', (event) =>
+    @element.on 'drop', (event) =>
       return if @previewing
 
       # handle dropping snippets
@@ -82,13 +71,13 @@ class @Mercury.Regions.Markupable extends Mercury.Region
         @focus()
         Mercury.uploader(event.originalEvent.dataTransfer.files[0])
 
-    @element.focus =>
+    @element.on 'focus', =>
       return if @previewing
       Mercury.region = @
       @container.addClass('focus')
       Mercury.trigger('region:focused', {region: @})
 
-    @element.keydown (event) =>
+    @element.on 'keydown', (event) =>
       return if @previewing
       @resize()
       switch event.keyCode
@@ -135,19 +124,23 @@ class @Mercury.Regions.Markupable extends Mercury.Region
 
       @pushHistory(event.keyCode)
 
-    @element.keyup =>
+    @element.on 'keyup', =>
       return if @previewing
       Mercury.changes = true
       @resize()
       Mercury.trigger('region:update', {region: @})
 
-    @element.mouseup =>
+    @element.on 'mouseup', =>
       return if @previewing
       @focus()
       Mercury.trigger('region:focused', {region: @})
 
-    @previewElement.click (event) =>
+    @previewElement.on 'click', (event) =>
       $(event.target).closest('a').attr('target', '_top') if @previewing
+
+
+  focus: ->
+    @element.focus()
 
 
   content: (value = null, filterSnippets = true) ->
@@ -204,7 +197,7 @@ class @Mercury.Regions.Markupable extends Mercury.Region
       @history.push(@contentAndSelection())
     else if keyCode
       # set a timeout for pushing to the history
-      @historyTimeout = setTimeout((=> @history.push(@contentAndSelection())), waitTime * 1000)
+      @historyTimeout = setTimeout(waitTime * 1000, => @history.push(@contentAndSelection()))
     else
       # push to the history immediately
       @history.push(@contentAndSelection())

@@ -16,19 +16,21 @@ class @Mercury.Panel extends Mercury.Dialog
 
 
   bindEvents: ->
-    Mercury.bind 'resize', => @position(@visible)
-    Mercury.bind 'hide:panels', (event, panel) =>
-      unless panel == @
-        @button.removeClass('pressed')
-        @hide()
+    Mercury.on 'resize', => @position(@visible)
 
-    @element.mousedown (event) -> event.stopPropagation()
+    Mercury.on 'hide:panels', (event, panel) =>
+      return if panel == @
+      @button.removeClass('pressed')
+      @hide()
 
-    @titleElement.find('.mercury-panel-close').click (event) ->
+    @titleElement.find('.mercury-panel-close').on 'click', (event) ->
       event.preventDefault()
       Mercury.trigger('hide:panels')
 
-    @element.bind 'ajax:beforeSend', (event, xhr, options) =>
+    @element.on 'mousedown', (event) ->
+      event.stopPropagation()
+
+    @element.on 'ajax:beforeSend', (event, xhr, options) =>
       options.success = (content) =>
         @loadContent(content)
         @resize()

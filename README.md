@@ -12,16 +12,17 @@ Mercury has been written using CoffeeScript and jQuery for the Javascript portio
 
 Hey international open source contributors, want to contribute to the Mercury Editor project without having to do much
 coding?  We're looking for good translations.  If you have a good grasp of english, another common language, and have
-the desire and time to do a translation for the project it would be awesome to hear from you.  Just shoot me a message
-or email and I'll provide more details.  While any translation would be a good thing, the languages that seem like they
-would give the most value are:
+the desire and time to do a translation for the project it would be awesome to hear from you.  The easiest way to submit
+is to fork the project, create a locale file with your translation, and submit a pull request -- in this way you can get
+full credit for your contributions.
 
-- French
+- French (pending)
 - German
-- Spanish
+- Spanish (pending)
 - Japanese
 - Chinese
-- Dutch
+- Dutch (pending)
+- Portuguese (pending)
 
 
 ## Awesomeness
@@ -87,6 +88,7 @@ The feature list is actually pretty long, so here's a short list that need highl
 - Image Uploading: Drag images from your desktop and they'll be automatically uploaded and inserted.
 - Table Editing: Advanced table editing and creation, including support for multiple column and rows spans.
 - Snippets: Insert and edit predefined and reusable bits of markup/code using drag and drop.
+- I18n: Built in low profile translation and internationalization system.
 
 
 ## Installation

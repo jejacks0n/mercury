@@ -1,5 +1,3 @@
-require '/assets/mercury.js'
-
 describe "Mercury.modalHandlers.insertTable", ->
 
   template 'mercury/modals/inserttable.html'

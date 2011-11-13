@@ -1,5 +1,3 @@
-require '/assets/mercury.js'
-
 describe "Mercury.Panel", ->
 
   template 'mercury/panel.html'
@@ -7,9 +5,12 @@ describe "Mercury.Panel", ->
   beforeEach ->
     Mercury.displayRect = {top: 20, left: 20, width: 200, height: 200}
     $.fx.off = true
+    Mercury.determinedLocale =
+      top: {'hello world!': 'bork! bork!'}
+      sub: {'foo': 'Bork!'}
 
   afterEach ->
-    @panel = null
+    Mercury.config.localization.enabled = false
     delete(@panel)
     $(window).unbind('mercury:resize')
     $(window).unbind('mercury:hide:panels')
@@ -156,12 +157,21 @@ describe "Mercury.Panel", ->
       expect(@panel.element.hasClass('loading')).toEqual(false)
 
     it "sets the element html to be the data passed to it", ->
-      @panel.loadContent('hello world!')
+      @panel.loadContent('<span>hello world!</span>')
       html = @panel.element.html()
       expect(html).toContain('<h1>foo panel</h1>')
       expect(html).toContain('class="mercury-panel-pane"')
       expect(html).toContain('style="visibility: hidden;')
-      expect(html).toContain('hello world')
+      expect(html).toContain('hello world!')
+
+    it "sets the element html to be the data passed to it", ->
+      Mercury.config.localization.enabled = true
+      @panel.loadContent('<span>hello world!</span>')
+      html = @panel.element.html()
+      expect(html).toContain('<h1>foo panel</h1>')
+      expect(html).toContain('class="mercury-panel-pane"')
+      expect(html).toContain('style="visibility: hidden;')
+      expect(html).toContain('bork! bork!')
 
 
   describe "#makesDraggable", ->

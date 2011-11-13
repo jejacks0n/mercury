@@ -12,12 +12,12 @@ Feature:
 
 #  Scenario: A user can view and close the about dialog
     When I click on the about the editor link
-    Then I should see "About Mercury Editor" within the lightview title
+    Then I should see "Mercury Editor" within the lightview title
     And I should see "Mercury Editor is an open source project written by Jeremy Jackson" within the lightview window
     And I should see "Project Home" within the lightview window
     And I should see "Project Source" within the lightview window
 
-    When I click on the lightview close button
+    When I click on the lightview overlay
     Then the lightview window should not be visible
     And the lightview overlay should not be visible
 

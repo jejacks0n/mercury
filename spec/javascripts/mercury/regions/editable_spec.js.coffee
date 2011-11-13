@@ -1,5 +1,3 @@
-require '/assets/mercury.js'
-
 describe "Mercury.Regions.Editable", ->
 
   template 'mercury/regions/editable.html'

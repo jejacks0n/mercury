@@ -1,5 +1,3 @@
-require '/assets/mercury.js'
-
 describe "Mercury.PageEditor", ->
 
   template 'mercury/page_editor.html'
@@ -265,7 +263,7 @@ describe "Mercury.PageEditor", ->
       spy = spyOn(window, 'alert').andCallFake(=>)
       @pageEditor.buildRegion($('#region2'))
       expect(spy.callCount).toEqual(1)
-      expect(spy.argsForCall[0]).toEqual(['Region type is malformed, no data-type provided, or "Editable" is unknown for "unknown".'])
+      expect(spy.argsForCall[0]).toEqual(['Region type is malformed, no data-type provided, or "Editable" is unknown for the "region2" region.'])
 
     it "doesn't re-instantiate the region if the element's already initialized", ->
       $('#region2').data('region', {foo: 'bar'})

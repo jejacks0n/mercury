@@ -6,7 +6,7 @@ class @Mercury.Panel extends Mercury.Dialog
 
   build: ->
     @element = jQuery('<div>', {class: 'mercury-panel loading', style: 'display:none;'})
-    @titleElement = jQuery("<h1>#{@options.title}</h1>").appendTo(@element)
+    @titleElement = jQuery("<h1>#{Mercury.I18n(@options.title)}</h1>").appendTo(@element)
     @paneElement = jQuery('<div>', {class: 'mercury-panel-pane'}).appendTo(@element)
 
     if @options.closeButton
@@ -92,6 +92,7 @@ class @Mercury.Panel extends Mercury.Dialog
     @element.removeClass('loading')
     @paneElement.css({visibility: 'hidden'})
     @paneElement.html(data)
+    @paneElement.localize(Mercury.locale()) if Mercury.config.localization.enabled
 
 
   makeDraggable: ->

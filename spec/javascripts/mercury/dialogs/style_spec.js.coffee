@@ -1,5 +1,3 @@
-require '/assets/mercury.js'
-
 describe "Mercury.dialogHandlers.style", ->
 
   template 'mercury/dialogs/style.html'

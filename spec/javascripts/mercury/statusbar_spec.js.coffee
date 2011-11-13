@@ -1,5 +1,3 @@
-require '/assets/mercury.js'
-
 describe "Mercury.Statusbar", ->
 
   template 'mercury/statusbar.html'

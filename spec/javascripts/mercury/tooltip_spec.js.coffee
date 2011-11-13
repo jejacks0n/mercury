@@ -1,5 +1,3 @@
-require '/assets/mercury.js'
-
 describe "Mercury.tooltip", ->
 
   template 'mercury/tooltip.html'

@@ -1,5 +1,3 @@
-require '/assets/mercury.js'
-
 describe "Mercury.Regions.Snippetable", ->
 
   template 'mercury/regions/snippetable.html'

@@ -1,5 +1,3 @@
-require '/assets/mercury.js'
-
 describe "Mercury.modal", ->
 
   template 'mercury/modal.html'
@@ -7,8 +5,12 @@ describe "Mercury.modal", ->
   beforeEach ->
     $.fx.off = true
     Mercury.displayRect = {fullHeight: 200}
+    Mercury.determinedLocale =
+      top: {'hello world!': 'bork! bork!'}
+      sub: {'foo': 'Bork!'}
 
   afterEach ->
+    Mercury.config.localization.enabled = false
     Mercury.modal.initialized = false
     Mercury.modal.visible = false
     $(window).unbind('mercury:refresh')
@@ -118,11 +120,6 @@ describe "Mercury.modal", ->
       Mercury.modal.build()
       expect($('#modal_container .mercury-modal').length).toEqual(1)
       expect($('#modal_container .mercury-modal-overlay').length).toEqual(1)
-
-    it "updates the title to reflect what was passed in the options", ->
-      Mercury.modal.options.title = 'title'
-      Mercury.modal.build()
-      expect($('#test .mercury-modal-title span').html()).toEqual('title')
 
 
   describe "observed events", ->
@@ -399,8 +396,8 @@ describe "Mercury.modal", ->
       expect($('.mercury-modal').hasClass('loading')).toEqual(false)
 
     it "sets the content elements html to whatever was passed", ->
-      Mercury.modal.loadContent('content')
-      expect($('.mercury-modal-content').html()).toEqual('content')
+      Mercury.modal.loadContent('<span>content</span>')
+      expect($('.mercury-modal-content').html()).toEqual('<span>content</span>')
 
     it "hides the contentElement", ->
       $('.mercury-modal-content').css('display', 'block')
@@ -423,6 +420,11 @@ describe "Mercury.modal", ->
       Mercury.modalHandlers['foo'] = => callCount += 1
       Mercury.modal.loadContent('content', {handler: 'foo'})
       expect(callCount).toEqual(1)
+
+    it "translates the content if configured", ->
+      Mercury.config.localization.enabled = true
+      Mercury.modal.loadContent('<span>foo</span>')
+      expect($('.mercury-modal-content').html()).toEqual('<span>Bork!</span>')
 
     it "calls resize", ->
       Mercury.modal.loadContent('content')

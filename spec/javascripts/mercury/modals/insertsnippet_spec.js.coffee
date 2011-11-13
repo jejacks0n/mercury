@@ -1,5 +1,3 @@
-require '/assets/mercury.js'
-
 describe "Mercury.modalHandlers.insertSnippet", ->
 
   template 'mercury/modals/insertsnippet.html'

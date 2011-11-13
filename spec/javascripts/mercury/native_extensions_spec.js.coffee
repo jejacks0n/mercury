@@ -1,5 +1,3 @@
-require '/assets/mercury.js'
-
 describe "String", ->
 
   describe "#titleize", ->
@@ -19,6 +17,20 @@ describe "String", ->
 
     it "escapes characters used in regular expressions", ->
       expect('/.*+?|()[]{}\\'.regExpEscape()).toEqual('\\/\\.\\*\\+\\?\\|\\(\\)\\[\\]\\{\\}\\\\')
+
+
+  describe "#printf", ->
+
+    it "works something like a basic implementation of the standard sprintf", ->
+      expect('int %d'.printf(2.1)).toEqual('int 2')
+      expect('int%d'.printf(2.1)).toEqual('int2')
+      expect('%d-int'.printf(2.1)).toEqual('2-int')
+      expect('%f float'.printf(2.1)).toEqual('2.1 float')
+      expect('%s string'.printf(2.1)).toEqual('2.1 string')
+      expect('%% a'.printf(2.1)).toEqual('% a')
+      expect('a %% b'.printf()).toEqual('a % b')
+      expect('a %% %d'.printf(2.1)).toEqual('a % 2')
+      expect('%d\n%s'.printf(2.1, 'string')).toEqual('2\nstring')
 
 
 describe "Number", ->

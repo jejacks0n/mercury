@@ -1,5 +1,3 @@
-require '/assets/mercury.js'
-
 describe "Mercury.dialogHandlers.foreColor", ->
 
   template 'mercury/dialogs/forecolor.html'

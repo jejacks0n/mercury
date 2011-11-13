@@ -15,6 +15,27 @@ String::regExpEscape = ->
   return @replace(escaped, '\\$1')
 
 
+String::printf = ->
+  chunks = @split('%')
+  result = chunks[0]
+  re = /^([sdf])([\s\S%]*)$/
+  offset = 0
+  for chunk, index in chunks
+    p = re.exec(chunk)
+    if index == 0 || !p || arguments[index] == null
+      if index > 1
+        offset += 2
+        result += "%#{chunk}"
+      continue
+    arg = arguments[(index - 1) - offset]
+    switch p[1]
+      when 's' then result += arg
+      when 'd', 'i' then result += parseInt(arg.toString(), 10)
+      when 'f' then result += parseFloat(arg)
+    result += p[2]
+  return result
+
+
 Number::toHex = ->
   result = @toString(16).toUpperCase()
   return if result[1] then result else "0#{result}"

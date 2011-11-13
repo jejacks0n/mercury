@@ -1,5 +1,3 @@
-require '/assets/mercury.js'
-
 describe "Mercury.Snippet", ->
 
   template 'mercury/snippet.html'
@@ -44,7 +42,6 @@ describe "Mercury.Snippet", ->
 
     it "sets the default content to the identity", ->
       ret = @snippet.getHTML($(document))
-      html = $('<div>').html(ret).html()
       expect(ret.html()).toEqual('[identity]')
 
     it "calls loadPreview", ->
@@ -110,7 +107,7 @@ describe "Mercury.Snippet", ->
         spy = spyOn(window, 'alert').andCallFake(=>)
         @snippet.loadPreview($('#snippet'))
         expect(spy.callCount).toEqual(1)
-        expect(spy.argsForCall[0]).toEqual(['Error loading the preview for the foo snippet.'])
+        expect(spy.argsForCall[0]).toEqual(['Error loading the preview for the "foo" snippet.'])
 
 
   describe "#displayOptions", ->

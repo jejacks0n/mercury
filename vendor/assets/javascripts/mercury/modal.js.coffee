@@ -33,8 +33,6 @@ jQuery.extend Mercury.modal, {
     @element.appendTo(jQuery(@options.appendTo).get(0) ? 'body')
     @overlay.appendTo(jQuery(@options.appendTo).get(0) ? 'body')
 
-    @titleElement.find('span').html(@options.title)
-
 
   bindEvents: ->
     Mercury.bind 'refresh', => @resize(true)
@@ -144,7 +142,7 @@ jQuery.extend Mercury.modal, {
         success: (data) => @loadContent(data)
         error: =>
           @hide()
-          alert("Mercury was unable to load #{@url} for the modal.")
+          Mercury.notify("Mercury was unable to load %s for the modal.", @url)
       }
 
 
@@ -165,11 +163,12 @@ jQuery.extend Mercury.modal, {
     if @options.handler && Mercury.modalHandlers[@options.handler]
       Mercury.modalHandlers[@options.handler].call(@)
 
+    @element.localize(Mercury.locale()) if Mercury.config.localization.enabled
     @resize()
 
 
   setTitle: ->
-    @titleElement.find('span').html(@options.title)
+    @titleElement.find('span').html(Mercury.I18n(@options.title))
 
 
   reset: ->

@@ -1,5 +1,3 @@
-require '/assets/mercury.js'
-
 describe "Mercury.modalHandlers.insertMedia", ->
 
   template 'mercury/modals/insertmedia.html'

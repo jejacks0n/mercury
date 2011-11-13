@@ -1,5 +1,3 @@
-require '/assets/mercury.js'
-
 describe "Mercury.SnippetToolbar", ->
 
   template 'mercury/snippet_toolbar.html'

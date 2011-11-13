@@ -1,12 +1,10 @@
-require '/assets/mercury.js'
-
 describe "Mercury.Toolbar", ->
 
   template 'mercury/toolbar.html'
 
   beforeEach ->
     $.fx.off = true
-    ajaxSpy = spyOn($, 'ajax').andCallFake (url, options) =>
+    spyOn($, 'ajax').andCallFake (url, options) =>
       options.success('data') if options.success
 
   afterEach ->
@@ -87,7 +85,7 @@ describe "Mercury.Toolbar", ->
       @toolbar = new Mercury.Toolbar({appendTo: '#test'})
 
     it "throws an exception when invalid options are passed", ->
-      expect(=> @toolbar.buildButton('foo', false)).toThrow('Unknown button structure -- please provide an array, object, or string for foo.')
+      expect(=> @toolbar.buildButton('foo', false)).toThrow('Unknown button structure -- please provide an array, object, or string for "foo".')
 
     it "returns false if the name is _custom, or _regions", ->
       expect(@toolbar.buildButton('_custom', 'foo')).toEqual(false)

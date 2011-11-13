@@ -1,5 +1,3 @@
-require '/assets/mercury.js'
-
 describe "Mercury.modalHandlers.insertCharacter", ->
 
   template 'mercury/modals/insertcharacter.html'

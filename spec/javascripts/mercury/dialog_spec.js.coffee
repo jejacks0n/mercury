@@ -1,15 +1,17 @@
-require '/assets/mercury.js'
-
 describe "Mercury.Dialog", ->
 
   template 'mercury/dialog.html'
 
   beforeEach ->
     $.fx.off = true
+    Mercury.determinedLocale =
+      top: {'hello world!': 'bork! bork!'}
+      sub: {'foo': 'Bork!'}
 
   afterEach ->
-    @dialog = null
     delete(@dialog)
+    Mercury.config.localization.enabled = false
+
 
   describe "constructor", ->
 
@@ -253,7 +255,7 @@ describe "Mercury.Dialog", ->
         it "alerts the user", ->
           @dialog.load()
           expect(@alertSpy.callCount).toEqual(1)
-          expect(@alertSpy.argsForCall[0]).toEqual(['Mercury was unable to load /evergreen/responses/blank.html for the foo dialog.'])
+          expect(@alertSpy.argsForCall[0]).toEqual(['Mercury was unable to load /evergreen/responses/blank.html for the "foo" dialog.'])
 
 
   describe "#loadContent", ->
@@ -270,5 +272,10 @@ describe "Mercury.Dialog", ->
       expect(@dialog.element.hasClass('loading')).toEqual(false)
 
     it "sets the element html to be the data passed to it", ->
-      @dialog.loadContent('hello world!')
-      expect(@dialog.element.html()).toEqual('hello world!')
+      @dialog.loadContent('<span>hello world!</span>')
+      expect(@dialog.element.html()).toEqual('<span>hello world!</span>')
+
+    it "translates the content if configured", ->
+      Mercury.config.localization.enabled = true
+      @dialog.loadContent('<span>hello world!</span>')
+      expect(@dialog.element.html()).toEqual('<span>bork! bork!</span>')

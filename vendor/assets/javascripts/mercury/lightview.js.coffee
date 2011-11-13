@@ -34,8 +34,6 @@ jQuery.extend Mercury.lightview, {
     @element.appendTo(jQuery(@options.appendTo).get(0) ? 'body')
     @overlay.appendTo(jQuery(@options.appendTo).get(0) ? 'body')
 
-    @titleElement.find('span').html(@options.title)
-
 
   bindEvents: ->
     Mercury.bind 'refresh', => @resize(true)
@@ -124,7 +122,7 @@ jQuery.extend Mercury.lightview, {
         success: (data) => @loadContent(data)
         error: =>
           @hide()
-          alert("Mercury was unable to load #{@url} for the lightview.")
+          Mercury.notify('Mercury was unable to load %s for the lightview.', @url)
       }
 
 
@@ -141,11 +139,12 @@ jQuery.extend Mercury.lightview, {
     if @options.handler && Mercury.lightviewHandlers[@options.handler]
       Mercury.lightviewHandlers[@options.handler].call(@)
 
+    @element.localize(Mercury.locale()) if Mercury.config.localization.enabled
     @resize()
 
 
   setTitle: ->
-    @titleElement.find('span').html(@options.title)
+    @titleElement.find('span').html(Mercury.I18n(@options.title))
 
 
   reset: ->

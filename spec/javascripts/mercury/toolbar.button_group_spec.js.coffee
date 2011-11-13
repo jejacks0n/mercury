@@ -1,5 +1,3 @@
-require '/assets/mercury.js'
-
 describe "Mercury.Toolbar.ButtonGroup", ->
 
   template 'mercury/toolbar.button_group.html'

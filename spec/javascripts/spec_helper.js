@@ -1,3 +1,4 @@
+require('/assets/mercury.js');
 
 jasmine.simulate = {
 

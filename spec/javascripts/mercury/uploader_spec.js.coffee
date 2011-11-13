@@ -1,5 +1,3 @@
-require '/assets/mercury.js'
-
 describe "Mercury.uploader", ->
 
   template 'mercury/uploader.html'

@@ -48,7 +48,7 @@ class @Mercury.Toolbar
       when 'string' # separator
         jQuery('<hr>', {class: "mercury-#{if options == '-' then 'line-separator' else 'separator'}"})
 
-      else throw "Unknown button structure -- please provide an array, object, or string for #{name}."
+      else throw Mercury.I18n('Unknown button structure -- please provide an array, object, or string for "%s".', name)
 
 
   bindEvents: ->

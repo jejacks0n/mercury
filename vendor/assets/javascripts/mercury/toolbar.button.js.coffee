@@ -1,6 +1,9 @@
 class @Mercury.Toolbar.Button
 
   constructor: (@name, @title, @summary = null, @types = {}, @options = {}) ->
+    @title = Mercury.I18n(@title) if @title
+    @summary = Mercury.I18n(@summary) if @summary
+
     @build()
     @bindEvents()
     return @element
@@ -48,7 +51,7 @@ class @Mercury.Toolbar.Button
         when 'modal'
           @handled[type] = if jQuery.isFunction(mixed) then mixed.apply(@, @name) else mixed
 
-        else throw "Unknown button type #{type} used for the #{@name} button."
+        else throw Mercury.I18n('Unknown button type \"%s\" used for the \"%s\" button.', type, @name)
 
 
   bindEvents: ->

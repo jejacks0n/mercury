@@ -1,5 +1,3 @@
-require '/assets/mercury.js'
-
 describe "Mercury.dialogHandlers.snippetPanel", ->
 
   template 'mercury/dialogs/snippetpanel.html'

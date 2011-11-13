@@ -1,5 +1,3 @@
-require '/assets/mercury.js'
-
 describe "Mercury.modalHandlers.insertLink", ->
 
   template 'mercury/modals/insertlink.html'

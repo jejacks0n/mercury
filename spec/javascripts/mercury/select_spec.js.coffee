@@ -1,5 +1,3 @@
-require '/assets/mercury.js'
-
 describe "Mercury.Select", ->
 
   template 'mercury/select.html'

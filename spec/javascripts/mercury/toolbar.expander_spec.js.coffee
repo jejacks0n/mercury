@@ -1,5 +1,3 @@
-require '/assets/mercury.js'
-
 describe "Mercury.Toolbar.Expander", ->
 
   template 'mercury/toolbar.expander.html'

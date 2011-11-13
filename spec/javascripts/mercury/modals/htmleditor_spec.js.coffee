@@ -1,5 +1,3 @@
-require '/assets/mercury.js'
-
 describe "Mercury.modalHandlers.htmlEditor", ->
 
   template 'mercury/modals/htmleditor.html'

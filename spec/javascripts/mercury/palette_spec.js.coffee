@@ -1,5 +1,3 @@
-require '/assets/mercury.js'
-
 describe "Mercury.Palette", ->
 
   template 'mercury/palette.html'

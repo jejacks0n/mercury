@@ -1,5 +1,3 @@
-require '/assets/mercury.js'
-
 describe "Mercury.lightview", ->
 
   template 'mercury/lightview.html'
@@ -7,8 +5,12 @@ describe "Mercury.lightview", ->
   beforeEach ->
     $.fx.off = true
     Mercury.displayRect = {fullHeight: 200, width: 1000}
+    Mercury.determinedLocale =
+      top: {'hello world!': 'bork! bork!'}
+      sub: {'foo': 'Bork!'}
 
   afterEach ->
+    Mercury.config.localization.enabled = false
     Mercury.lightview.initialized = false
     Mercury.lightview.visible = false
     $(window).unbind('mercury:refresh')
@@ -113,11 +115,6 @@ describe "Mercury.lightview", ->
       Mercury.lightview.build()
       expect($('#lightview_container .mercury-lightview').length).toEqual(1)
       expect($('#lightview_container .mercury-lightview-overlay').length).toEqual(1)
-
-    it "updates the title to reflect what was passed in the options", ->
-      Mercury.lightview.options.title = 'title'
-      Mercury.lightview.build()
-      expect($('#test .mercury-lightview-title span').html()).toEqual('title')
 
     it "creates a close button if asked to in the options", ->
       Mercury.lightview.options.closeButton = true
@@ -406,8 +403,8 @@ describe "Mercury.lightview", ->
       expect($('.mercury-lightview').hasClass('loading')).toEqual(false)
 
     it "sets the content elements html to whatever was passed", ->
-      Mercury.lightview.loadContent('content')
-      expect($('.mercury-lightview-content').html()).toEqual('content')
+      Mercury.lightview.loadContent('<span>content</span>')
+      expect($('.mercury-lightview-content').html()).toEqual('<span>content</span>')
 
     it "hides the contentElement", ->
       $('.mercury-lightview-content').css('display', 'block')
@@ -425,6 +422,11 @@ describe "Mercury.lightview", ->
       Mercury.lightviewHandlers['foo'] = => callCount += 1
       Mercury.lightview.loadContent('content', {handler: 'foo'})
       expect(callCount).toEqual(1)
+
+    it "translates the content if configured", ->
+      Mercury.config.localization.enabled = true
+      Mercury.lightview.loadContent('<span>foo</span>')
+      expect($('.mercury-lightview-content').html()).toEqual('<span>Bork!</span>')
 
     it "calls resize", ->
       Mercury.lightview.loadContent('content')

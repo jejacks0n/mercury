@@ -41,6 +41,9 @@
  * Require Mercury Editor itself.
  *= require mercury/mercury
  *
+ * Require any localizations you wish to support.
+ * require mercury/locales/swedish_chef.locale
+ *
  * Add all requires for plugins that extend or change the behavior of Mercury Editor.
  * require mercury/plugins/save_as_xml/plugin.js
  */
@@ -159,8 +162,8 @@ window.Mercury = {
           sep:                 '-'
           },
         indent:                {
-          outdent:             ['Decrease Indentation', null],
-          indent:              ['Increase Indentation', null],
+          outdent:             ['Decrease Indentation'],
+          indent:              ['Increase Indentation'],
           sep:                 '-'
           },
         table:                 {
@@ -194,13 +197,28 @@ window.Mercury = {
       snippetable: {
         _custom:               true,
         actions:               {
-          editSnippet:         ['Edit Snippet Settings', null],
+          editSnippet:         ['Edit Snippet Settings'],
           sep1:                ' ',
-          removeSnippet:       ['Remove Snippet', null]
+          removeSnippet:       ['Remove Snippet']
           }
         }
       },
 
+
+    // ## Localization / I18n
+    //
+    // .. brain dump ..
+    // en, en-US, es, fr, pt, etc..
+    //
+    // Include the .locale files you want to support when loading mercury.. the files are always named by the language,
+    // and not the regional dialect (eg. en.locale.js) because the regional dialects are nested within the primary
+    // locale file.
+    // The clients locale will be used first, and if no proper locale file is found for their language the
+    // preferedLocale configuration will be used.  If one isn't provided, en is assumed.
+    localization: {
+      enabled: false,
+      preferedLocale: 'swedish_chef-BORK'
+    },
 
     // ## Hijacking Links & Forms
     //

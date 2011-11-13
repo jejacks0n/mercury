@@ -1,5 +1,3 @@
-require '/assets/mercury.js'
-
 describe "Mercury.Toolbar.Button", ->
 
   template 'mercury/toolbar.button.html'
@@ -104,7 +102,7 @@ describe "Mercury.Toolbar.Button", ->
     it "throws an error when an unknown type is encountered", ->
       expect(=>
         @button = new Mercury.Toolbar.Button('foo', 'title', 'summary', {foo: '/evergreen/responses/blank.html'})
-      ).toThrow('Unknown button type foo used for the foo button.')
+      ).toThrow('Unknown button type "foo" used for the "foo" button.')
 
 
   describe "observed events", ->

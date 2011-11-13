@@ -1,5 +1,3 @@
-require '/assets/mercury.js'
-
 describe "Mercury.Regions.Markupable", ->
 
   template 'mercury/regions/markupable.html'

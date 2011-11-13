@@ -1,5 +1,3 @@
-require '/assets/mercury.js'
-
 describe "Mercury.tableEditor", ->
 
   template 'mercury/table_editor.html'

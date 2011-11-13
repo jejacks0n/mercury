@@ -51,7 +51,7 @@
       when 'youtube_url'
         url = @element.find('#media_youtube_url').val()
         unless /^http:\/\/youtu.be\//.test(url)
-          alert('Error: The provided youtube share url was invalid.')
+          Mercury.notify('Error: The provided youtube share url was invalid.')
           return
         code = url.replace('http://youtu.be/', '')
         value = jQuery('<iframe>', {
@@ -66,14 +66,14 @@
       when 'vimeo_url'
         url = @element.find('#media_vimeo_url').val()
         unless /^http:\/\/vimeo.com\//.test(url)
-          alert('Error: The provided vimeo url was invalid.')
+          Mercury.notify('Error: The provided vimeo url was invalid.')
           return
         code = url.replace('http://vimeo.com/', '')
         value = jQuery('<iframe>', {
           width: @element.find('#media_vimeo_width').val() || 400,
           height: @element.find('#media_vimeo_height').val() || 225,
           src: "http://player.vimeo.com/video/#{code}?title=1&byline=1&portrait=0&color=ffffff",
-          frameborder: 0,
+          frameborder: 0
         })
         Mercury.trigger('action', {action: 'insertHTML', value: value})
 

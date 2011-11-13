@@ -76,10 +76,13 @@ form label {
   text-align: right;
   line-height: 27px;
   font-size: 1.1em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 form label input {
   width: auto !important;
-  margin: 0 5px 0 -20px !important;
+  margin: 0 5px 0 2px !important;
 }
 form select,
 form input[type=text],

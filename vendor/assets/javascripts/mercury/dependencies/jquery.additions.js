@@ -149,3 +149,58 @@ jQuery.extend(jQuery.easing, {
   var _escapeable = /["\\\x00-\x1f\x7f-\x9f]/g;
   var _meta = {'\b': '\\b', '\t': '\\t', '\n': '\\n', '\f': '\\f', '\r': '\\r', '"' : '\\"', '\\': '\\\\'};
 })(jQuery);
+
+/*
+ * jQuery Localizer Plugin
+ *
+ * Copyright (c) 2011 Sagi Mann (with a basic reworking by Jeremy Jackson)
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms are permitted provided that the above copyright notice and this
+ * paragraph are duplicated in all such forms and that any documentation, advertising materials, and other materials
+ * related to such distribution and use acknowledge that the software was developed by the <organization>.  The name of
+ * the University may not be used to endorse or promote products derived from this software without specific prior
+ * written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED ``AS IS'' AND WITHOUT ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, WITHOUT LIMITATION, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+ */
+(function($) {
+  $.fn.localize = function(locale) {
+    this.find('*').contents().each(function() {
+      var translated = false;
+      var source = '';
+      if (typeof(this.data) == 'string') {
+        source = $.trim(this.data);
+        if (source && (translated = (locale.sub[source] || locale.top[source]))) {
+          this.data = translated;
+        }
+      }
+
+      if (this.nodeName == 'IMG' && this.attributes['src']) {
+        source = this.attributes['src'].nodeValue;
+        if (source && (translated = (locale.sub[source] || locale.top[source]))) {
+          $(this).attr('src', translated);
+        }
+      }
+
+      if (this.nodeName == "A" && this.attributes['href']) {
+        source = $.trim(this.attributes['href'].nodeValue);
+        if (source && (translated = (locale.sub[source] || locale.top[source]))) {
+          $(this).attr('href', translated);
+        }
+      }
+
+      if (this.nodeName == "INPUT" && this.attributes['type']) {
+        if (this.attributes['value'] && ['submit', 'reset', 'button'].indexOf(this.attributes['type'].nodeValue.toLowerCase()) > -1) {
+          source = $.trim(this.attributes['value'].nodeValue);
+          if (source && (translated = (locale.sub[source] || locale.top[source]))) {
+            $(this).attr('value', translated);
+          }
+        }
+      }
+
+      return this;
+    });
+  };
+})(jQuery);

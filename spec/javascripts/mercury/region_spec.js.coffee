@@ -1,5 +1,3 @@
-require '/assets/mercury.js'
-
 describe "Mercury.Region", ->
 
   template 'mercury/region.html'

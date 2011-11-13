@@ -1,6 +1,7 @@
-require '/assets/mercury.js'
-
 describe "Mercury", ->
+
+  afterEach: ->
+    Mercury.config.localization.enabled = false
 
   describe "supported:", ->
 
@@ -50,3 +51,49 @@ describe "Mercury", ->
       window.console = null
       Mercury.log(1, 2)
       expect(@debugSpy.callCount).toEqual(0)
+
+
+  describe "#locale", ->
+
+    beforeEach ->
+      @translationSource = Mercury.I18n['en'] = {
+        'original-top': 'translated-top'
+        _US_: {'original-sub': 'translated-sub'}
+      }
+
+    it "memoizes array for what the browsers language is set to (breaks with a different language set)", ->
+      Mercury.config.localization.enabled = true
+      expect(Mercury.determinedLocale).toEqual(undefined)
+      expect(Mercury.locale()).toEqual({top: @translationSource, sub: @translationSource['_US_']})
+      expect(Mercury.determinedLocale).toEqual({top: @translationSource, sub: @translationSource['_US_']})
+
+
+  describe "#I18n", ->
+
+    beforeEach ->
+      Mercury.I18n['foo'] =
+        'originaL': 'translated -- top level'
+        'uniquE': 'translated unique'
+        'complex %s with %d, and %f': 'translated %s with %d, and %f'
+        BAR:
+          'originaL': 'translated -- sub level'
+          'unique': 'undesired unique'
+      Mercury.determinedLocale = {top: Mercury.I18n['foo'], sub: Mercury.I18n['foo']['BAR']}
+
+
+    it "translates from a top level locale", ->
+      Mercury.determinedLocale.sub = {}
+      expect(Mercury.I18n('originaL')).toEqual('translated -- top level')
+
+    it "translates from a sub level locale", ->
+      expect(Mercury.I18n('originaL')).toEqual('translated -- sub level')
+
+    it "falls back from a sub level locale", ->
+      expect(Mercury.I18n('uniquE')).toEqual('translated unique')
+
+    it "falls back to no translation", ->
+      Mercury.determinedLocale = {top: {}, sub: {}}
+      expect(Mercury.I18n('original')).toEqual('original')
+
+    it "uses printf to get any number of variables into the translation", ->
+      expect(Mercury.I18n('complex %s with %d, and %f', 'string', 1, 2.4)).toEqual('translated string with 1, and 2.4')

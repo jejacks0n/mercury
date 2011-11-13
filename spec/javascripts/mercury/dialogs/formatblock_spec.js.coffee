@@ -1,5 +1,3 @@
-require '/assets/mercury.js'
-
 describe "Mercury.dialogHandlers.formatblock", ->
 
   template 'mercury/dialogs/formatblock.html'

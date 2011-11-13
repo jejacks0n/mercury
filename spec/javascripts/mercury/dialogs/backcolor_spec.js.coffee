@@ -1,5 +1,3 @@
-require '/assets/mercury.js'
-
 describe "Mercury.dialogHandlers.backColor", ->
 
   template 'mercury/dialogs/backcolor.html'

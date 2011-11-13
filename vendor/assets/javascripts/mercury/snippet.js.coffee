@@ -60,7 +60,7 @@ class @Mercury.Snippet
         element.html(data)
         callback() if callback
       error: =>
-        alert("Error loading the preview for the #{@name} snippet.")
+        Mercury.notify('Error loading the preview for the \"%s\" snippet.', @name)
     }
 
 

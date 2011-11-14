@@ -7,6 +7,7 @@ class @Mercury.Region
 
     @document = @window.document
     @name = @element.attr('id')
+    @scope = @element.attr('data-scope')
     @history = new Mercury.HistoryBuffer()
     @build()
     @bindEvents()
@@ -95,6 +96,7 @@ class @Mercury.Region
   serialize: ->
     return {
       type: @type
+      scope: @scope
       value: @content(null, true)
       snippets: @snippets()
     }

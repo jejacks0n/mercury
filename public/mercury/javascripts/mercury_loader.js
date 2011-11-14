@@ -130,6 +130,7 @@ if (!window.mercuryPackages) window.mercuryPackages = {
           var script = document.createElement('script');
           script.src = options.src + '/' + src;
           script.type = 'text/javascript';
+          script.charset = 'utf-8';
           head.appendChild(script);
           script.onload = function() {
             loaded += 1;

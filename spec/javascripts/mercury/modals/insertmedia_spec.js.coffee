@@ -4,6 +4,7 @@ describe "Mercury.modalHandlers.insertMedia", ->
 
   beforeEach ->
     Mercury.region = null
+    spyOn(window, 'setTimeout').andCallFake((timeout, callback) => callback())
     @modal =
       element: $('#test')
       hide: ->

@@ -27,6 +27,7 @@ jQuery.extend Mercury.modal,
 
     @titleElement = @element.find('.mercury-modal-title')
     @contentContainerElement = @element.find('.mercury-modal-content-container')
+
     @contentElement = @element.find('.mercury-modal-content')
 
     @element.appendTo(jQuery(@options.appendTo).get(0) ? 'body')
@@ -87,7 +88,7 @@ jQuery.extend Mercury.modal,
         @contentElement.css({height: height - titleHeight, overflow: 'visible'})
         controlHeight = if @contentControl.length then @contentControl.outerHeight() else 0
         @contentPane.css({height: height - titleHeight - controlHeight - 40})
-        @contentPane.find('.mercury-modal-pane').css({width: width - 40})
+        @contentPane.find('.mercury-display-pane').css({width: width - 40})
       else
         @contentElement.css({height: height - titleHeight, overflow: 'auto'})
 
@@ -110,7 +111,7 @@ jQuery.extend Mercury.modal,
       @contentElement.css({height: height - titleHeight, overflow: 'visible'})
       controlHeight = if @contentControl.length then @contentControl.outerHeight() else 0
       @contentPane.css({height: height - titleHeight - controlHeight - 40})
-      @contentPane.find('.mercury-modal-pane').css({width: width - 40})
+      @contentPane.find('.mercury-display-pane').css({width: width - 40})
     else
       @contentElement.css({height: height - titleHeight, overflow: 'auto'})
 
@@ -157,12 +158,15 @@ jQuery.extend Mercury.modal,
     @contentElement.css({display: 'none', visibility: 'hidden'})
 
     # for complex modal content, we provide panes and controls
-    @contentPane = @element.find('.mercury-modal-pane-container')
-    @contentControl = @element.find('.mercury-modal-controls')
+    @contentPane = @element.find('.mercury-display-pane-container')
+    @contentControl = @element.find('.mercury-display-controls')
 
     @options.afterLoad.call(@) if @options.afterLoad
-    if @options.handler && Mercury.modalHandlers[@options.handler]
-      Mercury.modalHandlers[@options.handler].call(@)
+    if @options.handler
+      if Mercury.modalHandlers[@options.handler]
+        Mercury.modalHandlers[@options.handler].call(@)
+      else if Mercury.lightviewHandlers[@options.handler]
+        Mercury.lightviewHandlers[@options.handler].call(@)
 
     @element.localize(Mercury.locale()) if Mercury.config.localization.enabled
     @resize()
@@ -179,6 +183,8 @@ jQuery.extend Mercury.modal,
 
   hide: ->
     return if @showing
+    @options = {}
+    @initialized = false
 
     Mercury.trigger('focus:frame')
     @element.hide()

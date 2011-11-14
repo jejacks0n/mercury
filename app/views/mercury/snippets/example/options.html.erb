@@ -1,8 +1,8 @@
 <% @options = params[:options] || {} %>
 <%= semantic_form_for 'options', { :html => { :style => 'width:600px' } } do |f| %>
 
-  <div class="mercury-modal-pane-container">
-    <div class="mercury-modal-pane">
+  <div class="mercury-display-pane-container">
+    <div class="mercury-display-pane">
       <%= f.inputs do %>
         <%= f.input :first_name, :required => false, :label => 'First Name',
                     :input_html => {:value => @options[:first_name] || 'First Name'} %>
@@ -14,7 +14,7 @@
     </div>
   </div>
 
-  <div class="mercury-modal-controls">
+  <div class="mercury-display-controls">
     <%= f.buttons do %>
       <%= f.commit_button 'Insert Snippet' %>
     <% end %>

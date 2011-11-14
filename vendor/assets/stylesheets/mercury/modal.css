@@ -93,15 +93,15 @@
   overflow: hidden;
   height: 0;
 }
-.mercury-modal .mercury-modal-pane-container {
+.mercury-modal .mercury-display-pane-container {
   overflow: auto;
   margin: -20px -20px 0;
   padding: 20px 20px 10px;
 }
-.mercury-modal .mercury-modal-pane-container .mercury-modal-pane {
+.mercury-modal .mercury-display-pane-container .mercury-display-pane {
   float: left;
 }
-.mercury-modal .mercury-modal-controls {
+.mercury-modal .mercury-display-controls {
   padding: 15px 0 0;
   border-top: 1px solid #CCC;
   text-align: right;

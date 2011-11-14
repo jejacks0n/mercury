@@ -51,6 +51,9 @@ class @Mercury.Toolbar.Button
         when 'modal'
           @handled[type] = if jQuery.isFunction(mixed) then mixed.apply(@, @name) else mixed
 
+        when 'lightview'
+          @handled[type] = if jQuery.isFunction(mixed) then mixed.apply(@, @name) else mixed
+
         else throw Mercury.I18n('Unknown button type \"%s\" used for the \"%s\" button.', type, @name)
 
 
@@ -100,6 +103,10 @@ class @Mercury.Toolbar.Button
           when 'modal'
             handled = true
             Mercury.modal(@handled.modal, {title: @summary || @title, handler: @name})
+
+          when 'lightview'
+            handled = true
+            Mercury.lightview(@handled.lightview, {title: @summary || @title, handler: @name, closeButton: true})
 
           when 'palette', 'select', 'panel'
             event.stopPropagation()

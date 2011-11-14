@@ -406,9 +406,9 @@ describe "Mercury.modal", ->
       expect($('.mercury-modal-content').css('visibility')).toEqual('hidden')
 
     it "finds the content panes and control elements in case they were added with the content", ->
-      Mercury.modal.loadContent('<div class="mercury-modal-pane-container"></div><div class="mercury-modal-controls"></div>')
-      expect(Mercury.modal.contentPane.get(0)).toEqual($('#test .mercury-modal-pane-container').get(0))
-      expect(Mercury.modal.contentControl.get(0)).toEqual($('#test .mercury-modal-controls').get(0))
+      Mercury.modal.loadContent('<div class="mercury-display-pane-container"></div><div class="mercury-display-controls"></div>')
+      expect(Mercury.modal.contentPane.get(0)).toEqual($('#test .mercury-display-pane-container').get(0))
+      expect(Mercury.modal.contentControl.get(0)).toEqual($('#test .mercury-display-controls').get(0))
 
     it "calls an afterLoad callback (if provided in options)", ->
       callCount = 0

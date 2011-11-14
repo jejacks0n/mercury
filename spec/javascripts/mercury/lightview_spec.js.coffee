@@ -251,6 +251,12 @@ describe "Mercury.lightview", ->
     beforeEach ->
       spyOn(Mercury.lightview, 'appear').andCallFake(=>)
       Mercury.lightview('/evergreen/responses/blank.html', {appendTo: $('#test')})
+      Mercury.lightview.contentPane = $()
+
+    it "will keep the content element visible if asked to do so", ->
+      $('.mercury-lightview-content').css('visibility', 'visible')
+      Mercury.lightview.resize(true)
+      expect($('.mercury-lightview-content').css('visibility')).toEqual('visible')
 
     it "resizes the element and adjusts it's position when empty", ->
       $('.mercury-lightview').css({display: 'block', visibility: 'visible', top: 0})
@@ -263,8 +269,8 @@ describe "Mercury.lightview", ->
       Mercury.lightview.loadContent('<div style="width:600px;height:400px"></div>')
       $('.mercury-lightview').css({display: 'block', visibility: 'visible', top: 0})
       Mercury.lightview.resize()
-      expect($('.mercury-lightview').width()).toEqual(642)
-      expect($('.mercury-lightview').offset()).toEqual({top: 20, left: 179})
+      expect($('.mercury-lightview').width()).toEqual(300)
+      expect($('.mercury-lightview').offset()).toEqual({top: 20, left: 350})
       expect($('.mercury-lightview').height()).toEqual(180)
 
 

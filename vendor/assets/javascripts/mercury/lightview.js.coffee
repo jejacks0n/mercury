@@ -36,7 +36,6 @@ jQuery.extend Mercury.lightview,
 
   bindEvents: ->
     Mercury.on 'refresh', => @resize(true)
-
     Mercury.on 'resize', => @position() if @visible
 
     @overlay.on 'click', =>
@@ -54,6 +53,7 @@ jQuery.extend Mercury.lightview,
 
 
   appear: ->
+    @showing = true
     @position()
 
     @overlay.show().css({opacity: 0})
@@ -62,47 +62,75 @@ jQuery.extend Mercury.lightview,
       @element.show().css({opacity: 0})
       @element.stop().animate {opacity: 1}, 200, 'easeInOutSine', =>
         @visible = true
+        @showing = false
         @load()
 
 
   resize: (keepVisible) ->
+    visibility = if keepVisible then 'visible' else 'hidden'
+
     viewportWidth = Mercury.displayRect.width
     viewportHeight = Mercury.displayRect.fullHeight
 
-    @element.css({overflow: 'hidden'})
-    @contentElement.css({visibility: 'hidden', display: 'none', width: 'auto', height: 'auto'})
+    titleHeight = @titleElement.outerHeight()
 
-    width = @contentElement.outerWidth() + 40 + 2
+    width = @contentElement.outerWidth()
     width = viewportWidth - 40 if width > viewportWidth - 40 || @options.fullSize
-    height = @contentElement.outerHeight() + @titleElement.outerHeight() + 30
+
+    @contentPane.css({height: 'auto'}) if @contentPane
+    @contentElement.css({height: 'auto', visibility: visibility, display: 'block'})
+
+    height = @contentElement.outerHeight() + titleHeight
     height = viewportHeight - 20 if height > viewportHeight - 20 || @options.fullSize
 
     width = 300 if width < 300
     height = 150 if height < 150
 
     @element.stop().animate {top: ((viewportHeight - height) / 2) + 10, left: (Mercury.displayRect.width - width) / 2, width: width, height: height}, 200, 'easeInOutSine', =>
-      @contentElement.css({visibility: 'visible', display: 'block', opacity: 0})
-      @contentElement.stop().animate({opacity: 1}, 200, 'easeInOutSine')
-      @element.css({overflow: 'auto'})
+      @contentElement.css({visibility: 'visible', display: 'block'})
+      if @contentPane.length
+        @contentElement.css({height: height - titleHeight, overflow: 'visible'})
+        controlHeight = if @contentControl.length then @contentControl.outerHeight() else 0
+        @contentPane.css({height: height - titleHeight - controlHeight - 40})
+        @contentPane.find('.mercury-display-pane').css({width: width - 40})
+      else
+        @contentElement.css({height: height - titleHeight - 30, overflow: 'auto'})
 
 
   position: ->
     viewportWidth = Mercury.displayRect.width
     viewportHeight = Mercury.displayRect.fullHeight
 
-    @contentElement.css({position: 'absolute', width: 'auto', height: 'auto'})
-    width = @contentElement.width() + 40 + 2
-    width = viewportWidth - 40 if width > viewportWidth - 40 || @options.fullSize
+    @contentPane.css({height: 'auto'}) if @contentPane
+    @contentElement.css({height: 'auto'})
+    @element.css({width: 'auto', height: 'auto', display: 'block', visibility: 'hidden'})
 
+    width = @contentElement.width() + 40
     height = @contentElement.height() + @titleElement.outerHeight() + 30
+
+    width = viewportWidth - 40 if width > viewportWidth - 40 || @options.fullSize
     height = viewportHeight - 20 if height > viewportHeight - 20 || @options.fullSize
-    @contentElement.css({position: 'relative'})
 
     width = 300 if width < 300
     height = 150 if height < 150
 
-    @element.css({top: ((viewportHeight - height) / 2) + 10, left: (viewportWidth - width) / 2, width: width, height: height, overflow: 'auto'})
-    @contentElement.css({width: width - 40, height: height - 30 - @titleElement.outerHeight()}) if @visible
+    titleHeight = @titleElement.outerHeight()
+    if @contentPane && @contentPane.length
+      @contentElement.css({height: height - titleHeight, overflow: 'visible'})
+      controlHeight = if @contentControl.length then @contentControl.outerHeight() else 0
+      @contentPane.css({height: height - titleHeight - controlHeight - 40})
+      @contentPane.find('.mercury-display-pane').css({width: width - 40})
+    else
+      @contentElement.css({height: height - titleHeight - 30, overflow: 'auto'})
+
+    @element.css {
+      top: ((viewportHeight - height) / 2) + 10,
+      left: (viewportWidth - width) / 2,
+      width: width
+      height: height
+      display: if @visible then 'block' else 'none'
+      visibility: 'visible'
+    }
 
 
   update:  ->
@@ -138,9 +166,16 @@ jQuery.extend Mercury.lightview,
     @contentElement.html(data)
     @contentElement.css({display: 'none', visibility: 'hidden'})
 
+    # for complex lightview content, we provide panes and controls
+    @contentPane = @element.find('.mercury-display-pane-container')
+    @contentControl = @element.find('.mercury-display-controls')
+
     @options.afterLoad.call(@) if @options.afterLoad
-    if @options.handler && Mercury.lightviewHandlers[@options.handler]
-      Mercury.lightviewHandlers[@options.handler].call(@)
+    if @options.handler
+      if Mercury.modalHandlers[@options.handler]
+        Mercury.modalHandlers[@options.handler].call(@)
+      else if Mercury.lightviewHandlers[@options.handler]
+        Mercury.lightviewHandlers[@options.handler].call(@)
 
     @element.localize(Mercury.locale()) if Mercury.config.localization.enabled
     @resize()
@@ -156,6 +191,10 @@ jQuery.extend Mercury.lightview,
 
 
   hide: ->
+    return if @showing
+    @options = {}
+    @initialized = false
+
     Mercury.trigger('focus:frame')
     @element.hide()
     @overlay.hide()

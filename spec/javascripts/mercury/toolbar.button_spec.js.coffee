@@ -99,6 +99,10 @@ describe "Mercury.Toolbar.Button", ->
       @button = new Mercury.Toolbar.Button('foo', 'title', 'summary', {modal: '/evergreen/responses/blank.html'}, {appendDialogsTo: $('#test')})
       # nothing unique about this in building -- the modal is built/fired on click
 
+    it "builds lightview buttons", ->
+      @button = new Mercury.Toolbar.Button('foo', 'title', 'summary', {lightview: '/evergreen/responses/blank.html'}, {appendDialogsTo: $('#test')})
+      # nothing unique about this in building -- the lightview is built/fired on click
+
     it "throws an error when an unknown type is encountered", ->
       expect(=>
         @button = new Mercury.Toolbar.Button('foo', 'title', 'summary', {foo: '/evergreen/responses/blank.html'})
@@ -226,6 +230,13 @@ describe "Mercury.Toolbar.Button", ->
 
         jasmine.simulate.click(@button.get(0))
         expect(spy.argsForCall[0]).toEqual(['/evergreen/responses/blank.html', {title: 'summary', handler: 'foo'}])
+
+      it "opens a lightview window", ->
+        spy = spyOn(Mercury, 'lightview').andCallFake(=>)
+        @button = new Mercury.Toolbar.Button('foo', 'title', 'summary', {lightview: '/evergreen/responses/blank.html'})
+
+        jasmine.simulate.click(@button.get(0))
+        expect(spy.argsForCall[0]).toEqual(['/evergreen/responses/blank.html', {title: 'summary', handler: 'foo', closeButton: true}])
 
       it "shows and hides palettes", ->
         spy = spyOn(Mercury.Palette.prototype, 'toggle').andCallFake(=>)

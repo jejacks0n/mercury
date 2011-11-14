@@ -73,30 +73,33 @@ window.Mercury = {
     //
     // ### The available button types are:
     //
-    // - toggle:  toggles on or off when clicked, otherwise behaves like a button
-    // - modal:   opens a modal window, expects the action to be one of:
+    // - toggle:    toggles on or off when clicked, otherwise behaves like a button
+    // - modal:     opens a modal window, expects the action to be one of:
     //   1. a string url
     //   2. a function that returns a string url
-    // - panel:   opens a panel dialog, expects the action to be one of:
+    // - lightview: opens a lightview window (like modal, but different UI), expects the action to be one of:
     //   1. a string url
     //   2. a function that returns a string url
-    // - palette: opens a palette window, expects the action to be one of:
+    // - panel:     opens a panel dialog, expects the action to be one of:
     //   1. a string url
     //   2. a function that returns a string url
-    // - select:  opens a pulldown style window, expects the action to be one of:
+    // - palette:   opens a palette window, expects the action to be one of:
     //   1. a string url
     //   2. a function that returns a string url
-    // - context: calls a callback function, expects the action to be:
+    // - select:    opens a pulldown style window, expects the action to be one of:
+    //   1. a string url
+    //   2. a function that returns a string url
+    // - context:   calls a callback function, expects the action to be:
     //   1. a function that returns a boolean to highlight the button
     //   note: if a function isn't provided, the key will be passed to the contextHandler, in which case a default
     //         context will be used (for more info read the Contexts section below)
-    // - mode:    toggle a given mode in the editor, expects the action to be:
+    // - mode:      toggle a given mode in the editor, expects the action to be:
     //   1. a string, denoting the name of the mode
     //   note: it's assumed that when a specific mode is turned on, all other modes will be turned off, which happens
     //         automatically, thus putting the editor into a specific "state"
-    // - regions: allows buttons to be enabled/disabled based on what region type has focus, expects the action to be:
+    // - regions:   allows buttons to be enabled/disabled based on what region type has focus, expects the action to be:
     //   1. an array of region types (eg. ['editable', 'markupable'])
-    // - preload: allows some dialog views to be loaded when the button is created instead of on first open, expects:
+    // - preload:   allows some dialog views to be loaded when the button is created instead of on first open, expects:
     //   1. a boolean true / false
     //   note: this is only used by panels, selects, and palettes
     //
@@ -216,7 +219,7 @@ window.Mercury = {
     // preferredLocale configuration will be used.  If one isn't provided, and the client locale isn't included, the
     // strings will remain untranslated.
     localization: {
-      enabled: true,
+      enabled: false,
       preferredLocale: 'swedish_chef-BORK'
     },
 

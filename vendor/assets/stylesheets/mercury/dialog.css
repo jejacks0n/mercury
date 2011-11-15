@@ -81,10 +81,11 @@
   text-shadow: 1px 1px 2px rgba(0,0,0, .9);
 }
 .mercury-panel h1 a.mercury-panel-close {
-  float: right;
+  position: absolute;
+  right: -5px;
+  top: -4px;
   width: 42px;
   height: 42px;
-  margin: -14px -20px;
   background: url(/assets/mercury/close.png) no-repeat center;
   cursor: default;
 }

@@ -88,6 +88,7 @@ The feature list is actually pretty long, so here's a short list that need highl
 - Image Uploading: Drag images from your desktop and they'll be automatically uploaded and inserted.
 - Table Editing: Advanced table editing and creation, including support for multiple column and rows spans.
 - Snippets: Insert and edit predefined and reusable bits of markup/code using drag and drop.
+- Custom Regions: We provide Markdown, HTML, and Snippet region types by default.
 - I18n: Built in low profile translation and internationalization system.
 
 

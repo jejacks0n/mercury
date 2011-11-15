@@ -11,18 +11,16 @@ Mercury has been written using CoffeeScript and jQuery for the Javascript portio
 ## Translations
 
 Hey international open source contributors, want to contribute to the Mercury Editor project without having to do much
-coding?  We're looking for good translations.  If you have a good grasp of english, another common language, and have
-the desire and time to do a translation for the project it would be awesome to hear from you.  The easiest way to submit
-is to fork the project, create a locale file with your translation, and submit a pull request -- in this way you can get
-full credit for your contributions.  There's an [example file](/jejacks0n/mercury/tree/master/vendor/assets/javascripts/mercury/locales) provided.
+coding?  We're looking for good translations.  If you have a good grasp of english, another language, and have the
+desire and time to do a translation for the project it would be awesome to hear from you.  The easiest way to submit is
+to fork the project, create a locale file with your translation, and submit a pull request -- that way you get full
+credit for your contributions.
 
-- French (pending)
-- German
+Some [examples are here](https://github.com/jejacks0n/mercury/tree/master/vendor/assets/javascripts/mercury/locales),
+and there's more on the [wiki page](https://github.com/jejacks0n/mercury/wiki/Localization-&-Translations-(I18n)).
+
+- French (provided by [adamantx](https://github.com/adamantx))
 - Spanish (provided by [javiercr](https://github.com/javiercr))
-- Japanese
-- Chinese
-- Dutch (pending)
-- Portuguese (pending)
 
 
 ## Awesomeness

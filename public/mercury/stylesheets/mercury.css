@@ -484,16 +484,23 @@ form fieldset.buttons .commit input:hover {
  *----------------------------------------------------------------------------*/
 /* about mercury */
 #mercury_about {
-  width: 200px;
+  width: 300px;
   min-height: 100px;
-  padding-left: 130px;
-  background: url(/assets/mercury/temp-logo.png) no-repeat left center;
-  font-size: .9em;
+  background: url(/assets/mercury/temp-logo.png) no-repeat 0 0;
+  font-size: 1.1em;
 }
 #mercury_about ul {
+  float: left;
   list-style: none;
   padding: 0;
-  margin: 20px 0 0 0;
+  margin: 118px 0 0 0;
+  width: 120px;
+  text-align: center;
+}
+#mercury_about p {
+  margin: 0;
+  float: right;
+  width: 175px;
 }
 #mercury_about a {
   color: #09F;

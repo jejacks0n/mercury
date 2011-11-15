@@ -188,6 +188,7 @@ namespace :mercury do
       end
 
       copy_file(Rails.root.join('vendor/assets/javascripts/mercury_loader.js'), Rails.root.join('public/mercury/javascripts/mercury_loader.js'))
+      copy_file(Rails.root.join('vendor/assets/javascripts/mercury/dependencies/jquery-1.7.js'), Rails.root.join('public/mercury/javascripts/jquery-1.7.js'))
     end
 
     desc "Combine stylesheets into mercury.css and mercury.bundle.css (bundling images where possible)"

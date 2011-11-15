@@ -52,6 +52,7 @@
     <span class="nx">@build</span><span class="p">()</span>
     <span class="nx">@bindEvents</span><span class="p">()</span>
     <span class="nx">@pushHistory</span><span class="p">()</span>
+    <span class="nx">@element</span><span class="p">.</span><span class="nx">data</span><span class="p">(</span><span class="s1">&#39;region&#39;</span><span class="p">,</span> <span class="err">@</span><span class="p">)</span>
 
 
   <span class="nv">build: </span><span class="o">-&gt;</span>
@@ -61,28 +62,24 @@
 
 
   <span class="nv">bindEvents: </span><span class="o">-&gt;</span>
-    <span class="nx">Mercury</span><span class="p">.</span><span class="nx">bind</span> <span class="s1">&#39;mode&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">event</span><span class="p">,</span> <span class="nx">options</span><span class="p">)</span> <span class="o">=&gt;</span>
-      <span class="nx">@togglePreview</span><span class="p">()</span> <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">mode</span> <span class="o">==</span> <span class="s1">&#39;preview&#39;</span>
+    <span class="nx">Mercury</span><span class="p">.</span><span class="kc">on</span> <span class="s1">&#39;mode&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">event</span><span class="p">,</span> <span class="nx">options</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">@togglePreview</span><span class="p">()</span> <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">mode</span> <span class="o">==</span> <span class="s1">&#39;preview&#39;</span>
 
-    <span class="nx">Mercury</span><span class="p">.</span><span class="nx">bind</span> <span class="s1">&#39;focus:frame&#39;</span><span class="p">,</span> <span class="o">=&gt;</span>
-      <span class="k">return</span> <span class="k">if</span> <span class="nx">@previewing</span>
-      <span class="k">return</span> <span class="nx">unless</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">region</span> <span class="o">==</span> <span class="err">@</span>
+    <span class="nx">Mercury</span><span class="p">.</span><span class="kc">on</span> <span class="s1">&#39;focus:frame&#39;</span><span class="p">,</span> <span class="o">=&gt;</span>
+      <span class="k">return</span> <span class="k">if</span> <span class="nx">@previewing</span> <span class="o">||</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">region</span> <span class="o">!=</span> <span class="err">@</span>
       <span class="nx">@focus</span><span class="p">()</span>
 
-    <span class="nx">Mercury</span><span class="p">.</span><span class="nx">bind</span> <span class="s1">&#39;action&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">event</span><span class="p">,</span> <span class="nx">options</span><span class="p">)</span> <span class="o">=&gt;</span>
-      <span class="k">return</span> <span class="k">if</span> <span class="nx">@previewing</span>
-      <span class="k">return</span> <span class="nx">unless</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">region</span> <span class="o">==</span> <span class="err">@</span>
+    <span class="nx">Mercury</span><span class="p">.</span><span class="kc">on</span> <span class="s1">&#39;action&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">event</span><span class="p">,</span> <span class="nx">options</span><span class="p">)</span> <span class="o">=&gt;</span>
+      <span class="k">return</span> <span class="k">if</span> <span class="nx">@previewing</span> <span class="o">||</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">region</span> <span class="o">!=</span> <span class="err">@</span>
       <span class="nx">@execCommand</span><span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">action</span><span class="p">,</span> <span class="nx">options</span><span class="p">)</span> <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">action</span>
 
-    <span class="nx">@element</span><span class="p">.</span><span class="nx">mousemove</span> <span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="o">=&gt;</span>
-      <span class="k">return</span> <span class="k">if</span> <span class="nx">@previewing</span>
-      <span class="k">return</span> <span class="nx">unless</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">region</span> <span class="o">==</span> <span class="err">@</span>
+    <span class="nx">@element</span><span class="p">.</span><span class="kc">on</span> <span class="s1">&#39;mousemove&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="o">=&gt;</span>
+      <span class="k">return</span> <span class="k">if</span> <span class="nx">@previewing</span> <span class="o">||</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">region</span> <span class="o">!=</span> <span class="err">@</span>
       <span class="nv">snippet = </span><span class="nx">jQuery</span><span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">target</span><span class="p">).</span><span class="nx">closest</span><span class="p">(</span><span class="s1">&#39;.mercury-snippet&#39;</span><span class="p">)</span>
       <span class="k">if</span> <span class="nx">snippet</span><span class="p">.</span><span class="nx">length</span>
         <span class="vi">@snippet = </span><span class="nx">snippet</span>
         <span class="nx">Mercury</span><span class="p">.</span><span class="nx">trigger</span><span class="p">(</span><span class="s1">&#39;show:toolbar&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nv">type: </span><span class="s1">&#39;snippet&#39;</span><span class="p">,</span> <span class="nv">snippet: </span><span class="nx">@snippet</span><span class="p">})</span>
 
-    <span class="nx">@element</span><span class="p">.</span><span class="nx">mouseout</span> <span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="o">=&gt;</span>
+    <span class="nx">@element</span><span class="p">.</span><span class="kc">on</span> <span class="s1">&#39;mouseout&#39;</span><span class="p">,</span> <span class="o">=&gt;</span>
       <span class="k">return</span> <span class="k">if</span> <span class="nx">@previewing</span>
       <span class="nx">Mercury</span><span class="p">.</span><span class="nx">trigger</span><span class="p">(</span><span class="s1">&#39;hide:toolbar&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nv">type: </span><span class="s1">&#39;snippet&#39;</span><span class="p">,</span> <span class="nv">immediately: </span><span class="kc">false</span><span class="p">})</span>
 
@@ -114,7 +111,7 @@
 
       </td>
       <td class=code>
-        <div class='highlight'><pre>      <span class="k">if</span> <span class="nx">filterSnippets</span> <span class="k">then</span> <span class="k">for</span> <span class="nx">snippet</span><span class="p">,</span> <span class="nx">index</span> <span class="k">in</span> <span class="nx">container</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;.mercury-snippet&#39;</span><span class="p">)</span>
+        <div class='highlight'><pre>      <span class="k">if</span> <span class="nx">filterSnippets</span> <span class="k">then</span> <span class="k">for</span> <span class="nx">snippet</span> <span class="k">in</span> <span class="nx">container</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;.mercury-snippet&#39;</span><span class="p">)</span>
         <span class="nv">snippet = </span><span class="nx">jQuery</span><span class="p">(</span><span class="nx">snippet</span><span class="p">)</span>
         <span class="nx">snippet</span><span class="p">.</span><span class="nx">attr</span><span class="p">({</span><span class="nv">contenteditable: </span><span class="kc">null</span><span class="p">,</span> <span class="s1">&#39;data-version&#39;</span><span class="o">:</span> <span class="kc">null</span><span class="p">})</span>
         <span class="nx">snippet</span><span class="p">.</span><span class="nx">html</span><span class="p">(</span><span class="s2">&quot;[#{snippet.data(&#39;snippet&#39;)}]&quot;</span><span class="p">)</span>
@@ -125,11 +122,11 @@
   <span class="nv">togglePreview: </span><span class="o">-&gt;</span>
     <span class="k">if</span> <span class="nx">@previewing</span>
       <span class="vi">@previewing = </span><span class="kc">false</span>
-      <span class="nx">@element</span><span class="p">.</span><span class="nx">addClass</span><span class="p">(</span><span class="s1">&#39;mercury-region&#39;</span><span class="p">).</span><span class="nx">removeClass</span><span class="p">(</span><span class="s1">&#39;mercury-region-preview&#39;</span><span class="p">)</span>
+      <span class="nx">@element</span><span class="p">.</span><span class="nx">addClass</span><span class="p">(</span><span class="nx">Mercury</span><span class="p">.</span><span class="nx">config</span><span class="p">.</span><span class="nx">regionClass</span><span class="p">).</span><span class="nx">removeClass</span><span class="p">(</span><span class="s2">&quot;#{Mercury.config.regionClass}-preview&quot;</span><span class="p">)</span>
       <span class="nx">@focus</span><span class="p">()</span> <span class="k">if</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">region</span> <span class="o">==</span> <span class="err">@</span>
     <span class="k">else</span>
       <span class="vi">@previewing = </span><span class="kc">true</span>
-      <span class="nx">@element</span><span class="p">.</span><span class="nx">addClass</span><span class="p">(</span><span class="s1">&#39;mercury-region-preview&#39;</span><span class="p">).</span><span class="nx">removeClass</span><span class="p">(</span><span class="s1">&#39;mercury-region&#39;</span><span class="p">)</span>
+      <span class="nx">@element</span><span class="p">.</span><span class="nx">addClass</span><span class="p">(</span><span class="s2">&quot;#{Mercury.config.regionClass}-preview&quot;</span><span class="p">).</span><span class="nx">removeClass</span><span class="p">(</span><span class="nx">Mercury</span><span class="p">.</span><span class="nx">config</span><span class="p">.</span><span class="nx">regionClass</span><span class="p">)</span>
       <span class="nx">Mercury</span><span class="p">.</span><span class="nx">trigger</span><span class="p">(</span><span class="s1">&#39;region:blurred&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nv">region: </span><span class="err">@</span><span class="p">})</span>
 
 

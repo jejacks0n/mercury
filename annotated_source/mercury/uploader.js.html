@@ -43,7 +43,7 @@
   <span class="nx">Mercury</span><span class="p">.</span><span class="nx">uploader</span><span class="p">.</span><span class="nx">show</span><span class="p">(</span><span class="nx">file</span><span class="p">,</span> <span class="nx">options</span><span class="p">)</span> <span class="k">if</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">config</span><span class="p">.</span><span class="nx">uploading</span><span class="p">.</span><span class="nx">enabled</span>
   <span class="k">return</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">uploader</span>
 
-<span class="nx">jQuery</span><span class="p">.</span><span class="nx">extend</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">uploader</span><span class="p">,</span> <span class="p">{</span>
+<span class="nx">jQuery</span><span class="p">.</span><span class="nx">extend</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">uploader</span><span class="p">,</span>
 
   <span class="nv">show: </span><span class="nf">(file, @options = {}) -&gt;</span>
     <span class="vi">@file = </span><span class="k">new</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">uploader</span><span class="p">.</span><span class="nx">File</span><span class="p">(</span><span class="nx">file</span><span class="p">)</span>
@@ -81,7 +81,9 @@
     <span class="vi">@element = </span><span class="nx">jQuery</span><span class="p">(</span><span class="s1">&#39;&lt;div&gt;&#39;</span><span class="p">,</span> <span class="p">{</span><span class="k">class</span><span class="o">:</span> <span class="s1">&#39;mercury-uploader&#39;</span><span class="p">,</span> <span class="nv">style: </span><span class="s1">&#39;display:none&#39;</span><span class="p">})</span>
     <span class="nx">@element</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="s1">&#39;&lt;div class=&quot;mercury-uploader-preview&quot;&gt;&lt;b&gt;&lt;img/&gt;&lt;/b&gt;&lt;/div&gt;&#39;</span><span class="p">)</span>
     <span class="nx">@element</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="s1">&#39;&lt;div class=&quot;mercury-uploader-details&quot;&gt;&lt;/div&gt;&#39;</span><span class="p">)</span>
-    <span class="nx">@element</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="s1">&#39;&lt;div class=&quot;mercury-uploader-progress&quot;&gt;&lt;span&gt;Processing...&lt;/span&gt;&lt;div class=&quot;mercury-uploader-indicator&quot;&gt;&lt;div&gt;&lt;b&gt;0%&lt;/b&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&#39;</span><span class="p">)</span>
+    <span class="nx">@element</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="s1">&#39;&lt;div class=&quot;mercury-uploader-progress&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;div class=&quot;mercury-uploader-indicator&quot;&gt;&lt;div&gt;&lt;b&gt;0%&lt;/b&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&#39;</span><span class="p">)</span>
+
+    <span class="nx">@updateStatus</span><span class="p">(</span><span class="s1">&#39;Processing...&#39;</span><span class="p">)</span>
 
     <span class="vi">@overlay = </span><span class="nx">jQuery</span><span class="p">(</span><span class="s1">&#39;&lt;div&gt;&#39;</span><span class="p">,</span> <span class="p">{</span><span class="k">class</span><span class="o">:</span> <span class="s1">&#39;mercury-uploader-overlay&#39;</span><span class="p">,</span> <span class="nv">style: </span><span class="s1">&#39;display:none&#39;</span><span class="p">})</span>
 
@@ -90,7 +92,7 @@
 
 
   <span class="nv">bindEvents: </span><span class="o">-&gt;</span>
-    <span class="nx">Mercury</span><span class="p">.</span><span class="nx">bind</span> <span class="s1">&#39;resize&#39;</span><span class="p">,</span> <span class="o">=&gt;</span> <span class="nx">@position</span><span class="p">()</span>
+    <span class="nx">Mercury</span><span class="p">.</span><span class="kc">on</span> <span class="s1">&#39;resize&#39;</span><span class="p">,</span> <span class="o">=&gt;</span> <span class="nx">@position</span><span class="p">()</span>
 
 
   <span class="nv">appear: </span><span class="o">-&gt;</span>
@@ -116,7 +118,11 @@
 
 
   <span class="nv">fillDisplay: </span><span class="o">-&gt;</span>
-    <span class="nv">details = </span><span class="p">[</span><span class="s2">&quot;Name: #{@file.name}&quot;</span><span class="p">,</span> <span class="s2">&quot;Size: #{@file.readableSize}&quot;</span><span class="p">,</span> <span class="s2">&quot;Type: #{@file.type}&quot;</span><span class="p">]</span>
+    <span class="nv">details = </span><span class="p">[</span>
+      <span class="nx">Mercury</span><span class="p">.</span><span class="nx">I18n</span><span class="p">(</span><span class="s1">&#39;Name: %s&#39;</span><span class="p">,</span> <span class="nx">@file</span><span class="p">.</span><span class="nx">name</span><span class="p">),</span>
+      <span class="nx">Mercury</span><span class="p">.</span><span class="nx">I18n</span><span class="p">(</span><span class="s1">&#39;Size: %s&#39;</span><span class="p">,</span> <span class="nx">@file</span><span class="p">.</span><span class="nx">readableSize</span><span class="p">),</span>
+      <span class="nx">Mercury</span><span class="p">.</span><span class="nx">I18n</span><span class="p">(</span><span class="s1">&#39;Type: %s&#39;</span><span class="p">,</span> <span class="nx">@file</span><span class="p">.</span><span class="nx">type</span><span class="p">)</span>
+    <span class="p">]</span>
     <span class="nx">@element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;.mercury-uploader-details&#39;</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="nx">details</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="s1">&#39;&lt;br/&gt;&#39;</span><span class="p">))</span>
 
 
@@ -131,10 +137,9 @@
     <span class="nx">jQuery</span><span class="p">.</span><span class="nx">each</span> <span class="p">[</span><span class="s1">&#39;onloadstart&#39;</span><span class="p">,</span> <span class="s1">&#39;onprogress&#39;</span><span class="p">,</span> <span class="s1">&#39;onload&#39;</span><span class="p">,</span> <span class="s1">&#39;onabort&#39;</span><span class="p">,</span> <span class="s1">&#39;onerror&#39;</span><span class="p">],</span> <span class="p">(</span><span class="nx">index</span><span class="p">,</span> <span class="nx">eventName</span><span class="p">)</span> <span class="o">=&gt;</span>
       <span class="nx">xhr</span><span class="p">.</span><span class="nx">upload</span><span class="p">[</span><span class="nx">eventName</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">@uploaderEvents</span><span class="p">[</span><span class="nx">eventName</span><span class="p">].</span><span class="nx">call</span><span class="p">(</span><span class="err">@</span><span class="p">,</span> <span class="nx">event</span><span class="p">)</span>
     <span class="nv">xhr.onload = </span><span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="o">=&gt;</span>
-      <span class="nx">console</span><span class="p">.</span><span class="nx">debug</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span>
       <span class="k">if</span> <span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">currentTarget</span><span class="p">.</span><span class="nx">status</span> <span class="o">&gt;=</span> <span class="mi">400</span><span class="p">)</span>
         <span class="nx">@updateStatus</span><span class="p">(</span><span class="s1">&#39;Error: Unable to upload the file&#39;</span><span class="p">)</span>
-        <span class="nx">alert</span><span class="p">(</span><span class="s2">&quot;#{event.currentTarget.status}: Unable to process response&quot;</span><span class="p">)</span>
+        <span class="nx">Mercury</span><span class="p">.</span><span class="nx">notify</span><span class="p">(</span><span class="s1">&#39;Unable to process response: %s&#39;</span><span class="p">,</span> <span class="nx">event</span><span class="p">.</span><span class="nx">currentTarget</span><span class="p">.</span><span class="nx">status</span><span class="p">)</span>
         <span class="nx">@hide</span><span class="p">()</span>
       <span class="k">else</span>
         <span class="k">try</span>
@@ -144,15 +149,16 @@
             <span class="k">else</span>
               <span class="nx">jQuery</span><span class="p">.</span><span class="nx">parseJSON</span><span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">target</span><span class="p">.</span><span class="nx">responseText</span><span class="p">)</span>
           <span class="nx">Mercury</span><span class="p">.</span><span class="nx">trigger</span><span class="p">(</span><span class="s1">&#39;action&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nv">action: </span><span class="s1">&#39;insertImage&#39;</span><span class="p">,</span> <span class="nv">value: </span><span class="p">{</span><span class="nv">src: </span><span class="nx">response</span><span class="p">.</span><span class="nx">image</span><span class="p">.</span><span class="nx">url</span><span class="p">}})</span>
+          <span class="nx">@hide</span><span class="p">()</span>
         <span class="k">catch</span> <span class="nx">error</span>
           <span class="nx">@updateStatus</span><span class="p">(</span><span class="s1">&#39;Error: Unable to upload the file&#39;</span><span class="p">)</span>
-          <span class="nx">alert</span><span class="p">(</span><span class="s2">&quot;Unable to process response: #{error}&quot;</span><span class="p">)</span>
+          <span class="nx">Mercury</span><span class="p">.</span><span class="nx">notify</span><span class="p">(</span><span class="s1">&#39;Unable to process response: %s&#39;</span><span class="p">,</span> <span class="nx">error</span><span class="p">)</span>
           <span class="nx">@hide</span><span class="p">()</span>
 
     <span class="nx">xhr</span><span class="p">.</span><span class="nx">open</span><span class="p">(</span><span class="s1">&#39;post&#39;</span><span class="p">,</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">config</span><span class="p">.</span><span class="nx">uploading</span><span class="p">.</span><span class="nx">url</span><span class="p">,</span> <span class="kc">true</span><span class="p">)</span>
     <span class="nx">xhr</span><span class="p">.</span><span class="nx">setRequestHeader</span><span class="p">(</span><span class="s1">&#39;Accept&#39;</span><span class="p">,</span> <span class="s1">&#39;application/json, text/javascript, text/html, application/xml, text/xml, */*&#39;</span><span class="p">)</span>
     <span class="nx">xhr</span><span class="p">.</span><span class="nx">setRequestHeader</span><span class="p">(</span><span class="s1">&#39;X-Requested-With&#39;</span><span class="p">,</span> <span class="s1">&#39;XMLHttpRequest&#39;</span><span class="p">)</span>
-    <span class="nx">xhr</span><span class="p">.</span><span class="nx">setRequestHeader</span><span class="p">(</span><span class="s1">&#39;X-CSRF-Token&#39;</span><span class="p">,</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">csrfToken</span><span class="p">)</span>
+    <span class="nx">xhr</span><span class="p">.</span><span class="nx">setRequestHeader</span><span class="p">(</span><span class="nx">Mercury</span><span class="p">.</span><span class="nx">config</span><span class="p">.</span><span class="nx">csrfHeader</span><span class="p">,</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">csrfToken</span><span class="p">)</span>
 
     <span class="nx">@file</span><span class="p">.</span><span class="nx">readAsBinaryString</span> <span class="p">(</span><span class="nx">result</span><span class="p">)</span> <span class="o">=&gt;</span></pre></div>
       </td>
@@ -192,7 +198,7 @@
 
 
   <span class="nv">updateStatus: </span><span class="nf">(message, loaded) -&gt;</span>
-    <span class="nx">@element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;.mercury-uploader-progress span&#39;</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="nx">message</span><span class="p">)</span>
+    <span class="nx">@element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;.mercury-uploader-progress span&#39;</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="nx">Mercury</span><span class="p">.</span><span class="nx">I18n</span><span class="p">(</span><span class="nx">message</span><span class="p">).</span><span class="nx">toString</span><span class="p">())</span>
     <span class="k">if</span> <span class="nx">loaded</span>
       <span class="nv">percent = </span><span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nx">loaded</span> <span class="o">*</span> <span class="mi">100</span> <span class="o">/</span> <span class="nx">@file</span><span class="p">.</span><span class="nx">size</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;%&#39;</span>
       <span class="nx">@element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;.mercury-uploader-indicator div&#39;</span><span class="p">).</span><span class="nx">css</span><span class="p">({</span><span class="nv">width: </span><span class="nx">percent</span><span class="p">})</span>
@@ -200,7 +206,7 @@
 
 
   <span class="nv">hide: </span><span class="nf">(delay = 0) -&gt;</span>
-    <span class="nx">setTimeout</span><span class="p">((</span><span class="o">=&gt;</span>
+    <span class="nx">setTimeout</span> <span class="nx">delay</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">,</span> <span class="o">=&gt;</span>
       <span class="nx">@element</span><span class="p">.</span><span class="nx">animate</span> <span class="p">{</span><span class="nv">opacity: </span><span class="mi">0</span><span class="p">},</span> <span class="mi">200</span><span class="p">,</span> <span class="s1">&#39;easeInOutSine&#39;</span><span class="p">,</span> <span class="o">=&gt;</span>
         <span class="nx">@overlay</span><span class="p">.</span><span class="nx">animate</span> <span class="p">{</span><span class="nv">opacity: </span><span class="mi">0</span><span class="p">},</span> <span class="mi">200</span><span class="p">,</span> <span class="s1">&#39;easeInOutSine&#39;</span><span class="p">,</span> <span class="o">=&gt;</span>
           <span class="nx">@overlay</span><span class="p">.</span><span class="nx">hide</span><span class="p">()</span>
@@ -208,14 +214,13 @@
           <span class="nx">@reset</span><span class="p">()</span>
           <span class="vi">@visible = </span><span class="kc">false</span>
           <span class="nx">Mercury</span><span class="p">.</span><span class="nx">trigger</span><span class="p">(</span><span class="s1">&#39;focus:frame&#39;</span><span class="p">)</span>
-    <span class="p">),</span> <span class="nx">delay</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">)</span>
 
 
   <span class="nv">reset: </span><span class="o">-&gt;</span>
     <span class="nx">@element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;.mercury-uploader-preview b&#39;</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
     <span class="nx">@element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;.mercury-uploader-indicator div&#39;</span><span class="p">).</span><span class="nx">css</span><span class="p">({</span><span class="nv">width: </span><span class="mi">0</span><span class="p">})</span>
     <span class="nx">@element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;.mercury-uploader-indicator b&#39;</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="s1">&#39;0%&#39;</span><span class="p">).</span><span class="nx">hide</span><span class="p">()</span>
-    <span class="nx">@updateStatus</span><span class="p">(</span><span class="s1">&#39;Processing...&#39;</span><span class="p">,)</span>
+    <span class="nx">@updateStatus</span><span class="p">(</span><span class="s1">&#39;Processing...&#39;</span><span class="p">)</span>
 
 
   <span class="nv">uploaderEvents:</span>
@@ -228,13 +233,11 @@
       <span class="nx">@hide</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 
     <span class="nv">onload: </span><span class="o">-&gt;</span>
-      <span class="nx">@updateStatus</span><span class="p">(</span><span class="s1">&#39;Successfully uploaded&#39;</span><span class="p">,</span> <span class="nx">@file</span><span class="p">.</span><span class="nx">size</span><span class="p">)</span>
-      <span class="nx">@hide</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+      <span class="nx">@updateStatus</span><span class="p">(</span><span class="s1">&#39;Successfully uploaded...&#39;</span><span class="p">,</span> <span class="nx">@file</span><span class="p">.</span><span class="nx">size</span><span class="p">)</span>
 
     <span class="nv">onerror: </span><span class="o">-&gt;</span>
       <span class="nx">@updateStatus</span><span class="p">(</span><span class="s1">&#39;Error: Unable to upload the file&#39;</span><span class="p">)</span>
       <span class="nx">@hide</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
-<span class="p">}</span>
 
 
 
@@ -258,8 +261,8 @@
       </td>
       <td class=code>
         <div class='highlight'><pre>    <span class="nv">errors = </span><span class="p">[]</span>
-    <span class="nx">errors</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="s1">&#39;Too large&#39;</span><span class="p">)</span> <span class="k">if</span> <span class="nx">@size</span> <span class="o">&gt;=</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">config</span><span class="p">.</span><span class="nx">uploading</span><span class="p">.</span><span class="nx">maxFileSize</span>
-    <span class="nx">errors</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="s1">&#39;Unsupported format&#39;</span><span class="p">)</span> <span class="nx">unless</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">config</span><span class="p">.</span><span class="nx">uploading</span><span class="p">.</span><span class="nx">allowedMimeTypes</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="nx">@type</span><span class="p">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span>
+    <span class="nx">errors</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">Mercury</span><span class="p">.</span><span class="nx">I18n</span><span class="p">(</span><span class="s1">&#39;Too large&#39;</span><span class="p">))</span> <span class="k">if</span> <span class="nx">@size</span> <span class="o">&gt;=</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">config</span><span class="p">.</span><span class="nx">uploading</span><span class="p">.</span><span class="nx">maxFileSize</span>
+    <span class="nx">errors</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">Mercury</span><span class="p">.</span><span class="nx">I18n</span><span class="p">(</span><span class="s1">&#39;Unsupported format&#39;</span><span class="p">))</span> <span class="nx">unless</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">config</span><span class="p">.</span><span class="nx">uploading</span><span class="p">.</span><span class="nx">allowedMimeTypes</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="nx">@type</span><span class="p">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span>
     <span class="vi">@errors = </span><span class="nx">errors</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="s1">&#39; / &#39;</span><span class="p">)</span> <span class="k">if</span> <span class="nx">errors</span><span class="p">.</span><span class="nx">length</span>
 
 

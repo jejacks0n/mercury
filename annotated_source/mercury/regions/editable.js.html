@@ -118,22 +118,13 @@ mozilla: this makes double clicking in textareas fail: https://bugzilla.mozilla.
       </td>
       <td class=code>
         <div class='highlight'><pre>    <span class="nx">unless</span> <span class="nx">@document</span><span class="p">.</span><span class="nx">mercuryEditing</span>
-      <span class="nx">@document</span><span class="p">.</span><span class="nx">execCommand</span><span class="p">(</span><span class="s1">&#39;styleWithCSS&#39;</span><span class="p">,</span> <span class="kc">false</span><span class="p">,</span> <span class="kc">false</span><span class="p">)</span>
-      <span class="nx">@document</span><span class="p">.</span><span class="nx">execCommand</span><span class="p">(</span><span class="s1">&#39;insertBROnReturn&#39;</span><span class="p">,</span> <span class="kc">false</span><span class="p">,</span> <span class="kc">true</span><span class="p">)</span>
-      <span class="nx">@document</span><span class="p">.</span><span class="nx">execCommand</span><span class="p">(</span><span class="s1">&#39;enableInlineTableEditing&#39;</span><span class="p">,</span> <span class="kc">false</span><span class="p">,</span> <span class="kc">false</span><span class="p">)</span>
-      <span class="nx">@document</span><span class="p">.</span><span class="nx">execCommand</span><span class="p">(</span><span class="s1">&#39;enableObjectResizing&#39;</span><span class="p">,</span> <span class="kc">false</span><span class="p">,</span> <span class="kc">false</span><span class="p">)</span>
       <span class="vi">@document.mercuryEditing = </span><span class="kc">true</span>
-
-
-  <span class="nv">bindEvents: </span><span class="o">-&gt;</span>
-    <span class="k">super</span>
-
-    <span class="nx">Mercury</span><span class="p">.</span><span class="nx">bind</span> <span class="s1">&#39;region:update&#39;</span><span class="p">,</span> <span class="o">=&gt;</span>
-      <span class="k">return</span> <span class="k">if</span> <span class="nx">@previewing</span>
-      <span class="k">return</span> <span class="nx">unless</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">region</span> <span class="o">==</span> <span class="err">@</span>
-      <span class="nx">setTimeout</span><span class="p">((</span><span class="o">=&gt;</span> <span class="nx">@selection</span><span class="p">().</span><span class="nx">forceSelection</span><span class="p">(</span><span class="nx">@element</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="mi">0</span><span class="p">))),</span> <span class="mi">1</span><span class="p">)</span>
-      <span class="nv">currentElement = </span><span class="nx">@currentElement</span><span class="p">()</span>
-      <span class="k">if</span> <span class="nx">currentElement</span><span class="p">.</span><span class="nx">length</span></pre></div>
+      <span class="k">try</span>
+        <span class="nx">@document</span><span class="p">.</span><span class="nx">execCommand</span><span class="p">(</span><span class="s1">&#39;styleWithCSS&#39;</span><span class="p">,</span> <span class="kc">false</span><span class="p">,</span> <span class="kc">false</span><span class="p">)</span>
+        <span class="nx">@document</span><span class="p">.</span><span class="nx">execCommand</span><span class="p">(</span><span class="s1">&#39;insertBROnReturn&#39;</span><span class="p">,</span> <span class="kc">false</span><span class="p">,</span> <span class="kc">true</span><span class="p">)</span>
+        <span class="nx">@document</span><span class="p">.</span><span class="nx">execCommand</span><span class="p">(</span><span class="s1">&#39;enableInlineTableEditing&#39;</span><span class="p">,</span> <span class="kc">false</span><span class="p">,</span> <span class="kc">false</span><span class="p">)</span>
+        <span class="nx">@document</span><span class="p">.</span><span class="nx">execCommand</span><span class="p">(</span><span class="s1">&#39;enableObjectResizing&#39;</span><span class="p">,</span> <span class="kc">false</span><span class="p">,</span> <span class="kc">false</span><span class="p">)</span>
+      <span class="k">catch</span> <span class="nx">e</span></pre></div>
       </td>
     </tr>
     <tr id='section-8'>
@@ -141,17 +132,35 @@ mozilla: this makes double clicking in textareas fail: https://bugzilla.mozilla.
         <div class="pilwrap">
           <a class="pilcrow" href="#section-8">&#182;</a>
         </div>
-        <p>setup the table editor if we&rsquo;re inside a table</p>
+        <p>intentionally do nothing if any of these fail, to broaden support for Opera</p>
       </td>
       <td class=code>
-        <div class='highlight'><pre>        <span class="nv">table = </span><span class="nx">currentElement</span><span class="p">.</span><span class="nx">closest</span><span class="p">(</span><span class="s1">&#39;table&#39;</span><span class="p">,</span> <span class="nx">@element</span><span class="p">)</span>
-        <span class="nx">Mercury</span><span class="p">.</span><span class="nx">tableEditor</span><span class="p">(</span><span class="nx">table</span><span class="p">,</span> <span class="nx">currentElement</span><span class="p">.</span><span class="nx">closest</span><span class="p">(</span><span class="s1">&#39;tr, td&#39;</span><span class="p">),</span> <span class="s1">&#39;&amp;nbsp;&#39;</span><span class="p">)</span> <span class="k">if</span> <span class="nx">table</span><span class="p">.</span><span class="nx">length</span></pre></div>
+        <div class='highlight'><pre>  <span class="nv">bindEvents: </span><span class="o">-&gt;</span>
+    <span class="k">super</span>
+
+    <span class="nx">Mercury</span><span class="p">.</span><span class="kc">on</span> <span class="s1">&#39;region:update&#39;</span><span class="p">,</span> <span class="o">=&gt;</span>
+      <span class="k">return</span> <span class="k">if</span> <span class="nx">@previewing</span> <span class="o">||</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">region</span> <span class="o">!=</span> <span class="err">@</span>
+      <span class="nx">setTimeout</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">=&gt;</span> <span class="nx">@selection</span><span class="p">().</span><span class="nx">forceSelection</span><span class="p">(</span><span class="nx">@element</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="mi">0</span><span class="p">)))</span>
+      <span class="nv">currentElement = </span><span class="nx">@currentElement</span><span class="p">()</span>
+      <span class="k">if</span> <span class="nx">currentElement</span><span class="p">.</span><span class="nx">length</span></pre></div>
       </td>
     </tr>
     <tr id='section-9'>
       <td class=docs>
         <div class="pilwrap">
           <a class="pilcrow" href="#section-9">&#182;</a>
+        </div>
+        <p>setup the table editor if we&rsquo;re inside a table</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>        <span class="nv">table = </span><span class="nx">currentElement</span><span class="p">.</span><span class="nx">closest</span><span class="p">(</span><span class="s1">&#39;table&#39;</span><span class="p">,</span> <span class="nx">@element</span><span class="p">)</span>
+        <span class="nx">Mercury</span><span class="p">.</span><span class="nx">tableEditor</span><span class="p">(</span><span class="nx">table</span><span class="p">,</span> <span class="nx">currentElement</span><span class="p">.</span><span class="nx">closest</span><span class="p">(</span><span class="s1">&#39;tr, td&#39;</span><span class="p">),</span> <span class="s1">&#39;&lt;br/&gt;&#39;</span><span class="p">)</span> <span class="k">if</span> <span class="nx">table</span><span class="p">.</span><span class="nx">length</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-10'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-10">&#182;</a>
         </div>
         <p>display a tooltip if we&rsquo;re in an anchor</p>
       </td>
@@ -162,39 +171,39 @@ mozilla: this makes double clicking in textareas fail: https://bugzilla.mozilla.
         <span class="k">else</span>
           <span class="nx">Mercury</span><span class="p">.</span><span class="nx">tooltip</span><span class="p">.</span><span class="nx">hide</span><span class="p">()</span>
 
-    <span class="nx">@element</span><span class="p">.</span><span class="nx">bind</span> <span class="s1">&#39;dragenter&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="o">=&gt;</span>
+    <span class="nx">@element</span><span class="p">.</span><span class="kc">on</span> <span class="s1">&#39;dragenter&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="o">=&gt;</span>
       <span class="k">return</span> <span class="k">if</span> <span class="nx">@previewing</span>
       <span class="nx">event</span><span class="p">.</span><span class="nx">preventDefault</span><span class="p">()</span> <span class="nx">unless</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">snippet</span>
       <span class="nv">event.originalEvent.dataTransfer.dropEffect = </span><span class="s1">&#39;copy&#39;</span>
 
-    <span class="nx">@element</span><span class="p">.</span><span class="nx">bind</span> <span class="s1">&#39;dragover&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="o">=&gt;</span>
+    <span class="nx">@element</span><span class="p">.</span><span class="kc">on</span> <span class="s1">&#39;dragover&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="o">=&gt;</span>
       <span class="k">return</span> <span class="k">if</span> <span class="nx">@previewing</span>
       <span class="nx">event</span><span class="p">.</span><span class="nx">preventDefault</span><span class="p">()</span> <span class="nx">unless</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">snippet</span>
       <span class="nv">event.originalEvent.dataTransfer.dropEffect = </span><span class="s1">&#39;copy&#39;</span>
       <span class="k">if</span> <span class="nx">jQuery</span><span class="p">.</span><span class="nx">browser</span><span class="p">.</span><span class="nx">webkit</span>
         <span class="nx">clearTimeout</span><span class="p">(</span><span class="nx">@dropTimeout</span><span class="p">)</span>
-        <span class="vi">@dropTimeout = </span><span class="nx">setTimeout</span><span class="p">((</span><span class="o">=&gt;</span> <span class="nx">@element</span><span class="p">.</span><span class="nx">trigger</span><span class="p">(</span><span class="s1">&#39;possible:drop&#39;</span><span class="p">)),</span> <span class="mi">10</span><span class="p">)</span>
+        <span class="vi">@dropTimeout = </span><span class="nx">setTimeout</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="o">=&gt;</span> <span class="nx">@element</span><span class="p">.</span><span class="nx">trigger</span><span class="p">(</span><span class="s1">&#39;possible:drop&#39;</span><span class="p">))</span>
 
-    <span class="nx">@element</span><span class="p">.</span><span class="nx">bind</span> <span class="s1">&#39;drop&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="o">=&gt;</span>
+    <span class="nx">@element</span><span class="p">.</span><span class="kc">on</span> <span class="s1">&#39;drop&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="o">=&gt;</span>
       <span class="k">return</span> <span class="k">if</span> <span class="nx">@previewing</span></pre></div>
-      </td>
-    </tr>
-    <tr id='section-10'>
-      <td class=docs>
-        <div class="pilwrap">
-          <a class="pilcrow" href="#section-10">&#182;</a>
-        </div>
-        <p>handle dropping snippets</p>
-      </td>
-      <td class=code>
-        <div class='highlight'><pre>      <span class="nx">clearTimeout</span><span class="p">(</span><span class="nx">@dropTimeout</span><span class="p">)</span>
-      <span class="vi">@dropTimeout = </span><span class="nx">setTimeout</span><span class="p">((</span><span class="o">=&gt;</span> <span class="nx">@element</span><span class="p">.</span><span class="nx">trigger</span><span class="p">(</span><span class="s1">&#39;possible:drop&#39;</span><span class="p">)),</span> <span class="mi">1</span><span class="p">)</span></pre></div>
       </td>
     </tr>
     <tr id='section-11'>
       <td class=docs>
         <div class="pilwrap">
           <a class="pilcrow" href="#section-11">&#182;</a>
+        </div>
+        <p>handle dropping snippets</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>      <span class="nx">clearTimeout</span><span class="p">(</span><span class="nx">@dropTimeout</span><span class="p">)</span>
+      <span class="vi">@dropTimeout = </span><span class="nx">setTimeout</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">=&gt;</span> <span class="nx">@element</span><span class="p">.</span><span class="nx">trigger</span><span class="p">(</span><span class="s1">&#39;possible:drop&#39;</span><span class="p">))</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-12'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-12">&#182;</a>
         </div>
         <p>handle any files that were dropped</p>
       </td>
@@ -205,10 +214,10 @@ mozilla: this makes double clicking in textareas fail: https://bugzilla.mozilla.
       <span class="nx">Mercury</span><span class="p">.</span><span class="nx">uploader</span><span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">originalEvent</span><span class="p">.</span><span class="nx">dataTransfer</span><span class="p">.</span><span class="nx">files</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span></pre></div>
       </td>
     </tr>
-    <tr id='section-12'>
+    <tr id='section-13'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-12">&#182;</a>
+          <a class="pilcrow" href="#section-13">&#182;</a>
         </div>
         <p>possible:drop custom event: we have to do this because webkit doesn&rsquo;t fire the drop event unless both dragover and
 dragstart default behaviors are canceled.. but when we do that and observe the drop event, the default behavior
@@ -217,7 +226,7 @@ our thing we have this little hack.  <em>sigh</em>
 read: http://www.quirksmode.org/blog/archives/2009/09/the<em>html5</em>drag.html</p>
       </td>
       <td class=code>
-        <div class='highlight'><pre>    <span class="nx">@element</span><span class="p">.</span><span class="nx">bind</span> <span class="s1">&#39;possible:drop&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="o">=&gt;</span>
+        <div class='highlight'><pre>    <span class="nx">@element</span><span class="p">.</span><span class="kc">on</span> <span class="s1">&#39;possible:drop&#39;</span><span class="p">,</span> <span class="o">=&gt;</span>
       <span class="k">return</span> <span class="k">if</span> <span class="nx">@previewing</span>
       <span class="k">if</span> <span class="nv">snippet = </span><span class="nx">@element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;img[data-snippet]&#39;</span><span class="p">).</span><span class="nx">get</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
         <span class="nx">@focus</span><span class="p">()</span>
@@ -225,57 +234,55 @@ read: http://www.quirksmode.org/blog/archives/2009/09/the<em>html5</em>drag.html
         <span class="nx">@document</span><span class="p">.</span><span class="nx">execCommand</span><span class="p">(</span><span class="s1">&#39;undo&#39;</span><span class="p">,</span> <span class="kc">false</span><span class="p">,</span> <span class="kc">null</span><span class="p">)</span></pre></div>
       </td>
     </tr>
-    <tr id='section-13'>
+    <tr id='section-14'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-13">&#182;</a>
+          <a class="pilcrow" href="#section-14">&#182;</a>
         </div>
         <p>custom paste handling: we have to do some hackery to get the pasted content since it&rsquo;s not exposed normally
 through a clipboard in firefox (heaven forbid), and to keep the behavior across all browsers, we manually detect
-what was pasted by running a quick diff, removing it by calling undo, making our adjustments, and then putting the
-content back.  This is possible, so it doesn&rsquo;t make sense why it wouldn&rsquo;t be exposed in a sensible way.  <em>sigh</em></p>
+what was pasted by focusing a different (hidden) region, letting it paste there, making our adjustments, and then
+inserting the content where it was intended.  This is possible, so it doesn&rsquo;t make sense why it wouldn&rsquo;t be
+exposed in a sensible way.  <em>sigh</em></p>
       </td>
       <td class=code>
-        <div class='highlight'><pre>    <span class="nx">@element</span><span class="p">.</span><span class="nx">bind</span> <span class="s1">&#39;paste&#39;</span><span class="p">,</span> <span class="o">=&gt;</span>
-      <span class="k">return</span> <span class="k">if</span> <span class="nx">@previewing</span>
-      <span class="k">return</span> <span class="nx">unless</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">region</span> <span class="o">==</span> <span class="err">@</span>
-      <span class="nv">Mercury.changes = </span><span class="kc">true</span>
+        <div class='highlight'><pre>    <span class="nx">@element</span><span class="p">.</span><span class="kc">on</span> <span class="s1">&#39;paste&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="o">=&gt;</span>
+      <span class="k">return</span> <span class="k">if</span> <span class="nx">@previewing</span> <span class="o">||</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">region</span> <span class="o">!=</span> <span class="err">@</span>
       <span class="k">if</span> <span class="nx">@specialContainer</span>
         <span class="nx">event</span><span class="p">.</span><span class="nx">preventDefault</span><span class="p">()</span>
         <span class="k">return</span>
-      <span class="nv">content = </span><span class="nx">@content</span><span class="p">()</span>
-      <span class="nx">clearTimeout</span><span class="p">(</span><span class="nx">@handlePasteTimeout</span><span class="p">)</span>
-      <span class="vi">@handlePasteTimeout = </span><span class="nx">setTimeout</span><span class="p">((</span><span class="o">=&gt;</span> <span class="nx">@handlePaste</span><span class="p">(</span><span class="nx">content</span><span class="p">)),</span> <span class="mi">100</span><span class="p">)</span>
+      <span class="k">return</span> <span class="k">if</span> <span class="nx">@pasting</span>
+      <span class="nv">Mercury.changes = </span><span class="kc">true</span>
+      <span class="nx">@handlePaste</span><span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">originalEvent</span><span class="p">)</span>
 
-    <span class="nx">@element</span><span class="p">.</span><span class="nx">focus</span> <span class="o">=&gt;</span>
+    <span class="nx">@element</span><span class="p">.</span><span class="kc">on</span> <span class="s1">&#39;focus&#39;</span><span class="p">,</span> <span class="o">=&gt;</span>
       <span class="k">return</span> <span class="k">if</span> <span class="nx">@previewing</span>
       <span class="nv">Mercury.region = </span><span class="err">@</span>
-      <span class="nx">setTimeout</span><span class="p">((</span><span class="o">=&gt;</span> <span class="nx">@selection</span><span class="p">().</span><span class="nx">forceSelection</span><span class="p">(</span><span class="nx">@element</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="mi">0</span><span class="p">))),</span> <span class="mi">1</span><span class="p">)</span>
+      <span class="nx">setTimeout</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">=&gt;</span> <span class="nx">@selection</span><span class="p">().</span><span class="nx">forceSelection</span><span class="p">(</span><span class="nx">@element</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="mi">0</span><span class="p">)))</span>
       <span class="nx">Mercury</span><span class="p">.</span><span class="nx">trigger</span><span class="p">(</span><span class="s1">&#39;region:focused&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nv">region: </span><span class="err">@</span><span class="p">})</span>
 
-    <span class="nx">@element</span><span class="p">.</span><span class="nx">blur</span> <span class="o">=&gt;</span>
+    <span class="nx">@element</span><span class="p">.</span><span class="kc">on</span> <span class="s1">&#39;blur&#39;</span><span class="p">,</span> <span class="o">=&gt;</span>
       <span class="k">return</span> <span class="k">if</span> <span class="nx">@previewing</span>
       <span class="nx">Mercury</span><span class="p">.</span><span class="nx">trigger</span><span class="p">(</span><span class="s1">&#39;region:blurred&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nv">region: </span><span class="err">@</span><span class="p">})</span>
       <span class="nx">Mercury</span><span class="p">.</span><span class="nx">tooltip</span><span class="p">.</span><span class="nx">hide</span><span class="p">()</span>
 
-    <span class="nx">@element</span><span class="p">.</span><span class="nx">click</span> <span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="o">=&gt;</span>
+    <span class="nx">@element</span><span class="p">.</span><span class="kc">on</span> <span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="o">=&gt;</span>
       <span class="nx">jQuery</span><span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">target</span><span class="p">).</span><span class="nx">closest</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="s1">&#39;target&#39;</span><span class="p">,</span> <span class="s1">&#39;_top&#39;</span><span class="p">)</span> <span class="k">if</span> <span class="nx">@previewing</span>
 
-    <span class="nx">@element</span><span class="p">.</span><span class="nx">dblclick</span> <span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="o">=&gt;</span>
+    <span class="nx">@element</span><span class="p">.</span><span class="kc">on</span> <span class="s1">&#39;dblclick&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="o">=&gt;</span>
       <span class="k">return</span> <span class="k">if</span> <span class="nx">@previewing</span>
       <span class="nv">image = </span><span class="nx">jQuery</span><span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">target</span><span class="p">).</span><span class="nx">closest</span><span class="p">(</span><span class="s1">&#39;img&#39;</span><span class="p">,</span> <span class="nx">@element</span><span class="p">)</span>
       <span class="k">if</span> <span class="nx">image</span><span class="p">.</span><span class="nx">length</span>
         <span class="nx">@selection</span><span class="p">().</span><span class="nx">selectNode</span><span class="p">(</span><span class="nx">image</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="kc">true</span><span class="p">)</span>
         <span class="nx">Mercury</span><span class="p">.</span><span class="nx">trigger</span><span class="p">(</span><span class="s1">&#39;button&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nv">action: </span><span class="s1">&#39;insertMedia&#39;</span><span class="p">})</span>
 
-    <span class="nx">@element</span><span class="p">.</span><span class="nx">mouseup</span> <span class="o">=&gt;</span>
+    <span class="nx">@element</span><span class="p">.</span><span class="kc">on</span> <span class="s1">&#39;mouseup&#39;</span><span class="p">,</span> <span class="o">=&gt;</span>
       <span class="k">return</span> <span class="k">if</span> <span class="nx">@previewing</span>
       <span class="nx">@pushHistory</span><span class="p">()</span>
       <span class="nx">Mercury</span><span class="p">.</span><span class="nx">trigger</span><span class="p">(</span><span class="s1">&#39;region:update&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nv">region: </span><span class="err">@</span><span class="p">})</span>
 
-    <span class="nx">@element</span><span class="p">.</span><span class="nx">keydown</span> <span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="o">=&gt;</span>
+    <span class="nx">@element</span><span class="p">.</span><span class="kc">on</span> <span class="s1">&#39;keydown&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="o">=&gt;</span>
       <span class="k">return</span> <span class="k">if</span> <span class="nx">@previewing</span>
-      <span class="nv">Mercury.changes = </span><span class="kc">true</span>
       <span class="k">switch</span> <span class="nx">event</span><span class="p">.</span><span class="nx">keyCode</span>
         <span class="k">when</span> <span class="mi">90</span> <span class="c1"># undo / redo</span>
           <span class="k">return</span> <span class="nx">unless</span> <span class="nx">event</span><span class="p">.</span><span class="nx">metaKey</span>
@@ -284,27 +291,10 @@ content back.  This is possible, so it doesn&rsquo;t make sense why it wouldn&rs
           <span class="k">return</span>
 
         <span class="k">when</span> <span class="mi">13</span> <span class="c1"># enter</span>
-          <span class="k">if</span> <span class="nx">jQuery</span><span class="p">.</span><span class="nx">browser</span><span class="p">.</span><span class="nx">webkit</span> <span class="o">&amp;&amp;</span> <span class="nx">@selection</span><span class="p">().</span><span class="nx">commonAncestor</span><span class="p">().</span><span class="nx">closest</span><span class="p">(</span><span class="s1">&#39;li, ul&#39;</span><span class="p">,</span> <span class="nx">@element</span><span class="p">).</span><span class="nx">length</span> <span class="o">==</span> <span class="mi">0</span>
+          <span class="k">if</span> <span class="nx">jQuery</span><span class="p">.</span><span class="nx">browser</span><span class="p">.</span><span class="nx">webkit</span> <span class="o">&amp;&amp;</span> <span class="nx">@selection</span><span class="p">().</span><span class="nx">commonAncestor</span><span class="p">().</span><span class="nx">closest</span><span class="p">(</span><span class="s1">&#39;li, ul, ol&#39;</span><span class="p">,</span> <span class="nx">@element</span><span class="p">).</span><span class="nx">length</span> <span class="o">==</span> <span class="mi">0</span>
             <span class="nx">event</span><span class="p">.</span><span class="nx">preventDefault</span><span class="p">()</span>
-            <span class="nx">@document</span><span class="p">.</span><span class="nx">execCommand</span><span class="p">(</span><span class="s1">&#39;insertLineBreak&#39;</span><span class="p">,</span> <span class="kc">false</span><span class="p">,</span> <span class="kc">null</span><span class="p">)</span>
-          <span class="k">else</span> <span class="k">if</span> <span class="nx">@specialContainer</span></pre></div>
-      </td>
-    </tr>
-    <tr id='section-14'>
-      <td class=docs>
-        <div class="pilwrap">
-          <a class="pilcrow" href="#section-14">&#182;</a>
-        </div>
-        <p>mozilla: pressing enter in any elemeny besides a div handles strangely</p>
-      </td>
-      <td class=code>
-        <div class='highlight'><pre>            <span class="nx">event</span><span class="p">.</span><span class="nx">preventDefault</span><span class="p">()</span>
-            <span class="nx">@document</span><span class="p">.</span><span class="nx">execCommand</span><span class="p">(</span><span class="s1">&#39;insertHTML&#39;</span><span class="p">,</span> <span class="kc">false</span><span class="p">,</span> <span class="s1">&#39;&lt;br/&gt;&#39;</span><span class="p">)</span>
-
-        <span class="k">when</span> <span class="mi">9</span> <span class="c1"># tab</span>
-          <span class="nx">event</span><span class="p">.</span><span class="nx">preventDefault</span><span class="p">()</span>
-          <span class="nv">container = </span><span class="nx">@selection</span><span class="p">().</span><span class="nx">commonAncestor</span><span class="p">()</span>
-          <span class="nv">handled = </span><span class="kc">false</span></pre></div>
+            <span class="nx">@document</span><span class="p">.</span><span class="nx">execCommand</span><span class="p">(</span><span class="s1">&#39;insertParagraph&#39;</span><span class="p">,</span> <span class="kc">false</span><span class="p">,</span> <span class="kc">null</span><span class="p">)</span>
+          <span class="k">else</span> <span class="k">if</span> <span class="nx">@specialContainer</span> <span class="o">||</span> <span class="nx">jQuery</span><span class="p">.</span><span class="nx">browser</span><span class="p">.</span><span class="nx">opera</span></pre></div>
       </td>
     </tr>
     <tr id='section-15'>
@@ -312,14 +302,42 @@ content back.  This is possible, so it doesn&rsquo;t make sense why it wouldn&rs
         <div class="pilwrap">
           <a class="pilcrow" href="#section-15">&#182;</a>
         </div>
+        <p>mozilla: pressing enter in any element besides a div handles strangely</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>            <span class="nx">event</span><span class="p">.</span><span class="nx">preventDefault</span><span class="p">()</span>
+            <span class="nx">@document</span><span class="p">.</span><span class="nx">execCommand</span><span class="p">(</span><span class="s1">&#39;insertHTML&#39;</span><span class="p">,</span> <span class="kc">false</span><span class="p">,</span> <span class="s1">&#39;&lt;br/&gt;&#39;</span><span class="p">)</span>
+
+        <span class="k">when</span> <span class="mi">9</span> <span class="c1"># tab</span>
+          <span class="nx">event</span><span class="p">.</span><span class="nx">preventDefault</span><span class="p">()</span>
+          <span class="nv">container = </span><span class="nx">@selection</span><span class="p">().</span><span class="nx">commonAncestor</span><span class="p">()</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-16'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-16">&#182;</a>
+        </div>
         <p>indent when inside of an li</p>
       </td>
       <td class=code>
         <div class='highlight'><pre>          <span class="k">if</span> <span class="nx">container</span><span class="p">.</span><span class="nx">closest</span><span class="p">(</span><span class="s1">&#39;li&#39;</span><span class="p">,</span> <span class="nx">@element</span><span class="p">).</span><span class="nx">length</span>
-            <span class="nv">handled = </span><span class="kc">true</span>
-            <span class="k">if</span> <span class="nx">event</span><span class="p">.</span><span class="nx">shiftKey</span> <span class="k">then</span> <span class="nx">@execCommand</span><span class="p">(</span><span class="s1">&#39;outdent&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="nx">@execCommand</span><span class="p">(</span><span class="s1">&#39;indent&#39;</span><span class="p">)</span>
-
-          <span class="nx">@execCommand</span><span class="p">(</span><span class="s1">&#39;insertHTML&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nv">value: </span><span class="s1">&#39;&amp;nbsp; &#39;</span><span class="p">})</span> <span class="nx">unless</span> <span class="nx">handled</span>
+            <span class="nx">unless</span> <span class="nx">event</span><span class="p">.</span><span class="nx">shiftKey</span>
+              <span class="nx">@execCommand</span><span class="p">(</span><span class="s1">&#39;indent&#39;</span><span class="p">)</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-17'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-17">&#182;</a>
+        </div>
+        <p>do not outdent on last ul/ol parent, or we break out of the list</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>            <span class="k">else</span> <span class="k">if</span> <span class="nx">container</span><span class="p">.</span><span class="nx">parents</span><span class="p">(</span><span class="s1">&#39;ul, ol&#39;</span><span class="p">).</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">1</span>
+              <span class="nx">@execCommand</span><span class="p">(</span><span class="s1">&#39;outdent&#39;</span><span class="p">)</span>
+          <span class="k">else</span>
+            <span class="nx">@execCommand</span><span class="p">(</span><span class="s1">&#39;insertHTML&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nv">value: </span><span class="s1">&#39;&amp;nbsp;&amp;nbsp;&#39;</span><span class="p">})</span>
 
       <span class="k">if</span> <span class="nx">event</span><span class="p">.</span><span class="nx">metaKey</span>
         <span class="k">switch</span> <span class="nx">event</span><span class="p">.</span><span class="nx">keyCode</span>
@@ -337,15 +355,30 @@ content back.  This is possible, so it doesn&rsquo;t make sense why it wouldn&rs
 
       <span class="nx">@pushHistory</span><span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">keyCode</span><span class="p">)</span>
 
-    <span class="nx">@element</span><span class="p">.</span><span class="nx">keyup</span> <span class="o">=&gt;</span>
+    <span class="nx">@element</span><span class="p">.</span><span class="kc">on</span> <span class="s1">&#39;keyup&#39;</span><span class="p">,</span> <span class="o">=&gt;</span>
       <span class="k">return</span> <span class="k">if</span> <span class="nx">@previewing</span>
       <span class="nx">Mercury</span><span class="p">.</span><span class="nx">trigger</span><span class="p">(</span><span class="s1">&#39;region:update&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nv">region: </span><span class="err">@</span><span class="p">})</span>
+      <span class="nv">Mercury.changes = </span><span class="kc">true</span>
 
 
   <span class="nv">focus: </span><span class="o">-&gt;</span>
     <span class="k">if</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">region</span> <span class="o">!=</span> <span class="err">@</span>
-      <span class="nx">@element</span><span class="p">.</span><span class="nx">focus</span><span class="p">()</span>
-      <span class="nv">selection = </span><span class="nx">@selection</span><span class="p">().</span><span class="nx">selection</span><span class="p">.</span><span class="nx">collapseToStart</span><span class="p">()</span>
+      <span class="nx">setTimeout</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="o">=&gt;</span> <span class="nx">@element</span><span class="p">.</span><span class="nx">focus</span><span class="p">())</span>
+      <span class="k">try</span>
+        <span class="nx">@selection</span><span class="p">().</span><span class="nx">selection</span><span class="p">.</span><span class="nx">collapseToStart</span><span class="p">()</span>
+      <span class="k">catch</span> <span class="nx">e</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-18'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-18">&#182;</a>
+        </div>
+        <p>intentially do nothing</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>    <span class="k">else</span>
+      <span class="nx">setTimeout</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="o">=&gt;</span> <span class="nx">@element</span><span class="p">.</span><span class="nx">focus</span><span class="p">())</span>
 
     <span class="nx">Mercury</span><span class="p">.</span><span class="nx">trigger</span><span class="p">(</span><span class="s1">&#39;region:focused&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nv">region: </span><span class="err">@</span><span class="p">})</span>
     <span class="nx">Mercury</span><span class="p">.</span><span class="nx">trigger</span><span class="p">(</span><span class="s1">&#39;region:update&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nv">region: </span><span class="err">@</span><span class="p">})</span>
@@ -355,10 +388,10 @@ content back.  This is possible, so it doesn&rsquo;t make sense why it wouldn&rs
     <span class="k">if</span> <span class="nx">value</span> <span class="o">!=</span> <span class="kc">null</span></pre></div>
       </td>
     </tr>
-    <tr id='section-16'>
+    <tr id='section-19'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-16">&#182;</a>
+          <a class="pilcrow" href="#section-19">&#182;</a>
         </div>
         <p>sanitize the html before we insert it</p>
       </td>
@@ -367,10 +400,10 @@ content back.  This is possible, so it doesn&rsquo;t make sense why it wouldn&rs
       <span class="nx">container</span><span class="p">.</span><span class="nx">html</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span></pre></div>
       </td>
     </tr>
-    <tr id='section-17'>
+    <tr id='section-20'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-17">&#182;</a>
+          <a class="pilcrow" href="#section-20">&#182;</a>
         </div>
         <p>fill in the snippet contents</p>
       </td>
@@ -389,10 +422,10 @@ content back.  This is possible, so it doesn&rsquo;t make sense why it wouldn&rs
             <span class="k">catch</span> <span class="nx">error</span></pre></div>
       </td>
     </tr>
-    <tr id='section-18'>
+    <tr id='section-21'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-18">&#182;</a>
+          <a class="pilcrow" href="#section-21">&#182;</a>
         </div>
         <p>set the html</p>
       </td>
@@ -400,10 +433,10 @@ content back.  This is possible, so it doesn&rsquo;t make sense why it wouldn&rs
         <div class='highlight'><pre>      <span class="nx">@element</span><span class="p">.</span><span class="nx">html</span><span class="p">(</span><span class="nx">container</span><span class="p">.</span><span class="nx">html</span><span class="p">())</span></pre></div>
       </td>
     </tr>
-    <tr id='section-19'>
+    <tr id='section-22'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-19">&#182;</a>
+          <a class="pilcrow" href="#section-22">&#182;</a>
         </div>
         <p>create a selection if there&rsquo;s markers</p>
       </td>
@@ -412,10 +445,10 @@ content back.  This is possible, so it doesn&rsquo;t make sense why it wouldn&rs
     <span class="k">else</span></pre></div>
       </td>
     </tr>
-    <tr id='section-20'>
+    <tr id='section-23'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-20">&#182;</a>
+          <a class="pilcrow" href="#section-23">&#182;</a>
         </div>
         <p>remove any meta tags</p>
       </td>
@@ -423,10 +456,10 @@ content back.  This is possible, so it doesn&rsquo;t make sense why it wouldn&rs
         <div class='highlight'><pre>      <span class="nx">@element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;meta&#39;</span><span class="p">).</span><span class="nx">remove</span><span class="p">()</span></pre></div>
       </td>
     </tr>
-    <tr id='section-21'>
+    <tr id='section-24'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-21">&#182;</a>
+          <a class="pilcrow" href="#section-24">&#182;</a>
         </div>
         <p>place markers for the selection</p>
       </td>
@@ -436,10 +469,10 @@ content back.  This is possible, so it doesn&rsquo;t make sense why it wouldn&rs
         <span class="nx">selection</span><span class="p">.</span><span class="nx">placeMarker</span><span class="p">()</span></pre></div>
       </td>
     </tr>
-    <tr id='section-22'>
+    <tr id='section-25'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-22">&#182;</a>
+          <a class="pilcrow" href="#section-25">&#182;</a>
         </div>
         <p>sanitize the html before we return it</p>
       </td>
@@ -448,10 +481,10 @@ content back.  This is possible, so it doesn&rsquo;t make sense why it wouldn&rs
       <span class="nx">container</span><span class="p">.</span><span class="nx">html</span><span class="p">(</span><span class="nx">@element</span><span class="p">.</span><span class="nx">html</span><span class="p">().</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/^\s+|\s+$/g</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">))</span></pre></div>
       </td>
     </tr>
-    <tr id='section-23'>
+    <tr id='section-26'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-23">&#182;</a>
+          <a class="pilcrow" href="#section-26">&#182;</a>
         </div>
         <p>replace snippet contents to be an identifier</p>
       </td>
@@ -464,10 +497,10 @@ content back.  This is possible, so it doesn&rsquo;t make sense why it wouldn&rs
         <span class="nx">element</span><span class="p">.</span><span class="nx">attr</span><span class="p">({</span><span class="nv">contenteditable: </span><span class="kc">null</span><span class="p">,</span> <span class="s1">&#39;data-version&#39;</span><span class="o">:</span> <span class="kc">null</span><span class="p">})</span></pre></div>
       </td>
     </tr>
-    <tr id='section-24'>
+    <tr id='section-27'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-24">&#182;</a>
+          <a class="pilcrow" href="#section-27">&#182;</a>
         </div>
         <p>get the html before removing the markers</p>
       </td>
@@ -475,10 +508,10 @@ content back.  This is possible, so it doesn&rsquo;t make sense why it wouldn&rs
         <div class='highlight'><pre>      <span class="nv">content = </span><span class="nx">container</span><span class="p">.</span><span class="nx">html</span><span class="p">()</span></pre></div>
       </td>
     </tr>
-    <tr id='section-25'>
+    <tr id='section-28'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-25">&#182;</a>
+          <a class="pilcrow" href="#section-28">&#182;</a>
         </div>
         <p>remove the markers from the dom</p>
       </td>
@@ -504,10 +537,10 @@ content back.  This is possible, so it doesn&rsquo;t make sense why it wouldn&rs
     <span class="k">super</span></pre></div>
       </td>
     </tr>
-    <tr id='section-26'>
+    <tr id='section-29'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-26">&#182;</a>
+          <a class="pilcrow" href="#section-29">&#182;</a>
         </div>
         <p>use a custom handler if there&rsquo;s one, otherwise use execCommand</p>
       </td>
@@ -522,25 +555,36 @@ content back.  This is possible, so it doesn&rsquo;t make sense why it wouldn&rs
       <span class="k">catch</span> <span class="nx">error</span></pre></div>
       </td>
     </tr>
-    <tr id='section-27'>
+    <tr id='section-30'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-27">&#182;</a>
+          <a class="pilcrow" href="#section-30">&#182;</a>
         </div>
         <p>mozilla: indenting when there&rsquo;s no br tag handles strangely
 todo: mozilla: trying to justify the first line of any contentEditable fails</p>
       </td>
       <td class=code>
-        <div class='highlight'><pre>        <span class="nx">@element</span><span class="p">.</span><span class="nx">prev</span><span class="p">().</span><span class="nx">remove</span><span class="p">()</span> <span class="k">if</span> <span class="nx">action</span> <span class="o">==</span> <span class="s1">&#39;indent&#39;</span> <span class="o">&amp;&amp;</span> <span class="nx">@element</span><span class="p">.</span><span class="nx">prev</span><span class="p">()</span> <span class="o">!=</span> <span class="nx">sibling</span>
+        <div class='highlight'><pre>        <span class="nx">@element</span><span class="p">.</span><span class="nx">prev</span><span class="p">().</span><span class="nx">remove</span><span class="p">()</span> <span class="k">if</span> <span class="nx">action</span> <span class="o">==</span> <span class="s1">&#39;indent&#39;</span> <span class="o">&amp;&amp;</span> <span class="nx">@element</span><span class="p">.</span><span class="nx">prev</span><span class="p">()</span> <span class="o">!=</span> <span class="nx">sibling</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-31'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-31">&#182;</a>
+        </div>
+        <p>handle any broken images by replacing the source with an alert image</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>    <span class="nx">@element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;img&#39;</span><span class="p">).</span><span class="nx">one</span> <span class="s1">&#39;error&#39;</span><span class="p">,</span> <span class="o">-&gt;</span> <span class="nx">jQuery</span><span class="p">(</span><span class="err">@</span><span class="p">).</span><span class="nx">attr</span><span class="p">({</span><span class="nv">src: </span><span class="s1">&#39;/assets/mercury/missing-image.png&#39;</span><span class="p">,</span> <span class="nv">title: </span><span class="s1">&#39;Image not found&#39;</span><span class="p">})</span>
 
 
   <span class="nv">pushHistory: </span><span class="nf">(keyCode) -&gt;</span></pre></div>
       </td>
     </tr>
-    <tr id='section-28'>
+    <tr id='section-32'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-28">&#182;</a>
+          <a class="pilcrow" href="#section-32">&#182;</a>
         </div>
         <p>when pressing return, delete or backspace it should push to the history
 all other times it should store if there&rsquo;s a 1 second pause</p>
@@ -551,10 +595,10 @@ all other times it should store if there&rsquo;s a 1 second pause</p>
     <span class="nv">knownKeyCode = </span><span class="nx">keyCodes</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="nx">keyCode</span><span class="p">)</span> <span class="k">if</span> <span class="nx">keyCode</span></pre></div>
       </td>
     </tr>
-    <tr id='section-29'>
+    <tr id='section-33'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-29">&#182;</a>
+          <a class="pilcrow" href="#section-33">&#182;</a>
         </div>
         <p>clear any pushes to the history</p>
       </td>
@@ -562,10 +606,10 @@ all other times it should store if there&rsquo;s a 1 second pause</p>
         <div class='highlight'><pre>    <span class="nx">clearTimeout</span><span class="p">(</span><span class="nx">@historyTimeout</span><span class="p">)</span></pre></div>
       </td>
     </tr>
-    <tr id='section-30'>
+    <tr id='section-34'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-30">&#182;</a>
+          <a class="pilcrow" href="#section-34">&#182;</a>
         </div>
         <p>if the key code was return, delete, or backspace store now &mdash; unless it was the same as last time</p>
       </td>
@@ -575,22 +619,22 @@ all other times it should store if there&rsquo;s a 1 second pause</p>
     <span class="k">else</span> <span class="k">if</span> <span class="nx">keyCode</span></pre></div>
       </td>
     </tr>
-    <tr id='section-31'>
+    <tr id='section-35'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-31">&#182;</a>
+          <a class="pilcrow" href="#section-35">&#182;</a>
         </div>
         <p>set a timeout for pushing to the history</p>
       </td>
       <td class=code>
-        <div class='highlight'><pre>      <span class="vi">@historyTimeout = </span><span class="nx">setTimeout</span><span class="p">((</span><span class="o">=&gt;</span> <span class="nx">@history</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">@content</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="kc">false</span><span class="p">,</span> <span class="kc">true</span><span class="p">))),</span> <span class="nx">waitTime</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">)</span>
+        <div class='highlight'><pre>      <span class="vi">@historyTimeout = </span><span class="nx">setTimeout</span><span class="p">(</span><span class="nx">waitTime</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">,</span> <span class="o">=&gt;</span> <span class="nx">@history</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">@content</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="kc">false</span><span class="p">,</span> <span class="kc">true</span><span class="p">)))</span>
     <span class="k">else</span></pre></div>
       </td>
     </tr>
-    <tr id='section-32'>
+    <tr id='section-36'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-32">&#182;</a>
+          <a class="pilcrow" href="#section-36">&#182;</a>
         </div>
         <p>push to the history immediately</p>
       </td>
@@ -619,56 +663,7 @@ all other times it should store if there&rsquo;s a 1 second pause</p>
     <span class="k">return</span> <span class="nx">element</span>
 
 
-  <span class="nv">handlePaste: </span><span class="nf">(prePasteContent) -&gt;</span>
-    <span class="nv">prePasteContent = </span><span class="nx">prePasteContent</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/^\&lt;br\&gt;/</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span></pre></div>
-      </td>
-    </tr>
-    <tr id='section-33'>
-      <td class=docs>
-        <div class="pilwrap">
-          <a class="pilcrow" href="#section-33">&#182;</a>
-        </div>
-        <p>remove any regions that might have been pasted</p>
-      </td>
-      <td class=code>
-        <div class='highlight'><pre>    <span class="nx">@element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;.mercury-region&#39;</span><span class="p">).</span><span class="nx">remove</span><span class="p">()</span></pre></div>
-      </td>
-    </tr>
-    <tr id='section-34'>
-      <td class=docs>
-        <div class="pilwrap">
-          <a class="pilcrow" href="#section-34">&#182;</a>
-        </div>
-        <p>handle pasting from ms office etc</p>
-      </td>
-      <td class=code>
-        <div class='highlight'><pre>    <span class="nv">content = </span><span class="nx">@content</span><span class="p">()</span>
-    <span class="k">if</span> <span class="nx">content</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s1">&#39;&lt;!--StartFragment--&gt;&#39;</span><span class="p">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span> <span class="o">||</span> <span class="nx">content</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s1">&#39;=&quot;mso-&#39;</span><span class="p">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span> <span class="o">||</span> <span class="nx">content</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s1">&#39;&lt;o:&#39;</span><span class="p">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span> <span class="o">||</span> <span class="nx">content</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s1">&#39;=&quot;Mso&#39;</span><span class="p">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span></pre></div>
-      </td>
-    </tr>
-    <tr id='section-35'>
-      <td class=docs>
-        <div class="pilwrap">
-          <a class="pilcrow" href="#section-35">&#182;</a>
-        </div>
-        <p>clean out all the tags from the pasted contents</p>
-      </td>
-      <td class=code>
-        <div class='highlight'><pre>      <span class="nv">cleaned = </span><span class="nx">prePasteContent</span><span class="p">.</span><span class="nx">singleDiff</span><span class="p">(</span><span class="nx">@content</span><span class="p">()).</span><span class="nx">sanitizeHTML</span><span class="p">()</span>
-      <span class="k">try</span></pre></div>
-      </td>
-    </tr>
-    <tr id='section-36'>
-      <td class=docs>
-        <div class="pilwrap">
-          <a class="pilcrow" href="#section-36">&#182;</a>
-        </div>
-        <p>try to undo and put the cleaned html where the selection was</p>
-      </td>
-      <td class=code>
-        <div class='highlight'><pre>        <span class="nx">@document</span><span class="p">.</span><span class="nx">execCommand</span><span class="p">(</span><span class="s1">&#39;undo&#39;</span><span class="p">,</span> <span class="kc">false</span><span class="p">,</span> <span class="kc">null</span><span class="p">)</span>
-        <span class="nx">@execCommand</span><span class="p">(</span><span class="s1">&#39;insertHTML&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nv">value: </span><span class="nx">cleaned</span><span class="p">})</span>
-      <span class="k">catch</span> <span class="nx">error</span></pre></div>
+  <span class="nv">handlePaste: </span><span class="nf">(event) -&gt;</span></pre></div>
       </td>
     </tr>
     <tr id='section-37'>
@@ -676,15 +671,14 @@ all other times it should store if there&rsquo;s a 1 second pause</p>
         <div class="pilwrap">
           <a class="pilcrow" href="#section-37">&#182;</a>
         </div>
-        <p>remove the pasted html and load up the cleaned contents into a modal</p>
+        <p>get the text content from the clipboard and fall back to using the sanitizer if unavailable</p>
       </td>
       <td class=code>
-        <div class='highlight'><pre>        <span class="nx">@content</span><span class="p">(</span><span class="nx">prePasteContent</span><span class="p">)</span>
-        <span class="nx">Mercury</span><span class="p">.</span><span class="nx">modal</span> <span class="s1">&#39;/mercury/modals/sanitizer&#39;</span><span class="p">,</span> <span class="p">{</span>
-          <span class="nv">title: </span><span class="s1">&#39;HTML Sanitizer (Starring Clippy)&#39;</span><span class="p">,</span>
-          <span class="nv">afterLoad: </span><span class="o">-&gt;</span> <span class="nx">@element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;textarea&#39;</span><span class="p">).</span><span class="nx">val</span><span class="p">(</span><span class="nx">cleaned</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/&lt;br\/&gt;/g</span><span class="p">,</span> <span class="s1">&#39;\n&#39;</span><span class="p">))</span>
-        <span class="p">}</span>
-    <span class="k">else</span> <span class="k">if</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">config</span><span class="p">.</span><span class="nx">cleanStylesOnPaste</span></pre></div>
+        <div class='highlight'><pre>    <span class="k">if</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">config</span><span class="p">.</span><span class="nx">pasting</span><span class="p">.</span><span class="nx">sanitize</span> <span class="o">==</span> <span class="s1">&#39;text&#39;</span> <span class="o">&amp;&amp;</span> <span class="nx">event</span><span class="p">.</span><span class="nx">clipboardData</span>
+      <span class="nx">@execCommand</span><span class="p">(</span><span class="s1">&#39;insertHTML&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nv">value: </span><span class="nx">event</span><span class="p">.</span><span class="nx">clipboardData</span><span class="p">.</span><span class="nx">getData</span><span class="p">(</span><span class="s1">&#39;text/plain&#39;</span><span class="p">)})</span>
+      <span class="nx">event</span><span class="p">.</span><span class="nx">preventDefault</span><span class="p">()</span>
+      <span class="k">return</span>
+    <span class="k">else</span></pre></div>
       </td>
     </tr>
     <tr id='section-38'>
@@ -692,16 +686,13 @@ all other times it should store if there&rsquo;s a 1 second pause</p>
         <div class="pilwrap">
           <a class="pilcrow" href="#section-38">&#182;</a>
         </div>
-        <p>strip styles</p>
+        <p>get current selection &amp; range</p>
       </td>
       <td class=code>
-        <div class='highlight'><pre>      <span class="nv">pasted = </span><span class="nx">prePasteContent</span><span class="p">.</span><span class="nx">singleDiff</span><span class="p">(</span><span class="nx">@content</span><span class="p">())</span>
+        <div class='highlight'><pre>      <span class="nv">selection = </span><span class="nx">@selection</span><span class="p">()</span>
+      <span class="nx">selection</span><span class="p">.</span><span class="nx">placeMarker</span><span class="p">()</span>
 
-      <span class="nv">container = </span><span class="nx">jQuery</span><span class="p">(</span><span class="s1">&#39;&lt;div&gt;&#39;</span><span class="p">).</span><span class="nx">appendTo</span><span class="p">(</span><span class="nx">@document</span><span class="p">.</span><span class="nx">createDocumentFragment</span><span class="p">()).</span><span class="nx">html</span><span class="p">(</span><span class="nx">pasted</span><span class="p">)</span>
-      <span class="nx">container</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;[style]&#39;</span><span class="p">).</span><span class="nx">attr</span><span class="p">({</span><span class="nv">style: </span><span class="kc">null</span><span class="p">})</span>
-
-      <span class="nx">@document</span><span class="p">.</span><span class="nx">execCommand</span><span class="p">(</span><span class="s1">&#39;undo&#39;</span><span class="p">,</span> <span class="kc">false</span><span class="p">,</span> <span class="kc">null</span><span class="p">)</span>
-      <span class="nx">@execCommand</span><span class="p">(</span><span class="s1">&#39;insertHTML&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nv">value: </span><span class="nx">container</span><span class="p">.</span><span class="nx">html</span><span class="p">()})</span></pre></div>
+      <span class="nv">sanitizer = </span><span class="nx">jQuery</span><span class="p">(</span><span class="s1">&#39;#mercury_sanitizer&#39;</span><span class="p">,</span> <span class="nx">@document</span><span class="p">).</span><span class="nx">focus</span><span class="p">()</span></pre></div>
       </td>
     </tr>
     <tr id='section-39'>
@@ -709,38 +700,21 @@ all other times it should store if there&rsquo;s a 1 second pause</p>
         <div class="pilwrap">
           <a class="pilcrow" href="#section-39">&#182;</a>
         </div>
-        <p>Custom actions (eg. things that execCommand doesn&rsquo;t do, or doesn&rsquo;t do well)</p>
+        <p>set 1ms timeout to allow paste event to complete</p>
       </td>
       <td class=code>
-        <div class='highlight'><pre>  <span class="vi">@actions: </span><span class="p">{</span></pre></div>
+        <div class='highlight'><pre>      <span class="nx">setTimeout</span> <span class="mi">1</span><span class="p">,</span> <span class="o">=&gt;</span></pre></div>
       </td>
     </tr>
-    <tr id='section-selection.selectWordByCursor()'>
+    <tr id='section-40'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-selection.selectWordByCursor()">&#182;</a>
+          <a class="pilcrow" href="#section-40">&#182;</a>
         </div>
-        <p>bold: (selection) &ndash;&gt;
-  unless selection.collapsed
-    @document.execCommand(&lsquo;bold&rsquo;, false, null)
-  else</p>
-
-<h1>selection.selectWordByCursor()</h1>
-
-<h1>@document.execCommand(&lsquo;bold&rsquo;, false, null)</h1>
-
-<pre><code>selection.placeMarker()
-node = @element.find(&lsquo;.mercury-marker&rsquo;).get(0)
-prev = node.previousSibling
-selection.removeMarker()
-next = prev.nextSibling
-console.debug(prev, next)
-</code></pre>
-
-<h1>if prev.textContent[prev.textContent.length &ndash; 1] != &lsquo; &rsquo; &amp;&amp;</h1>
+        <p>sanitize the content</p>
       </td>
       <td class=code>
-        <div class='highlight'><pre></pre></div>
+        <div class='highlight'><pre>        <span class="nv">content = </span><span class="nx">@sanitize</span><span class="p">(</span><span class="nx">sanitizer</span><span class="p">)</span></pre></div>
       </td>
     </tr>
     <tr id='section-41'>
@@ -748,41 +722,96 @@ console.debug(prev, next)
         <div class="pilwrap">
           <a class="pilcrow" href="#section-41">&#182;</a>
         </div>
-        <p>[some]| content
-textContent = some, wholeText = some
-textContent = &ldquo;, wholeText = some
-content |[some]
-content [s|ome]
-co|ntent [some]
-|content [some]</p>
+        <p>move cursor back to original element &amp; position</p>
       </td>
       <td class=code>
-        <div class='highlight'><pre></pre></div>
+        <div class='highlight'><pre>        <span class="nx">selection</span><span class="p">.</span><span class="nx">selectMarker</span><span class="p">(</span><span class="nx">@element</span><span class="p">)</span>
+        <span class="nx">selection</span><span class="p">.</span><span class="nx">removeMarker</span><span class="p">()</span></pre></div>
       </td>
     </tr>
-    <tr id='section-selection.selectWord()'>
+    <tr id='section-42'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-selection.selectWord()">&#182;</a>
+          <a class="pilcrow" href="#section-42">&#182;</a>
         </div>
-        <pre><code>   console.debug(commonAncestor)
-   beforeText = commonAncestor.textContent
-   afterText = commonAncestor.wholeText.substring(commonAncestor.wholeText.lastIndexOf(beforeText) + beforeText.length, commonAncestor.wholeText.length)
-   if beforeText &amp;&amp; afterText &amp;&amp; (beforeChar = beforeText[beforeText.length &ndash; 1]) != &lsquo; &rsquo; &amp;&amp; (afterChar = afterText[0]) != &lsquo; &rsquo;
-     console.debug(&lsquo;bolding word&rsquo;, beforeChar, afterChar)
-   else
-     @document.execCommand(&lsquo;bold&rsquo;, false, null)
-</code></pre>
-
-<h1>selection.selectWord()</h1>
-
-<h1>commonAncestor.wholeText, commonAncestor.textContent</h1>
-
-<pre><code> else
-</code></pre>
+        <p>paste sanitized content</p>
       </td>
       <td class=code>
-        <div class='highlight'><pre>    <span class="nv">insertRowBefore: </span><span class="o">-&gt;</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">tableEditor</span><span class="p">.</span><span class="nx">addRow</span><span class="p">(</span><span class="s1">&#39;before&#39;</span><span class="p">)</span>
+        <div class='highlight'><pre>        <span class="nx">@element</span><span class="p">.</span><span class="nx">focus</span><span class="p">()</span>
+        <span class="nx">@execCommand</span><span class="p">(</span><span class="s1">&#39;insertHTML&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nv">value: </span><span class="nx">content</span><span class="p">})</span>
+
+
+  <span class="nv">sanitize: </span><span class="nf">(sanitizer) -&gt;</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-43'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-43">&#182;</a>
+        </div>
+        <p>always remove nested regions</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>    <span class="nx">sanitizer</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s2">&quot;.#{Mercury.config.regionClass}&quot;</span><span class="p">).</span><span class="nx">remove</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">config</span><span class="p">.</span><span class="nx">pasting</span><span class="p">.</span><span class="nx">sanitize</span>
+      <span class="k">switch</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">config</span><span class="p">.</span><span class="nx">pasting</span><span class="p">.</span><span class="nx">sanitize</span>
+        <span class="k">when</span> <span class="s1">&#39;blacklist&#39;</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-44'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-44">&#182;</a>
+        </div>
+        <p>todo: finish writing black list functionality</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>          <span class="nx">sanitizer</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;[style]&#39;</span><span class="p">).</span><span class="nx">removeAttr</span><span class="p">(</span><span class="s1">&#39;style&#39;</span><span class="p">)</span>
+          <span class="nx">sanitizer</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;[class=&quot;Apple-style-span&quot;]&#39;</span><span class="p">).</span><span class="nx">removeClass</span><span class="p">(</span><span class="s1">&#39;Apple-style-span&#39;</span><span class="p">)</span>
+          <span class="nv">content = </span><span class="nx">sanitizer</span><span class="p">.</span><span class="nx">html</span><span class="p">()</span>
+        <span class="k">when</span> <span class="s1">&#39;whitelist&#39;</span>
+          <span class="k">for</span> <span class="nx">element</span> <span class="k">in</span> <span class="nx">sanitizer</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;*&#39;</span><span class="p">)</span>
+            <span class="nv">allowed = </span><span class="kc">false</span>
+            <span class="k">for</span> <span class="nx">allowedTag</span><span class="p">,</span> <span class="nx">allowedAttributes</span> <span class="k">of</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">config</span><span class="p">.</span><span class="nx">pasting</span><span class="p">.</span><span class="nx">whitelist</span>
+              <span class="k">if</span> <span class="nx">element</span><span class="p">.</span><span class="nx">tagName</span><span class="p">.</span><span class="nx">toLowerCase</span><span class="p">()</span> <span class="o">==</span> <span class="nx">allowedTag</span><span class="p">.</span><span class="nx">toLowerCase</span><span class="p">()</span>
+                <span class="nv">allowed = </span><span class="kc">true</span>
+                <span class="k">for</span> <span class="nx">attr</span> <span class="k">in</span> <span class="nx">jQuery</span><span class="p">(</span><span class="nx">element</span><span class="p">.</span><span class="nx">attributes</span><span class="p">)</span>
+                  <span class="nx">jQuery</span><span class="p">(</span><span class="nx">element</span><span class="p">).</span><span class="nx">removeAttr</span><span class="p">(</span><span class="nx">attr</span><span class="p">.</span><span class="nx">name</span><span class="p">)</span> <span class="nx">unless</span> <span class="nx">attr</span><span class="p">.</span><span class="nx">name</span> <span class="k">in</span> <span class="nx">allowedAttributes</span>
+                <span class="k">break</span>
+            <span class="nx">jQuery</span><span class="p">(</span><span class="nx">element</span><span class="p">).</span><span class="nx">replaceWith</span><span class="p">(</span><span class="nx">jQuery</span><span class="p">(</span><span class="nx">element</span><span class="p">).</span><span class="nx">contents</span><span class="p">())</span> <span class="nx">unless</span> <span class="nx">allowed</span>
+          <span class="nv">content = </span><span class="nx">sanitizer</span><span class="p">.</span><span class="nx">html</span><span class="p">()</span>
+        <span class="k">else</span> <span class="nv">content = </span><span class="nx">sanitizer</span><span class="p">.</span><span class="nx">text</span><span class="p">()</span>
+    <span class="k">else</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-45'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-45">&#182;</a>
+        </div>
+        <p>force text if it looks like it&rsquo;s from word/pages, even if there&rsquo;s no sanitizing requested</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>      <span class="nv">content = </span><span class="nx">sanitizer</span><span class="p">.</span><span class="nx">html</span><span class="p">()</span>
+      <span class="k">if</span> <span class="nx">content</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s1">&#39;&lt;!--StartFragment--&gt;&#39;</span><span class="p">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span> <span class="o">||</span> <span class="nx">content</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s1">&#39;=&quot;mso-&#39;</span><span class="p">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span> <span class="o">||</span> <span class="nx">content</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s1">&#39;&lt;o:&#39;</span><span class="p">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span> <span class="o">||</span> <span class="nx">content</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s1">&#39;=&quot;Mso&#39;</span><span class="p">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="nv">content = </span><span class="nx">sanitizer</span><span class="p">.</span><span class="nx">text</span><span class="p">()</span>
+
+    <span class="nx">sanitizer</span><span class="p">.</span><span class="nx">html</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nx">content</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-46'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-46">&#182;</a>
+        </div>
+        <p>Custom actions (eg. things that execCommand doesn&rsquo;t do, or doesn&rsquo;t do well)</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>  <span class="vi">@actions: </span><span class="p">{</span>
+
+    <span class="nv">insertRowBefore: </span><span class="o">-&gt;</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">tableEditor</span><span class="p">.</span><span class="nx">addRow</span><span class="p">(</span><span class="s1">&#39;before&#39;</span><span class="p">)</span>
 
     <span class="nv">insertRowAfter: </span><span class="o">-&gt;</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">tableEditor</span><span class="p">.</span><span class="nx">addRow</span><span class="p">(</span><span class="s1">&#39;after&#39;</span><span class="p">)</span>
 
@@ -806,6 +835,8 @@ co|ntent [some]
 
     <span class="nv">redo: </span><span class="o">-&gt;</span> <span class="nx">@content</span><span class="p">(</span><span class="nx">@history</span><span class="p">.</span><span class="nx">redo</span><span class="p">())</span>
 
+    <span class="nv">horizontalRule: </span><span class="o">-&gt;</span> <span class="k">this</span><span class="p">.</span><span class="nx">execCommand</span><span class="p">(</span><span class="s1">&#39;insertHorizontalRule&#39;</span><span class="p">)</span>
+
     <span class="nv">removeFormatting: </span><span class="nf">(selection) -&gt;</span> <span class="nx">selection</span><span class="p">.</span><span class="nx">insertTextNode</span><span class="p">(</span><span class="nx">selection</span><span class="p">.</span><span class="nx">textContent</span><span class="p">())</span>
 
     <span class="nv">backColor: </span><span class="nf">(selection, options) -&gt;</span> <span class="nx">selection</span><span class="p">.</span><span class="nx">wrap</span><span class="p">(</span><span class="s2">&quot;&lt;span style=\&quot;background-color:#{options.value.toHex()}\&quot;&gt;&quot;</span><span class="p">,</span> <span class="kc">true</span><span class="p">)</span>
@@ -817,6 +848,8 @@ co|ntent [some]
     <span class="nv">replaceHTML: </span><span class="nf">(selection, options) -&gt;</span> <span class="nx">@content</span><span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">value</span><span class="p">)</span>
 
     <span class="nv">insertImage: </span><span class="nf">(selection, options) -&gt;</span> <span class="nx">@execCommand</span><span class="p">(</span><span class="s1">&#39;insertHTML&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nv">value: </span><span class="nx">jQuery</span><span class="p">(</span><span class="s1">&#39;&lt;img/&gt;&#39;</span><span class="p">,</span> <span class="nx">options</span><span class="p">.</span><span class="nx">value</span><span class="p">)})</span>
+
+    <span class="nv">insertTable: </span><span class="nf">(selection, options) -&gt;</span> <span class="nx">@execCommand</span><span class="p">(</span><span class="s1">&#39;insertHTML&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nv">value: </span><span class="nx">options</span><span class="p">.</span><span class="nx">value</span><span class="p">})</span>
 
     <span class="nv">insertLink: </span><span class="nf">(selection, options) -&gt;</span>
       <span class="nv">anchor = </span><span class="nx">jQuery</span><span class="p">(</span><span class="s2">&quot;&lt;#{options.value.tagName}&gt;&quot;</span><span class="p">,</span> <span class="nx">@document</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">value</span><span class="p">.</span><span class="nx">attrs</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">value</span><span class="p">.</span><span class="nx">content</span><span class="p">)</span>
@@ -845,10 +878,10 @@ co|ntent [some]
   <span class="p">}</span></pre></div>
       </td>
     </tr>
-    <tr id='section-43'>
+    <tr id='section-47'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-43">&#182;</a>
+          <a class="pilcrow" href="#section-47">&#182;</a>
         </div>
         <p>Helper class for managing selection and getting information from it</p>
       </td>
@@ -886,34 +919,24 @@ co|ntent [some]
 
   <span class="o">is:</span> <span class="nf">(elementType) -&gt;</span>
     <span class="nv">content = </span><span class="nx">@content</span><span class="p">()</span>
-    <span class="k">return</span> <span class="nx">jQuery</span><span class="p">(</span><span class="nx">content</span><span class="p">.</span><span class="nx">firstChild</span><span class="p">)</span> <span class="k">if</span> <span class="nx">content</span><span class="p">.</span><span class="nx">childNodes</span><span class="p">.</span><span class="nx">length</span> <span class="o">==</span> <span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="nx">jQuery</span><span class="p">(</span><span class="nx">content</span><span class="p">.</span><span class="nx">firstChild</span><span class="p">).</span><span class="o">is</span><span class="p">(</span><span class="nx">elementType</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nx">jQuery</span><span class="p">(</span><span class="nx">content</span><span class="p">.</span><span class="nx">firstChild</span><span class="p">)</span> <span class="k">if</span> <span class="nx">jQuery</span><span class="p">(</span><span class="nx">content</span><span class="p">).</span><span class="nx">length</span> <span class="o">==</span> <span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="nx">jQuery</span><span class="p">(</span><span class="nx">content</span><span class="p">.</span><span class="nx">firstChild</span><span class="p">).</span><span class="o">is</span><span class="p">(</span><span class="nx">elementType</span><span class="p">)</span>
     <span class="k">return</span> <span class="kc">false</span>
 
 
   <span class="nv">forceSelection: </span><span class="nf">(element) -&gt;</span>
     <span class="k">return</span> <span class="nx">unless</span> <span class="nx">jQuery</span><span class="p">.</span><span class="nx">browser</span><span class="p">.</span><span class="nx">webkit</span>
-    <span class="nv">range = </span><span class="nx">@context</span><span class="p">.</span><span class="nx">createRange</span><span class="p">()</span></pre></div>
-      </td>
-    </tr>
-    <tr id='section-44'>
-      <td class=docs>
-        <div class="pilwrap">
-          <a class="pilcrow" href="#section-44">&#182;</a>
-        </div>
-        <p>todo: the \00 thing breaks when using uglifier, and is escapped to &quot;0&rdquo;.. it&rsquo;s been fixed, but isn&rsquo;t available yet
-https://github.com/lautis/uglifier/issues/11</p>
-      </td>
-      <td class=code>
-        <div class='highlight'><pre>    <span class="k">if</span> <span class="nx">@range</span>
+    <span class="nv">range = </span><span class="nx">@context</span><span class="p">.</span><span class="nx">createRange</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="nx">@range</span>
       <span class="k">if</span> <span class="nx">@commonAncestor</span><span class="p">(</span><span class="kc">true</span><span class="p">).</span><span class="nx">closest</span><span class="p">(</span><span class="s1">&#39;.mercury-snippet&#39;</span><span class="p">).</span><span class="nx">length</span>
-        <span class="nv">lastChild = </span><span class="nx">@context</span><span class="p">.</span><span class="nx">createTextNode</span><span class="p">(</span><span class="s1">&#39;\00&#39;</span><span class="p">)</span> <span class="c1">#\00</span>
+        <span class="nv">lastChild = </span><span class="nx">@context</span><span class="p">.</span><span class="nx">createTextNode</span><span class="p">(</span><span class="s1">&#39;\00&#39;</span><span class="p">)</span>
         <span class="nx">element</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">lastChild</span><span class="p">)</span>
     <span class="k">else</span>
       <span class="k">if</span> <span class="nx">element</span><span class="p">.</span><span class="nx">lastChild</span> <span class="o">&amp;&amp;</span> <span class="nx">element</span><span class="p">.</span><span class="nx">lastChild</span><span class="p">.</span><span class="nx">nodeType</span> <span class="o">==</span> <span class="mi">3</span> <span class="o">&amp;&amp;</span> <span class="nx">element</span><span class="p">.</span><span class="nx">lastChild</span><span class="p">.</span><span class="nx">textContent</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/^[\s+|\n+]|[\s+|\n+]$/</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span>
         <span class="nv">lastChild = </span><span class="nx">element</span><span class="p">.</span><span class="nx">lastChild</span>
-        <span class="nv">element.lastChild.textContent = </span><span class="s1">&#39;\00&#39;</span> <span class="c1">#\00</span>
+        <span class="nv">element.lastChild.textContent = </span><span class="s1">&#39;\00&#39;</span>
       <span class="k">else</span>
-        <span class="nv">lastChild = </span><span class="nx">@context</span><span class="p">.</span><span class="nx">createTextNode</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">)</span> <span class="c1">#\00</span>
+        <span class="nv">lastChild = </span><span class="nx">@context</span><span class="p">.</span><span class="nx">createTextNode</span><span class="p">(</span><span class="s1">&#39;\00&#39;</span><span class="p">)</span>
         <span class="nx">element</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">lastChild</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="nx">lastChild</span>
@@ -943,10 +966,10 @@ https://github.com/lautis/uglifier/issues/11</p>
     <span class="vi">@endMarker = </span><span class="nx">jQuery</span><span class="p">(</span><span class="s1">&#39;&lt;em class=&quot;mercury-marker&quot;/&gt;&#39;</span><span class="p">,</span> <span class="nx">@context</span><span class="p">).</span><span class="nx">get</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span></pre></div>
       </td>
     </tr>
-    <tr id='section-45'>
+    <tr id='section-48'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-45">&#182;</a>
+          <a class="pilcrow" href="#section-48">&#182;</a>
         </div>
         <p>put a single marker (the end)</p>
       </td>
@@ -958,10 +981,10 @@ https://github.com/lautis/uglifier/issues/11</p>
     <span class="nx">unless</span> <span class="nx">@range</span><span class="p">.</span><span class="nx">collapsed</span></pre></div>
       </td>
     </tr>
-    <tr id='section-46'>
+    <tr id='section-49'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-46">&#182;</a>
+          <a class="pilcrow" href="#section-49">&#182;</a>
         </div>
         <p>put a start marker</p>
 
@@ -1004,14 +1027,15 @@ https://github.com/lautis/uglifier/issues/11</p>
     <span class="nx">@selection</span><span class="p">.</span><span class="nx">addRange</span><span class="p">(</span><span class="nx">@range</span><span class="p">)</span>
 
 
-  <span class="nv">replace: </span><span class="nf">(element) -&gt;</span>
+  <span class="nv">replace: </span><span class="nf">(element, collapse) -&gt;</span>
     <span class="nv">element = </span><span class="nx">element</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="k">if</span> <span class="nx">element</span><span class="p">.</span><span class="nx">get</span>
     <span class="nv">element = </span><span class="nx">jQuery</span><span class="p">(</span><span class="nx">element</span><span class="p">,</span> <span class="nx">@context</span><span class="p">).</span><span class="nx">get</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="k">if</span> <span class="nx">jQuery</span><span class="p">.</span><span class="nx">type</span><span class="p">(</span><span class="nx">element</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;string&#39;</span>
 
     <span class="nx">@range</span><span class="p">.</span><span class="nx">deleteContents</span><span class="p">()</span>
     <span class="nx">@range</span><span class="p">.</span><span class="nx">insertNode</span><span class="p">(</span><span class="nx">element</span><span class="p">)</span>
     <span class="nx">@range</span><span class="p">.</span><span class="nx">selectNodeContents</span><span class="p">(</span><span class="nx">element</span><span class="p">)</span>
-    <span class="nx">@selection</span><span class="p">.</span><span class="nx">addRange</span><span class="p">(</span><span class="nx">@range</span><span class="p">)</span></pre></div>
+    <span class="nx">@selection</span><span class="p">.</span><span class="nx">addRange</span><span class="p">(</span><span class="nx">@range</span><span class="p">)</span>
+    <span class="nx">@range</span><span class="p">.</span><span class="nx">collapse</span><span class="p">(</span><span class="kc">false</span><span class="p">)</span> <span class="k">if</span> <span class="nx">collapse</span></pre></div>
       </td>
     </tr>
   </table>

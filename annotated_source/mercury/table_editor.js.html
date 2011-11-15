@@ -43,7 +43,7 @@
   <span class="nx">Mercury</span><span class="p">.</span><span class="nx">tableEditor</span><span class="p">.</span><span class="nx">load</span><span class="p">(</span><span class="nx">table</span><span class="p">,</span> <span class="nx">cell</span><span class="p">,</span> <span class="nx">cellContent</span><span class="p">)</span>
   <span class="k">return</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">tableEditor</span>
 
-<span class="nx">jQuery</span><span class="p">.</span><span class="nx">extend</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">tableEditor</span><span class="p">,</span> <span class="p">{</span>
+<span class="nx">jQuery</span><span class="p">.</span><span class="nx">extend</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">tableEditor</span><span class="p">,</span>
 
   <span class="nv">load: </span><span class="nf">(@table, @cell, @cellContent = &#39;&#39;) -&gt;</span>
     <span class="vi">@row = </span><span class="nx">@cell</span><span class="p">.</span><span class="nx">parent</span><span class="p">(</span><span class="s1">&#39;tr&#39;</span><span class="p">)</span>
@@ -462,9 +462,7 @@ specified.</p>
       </td>
       <td class=code>
         <div class='highlight'><pre>  <span class="nv">setRowspanFor: </span><span class="nf">(cell, value) -&gt;</span>
-    <span class="nx">jQuery</span><span class="p">(</span><span class="nx">cell</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="s1">&#39;rowspan&#39;</span><span class="p">,</span> <span class="k">if</span> <span class="nx">value</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">then</span> <span class="nx">value</span> <span class="k">else</span> <span class="kc">null</span><span class="p">)</span>
-
-<span class="p">}</span></pre></div>
+    <span class="nx">jQuery</span><span class="p">(</span><span class="nx">cell</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="s1">&#39;rowspan&#39;</span><span class="p">,</span> <span class="k">if</span> <span class="nx">value</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">then</span> <span class="nx">value</span> <span class="k">else</span> <span class="kc">null</span><span class="p">)</span></pre></div>
       </td>
     </tr>
   </table>

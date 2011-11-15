@@ -109,7 +109,8 @@ focus from being taken away from the active region when different things are cli
       </td>
       <td class=code>
         <div class='highlight'><pre>  <span class="nv">bindEvents: </span><span class="o">-&gt;</span>
-    <span class="nx">@element</span><span class="p">.</span><span class="nx">mousedown</span> <span class="nf">(event) -&gt;</span> <span class="nx">event</span><span class="p">.</span><span class="nx">stopPropagation</span><span class="p">()</span></pre></div>
+    <span class="nx">@element</span><span class="p">.</span><span class="kc">on</span> <span class="s1">&#39;mousedown&#39;</span><span class="p">,</span> <span class="nf">(event) -&gt;</span>
+      <span class="nx">event</span><span class="p">.</span><span class="nx">stopPropagation</span><span class="p">()</span></pre></div>
       </td>
     </tr>
     <tr id='section-#preload'>
@@ -206,7 +207,7 @@ then positioned and shown.  The show animation of the dialog is typically dictat
         </div>
         <h2>#position</h2>
 
-<p>Interface method.  Implemenations are expected to position the dialog themselves.</p>
+<p>Interface method.  Implementations are expected to position the dialog themselves.</p>
 <blockquote>
 <p><strong>keepVisible</strong> <em>boolean</em> specifies if the element should stay visible if it&rsquo;s already visible.  </p>
 </blockquote>
@@ -281,8 +282,8 @@ cases where content is not preloaded we can display the dialog, fill it&rsquo;s 
         <div class="pilwrap">
           <a class="pilcrow" href="#section-16">&#182;</a>
         </div>
-        <p>And call the dialog handler if there&rsquo;s one.  We&rsquo;ve broken the handlers out into seperate files so they can be
-tested more easily, but you can define your own by putting them in dialogHanders.</p>
+        <p>And call the dialog handler if there&rsquo;s one.  We&rsquo;ve broken the handlers out into separate files so they can be
+tested more easily, but you can define your own by putting them in dialogHandlers.</p>
       </td>
       <td class=code>
         <div class='highlight'><pre>      <span class="nx">Mercury</span><span class="p">.</span><span class="nx">dialogHandlers</span><span class="p">[</span><span class="nx">@name</span><span class="p">].</span><span class="nx">call</span><span class="p">(</span><span class="err">@</span><span class="p">)</span> <span class="k">if</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">dialogHandlers</span><span class="p">[</span><span class="nx">@name</span><span class="p">]</span>
@@ -316,7 +317,7 @@ tested more easily, but you can define your own by putting them in dialogHanders
       <td class=code>
         <div class='highlight'><pre>          <span class="nx">@hide</span><span class="p">()</span>
           <span class="nx">@button</span><span class="p">.</span><span class="nx">removeClass</span><span class="p">(</span><span class="s1">&#39;pressed&#39;</span><span class="p">)</span> <span class="k">if</span> <span class="nx">@button</span>
-          <span class="nx">alert</span><span class="p">(</span><span class="s2">&quot;Mercury was unable to load #{@url} for the #{@name} dialog.&quot;</span><span class="p">)</span>
+          <span class="nx">Mercury</span><span class="p">.</span><span class="nx">notify</span><span class="p">(</span><span class="s1">&#39;Mercury was unable to load %s for the &quot;%s&quot; dialog.&#39;</span><span class="p">,</span> <span class="nx">@url</span><span class="p">,</span> <span class="nx">@name</span><span class="p">)</span>
       <span class="p">}</span></pre></div>
       </td>
     </tr>
@@ -336,7 +337,8 @@ tested more easily, but you can define your own by putting them in dialogHanders
         <div class='highlight'><pre>  <span class="nv">loadContent: </span><span class="nf">(data) -&gt;</span>
     <span class="vi">@loaded = </span><span class="kc">true</span>
     <span class="nx">@element</span><span class="p">.</span><span class="nx">removeClass</span><span class="p">(</span><span class="s1">&#39;loading&#39;</span><span class="p">)</span>
-    <span class="nx">@element</span><span class="p">.</span><span class="nx">html</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span></pre></div>
+    <span class="nx">@element</span><span class="p">.</span><span class="nx">html</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span>
+    <span class="nx">@element</span><span class="p">.</span><span class="nx">localize</span><span class="p">(</span><span class="nx">Mercury</span><span class="p">.</span><span class="nx">locale</span><span class="p">())</span> <span class="k">if</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">config</span><span class="p">.</span><span class="nx">localization</span><span class="p">.</span><span class="nx">enabled</span></pre></div>
       </td>
     </tr>
   </table>

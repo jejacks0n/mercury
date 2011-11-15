@@ -43,8 +43,7 @@
   <span class="nx">Mercury</span><span class="p">.</span><span class="nx">modal</span><span class="p">.</span><span class="nx">show</span><span class="p">(</span><span class="nx">url</span><span class="p">,</span> <span class="nx">options</span><span class="p">)</span>
   <span class="k">return</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">modal</span>
 
-<span class="nx">jQuery</span><span class="p">.</span><span class="nx">extend</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">modal</span><span class="p">,</span> <span class="p">{</span>
-
+<span class="nx">jQuery</span><span class="p">.</span><span class="nx">extend</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">modal</span><span class="p">,</span>
   <span class="nv">minWidth: </span><span class="mi">400</span>
 
   <span class="nv">show: </span><span class="nf">(@url, @options = {}) -&gt;</span>
@@ -69,23 +68,28 @@
 
     <span class="vi">@titleElement = </span><span class="nx">@element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;.mercury-modal-title&#39;</span><span class="p">)</span>
     <span class="vi">@contentContainerElement = </span><span class="nx">@element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;.mercury-modal-content-container&#39;</span><span class="p">)</span>
+
     <span class="vi">@contentElement = </span><span class="nx">@element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;.mercury-modal-content&#39;</span><span class="p">)</span>
 
     <span class="nx">@element</span><span class="p">.</span><span class="nx">appendTo</span><span class="p">(</span><span class="nx">jQuery</span><span class="p">(</span><span class="nx">@options</span><span class="p">.</span><span class="nx">appendTo</span><span class="p">).</span><span class="nx">get</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">?</span> <span class="s1">&#39;body&#39;</span><span class="p">)</span>
     <span class="nx">@overlay</span><span class="p">.</span><span class="nx">appendTo</span><span class="p">(</span><span class="nx">jQuery</span><span class="p">(</span><span class="nx">@options</span><span class="p">.</span><span class="nx">appendTo</span><span class="p">).</span><span class="nx">get</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">?</span> <span class="s1">&#39;body&#39;</span><span class="p">)</span>
 
-    <span class="nx">@titleElement</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;span&#39;</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="nx">@options</span><span class="p">.</span><span class="nx">title</span><span class="p">)</span>
-
 
   <span class="nv">bindEvents: </span><span class="o">-&gt;</span>
-    <span class="nx">Mercury</span><span class="p">.</span><span class="nx">bind</span> <span class="s1">&#39;refresh&#39;</span><span class="p">,</span> <span class="o">=&gt;</span> <span class="nx">@resize</span><span class="p">(</span><span class="kc">true</span><span class="p">)</span>
-    <span class="nx">Mercury</span><span class="p">.</span><span class="nx">bind</span> <span class="s1">&#39;resize&#39;</span><span class="p">,</span> <span class="o">=&gt;</span> <span class="nx">@position</span><span class="p">()</span>
+    <span class="nx">Mercury</span><span class="p">.</span><span class="kc">on</span> <span class="s1">&#39;refresh&#39;</span><span class="p">,</span> <span class="o">=&gt;</span> <span class="nx">@resize</span><span class="p">(</span><span class="kc">true</span><span class="p">)</span>
+    <span class="nx">Mercury</span><span class="p">.</span><span class="kc">on</span> <span class="s1">&#39;resize&#39;</span><span class="p">,</span> <span class="o">=&gt;</span> <span class="nx">@position</span><span class="p">()</span>
 
-    <span class="nx">@overlay</span><span class="p">.</span><span class="nx">click</span> <span class="o">=&gt;</span> <span class="nx">@hide</span><span class="p">()</span>
+    <span class="nx">@overlay</span><span class="p">.</span><span class="kc">on</span> <span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="o">=&gt;</span>
+      <span class="nx">@hide</span><span class="p">()</span> <span class="k">if</span> <span class="nx">@options</span><span class="p">.</span><span class="nx">allowHideUsingOverlay</span>
 
-    <span class="nx">@titleElement</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">).</span><span class="nx">click</span> <span class="o">=&gt;</span> <span class="nx">@hide</span><span class="p">()</span>
+    <span class="nx">@titleElement</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">).</span><span class="kc">on</span> <span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="o">=&gt;</span>
+      <span class="nx">@hide</span><span class="p">()</span>
 
-    <span class="nx">jQuery</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">bind</span> <span class="s1">&#39;keydown&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="o">=&gt;</span>
+    <span class="nx">@element</span><span class="p">.</span><span class="kc">on</span> <span class="s1">&#39;ajax:beforeSend&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">event</span><span class="p">,</span> <span class="nx">xhr</span><span class="p">,</span> <span class="nx">options</span><span class="p">)</span> <span class="o">=&gt;</span>
+      <span class="nv">options.success = </span><span class="p">(</span><span class="nx">content</span><span class="p">)</span> <span class="o">=&gt;</span>
+        <span class="nx">@loadContent</span><span class="p">(</span><span class="nx">content</span><span class="p">)</span>
+
+    <span class="nx">jQuery</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="kc">on</span> <span class="s1">&#39;keydown&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="o">=&gt;</span>
        <span class="nx">@hide</span><span class="p">()</span> <span class="k">if</span> <span class="nx">event</span><span class="p">.</span><span class="nx">keyCode</span> <span class="o">==</span> <span class="mi">27</span> <span class="o">&amp;&amp;</span> <span class="nx">@visible</span>
 
 
@@ -125,7 +129,7 @@
         <span class="nx">@contentElement</span><span class="p">.</span><span class="nx">css</span><span class="p">({</span><span class="nv">height: </span><span class="nx">height</span> <span class="o">-</span> <span class="nx">titleHeight</span><span class="p">,</span> <span class="nv">overflow: </span><span class="s1">&#39;visible&#39;</span><span class="p">})</span>
         <span class="nv">controlHeight = </span><span class="k">if</span> <span class="nx">@contentControl</span><span class="p">.</span><span class="nx">length</span> <span class="k">then</span> <span class="nx">@contentControl</span><span class="p">.</span><span class="nx">outerHeight</span><span class="p">()</span> <span class="k">else</span> <span class="mi">0</span>
         <span class="nx">@contentPane</span><span class="p">.</span><span class="nx">css</span><span class="p">({</span><span class="nv">height: </span><span class="nx">height</span> <span class="o">-</span> <span class="nx">titleHeight</span> <span class="o">-</span> <span class="nx">controlHeight</span> <span class="o">-</span> <span class="mi">40</span><span class="p">})</span>
-        <span class="nx">@contentPane</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;.mercury-modal-pane&#39;</span><span class="p">).</span><span class="nx">css</span><span class="p">({</span><span class="nv">width: </span><span class="nx">width</span> <span class="o">-</span> <span class="mi">40</span><span class="p">})</span>
+        <span class="nx">@contentPane</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;.mercury-display-pane&#39;</span><span class="p">).</span><span class="nx">css</span><span class="p">({</span><span class="nv">width: </span><span class="nx">width</span> <span class="o">-</span> <span class="mi">40</span><span class="p">})</span>
       <span class="k">else</span>
         <span class="nx">@contentElement</span><span class="p">.</span><span class="nx">css</span><span class="p">({</span><span class="nv">height: </span><span class="nx">height</span> <span class="o">-</span> <span class="nx">titleHeight</span><span class="p">,</span> <span class="nv">overflow: </span><span class="s1">&#39;auto&#39;</span><span class="p">})</span>
 
@@ -148,7 +152,7 @@
       <span class="nx">@contentElement</span><span class="p">.</span><span class="nx">css</span><span class="p">({</span><span class="nv">height: </span><span class="nx">height</span> <span class="o">-</span> <span class="nx">titleHeight</span><span class="p">,</span> <span class="nv">overflow: </span><span class="s1">&#39;visible&#39;</span><span class="p">})</span>
       <span class="nv">controlHeight = </span><span class="k">if</span> <span class="nx">@contentControl</span><span class="p">.</span><span class="nx">length</span> <span class="k">then</span> <span class="nx">@contentControl</span><span class="p">.</span><span class="nx">outerHeight</span><span class="p">()</span> <span class="k">else</span> <span class="mi">0</span>
       <span class="nx">@contentPane</span><span class="p">.</span><span class="nx">css</span><span class="p">({</span><span class="nv">height: </span><span class="nx">height</span> <span class="o">-</span> <span class="nx">titleHeight</span> <span class="o">-</span> <span class="nx">controlHeight</span> <span class="o">-</span> <span class="mi">40</span><span class="p">})</span>
-      <span class="nx">@contentPane</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;.mercury-modal-pane&#39;</span><span class="p">).</span><span class="nx">css</span><span class="p">({</span><span class="nv">width: </span><span class="nx">width</span> <span class="o">-</span> <span class="mi">40</span><span class="p">})</span>
+      <span class="nx">@contentPane</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;.mercury-display-pane&#39;</span><span class="p">).</span><span class="nx">css</span><span class="p">({</span><span class="nv">width: </span><span class="nx">width</span> <span class="o">-</span> <span class="mi">40</span><span class="p">})</span>
     <span class="k">else</span>
       <span class="nx">@contentElement</span><span class="p">.</span><span class="nx">css</span><span class="p">({</span><span class="nv">height: </span><span class="nx">height</span> <span class="o">-</span> <span class="nx">titleHeight</span><span class="p">,</span> <span class="nv">overflow: </span><span class="s1">&#39;auto&#39;</span><span class="p">})</span>
 
@@ -172,15 +176,16 @@
     <span class="k">return</span> <span class="nx">unless</span> <span class="nx">@url</span>
     <span class="nx">@element</span><span class="p">.</span><span class="nx">addClass</span><span class="p">(</span><span class="s1">&#39;loading&#39;</span><span class="p">)</span>
     <span class="k">if</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">preloadedViews</span><span class="p">[</span><span class="nx">@url</span><span class="p">]</span>
-      <span class="nx">setTimeout</span><span class="p">((</span><span class="o">=&gt;</span> <span class="nx">@loadContent</span><span class="p">(</span><span class="nx">Mercury</span><span class="p">.</span><span class="nx">preloadedViews</span><span class="p">[</span><span class="nx">@url</span><span class="p">])),</span> <span class="mi">10</span><span class="p">)</span>
+      <span class="nx">setTimeout</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="o">=&gt;</span> <span class="nx">@loadContent</span><span class="p">(</span><span class="nx">Mercury</span><span class="p">.</span><span class="nx">preloadedViews</span><span class="p">[</span><span class="nx">@url</span><span class="p">]))</span>
     <span class="k">else</span>
       <span class="nx">jQuery</span><span class="p">.</span><span class="nx">ajax</span> <span class="nx">@url</span><span class="p">,</span> <span class="p">{</span>
-        <span class="nv">type: </span><span class="nx">@options</span><span class="p">.</span><span class="nx">loadType</span> <span class="o">||</span> <span class="s1">&#39;get&#39;</span>
+        <span class="nv">headers: </span><span class="nx">Mercury</span><span class="p">.</span><span class="nx">ajaxHeaders</span><span class="p">()</span>
+        <span class="nv">type: </span><span class="nx">@options</span><span class="p">.</span><span class="nx">loadType</span> <span class="o">||</span> <span class="s1">&#39;GET&#39;</span>
         <span class="nv">data: </span><span class="nx">@options</span><span class="p">.</span><span class="nx">loadData</span>
         <span class="nv">success: </span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">@loadContent</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span>
         <span class="nv">error: </span><span class="o">=&gt;</span>
           <span class="nx">@hide</span><span class="p">()</span>
-          <span class="nx">alert</span><span class="p">(</span><span class="s2">&quot;Mercury was unable to load #{@url} for the modal.&quot;</span><span class="p">)</span>
+          <span class="nx">Mercury</span><span class="p">.</span><span class="nx">notify</span><span class="p">(</span><span class="s2">&quot;Mercury was unable to load %s for the modal.&quot;</span><span class="p">,</span> <span class="nx">@url</span><span class="p">)</span>
       <span class="p">}</span>
 
 
@@ -203,18 +208,22 @@
 
       </td>
       <td class=code>
-        <div class='highlight'><pre>    <span class="vi">@contentPane = </span><span class="nx">@element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;.mercury-modal-pane-container&#39;</span><span class="p">)</span>
-    <span class="vi">@contentControl = </span><span class="nx">@element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;.mercury-modal-controls&#39;</span><span class="p">)</span>
+        <div class='highlight'><pre>    <span class="vi">@contentPane = </span><span class="nx">@element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;.mercury-display-pane-container&#39;</span><span class="p">)</span>
+    <span class="vi">@contentControl = </span><span class="nx">@element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;.mercury-display-controls&#39;</span><span class="p">)</span>
 
     <span class="nx">@options</span><span class="p">.</span><span class="nx">afterLoad</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="err">@</span><span class="p">)</span> <span class="k">if</span> <span class="nx">@options</span><span class="p">.</span><span class="nx">afterLoad</span>
-    <span class="k">if</span> <span class="nx">@options</span><span class="p">.</span><span class="nx">handler</span> <span class="o">&amp;&amp;</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">modalHandlers</span><span class="p">[</span><span class="nx">@options</span><span class="p">.</span><span class="nx">handler</span><span class="p">]</span>
-      <span class="nx">Mercury</span><span class="p">.</span><span class="nx">modalHandlers</span><span class="p">[</span><span class="nx">@options</span><span class="p">.</span><span class="nx">handler</span><span class="p">].</span><span class="nx">call</span><span class="p">(</span><span class="err">@</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nx">@options</span><span class="p">.</span><span class="nx">handler</span>
+      <span class="k">if</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">modalHandlers</span><span class="p">[</span><span class="nx">@options</span><span class="p">.</span><span class="nx">handler</span><span class="p">]</span>
+        <span class="nx">Mercury</span><span class="p">.</span><span class="nx">modalHandlers</span><span class="p">[</span><span class="nx">@options</span><span class="p">.</span><span class="nx">handler</span><span class="p">].</span><span class="nx">call</span><span class="p">(</span><span class="err">@</span><span class="p">)</span>
+      <span class="k">else</span> <span class="k">if</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">lightviewHandlers</span><span class="p">[</span><span class="nx">@options</span><span class="p">.</span><span class="nx">handler</span><span class="p">]</span>
+        <span class="nx">Mercury</span><span class="p">.</span><span class="nx">lightviewHandlers</span><span class="p">[</span><span class="nx">@options</span><span class="p">.</span><span class="nx">handler</span><span class="p">].</span><span class="nx">call</span><span class="p">(</span><span class="err">@</span><span class="p">)</span>
 
+    <span class="nx">@element</span><span class="p">.</span><span class="nx">localize</span><span class="p">(</span><span class="nx">Mercury</span><span class="p">.</span><span class="nx">locale</span><span class="p">())</span> <span class="k">if</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">config</span><span class="p">.</span><span class="nx">localization</span><span class="p">.</span><span class="nx">enabled</span>
     <span class="nx">@resize</span><span class="p">()</span>
 
 
   <span class="nv">setTitle: </span><span class="o">-&gt;</span>
-    <span class="nx">@titleElement</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;span&#39;</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="nx">@options</span><span class="p">.</span><span class="nx">title</span><span class="p">)</span>
+    <span class="nx">@titleElement</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;span&#39;</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="nx">Mercury</span><span class="p">.</span><span class="nx">I18n</span><span class="p">(</span><span class="nx">@options</span><span class="p">.</span><span class="nx">title</span><span class="p">))</span>
 
 
   <span class="nv">reset: </span><span class="o">-&gt;</span>
@@ -224,15 +233,15 @@
 
   <span class="nv">hide: </span><span class="o">-&gt;</span>
     <span class="k">return</span> <span class="k">if</span> <span class="nx">@showing</span>
+    <span class="vi">@options = </span><span class="p">{}</span>
+    <span class="vi">@initialized = </span><span class="kc">false</span>
 
     <span class="nx">Mercury</span><span class="p">.</span><span class="nx">trigger</span><span class="p">(</span><span class="s1">&#39;focus:frame&#39;</span><span class="p">)</span>
     <span class="nx">@element</span><span class="p">.</span><span class="nx">hide</span><span class="p">()</span>
     <span class="nx">@overlay</span><span class="p">.</span><span class="nx">hide</span><span class="p">()</span>
     <span class="nx">@reset</span><span class="p">()</span>
 
-    <span class="vi">@visible = </span><span class="kc">false</span>
-
-<span class="p">}</span></pre></div>
+    <span class="vi">@visible = </span><span class="kc">false</span></pre></div>
       </td>
     </tr>
   </table>

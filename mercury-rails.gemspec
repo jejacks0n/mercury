@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Jeremy Jackson"]
-  s.date = "2011-10-24"
+  s.date = "2011-11-15"
   s.description = "A fully featured and advanced HTML5 WYSIWYG editor written in CoffeeScript on top of Rails 3.1"
   s.email = "jejacks0n@gmail.com"
   s.extra_rdoc_files = [
@@ -22,9 +22,9 @@ Gem::Specification.new do |s|
     "README.md",
     "VERSION",
     "annotated_source.template",
-    "app/controllers/images_controller.rb",
+    "app/controllers/mercury/images_controller.rb",
     "app/controllers/mercury_controller.rb",
-    "app/models/image.rb",
+    "app/models/mercury/image.rb",
     "app/views/layouts/mercury.html.erb",
     "app/views/mercury/lightviews/about.html",
     "app/views/mercury/modals/character.html",
@@ -43,7 +43,7 @@ Gem::Specification.new do |s|
     "app/views/mercury/snippets/example/preview.html.erb",
     "config/engine.rb",
     "config/routes.rb",
-    "db/migrate/20110526035601_create_images.rb",
+    "db/migrate/20110526035601_create_mercury_images.rb",
     "features/loading/loading.feature",
     "features/loading/navigating.feature",
     "features/loading/user_interface.feature",
@@ -152,6 +152,7 @@ Gem::Specification.new do |s|
     "vendor/assets/images/mercury/default-snippet.png",
     "vendor/assets/images/mercury/loading-dark.gif",
     "vendor/assets/images/mercury/loading-light.gif",
+    "vendor/assets/images/mercury/missing-image.png",
     "vendor/assets/images/mercury/search-icon.png",
     "vendor/assets/images/mercury/temp-logo.png",
     "vendor/assets/images/mercury/toolbar/editable/buttons.png",
@@ -171,7 +172,7 @@ Gem::Specification.new do |s|
     "vendor/assets/images/mercury/toolbar/primary/undo.png",
     "vendor/assets/images/mercury/toolbar/snippetable/buttons.png",
     "vendor/assets/javascripts/mercury.js",
-    "vendor/assets/javascripts/mercury/dependencies/jquery-1.6.js",
+    "vendor/assets/javascripts/mercury/dependencies/jquery-1.7.js",
     "vendor/assets/javascripts/mercury/dependencies/jquery-ui-1.8.13.custom.js",
     "vendor/assets/javascripts/mercury/dependencies/jquery.additions.js",
     "vendor/assets/javascripts/mercury/dependencies/jquery.htmlClean.js",
@@ -181,11 +182,15 @@ Gem::Specification.new do |s|
     "vendor/assets/javascripts/mercury/dialogs/backcolor.js.coffee",
     "vendor/assets/javascripts/mercury/dialogs/forecolor.js.coffee",
     "vendor/assets/javascripts/mercury/dialogs/formatblock.js.coffee",
-    "vendor/assets/javascripts/mercury/dialogs/objectspanel.js.coffee",
+    "vendor/assets/javascripts/mercury/dialogs/snippetpanel.js.coffee",
     "vendor/assets/javascripts/mercury/dialogs/style.js.coffee",
+    "vendor/assets/javascripts/mercury/finalize.js.coffee",
     "vendor/assets/javascripts/mercury/history_buffer.js.coffee",
     "vendor/assets/javascripts/mercury/lightview.js.coffee",
-    "vendor/assets/javascripts/mercury/lightviews/imageprocessor.js.coffee",
+    "vendor/assets/javascripts/mercury/locales/es.locale.js.coffee",
+    "vendor/assets/javascripts/mercury/locales/fr.locale.js.coffee",
+    "vendor/assets/javascripts/mercury/locales/pt.locale.js.coffee",
+    "vendor/assets/javascripts/mercury/locales/swedish_chef.locale.js.coffee",
     "vendor/assets/javascripts/mercury/mercury.js.coffee",
     "vendor/assets/javascripts/mercury/modal.js.coffee",
     "vendor/assets/javascripts/mercury/modals/htmleditor.js.coffee",

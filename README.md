@@ -184,7 +184,7 @@ that when it's ready.
 #### Mercury
 
     if (top.Mercury) {
-      top.Mercury.bind('ready', function() { Mercury.saveUrl = '/content'; });
+      top.Mercury.on('ready', function() { Mercury.saveUrl = '/content'; });
     }
 
 #### Function Declaration

@@ -13,7 +13,7 @@ Feature:
 #  Scenario: A user can view and close the about dialog
     When I click on the about the editor link
     Then I should see "Mercury Editor" within the lightview title
-    And I should see "Mercury Editor is an open source project written by Jeremy Jackson" within the lightview window
+    And I should see "Mercury Editor is an open source HTML5 WYSIWYG editor written in Coffeescript using jQuery. The project has been released under the MIT license." within the lightview window
     And I should see "Project Home" within the lightview window
     And I should see "Project Source" within the lightview window
 

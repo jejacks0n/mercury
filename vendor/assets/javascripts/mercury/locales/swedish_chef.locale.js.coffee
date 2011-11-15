@@ -207,6 +207,6 @@ Mercury.I18n['swedish_chef'] =
 
   # ## Custom Regional Overrides (eg. swedish_chef-BORK)
   _BORK_:
-    "Save": "Bork Bork!"
+    "Save": "Bork!"
     "Snippet Options": "Bork Oopshuns"
     "Insert Link": "Bork! Leenk"

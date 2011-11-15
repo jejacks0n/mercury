@@ -372,6 +372,16 @@ window.Mercury = {
     regionClass: 'mercury-region',
 
     
+    // ## Region Data Attributes
+    //
+    // These attributes, when applied to a Mercury region element, will be automatically serialized and submitted
+    // with the AJAX request sent when a page is saved. These are expected to be HTML5 data attributes, and 'data-'
+    // will automatically be prepended to each attribute listed here.
+    //
+    // Example: regionDataAttributes: ['scope', 'version']
+    regionDataAttributes: [],
+    
+    
     // ## Styles
     //
     // Mercury tries to stay as much out of your code as possible, but because regions appear within your document we

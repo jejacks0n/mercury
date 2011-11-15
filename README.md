@@ -18,7 +18,7 @@ full credit for your contributions.  There's an [example file](/jejacks0n/mercur
 
 - French (pending)
 - German
-- Spanish (pending)
+- Spanish (provided by [javiercr](https://github.com/javiercr))
 - Japanese
 - Chinese
 - Dutch (pending)

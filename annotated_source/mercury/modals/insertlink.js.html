@@ -50,10 +50,10 @@
         <p>make the inputs work with the radio buttons</p>
       </td>
       <td class=code>
-        <div class='highlight'><pre>  <span class="nx">@element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;label input&#39;</span><span class="p">).</span><span class="nx">click</span> <span class="nf">(event) -&gt;</span>
+        <div class='highlight'><pre>  <span class="nx">@element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;label input&#39;</span><span class="p">).</span><span class="kc">on</span> <span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="o">-&gt;</span>
     <span class="nx">jQuery</span><span class="p">(</span><span class="err">@</span><span class="p">).</span><span class="nx">closest</span><span class="p">(</span><span class="s1">&#39;label&#39;</span><span class="p">).</span><span class="nx">next</span><span class="p">(</span><span class="s1">&#39;.selectable&#39;</span><span class="p">).</span><span class="nx">focus</span><span class="p">()</span>
 
-  <span class="nx">@element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;.selectable&#39;</span><span class="p">).</span><span class="nx">focus</span> <span class="o">-&gt;</span>
+  <span class="nx">@element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;.selectable&#39;</span><span class="p">).</span><span class="kc">on</span> <span class="s1">&#39;focus&#39;</span><span class="p">,</span> <span class="o">-&gt;</span>
     <span class="nx">jQuery</span><span class="p">(</span><span class="err">@</span><span class="p">).</span><span class="nx">prev</span><span class="p">(</span><span class="s1">&#39;label&#39;</span><span class="p">).</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;input[type=radio]&#39;</span><span class="p">).</span><span class="nx">prop</span><span class="p">(</span><span class="s2">&quot;checked&quot;</span><span class="p">,</span> <span class="kc">true</span><span class="p">)</span></pre></div>
       </td>
     </tr>
@@ -65,7 +65,7 @@
         <p>show/hide the link target options on target change</p>
       </td>
       <td class=code>
-        <div class='highlight'><pre>  <span class="nx">@element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;#link_target&#39;</span><span class="p">).</span><span class="nx">change</span> <span class="o">=&gt;</span>
+        <div class='highlight'><pre>  <span class="nx">@element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;#link_target&#39;</span><span class="p">).</span><span class="kc">on</span> <span class="s1">&#39;change&#39;</span><span class="p">,</span> <span class="o">=&gt;</span>
     <span class="nx">@element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s2">&quot;.link-target-options&quot;</span><span class="p">).</span><span class="nx">hide</span><span class="p">()</span>
     <span class="nx">@element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s2">&quot;##{@element.find(&#39;#link_target&#39;).val()}_options&quot;</span><span class="p">).</span><span class="nx">show</span><span class="p">()</span>
     <span class="nx">@resize</span><span class="p">(</span><span class="kc">true</span><span class="p">)</span></pre></div>
@@ -198,7 +198,7 @@
 
       </td>
       <td class=code>
-        <div class='highlight'><pre>  <span class="nx">@element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;form&#39;</span><span class="p">).</span><span class="nx">submit</span> <span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="o">=&gt;</span>
+        <div class='highlight'><pre>  <span class="nx">@element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;form&#39;</span><span class="p">).</span><span class="kc">on</span> <span class="s1">&#39;submit&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="o">=&gt;</span>
     <span class="nx">event</span><span class="p">.</span><span class="nx">preventDefault</span><span class="p">()</span>
 
     <span class="nv">content = </span><span class="nx">@element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;#link_text&#39;</span><span class="p">).</span><span class="nx">val</span><span class="p">()</span>

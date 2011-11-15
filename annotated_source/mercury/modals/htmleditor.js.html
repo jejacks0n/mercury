@@ -50,7 +50,8 @@
         <p>fill the text area with the content</p>
       </td>
       <td class=code>
-        <div class='highlight'><pre>  <span class="nv">content = </span><span class="nx">Mercury</span><span class="p">.</span><span class="nx">region</span><span class="p">.</span><span class="nx">content</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="kc">true</span><span class="p">,</span> <span class="kc">false</span><span class="p">)</span></pre></div>
+        <div class='highlight'><pre>  <span class="nv">content = </span><span class="nx">Mercury</span><span class="p">.</span><span class="nx">region</span><span class="p">.</span><span class="nx">content</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="kc">true</span><span class="p">,</span> <span class="kc">false</span><span class="p">)</span>
+  <span class="nx">@element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;textarea&#39;</span><span class="p">).</span><span class="nx">val</span><span class="p">(</span><span class="nx">content</span><span class="p">)</span></pre></div>
       </td>
     </tr>
     <tr id='section-3'>
@@ -58,22 +59,11 @@
         <div class="pilwrap">
           <a class="pilcrow" href="#section-3">&#182;</a>
         </div>
-        <p>content = jQuery.htmlClean(content, {format: true, replace: [], allowedClasses: [&lsquo;mercury-snippet&rsquo;]})</p>
-      </td>
-      <td class=code>
-        <div class='highlight'><pre>  <span class="nx">@element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;textarea&#39;</span><span class="p">).</span><span class="nx">val</span><span class="p">(</span><span class="nx">content</span><span class="p">)</span></pre></div>
-      </td>
-    </tr>
-    <tr id='section-4'>
-      <td class=docs>
-        <div class="pilwrap">
-          <a class="pilcrow" href="#section-4">&#182;</a>
-        </div>
         <p>replace the contents on form submit</p>
 
       </td>
       <td class=code>
-        <div class='highlight'><pre>  <span class="nx">@element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;form&#39;</span><span class="p">).</span><span class="nx">submit</span> <span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="o">=&gt;</span>
+        <div class='highlight'><pre>  <span class="nx">@element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;form&#39;</span><span class="p">).</span><span class="kc">on</span> <span class="s1">&#39;submit&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="o">=&gt;</span>
     <span class="nx">event</span><span class="p">.</span><span class="nx">preventDefault</span><span class="p">()</span>
     <span class="nv">value = </span><span class="nx">@element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;textarea&#39;</span><span class="p">).</span><span class="nx">val</span><span class="p">().</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/\n/g</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
     <span class="nx">Mercury</span><span class="p">.</span><span class="nx">trigger</span><span class="p">(</span><span class="s1">&#39;action&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nv">action: </span><span class="s1">&#39;replaceHTML&#39;</span><span class="p">,</span> <span class="nv">value: </span><span class="nx">value</span><span class="p">})</span>

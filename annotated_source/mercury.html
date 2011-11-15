@@ -63,7 +63,18 @@
 <span class="cm"> * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR</span>
 <span class="cm"> * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</span>
 <span class="cm"> *</span>
+<span class="cm"> * Minimum jQuery requirements are 1.7</span>
+<span class="cm"> *= require mercury/dependencies/jquery-1.7</span>
+<span class="cm"> *</span>
+<span class="cm"> * You can include the Rails jQuery ujs script here to get some nicer behaviors in modals, panels and lightviews when</span>
+<span class="cm"> * using :remote =&gt; true within the contents rendered in them.</span>
+<span class="cm"> * require jquery_ujs</span>
+<span class="cm"> *</span>
 <span class="cm"> *= require_self</span>
+<span class="cm"> *</span>
+<span class="cm"> * If you want to override Mercury functionality, you can do so in a custom file that binds to the mercury:loaded event,</span>
+<span class="cm"> * or do so at the end of the current file (mercury.js).  There&#39;s an example that will help you get started.</span>
+<span class="cm"> * require mercury_overrides</span>
 <span class="cm"> *</span>
 <span class="cm"> * Add all requires for the support libraries that integrate nicely with Mercury Editor.</span>
 <span class="cm"> * require mercury/support/history</span>
@@ -71,10 +82,14 @@
 <span class="cm"> * Require Mercury Editor itself.</span>
 <span class="cm"> *= require mercury/mercury</span>
 <span class="cm"> *</span>
+<span class="cm"> * Require any localizations you wish to support</span>
+<span class="cm"> * Example: es.locale, or fr.locale -- regional dialects are in each language file so never en_US for instance.</span>
+<span class="cm"> * require mercury/locales/swedish_chef.locale</span>
+<span class="cm"> *</span>
 <span class="cm"> * Add all requires for plugins that extend or change the behavior of Mercury Editor.</span>
 <span class="cm"> * require mercury/plugins/save_as_xml/plugin.js</span>
 <span class="cm"> */</span>
-<span class="nb">window</span><span class="p">.</span><span class="nx">MercurySetup</span> <span class="o">=</span> <span class="p">{</span></pre></div>
+<span class="nb">window</span><span class="p">.</span><span class="nx">Mercury</span> <span class="o">=</span> <span class="p">{</span></pre></div>
       </td>
     </tr>
     <tr id='section-Mercury_Configuration'>
@@ -115,51 +130,57 @@ their name is used in the event that&rsquo;s fired when you click on them.</p>
 <h3>The available button types are:</h3>
 
 <ul>
-<li>toggle:  toggles on or off when clicked, otherwise behaves like a button</li>
-<li>modal:   opens a modal window, expects the action to be one of:
+<li>toggle:    toggles on or off when clicked, otherwise behaves like a button</li>
+<li>modal:     opens a modal window, expects the action to be one of:
 
 <ol>
 <li>a string url</li>
 <li>a function that returns a string url</li>
 </ol></li>
-<li>panel:   opens a panel dialog, expects the action to be one of:
+<li>lightview: opens a lightview window (like modal, but different UI), expects the action to be one of:
 
 <ol>
 <li>a string url</li>
 <li>a function that returns a string url</li>
 </ol></li>
-<li>palette: opens a palette window, expects the action to be one of:
+<li>panel:     opens a panel dialog, expects the action to be one of:
 
 <ol>
 <li>a string url</li>
 <li>a function that returns a string url</li>
 </ol></li>
-<li>select:  opens a pulldown style window, expects the action to be one of:
+<li>palette:   opens a palette window, expects the action to be one of:
 
 <ol>
 <li>a string url</li>
 <li>a function that returns a string url</li>
 </ol></li>
-<li>context: calls a callback function, expects the action to be:
+<li>select:    opens a pulldown style window, expects the action to be one of:
+
+<ol>
+<li>a string url</li>
+<li>a function that returns a string url</li>
+</ol></li>
+<li>context:   calls a callback function, expects the action to be:
 
 <ol>
 <li>a function that returns a boolean to highlight the button
 note: if a function isn&rsquo;t provided, the key will be passed to the contextHandler, in which case a default
 context will be used (for more info read the Contexts section below)</li>
 </ol></li>
-<li>mode:    toggle a given mode in the editor, expects the action to be:
+<li>mode:      toggle a given mode in the editor, expects the action to be:
 
 <ol>
 <li>a string, denoting the name of the mode
 note: it&rsquo;s assumed that when a specific mode is turned on, all other modes will be turned off, which happens
 automatically, thus putting the editor into a specific &ldquo;state&rdquo;</li>
 </ol></li>
-<li>regions: allows buttons to be enabled/disabled based on what region type has focus, expects the action to be:
+<li>regions:   allows buttons to be enabled/disabled based on what region type has focus, expects the action to be:
 
 <ol>
 <li>an array of region types (eg. [&lsquo;editable&rsquo;, &lsquo;markupable&rsquo;])</li>
 </ol></li>
-<li>preload: allows some dialog views to be loaded when the button is created instead of on first open, expects:
+<li>preload:   allows some dialog views to be loaded when the button is created instead of on first open, expects:
 
 <ol>
 <li>a boolean true / false
@@ -232,8 +253,8 @@ separator styles: line (&lsquo;&ndash;&rsquo;), and spacer (&lsquo; &rsquo;).</p
           <span class="nx">sep</span><span class="o">:</span>                 <span class="s1">&#39;-&#39;</span>
           <span class="p">},</span>
         <span class="nx">indent</span><span class="o">:</span>                <span class="p">{</span>
-          <span class="nx">outdent</span><span class="o">:</span>             <span class="p">[</span><span class="s1">&#39;Decrease Indentation&#39;</span><span class="p">,</span> <span class="kc">null</span><span class="p">],</span>
-          <span class="nx">indent</span><span class="o">:</span>              <span class="p">[</span><span class="s1">&#39;Increase Indentation&#39;</span><span class="p">,</span> <span class="kc">null</span><span class="p">],</span>
+          <span class="nx">outdent</span><span class="o">:</span>             <span class="p">[</span><span class="s1">&#39;Decrease Indentation&#39;</span><span class="p">],</span>
+          <span class="nx">indent</span><span class="o">:</span>              <span class="p">[</span><span class="s1">&#39;Increase Indentation&#39;</span><span class="p">],</span>
           <span class="nx">sep</span><span class="o">:</span>                 <span class="s1">&#39;-&#39;</span>
           <span class="p">},</span>
         <span class="nx">table</span><span class="o">:</span>                 <span class="p">{</span>
@@ -267,12 +288,34 @@ separator styles: line (&lsquo;&ndash;&rsquo;), and spacer (&lsquo; &rsquo;).</p
       <span class="nx">snippetable</span><span class="o">:</span> <span class="p">{</span>
         <span class="nx">_custom</span><span class="o">:</span>               <span class="kc">true</span><span class="p">,</span>
         <span class="nx">actions</span><span class="o">:</span>               <span class="p">{</span>
-          <span class="nx">editSnippet</span><span class="o">:</span>         <span class="p">[</span><span class="s1">&#39;Edit Snippet Settings&#39;</span><span class="p">,</span> <span class="kc">null</span><span class="p">],</span>
+          <span class="nx">editSnippet</span><span class="o">:</span>         <span class="p">[</span><span class="s1">&#39;Edit Snippet Settings&#39;</span><span class="p">],</span>
           <span class="nx">sep1</span><span class="o">:</span>                <span class="s1">&#39; &#39;</span><span class="p">,</span>
-          <span class="nx">removeSnippet</span><span class="o">:</span>       <span class="p">[</span><span class="s1">&#39;Remove Snippet&#39;</span><span class="p">,</span> <span class="kc">null</span><span class="p">]</span>
+          <span class="nx">removeSnippet</span><span class="o">:</span>       <span class="p">[</span><span class="s1">&#39;Remove Snippet&#39;</span><span class="p">]</span>
           <span class="p">}</span>
         <span class="p">}</span>
       <span class="p">},</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-Localization_/_I18n'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-Localization_/_I18n">&#182;</a>
+        </div>
+        <h2>Localization / I18n</h2>
+
+<p>Include the .locale files you want to support when loading mercury.. the files are always named by the language,
+and not the regional dialect (eg. en.locale.js) because the regional dialects are nested within the primary
+locale files.</p>
+
+<p>The client locale will be used first, and if no proper locale file is found for their language then the fallback
+preferredLocale configuration will be used.  If one isn&rsquo;t provided, and the client locale isn&rsquo;t included, the
+strings will remain untranslated.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>    <span class="nx">localization</span><span class="o">:</span> <span class="p">{</span>
+      <span class="nx">enabled</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+      <span class="nx">preferredLocale</span><span class="o">:</span> <span class="s1">&#39;swedish_chef-BORK&#39;</span>
+    <span class="p">},</span></pre></div>
       </td>
     </tr>
     <tr id='section-Hijacking_Links_&amp;amp;_Forms'>
@@ -420,7 +463,7 @@ object: {image: {url: &lsquo;[your provided url]&rsquo;}</p>
       <span class="nx">allowedMimeTypes</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;image/jpeg&#39;</span><span class="p">,</span> <span class="s1">&#39;image/gif&#39;</span><span class="p">,</span> <span class="s1">&#39;image/png&#39;</span><span class="p">],</span>
       <span class="nx">maxFileSize</span><span class="o">:</span> <span class="mi">1235242880</span><span class="p">,</span>
       <span class="nx">inputName</span><span class="o">:</span> <span class="s1">&#39;image[image]&#39;</span><span class="p">,</span>
-      <span class="nx">url</span><span class="o">:</span> <span class="s1">&#39;/images&#39;</span><span class="p">,</span>
+      <span class="nx">url</span><span class="o">:</span> <span class="s1">&#39;/mercury/images&#39;</span><span class="p">,</span>
       <span class="nx">handler</span><span class="o">:</span> <span class="kc">false</span>
       <span class="p">},</span></pre></div>
       </td>
@@ -444,10 +487,10 @@ Here&rsquo;s some examples to help you get started.</p>
         <div class='highlight'><pre>    <span class="nx">behaviors</span><span class="o">:</span> <span class="p">{</span></pre></div>
       </td>
     </tr>
-    <tr id='section-10'>
+    <tr id='section-11'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-10">&#182;</a>
+          <a class="pilcrow" href="#section-11">&#182;</a>
         </div>
         <p>foreColor: function(selection, options) { selection.wrap(&lsquo;<span style="color:' + options.value.toHex() + '">&rsquo;, true) },</p>
       </td>
@@ -539,15 +582,36 @@ configuration directive.</p>
         <h2>Debug Mode</h2>
 
 <p>Turning debug mode on will log events and other various things (using console.debug if available).</p>
-
       </td>
       <td class=code>
         <div class='highlight'><pre>  <span class="nx">debug</span><span class="o">:</span> <span class="kc">false</span>
 
-<span class="p">};</span>
+<span class="p">};</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-17'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-17">&#182;</a>
+        </div>
+        <p>The mercury:loaded event is provided in case you want to override default Mercury Editor behavior.  It will fire
+directly after the Mercury scripts have loaded, but before anything has been initialized.  It&rsquo;s a good place to add
+or change functionality.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre><span class="nx">jQuery</span><span class="p">(</span><span class="nb">window</span><span class="p">).</span><span class="nx">bind</span><span class="p">(</span><span class="s1">&#39;mercury:loaded&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-18'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-18">&#182;</a>
+        </div>
+        <p>Mercury.PageEditor.prototype.iframeSrc = function(url) { return &lsquo;/testing&rsquo;; }</p>
 
-<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nb">window</span><span class="p">.</span><span class="nx">Mercury</span><span class="p">)</span> <span class="nb">window</span><span class="p">.</span><span class="nx">Mercury</span> <span class="o">=</span> <span class="nb">window</span><span class="p">.</span><span class="nx">MercurySetup</span><span class="p">;</span>
-<span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span><span class="p">(</span><span class="nx">jQuery</span><span class="p">)</span> <span class="o">!==</span> <span class="s1">&#39;undefined&#39;</span><span class="p">)</span> <span class="nx">jQuery</span><span class="p">.</span><span class="nx">extend</span><span class="p">(</span><span class="nb">window</span><span class="p">.</span><span class="nx">Mercury</span><span class="p">,</span> <span class="nb">window</span><span class="p">.</span><span class="nx">MercurySetup</span><span class="p">);</span></pre></div>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre><span class="p">});</span></pre></div>
       </td>
     </tr>
   </table>

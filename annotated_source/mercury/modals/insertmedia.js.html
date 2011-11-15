@@ -50,10 +50,10 @@
         <p>make the inputs work with the radio buttons, and options</p>
       </td>
       <td class=code>
-        <div class='highlight'><pre>  <span class="nx">@element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;label input&#39;</span><span class="p">).</span><span class="nx">click</span> <span class="nf">(event) -&gt;</span>
+        <div class='highlight'><pre>  <span class="nx">@element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;label input&#39;</span><span class="p">).</span><span class="kc">on</span> <span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="o">-&gt;</span>
     <span class="nx">jQuery</span><span class="p">(</span><span class="err">@</span><span class="p">).</span><span class="nx">closest</span><span class="p">(</span><span class="s1">&#39;label&#39;</span><span class="p">).</span><span class="nx">next</span><span class="p">(</span><span class="s1">&#39;.selectable&#39;</span><span class="p">).</span><span class="nx">focus</span><span class="p">()</span>
 
-  <span class="nx">@element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;.selectable&#39;</span><span class="p">).</span><span class="nx">focus</span> <span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="o">=&gt;</span>
+  <span class="nx">@element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;.selectable&#39;</span><span class="p">).</span><span class="kc">on</span> <span class="s1">&#39;focus&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="o">=&gt;</span>
     <span class="nv">element = </span><span class="nx">jQuery</span><span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">target</span><span class="p">)</span>
     <span class="nx">element</span><span class="p">.</span><span class="nx">prev</span><span class="p">(</span><span class="s1">&#39;label&#39;</span><span class="p">).</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;input[type=radio]&#39;</span><span class="p">).</span><span class="nx">prop</span><span class="p">(</span><span class="s2">&quot;checked&quot;</span><span class="p">,</span> <span class="kc">true</span><span class="p">)</span>
 
@@ -84,7 +84,8 @@
       <td class=code>
         <div class='highlight'><pre>    <span class="k">if</span> <span class="nx">selection</span><span class="p">.</span><span class="o">is</span> <span class="o">&amp;&amp;</span> <span class="nv">image = </span><span class="nx">selection</span><span class="p">.</span><span class="o">is</span><span class="p">(</span><span class="s1">&#39;img&#39;</span><span class="p">)</span>
       <span class="nx">@element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;#media_image_url&#39;</span><span class="p">).</span><span class="nx">val</span><span class="p">(</span><span class="nx">image</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s1">&#39;src&#39;</span><span class="p">))</span>
-      <span class="nx">@element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;#media_image_alignment&#39;</span><span class="p">).</span><span class="nx">val</span><span class="p">(</span><span class="nx">image</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s1">&#39;align&#39;</span><span class="p">))</span></pre></div>
+      <span class="nx">@element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;#media_image_alignment&#39;</span><span class="p">).</span><span class="nx">val</span><span class="p">(</span><span class="nx">image</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s1">&#39;align&#39;</span><span class="p">))</span>
+      <span class="nx">setTimeout</span> <span class="mi">300</span><span class="p">,</span> <span class="o">=&gt;</span> <span class="nx">@element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;#media_image_url&#39;</span><span class="p">).</span><span class="nx">focus</span><span class="p">()</span></pre></div>
       </td>
     </tr>
     <tr id='section-5'>
@@ -111,7 +112,7 @@
         <div class='highlight'><pre>        <span class="nx">@element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;#media_youtube_url&#39;</span><span class="p">).</span><span class="nx">val</span><span class="p">(</span><span class="s2">&quot;http://youtu.be/#{src.match(/\/embed\/(\w+)/)[1]}&quot;</span><span class="p">)</span>
         <span class="nx">@element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;#media_youtube_width&#39;</span><span class="p">).</span><span class="nx">val</span><span class="p">(</span><span class="nx">iframe</span><span class="p">.</span><span class="nx">width</span><span class="p">())</span>
         <span class="nx">@element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;#media_youtube_height&#39;</span><span class="p">).</span><span class="nx">val</span><span class="p">(</span><span class="nx">iframe</span><span class="p">.</span><span class="nx">height</span><span class="p">())</span>
-        <span class="nx">@element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;#media_youtube_url&#39;</span><span class="p">).</span><span class="nx">focus</span><span class="p">()</span>
+        <span class="nx">setTimeout</span> <span class="mi">300</span><span class="p">,</span> <span class="o">=&gt;</span> <span class="nx">@element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;#media_youtube_url&#39;</span><span class="p">).</span><span class="nx">focus</span><span class="p">()</span>
       <span class="k">else</span> <span class="k">if</span> <span class="nx">src</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s1">&#39;http://player.vimeo.com&#39;</span><span class="p">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span></pre></div>
       </td>
     </tr>
@@ -126,7 +127,7 @@
         <div class='highlight'><pre>        <span class="nx">@element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;#media_vimeo_url&#39;</span><span class="p">).</span><span class="nx">val</span><span class="p">(</span><span class="s2">&quot;http://vimeo.com/#{src.match(/\/video\/(\w+)/)[1]}&quot;</span><span class="p">)</span>
         <span class="nx">@element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;#media_vimeo_width&#39;</span><span class="p">).</span><span class="nx">val</span><span class="p">(</span><span class="nx">iframe</span><span class="p">.</span><span class="nx">width</span><span class="p">())</span>
         <span class="nx">@element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;#media_vimeo_height&#39;</span><span class="p">).</span><span class="nx">val</span><span class="p">(</span><span class="nx">iframe</span><span class="p">.</span><span class="nx">height</span><span class="p">())</span>
-        <span class="nx">@element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;#media_vimeo_url&#39;</span><span class="p">).</span><span class="nx">focus</span><span class="p">()</span></pre></div>
+        <span class="nx">setTimeout</span> <span class="mi">300</span><span class="p">,</span> <span class="o">=&gt;</span> <span class="nx">@element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;#media_vimeo_url&#39;</span><span class="p">).</span><span class="nx">focus</span><span class="p">()</span></pre></div>
       </td>
     </tr>
     <tr id='section-8'>
@@ -138,9 +139,8 @@
 
       </td>
       <td class=code>
-        <div class='highlight'><pre>  <span class="nx">@element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;form&#39;</span><span class="p">).</span><span class="nx">submit</span> <span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="o">=&gt;</span>
+        <div class='highlight'><pre>  <span class="nx">@element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;form&#39;</span><span class="p">).</span><span class="kc">on</span> <span class="s1">&#39;submit&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="o">=&gt;</span>
     <span class="nx">event</span><span class="p">.</span><span class="nx">preventDefault</span><span class="p">()</span>
-
     <span class="nv">type = </span><span class="nx">@element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;input[name=media_type]:checked&#39;</span><span class="p">).</span><span class="nx">val</span><span class="p">()</span>
 
     <span class="k">switch</span> <span class="nx">type</span>
@@ -152,7 +152,7 @@
       <span class="k">when</span> <span class="s1">&#39;youtube_url&#39;</span>
         <span class="nv">url = </span><span class="nx">@element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;#media_youtube_url&#39;</span><span class="p">).</span><span class="nx">val</span><span class="p">()</span>
         <span class="nx">unless</span> <span class="sr">/^http:\/\/youtu.be\//</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="nx">url</span><span class="p">)</span>
-          <span class="nx">alert</span><span class="p">(</span><span class="s1">&#39;Error: The provided youtube share url was invalid.&#39;</span><span class="p">)</span>
+          <span class="nx">Mercury</span><span class="p">.</span><span class="nx">notify</span><span class="p">(</span><span class="s1">&#39;Error: The provided youtube share url was invalid.&#39;</span><span class="p">)</span>
           <span class="k">return</span>
         <span class="nv">code = </span><span class="nx">url</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="s1">&#39;http://youtu.be/&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
         <span class="nv">value = </span><span class="nx">jQuery</span><span class="p">(</span><span class="s1">&#39;&lt;iframe&gt;&#39;</span><span class="p">,</span> <span class="p">{</span>
@@ -167,14 +167,14 @@
       <span class="k">when</span> <span class="s1">&#39;vimeo_url&#39;</span>
         <span class="nv">url = </span><span class="nx">@element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;#media_vimeo_url&#39;</span><span class="p">).</span><span class="nx">val</span><span class="p">()</span>
         <span class="nx">unless</span> <span class="sr">/^http:\/\/vimeo.com\//</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="nx">url</span><span class="p">)</span>
-          <span class="nx">alert</span><span class="p">(</span><span class="s1">&#39;Error: The provided vimeo url was invalid.&#39;</span><span class="p">)</span>
+          <span class="nx">Mercury</span><span class="p">.</span><span class="nx">notify</span><span class="p">(</span><span class="s1">&#39;Error: The provided vimeo url was invalid.&#39;</span><span class="p">)</span>
           <span class="k">return</span>
         <span class="nv">code = </span><span class="nx">url</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="s1">&#39;http://vimeo.com/&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
         <span class="nv">value = </span><span class="nx">jQuery</span><span class="p">(</span><span class="s1">&#39;&lt;iframe&gt;&#39;</span><span class="p">,</span> <span class="p">{</span>
           <span class="nv">width: </span><span class="nx">@element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;#media_vimeo_width&#39;</span><span class="p">).</span><span class="nx">val</span><span class="p">()</span> <span class="o">||</span> <span class="mi">400</span><span class="p">,</span>
           <span class="nv">height: </span><span class="nx">@element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;#media_vimeo_height&#39;</span><span class="p">).</span><span class="nx">val</span><span class="p">()</span> <span class="o">||</span> <span class="mi">225</span><span class="p">,</span>
           <span class="nv">src: </span><span class="s2">&quot;http://player.vimeo.com/video/#{code}?title=1&amp;byline=1&amp;portrait=0&amp;color=ffffff&quot;</span><span class="p">,</span>
-          <span class="nv">frameborder: </span><span class="mi">0</span><span class="p">,</span>
+          <span class="nv">frameborder: </span><span class="mi">0</span>
         <span class="p">})</span>
         <span class="nx">Mercury</span><span class="p">.</span><span class="nx">trigger</span><span class="p">(</span><span class="s1">&#39;action&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nv">action: </span><span class="s1">&#39;insertHTML&#39;</span><span class="p">,</span> <span class="nv">value: </span><span class="nx">value</span><span class="p">})</span>
 

@@ -71,42 +71,31 @@ nice if we could activate the bold button for instance.</p>
     <span class="nx">@resize</span><span class="p">()</span>
 
 
-  <span class="nv">focus: </span><span class="o">-&gt;</span>
-    <span class="nx">@element</span><span class="p">.</span><span class="nx">focus</span><span class="p">()</span>
-
-
   <span class="nv">bindEvents: </span><span class="o">-&gt;</span>
-    <span class="nx">Mercury</span><span class="p">.</span><span class="nx">bind</span> <span class="s1">&#39;mode&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">event</span><span class="p">,</span> <span class="nx">options</span><span class="p">)</span> <span class="o">=&gt;</span>
-      <span class="nx">@togglePreview</span><span class="p">()</span> <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">mode</span> <span class="o">==</span> <span class="s1">&#39;preview&#39;</span>
+    <span class="nx">Mercury</span><span class="p">.</span><span class="kc">on</span> <span class="s1">&#39;mode&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">event</span><span class="p">,</span> <span class="nx">options</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">@togglePreview</span><span class="p">()</span> <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">mode</span> <span class="o">==</span> <span class="s1">&#39;preview&#39;</span>
+    <span class="nx">Mercury</span><span class="p">.</span><span class="kc">on</span> <span class="s1">&#39;focus:frame&#39;</span><span class="p">,</span> <span class="o">=&gt;</span> <span class="nx">@focus</span><span class="p">()</span> <span class="nx">unless</span> <span class="nx">@previewing</span> <span class="o">&amp;&amp;</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">region</span> <span class="o">!=</span> <span class="err">@</span>
 
-    <span class="nx">Mercury</span><span class="p">.</span><span class="nx">bind</span> <span class="s1">&#39;focus:frame&#39;</span><span class="p">,</span> <span class="o">=&gt;</span>
-      <span class="k">return</span> <span class="k">if</span> <span class="nx">@previewing</span>
-      <span class="k">return</span> <span class="nx">unless</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">region</span> <span class="o">==</span> <span class="err">@</span>
-      <span class="nx">@focus</span><span class="p">()</span>
-
-    <span class="nx">Mercury</span><span class="p">.</span><span class="nx">bind</span> <span class="s1">&#39;action&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">event</span><span class="p">,</span> <span class="nx">options</span><span class="p">)</span> <span class="o">=&gt;</span>
-      <span class="k">return</span> <span class="k">if</span> <span class="nx">@previewing</span>
-      <span class="k">return</span> <span class="nx">unless</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">region</span> <span class="o">==</span> <span class="err">@</span>
+    <span class="nx">Mercury</span><span class="p">.</span><span class="kc">on</span> <span class="s1">&#39;action&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">event</span><span class="p">,</span> <span class="nx">options</span><span class="p">)</span> <span class="o">=&gt;</span>
+      <span class="k">return</span> <span class="k">if</span> <span class="nx">@previewing</span> <span class="o">||</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">region</span> <span class="o">!=</span> <span class="err">@</span>
       <span class="nx">@execCommand</span><span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">action</span><span class="p">,</span> <span class="nx">options</span><span class="p">)</span> <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">action</span>
 
-    <span class="nx">Mercury</span><span class="p">.</span><span class="nx">bind</span> <span class="s1">&#39;unfocus:regions&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="o">=&gt;</span>
-      <span class="k">return</span> <span class="k">if</span> <span class="nx">@previewing</span>
-      <span class="k">return</span> <span class="nx">unless</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">region</span> <span class="o">==</span> <span class="err">@</span>
+    <span class="nx">Mercury</span><span class="p">.</span><span class="kc">on</span> <span class="s1">&#39;unfocus:regions&#39;</span><span class="p">,</span> <span class="o">=&gt;</span>
+      <span class="k">return</span> <span class="k">if</span> <span class="nx">@previewing</span> <span class="o">||</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">region</span> <span class="o">!=</span> <span class="err">@</span>
       <span class="nx">@element</span><span class="p">.</span><span class="nx">blur</span><span class="p">()</span>
       <span class="nx">@container</span><span class="p">.</span><span class="nx">removeClass</span><span class="p">(</span><span class="s1">&#39;focus&#39;</span><span class="p">)</span>
       <span class="nx">Mercury</span><span class="p">.</span><span class="nx">trigger</span><span class="p">(</span><span class="s1">&#39;region:blurred&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nv">region: </span><span class="err">@</span><span class="p">})</span>
 
-    <span class="nx">@element</span><span class="p">.</span><span class="nx">bind</span> <span class="s1">&#39;dragenter&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="o">=&gt;</span>
+    <span class="nx">@element</span><span class="p">.</span><span class="kc">on</span> <span class="s1">&#39;dragenter&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="o">=&gt;</span>
       <span class="k">return</span> <span class="k">if</span> <span class="nx">@previewing</span>
       <span class="nx">event</span><span class="p">.</span><span class="nx">preventDefault</span><span class="p">()</span>
       <span class="nv">event.originalEvent.dataTransfer.dropEffect = </span><span class="s1">&#39;copy&#39;</span>
 
-    <span class="nx">@element</span><span class="p">.</span><span class="nx">bind</span> <span class="s1">&#39;dragover&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="o">=&gt;</span>
+    <span class="nx">@element</span><span class="p">.</span><span class="kc">on</span> <span class="s1">&#39;dragover&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="o">=&gt;</span>
       <span class="k">return</span> <span class="k">if</span> <span class="nx">@previewing</span>
       <span class="nx">event</span><span class="p">.</span><span class="nx">preventDefault</span><span class="p">()</span>
       <span class="nv">event.originalEvent.dataTransfer.dropEffect = </span><span class="s1">&#39;copy&#39;</span>
 
-    <span class="nx">@element</span><span class="p">.</span><span class="nx">bind</span> <span class="s1">&#39;drop&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="o">=&gt;</span>
+    <span class="nx">@element</span><span class="p">.</span><span class="kc">on</span> <span class="s1">&#39;drop&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="o">=&gt;</span>
       <span class="k">return</span> <span class="k">if</span> <span class="nx">@previewing</span></pre></div>
       </td>
     </tr>
@@ -137,13 +126,13 @@ nice if we could activate the bold button for instance.</p>
         <span class="nx">@focus</span><span class="p">()</span>
         <span class="nx">Mercury</span><span class="p">.</span><span class="nx">uploader</span><span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">originalEvent</span><span class="p">.</span><span class="nx">dataTransfer</span><span class="p">.</span><span class="nx">files</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 
-    <span class="nx">@element</span><span class="p">.</span><span class="nx">focus</span> <span class="o">=&gt;</span>
+    <span class="nx">@element</span><span class="p">.</span><span class="kc">on</span> <span class="s1">&#39;focus&#39;</span><span class="p">,</span> <span class="o">=&gt;</span>
       <span class="k">return</span> <span class="k">if</span> <span class="nx">@previewing</span>
       <span class="nv">Mercury.region = </span><span class="err">@</span>
       <span class="nx">@container</span><span class="p">.</span><span class="nx">addClass</span><span class="p">(</span><span class="s1">&#39;focus&#39;</span><span class="p">)</span>
       <span class="nx">Mercury</span><span class="p">.</span><span class="nx">trigger</span><span class="p">(</span><span class="s1">&#39;region:focused&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nv">region: </span><span class="err">@</span><span class="p">})</span>
 
-    <span class="nx">@element</span><span class="p">.</span><span class="nx">keydown</span> <span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="o">=&gt;</span>
+    <span class="nx">@element</span><span class="p">.</span><span class="kc">on</span> <span class="s1">&#39;keydown&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="o">=&gt;</span>
       <span class="k">return</span> <span class="k">if</span> <span class="nx">@previewing</span>
       <span class="nx">@resize</span><span class="p">()</span>
       <span class="k">switch</span> <span class="nx">event</span><span class="p">.</span><span class="nx">keyCode</span>
@@ -190,19 +179,23 @@ nice if we could activate the bold button for instance.</p>
 
       <span class="nx">@pushHistory</span><span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">keyCode</span><span class="p">)</span>
 
-    <span class="nx">@element</span><span class="p">.</span><span class="nx">keyup</span> <span class="o">=&gt;</span>
+    <span class="nx">@element</span><span class="p">.</span><span class="kc">on</span> <span class="s1">&#39;keyup&#39;</span><span class="p">,</span> <span class="o">=&gt;</span>
       <span class="k">return</span> <span class="k">if</span> <span class="nx">@previewing</span>
       <span class="nv">Mercury.changes = </span><span class="kc">true</span>
       <span class="nx">@resize</span><span class="p">()</span>
       <span class="nx">Mercury</span><span class="p">.</span><span class="nx">trigger</span><span class="p">(</span><span class="s1">&#39;region:update&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nv">region: </span><span class="err">@</span><span class="p">})</span>
 
-    <span class="nx">@element</span><span class="p">.</span><span class="nx">mouseup</span> <span class="o">=&gt;</span>
+    <span class="nx">@element</span><span class="p">.</span><span class="kc">on</span> <span class="s1">&#39;mouseup&#39;</span><span class="p">,</span> <span class="o">=&gt;</span>
       <span class="k">return</span> <span class="k">if</span> <span class="nx">@previewing</span>
       <span class="nx">@focus</span><span class="p">()</span>
       <span class="nx">Mercury</span><span class="p">.</span><span class="nx">trigger</span><span class="p">(</span><span class="s1">&#39;region:focused&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nv">region: </span><span class="err">@</span><span class="p">})</span>
 
-    <span class="nx">@previewElement</span><span class="p">.</span><span class="nx">click</span> <span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="o">=&gt;</span>
+    <span class="nx">@previewElement</span><span class="p">.</span><span class="kc">on</span> <span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="o">=&gt;</span>
       <span class="nx">$</span><span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">target</span><span class="p">).</span><span class="nx">closest</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="s1">&#39;target&#39;</span><span class="p">,</span> <span class="s1">&#39;_top&#39;</span><span class="p">)</span> <span class="k">if</span> <span class="nx">@previewing</span>
+
+
+  <span class="nv">focus: </span><span class="o">-&gt;</span>
+    <span class="nx">@element</span><span class="p">.</span><span class="nx">focus</span><span class="p">()</span>
 
 
   <span class="nv">content: </span><span class="nf">(value = null, filterSnippets = true) -&gt;</span>
@@ -293,7 +286,7 @@ all other times it should store if there&rsquo;s a 1 second pause</p>
         <p>set a timeout for pushing to the history</p>
       </td>
       <td class=code>
-        <div class='highlight'><pre>      <span class="vi">@historyTimeout = </span><span class="nx">setTimeout</span><span class="p">((</span><span class="o">=&gt;</span> <span class="nx">@history</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">@contentAndSelection</span><span class="p">())),</span> <span class="nx">waitTime</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">)</span>
+        <div class='highlight'><pre>      <span class="vi">@historyTimeout = </span><span class="nx">setTimeout</span><span class="p">(</span><span class="nx">waitTime</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">,</span> <span class="o">=&gt;</span> <span class="nx">@history</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">@contentAndSelection</span><span class="p">()))</span>
     <span class="k">else</span></pre></div>
       </td>
     </tr>

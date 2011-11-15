@@ -42,6 +42,9 @@
         <div class='highlight'><pre><span class="k">class</span> <span class="nx">@Mercury</span><span class="p">.</span><span class="nx">Toolbar</span><span class="p">.</span><span class="nx">Button</span>
 
   <span class="nv">constructor: </span><span class="nf">(@name, @title, @summary = null, @types = {}, @options = {}) -&gt;</span>
+    <span class="vi">@title = </span><span class="nx">Mercury</span><span class="p">.</span><span class="nx">I18n</span><span class="p">(</span><span class="nx">@title</span><span class="p">)</span> <span class="k">if</span> <span class="nx">@title</span>
+    <span class="vi">@summary = </span><span class="nx">Mercury</span><span class="p">.</span><span class="nx">I18n</span><span class="p">(</span><span class="nx">@summary</span><span class="p">)</span> <span class="k">if</span> <span class="nx">@summary</span>
+
     <span class="nx">@build</span><span class="p">()</span>
     <span class="nx">@bindEvents</span><span class="p">()</span>
     <span class="k">return</span> <span class="nx">@element</span>
@@ -52,7 +55,7 @@
     <span class="nx">@element</span><span class="p">.</span><span class="nx">data</span><span class="p">(</span><span class="s1">&#39;expander&#39;</span><span class="p">,</span> <span class="s2">&quot;&lt;div class=\&quot;mercury-expander-button\&quot; data-button=\&quot;#{@name}\&quot;&gt;&lt;em&gt;&lt;/em&gt;&lt;span&gt;#{@title}&lt;/span&gt;&lt;/div&gt;&quot;</span><span class="p">)</span>
 
     <span class="vi">@handled = </span><span class="p">{}</span>
-    <span class="nv">dialogOptions = </span><span class="p">{</span><span class="nv">title: </span><span class="nx">@summary</span> <span class="o">||</span> <span class="nx">@title</span><span class="p">,</span> <span class="nv">preload: </span><span class="nx">@types</span><span class="p">.</span><span class="nx">preload</span><span class="p">,</span> <span class="nv">appendTo: </span><span class="nx">@options</span><span class="p">.</span><span class="nx">appendDialogsTo</span> <span class="o">||</span> <span class="s1">&#39;body&#39;</span><span class="p">,</span> <span class="k">for</span><span class="o">:</span> <span class="nx">@element</span><span class="p">}</span>
+
     <span class="k">for</span> <span class="nx">own</span> <span class="nx">type</span><span class="p">,</span> <span class="nx">mixed</span> <span class="k">of</span> <span class="nx">@types</span>
       <span class="k">switch</span> <span class="nx">type</span>
         <span class="k">when</span> <span class="s1">&#39;preload&#39;</span> <span class="k">then</span> <span class="kc">true</span>
@@ -73,33 +76,33 @@
         <span class="k">when</span> <span class="s1">&#39;palette&#39;</span>
           <span class="nx">@element</span><span class="p">.</span><span class="nx">addClass</span><span class="p">(</span><span class="s2">&quot;mercury-button-palette&quot;</span><span class="p">)</span>
           <span class="nv">url = </span><span class="k">if</span> <span class="nx">jQuery</span><span class="p">.</span><span class="nx">isFunction</span><span class="p">(</span><span class="nx">mixed</span><span class="p">)</span> <span class="k">then</span> <span class="nx">mixed</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="err">@</span><span class="p">,</span> <span class="nx">@name</span><span class="p">)</span> <span class="k">else</span> <span class="nx">mixed</span>
-          <span class="nx">@handled</span><span class="p">[</span><span class="nx">type</span><span class="p">]</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">Palette</span><span class="p">(</span><span class="nx">url</span><span class="p">,</span> <span class="nx">@name</span><span class="p">,</span> <span class="nx">dialogOptions</span><span class="p">)</span>
+          <span class="nx">@handled</span><span class="p">[</span><span class="nx">type</span><span class="p">]</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">Palette</span><span class="p">(</span><span class="nx">url</span><span class="p">,</span> <span class="nx">@name</span><span class="p">,</span> <span class="nx">@defaultDialogOptions</span><span class="p">())</span>
 
         <span class="k">when</span> <span class="s1">&#39;select&#39;</span>
           <span class="nx">@element</span><span class="p">.</span><span class="nx">addClass</span><span class="p">(</span><span class="s2">&quot;mercury-button-select&quot;</span><span class="p">).</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;em&#39;</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="nx">@title</span><span class="p">)</span>
           <span class="nv">url = </span><span class="k">if</span> <span class="nx">jQuery</span><span class="p">.</span><span class="nx">isFunction</span><span class="p">(</span><span class="nx">mixed</span><span class="p">)</span> <span class="k">then</span> <span class="nx">mixed</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="err">@</span><span class="p">,</span> <span class="nx">@name</span><span class="p">)</span> <span class="k">else</span> <span class="nx">mixed</span>
-          <span class="nx">@handled</span><span class="p">[</span><span class="nx">type</span><span class="p">]</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">Select</span><span class="p">(</span><span class="nx">url</span><span class="p">,</span> <span class="nx">@name</span><span class="p">,</span> <span class="nx">dialogOptions</span><span class="p">)</span>
+          <span class="nx">@handled</span><span class="p">[</span><span class="nx">type</span><span class="p">]</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">Select</span><span class="p">(</span><span class="nx">url</span><span class="p">,</span> <span class="nx">@name</span><span class="p">,</span> <span class="nx">@defaultDialogOptions</span><span class="p">())</span>
 
         <span class="k">when</span> <span class="s1">&#39;panel&#39;</span>
           <span class="nx">@element</span><span class="p">.</span><span class="nx">addClass</span><span class="p">(</span><span class="s1">&#39;mercury-button-panel&#39;</span><span class="p">)</span>
           <span class="nv">url = </span><span class="k">if</span> <span class="nx">jQuery</span><span class="p">.</span><span class="nx">isFunction</span><span class="p">(</span><span class="nx">mixed</span><span class="p">)</span> <span class="k">then</span> <span class="nx">mixed</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="err">@</span><span class="p">,</span> <span class="nx">@name</span><span class="p">)</span> <span class="k">else</span> <span class="nx">mixed</span>
           <span class="nx">@handled</span><span class="p">[</span><span class="s1">&#39;toggle&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">true</span>
-          <span class="nx">@handled</span><span class="p">[</span><span class="nx">type</span><span class="p">]</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">Panel</span><span class="p">(</span><span class="nx">url</span><span class="p">,</span> <span class="nx">@name</span><span class="p">,</span> <span class="nx">dialogOptions</span><span class="p">)</span>
+          <span class="nx">@handled</span><span class="p">[</span><span class="nx">type</span><span class="p">]</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">Panel</span><span class="p">(</span><span class="nx">url</span><span class="p">,</span> <span class="nx">@name</span><span class="p">,</span> <span class="nx">@defaultDialogOptions</span><span class="p">())</span>
 
         <span class="k">when</span> <span class="s1">&#39;modal&#39;</span>
           <span class="nx">@handled</span><span class="p">[</span><span class="nx">type</span><span class="p">]</span> <span class="o">=</span> <span class="k">if</span> <span class="nx">jQuery</span><span class="p">.</span><span class="nx">isFunction</span><span class="p">(</span><span class="nx">mixed</span><span class="p">)</span> <span class="k">then</span> <span class="nx">mixed</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="err">@</span><span class="p">,</span> <span class="nx">@name</span><span class="p">)</span> <span class="k">else</span> <span class="nx">mixed</span>
 
-        <span class="k">else</span> <span class="k">throw</span> <span class="s2">&quot;Unknown button type #{type} used for the #{@name} button.&quot;</span>
+        <span class="k">when</span> <span class="s1">&#39;lightview&#39;</span>
+          <span class="nx">@handled</span><span class="p">[</span><span class="nx">type</span><span class="p">]</span> <span class="o">=</span> <span class="k">if</span> <span class="nx">jQuery</span><span class="p">.</span><span class="nx">isFunction</span><span class="p">(</span><span class="nx">mixed</span><span class="p">)</span> <span class="k">then</span> <span class="nx">mixed</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="err">@</span><span class="p">,</span> <span class="nx">@name</span><span class="p">)</span> <span class="k">else</span> <span class="nx">mixed</span>
+
+        <span class="k">else</span> <span class="k">throw</span> <span class="nx">Mercury</span><span class="p">.</span><span class="nx">I18n</span><span class="p">(</span><span class="s1">&#39;Unknown button type \&quot;%s\&quot; used for the \&quot;%s\&quot; button.&#39;</span><span class="p">,</span> <span class="nx">type</span><span class="p">,</span> <span class="nx">@name</span><span class="p">)</span>
 
 
   <span class="nv">bindEvents: </span><span class="o">-&gt;</span>
-    <span class="nx">Mercury</span><span class="p">.</span><span class="nx">bind</span> <span class="s1">&#39;button&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">event</span><span class="p">,</span> <span class="nx">options</span><span class="p">)</span> <span class="o">=&gt;</span>
-      <span class="nx">@element</span><span class="p">.</span><span class="nx">click</span><span class="p">()</span> <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">action</span> <span class="o">==</span> <span class="nx">@name</span>
+    <span class="nx">Mercury</span><span class="p">.</span><span class="kc">on</span> <span class="s1">&#39;button&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">event</span><span class="p">,</span> <span class="nx">options</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">@element</span><span class="p">.</span><span class="nx">click</span><span class="p">()</span> <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">action</span> <span class="o">==</span> <span class="nx">@name</span>
+    <span class="nx">Mercury</span><span class="p">.</span><span class="kc">on</span> <span class="s1">&#39;mode&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">event</span><span class="p">,</span> <span class="nx">options</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">@togglePressed</span><span class="p">()</span> <span class="k">if</span> <span class="nx">@handled</span><span class="p">.</span><span class="nx">mode</span> <span class="o">==</span> <span class="nx">options</span><span class="p">.</span><span class="nx">mode</span> <span class="o">&amp;&amp;</span> <span class="nx">@handled</span><span class="p">.</span><span class="nx">toggle</span>
 
-    <span class="nx">Mercury</span><span class="p">.</span><span class="nx">bind</span> <span class="s1">&#39;mode&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">event</span><span class="p">,</span> <span class="nx">options</span><span class="p">)</span> <span class="o">=&gt;</span>
-      <span class="nx">@togglePressed</span><span class="p">()</span> <span class="k">if</span> <span class="nx">@handled</span><span class="p">.</span><span class="nx">mode</span> <span class="o">==</span> <span class="nx">options</span><span class="p">.</span><span class="nx">mode</span> <span class="o">&amp;&amp;</span> <span class="nx">@handled</span><span class="p">.</span><span class="nx">toggle</span>
-
-    <span class="nx">Mercury</span><span class="p">.</span><span class="nx">bind</span> <span class="s1">&#39;region:update&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">event</span><span class="p">,</span> <span class="nx">options</span><span class="p">)</span> <span class="o">=&gt;</span>
+    <span class="nx">Mercury</span><span class="p">.</span><span class="kc">on</span> <span class="s1">&#39;region:update&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">event</span><span class="p">,</span> <span class="nx">options</span><span class="p">)</span> <span class="o">=&gt;</span>
       <span class="k">if</span> <span class="nx">@handled</span><span class="p">.</span><span class="nx">context</span> <span class="o">&amp;&amp;</span> <span class="nx">options</span><span class="p">.</span><span class="nx">region</span> <span class="o">&amp;&amp;</span> <span class="nx">jQuery</span><span class="p">.</span><span class="nx">type</span><span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">region</span><span class="p">.</span><span class="nx">currentElement</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;function&#39;</span>
         <span class="nv">element = </span><span class="nx">options</span><span class="p">.</span><span class="nx">region</span><span class="p">.</span><span class="nx">currentElement</span><span class="p">()</span>
         <span class="k">if</span> <span class="nx">element</span><span class="p">.</span><span class="nx">length</span> <span class="o">&amp;&amp;</span> <span class="nx">@handled</span><span class="p">.</span><span class="nx">context</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="err">@</span><span class="p">,</span> <span class="nx">element</span><span class="p">,</span> <span class="nx">options</span><span class="p">.</span><span class="nx">region</span><span class="p">.</span><span class="nx">element</span><span class="p">)</span>
@@ -109,23 +112,23 @@
       <span class="k">else</span>
         <span class="nx">@element</span><span class="p">.</span><span class="nx">removeClass</span><span class="p">(</span><span class="s1">&#39;active&#39;</span><span class="p">)</span>
 
-    <span class="nx">Mercury</span><span class="p">.</span><span class="nx">bind</span> <span class="s1">&#39;region:focused&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">event</span><span class="p">,</span> <span class="nx">options</span><span class="p">)</span> <span class="o">=&gt;</span>
+    <span class="nx">Mercury</span><span class="p">.</span><span class="kc">on</span> <span class="s1">&#39;region:focused&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">event</span><span class="p">,</span> <span class="nx">options</span><span class="p">)</span> <span class="o">=&gt;</span>
       <span class="k">if</span> <span class="nx">@handled</span><span class="p">.</span><span class="nx">regions</span> <span class="o">&amp;&amp;</span> <span class="nx">options</span><span class="p">.</span><span class="nx">region</span> <span class="o">&amp;&amp;</span> <span class="nx">options</span><span class="p">.</span><span class="nx">region</span><span class="p">.</span><span class="nx">type</span>
         <span class="k">if</span> <span class="nx">@handled</span><span class="p">.</span><span class="nx">regions</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">region</span><span class="p">.</span><span class="nx">type</span><span class="p">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span>
           <span class="nx">@element</span><span class="p">.</span><span class="nx">removeClass</span><span class="p">(</span><span class="s1">&#39;disabled&#39;</span><span class="p">)</span>
         <span class="k">else</span>
           <span class="nx">@element</span><span class="p">.</span><span class="nx">addClass</span><span class="p">(</span><span class="s1">&#39;disabled&#39;</span><span class="p">)</span>
 
-    <span class="nx">Mercury</span><span class="p">.</span><span class="nx">bind</span> <span class="s1">&#39;region:blurred&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">event</span><span class="p">,</span> <span class="nx">options</span><span class="p">)</span> <span class="o">=&gt;</span>
+    <span class="nx">Mercury</span><span class="p">.</span><span class="kc">on</span> <span class="s1">&#39;region:blurred&#39;</span><span class="p">,</span> <span class="o">=&gt;</span>
       <span class="nx">@element</span><span class="p">.</span><span class="nx">addClass</span><span class="p">(</span><span class="s1">&#39;disabled&#39;</span><span class="p">)</span> <span class="k">if</span> <span class="nx">@handled</span><span class="p">.</span><span class="nx">regions</span>
 
-    <span class="nx">@element</span><span class="p">.</span><span class="nx">mousedown</span> <span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="o">=&gt;</span>
+    <span class="nx">@element</span><span class="p">.</span><span class="kc">on</span> <span class="s1">&#39;mousedown&#39;</span><span class="p">,</span> <span class="o">=&gt;</span>
       <span class="nx">@element</span><span class="p">.</span><span class="nx">addClass</span><span class="p">(</span><span class="s1">&#39;active&#39;</span><span class="p">)</span>
 
-    <span class="nx">@element</span><span class="p">.</span><span class="nx">mouseup</span> <span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="o">=&gt;</span>
+    <span class="nx">@element</span><span class="p">.</span><span class="kc">on</span> <span class="s1">&#39;mouseup&#39;</span><span class="p">,</span> <span class="o">=&gt;</span>
       <span class="nx">@element</span><span class="p">.</span><span class="nx">removeClass</span><span class="p">(</span><span class="s1">&#39;active&#39;</span><span class="p">)</span>
 
-    <span class="nx">@element</span><span class="p">.</span><span class="nx">click</span> <span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="o">=&gt;</span>
+    <span class="nx">@element</span><span class="p">.</span><span class="kc">on</span> <span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="o">=&gt;</span>
       <span class="k">if</span> <span class="nx">@element</span><span class="p">.</span><span class="nx">closest</span><span class="p">(</span><span class="s1">&#39;.disabled&#39;</span><span class="p">).</span><span class="nx">length</span> <span class="k">then</span> <span class="k">return</span>
 
       <span class="nv">handled = </span><span class="kc">false</span>
@@ -142,13 +145,27 @@
             <span class="nv">handled = </span><span class="kc">true</span>
             <span class="nx">Mercury</span><span class="p">.</span><span class="nx">modal</span><span class="p">(</span><span class="nx">@handled</span><span class="p">.</span><span class="nx">modal</span><span class="p">,</span> <span class="p">{</span><span class="nv">title: </span><span class="nx">@summary</span> <span class="o">||</span> <span class="nx">@title</span><span class="p">,</span> <span class="nv">handler: </span><span class="nx">@name</span><span class="p">})</span>
 
+          <span class="k">when</span> <span class="s1">&#39;lightview&#39;</span>
+            <span class="nv">handled = </span><span class="kc">true</span>
+            <span class="nx">Mercury</span><span class="p">.</span><span class="nx">lightview</span><span class="p">(</span><span class="nx">@handled</span><span class="p">.</span><span class="nx">lightview</span><span class="p">,</span> <span class="p">{</span><span class="nv">title: </span><span class="nx">@summary</span> <span class="o">||</span> <span class="nx">@title</span><span class="p">,</span> <span class="nv">handler: </span><span class="nx">@name</span><span class="p">,</span> <span class="nv">closeButton: </span><span class="kc">true</span><span class="p">})</span>
+
           <span class="k">when</span> <span class="s1">&#39;palette&#39;</span><span class="p">,</span> <span class="s1">&#39;select&#39;</span><span class="p">,</span> <span class="s1">&#39;panel&#39;</span>
             <span class="nx">event</span><span class="p">.</span><span class="nx">stopPropagation</span><span class="p">()</span>
             <span class="nv">handled = </span><span class="kc">true</span>
             <span class="nx">@handled</span><span class="p">[</span><span class="nx">type</span><span class="p">].</span><span class="nx">toggle</span><span class="p">()</span>
 
       <span class="nx">Mercury</span><span class="p">.</span><span class="nx">trigger</span><span class="p">(</span><span class="s1">&#39;action&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nv">action: </span><span class="nx">@name</span><span class="p">})</span> <span class="nx">unless</span> <span class="nx">handled</span>
-      <span class="nx">Mercury</span><span class="p">.</span><span class="nx">trigger</span><span class="p">(</span><span class="s1">&#39;focus:frame&#39;</span><span class="p">)</span>
+      <span class="nx">Mercury</span><span class="p">.</span><span class="nx">trigger</span><span class="p">(</span><span class="s1">&#39;focus:frame&#39;</span><span class="p">)</span> <span class="k">if</span> <span class="nx">@options</span><span class="p">[</span><span class="s1">&#39;regions&#39;</span><span class="p">]</span> <span class="o">&amp;&amp;</span> <span class="nx">@options</span><span class="p">[</span><span class="s1">&#39;regions&#39;</span><span class="p">].</span><span class="nx">length</span>
+
+
+  <span class="nv">defaultDialogOptions: </span><span class="o">-&gt;</span>
+    <span class="k">return</span> <span class="p">{</span>
+      <span class="nv">title: </span><span class="nx">@summary</span> <span class="o">||</span> <span class="nx">@title</span>
+      <span class="nv">preload: </span><span class="nx">@types</span><span class="p">.</span><span class="nx">preload</span>
+      <span class="nv">appendTo: </span><span class="nx">@options</span><span class="p">.</span><span class="nx">appendDialogsTo</span> <span class="o">||</span> <span class="s1">&#39;body&#39;</span>
+      <span class="nv">closeButton: </span><span class="kc">true</span>
+      <span class="k">for</span><span class="o">:</span> <span class="nx">@element</span>
+    <span class="p">}</span>
 
 
   <span class="nv">togglePressed: </span><span class="o">-&gt;</span>
@@ -183,21 +200,12 @@
         </div>
         <p>todo: overline is a bit weird because <u> and <strike> override text-decoration, so we can&rsquo;t always tell
 todo: maybe walk up the tree if it&rsquo;s not too expensive?</p>
-      </td>
-      <td class=code>
-        <div class='highlight'><pre>  <span class="nv">overline: </span><span class="nf">(node) -&gt;</span> <span class="nx">node</span><span class="p">.</span><span class="nx">css</span><span class="p">(</span><span class="s1">&#39;text-decoration&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;overline&#39;</span></pre></div>
-      </td>
-    </tr>
-    <tr id='section-4'>
-      <td class=docs>
-        <div class="pilwrap">
-          <a class="pilcrow" href="#section-4">&#182;</a>
-        </div>
-        <p>todo: this should never check for tags, because they could be styled differently</p>
 
       </td>
       <td class=code>
-        <div class='highlight'><pre>  <span class="nv">strikethrough: </span><span class="nf">(node, region) -&gt;</span> <span class="nx">node</span><span class="p">.</span><span class="nx">css</span><span class="p">(</span><span class="s1">&#39;text-decoration&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;line-through&#39;</span> <span class="o">||</span> <span class="o">!!</span><span class="nx">node</span><span class="p">.</span><span class="nx">closest</span><span class="p">(</span><span class="s1">&#39;strike&#39;</span><span class="p">,</span> <span class="nx">region</span><span class="p">).</span><span class="nx">length</span>
+        <div class='highlight'><pre>  <span class="nv">overline: </span><span class="nf">(node) -&gt;</span> <span class="nx">node</span><span class="p">.</span><span class="nx">css</span><span class="p">(</span><span class="s1">&#39;text-decoration&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;overline&#39;</span>
+
+  <span class="nv">strikethrough: </span><span class="nf">(node, region) -&gt;</span> <span class="nx">node</span><span class="p">.</span><span class="nx">css</span><span class="p">(</span><span class="s1">&#39;text-decoration&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;line-through&#39;</span> <span class="o">||</span> <span class="o">!!</span><span class="nx">node</span><span class="p">.</span><span class="nx">closest</span><span class="p">(</span><span class="s1">&#39;strike&#39;</span><span class="p">,</span> <span class="nx">region</span><span class="p">).</span><span class="nx">length</span>
 
   <span class="nv">underline: </span><span class="nf">(node, region) -&gt;</span> <span class="nx">node</span><span class="p">.</span><span class="nx">css</span><span class="p">(</span><span class="s1">&#39;text-decoration&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;underline&#39;</span> <span class="o">||</span> <span class="o">!!</span><span class="nx">node</span><span class="p">.</span><span class="nx">closest</span><span class="p">(</span><span class="s1">&#39;u&#39;</span><span class="p">,</span> <span class="nx">region</span><span class="p">).</span><span class="nx">length</span>
 

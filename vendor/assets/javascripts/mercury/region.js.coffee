@@ -7,6 +7,7 @@ class @Mercury.Region
 
     @document = @window.document
     @name = @element.attr('id')
+    @collectDataAttributes()
     @history = new Mercury.HistoryBuffer()
     @build()
     @bindEvents()
@@ -19,6 +20,11 @@ class @Mercury.Region
 
   focus: ->
 
+
+  collectDataAttributes: ->
+    @data = {}
+    $(Mercury.config.regionDataAttributes).each (index, item) =>
+      @data[item] = @element.attr('data-' + item)
 
   bindEvents: ->
     Mercury.on 'mode', (event, options) => @togglePreview() if options.mode == 'preview'
@@ -95,6 +101,7 @@ class @Mercury.Region
   serialize: ->
     return {
       type: @type
+      data: @data
       value: @content(null, true)
       snippets: @snippets()
     }

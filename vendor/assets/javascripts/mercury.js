@@ -22,14 +22,14 @@
  * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
+ *= require_self
+ *
  * Minimum jQuery requirements are 1.7
  *= require mercury/dependencies/jquery-1.7
  *
  * You can include the Rails jQuery ujs script here to get some nicer behaviors in modals, panels and lightviews when
  * using :remote => true within the contents rendered in them.
  * require jquery_ujs
- *
- *= require_self
  *
  * If you want to override Mercury functionality, you can do so in a custom file that binds to the mercury:loaded event,
  * or do so at the end of the current file (mercury.js).  There's an example that will help you get started.
@@ -396,13 +396,13 @@ window.Mercury = {
   // ## Debug Mode
   //
   // Turning debug mode on will log events and other various things (using console.debug if available).
-  debug: false
+  debug: false,
+
+  // The onload method is provided as a callback in case you want to override default Mercury Editor behavior.  It will
+  // be called directly after the Mercury scripts have loaded, but before anything has been initialized.  It's a good
+  // place to add or change functionality.
+  onload: function() {
+    //Mercury.PageEditor.prototype.iframeSrc = function(url) { return '/testing'; }
+  }
 
 };
-
-// The mercury:loaded event is provided in case you want to override default Mercury Editor behavior.  It will fire
-// directly after the Mercury scripts have loaded, but before anything has been initialized.  It's a good place to add
-// or change functionality.
-jQuery(window).bind('mercury:loaded', function() {
-  //Mercury.PageEditor.prototype.iframeSrc = function(url) { return '/testing'; }
-});

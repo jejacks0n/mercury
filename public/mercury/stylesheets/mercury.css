@@ -96,10 +96,13 @@ form label {
   text-align: right;
   line-height: 27px;
   font-size: 1.1em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 form label input {
   width: auto !important;
-  margin: 0 5px 0 -20px !important;
+  margin: 0 5px 0 2px !important;
 }
 form select,
 form input[type=text],
@@ -246,6 +249,14 @@ form fieldset.buttons .commit input:hover {
   height: 15px;
   cursor: move;
   text-shadow: 1px 1px 2px rgba(0,0,0, .9);
+}
+.mercury-panel h1 a.mercury-panel-close {
+  float: right;
+  width: 42px;
+  height: 42px;
+  margin: -14px -20px;
+  background: url(/assets/mercury/close.png) no-repeat center;
+  cursor: default;
 }
 .mercury-panel h4,
 .mercury-panel h5,
@@ -401,7 +412,7 @@ form fieldset.buttons .commit input:hover {
   background: #000 url(/assets/mercury/loading-dark.gif) no-repeat center;
 }
 .mercury-lightview .mercury-lightview-content {
-  margin: 10px 20px 20px;
+  padding: 10px 20px 20px;
 }
 .mercury-lightview h1.mercury-lightview-title {
   margin: 0;
@@ -422,6 +433,19 @@ form fieldset.buttons .commit input:hover {
   margin: -14px -20px;
   background: url(/assets/mercury/close.png) no-repeat center;
 }
+.mercury-lightview .mercury-display-pane-container {
+  overflow: auto;
+  margin: -10px -20px 0;
+  padding: 20px 20px 10px;
+}
+.mercury-lightview .mercury-display-pane-container .mercury-display-pane {
+  float: left;
+}
+.mercury-lightview .mercury-display-controls {
+  padding: 15px 0 0;
+  border-top: 1px solid #333;
+  text-align: right;
+}
 
 /*
  * Forms
@@ -439,31 +463,61 @@ form fieldset.buttons .commit input:hover {
 .mercury-lightview form input[type="password"],
 .mercury-lightview form textarea,
 .mercury-lightview form input.text {
-  background: #000;
+  background: #444;
   color: #FFF;
   border: 2px solid #555;
+  -moz-box-shadow: inset 0 0 3px #000000;
+  -webkit-box-shadow: inset 0 0 3px #000000;
+  box-shadow: inset 0 0 3px #000000;
+}
+.mercury-lightview form input[type="button"] {
+  border: 2px solid #555;
+  border-radius: 4px;
+  background: #222;
+  color: #FFF;
+}
+.mercury-lightview hr {
+  border-color: #333;
 }
 /*
  * Specific Lightviews
  *----------------------------------------------------------------------------*/
 /* about mercury */
-.mercury-about-lightview {
+#mercury_about {
   width: 200px;
   min-height: 100px;
   padding-left: 130px;
   background: url(/assets/mercury/temp-logo.png) no-repeat left center;
   font-size: .9em;
 }
-.mercury-about-lightview ul {
+#mercury_about ul {
   list-style: none;
   padding: 0;
   margin: 20px 0 0 0;
 }
-.mercury-about-lightview a {
+#mercury_about a {
   color: #09F;
 }
-.mercury-about-lightview a:hover {
+#mercury_about a:hover {
   color: #FFF;
+}
+/* character */
+.mercury-lightview #mercury_character .character {
+  border: 1px solid #444;
+  background: #222;
+}
+.mercury-lightview #mercury_character .character:hover {
+  background: #555;
+  border: 1px solid #CCC;
+}
+/* table */
+.mercury-lightview #mercury_table #table_display {
+  background: #222;
+  border: 1px solid #444;
+  height: 301px;
+}
+.mercury-lightview #mercury_table #table_display td.selected {
+  background: #09F;
 }
 /*
  * Modal
@@ -561,15 +615,15 @@ form fieldset.buttons .commit input:hover {
   overflow: hidden;
   height: 0;
 }
-.mercury-modal .mercury-modal-pane-container {
+.mercury-modal .mercury-display-pane-container {
   overflow: auto;
   margin: -20px -20px 0;
   padding: 20px 20px 10px;
 }
-.mercury-modal .mercury-modal-pane-container .mercury-modal-pane {
+.mercury-modal .mercury-display-pane-container .mercury-display-pane {
   float: left;
 }
-.mercury-modal .mercury-modal-controls {
+.mercury-modal .mercury-display-controls {
   padding: 15px 0 0;
   border-top: 1px solid #CCC;
   text-align: right;

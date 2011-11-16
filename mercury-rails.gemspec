@@ -18,7 +18,6 @@ Gem::Specification.new do |s|
   # Runtime Dependencies
   s.add_runtime_dependency('rails', ["~> 3.1.0"])
   s.add_runtime_dependency('paperclip')
-  s.add_runtime_dependency('formtastic') # this should be removed fully
   s.add_runtime_dependency('coffee-script')
 
 

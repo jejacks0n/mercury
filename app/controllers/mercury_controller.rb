@@ -12,6 +12,7 @@ class MercuryController < ActionController::Base
   end
 
   def snippet_options
+    @options = params[:options] || {}
     render :action => "/snippets/#{params[:name]}/options"
   end
 

@@ -3,7 +3,6 @@ PATH
   specs:
     mercury-rails (0.2.3)
       coffee-script
-      formtastic
       paperclip
       rails (~> 3.1.0)
 
@@ -83,8 +82,6 @@ GEM
     execjs (1.2.9)
       multi_json (~> 1.0)
     ffi (1.0.9)
-    formtastic (2.0.2)
-      rails (~> 3.0)
     fuubar-cucumber (0.0.15)
       cucumber (>= 1.0.2)
       ruby-progressbar (~> 0.0.10)

@@ -1,23 +1,34 @@
-<% @options = params[:options] || {} %>
-<%= semantic_form_for 'options', { :html => { :style => 'width:600px' } } do |f| %>
+<%= form_for 'options', { :html => { :style => 'width:600px' } } do |f| %>
 
   <div class="mercury-display-pane-container">
     <div class="mercury-display-pane">
-      <%= f.inputs do %>
-        <%= f.input :first_name, :required => false, :label => 'First Name',
-                    :input_html => {:value => @options[:first_name] || 'First Name'} %>
-      <% end %>
-      <%= f.inputs 'Options' do %>
-        <%= f.input :favorite_beer, :required => false, :label => 'Favorite Beer',
-                    :input_html => {:value => @options[:favorite_beer] || 'PBR'} %>
-      <% end %>
+      <fieldset class="inputs">
+        <ol>
+          <li class="string input optional stringish" id="options_first_name_input">
+            <label class="label" for="options_first_name">First Name</label>
+            <input id="options_first_name" name="options[first_name]" type="text" value="<%= @options[:first_name] %>"/>
+          </li>
+        </ol>
+      </fieldset>
+
+      <fieldset class="inputs">
+        <legend><span>Options</span></legend>
+        <ol>
+          <li class="string input optional stringish" id="options_favorite_beer_input">
+            <label class="label" for="options_favorite_beer">Favorite Beer</label>
+            <input id="options_favorite_beer" name="options[favorite_beer]" type="text" value="<%= @options[:favorite_beer] %>"/>
+          </li>
+        </ol>
+      </fieldset>
     </div>
   </div>
 
   <div class="mercury-display-controls">
-    <%= f.buttons do %>
-      <%= f.commit_button 'Insert Snippet' %>
-    <% end %>
+    <fieldset class="buttons">
+      <ol>
+        <li class="commit button"><input class="submit" name="commit" type="submit" value="Insert Snippet"/></li>
+      </ol>
+    </fieldset>
   </div>
 
 <% end %>

@@ -34,7 +34,7 @@ class @Mercury.Regions.Markupable extends Mercury.Region
 
   bindEvents: ->
     Mercury.on 'mode', (event, options) => @togglePreview() if options.mode == 'preview'
-    Mercury.on 'focus:frame', => @focus() unless @previewing && Mercury.region != @
+    Mercury.on 'focus:frame', => @focus() if !@previewing && Mercury.region == @
 
     Mercury.on 'action', (event, options) =>
       return if @previewing || Mercury.region != @

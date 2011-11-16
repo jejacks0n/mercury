@@ -370,6 +370,16 @@ window.Mercury = {
     regionClass: 'mercury-region',
 
     
+    // ## Region Data Attributes
+    //
+    // These attributes, when applied to a Mercury region element, will be automatically serialized and submitted
+    // with the AJAX request sent when a page is saved. These are expected to be HTML5 data attributes, and 'data-'
+    // will automatically be prepended to each attribute listed here.
+    //
+    // Example: regionDataAttributes: ['scope', 'version']
+    regionDataAttributes: [],
+    
+    
     // ## Styles
     //
     // Mercury tries to stay as much out of your code as possible, but because regions appear within your document we
@@ -16069,6 +16079,7 @@ Showdown.converter = function() {
       Mercury.log("building " + this.type, this.element, this.options);
       this.document = this.window.document;
       this.name = this.element.attr('id');
+      this.collectDataAttributes();
       this.history = new Mercury.HistoryBuffer();
       this.build();
       this.bindEvents();
@@ -16077,6 +16088,12 @@ Showdown.converter = function() {
     }
     Region.prototype.build = function() {};
     Region.prototype.focus = function() {};
+    Region.prototype.collectDataAttributes = function() {
+      this.data = {};
+      return $(Mercury.config.regionDataAttributes).each(__bind(function(index, item) {
+        return this.data[item] = this.element.attr('data-' + item);
+      }, this));
+    };
     Region.prototype.bindEvents = function() {
       Mercury.on('mode', __bind(function(event, options) {
         if (options.mode === 'preview') {
@@ -16193,6 +16210,7 @@ Showdown.converter = function() {
     Region.prototype.serialize = function() {
       return {
         type: this.type,
+        data: this.data,
         value: this.content(null, true),
         snippets: this.snippets()
       };
@@ -17321,7 +17339,7 @@ Showdown.converter = function() {
         }
       }, this));
       Mercury.on('focus:frame', __bind(function() {
-        if (!(this.previewing && Mercury.region !== this)) {
+        if (!this.previewing && Mercury.region === this) {
           return this.focus();
         }
       }, this));
@@ -18424,5 +18442,8 @@ Showdown.converter = function() {
   };
 }).call(this);
 (function() {
+  if (Mercury.onload) {
+    Mercury.onload();
+  }
   jQuery(window).trigger('mercury:loaded');
 }).call(this);

@@ -80,9 +80,15 @@ namespace :mercury do
       Dir[Rails.root.join('public/assets/mercury-*.js')].each do |filename|
         copy_file(filename, Rails.root.join('public/mercury/javascripts/mercury.js'))
         remove(filename)
+      end
 
-        minified = Uglifier.compile(File.read(Rails.root.join('public/mercury/javascripts/mercury.js')))
+      Dir[Rails.root.join('public/assets/mercury/mercury-*.js')].each do |filename|
+        copy_file(filename, Rails.root.join('public/mercury/javascripts/mercury.min.js'))
+        remove(filename)
+        minified = Uglifier.compile(File.read(Rails.root.join('vendor/assets/javascripts/mercury/dependencies/jquery-1.7.js')))
+        minified += Uglifier.compile(File.read(Rails.root.join('public/mercury/javascripts/mercury.min.js')))
         File.open(Rails.root.join('public/mercury/javascripts/mercury.min.js'), 'w') do |file|
+          file.write(File.read(Rails.root.join('vendor/assets/javascripts/mercury.js')))
           file.write(minified)
         end
       end

@@ -2,7 +2,7 @@ class Mercury::ImagesController < MercuryController
 
   # POST /images.json
   def create
-    @image = Image.new(params[:image])
+    @image = Mercury::Image.new(params[:image])
     @image.save
     respond_to do |format|
       format.json {
@@ -13,7 +13,7 @@ class Mercury::ImagesController < MercuryController
 
   # DELETE /images/1.json
   def destroy
-    @image = Image.find(params[:id])
+    @image = Mercury::Image.find(params[:id])
     @image.destroy
     respond_to do |format|
       format.json {

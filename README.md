@@ -17,7 +17,7 @@ to fork the project, create a locale file with your translation, and submit a pu
 credit for your contributions.
 
 Some [examples are here](https://github.com/jejacks0n/mercury/tree/master/vendor/assets/javascripts/mercury/locales),
-and there's more on the [wiki page](https://github.com/jejacks0n/mercury/wiki/Localization-&-Translations-(I18n)).
+and there's more on the [wiki page](https://github.com/jejacks0n/mercury/wiki/Localization-&-Translations-(I18n).
 
 - French (provided by [adamantx](https://github.com/adamantx))
 - Spanish (provided by [javiercr](https://github.com/javiercr))

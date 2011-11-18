@@ -98,6 +98,7 @@ Mercury.I18n['swedish_chef'] =
   # Error Messages
   "Unable to process response: %s": "Uneble-a tu prucess respunse-a: %s"
   "Error: Unable to upload the file": "Irrur: Uneble-a tu uplued zee feele-a"
+  "Malformed response from server": "Melffurmed respunse-a frum serfer"
   "Too large": "Tuu lerge-a"
   "Unsupported format": "Unsooppurted furmet"
   # Statuses

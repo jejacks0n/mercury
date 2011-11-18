@@ -98,6 +98,7 @@ Mercury.I18n['en'] =
   # Error Messages
   "Unable to process response: %s": ""
   "Error: Unable to upload the file": ""
+  "Malformed response from server": "" # needs translation
   "Too large": ""
   "Unsupported format": ""
   # Statuses

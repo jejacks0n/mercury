@@ -107,7 +107,9 @@ jQuery.extend Mercury.uploader,
               Mercury.config.uploading.handler(event.target.responseText)
             else
               jQuery.parseJSON(event.target.responseText)
-          Mercury.trigger('action', {action: 'insertImage', value: {src: response.image.url}})
+          src = response.url || response.image.url
+          throw 'Malformed response from server.' unless src
+          Mercury.trigger('action', {action: 'insertImage', value: {src: src}})
           @hide()
         catch error
           @updateStatus('Error: Unable to upload the file')

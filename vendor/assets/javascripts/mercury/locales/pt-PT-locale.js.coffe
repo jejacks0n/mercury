@@ -1,4 +1,4 @@
-Mercury.I18n['pt'] =
+Mercury.I18n['pt-PT'] =
   # ## Javascript Strings
 
   # ### Default Configuration
@@ -23,7 +23,7 @@ Mercury.I18n['pt'] =
   "History": "Histórico"
   "Page Version History": "Veja o histórico desta página"
   "Notes": "Anotações"
-  "Page Notes": "Anovações da página"
+  "Page Notes": "Anotações da página"
   "Style": "Estilos"
   "Block Format": "Bloco"
   "Background Color": "Cor de Fundo"

@@ -361,6 +361,15 @@ window.Mercury = {
     // and
     // Mercury.Toolbar.ButtonGroup.contexts
 
+
+    // ## Unique region identifier
+    //
+    // Mercury requires a region "id" to identify the specific region and send the value to the server. To allow for
+    // as much flexibility as possible, and to not interrupt with already set id's on elements, you can set the
+    // attribute to use when identifying the regions. Default is "data-id", but it can by any attribute
+    // (preferably a data-attribute)
+    regionIdentifier: "data-id",
+
     
     // ## Region Class
     //

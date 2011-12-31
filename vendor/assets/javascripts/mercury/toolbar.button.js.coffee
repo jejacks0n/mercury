@@ -25,6 +25,9 @@ class @Mercury.Toolbar.Button
 
         when 'toggle'
           @handled[type] = true
+          
+        when 'exit'
+          @handled[type] = if jQuery.isFunction(mixed) then mixed.call(@, @name) else mixed
 
         when 'mode'
           @handled[type] = if mixed == true then @name else mixed
@@ -95,6 +98,10 @@ class @Mercury.Toolbar.Button
         switch type
           when 'toggle'
             @togglePressed() unless @handled.mode
+            
+          when 'exit'
+            handled = true
+            Mercury.trigger('exit', { action: type, path: mixed })
 
           when 'mode'
             handled = true

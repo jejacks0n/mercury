@@ -350,6 +350,16 @@ window.Mercury = {
       htmlEditor: function() { Mercury.modal('/mercury/modals/htmleditor.html', { title: 'HTML Editor', fullHeight: true, handler: 'htmlEditor' }); }
       },
 
+    // ## Navigation
+    //
+    // When a toolbar button's action is set to 'exit', it can reference an attribute 
+    // defined in this navigation list. These attributes can either be a string URL, or
+    // a function that returns a string URL. The browser location will be set to the
+    // URL returned by the attribute.
+    navigation: {
+      //pages: function() { return window.location.href.replace(/\/\d+\/editor.*$/, '') },   
+    },
+
 
     // ## Contexts
     //

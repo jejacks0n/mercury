@@ -104,6 +104,7 @@ class @Mercury.PageEditor
     Mercury.on 'toggle:interface', => @toggleInterface()
     Mercury.on 'reinitialize', => @initializeRegions()
     Mercury.on 'mode', (event, options) => @previewing = !@previewing if options.mode == 'preview'
+    Mercury.on 'exit', (event, options) => @exit(options.path) if options.action = 'exit'
     Mercury.on 'action', (event, options) => @save() if options.action == 'save'
 
     @document.on 'mousedown', (event) ->
@@ -192,6 +193,11 @@ class @Mercury.PageEditor
       error: =>
         Mercury.notify('Mercury was unable to save to the url: %s', url)
     }
+    
+        
+  exit: (path) ->
+    url = Mercury.config.navigation[path] || path
+    window.location.href = if jQuery.isFunction(url) then url.call() else url
 
 
   serialize: ->

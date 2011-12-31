@@ -208,6 +208,4 @@ Mercury.I18n['es'] =
 
   # ## Custom Regional Overrides (eg. es-AR -- Spanish (Argentina))
   _AR_:
-    "Save": ""
-    "Snippet Options": ""
-    "Insert Link": ""
+    "Save": "Guardar"

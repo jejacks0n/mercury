@@ -1,4 +1,4 @@
-Mercury.I18n['pt-PT'] =
+Mercury.I18n['pt'] =
   # ## Javascript Strings
 
   # ### Default Configuration
@@ -207,7 +207,5 @@ Mercury.I18n['pt-PT'] =
 
 
   # ## Custom Regional Overrides (eg. en-US)
-  _US_:
-    "Save": ""
-    "Snippet Options": ""
-    "Insert Link": ""
+  _BR_:
+    "Save": "Salvar"

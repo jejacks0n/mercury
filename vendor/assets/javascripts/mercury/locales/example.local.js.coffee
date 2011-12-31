@@ -209,5 +209,3 @@ Mercury.I18n['en'] =
   # ## Custom Regional Overrides (eg. en-US)
   _US_:
     "Save": ""
-    "Snippet Options": ""
-    "Insert Link": ""

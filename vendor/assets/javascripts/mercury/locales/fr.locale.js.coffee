@@ -209,5 +209,3 @@ Mercury.I18n['fr'] =
   # ## Custom Regional Overrides (eg. fr-LU -- French (Luxembourg))
   _LU_:
     "Save": "Enregistrer"
-    "Snippet Options": "Options de l'extrait"
-    "Insert Link": "Insérer un lien"

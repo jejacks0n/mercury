@@ -20,6 +20,7 @@ describe "Mercury.modalHandlers.insertMedia", ->
       jasmine.simulate.click($('#checkbox1').get(0))
       expect(spy.callCount).toEqual(1)
 
+
   describe "focusing an input", ->
 
     beforeEach ->

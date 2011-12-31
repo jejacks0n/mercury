@@ -3,7 +3,8 @@ describe "Mercury.Region", ->
   template 'mercury/region.html'
 
   beforeEach ->
-    Mercury.config.regionClass = 'custom-region-class'
+    Mercury.config.regions.className = 'custom-region-class'
+    Mercury.config.regions.dataAttributes = []
 
   afterEach ->
     @region = null
@@ -31,6 +32,11 @@ describe "Mercury.Region", ->
       @region = new Mercury.Region($('#region'), window, {foo: 'bar'})
       expect(@region.name).toEqual('region')
       expect(@region.history).toBeDefined()
+
+    it "sets name based on configuration", ->
+      Mercury.config.regions.identifier = 'data-scope'
+      @region = new Mercury.Region($('#region'), window, {foo: 'bar'})
+      expect(@region.name).toEqual('scope')
 
     it "calls build", ->
       @region = new Mercury.Region($('#region'), window, {foo: 'bar'})
@@ -254,13 +260,39 @@ describe "Mercury.Region", ->
     it "does nothing and is there as an interface", ->
 
 
+  describe "#dataAttributes", ->
+
+    beforeEach ->
+      Mercury.config.regions.dataAttributes = ['scope', 'version']
+      @region = new Mercury.Region($('#region'), window)
+
+    it "returns an object of data attributes based on configuration", ->
+      @region.element.attr('data-version', 2)
+      expect(@region.dataAttributes()).toEqual({scope: 'scope', version: '2'})
+
+
   describe "#serialize", ->
 
     beforeEach ->
       @region = new Mercury.Region($('#region'), window)
 
-    it "returns an object with it's type, value, and snippets", ->
-      serialized = @region.serialize()
-      expect(serialized.type).toEqual('region')
-      expect(serialized.value).toEqual('contents')
-      expect(serialized.snippets).toEqual({})
+    describe "without data attributes configured", ->
+
+      it "returns an object with it's type, value, and snippets", ->
+        serialized = @region.serialize()
+        expect(serialized.type).toEqual('region')
+        expect(serialized.value).toEqual('contents')
+        expect(serialized.snippets).toEqual({})
+        expect(serialized.data).toEqual({})
+
+    describe "with data attributes configured", ->
+
+      beforeEach ->
+        Mercury.config.regions.dataAttributes = ['scope', 'version']
+
+      it "returns an object with it's type, value, data and snippets", ->
+        serialized = @region.serialize()
+        expect(serialized.type).toEqual('region')
+        expect(serialized.value).toEqual('contents')
+        expect(serialized.snippets).toEqual({})
+        expect(serialized.data).toEqual({scope: 'scope', version: '1'})

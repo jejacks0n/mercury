@@ -360,7 +360,7 @@ class @Mercury.Regions.Editable extends Mercury.Region
 
   sanitize: (sanitizer) ->
     # always remove nested regions
-    sanitizer.find(".#{Mercury.config.regionClass}").remove()
+    sanitizer.find(".#{Mercury.config.regions.className}").remove()
 
     if Mercury.config.pasting.sanitize
       switch Mercury.config.pasting.sanitize

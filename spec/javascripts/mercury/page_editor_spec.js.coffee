@@ -3,7 +3,7 @@ describe "Mercury.PageEditor", ->
   template 'mercury/page_editor.html'
 
   beforeEach ->
-    Mercury.config.regionClass = 'custom-region-class'
+    Mercury.config.regions.className = 'custom-region-class'
 
   afterEach ->
     @pageEditor = null
@@ -423,8 +423,18 @@ describe "Mercury.PageEditor", ->
       spec.toolbarHideCallCount = 0
       spec.statusbarShowCallCount = 0
       spec.statusbarHideCallCount = 0
-      Mercury.Toolbar = -> {toolbar: true, height: (-> 100), show: (=> spec.toolbarShowCallCount += 1), hide: (=> spec.toolbarHideCallCount += 1)}
-      Mercury.Statusbar = -> {statusbar: true, top: (-> 500), show: (=> spec.statusbarShowCallCount += 1), hide: (=> spec.statusbarHideCallCount += 1)}
+      Mercury.Toolbar = -> {
+        toolbar: true,
+        height: (-> 100),
+        show: (=> spec.toolbarShowCallCount += 1),
+        hide: (=> spec.toolbarHideCallCount += 1)
+      }
+      Mercury.Statusbar = -> {
+        statusbar: true,
+        top: (-> 500),
+        show: (=> spec.statusbarShowCallCount += 1),
+        hide: (=> spec.statusbarHideCallCount += 1)
+      }
       Mercury.PageEditor.prototype.initializeFrame = ->
       @pageEditor = new Mercury.PageEditor('', {appendTo: $('#test')})
 

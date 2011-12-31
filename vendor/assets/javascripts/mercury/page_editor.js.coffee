@@ -38,7 +38,7 @@ class @Mercury.PageEditor
       @iframe.data('loaded', true)
       Mercury.notify("Opera isn't a fully supported browser, your results may not be optimal.") if jQuery.browser.opera
       @document = jQuery(@iframe.get(0).contentWindow.document)
-      stylesToInject = Mercury.config.injectedStyles.replace(/{{regionClass}}/g, Mercury.config.regionClass)
+      stylesToInject = Mercury.config.injectedStyles.replace(/{{regionClass}}/g, Mercury.config.regions.className)
       jQuery("<style mercury-styles=\"true\">").html(stylesToInject).appendTo(@document.find('head'))
 
       # jquery: make jQuery evaluate scripts within the context of the iframe window
@@ -65,7 +65,7 @@ class @Mercury.PageEditor
 
   initializeRegions: ->
     @regions = []
-    @buildRegion(jQuery(region)) for region in jQuery(".#{Mercury.config.regionClass}", @document)
+    @buildRegion(jQuery(region)) for region in jQuery(".#{Mercury.config.regions.className}", @document)
     return unless @options.visible
     for region in @regions
       if region.focus
@@ -109,7 +109,7 @@ class @Mercury.PageEditor
     @document.on 'mousedown', (event) ->
       Mercury.trigger('hide:dialogs')
       if Mercury.region
-        Mercury.trigger('unfocus:regions') unless jQuery(event.target).closest(".#{Mercury.config.regionClass}").get(0) == Mercury.region.element.get(0)
+        Mercury.trigger('unfocus:regions') unless jQuery(event.target).closest(".#{Mercury.config.regions.className}").get(0) == Mercury.region.element.get(0)
 
     jQuery(window).on 'resize', =>
       @resize()
@@ -158,7 +158,7 @@ class @Mercury.PageEditor
         if jQuery(element).hasClass(classname)
           ignored = true
           continue
-      if !ignored && (element.target == '' || element.target == '_self') && !jQuery(element).closest(".#{Mercury.config.regionClass}").length
+      if !ignored && (element.target == '' || element.target == '_self') && !jQuery(element).closest(".#{Mercury.config.regions.className}").length
         jQuery(element).attr('target', '_top')
 
 

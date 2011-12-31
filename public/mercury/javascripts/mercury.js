@@ -103,6 +103,13 @@ window.Mercury = {
     //
     // Separators are any "button" that's not an array, and are expected to be a string.  You can use two different
     // separator styles: line ('-'), and spacer (' ').
+    //
+    // ### Adding Contexts
+    //
+    // Contexts are used callback functions used for highlighting and disabling/enabling buttons and buttongroups.  When
+    // the cursor enters an element within an html region for instance we want to disable or highlight buttons based on
+    // the properties of the given node.  You can see examples of contexts in, and add your own to:
+    // `Mercury.Toolbar.Button.contexts` and `Mercury.Toolbar.ButtonGroup.contexts`
     toolbars: {
       primary: {
         save:                  ['Save', 'Save this page'],
@@ -207,19 +214,134 @@ window.Mercury = {
       },
 
 
+    // ## Region Options
+    //
+    // You can customize some aspects of how regions are found, identified, and saved.
+    //
+    // className: Mercury identifies editable regions by a className.  This classname has to be added in your HTML in
+    // advance, and is the only real code/naming exposed in the implementation of Mercury.  To allow this to be as
+    // configurable as possible, you can set the name of the class.  When switching to preview mode, this configuration
+    // is also used to generate a class to indicate that Mercury is in preview mode by appending it with '-preview' (so
+    // by default it would be mercury-region-preview)
+    //
+    // identifier: This is used as a unique identifier for any given region (and thus should be unique to the page).
+    // By default this is the id attribute but can be changed to a data attribute should you want to use something
+    // custom instead.
+    //
+    // dataAttributes: The dataAttributes is an array of data attributes that will be serialized and returned to the
+    // server upon saving.  These attributes, when applied to a Mercury region element, will be automatically serialized
+    // and submitted with the AJAX request sent when a page is saved.  These are expected to be HTML5 data attributes,
+    // and 'data-' will automatically be prepended to each item in this directive. (ex. ['scope', 'version'])
+    regions: {
+      className: 'mercury-region',
+      identifier: 'id',
+      dataAttributes: []
+      },
+
+
+    // ## Snippet Options / Preview
+    //
+    // When a user drags a snippet onto the page they'll be prompted to enter options for the given snippet.  The server
+    // is expected to respond with a form.  Once the user submits this form, an Ajax request is sent to the server with
+    // the options provided; this preview request is expected to respond with the rendered markup for the snippet.
+    //
+    // method: The HTTP method used when submitting both the options and the preview.  We use POST by default because a
+    // snippet options form may contain large text inputs and we don't want that to be truncated when sent to the
+    // server.
+    //
+    // optionsUrl: The url that the options form will be loaded from.
+    //
+    // previewUrl: The url that the options will be submitted to, and will return the rendered snippet markup.
+    //
+    // **Note:** `:name` will be replaced with the snippet name in the urls (eg. /mercury/snippets/example/options.html)
+    snippets: {
+      method: 'POST',
+      optionsUrl: '/mercury/snippets/:name/options.html',
+      previewUrl: '/mercury/snippets/:name/preview.html'
+      },
+
+
+    // ## Image Uploading
+    //
+    // If you drag images from your desktop into regions that support it, it will be uploaded to the server and inserted
+    // into the region.  You can disable or enable this feature, the accepted mime-types, file size restrictions, and
+    // other things related to uploading.
+    //
+    // **Note:** Image uploading is only supported in some region types, and some browsers.
+    //
+    // enabled: You can set this to true, or false if you want to disable the feature entirely.
+    //
+    // allowedMimeTypes: You can restrict the types of files that can be uploaded by providing a list of allowed mime
+    // types.
+    //
+    // maxFileSize: You can restrict large files by setting the maxFileSize (in bytes).
+    //
+    // inputName: When uploading, a form is generated and submitted to the server via Ajax.  If your server would prefer
+    // a different name for how the image comes through, you can change the inputName.
+    //
+    // url: The url that the image upload will be submitted to.
+    //
+    // handler: You can use false to let Mercury handle it for you, or you can provide a handler function that can
+    // modify the response from the server.  This can be useful if your server doesn't respond the way Mercury expects.
+    // The handler function should take the response from the server and return an object that matches:
+    // `{image: {url: '[your provided url]'}`
+    uploading: {
+      enabled: true,
+      allowedMimeTypes: ['image/jpeg', 'image/gif', 'image/png'],
+      maxFileSize: 1235242880,
+      inputName: 'image[image]',
+      url: '/mercury/images',
+      handler: false
+      },
+
+
     // ## Localization / I18n
     //
-    // Include the .locale files you want to support when loading mercury.. the files are always named by the language,
+    // Include the .locale files you want to support when loading Mercury.  The files are always named by the language,
     // and not the regional dialect (eg. en.locale.js) because the regional dialects are nested within the primary
     // locale files.
     //
     // The client locale will be used first, and if no proper locale file is found for their language then the fallback
     // preferredLocale configuration will be used.  If one isn't provided, and the client locale isn't included, the
     // strings will remain untranslated.
+    //
+    // enabled: Set to false to disable, true to enable.
+    //
+    // preferredLocale: If a client doesn't support the locales you've included, this is used as a fallback.
     localization: {
       enabled: false,
       preferredLocale: 'swedish_chef-BORK'
-    },
+      },
+
+
+    // ## Behaviors
+    //
+    // Behaviors are used to change the default behaviors of a given region type when a given button is clicked.  For
+    // example, you may prefer to add HR tags using an HR wrapped within a div with a classname (for styling).  You
+    // can add your own complex behaviors here and they'll be shared across all regions.
+    //
+    // If you want to add behaviors to specific region types, you can mix them into the actions property of any region
+    // type.
+    //
+    //     Mercury.Regions.Editable.actions.htmlEditor = function() {}
+    //
+    // You can see how the behavior matches up directly with the button names.  It's also important to note that the
+    // callback functions are executed within the scope of the given region, so you have access to all it's methods.
+    behaviors: {
+      //exit: function() { window.location.href = window.mercuryInstance.iframeSrc() },
+      //foreColor: function(selection, options) { selection.wrap('<span style="color:' + options.value.toHex() + '">', true) },
+      htmlEditor: function() { Mercury.modal('/mercury/modals/htmleditor.html', { title: 'HTML Editor', fullHeight: true, handler: 'htmlEditor' }); }
+      },
+
+
+    // ## Ajax and CSRF Headers
+    //
+    // Some server frameworks require that you provide a specific header for Ajax requests.  The values for these CSRF
+    // tokens are typically stored in the rendered DOM.  By default, Mercury will look for the Rails specific meta tag,
+    // and provide the X-CSRF-Token header on Ajax requests, but you can modify this configuration if the system you're
+    // using doesn't follow the same standard.
+    csrfSelector: 'meta[name="csrf-token"]',
+    csrfHeader: 'X-CSRF-Token',
 
 
     // ## Hijacking Links & Forms
@@ -234,16 +356,6 @@ window.Mercury = {
     nonHijackableClasses: [],
 
 
-    // ## Ajax and CSRF Headers
-    //
-    // Some server frameworks require that you provide a specific header for Ajax requests.  The values for these CSRF
-    // tokens are typically stored in the rendered DOM.  By default, Mercury will look for the Rails specific meta tag,
-    // and provide the X-CSRF-Token header on Ajax requests, but you can modify this configuration if the system you're
-    // using doesn't follow the same standard.
-    csrfSelector: 'meta[name="csrf-token"]',
-    csrfHeader: 'X-CSRF-Token',
-
-
     // ## Pasting & Sanitizing
     //
     // When pasting content into Mercury it may sometimes contain HTML tags and attributes.  This markup is used to
@@ -251,17 +363,15 @@ window.Mercury = {
     // desired feature or an annoyance, so you can enable various sanitizing methods to clean the content when it's
     // pasted.
     //
-    // ### Sanitizing options:
+    // sanitize: Can be any of the following:
     // - false: no sanitizing is done, the content is pasted the exact same as it was copied by the user
     // - 'whitelist': content is cleaned using the settings specified in the tag white list (described below)
     // - 'text': all html is stripped before pasting, leaving only the raw text
     //
-    // ### Using the whitelist configuration
-    //
-    // The white list allows you to specify tags and attributes that are allowed when pasting content.  Each item in
-    // this object should contain the allowed tag, and an array of attributes that are allowed on that tag.  If the
-    // allowed attributes array is empty, all attributes will be removed.  If a tag is not present in this list, it will
-    // be removed, but without removing any of the text or tags inside it.
+    // whitelist: The white list allows you to specify tags and attributes that are allowed when pasting content.  Each
+    // item in this object should contain the allowed tag, and an array of attributes that are allowed on that tag.  If
+    // the allowed attributes array is empty, all attributes will be removed.  If a tag is not present in this list, it
+    // will be removed, but without removing any of the text or tags inside it.
     //
     // **Note:** Content is *always* sanitized if looks like it's from MS Word or similar editors regardless of this
     // configuration.
@@ -301,92 +411,13 @@ window.Mercury = {
       },
 
 
-    // ## Snippet Options and Preview
-    //
-    // When a user drags a snippet onto the page they'll be prompted to enter options for the given snippet.  The server
-    // is expected to respond with a form.  Once the user submits this form, an Ajax request is sent to the server with
-    // the options provided; this preview request is expected to respond with the rendered markup for the snippet.
-    //
-    // Name will be replaced with the snippet name (eg. example)
-    snippets: {
-      method: 'POST',
-      optionsUrl: '/mercury/snippets/:name/options.html',
-      previewUrl: '/mercury/snippets/:name/preview.html'
-      },
-
-
-    // ## Image Uploading
-    //
-    // If you drag images (while pressing shift) from your desktop into regions that support it, it will be uploaded
-    // to the server and inserted into the region.  This configuration allows you to specify if you want to
-    // disable/enable this feature, the accepted mime-types, file size restrictions, and other things related to
-    // uploading.  You can optionally provide a handler function that takes the response from the server and returns an
-    // object: {image: {url: '[your provided url]'}
-    //
-    // **Note:** Image uploading is only supported in some region types, and some browsers.
-    uploading: {
-      enabled: true,
-      allowedMimeTypes: ['image/jpeg', 'image/gif', 'image/png'],
-      maxFileSize: 1235242880,
-      inputName: 'image[image]',
-      url: '/mercury/images',
-      handler: false
-      },
-
-
-    // ## Behaviors
-    //
-    // Behaviors are used to change the default behaviors of a given region type when a given button is clicked.  For
-    // example, you may prefer to add HR tags using an HR wrapped within a div with a classname (for styling).  You
-    // can add your own complex behaviors here.
-    //
-    // You can see how the behavior matches up directly with the button names.  It's also important to note that the
-    // callback functions are executed within the scope of the given region, so you have access to all it's methods.
-    // Here's some examples to help you get started.
-    behaviors: {
-      //foreColor: function(selection, options) { selection.wrap('<span style="color:' + options.value.toHex() + '">', true) },
-      htmlEditor: function() { Mercury.modal('/mercury/modals/htmleditor.html', { title: 'HTML Editor', fullHeight: true, handler: 'htmlEditor' }); }
-      },
-
-
-    // ## Contexts
-    //
-    // Contexts are used callback functions used for highlighting and disabling/enabling buttons and buttongroups.
-    // When the cursor enters an element within an html region for instance we want to disable or highlight buttons
-    // based on the properties of the given node.  You can see some examples of contexts in:
-    //
-    // Mercury.Toolbar.Button.contexts
-    // and
-    // Mercury.Toolbar.ButtonGroup.contexts
-
-    
-    // ## Region Class
-    //
-    // Mercury identifies editable regions by a region class.  This class has to be added in your HTML in advance, and
-    // is the only real Mercury code/naming exposed in the implementation of Mercury.  To allow this to be as
-    // configurable as possible, you can set the name of the class here.  When switching to preview mode, this
-    // configuration is used to generate a class to indicate that Mercury is in preview mode -- which will be this
-    // class with '-preview' appended (so, mercury-region-preview by default)
-    regionClass: 'mercury-region',
-
-    
-    // ## Region Data Attributes
-    //
-    // These attributes, when applied to a Mercury region element, will be automatically serialized and submitted
-    // with the AJAX request sent when a page is saved. These are expected to be HTML5 data attributes, and 'data-'
-    // will automatically be prepended to each attribute listed here.
-    //
-    // Example: regionDataAttributes: ['scope', 'version']
-    regionDataAttributes: [],
-    
-    
-    // ## Styles
+    // ## Injected Styles
     //
     // Mercury tries to stay as much out of your code as possible, but because regions appear within your document we
     // need to include a few styles to indicate regions, as well as the different states of them (eg. focused).  These
-    // styles are injected into your document, and as simple as they might be, you may want to change them.  You can do
-    // so here.  {{regionClass}} will be automatically replaced with whatever you have set in the regionClass
-    // configuration directive.
+    // styles are injected into your document, and as simple as they might be, you may want to change them.
+    //
+    // {{regionClass}} will be automatically replaced with whatever you have set in the regions.class config directive.
     injectedStyles: '' +
       '.{{regionClass}} { min-height: 10px; outline: 1px dotted #09F } ' +
       '.{{regionClass}}:focus, .{{regionClass}}.focus { outline: none; -webkit-box-shadow: 0 0 10px #09F, 0 0 1px #045; box-shadow: 0 0 10px #09F, 0 0 1px #045 }' +
@@ -13453,7 +13484,7 @@ Showdown.converter = function() {
           Mercury.notify("Opera isn't a fully supported browser, your results may not be optimal.");
         }
         this.document = jQuery(this.iframe.get(0).contentWindow.document);
-        stylesToInject = Mercury.config.injectedStyles.replace(/{{regionClass}}/g, Mercury.config.regionClass);
+        stylesToInject = Mercury.config.injectedStyles.replace(/{{regionClass}}/g, Mercury.config.regions.className);
         jQuery("<style mercury-styles=\"true\">").html(stylesToInject).appendTo(this.document.find('head'));
         iframeWindow = this.iframe.get(0).contentWindow;
         jQuery.globalEval = function(data) {
@@ -13489,7 +13520,7 @@ Showdown.converter = function() {
     PageEditor.prototype.initializeRegions = function() {
       var region, _i, _j, _len, _len2, _ref, _ref2, _results;
       this.regions = [];
-      _ref = jQuery("." + Mercury.config.regionClass, this.document);
+      _ref = jQuery("." + Mercury.config.regions.className, this.document);
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         region = _ref[_i];
         this.buildRegion(jQuery(region));
@@ -13575,7 +13606,7 @@ Showdown.converter = function() {
       this.document.on('mousedown', function(event) {
         Mercury.trigger('hide:dialogs');
         if (Mercury.region) {
-          if (jQuery(event.target).closest("." + Mercury.config.regionClass).get(0) !== Mercury.region.element.get(0)) {
+          if (jQuery(event.target).closest("." + Mercury.config.regions.className).get(0) !== Mercury.region.element.get(0)) {
             return Mercury.trigger('unfocus:regions');
           }
         }
@@ -13645,7 +13676,7 @@ Showdown.converter = function() {
             continue;
           }
         }
-        _results.push(!ignored && (element.target === '' || element.target === '_self') && !jQuery(element).closest("." + Mercury.config.regionClass).length ? jQuery(element).attr('target', '_top') : void 0);
+        _results.push(!ignored && (element.target === '' || element.target === '_self') && !jQuery(element).closest("." + Mercury.config.regions.className).length ? jQuery(element).attr('target', '_top') : void 0);
       }
       return _results;
     };
@@ -16078,8 +16109,7 @@ Showdown.converter = function() {
       }
       Mercury.log("building " + this.type, this.element, this.options);
       this.document = this.window.document;
-      this.name = this.element.attr('id');
-      this.collectDataAttributes();
+      this.name = this.element.attr(Mercury.config.regions.identifier);
       this.history = new Mercury.HistoryBuffer();
       this.build();
       this.bindEvents();
@@ -16088,12 +16118,6 @@ Showdown.converter = function() {
     }
     Region.prototype.build = function() {};
     Region.prototype.focus = function() {};
-    Region.prototype.collectDataAttributes = function() {
-      this.data = {};
-      return $(Mercury.config.regionDataAttributes).each(__bind(function(index, item) {
-        return this.data[item] = this.element.attr('data-' + item);
-      }, this));
-    };
     Region.prototype.bindEvents = function() {
       Mercury.on('mode', __bind(function(event, options) {
         if (options.mode === 'preview') {
@@ -16169,13 +16193,13 @@ Showdown.converter = function() {
     Region.prototype.togglePreview = function() {
       if (this.previewing) {
         this.previewing = false;
-        this.element.addClass(Mercury.config.regionClass).removeClass("" + Mercury.config.regionClass + "-preview");
+        this.element.addClass(Mercury.config.regions.className).removeClass("" + Mercury.config.regions.className + "-preview");
         if (Mercury.region === this) {
           return this.focus();
         }
       } else {
         this.previewing = true;
-        this.element.addClass("" + Mercury.config.regionClass + "-preview").removeClass(Mercury.config.regionClass);
+        this.element.addClass("" + Mercury.config.regions.className + "-preview").removeClass(Mercury.config.regions.className);
         return Mercury.trigger('region:blurred', {
           region: this
         });
@@ -16207,10 +16231,20 @@ Showdown.converter = function() {
       }
       return snippets;
     };
+    Region.prototype.dataAttributes = function() {
+      var attr, data, _i, _len, _ref;
+      data = {};
+      _ref = Mercury.config.regions.dataAttributes;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        attr = _ref[_i];
+        data[attr] = this.element.attr('data-' + attr);
+      }
+      return data;
+    };
     Region.prototype.serialize = function() {
       return {
         type: this.type,
-        data: this.data,
+        data: this.dataAttributes(),
         value: this.content(null, true),
         snippets: this.snippets()
       };
@@ -16335,7 +16369,7 @@ Showdown.converter = function() {
         }, this);
       }, this));
       xhr.onload = __bind(function(event) {
-        var response;
+        var response, src;
         if (event.currentTarget.status >= 400) {
           this.updateStatus('Error: Unable to upload the file');
           Mercury.notify('Unable to process response: %s', event.currentTarget.status);
@@ -16343,10 +16377,14 @@ Showdown.converter = function() {
         } else {
           try {
             response = Mercury.config.uploading.handler ? Mercury.config.uploading.handler(event.target.responseText) : jQuery.parseJSON(event.target.responseText);
+            src = response.url || response.image.url;
+            if (!src) {
+              throw 'Malformed response from server.';
+            }
             Mercury.trigger('action', {
               action: 'insertImage',
               value: {
-                src: response.image.url
+                src: src
               }
             });
             return this.hide();
@@ -16973,7 +17011,7 @@ Showdown.converter = function() {
     };
     Editable.prototype.sanitize = function(sanitizer) {
       var allowed, allowedAttributes, allowedTag, attr, content, element, _i, _j, _len, _len2, _ref, _ref2, _ref3, _ref4;
-      sanitizer.find("." + Mercury.config.regionClass).remove();
+      sanitizer.find("." + Mercury.config.regions.className).remove();
       if (Mercury.config.pasting.sanitize) {
         switch (Mercury.config.pasting.sanitize) {
           case 'blacklist':
@@ -17311,7 +17349,7 @@ Showdown.converter = function() {
       width = '100%';
       height = this.element.height();
       value = this.element.html().replace(/^\s+|\s+$/g, '').replace('&gt;', '>');
-      this.element.removeClass(Mercury.config.regionClass);
+      this.element.removeClass(Mercury.config.regions.className);
       this.textarea = jQuery('<textarea>', this.document).val(value);
       this.textarea.attr('class', this.element.attr('class')).addClass('mercury-textarea');
       this.textarea.css({
@@ -17323,7 +17361,7 @@ Showdown.converter = function() {
         height: height,
         fontFamily: '"Courier New", Courier, monospace'
       });
-      this.element.addClass(Mercury.config.regionClass);
+      this.element.addClass(Mercury.config.regions.className);
       this.element.empty().append(this.textarea);
       this.previewElement = jQuery('<div>', this.document);
       this.element.append(this.previewElement);
@@ -17521,7 +17559,7 @@ Showdown.converter = function() {
       var value;
       if (this.previewing) {
         this.previewing = false;
-        this.container.addClass(Mercury.config.regionClass).removeClass("" + Mercury.config.regionClass + "-preview");
+        this.container.addClass(Mercury.config.regions.className).removeClass("" + Mercury.config.regions.className + "-preview");
         this.previewElement.hide();
         this.element.show();
         if (Mercury.region === this) {
@@ -17529,7 +17567,7 @@ Showdown.converter = function() {
         }
       } else {
         this.previewing = true;
-        this.container.addClass("" + Mercury.config.regionClass + "-preview").removeClass(Mercury.config.regionClass);
+        this.container.addClass("" + Mercury.config.regions.className + "-preview").removeClass(Mercury.config.regions.className);
         value = this.converter.makeHtml(this.element.val());
         this.previewElement.html(value);
         this.previewElement.show();

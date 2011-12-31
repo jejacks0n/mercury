@@ -6,8 +6,7 @@ class @Mercury.Region
     Mercury.log("building #{@type}", @element, @options)
 
     @document = @window.document
-    @name = @element.attr('id')
-    @collectDataAttributes()
+    @name = @element.attr(Mercury.config.regions.identifier)
     @history = new Mercury.HistoryBuffer()
     @build()
     @bindEvents()
@@ -20,11 +19,6 @@ class @Mercury.Region
 
   focus: ->
 
-
-  collectDataAttributes: ->
-    @data = {}
-    $(Mercury.config.regionDataAttributes).each (index, item) =>
-      @data[item] = @element.attr('data-' + item)
 
   bindEvents: ->
     Mercury.on 'mode', (event, options) => @togglePreview() if options.mode == 'preview'
@@ -69,11 +63,11 @@ class @Mercury.Region
   togglePreview: ->
     if @previewing
       @previewing = false
-      @element.addClass(Mercury.config.regionClass).removeClass("#{Mercury.config.regionClass}-preview")
+      @element.addClass(Mercury.config.regions.className).removeClass("#{Mercury.config.regions.className}-preview")
       @focus() if Mercury.region == @
     else
       @previewing = true
-      @element.addClass("#{Mercury.config.regionClass}-preview").removeClass(Mercury.config.regionClass)
+      @element.addClass("#{Mercury.config.regions.className}-preview").removeClass(Mercury.config.regions.className)
       Mercury.trigger('region:blurred', {region: @})
 
 
@@ -98,10 +92,16 @@ class @Mercury.Region
     return snippets
 
 
+  dataAttributes: ->
+    data = {}
+    data[attr] = @element.attr('data-' + attr) for attr in Mercury.config.regions.dataAttributes
+    return data
+
+
   serialize: ->
     return {
       type: @type
-      data: @data
+      data: @dataAttributes()
       value: @content(null, true)
       snippets: @snippets()
     }

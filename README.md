@@ -21,6 +21,8 @@ and there's more on the [wiki page](https://github.com/jejacks0n/mercury/wiki/Lo
 
 - French (provided by [adamantx](https://github.com/adamantx))
 - Spanish (provided by [javiercr](https://github.com/javiercr))
+- Portuguese (provided by [yakko](https://github.com/yakko))
+- Dutch (provided by [kieranklaassen](https://github.com/kieranklaassen))
 
 
 ## Awesomeness

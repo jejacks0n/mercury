@@ -239,7 +239,7 @@ describe "Mercury.uploader", ->
   describe "#upload", ->
 
     # todo: test this
-    it "", ->
+    it "should build a multipart form and submit it", ->
 
 
   describe "#updateStatus", ->

@@ -3,9 +3,8 @@ String::titleize = ->
 
 
 String::toHex = ->
-  # todo: we should handle alpha as well
   return @ if @[0] == '#'
-  @replace /rgba?\((\d+)[\s|\,]?\s(\d+)[\s|\,]?\s(\d+)\)/gi, (a, r, g, b) ->
+  @replace /rgb(a)?\(([0-9|%]+)[\s|,]?\s?([0-9|%]+)[\s|,]?\s?([0-9|%]+)[\s|,]?\s?([0-9|.|%]+\s?)?\)/gi, (x, alpha, r, g, b, a) ->
     "##{parseInt(r).toHex()}#{parseInt(g).toHex()}#{parseInt(b).toHex()}"
 
 

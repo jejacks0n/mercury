@@ -60,11 +60,6 @@ jQuery.extend @Mercury,
     jQuery(top).trigger("mercury:#{eventName}", options)
 
 
-  bind: (eventName, callback) -> # todo: deprecated -- use 'on' instead
-    Mercury.deprecated('Mercury.bind is deprecated, use Mercury.on instead')
-    Mercury.on(eventName, callback)
-
-
   # Alerting and logging methods
   notify: (args...) ->
     window.alert(Mercury.I18n.apply(@, args))

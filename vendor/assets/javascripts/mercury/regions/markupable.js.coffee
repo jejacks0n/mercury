@@ -4,6 +4,9 @@
 # nice if we could activate the bold button for instance.
 
 class @Mercury.Regions.Markupable extends Mercury.Region
+  @supported: document.getElementById
+  @supportedText: "IE 7+, Chrome 10+, Firefox 4+, Safari 5+, Opera 8+"
+
   type = 'markupable'
 
   constructor: (@element, @window, @options = {}) ->

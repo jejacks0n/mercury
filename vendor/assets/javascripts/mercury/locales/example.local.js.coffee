@@ -68,7 +68,7 @@ Mercury.I18n['en'] =
 
   # ### General
   # Error Messages
-  "Mercury.PageEditor is unsupported in this client. Supported browsers are Chrome 10+, Firefox 4+, and Safari 5+.": ""
+  "Mercury.Regions.%s is unsupported in this client. Supported browsers are %s.": ""
   "Mercury.PageEditor can only be instantiated once.": ""
   "Opera isn't a fully supported browser, your results may not be optimal.": ""
   "Mercury.PageEditor failed to load: %s\n\nPlease try refreshing.": ""

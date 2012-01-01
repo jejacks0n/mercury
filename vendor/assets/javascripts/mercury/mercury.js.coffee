@@ -36,10 +36,6 @@
 jQuery.extend @Mercury,
   version: '0.2.3'
 
-  # No IE support yet because it doesn't follow the W3C standards for HTML5 contentEditable (aka designMode).
-  # todo: move these into the specific region types -- some would be supported, just not the primary ones?
-  supported: document.getElementById && document.designMode && !jQuery.browser.konqueror && !jQuery.browser.msie
-
   # Mercury object namespaces
   Regions: Mercury.Regions || {}
   modalHandlers: Mercury.modalHandlers || {}

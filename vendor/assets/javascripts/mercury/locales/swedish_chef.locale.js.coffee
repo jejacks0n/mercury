@@ -68,7 +68,7 @@ Mercury.I18n['swedish_chef'] =
 
   # ### General
   # Error Messages
-  "Mercury.PageEditor is unsupported in this client. Supported browsers are Chrome 10+, Firefox 4+, and Safari 5+.": "Mercury.PageEditor is unsooppurted in thees cleeent. Sooppurted broosers ere-a Chrome 10+, Firefox 4+, und Safari 5+. Bork Bork Bork!"
+  "Mercury.Regions.%s is unsupported in this client. Supported browsers are %s.": "Mercury.Regions.%s is unsooppurted in thees cleeent. Sooppurted broosers ere-a %s Bork Bork Bork!"
   "Mercury.PageEditor can only be instantiated once.": "Mercury.PageEditor cun oonly be-a instunteeeted oonce-a. Bork Bork Bork!"
   "Opera isn't a fully supported browser, your results may not be optimal.": "Opera isn't a foolly sooppurted brooser, yuoor resoolts mey nut be-a oopteemel."
   "Mercury.PageEditor failed to load: %s\n\nPlease try refreshing.": "Mercury.PegeEdeetur feeeled tu lued: %s\n\nPleese-a try reffresheeng."

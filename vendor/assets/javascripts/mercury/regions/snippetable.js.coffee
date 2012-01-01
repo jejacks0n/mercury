@@ -1,4 +1,7 @@
 class @Mercury.Regions.Snippetable extends Mercury.Region
+  @supported: document.getElementById
+  @supportedText: "IE 7+, Chrome 10+, Firefox 4+, Safari 5+, Opera 8+"
+
   type = 'snippetable'
 
   constructor: (@element, @window, @options = {}) ->

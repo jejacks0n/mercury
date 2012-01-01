@@ -1,4 +1,8 @@
 class @Mercury.Regions.Editable extends Mercury.Region
+  # No IE support yet because it doesn't follow the W3C standards for HTML5 contentEditable (aka designMode).
+  @supported: document.designMode && !jQuery.browser.konqueror && !jQuery.browser.msie
+  @supportedText: "Chrome 10+, Firefox 4+, Safari 5+"
+
   type = 'editable'
 
   constructor: (@element, @window, @options = {}) ->
@@ -282,7 +286,7 @@ class @Mercury.Regions.Editable extends Mercury.Region
         @document.execCommand(action, false, options.value)
       catch error
         # mozilla: indenting when there's no br tag handles strangely
-        # todo: mozilla: trying to justify the first line of any contentEditable fails
+        # mozilla: trying to justify the first line of any contentEditable fails
         @element.prev().remove() if action == 'indent' && @element.prev() != sibling
 
     # handle any broken images by replacing the source with an alert image

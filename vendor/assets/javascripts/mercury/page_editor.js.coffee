@@ -6,7 +6,6 @@ class @Mercury.PageEditor
   # saveMethod: 'POST', or 'PUT', create or update actions on save (defaults to POST)
   # visible: boolean, if the interface should start visible or not (defaults to true)
   constructor: (@saveUrl = null, @options = {}) ->
-    throw Mercury.I18n('Mercury.PageEditor is unsupported in this client. Supported browsers are chrome 10+, firefix 4+, and safari 5+.') unless Mercury.supported
     throw Mercury.I18n('Mercury.PageEditor can only be instantiated once.') if window.mercuryInstance
 
     @options.visible = true unless @options.visible == false
@@ -42,7 +41,6 @@ class @Mercury.PageEditor
       jQuery("<style mercury-styles=\"true\">").html(stylesToInject).appendTo(@document.find('head'))
 
       # jquery: make jQuery evaluate scripts within the context of the iframe window
-      # todo: look into `context` options for ajax as an alternative -- didn't seem to work in the initial tests
       iframeWindow = @iframe.get(0).contentWindow
       jQuery.globalEval = (data) -> (iframeWindow.execScript || (data) -> iframeWindow["eval"].call(iframeWindow, data))(data) if (data && /\S/.test(data))
 
@@ -74,17 +72,17 @@ class @Mercury.PageEditor
 
 
   buildRegion: (region) ->
-    try
-      if region.data('region')
-        region = region.data('region')
-      else
-        type = region.data('type').titleize()
-        region = new Mercury.Regions[type](region, @iframe.get(0).contentWindow)
-        region.togglePreview() if @previewing
-      @regions.push(region)
-    catch error
-      Mercury.notify(error) if Mercury.debug
-      Mercury.notify('Region type is malformed, no data-type provided, or "%s" is unknown for the "%s" region.', type, region.attr('id') || 'unknown')
+    if region.data('region')
+      region = region.data('region')
+    else
+      type = (region.data('type') || 'unknown').titleize()
+      Mercury.notify('Region type is malformed, no data-type provided, or "%s" is unknown for the "%s" region.', type, region.attr('id') || 'unknown') unless Mercury.Regions[type]
+      if !Mercury.Regions[type].supported
+        Mercury.notify('Mercury.Regions.%s is unsupported in this client. Supported browsers are %s.', type, Mercury.Regions[type].supportedText)
+        return false
+      region = new Mercury.Regions[type](region, @iframe.get(0).contentWindow)
+      region.togglePreview() if @previewing
+    @regions.push(region)
 
 
   finalizeInterface: ->

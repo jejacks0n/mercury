@@ -13244,7 +13244,6 @@ Showdown.converter = function() {
   this.Mercury || (this.Mercury = {});
   jQuery.extend(this.Mercury, {
     version: '0.2.3',
-    supported: document.getElementById && document.designMode && !jQuery.browser.konqueror && !jQuery.browser.msie,
     Regions: Mercury.Regions || {},
     modalHandlers: Mercury.modalHandlers || {},
     lightviewHandlers: Mercury.lightviewHandlers || {},
@@ -13262,10 +13261,6 @@ Showdown.converter = function() {
     trigger: function(eventName, options) {
       Mercury.log(eventName, options);
       return jQuery(top).trigger("mercury:" + eventName, options);
-    },
-    bind: function(eventName, callback) {
-      Mercury.deprecated('Mercury.bind is deprecated, use Mercury.on instead');
-      return Mercury.on(eventName, callback);
     },
     notify: function() {
       var args;
@@ -13353,7 +13348,7 @@ Showdown.converter = function() {
     if (this[0] === '#') {
       return this;
     }
-    return this.replace(/rgba?\((\d+)[\s|\,]?\s(\d+)[\s|\,]?\s(\d+)\)/gi, function(a, r, g, b) {
+    return this.replace(/rgb(a)?\(([0-9|%]+)[\s|,]?\s?([0-9|%]+)[\s|,]?\s?([0-9|%]+)[\s|,]?\s?([0-9|.|%]+\s?)?\)/gi, function(x, alpha, r, g, b, a) {
       return "#" + (parseInt(r).toHex()) + (parseInt(g).toHex()) + (parseInt(b).toHex());
     });
   };
@@ -13434,9 +13429,6 @@ Showdown.converter = function() {
       var token;
       this.saveUrl = saveUrl != null ? saveUrl : null;
       this.options = options != null ? options : {};
-      if (!Mercury.supported) {
-        throw Mercury.I18n('Mercury.PageEditor is unsupported in this client. Supported browsers are chrome 10+, firefix 4+, and safari 5+.');
-      }
       if (window.mercuryInstance) {
         throw Mercury.I18n('Mercury.PageEditor can only be instantiated once.');
       }
@@ -13541,23 +13533,23 @@ Showdown.converter = function() {
     };
     PageEditor.prototype.buildRegion = function(region) {
       var type;
-      try {
-        if (region.data('region')) {
-          region = region.data('region');
-        } else {
-          type = region.data('type').titleize();
-          region = new Mercury.Regions[type](region, this.iframe.get(0).contentWindow);
-          if (this.previewing) {
-            region.togglePreview();
-          }
+      if (region.data('region')) {
+        region = region.data('region');
+      } else {
+        type = (region.data('type') || 'unknown').titleize();
+        if (type === 'Unknown' || !Mercury.Regions[type]) {
+          throw Mercury.I18n('Region type is malformed, no data-type provided, or "%s" is unknown for the "%s" region.', type, region.attr('id') || 'unknown');
         }
-        return this.regions.push(region);
-      } catch (error) {
-        if (Mercury.debug) {
-          Mercury.notify(error);
+        if (!Mercury.Regions[type].supported) {
+          Mercury.notify('Mercury.Regions.%s is unsupported in this client. Supported browsers are %s.', type, Mercury.Regions[type].supportedText);
+          return false;
         }
-        return Mercury.notify('Region type is malformed, no data-type provided, or "%s" is unknown for the "%s" region.', type, region.attr('id') || 'unknown');
+        region = new Mercury.Regions[type](region, this.iframe.get(0).contentWindow);
+        if (this.previewing) {
+          region.togglePreview();
+        }
       }
+      return this.regions.push(region);
     };
     PageEditor.prototype.finalizeInterface = function() {
       var _ref;
@@ -13613,6 +13605,28 @@ Showdown.converter = function() {
       });
       jQuery(window).on('resize', __bind(function() {
         return this.resize();
+      }, this));
+      jQuery(this.document).bind('keydown', __bind(function(event) {
+        if (!(event.ctrlKey || event.metaKey)) {
+          return;
+        }
+        if (event.keyCode === 83) {
+          Mercury.trigger('action', {
+            action: 'save'
+          });
+          return event.preventDefault();
+        }
+      }, this));
+      jQuery(window).bind('keydown', __bind(function(event) {
+        if (!(event.ctrlKey || event.metaKey)) {
+          return;
+        }
+        if (event.keyCode === 83) {
+          Mercury.trigger('action', {
+            action: 'save'
+          });
+          return event.preventDefault();
+        }
       }, this));
       return window.onbeforeunload = this.beforeUnload;
     };
@@ -15562,7 +15576,18 @@ Showdown.converter = function() {
       return node.css('font-style') === 'italic';
     },
     overline: function(node) {
-      return node.css('text-decoration') === 'overline';
+      var parent, _i, _len, _ref;
+      if (node.css('text-decoration') === 'overline') {
+        return true;
+      }
+      _ref = node.parentsUntil(this.element);
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        parent = _ref[_i];
+        if (jQuery(parent).css('text-decoration') === 'overline') {
+          return true;
+        }
+      }
+      return false;
     },
     strikethrough: function(node, region) {
       return node.css('text-decoration') === 'line-through' || !!node.closest('strike', region).length;
@@ -16559,6 +16584,8 @@ Showdown.converter = function() {
   this.Mercury.Regions.Editable = (function() {
     var type;
     __extends(Editable, Mercury.Region);
+    Editable.supported = document.designMode && !jQuery.browser.konqueror && !jQuery.browser.msie;
+    Editable.supportedText = "Chrome 10+, Firefox 4+, Safari 5+";
     type = 'editable';
     function Editable(element, window, options) {
       this.element = element;
@@ -17335,6 +17362,8 @@ Showdown.converter = function() {
   this.Mercury.Regions.Markupable = (function() {
     var type;
     __extends(Markupable, Mercury.Region);
+    Markupable.supported = document.getElementById;
+    Markupable.supportedText = "IE 7+, Chrome 10+, Firefox 4+, Safari 5+, Opera 8+";
     type = 'markupable';
     function Markupable(element, window, options) {
       this.element = element;
@@ -17876,6 +17905,8 @@ Showdown.converter = function() {
   this.Mercury.Regions.Snippetable = (function() {
     var type;
     __extends(Snippetable, Mercury.Region);
+    Snippetable.supported = document.getElementById;
+    Snippetable.supportedText = "IE 7+, Chrome 10+, Firefox 4+, Safari 5+, Opera 8+";
     type = 'snippetable';
     function Snippetable(element, window, options) {
       this.element = element;

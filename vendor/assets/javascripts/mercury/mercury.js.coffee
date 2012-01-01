@@ -52,12 +52,12 @@ jQuery.extend @Mercury,
 
   # Custom event methods
   on: (eventName, callback) ->
-    jQuery(top).on("mercury:#{eventName}", callback)
+    jQuery(window).on("mercury:#{eventName}", callback)
 
 
   trigger: (eventName, options) ->
     Mercury.log(eventName, options)
-    jQuery(top).trigger("mercury:#{eventName}", options)
+    jQuery(window).trigger("mercury:#{eventName}", options)
 
 
   # Alerting and logging methods

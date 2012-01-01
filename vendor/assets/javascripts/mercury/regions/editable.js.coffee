@@ -124,7 +124,7 @@ class @Mercury.Regions.Editable extends Mercury.Region
       Mercury.tooltip.hide()
 
     @element.on 'click', (event) =>
-      jQuery(event.target).closest('a').attr('target', '_top') if @previewing
+      jQuery(event.target).closest('a').attr('target', '_parent') if @previewing
 
     @element.on 'dblclick', (event) =>
       return if @previewing

@@ -139,7 +139,7 @@ class @Mercury.Regions.Markupable extends Mercury.Region
       Mercury.trigger('region:focused', {region: @})
 
     @previewElement.on 'click', (event) =>
-      $(event.target).closest('a').attr('target', '_top') if @previewing
+      $(event.target).closest('a').attr('target', '_parent') if @previewing
 
 
   focus: ->

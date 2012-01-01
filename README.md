@@ -123,13 +123,7 @@ trigger the initialize:frame event from within your normal application layouts. 
 to be interacted with (eg. dom:loaded, document.ready), or at the bottom of your body tag.  It's recommended that you do
 this because it gives you some load performance improvements, but it's not required.
 
-    jQuery(top).trigger('initialize:frame');
-
-Or if you're not using jQuery:
-
-    if (top.Mercury) {
-      top.Mercury.trigger('initialize:frame');
-    }
+    jQuery(parent).trigger('initialize:frame');
 
 Mercury has an expectation that content regions will be on the page (not required, but probably useful).  To define
 content regions that Mercury will make editable you need to add a `mercury-region` class attribute to an element (this
@@ -176,7 +170,7 @@ that when it's ready.
 
 #### jQuery
 
-    jQuery(window).bind('mercury:ready', function() { Mercury.saveUrl = '/content'; });
+    jQuery(window).on('mercury:ready', function() { Mercury.saveUrl = '/content'; });
 
 #### Prototype
 
@@ -184,8 +178,8 @@ that when it's ready.
 
 #### Mercury
 
-    if (top.Mercury) {
-      top.Mercury.on('ready', function() { Mercury.saveUrl = '/content'; });
+    if (parent.Mercury) {
+      parent.Mercury.on('ready', function() { Mercury.saveUrl = '/content'; });
     }
 
 #### Function Declaration
@@ -203,7 +197,7 @@ edited or removed.
 Mercury does very little to save content and snippets for you, but it does provide the ability to load snippets from
 your own storage implementation.  Here's an example of loading existing snippet options back into Mercury.
 
-    jQuery(window).bind('mercury:ready', function() {
+    jQuery(window).on('mercury:ready', function() {
       Mercury.Snippet.load({
         snippet_1: {name: 'example', options: {'options[favorite_beer]': "Bells Hopslam", 'options[first_name]': "Jeremy"}}
       });
@@ -255,7 +249,7 @@ setting Mercury.saveURL, or passing it into the Mercury.PageEditor constructor..
 you're using loading mercury (via the loader, or by using the route method).  In both situations setting Mercury.saveURL
 is the most consistent.
 
-    jQuery(window).bind('mercury:ready', function() {
+    jQuery(window).on('mercury:ready', function() {
       Mercury.saveURL = '/contents';
     });
 

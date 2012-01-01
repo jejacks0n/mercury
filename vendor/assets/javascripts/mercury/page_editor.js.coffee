@@ -169,7 +169,7 @@ class @Mercury.PageEditor
           ignored = true
           continue
       if !ignored && (element.target == '' || element.target == '_self') && !jQuery(element).closest(".#{Mercury.config.regions.className}").length
-        jQuery(element).attr('target', '_top')
+        jQuery(element).attr('target', '_parent')
 
 
   beforeUnload: ->

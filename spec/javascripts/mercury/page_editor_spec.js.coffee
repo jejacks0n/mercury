@@ -547,12 +547,12 @@ describe "Mercury.PageEditor", ->
       @pageEditor.hijackLinksAndForms()
       expect($('#anchor1').attr('target')).toEqual('_top')
       expect($('#anchor2').attr('target')).toEqual('_blank')
-      expect($('#anchor3').attr('target')).toEqual('_top')
-      expect($('#anchor4').attr('target')).toEqual('_top')
+      expect($('#anchor3').attr('target')).toEqual('_parent')
+      expect($('#anchor4').attr('target')).toEqual('_parent')
       expect($('#form1').attr('target')).toEqual('_top')
       expect($('#form2').attr('target')).toEqual('_blank')
-      expect($('#form3').attr('target')).toEqual('_top')
-      expect($('#form4').attr('target')).toEqual('_top')
+      expect($('#form3').attr('target')).toEqual('_parent')
+      expect($('#form4').attr('target')).toEqual('_parent')
 
     it "ignores links in regions", ->
       @pageEditor.hijackLinksAndForms()

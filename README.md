@@ -100,16 +100,19 @@ Include the gem in your Gemfile and bundle to install the gem.
 
     gem 'mercury-rails'
 
-Make sure you get the migrations that you'll need.
-
-    rake mercury_engine:install:migrations
-    rake db:migrate
-
 You can also get the configuration file, css, and routes by running the generator.
 
     rails generate mercury:install
 
-This generator puts the mercury base file (configuration) into your project in /app/assets/javascripts/mercury.js.
+This generator puts the mercury base file (configuration) into your project in /app/assets/javascripts/mercury.js,
+and includes the base mercury routes.  It can optionally install the layout and a css overrides file, as well as an
+authentication helper that allows you to restrict access to editing.
+
+Make sure you get the migrations that you'll need for image uploading (if not you can disable the feature in
+mercury.js).
+
+    rake mercury_engine:install:migrations
+    rake db:migrate
 
 
 ## Usage
@@ -263,6 +266,14 @@ expressions to do this, which is probably faster, but maybe not as safe.
 
 I'm interested in what solutions people are looking for and end up using for this, so feel free to shoot me a line if
 you write something (eg. a middleware layer, an nginx module, or just something simple to get the job done).
+
+
+## Adding Authentication
+
+When you install Mercury using the generator (`rails g mercury:install`) you can optionally install an authentication
+file into your application (at `lib/mercury/authentication.rb`).  This is a simple method for restricting the actions in
+the MercuryController to only users who have the required privileges.  Since this can vary largely from application to
+application, it's a basic approach that lets you write in what you want.
 
 
 ## Project Details

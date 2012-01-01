@@ -145,9 +145,11 @@ class @Mercury.Toolbar.Button
 
   italic: (node) -> node.css('font-style') == 'italic'
 
-  # todo: overline is a bit weird because <u> and <strike> override text-decoration, so we can't always tell
-  # todo: maybe walk up the tree if it's not too expensive?
-  overline: (node) -> node.css('text-decoration') == 'overline'
+  # overline is weird because <u> and <strike> override text-decoration -- we can't always tell without checking parents
+  overline: (node) ->
+    return true if node.css('text-decoration') == 'overline'
+    for parent in node.parentsUntil(@element)
+      return true if jQuery(parent).css('text-decoration') == 'overline'
 
   strikethrough: (node, region) -> node.css('text-decoration') == 'line-through' || !!node.closest('strike', region).length
 

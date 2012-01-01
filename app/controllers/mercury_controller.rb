@@ -1,6 +1,8 @@
 class MercuryController < ActionController::Base
-  protect_from_forgery
+  include ::Mercury::Authentication
 
+  protect_from_forgery
+  before_filter :authenticate, :only => :edit
   layout false
 
   def edit
@@ -24,4 +26,9 @@ class MercuryController < ActionController::Base
     render :text => params
   end
 
+  private
+
+  def authenticate
+    redirect_to params[:requested_uri] || '/' unless can_edit?
+  end
 end

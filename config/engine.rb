@@ -4,8 +4,13 @@ module Mercury
   class Engine < Rails::Engine
 
     # Additional application configuration to include precompiled assets.
-    initializer :assets do |config|
-      Rails.application.config.assets.precompile += %w( mercury.js mercury.css mercury_overrides.css )
+    initializer :assets do |app|
+      app.config.assets.precompile += %w( mercury.js mercury.css mercury_overrides.css )
+    end
+
+    # Require mercury authentication module and potentially other aspects later (so they can be overridden).
+    initializer 'mercury.add_lib' do |app|
+      require 'mercury/authentication'
     end
 
     # To load the routes for this Engine, within your main apps routes.rb file include:

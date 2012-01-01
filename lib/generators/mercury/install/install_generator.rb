@@ -23,6 +23,12 @@ module Mercury
         end
       end
 
+      def copy_authentication_overrides
+        if options[:full] || yes?("Install the authentication file so you can restrict access to editing? [yN]")
+          copy_file 'lib/mercury/authentication.rb'
+        end
+      end
+
       def display_readme
         readme 'POST_INSTALL'
       end

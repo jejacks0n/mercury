@@ -112,6 +112,18 @@ class @Mercury.PageEditor
     jQuery(window).on 'resize', =>
       @resize()
 
+    jQuery(@document).bind 'keydown', (event) =>
+      return unless event.ctrlKey || event.metaKey
+      if (event.keyCode == 83) # meta+S
+        Mercury.trigger('action', {action: 'save'})
+        event.preventDefault()
+
+    jQuery(window).bind 'keydown', (event) =>
+      return unless event.ctrlKey || event.metaKey
+      if (event.keyCode == 83) # meta+S
+        Mercury.trigger('action', {action: 'save'})
+        event.preventDefault()
+
     window.onbeforeunload = @beforeUnload
 
 

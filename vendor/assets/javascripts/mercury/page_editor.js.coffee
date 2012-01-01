@@ -76,7 +76,7 @@ class @Mercury.PageEditor
       region = region.data('region')
     else
       type = (region.data('type') || 'unknown').titleize()
-      Mercury.notify('Region type is malformed, no data-type provided, or "%s" is unknown for the "%s" region.', type, region.attr('id') || 'unknown') unless Mercury.Regions[type]
+      throw Mercury.I18n('Region type is malformed, no data-type provided, or "%s" is unknown for the "%s" region.', type, region.attr('id') || 'unknown') if type == 'Unknown' || !Mercury.Regions[type]
       if !Mercury.Regions[type].supported
         Mercury.notify('Mercury.Regions.%s is unsupported in this client. Supported browsers are %s.', type, Mercury.Regions[type].supportedText)
         return false

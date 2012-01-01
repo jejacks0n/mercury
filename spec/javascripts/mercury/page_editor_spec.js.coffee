@@ -24,13 +24,6 @@ describe "Mercury.PageEditor", ->
     beforeEach ->
       @initializeInterfaceSpy = spyOn(Mercury.PageEditor.prototype, 'initializeInterface').andCallFake(=>)
 
-    it "throws an error if it's not supported", ->
-      Mercury.supported = false
-      expect(=>
-        new Mercury.PageEditor()
-      ).toThrow('Mercury.PageEditor is unsupported in this client. Supported browsers are chrome 10+, firefix 4+, and safari 5+.')
-      Mercury.supported = true
-
     it "throws an error if it's already instantiated", ->
       window.mercuryInstance = true
       expect(=>
@@ -222,7 +215,7 @@ describe "Mercury.PageEditor", ->
     it "it calls buildRegion for all the regions found in a document", ->
       spy = spyOn(Mercury.PageEditor.prototype, 'buildRegion').andCallFake(=>)
       @pageEditor.initializeRegions()
-      expect(spy.callCount).toEqual(3)
+      expect(spy.callCount).toEqual(4)
 
     it "focuses the first region", ->
       regionIndex = 0
@@ -233,10 +226,11 @@ describe "Mercury.PageEditor", ->
           regionFocusCall = regionIndex
         })
       @pageEditor.initializeRegions()
-      expect(spy.callCount).toEqual(3)
+      expect(spy.callCount).toEqual(4)
       expect(regionFocusCall).toEqual(1)
 
     it "doesn't focus the first region if it's not supposed to be visible", ->
+      spy = spyOn(Mercury.PageEditor.prototype, 'buildRegion').andCallFake(=>)
       firstFocusCalled = false
       @pageEditor.regions = [{focus: => firstFocusCalled = true}, {}, {}]
       @pageEditor.options.visible = false
@@ -245,11 +239,19 @@ describe "Mercury.PageEditor", ->
 
 
   describe "#buildRegion", ->
+#    it "throws an error if it's not supported", ->
+#      Mercury.supported = false
+#      expect(=>
+#                new Mercury.PageEditor()
+#      ).toThrow('Mercury.PageEditor is unsupported in this client. Supported browsers are chrome 10+, firefix 4+, and safari 5+.')
+#      Mercury.supported = true
+#
 
     beforeEach ->
       @resizeSpy = spyOn(Mercury.PageEditor.prototype, 'resize').andCallFake(=>)
       Mercury.PageEditor.prototype.initializeFrame = ->
       Mercury.Regions.Editable = -> {region: true}
+      Mercury.Regions.Editable.supported = true
       @pageEditor = new Mercury.PageEditor('', {appendTo: $('#test')})
 
     it "instantiates the region and pushes it into the regions array", ->
@@ -257,13 +259,14 @@ describe "Mercury.PageEditor", ->
       expect(@pageEditor.regions.length).toEqual(1)
       expect(@pageEditor.regions[0]).toEqual({region: true})
 
-    it "alerts on errors", ->
-      Mercury.debug = false
-      Mercury.Regions.Editable = -> throw('error!')
-      spy = spyOn(window, 'alert').andCallFake(=>)
-      @pageEditor.buildRegion($('#region2'))
-      expect(spy.callCount).toEqual(1)
-      expect(spy.argsForCall[0]).toEqual(['Region type is malformed, no data-type provided, or "Editable" is unknown for the "region2" region.'])
+    it "throws an exception when there's no data-type attribute", ->
+      expect(=> @pageEditor.buildRegion($('#region4'))).toThrow('Region type is malformed, no data-type provided, or "Unknown" is unknown for the "region4" region.')
+      expect(=> @pageEditor.buildRegion($('#region4'))).toThrow('Region type is malformed, no data-type provided, or "Unknown" is unknown for the "region4" region.')
+
+    it "throws an exception when the data-type isn't known", ->
+      expect(=> @pageEditor.buildRegion($('#region4'))).toThrow('Region type is malformed, no data-type provided, or "Unknown" is unknown for the "region4" region.')
+      $('#region4').attr('data-type', 'foo')
+      expect(=> @pageEditor.buildRegion($('#region4'))).toThrow('Region type is malformed, no data-type provided, or "Foo" is unknown for the "region4" region.')
 
     it "doesn't re-instantiate the region if the element's already initialized", ->
       $('#region2').data('region', {foo: 'bar'})
@@ -274,6 +277,7 @@ describe "Mercury.PageEditor", ->
     it "calls togglePreview on the region if in preview mode", ->
       callCount = 0
       Mercury.Regions.Editable = -> {region: true, togglePreview: -> callCount += 1 }
+      Mercury.Regions.Editable.supported = true
       @pageEditor.previewing = true
       @pageEditor.buildRegion($('#region2'))
       expect(callCount).toEqual(1)
@@ -281,6 +285,7 @@ describe "Mercury.PageEditor", ->
     it "doesn't call togglePreview if not in preview mode", ->
       callCount = 0
       Mercury.Regions.Editable = -> {region: true, togglePreview: -> callCount += 1 }
+      Mercury.Regions.Editable.supported = true
       @pageEditor.buildRegion($('#region2'))
       expect(callCount).toEqual(0)
 

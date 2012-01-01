@@ -150,6 +150,7 @@ class @Mercury.Toolbar.Button
     return true if node.css('text-decoration') == 'overline'
     for parent in node.parentsUntil(@element)
       return true if jQuery(parent).css('text-decoration') == 'overline'
+    return false
 
   strikethrough: (node, region) -> node.css('text-decoration') == 'line-through' || !!node.closest('strike', region).length
 

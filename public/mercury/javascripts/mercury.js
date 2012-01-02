@@ -347,12 +347,12 @@ window.Mercury = {
     // ## Hijacking Links & Forms
     //
     // Mercury will hijack links and forms that don't have a target set, or the target is set to _self and will set it
-    // to _top.  This is because the target must be set properly for Mercury to not get in the way of some
+    // to _parent.  This is because the target must be set properly for Mercury to not get in the way of some
     // functionality, like proper page loads on form submissions etc.  Mercury doesn't do this to links or forms that
     // are within editable regions because it doesn't want to impact the html that's saved.  With that being explained,
     // you can add classes to links or forms that you don't want this behavior added to.  Let's say you have links that
-    // open a lightbox style window, and you don't want the targets of these to be set to _top.  You can add classes to
-    // this array, and they will be ignored when the hijacking is applied.
+    // open a lightbox style window, and you don't want the targets of these to be set to _parent.  You can add classes
+    // to this array, and they will be ignored when the hijacking is applied.
     nonHijackableClasses: [],
 
 
@@ -13256,11 +13256,11 @@ Showdown.converter = function() {
       return headers;
     },
     on: function(eventName, callback) {
-      return jQuery(top).on("mercury:" + eventName, callback);
+      return jQuery(window).on("mercury:" + eventName, callback);
     },
     trigger: function(eventName, options) {
       Mercury.log(eventName, options);
-      return jQuery(top).trigger("mercury:" + eventName, options);
+      return jQuery(window).trigger("mercury:" + eventName, options);
     },
     notify: function() {
       var args;
@@ -13690,7 +13690,7 @@ Showdown.converter = function() {
             continue;
           }
         }
-        _results.push(!ignored && (element.target === '' || element.target === '_self') && !jQuery(element).closest("." + Mercury.config.regions.className).length ? jQuery(element).attr('target', '_top') : void 0);
+        _results.push(!ignored && (element.target === '' || element.target === '_self') && !jQuery(element).closest("." + Mercury.config.regions.className).length ? jQuery(element).attr('target', '_parent') : void 0);
       }
       return _results;
     };
@@ -16738,7 +16738,7 @@ Showdown.converter = function() {
       }, this));
       this.element.on('click', __bind(function(event) {
         if (this.previewing) {
-          return jQuery(event.target).closest('a').attr('target', '_top');
+          return jQuery(event.target).closest('a').attr('target', '_parent');
         }
       }, this));
       this.element.on('dblclick', __bind(function(event) {
@@ -17553,7 +17553,7 @@ Showdown.converter = function() {
       }, this));
       return this.previewElement.on('click', __bind(function(event) {
         if (this.previewing) {
-          return $(event.target).closest('a').attr('target', '_top');
+          return $(event.target).closest('a').attr('target', '_parent');
         }
       }, this));
     };

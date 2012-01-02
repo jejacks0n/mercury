@@ -28,26 +28,25 @@
 /*
  */
 
-
+/*
+ * General Layout
+ *---------------------------------------------------------------------------*/
 
 html, body {
   margin: 0;
   padding: 0;
   overflow: hidden;
 }
-
 .mercury-iframe {
   position: absolute;
   top: 0;
   width: 100%;
   visibility: hidden;
 }
-
 .mercury-focusable {
   position: absolute;
   opacity: 0;
 }
-
 
 /*
  * Forms
@@ -149,7 +148,8 @@ form fieldset.buttons .commit input {
   padding: 8px 14px 9px !important;
   font-family: 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', sans-serif;
   font-size: 1.3em;
-  background: #222 url(/assets/mercury/button.png) repeat-x;
+  background-color: #222;
+  background-repeat: repeat-x;
   display: inline-block;
   color: #FFF;
   text-decoration: none;
@@ -194,7 +194,6 @@ form fieldset.buttons .commit input:hover {
 .mercury-dialog.loading,
 .mercury-select.loading,
 .mercury-palette.loading {
-  background-image: url(/assets/mercury/loading-light.gif);
   background-repeat: no-repeat;
   background-position: center;
 }
@@ -225,7 +224,6 @@ form fieldset.buttons .commit input:hover {
   max-width: 500px;
 }
 .mercury-panel.loading {
-  background-image: url(/assets/mercury/loading-dark.gif);
   background-repeat: no-repeat;
   background-position: center;
 }
@@ -256,8 +254,9 @@ form fieldset.buttons .commit input:hover {
   top: -4px;
   width: 42px;
   height: 42px;
-  background: url(/assets/mercury/close.png) no-repeat center;
   cursor: default;
+  background-repeat: no-repeat;
+  background-position: center;
 }
 .mercury-panel h4,
 .mercury-panel h5,
@@ -348,7 +347,8 @@ form fieldset.buttons .commit input:hover {
   -webkit-box-sizing: border-box;
   width: 100%;
   padding-left: 20px;
-  background: #FFF url(/assets/mercury/search-icon.png) no-repeat 4px center;
+  background-color: #FFF;
+  background-repeat: no-repeat;
 }
 .mercury-snippet-panel ul {
   font-size: .9em;
@@ -410,7 +410,8 @@ form fieldset.buttons .commit input:hover {
   color: #CCC;
 }
 .mercury-lightview.loading {
-  background: #000 url(/assets/mercury/loading-dark.gif) no-repeat center;
+  background-repeat: no-repeat;
+  background-position: center;
 }
 .mercury-lightview .mercury-lightview-content {
   padding: 10px 20px 20px;
@@ -432,7 +433,8 @@ form fieldset.buttons .commit input:hover {
   width: 32px;
   height: 42px;
   margin: -14px -20px;
-  background: url(/assets/mercury/close.png) no-repeat center;
+  background-repeat: no-repeat;
+  background-position: center;
 }
 .mercury-lightview .mercury-display-pane-container {
   overflow: auto;
@@ -447,7 +449,6 @@ form fieldset.buttons .commit input:hover {
   border-top: 1px solid #333;
   text-align: right;
 }
-
 /*
  * Forms
  *----------------------------------------------------------------------------*/
@@ -487,8 +488,8 @@ form fieldset.buttons .commit input:hover {
 #mercury_about {
   width: 300px;
   min-height: 100px;
-  background: url(/assets/mercury/temp-logo.png) no-repeat 0 0;
   font-size: 1.1em;
+  background-repeat: no-repeat;
 }
 #mercury_about ul {
   float: left;
@@ -561,7 +562,9 @@ form fieldset.buttons .commit input:hover {
   font: normal normal normal 12px/normal Helvetica, Tahoma, Arial, sans-serif;
 }
 .mercury-modal.loading .mercury-modal-content-container {
-  background: #EFEFEF url(/assets/mercury/loading-light.gif) no-repeat center;
+  background-color: #EFEFEF;
+  background-repeat: no-repeat;
+  background-position: center;
 }
 .mercury-modal h1.mercury-modal-title {
   -webkit-user-select: none;
@@ -844,7 +847,7 @@ form fieldset.buttons .commit input:hover {
   font-family: Helvetica, Tahoma, Arial, sans-serif;
 }
 .mercury-primary-toolbar .mercury-button.pressed {
-  background: url(/assets/mercury/toolbar/primary/_pressed.png) no-repeat top center;
+  background-repeat: no-repeat;
 }
 .mercury-primary-toolbar .mercury-button em {
   margin: 0 -5px;
@@ -874,31 +877,9 @@ form fieldset.buttons .commit input:hover {
 .mercury-primary-toolbar .mercury-toolbar-expander {
   width: 12px;
   height: 58px;
-  background: rgba(0, 0, 0, .2) url(/assets/mercury/toolbar/primary/_expander.png) no-repeat center 90%;
+  background-color: rgba(0, 0, 0, .2);
+  background-repeat: no-repeat;
 }
-/* default buttons */
-.mercury-primary-toolbar .mercury-save-button em,
-.mercury-expander-button[data-button=save] em             { background-image: url(/assets/mercury/toolbar/primary/save.png) }
-.mercury-primary-toolbar .mercury-preview-button em,
-.mercury-expander-button[data-button=preview] em          { background-image: url(/assets/mercury/toolbar/primary/preview.png) }
-.mercury-primary-toolbar .mercury-undo-button em,
-.mercury-expander-button[data-button=undo] em             { background-image: url(/assets/mercury/toolbar/primary/undo.png) }
-.mercury-primary-toolbar .mercury-redo-button em,
-.mercury-expander-button[data-button=redo] em             { background-image: url(/assets/mercury/toolbar/primary/redo.png) }
-.mercury-primary-toolbar .mercury-insertLink-button em,
-.mercury-expander-button[data-button=insertLink] em       { background-image: url(/assets/mercury/toolbar/primary/insertlink.png) }
-.mercury-primary-toolbar .mercury-insertMedia-button em,
-.mercury-expander-button[data-button=insertMedia] em      { background-image: url(/assets/mercury/toolbar/primary/insertmedia.png) }
-.mercury-primary-toolbar .mercury-insertTable-button em,
-.mercury-expander-button[data-button=insertTable] em      { background-image: url(/assets/mercury/toolbar/primary/inserttable.png) }
-.mercury-primary-toolbar .mercury-insertCharacter-button em,
-.mercury-expander-button[data-button=insertCharacter] em  { background-image: url(/assets/mercury/toolbar/primary/insertcharacter.png) }
-.mercury-primary-toolbar .mercury-snippetPanel-button em,
-.mercury-expander-button[data-button=snippetPanel] em     { background-image: url(/assets/mercury/toolbar/primary/snippetpanel.png) }
-.mercury-primary-toolbar .mercury-historyPanel-button em,
-.mercury-expander-button[data-button=historyPanel] em     { background-image: url(/assets/mercury/toolbar/primary/historypanel.png) }
-.mercury-primary-toolbar .mercury-notesPanel-button em,
-.mercury-expander-button[data-button=notesPanel] em       { background-image: url(/assets/mercury/toolbar/primary/notespanel.png) }
 /*
  * Toolbar: Editable Region Toolbar
  *----------------------------------------------------------------------------*/
@@ -934,10 +915,8 @@ form fieldset.buttons .commit input:hover {
   width: 22px;
   height: 18px;
   margin: 0 0 2px;
-  background-image: url(/assets/mercury/toolbar/editable/buttons.png);
 }
 .mercury-editable-toolbar .mercury-button em {
-  background-image: url(/assets/mercury/toolbar/editable/buttons.png);
   display: none;
 }
 .mercury-editable-toolbar .mercury-button-palette {
@@ -1058,10 +1037,8 @@ form fieldset.buttons .commit input:hover {
   width: 23px;
   height: 18px;
   margin: 0 0 2px;
-  background-image: url(/assets/mercury/toolbar/snippetable/buttons.png);
 }
 .mercury-snippet-toolbar .mercury-button em {
-  background-image: url(/assets/mercury/toolbar/snippetable/buttons.png);
   display: none;
 }
 /* default buttons */
@@ -1209,4 +1186,98 @@ form fieldset.buttons .commit input:hover {
   color: rgba(0, 0, 0, .6);
   text-shadow: rgba(255, 255, 255, 0.45) 0 1px 0px;
   white-space: nowrap;
+}
+/*
+ * mercury.css
+ *----------------------------------------------------------------------------*/
+
+form fieldset.buttons .commit input {
+  background-image: url(/assets/mercury/button.png);
+}
+
+/*
+ * dialog.css
+ *----------------------------------------------------------------------------*/
+.mercury-dialog.loading,
+.mercury-select.loading,
+.mercury-palette.loading {
+  background-image: url(/assets/mercury/loading-light.gif);
+}
+.mercury-panel.loading {
+  background-image: url(/assets/mercury/loading-dark.gif);
+}
+.mercury-panel h1 a.mercury-panel-close {
+  background-image: url(/assets/mercury/close.png);
+}
+.mercury-snippet-panel input.filter {
+  background-image: url(/assets/mercury/search-icon.png);
+  background-position: 4px center;
+}
+
+/*
+ * lightview.css
+ *----------------------------------------------------------------------------*/
+.mercury-lightview.loading {
+  background-image: url(/assets/mercury/loading-dark.gif);
+}
+.mercury-lightview h1.mercury-lightview-title a.mercury-lightview-close {
+  background-image: url(/assets/mercury/close.png);
+}
+#mercury_about {
+  background-image: url(/assets/mercury/temp-logo.png);
+  background-position: 0 0;
+}
+
+/*
+ * modal.css
+ *----------------------------------------------------------------------------*/
+.mercury-modal.loading .mercury-modal-content-container {
+  background-image: url(/assets/mercury/loading-light.gif);
+}
+
+/*
+ * toolbar.css
+ *----------------------------------------------------------------------------*/
+.mercury-primary-toolbar .mercury-button.pressed {
+  background-image: url(/assets/mercury/toolbar/primary/_pressed.png);
+  background-position: top center;
+}
+.mercury-primary-toolbar .mercury-toolbar-expander {
+  background-image: url(/assets/mercury/toolbar/primary/_expander.png);
+  background-position: center 90%;
+}
+.mercury-primary-toolbar .mercury-save-button em,
+.mercury-expander-button[data-button=save] em             { background-image: url(/assets/mercury/toolbar/primary/save.png) }
+.mercury-primary-toolbar .mercury-preview-button em,
+.mercury-expander-button[data-button=preview] em          { background-image: url(/assets/mercury/toolbar/primary/preview.png) }
+.mercury-primary-toolbar .mercury-undo-button em,
+.mercury-expander-button[data-button=undo] em             { background-image: url(/assets/mercury/toolbar/primary/undo.png) }
+.mercury-primary-toolbar .mercury-redo-button em,
+.mercury-expander-button[data-button=redo] em             { background-image: url(/assets/mercury/toolbar/primary/redo.png) }
+.mercury-primary-toolbar .mercury-insertLink-button em,
+.mercury-expander-button[data-button=insertLink] em       { background-image: url(/assets/mercury/toolbar/primary/insertlink.png) }
+.mercury-primary-toolbar .mercury-insertMedia-button em,
+.mercury-expander-button[data-button=insertMedia] em      { background-image: url(/assets/mercury/toolbar/primary/insertmedia.png) }
+.mercury-primary-toolbar .mercury-insertTable-button em,
+.mercury-expander-button[data-button=insertTable] em      { background-image: url(/assets/mercury/toolbar/primary/inserttable.png) }
+.mercury-primary-toolbar .mercury-insertCharacter-button em,
+.mercury-expander-button[data-button=insertCharacter] em  { background-image: url(/assets/mercury/toolbar/primary/insertcharacter.png) }
+.mercury-primary-toolbar .mercury-snippetPanel-button em,
+.mercury-expander-button[data-button=snippetPanel] em     { background-image: url(/assets/mercury/toolbar/primary/snippetpanel.png) }
+.mercury-primary-toolbar .mercury-historyPanel-button em,
+.mercury-expander-button[data-button=historyPanel] em     { background-image: url(/assets/mercury/toolbar/primary/historypanel.png) }
+.mercury-primary-toolbar .mercury-notesPanel-button em,
+.mercury-expander-button[data-button=notesPanel] em       { background-image: url(/assets/mercury/toolbar/primary/notespanel.png) }
+.mercury-editable-toolbar .mercury-button {
+  background-image: url(/assets/mercury/toolbar/editable/buttons.png);
+}
+.mercury-editable-toolbar .mercury-button em {
+  background-image: url(/assets/mercury/toolbar/editable/buttons.png);
+}
+
+.mercury-snippet-toolbar .mercury-button {
+  background-image: url(/assets/mercury/toolbar/snippetable/buttons.png);
+}
+.mercury-snippet-toolbar .mercury-button em {
+  background-image: url(/assets/mercury/toolbar/snippetable/buttons.png);
 }

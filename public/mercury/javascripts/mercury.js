@@ -13673,7 +13673,8 @@ Showdown.converter = function() {
       if (url == null) {
         url = null;
       }
-      return (url != null ? url : window.location.href).replace(/([http|https]:\/\/.[^\/]*)\/editor\/?(.*)/i, "$1/$2");
+      url = (url != null ? url : window.location.href).replace(/([http|https]:\/\/.[^\/]*)\/editor\/?(.*)/i, "$1/$2");
+      return "" + url + (url.indexOf('?') > -1 ? '&' : '?') + "mercury_frame=true";
     };
     PageEditor.prototype.hijackLinksAndForms = function() {
       var classname, element, ignored, _i, _j, _len, _len2, _ref, _ref2, _results;

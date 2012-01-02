@@ -31,7 +31,9 @@
   font: normal normal normal 12px/normal Helvetica, Tahoma, Arial, sans-serif;
 }
 .mercury-modal.loading .mercury-modal-content-container {
-  background: #EFEFEF url(/assets/mercury/loading-light.gif) no-repeat center;
+  background-color: #EFEFEF;
+  background-repeat: no-repeat;
+  background-position: center;
 }
 .mercury-modal h1.mercury-modal-title {
   -webkit-user-select: none;

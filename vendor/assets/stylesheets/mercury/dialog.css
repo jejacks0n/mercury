@@ -24,7 +24,6 @@
 .mercury-dialog.loading,
 .mercury-select.loading,
 .mercury-palette.loading {
-  background-image: url(/assets/mercury/loading-light.gif);
   background-repeat: no-repeat;
   background-position: center;
 }
@@ -55,7 +54,6 @@
   max-width: 500px;
 }
 .mercury-panel.loading {
-  background-image: url(/assets/mercury/loading-dark.gif);
   background-repeat: no-repeat;
   background-position: center;
 }
@@ -86,8 +84,9 @@
   top: -4px;
   width: 42px;
   height: 42px;
-  background: url(/assets/mercury/close.png) no-repeat center;
   cursor: default;
+  background-repeat: no-repeat;
+  background-position: center;
 }
 .mercury-panel h4,
 .mercury-panel h5,
@@ -178,7 +177,8 @@
   -webkit-box-sizing: border-box;
   width: 100%;
   padding-left: 20px;
-  background: #FFF url(/assets/mercury/search-icon.png) no-repeat 4px center;
+  background-color: #FFF;
+  background-repeat: no-repeat;
 }
 .mercury-snippet-panel ul {
   font-size: .9em;

@@ -7,27 +7,27 @@
  *= require ./toolbar
  *= require ./tooltip
  *= require ./uploader
+ *= require ./all_images
  */
 
-
+/*
+ * General Layout
+ *---------------------------------------------------------------------------*/
 html, body {
   margin: 0;
   padding: 0;
   overflow: hidden;
 }
-
 .mercury-iframe {
   position: absolute;
   top: 0;
   width: 100%;
   visibility: hidden;
 }
-
 .mercury-focusable {
   position: absolute;
   opacity: 0;
 }
-
 
 /*
  * Forms
@@ -129,7 +129,8 @@ form fieldset.buttons .commit input {
   padding: 8px 14px 9px !important;
   font-family: 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', sans-serif;
   font-size: 1.3em;
-  background: #222 url(/assets/mercury/button.png) repeat-x;
+  background-color: #222;
+  background-repeat: repeat-x;
   display: inline-block;
   color: #FFF;
   text-decoration: none;

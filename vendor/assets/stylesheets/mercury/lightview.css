@@ -31,7 +31,8 @@
   color: #CCC;
 }
 .mercury-lightview.loading {
-  background: #000 url(/assets/mercury/loading-dark.gif) no-repeat center;
+  background-repeat: no-repeat;
+  background-position: center;
 }
 .mercury-lightview .mercury-lightview-content {
   padding: 10px 20px 20px;
@@ -53,7 +54,8 @@
   width: 32px;
   height: 42px;
   margin: -14px -20px;
-  background: url(/assets/mercury/close.png) no-repeat center;
+  background-repeat: no-repeat;
+  background-position: center;
 }
 .mercury-lightview .mercury-display-pane-container {
   overflow: auto;
@@ -68,7 +70,6 @@
   border-top: 1px solid #333;
   text-align: right;
 }
-
 /*
  * Forms
  *----------------------------------------------------------------------------*/
@@ -108,8 +109,8 @@
 #mercury_about {
   width: 300px;
   min-height: 100px;
-  background: url(/assets/mercury/temp-logo.png) no-repeat 0 0;
   font-size: 1.1em;
+  background-repeat: no-repeat;
 }
 #mercury_about ul {
   float: left;

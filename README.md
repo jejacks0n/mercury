@@ -138,6 +138,9 @@ include one.  Region types are outlined below.
       default content
     </div>
 
+For more advanced ways to integrate Mercury Editor with your Rails application check out this
+[wiki article](https://github.com/jejacks0n/mercury/wiki/Rails-Integration-Techniques).
+
 
 ### Using Mercury without Rails
 

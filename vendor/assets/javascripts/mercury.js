@@ -349,9 +349,11 @@ window.Mercury = {
     //       Mercury.modal(null, {title: 'Saving', closeButton: true, content: content})
     //     }
     //
-    // This is a nice way to add functionality to the toolbar, when you don't want the behaviors aren't region specific.
+    // This is a nice way to add functionality, when the behaviors aren't region specific.  These can be triggered by a
+    // button, or manually with `Mercury.trigger('action', {action: 'barrelRoll'})`
     globalBehaviors: {
-      exit: function() { window.location.href = this.iframeSrc() }
+      exit: function() { window.location.href = this.iframeSrc() },
+      barrelRoll: function() { $('body').css({webkitTransform: 'rotate(360deg)'}) }
       },
 
 

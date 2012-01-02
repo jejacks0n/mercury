@@ -9,6 +9,8 @@ jQuery.extend Mercury.modal,
     Mercury.trigger('focus:window')
     @initialize()
     if @visible then @update() else @appear()
+    if @options.content
+      setTimeout 500, => @loadContent(@options.content)
 
 
   initialize: ->

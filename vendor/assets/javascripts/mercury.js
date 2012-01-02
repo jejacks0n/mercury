@@ -330,9 +330,28 @@ window.Mercury = {
     // You can see how the behavior matches up directly with the button names.  It's also important to note that the
     // callback functions are executed within the scope of the given region, so you have access to all it's methods.
     behaviors: {
-      //exit: function() { window.location.href = window.mercuryInstance.iframeSrc() },
       //foreColor: function(selection, options) { selection.wrap('<span style="color:' + options.value.toHex() + '">', true) },
       htmlEditor: function() { Mercury.modal('/mercury/modals/htmleditor.html', { title: 'HTML Editor', fullHeight: true, handler: 'htmlEditor' }); }
+      },
+
+
+    // ## Global Behaviors
+    //
+    // Global behaviors are much like behaviors, but are more "global".  Things like save, exit, etc. can be included
+    // here.  They'll only be called once, and execute within the scope of whatever editor is instantiated (eg.
+    // PageEditor).
+    //
+    // An example of changing how saving works:
+    //
+    //     save: function() {
+    //       var data = top.JSON.stringify(this.serialize(), null, '  ');
+    //       var content = '<textarea style="width:500px;height:200px" wrap="off">' + data + '</textarea>';
+    //       Mercury.modal(null, {title: 'Saving', closeButton: true, content: content})
+    //     }
+    //
+    // This is a nice way to add functionality to the toolbar, when you don't want the behaviors aren't region specific.
+    globalBehaviors: {
+      exit: function() { window.location.href = this.iframeSrc() }
       },
 
 

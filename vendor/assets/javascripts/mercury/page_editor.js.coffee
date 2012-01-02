@@ -28,7 +28,7 @@ class @Mercury.PageEditor
     @resize()
 
     @iframe.on 'load', => @initializeFrame()
-    @iframe.get(0).contentWindow.document.location.href = @iframeSrc()
+    @iframe.get(0).contentWindow.document.location.href = @iframeSrc(null, true)
 
 
   initializeFrame: ->
@@ -102,7 +102,11 @@ class @Mercury.PageEditor
     Mercury.on 'toggle:interface', => @toggleInterface()
     Mercury.on 'reinitialize', => @initializeRegions()
     Mercury.on 'mode', (event, options) => @previewing = !@previewing if options.mode == 'preview'
-    Mercury.on 'action', (event, options) => @save() if options.action == 'save'
+    Mercury.on 'action', (event, options) =>
+      action = Mercury.config.globalBehaviors[options.action] || @[options.action]
+      return unless typeof(action) == 'function'
+      options.already_handled = true
+      action.call(@, options)
 
     @document.on 'mousedown', (event) ->
       Mercury.trigger('hide:dialogs')
@@ -157,9 +161,13 @@ class @Mercury.PageEditor
     Mercury.trigger('resize')
 
 
-  iframeSrc: (url = null) ->
+  iframeSrc: (url = null, params = false) ->
     url = (url ? window.location.href).replace(/([http|https]:\/\/.[^\/]*)\/editor\/?(.*)/i, "$1/$2")
-    "#{url}#{if url.indexOf('?') > -1 then '&' else '?'}mercury_frame=true"
+    url = url.replace(/[\?|\&]mercury_frame=true/gi, '')
+    if params
+      return "#{url}#{if url.indexOf('?') > -1 then '&' else '?'}mercury_frame=true"
+    else
+      return url
 
 
   hijackLinksAndForms: ->

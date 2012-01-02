@@ -76,7 +76,7 @@ class @Mercury.Region
     @pushHistory() unless action == 'redo'
 
     Mercury.log('execCommand', action, options.value)
-    Mercury.changes = true
+    Mercury.changes = true unless options.already_handled
 
 
   pushHistory: ->

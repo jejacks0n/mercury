@@ -205,9 +205,9 @@ class @Mercury.PageEditor
       dataType: @options.saveDataType || 'json'
       data: {content: data, _method: method}
       success: =>
-        callback() if callback
         Mercury.changes = false
         Mercury.trigger('saved')
+        callback() if typeof(callback) == 'function'
       error: =>
         Mercury.notify('Mercury was unable to save to the url: %s', url)
     }

@@ -99,6 +99,7 @@ if (!window.mercuryPackages) window.mercuryPackages = {
         if (!match || !match[1]) continue;
 
         match[1].replace(/([^&=]*)=([^&=]*)/g, function (m, attr, value) {
+          if (['true', 'false'].indexOf(value) >= 0) value = JSON.parse(value);
           options[attr] = value;
         });
       }

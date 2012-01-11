@@ -178,4 +178,6 @@
   float: left;
   margin-left: 10px;
 }
-
+#mercury_table #table_options .inputs:first-child label {
+  width: 36%
+}

@@ -5,7 +5,10 @@ module Mercury
 
       desc "Installs Mercury into your application by copying the configuration file."
 
-      class_option :full, :type => :boolean, :aliases => "-f",
+      class_option :orm, :default => 'active_record', :banner => 'mongoid',
+                   :desc => 'ORM for required models -- active_record, or mongoid'
+
+      class_option :full, :type => :boolean, :aliases => '-g',
                    :desc => 'Full installation will install the layout and css overrides for easier customization.'
 
       def copy_config
@@ -14,6 +17,14 @@ module Mercury
 
       def add_routes
         route %Q{Mercury::Engine.routes}
+      end
+
+      def copy_models
+        if options[:orm] == 'mongoid'
+          copy_file 'lib/generators/mercury/install/templates/mongoid_paperclip_image.rb', 'app/models/mercury/image.rb'
+        else
+          copy_file 'app/models/mercury/image.rb' if options[:full]
+        end
       end
 
       def copy_layout_and_css_overrides
@@ -30,7 +41,7 @@ module Mercury
       end
 
       def display_readme
-        readme 'POST_INSTALL'
+        readme 'POST_INSTALL' if behavior == :invoke
       end
 
     end

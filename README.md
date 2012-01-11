@@ -105,11 +105,15 @@ You can also get the configuration file, css, and routes by running the generato
     rails generate mercury:install
 
 This generator puts the mercury base file (configuration) into your project in /app/assets/javascripts/mercury.js,
-and includes the base mercury routes.  It can optionally install the layout and a css overrides file, as well as an
-authentication helper that allows you to restrict access to editing.
+and includes the base mercury routes.  It can optionally install the layout and a css overrides file, models, as well as
+an authentication helper that allows you to restrict access to editing.  Check the options by using `--help`.
 
-Make sure you get the migrations that you'll need for image uploading (if not you can disable the feature in
-mercury.js).
+For Mongoid + MongoDB, you can use the `--orm=mongoid` option on the generator to get the required models added to your
+app.  Make sure to add `gem "mongoid-paperclip", :require => "mongoid_paperclip` to your Gemfile as well.  Thanks to
+[chandresh](https://github.com/chandresh) for this tip.
+
+If you're using ActiveRecord, make sure you get the migrations that you'll need for image uploading (if not you can
+disable the feature in mercury.js if you don't want it).
 
     rake mercury_engine:install:migrations
     rake db:migrate
@@ -140,7 +144,6 @@ include one.  Region types are outlined below.
 
 For more advanced ways to integrate Mercury Editor with your Rails application check out this
 [wiki article](https://github.com/jejacks0n/mercury/wiki/Rails-Integration-Techniques).
-
 
 ### Using Mercury without Rails
 

@@ -4,12 +4,12 @@ and other useful info can be found at: https://github.com/jejacks0n/mercury
 
 Here's a post install checklist:
 
-* Setup the database for image processing (if you haven't already) by running
+* Setup the database for image processing (ActiveRecord only) by running:
 
   rake mercury_engine:install:migrations
   rake db:migrate
 
-* Learn about, and make your configuration adjustments in the mercury.js file
+* Learn about, and make configuration adjustments in the mercury.js file.
 
 * If installed, check out mercury.html.erb and mercury_overrides.css for more
   customization info.

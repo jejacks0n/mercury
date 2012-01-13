@@ -465,6 +465,8 @@ window.Mercury = {
   // place to add or change functionality.
   onload: function() {
     //Mercury.PageEditor.prototype.iframeSrc = function(url) { return '/testing'; }
-  }
+  },
+
+  editorUrlRegEx: /([http|https]:\/\/.[^\/]*)\/editor\/?(.*)/i
 
 };

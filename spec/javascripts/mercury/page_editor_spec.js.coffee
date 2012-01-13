@@ -530,6 +530,12 @@ describe "Mercury.PageEditor", ->
     it "takes the location and removes the /editor", ->
       expect(@pageEditor.iframeSrc('http://foo.com/editor/path')).toEqual('http://foo.com/path')
 
+    it "uses the configured url regex to remove the editor", ->
+      original = Mercury.editorUrlRegEx
+      Mercury.editorUrlRegEx = /([http|https]:\/\/[^\/]*)\/(.*)\/edit\/?/i
+      expect(@pageEditor.iframeSrc('http://foo.com/path/edit')).toEqual('http://foo.com/path')
+      Mercury.editorUrlRegEx = original
+
     it "adds query params", ->
       expect(@pageEditor.iframeSrc('http://foo.com/editor/path', true)).toEqual('http://foo.com/path?mercury_frame=true')
       expect(@pageEditor.iframeSrc('http://foo.com/editor/path?something=true', true)).toEqual('http://foo.com/path?something=true&mercury_frame=true')

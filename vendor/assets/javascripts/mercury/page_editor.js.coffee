@@ -162,7 +162,7 @@ class @Mercury.PageEditor
 
 
   iframeSrc: (url = null, params = false) ->
-    url = (url ? window.location.href).replace(/([http|https]:\/\/.[^\/]*)\/editor\/?(.*)/i, "$1/$2")
+    url = (url ? window.location.href).replace(Mercury.editorUrlRegEx ?= /([http|https]:\/\/.[^\/]*)\/editor\/?(.*)/i,  "$1/$2")
     url = url.replace(/[\?|\&]mercury_frame=true/gi, '')
     if params
       return "#{url}#{if url.indexOf('?') > -1 then '&' else '?'}mercury_frame=true"

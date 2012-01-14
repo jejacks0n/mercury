@@ -23,6 +23,8 @@ and there's more on the [wiki page](https://github.com/jejacks0n/mercury/wiki/Lo
 - Spanish (provided by [javiercr](https://github.com/javiercr))
 - Portuguese (provided by [yakko](https://github.com/yakko))
 - Dutch (provided by [kieranklaassen](https://github.com/kieranklaassen))
+- Italian (provided by [gcastagneti](https://github.com/gcastagnet))
+- German (provided by [poke](https://github.com/poke))
 
 
 ## Awesomeness

@@ -26,7 +26,6 @@ Gem::Specification.new do |s|
   s.add_development_dependency('uglifier')
   s.add_development_dependency('jquery-rails')
   s.add_development_dependency('sqlite3')
-  s.add_development_dependency('thin')
   s.add_development_dependency('ruby-debug19')
   s.add_development_dependency('evergreen')
   s.add_development_dependency('selenium-webdriver')

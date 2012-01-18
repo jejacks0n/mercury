@@ -6,3 +6,4 @@ tmp/
 public/system
 pkg/
 mercury.ids
+.rvmrc

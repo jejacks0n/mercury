@@ -147,6 +147,22 @@ class @Mercury.Regions.Simple extends Mercury.Region
       @focus()
       Mercury.trigger('region:focused', {region: @})
 
+    @element.on 'paste', (event) =>
+      return if @previewing || Mercury.region != @
+      if @specialContainer
+        event.preventDefault()
+        return
+      return if @pasting
+      Mercury.changes = true
+      @handlePaste(event.originalEvent)
+
+
+  handlePaste: (event) ->
+    # get the text content from the clipboard and fall back to using the sanitizer if unavailable
+    @execCommand('insertHTML', {value: event.clipboardData.getData('text/plain').replace(/\n/g, ' ')})
+    event.preventDefault()
+    return
+
 
   focus: ->
     @element.focus()

@@ -5,10 +5,11 @@
     <%= csrf_meta_tags %>
     <title>Mercury Editor</title>
     <%= stylesheet_link_tag    'mercury', 'mercury_overrides' %>
-    <%= javascript_include_tag 'mercury' %>
+    <%= javascript_include_tag 'mercury', 'mercury_overrides' %>
   </head>
   <body>
     <script type="text/javascript">
+
       <% if Rails.application.config.respond_to?(:mercury_config) %>
         jQuery.extend(Mercury.config, <%= Rails.application.config.mercury_config.to_json.html_safe %>);
       <% end -%>

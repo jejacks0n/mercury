@@ -165,6 +165,10 @@ class @Mercury.Regions.Simple extends Mercury.Region
     return
 
 
+  path: ->
+    [@container.get(0)]
+
+
   focus: ->
     @element.focus()
 

@@ -230,6 +230,9 @@ window.Mercury = {
     // By default this is the id attribute but can be changed to a data attribute should you want to use something
     // custom instead.
     //
+    // determineType: This function is called after checking the data-type attribute for the correct field type. Use
+    // it if you want to programatically set the type based on inspection of the region.
+    //
     // dataAttributes: The dataAttributes is an array of data attributes that will be serialized and returned to the
     // server upon saving.  These attributes, when applied to a Mercury region element, will be automatically serialized
     // and submitted with the AJAX request sent when a page is saved.  These are expected to be HTML5 data attributes,
@@ -237,6 +240,7 @@ window.Mercury = {
     regions: {
       className: 'mercury-region',
       identifier: 'id',
+      // determineType: function(region){},
       dataAttributes: []
       },
 

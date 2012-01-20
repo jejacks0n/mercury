@@ -23,16 +23,17 @@ class @Mercury.Regions.Simple extends Mercury.Region
     @textarea = jQuery('<textarea>', @document).val(value)
     @textarea.attr('class', @element.attr('class')).addClass('mercury-textarea')
     @textarea.css
-      border: 0,
-      background: 'transparent',
-      display: 'block',
-      'overflow-y': 'hidden',
-      width: width,
-      height: height,
-      fontFamily: 'inherit',
-      fontSize: 'inherit',
-      fontWeight: 'inherit',
-      fontStyle: 'inherit',
+      border: 0
+      background: 'transparent'
+      display: 'block'
+      'overflow-y': 'hidden'
+      width: width
+      height: height
+      fontFamily: 'inherit'
+      fontSize: 'inherit'
+      fontWeight: 'inherit'
+      fontStyle: 'inherit'
+      color: 'inherit'
     @element.addClass(Mercury.config.regions.className)
     @element.empty().append(@textarea)
 

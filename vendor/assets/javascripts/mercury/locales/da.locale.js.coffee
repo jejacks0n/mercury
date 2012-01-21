@@ -1,4 +1,4 @@
-Mercury.I18n['dk'] =
+Mercury.I18n['da'] =
   # ## Javascript Strings
 
   # ### Default Configuration

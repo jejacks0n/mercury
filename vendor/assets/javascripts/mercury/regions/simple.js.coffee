@@ -15,8 +15,12 @@ class @Mercury.Regions.Simple extends Mercury.Region
 
 
   build: ->
-    width = '100%'
-    height = @element.height()
+    if @element.css('display') == 'block'
+      width = '100%'
+      height = @element.height()
+    else
+      width = @element.width()
+      height = @element.height() # 'auto'
 
     value = @element.text()
     @element.removeClass(Mercury.config.regions.className)
@@ -25,7 +29,6 @@ class @Mercury.Regions.Simple extends Mercury.Region
     @textarea.css
       border: 0
       background: 'transparent'
-      display: 'block'
       'overflow-y': 'hidden'
       width: width
       height: height
@@ -34,6 +37,12 @@ class @Mercury.Regions.Simple extends Mercury.Region
       fontWeight: 'inherit'
       fontStyle: 'inherit'
       color: 'inherit'
+      'min-height': 0
+      padding: '0'
+      margin: 0
+      'border-radius': 0
+      display: 'inherit'
+      lineHeight: 'inherit'
     @element.addClass(Mercury.config.regions.className)
     @element.empty().append(@textarea)
 

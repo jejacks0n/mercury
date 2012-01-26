@@ -25,7 +25,7 @@ jQuery.extend Mercury.modal,
     @element.html("""
 <h1 class="mercury-modal-title">
   <span></span>
-  #{@options.closeButton || jQuery.type(@options.closeButton) == 'undefined' ? '<a>&times;</a>' : ''}
+  <a></a>
 </h1>
     """)
     @element.append('<div class="mercury-modal-content-container"><div class="mercury-modal-content"></div></div>')
@@ -181,6 +181,12 @@ jQuery.extend Mercury.modal,
 
   setTitle: ->
     @titleElement.find('span').html(Mercury.I18n(@options.title))
+    @titleElement.find('a').html(
+      if @options.closeButton == true || jQuery.type(@options.closeButton) == 'undefined'
+        '&times;'
+      else
+        ''
+    )
 
 
   reset: ->

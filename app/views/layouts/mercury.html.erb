@@ -9,23 +9,25 @@
   </head>
   <body>
     <script type="text/javascript">
-
-      <% if Rails.application.config.respond_to?(:mercury_config) %>
-        jQuery.extend(Mercury.config, <%= Rails.application.config.mercury_config.to_json.html_safe %>);
-      <% end -%>
-
-      var saveUrl = null;
+      var saveUrl = null; // Set to the url that you want to save any given page to.
       var options = {
         saveStyle: null,  // 'form', or 'json' (default json)
         saveMethod: null, // 'POST', or 'PUT', (create, vs. update -- default POST)
         visible: null     // if the interface should start visible or not (default true)
       };
 
+      <!-- Mix in any configurations provided through Rails.application.config.mercury_config -->
+      <% if Rails.application.config.respond_to?(:mercury_config) %>
+        jQuery.extend(Mercury.config, <%= Rails.application.config.mercury_config.to_json.html_safe %>);
+      <% end -%>
+
+      <!-- Mix in any options for PageEditor provided through Rails.application.config.mercury_page_editor_config -->
       <% if Rails.application.config.respond_to?(:mercury_page_editor_config) %>
         jQuery.extend(options, <%= Rails.application.config.mercury_page_editor_config.to_json.html_safe %>);
       <% end -%>
-      new Mercury.PageEditor(saveUrl, options);
 
+      <!-- Instantiate the PageEditor -->
+      new Mercury.PageEditor(saveUrl, options);
     </script>
   </body>
 </html>

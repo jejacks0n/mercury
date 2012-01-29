@@ -366,6 +366,11 @@ window.Mercury = {
     csrfSelector: 'meta[name="csrf-token"]',
     csrfHeader: 'X-CSRF-Token',
 
+    // ## Editor URLs
+    //
+    // When loading a given page, you may want to tweak this regex.  It's to allow the url to differ from the page
+    // you're editing, and the url at which you access it.
+    editorUrlRegEx: /([http|https]:\/\/.[^\/]*)\/editor\/?(.*)/i,
 
     // ## Hijacking Links & Forms
     //
@@ -466,7 +471,5 @@ window.Mercury = {
   onload: function() {
     //Mercury.PageEditor.prototype.iframeSrc = function(url) { return '/testing'; }
   },
-
-  editorUrlRegEx: /([http|https]:\/\/.[^\/]*)\/editor\/?(.*)/i
 
 };

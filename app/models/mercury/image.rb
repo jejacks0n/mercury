@@ -1,6 +1,6 @@
 class Mercury::Image < ActiveRecord::Base
 
-  set_table_name :mercury_images
+  self.table_name = :mercury_images
 
   has_attached_file :image, :styles => { :medium => "300x300>", :thumb => "100x100>" }
 

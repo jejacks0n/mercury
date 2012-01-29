@@ -22,7 +22,12 @@ jQuery.extend Mercury.modal,
 
   build: ->
     @element = jQuery('<div>', {class: 'mercury-modal loading'})
-    @element.html('<h1 class="mercury-modal-title"><span></span><a>&times;</a></h1>')
+    @element.html("""
+<h1 class="mercury-modal-title">
+  <span></span>
+  <a></a>
+</h1>
+    """)
     @element.append('<div class="mercury-modal-content-container"><div class="mercury-modal-content"></div></div>')
 
     @overlay = jQuery('<div>', {class: 'mercury-modal-overlay'})
@@ -176,6 +181,12 @@ jQuery.extend Mercury.modal,
 
   setTitle: ->
     @titleElement.find('span').html(Mercury.I18n(@options.title))
+    @titleElement.find('a').html(
+      if @options.closeButton == true || jQuery.type(@options.closeButton) == 'undefined'
+        '&times;'
+      else
+        ''
+    )
 
 
   reset: ->

@@ -29,6 +29,6 @@ class MercuryController < ActionController::Base
   private
 
   def authenticate
-    redirect_to params[:requested_uri] || '/' unless can_edit?
+    redirect_to "/#{params[:requested_uri]}" unless can_edit?
   end
 end

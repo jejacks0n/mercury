@@ -1,4 +1,4 @@
-Mercury.I18n['se'] =
+Mercury.I18n['sv'] =
   # ## Javascript Strings
 
   # ### Default Configuration

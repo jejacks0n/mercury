@@ -19,13 +19,16 @@ credit for your contributions.
 Some [examples are here](https://github.com/jejacks0n/mercury/tree/master/vendor/assets/javascripts/mercury/locales),
 and there's more on the [wiki page](https://github.com/jejacks0n/mercury/wiki/Localization-&-Translations).
 
-- French (provided by [adamantx](https://github.com/adamantx))
-- Spanish (provided by [javiercr](https://github.com/javiercr))
-- Portuguese (provided by [yakko](https://github.com/yakko))
-- Dutch (provided by [kieranklaassen](https://github.com/kieranklaassen))
-- Italian (provided by [gcastagneti](https://github.com/gcastagnet))
-- German (provided by [poke](https://github.com/poke))
-
+Translations and contributors:
+- French ([adamantx](https://github.com/adamantx))
+- Spanish ([javiercr](https://github.com/javiercr))
+- Portuguese ([yakko](https://github.com/yakko))
+- Dutch ([kieranklaassen](https://github.com/kieranklaassen))
+- Italian ([gcastagneti](https://github.com/gcastagnet))
+- German ([poke](https://github.com/poke))
+- Danish ([martinjlowm](https://github.com/martinjlowm))
+- Swedish ([stefanm](https://github.com/stefanm))
+- Korean ([dorajistyle](https://github.com/dorajistyle))
 
 ## Awesomeness
 

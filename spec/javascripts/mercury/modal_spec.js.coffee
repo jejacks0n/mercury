@@ -441,6 +441,13 @@ describe "Mercury.modal", ->
       Mercury.modal.options = {title: 'new title'}
       Mercury.modal.setTitle()
       expect($('.mercury-modal-title span').html()).toEqual('new title')
+      expect($('.mercury-modal-title a').css('display')).toEqual('inline')
+
+    it "hides the close button if the options.closeButton is false", ->
+      Mercury.modal.options = {title: 'new title', closeButton: false}
+      Mercury.modal.setTitle()
+      expect($('.mercury-modal-title a').css('display')).toEqual('none')
+
 
 
   describe "#reset", ->

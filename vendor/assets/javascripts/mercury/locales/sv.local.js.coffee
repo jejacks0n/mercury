@@ -41,8 +41,8 @@ Mercury.I18n['sv'] =
   "Justify Full": "Justera"
   "Unordered List": "Osorterad lista"
   "Numbered List": "Numrerad lista"
-  "Decrease Indentation": "Öka indrag"
-  "Increase Indentation": "Minska indrag"
+  "Decrease Indentation": "Minska indrag"
+  "Increase Indentation": "Öka indrag"
   "Insert Table Row": "Infoga tabellrad"
   "Insert a table row before the cursor": "Infoga en tabellrad före pekaren"
   "Insert a table row after the cursor": "Infoga en tabellrad efter pekaren"
@@ -207,5 +207,3 @@ Mercury.I18n['sv'] =
 
 
   # ## Custom Regional Overrides (eg. en-US)
-  _US_:
-    "Save": "Spara"

@@ -43,6 +43,7 @@ class @Mercury.Regions.Simple extends Mercury.Region
       'border-radius': 0
       display: 'inherit'
       lineHeight: 'inherit'
+      textAlign: 'inherit'
     @element.addClass(Mercury.config.regions.className)
     @element.empty().append(@textarea)
 

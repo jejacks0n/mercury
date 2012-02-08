@@ -328,9 +328,30 @@ window.Mercury = {
     // You can see how the behavior matches up directly with the button names.  It's also important to note that the
     // callback functions are executed within the scope of the given region, so you have access to all it's methods.
     behaviors: {
-      //exit: function() { window.location.href = window.mercuryInstance.iframeSrc() },
       //foreColor: function(selection, options) { selection.wrap('<span style="color:' + options.value.toHex() + '">', true) },
       htmlEditor: function() { Mercury.modal('/mercury/modals/htmleditor.html', { title: 'HTML Editor', fullHeight: true, handler: 'htmlEditor' }); }
+      },
+
+
+    // ## Global Behaviors
+    //
+    // Global behaviors are much like behaviors, but are more "global".  Things like save, exit, etc. can be included
+    // here.  They'll only be called once, and execute within the scope of whatever editor is instantiated (eg.
+    // PageEditor).
+    //
+    // An example of changing how saving works:
+    //
+    //     save: function() {
+    //       var data = top.JSON.stringify(this.serialize(), null, '  ');
+    //       var content = '<textarea style="width:500px;height:200px" wrap="off">' + data + '</textarea>';
+    //       Mercury.modal(null, {title: 'Saving', closeButton: true, content: content})
+    //     }
+    //
+    // This is a nice way to add functionality, when the behaviors aren't region specific.  These can be triggered by a
+    // button, or manually with `Mercury.trigger('action', {action: 'barrelRoll'})`
+    globalBehaviors: {
+      exit: function() { window.location.href = this.iframeSrc() },
+      barrelRoll: function() { $('body').css({webkitTransform: 'rotate(360deg)'}) }
       },
 
 
@@ -343,6 +364,11 @@ window.Mercury = {
     csrfSelector: 'meta[name="csrf-token"]',
     csrfHeader: 'X-CSRF-Token',
 
+    // ## Editor URLs
+    //
+    // When loading a given page, you may want to tweak this regex.  It's to allow the url to differ from the page
+    // you're editing, and the url at which you access it.
+    editorUrlRegEx: /([http|https]:\/\/.[^\/]*)\/editor\/?(.*)/i,
 
     // ## Hijacking Links & Forms
     //
@@ -442,7 +468,7 @@ window.Mercury = {
   // place to add or change functionality.
   onload: function() {
     //Mercury.PageEditor.prototype.iframeSrc = function(url) { return '/testing'; }
-  }
+  },
 
 };
 /*!
@@ -13243,7 +13269,7 @@ Showdown.converter = function() {
   var __slice = Array.prototype.slice;
   this.Mercury || (this.Mercury = {});
   jQuery.extend(this.Mercury, {
-    version: '0.2.3',
+    version: '0.3.0',
     Regions: Mercury.Regions || {},
     modalHandlers: Mercury.modalHandlers || {},
     lightviewHandlers: Mercury.lightviewHandlers || {},
@@ -13432,7 +13458,7 @@ Showdown.converter = function() {
       if (window.mercuryInstance) {
         throw Mercury.I18n('Mercury.PageEditor can only be instantiated once.');
       }
-      if (this.options.visible !== false) {
+      if (!(this.options.visible === false || this.options.visible === 'no')) {
         this.options.visible = true;
       }
       this.visible = this.options.visible;
@@ -13463,7 +13489,7 @@ Showdown.converter = function() {
       this.iframe.on('load', __bind(function() {
         return this.initializeFrame();
       }, this));
-      return this.iframe.get(0).contentWindow.document.location.href = this.iframeSrc();
+      return this.iframe.get(0).contentWindow.document.location.href = this.iframeSrc(null, true);
     };
     PageEditor.prototype.initializeFrame = function() {
       var iframeWindow, stylesToInject;
@@ -13591,9 +13617,13 @@ Showdown.converter = function() {
         }
       }, this));
       Mercury.on('action', __bind(function(event, options) {
-        if (options.action === 'save') {
-          return this.save();
+        var action;
+        action = Mercury.config.globalBehaviors[options.action] || this[options.action];
+        if (typeof action !== 'function') {
+          return;
         }
+        options.already_handled = true;
+        return action.call(this, options);
       }, this));
       this.document.on('mousedown', function(event) {
         Mercury.trigger('hide:dialogs');
@@ -13669,12 +13699,21 @@ Showdown.converter = function() {
       });
       return Mercury.trigger('resize');
     };
-    PageEditor.prototype.iframeSrc = function(url) {
+    PageEditor.prototype.iframeSrc = function(url, params) {
+      var _ref;
       if (url == null) {
         url = null;
       }
-      url = (url != null ? url : window.location.href).replace(/([http|https]:\/\/.[^\/]*)\/editor\/?(.*)/i, "$1/$2");
-      return "" + url + (url.indexOf('?') > -1 ? '&' : '?') + "mercury_frame=true";
+      if (params == null) {
+        params = false;
+      }
+      url = (url != null ? url : window.location.href).replace((_ref = Mercury.editorUrlRegEx) != null ? _ref : Mercury.editorUrlRegEx = /([http|https]:\/\/.[^\/]*)\/editor\/?(.*)/i, "$1/$2");
+      url = url.replace(/[\?|\&]mercury_frame=true/gi, '');
+      if (params) {
+        return "" + url + (url.indexOf('?') > -1 ? '&' : '?') + "mercury_frame=true";
+      } else {
+        return url;
+      }
     };
     PageEditor.prototype.hijackLinksAndForms = function() {
       var classname, element, ignored, _i, _j, _len, _len2, _ref, _ref2, _results;
@@ -13732,11 +13771,11 @@ Showdown.converter = function() {
           _method: method
         },
         success: __bind(function() {
-          if (callback) {
-            callback();
-          }
           Mercury.changes = false;
-          return Mercury.trigger('saved');
+          Mercury.trigger('saved');
+          if (typeof callback === 'function') {
+            return callback();
+          }
         }, this),
         error: __bind(function() {
           return Mercury.notify('Mercury was unable to save to the url: %s', url);
@@ -14589,9 +14628,14 @@ Showdown.converter = function() {
       Mercury.trigger('focus:window');
       this.initialize();
       if (this.visible) {
-        return this.update();
+        this.update();
       } else {
-        return this.appear();
+        this.appear();
+      }
+      if (this.options.content) {
+        return setTimeout(500, __bind(function() {
+          return this.loadContent(this.options.content);
+        }, this));
       }
     },
     initialize: function() {
@@ -14831,7 +14875,14 @@ Showdown.converter = function() {
       return this.resize();
     },
     setTitle: function() {
-      return this.titleElement.find('span').html(Mercury.I18n(this.options.title));
+      var closeButton;
+      this.titleElement.find('span').html(Mercury.I18n(this.options.title));
+      closeButton = this.titleElement.find('a');
+      if (this.options.closeButton === false) {
+        return closeButton.hide();
+      } else {
+        return closeButton.show();
+      }
     },
     reset: function() {
       this.titleElement.find('span').html('');
@@ -14868,9 +14919,14 @@ Showdown.converter = function() {
       Mercury.trigger('focus:window');
       this.initialize();
       if (this.visible) {
-        return this.update();
+        this.update();
       } else {
-        return this.appear();
+        this.appear();
+      }
+      if (this.options.content) {
+        return setTimeout(500, __bind(function() {
+          return this.loadContent(this.options.content);
+        }, this));
       }
     },
     initialize: function() {
@@ -16240,7 +16296,9 @@ Showdown.converter = function() {
         this.pushHistory();
       }
       Mercury.log('execCommand', action, options.value);
-      return Mercury.changes = true;
+      if (!options.already_handled) {
+        return Mercury.changes = true;
+      }
     };
     Region.prototype.pushHistory = function() {
       return this.history.push(this.content());

@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    mercury-rails (0.2.3)
+    mercury-rails (0.3.0)
       coffee-script
       paperclip
       rails (>= 3.1.0)

@@ -33,6 +33,7 @@
  *---------------------------------------------------------------------------*/
 
 html, body {
+  -webkit-transition: -webkit-transform 3s;
   margin: 0;
   padding: 0;
   overflow: hidden;
@@ -709,7 +710,9 @@ form fieldset.buttons .commit input:hover {
   float: left;
   margin-left: 10px;
 }
-
+#mercury_table #table_options .inputs:first-child label {
+  width: 36%
+}
 /*
  * Statusbar
  *----------------------------------------------------------------------------*/

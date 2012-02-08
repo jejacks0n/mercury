@@ -23,7 +23,7 @@
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  */
- html, body { margin: 0; padding: 0; overflow: hidden; }
+ html, body { -webkit-transition: -webkit-transform 3s; margin: 0; padding: 0; overflow: hidden; }
  .mercury-iframe { position: absolute; top: 0; width: 100%; visibility: hidden; }
  .mercury-focusable { position: absolute; opacity: 0; }
  form, form ul, form ol, form li, form fieldset, form p, .filter { margin: 0; padding: 0; }
@@ -118,6 +118,7 @@
  #mercury_table #table_display table { width: 100%; height: 100%; }
  #mercury_table #table_display td.selected { background: #09F; }
  #mercury_table #table_options { width: 383px; float: left; margin-left: 10px; }
+ #mercury_table #table_options .inputs:first-child label { width: 36% }
  .mercury-statusbar { position: fixed; -webkit-user-select: none; -moz-user-select: none; user-select: none; box-sizing: border-box; -moz-box-sizing: border-box; -webkit-box-sizing: border-box; z-index: 10020; bottom: 0; left: 0; width: 100%; height: 23px; cursor: default; padding: 0 10px; background: #E2E1E2; border-top: 1px solid #727272; font-family: Helvetica, Tahoma, Arial, sans-serif; font-size: 8.5pt; line-height: 23px; color: #222; }
  .mercury-statusbar .mercury-statusbar-about { display: block; float: right; color: #333; text-shadow: #EEE 0 1px 0; text-decoration: none; }
  .mercury-toolbar-container { user-select: none; position: fixed; z-index: 10010; top: 0; left: 0; width: 100%; border-bottom: 1px solid #E2E1E2; }

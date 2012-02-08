@@ -13707,10 +13707,10 @@ Showdown.converter = function() {
     };
 
     PageEditor.prototype.iframeSrc = function(url, params) {
-      var _ref;
+      var _base, _ref;
       if (url == null) url = null;
       if (params == null) params = false;
-      url = (url != null ? url : window.location.href).replace((_ref = Mercury.editorUrlRegEx) != null ? _ref : Mercury.editorUrlRegEx = /([http|https]:\/\/.[^\/]*)\/editor\/?(.*)/i, "$1/$2");
+      url = (url != null ? url : window.location.href).replace((_ref = (_base = Mercury.config).editorUrlRegEx) != null ? _ref : _base.editorUrlRegEx = /([http|https]:\/\/.[^\/]*)\/editor\/?(.*)/i, "$1/$2");
       url = url.replace(/[\?|\&]mercury_frame=true/gi, '');
       if (params) {
         return "" + url + (url.indexOf('?') > -1 ? '&' : '?') + "mercury_frame=true";

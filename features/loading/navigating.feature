@@ -5,7 +5,7 @@ Feature:
   I should be able to expect the editor to not get in the way when I navigate and submit forms
 
   Background:
-    Given I adjust the configuration to have: "{nonHijackableClasses: ['lightview']}"
+    Given I adjust the configuration to have: {"nonHijackableClasses": ["lightview"]}
     And am on an editable page
 
 

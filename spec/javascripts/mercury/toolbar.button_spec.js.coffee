@@ -78,7 +78,7 @@ describe "Mercury.Toolbar.Button", ->
       expect(@button.hasClass('active')).toEqual(true)
 
     it "builds panel buttons (and assigns toggle)", ->
-      @button = new Mercury.Toolbar.Button('foo', 'title', 'summary', {panel: '/evergreen/responses/blank.html'}, {appendDialogsTo: $('#test')})
+      @button = new Mercury.Toolbar.Button('foo', 'title', 'summary', {panel: '/blank.html'}, {appendDialogsTo: $('#test')})
       expect($('#test .mercury-panel').length).toEqual(1)
 
       jasmine.simulate.click(@button.get(0))
@@ -88,24 +88,24 @@ describe "Mercury.Toolbar.Button", ->
       expect(@button.hasClass('pressed')).toEqual(false)
 
     it "builds palette buttons", ->
-      @button = new Mercury.Toolbar.Button('foo', 'title', 'summary', {palette: '/evergreen/responses/blank.html'}, {appendDialogsTo: $('#test')})
+      @button = new Mercury.Toolbar.Button('foo', 'title', 'summary', {palette: '/blank.html'}, {appendDialogsTo: $('#test')})
       expect($('#test .mercury-palette').length).toEqual(1)
 
     it "builds select buttons", ->
-      @button = new Mercury.Toolbar.Button('foo', 'title', 'summary', {select: '/evergreen/responses/blank.html'}, {appendDialogsTo: $('#test')})
+      @button = new Mercury.Toolbar.Button('foo', 'title', 'summary', {select: '/blank.html'}, {appendDialogsTo: $('#test')})
       expect($('#test .mercury-select').length).toEqual(1)
 
     it "builds modal buttons", ->
-      @button = new Mercury.Toolbar.Button('foo', 'title', 'summary', {modal: '/evergreen/responses/blank.html'}, {appendDialogsTo: $('#test')})
+      @button = new Mercury.Toolbar.Button('foo', 'title', 'summary', {modal: '/blank.html'}, {appendDialogsTo: $('#test')})
       # nothing unique about this in building -- the modal is built/fired on click
 
     it "builds lightview buttons", ->
-      @button = new Mercury.Toolbar.Button('foo', 'title', 'summary', {lightview: '/evergreen/responses/blank.html'}, {appendDialogsTo: $('#test')})
+      @button = new Mercury.Toolbar.Button('foo', 'title', 'summary', {lightview: '/blank.html'}, {appendDialogsTo: $('#test')})
       # nothing unique about this in building -- the lightview is built/fired on click
 
     it "throws an error when an unknown type is encountered", ->
       expect(=>
-        @button = new Mercury.Toolbar.Button('foo', 'title', 'summary', {foo: '/evergreen/responses/blank.html'})
+        @button = new Mercury.Toolbar.Button('foo', 'title', 'summary', {foo: '/blank.html'})
       ).toThrow('Unknown button type "foo" used for the "foo" button.')
 
 
@@ -226,21 +226,21 @@ describe "Mercury.Toolbar.Button", ->
 
       it "opens a modal window", ->
         spy = spyOn(Mercury, 'modal').andCallFake(=>)
-        @button = new Mercury.Toolbar.Button('foo', 'title', 'summary', {modal: '/evergreen/responses/blank.html'})
+        @button = new Mercury.Toolbar.Button('foo', 'title', 'summary', {modal: '/blank.html'})
 
         jasmine.simulate.click(@button.get(0))
-        expect(spy.argsForCall[0]).toEqual(['/evergreen/responses/blank.html', {title: 'summary', handler: 'foo'}])
+        expect(spy.argsForCall[0]).toEqual(['/blank.html', {title: 'summary', handler: 'foo'}])
 
       it "opens a lightview window", ->
         spy = spyOn(Mercury, 'lightview').andCallFake(=>)
-        @button = new Mercury.Toolbar.Button('foo', 'title', 'summary', {lightview: '/evergreen/responses/blank.html'})
+        @button = new Mercury.Toolbar.Button('foo', 'title', 'summary', {lightview: '/blank.html'})
 
         jasmine.simulate.click(@button.get(0))
-        expect(spy.argsForCall[0]).toEqual(['/evergreen/responses/blank.html', {title: 'summary', handler: 'foo', closeButton: true}])
+        expect(spy.argsForCall[0]).toEqual(['/blank.html', {title: 'summary', handler: 'foo', closeButton: true}])
 
       it "shows and hides palettes", ->
         spy = spyOn(Mercury.Palette.prototype, 'toggle').andCallFake(=>)
-        @button = new Mercury.Toolbar.Button('foo', 'title', 'summary', {palette: '/evergreen/responses/blank.html'})
+        @button = new Mercury.Toolbar.Button('foo', 'title', 'summary', {palette: '/blank.html'})
 
         jasmine.simulate.click(@button.get(0))
         expect(spy.callCount).toEqual(1)
@@ -250,7 +250,7 @@ describe "Mercury.Toolbar.Button", ->
 
       it "shows and hides selects", ->
         spy = spyOn(Mercury.Select.prototype, 'toggle').andCallFake(=>)
-        @button = new Mercury.Toolbar.Button('foo', 'title', 'summary', {select: '/evergreen/responses/blank.html'})
+        @button = new Mercury.Toolbar.Button('foo', 'title', 'summary', {select: '/blank.html'})
 
         jasmine.simulate.click(@button.get(0))
         expect(spy.callCount).toEqual(1)
@@ -260,7 +260,7 @@ describe "Mercury.Toolbar.Button", ->
 
       it "shows and hides panels, and toggles the button pressed state", ->
         spy = spyOn(Mercury.Panel.prototype, 'toggle').andCallFake(=>)
-        @button = new Mercury.Toolbar.Button('foo', 'title', 'summary', {panel: '/evergreen/responses/blank.html'})
+        @button = new Mercury.Toolbar.Button('foo', 'title', 'summary', {panel: '/blank.html'})
 
         jasmine.simulate.click(@button.get(0))
         expect(spy.callCount).toEqual(1)

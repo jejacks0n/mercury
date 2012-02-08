@@ -91,16 +91,16 @@ Feature:
     And I make a selection
 
     When I click on the justify left editor button
-    Then the contents of the editable region should be "<div>first line</div><br><div align='left'>this is <span>justifiable</span> <b>content</b></div>"
+    Then the contents of the editable region should be "<div>first line</div><br><div align='left'>this is <span>justifiable</span><b>content</b></div> "
 
     When I click on the justify center editor button
-    Then the contents of the editable region should be "<div>first line</div><br><div align='center'>this is <span>justifiable</span> <b>content</b></div>"
+    Then the contents of the editable region should be "<div>first line</div><br><div align='center'>this is <span>justifiable</span><b>content</b></div> "
 
     When I click on the justify right editor button
-    Then the contents of the editable region should be "<div>first line</div><br><div align='right'>this is <span>justifiable</span> <b>content</b></div>"
+    Then the contents of the editable region should be "<div>first line</div><br><div align='right'>this is <span>justifiable</span><b>content</b></div> "
 
     When I click on the full justification editor button
-    Then the contents of the editable region should be "<div>first line</div><br><div align='justify'>this is <span>justifiable</span> <b>content</b></div>"
+    Then the contents of the editable region should be "<div>first line</div><br><div align='justify'>this is <span>justifiable</span><b>content</b></div> "
 
 
 #  Scenario: A user can make an unordered list
@@ -128,16 +128,16 @@ Feature:
     And I make a selection
 
     When I click on the indent editor button
-    Then the contents of the editable region should be "<div>first line</div><br><blockquote>this is <span>justifiable</span> <b>content</b></blockquote>"
+    Then the contents of the editable region should be "<div>first line</div><br><blockquote>this is <span>justifiable</span><b>content</b></blockquote> "
 
     When I click on the indent editor button
-    Then the contents of the editable region should be "<div>first line</div><br><blockquote><blockquote>this is <span>justifiable</span> <b>content</b></blockquote></blockquote>"
+    Then the contents of the editable region should be "<div>first line</div><br><blockquote><blockquote>this is <span>justifiable</span><b>content</b></blockquote></blockquote> "
 
     When I click on the outdent editor button
-    Then the contents of the editable region should be "<div>first line</div><br><blockquote>this is <span>justifiable</span> <b>content</b></blockquote>"
+    Then the contents of the editable region should be "<div>first line</div><br><blockquote>this is <span>justifiable</span><b>content</b></blockquote> "
 
     When I click on the outdent editor button
-    Then the contents of the editable region should be "<div>first line</div><br>this is <span>justifiable</span> <b>content</b>"
+    Then the contents of the editable region should be "<div>first line</div><br>this is <span>justifiable</span><b>content</b> "
 
 
 #  Scenario: A user can insert horizontal rules

@@ -205,7 +205,7 @@ describe "Mercury.lightview", ->
       spyOn(Mercury.lightview, 'update').andCallFake(=>)
       @loadSpy = spyOn(Mercury.lightview, 'load').andCallFake(=>)
       @positionSpy = spyOn(Mercury.lightview, 'position').andCallFake(=>)
-      Mercury.lightview('/evergreen/responses/blank.html', {appendTo: $('#test')})
+      Mercury.lightview('/blank.html', {appendTo: $('#test')})
 
     it "calls position", ->
       Mercury.lightview.appear()
@@ -250,7 +250,7 @@ describe "Mercury.lightview", ->
 
     beforeEach ->
       spyOn(Mercury.lightview, 'appear').andCallFake(=>)
-      Mercury.lightview('/evergreen/responses/blank.html', {appendTo: $('#test')})
+      Mercury.lightview('/blank.html', {appendTo: $('#test')})
       Mercury.lightview.contentPane = $()
 
     it "will keep the content element visible if asked to do so", ->
@@ -306,7 +306,7 @@ describe "Mercury.lightview", ->
     beforeEach ->
       spyOn(Mercury.lightview, 'appear').andCallFake(=>)
       @ajaxSpy = spyOn($, 'ajax')
-      Mercury.lightview('/evergreen/responses/blank.html', {appendTo: $('#test')})
+      Mercury.lightview('/blank.html', {appendTo: $('#test')})
 
     it "does nothing if there's no url", ->
       Mercury.lightview.url = null
@@ -327,7 +327,7 @@ describe "Mercury.lightview", ->
 
       beforeEach ->
         @setTimeoutSpy = spyOn(window, 'setTimeout').andCallFake((timeout, callback) => callback())
-        Mercury.preloadedViews = {'/evergreen/responses/blank.html': 'this is the preloaded content'}
+        Mercury.preloadedViews = {'/blank.html': 'this is the preloaded content'}
 
       afterEach ->
         Mercury.preloadedViews = {}
@@ -374,7 +374,7 @@ describe "Mercury.lightview", ->
           spy = spyOn(window, 'alert').andCallFake(=>)
           Mercury.lightview.load()
           expect(spy.callCount).toEqual(1)
-          expect(spy.argsForCall[0]).toEqual(['Mercury was unable to load /evergreen/responses/blank.html for the lightview.'])
+          expect(spy.argsForCall[0]).toEqual(['Mercury was unable to load /blank.html for the lightview.'])
 
 
   describe "#loadContent", ->
@@ -382,7 +382,7 @@ describe "Mercury.lightview", ->
     beforeEach ->
       spyOn(Mercury.lightview, 'appear').andCallFake(=>)
       @resizeSpy = spyOn(Mercury.lightview, 'resize').andCallFake(=>)
-      Mercury.lightview('/evergreen/responses/blank.html', {appendTo: $('#test'), title: 'title'})
+      Mercury.lightview('/blank.html', {appendTo: $('#test'), title: 'title'})
 
     it "accepts options and sets them to the instance options", ->
       Mercury.lightview.loadContent('content', {title: 'title'})
@@ -443,7 +443,7 @@ describe "Mercury.lightview", ->
 
     beforeEach ->
       spyOn(Mercury.lightview, 'appear').andCallFake(=>)
-      Mercury.lightview('/evergreen/responses/blank.html', {appendTo: $('#test'), title: 'title'})
+      Mercury.lightview('/blank.html', {appendTo: $('#test'), title: 'title'})
 
     it "sets the the title contents to what was provided in the options", ->
       Mercury.lightview.options = {title: 'new title'}
@@ -455,7 +455,7 @@ describe "Mercury.lightview", ->
 
     beforeEach ->
       spyOn(Mercury.lightview, 'appear').andCallFake(=>)
-      Mercury.lightview('/evergreen/responses/blank.html', {appendTo: $('#test'), title: 'title'})
+      Mercury.lightview('/blank.html', {appendTo: $('#test'), title: 'title'})
 
     it "clears the title and content elements", ->
       $('.mercury-lightview-content').html('content')
@@ -468,7 +468,7 @@ describe "Mercury.lightview", ->
 
     beforeEach ->
       spyOn(Mercury.lightview, 'appear').andCallFake(=>)
-      Mercury.lightview('/evergreen/responses/blank.html', {appendTo: $('#test')})
+      Mercury.lightview('/blank.html', {appendTo: $('#test')})
 
     it "triggers the focus:frame event", ->
       spy = spyOn(Mercury, 'trigger').andCallFake(=>)

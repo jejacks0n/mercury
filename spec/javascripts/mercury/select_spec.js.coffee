@@ -12,20 +12,20 @@ describe "Mercury.Select", ->
   describe "#build", ->
 
     it "builds an element", ->
-      @select = new Mercury.Select('/evergreen/responses/blank.html', 'foo', {appendTo: '#test', for: $('#button')})
+      @select = new Mercury.Select('/blank.html', 'foo', {appendTo: '#test', for: $('#button')})
       html = $('<div>').html(@select.element).html()
       expect(html).toContain('class="mercury-select mercury-foo-select loading"')
       expect(html).toContain('style="display:none"')
 
     it "appends to any element", ->
-      @select = new Mercury.Select('/evergreen/responses/blank.html', 'foo', {appendTo: '#select_container', for: $('#button')})
+      @select = new Mercury.Select('/blank.html', 'foo', {appendTo: '#select_container', for: $('#button')})
       expect($('#select_container .mercury-select').length).toEqual(1)
 
 
   describe "observed events", ->
 
     beforeEach ->
-      @select = new Mercury.Select('/evergreen/responses/blank.html', 'foo', {appendTo: '#test', for: $('#button')})
+      @select = new Mercury.Select('/blank.html', 'foo', {appendTo: '#test', for: $('#button')})
 
     it "hides", ->
       @select.element.css({display: 'block'})
@@ -41,7 +41,7 @@ describe "Mercury.Select", ->
   describe "#position", ->
 
     beforeEach ->
-      @select = new Mercury.Select('/evergreen/responses/blank.html', 'foo', {appendTo: '#test', for: $('#button')})
+      @select = new Mercury.Select('/blank.html', 'foo', {appendTo: '#test', for: $('#button')})
 
     it "positions based on it's button", ->
       @select.element.css({display: 'block'})

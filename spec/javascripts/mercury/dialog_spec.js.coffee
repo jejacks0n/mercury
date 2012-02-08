@@ -21,12 +21,12 @@ describe "Mercury.Dialog", ->
       @preloadSpy = spyOn(Mercury.Dialog.prototype, 'preload').andCallFake(=>)
 
     it "expects a url and name", ->
-      @dialog = new Mercury.Dialog('/evergreen/responses/blank.html', 'foo')
-      expect(@dialog.url).toEqual('/evergreen/responses/blank.html')
+      @dialog = new Mercury.Dialog('/blank.html', 'foo')
+      expect(@dialog.url).toEqual('/blank.html')
       expect(@dialog.name).toEqual('foo')
 
     it "accepts options", ->
-      @dialog = new Mercury.Dialog('/evergreen/responses/blank.html', 'foo', {for: 'something', foo: 'bar'})
+      @dialog = new Mercury.Dialog('/blank.html', 'foo', {for: 'something', foo: 'bar'})
       expect(@dialog.options).toEqual({for: 'something', foo: 'bar'})
 
     it "calls build", ->
@@ -49,13 +49,13 @@ describe "Mercury.Dialog", ->
       @preloadSpy = spyOn(Mercury.Dialog.prototype, 'preload').andCallFake(=>)
 
     it "builds an element", ->
-      @dialog = new Mercury.Dialog('/evergreen/responses/blank.html', 'foo', {appendTo: '#test'})
+      @dialog = new Mercury.Dialog('/blank.html', 'foo', {appendTo: '#test'})
       html = $('<div>').html(@dialog.element).html()
       expect(html).toContain('class="mercury-dialog mercury-foo-dialog loading"')
       expect(html).toContain('style="display:none"')
 
     it "appends to any element", ->
-      @dialog = new Mercury.Dialog('/evergreen/responses/blank.html', 'foo', {appendTo: '#dialog_container'})
+      @dialog = new Mercury.Dialog('/blank.html', 'foo', {appendTo: '#dialog_container'})
       expect($('#dialog_container .mercury-dialog').length).toEqual(1)
 
 
@@ -70,18 +70,18 @@ describe "Mercury.Dialog", ->
       @loadSpy = spyOn(Mercury.Dialog.prototype, 'load').andCallFake(=>)
 
     it "calls load if configured", ->
-      @dialog = new Mercury.Dialog('/evergreen/responses/blank.html', 'foo', {appendTo: '#test', preload: true})
+      @dialog = new Mercury.Dialog('/blank.html', 'foo', {appendTo: '#test', preload: true})
       expect(@loadSpy.callCount).toEqual(1)
 
     it "doesn't call load if configured", ->
-      @dialog = new Mercury.Dialog('/evergreen/responses/blank.html', 'foo', {appendTo: '#test', preload: false})
+      @dialog = new Mercury.Dialog('/blank.html', 'foo', {appendTo: '#test', preload: false})
       expect(@loadSpy.callCount).toEqual(0)
 
 
   describe "#toggle", ->
 
     beforeEach ->
-      @dialog = new Mercury.Dialog('/evergreen/responses/blank.html', 'foo', {appendTo: '#test'})
+      @dialog = new Mercury.Dialog('/blank.html', 'foo', {appendTo: '#test'})
 
     it "shows or hides", ->
       expect(@dialog.element.css('display')).toEqual('none')
@@ -94,7 +94,7 @@ describe "Mercury.Dialog", ->
   describe "#resize", ->
 
     beforeEach ->
-      @dialog = new Mercury.Dialog('/evergreen/responses/blank.html', 'foo', {appendTo: '#test'})
+      @dialog = new Mercury.Dialog('/blank.html', 'foo', {appendTo: '#test'})
 
     it "calls show", ->
       spy = spyOn(Mercury.Dialog.prototype, 'show').andCallFake(=>)
@@ -105,7 +105,7 @@ describe "Mercury.Dialog", ->
   describe "#show", ->
 
     beforeEach ->
-      @dialog = new Mercury.Dialog('/evergreen/responses/blank.html', 'foo', {appendTo: '#test'})
+      @dialog = new Mercury.Dialog('/blank.html', 'foo', {appendTo: '#test'})
 
     it "triggers a custom event to hide all other dialogs", ->
       spy = spyOn(Mercury, 'trigger').andCallFake(=>)
@@ -157,7 +157,7 @@ describe "Mercury.Dialog", ->
   describe "#appear", ->
 
     beforeEach ->
-      @dialog = new Mercury.Dialog('/evergreen/responses/blank.html', 'foo', {appendTo: '#test'})
+      @dialog = new Mercury.Dialog('/blank.html', 'foo', {appendTo: '#test'})
 
     it "animates the dialog in", ->
       @dialog.appear()
@@ -170,7 +170,7 @@ describe "Mercury.Dialog", ->
   describe "#hide", ->
 
     beforeEach ->
-      @dialog = new Mercury.Dialog('/evergreen/responses/blank.html', 'foo', {appendTo: '#test'})
+      @dialog = new Mercury.Dialog('/blank.html', 'foo', {appendTo: '#test'})
 
     it "hides the dialog", ->
       @dialog.element.css({display: 'block'})
@@ -184,7 +184,7 @@ describe "Mercury.Dialog", ->
     beforeEach ->
       @spyFunction = ->
       Mercury.dialogHandlers.foo = ->
-      @dialog = new Mercury.Dialog('/evergreen/responses/blank.html', 'foo', {appendTo: '#test', for: $('#button')})
+      @dialog = new Mercury.Dialog('/blank.html', 'foo', {appendTo: '#test', for: $('#button')})
 
     it "does nothing if there's no url", ->
       spy = spyOn($, 'ajax').andCallFake(=>)
@@ -195,7 +195,7 @@ describe "Mercury.Dialog", ->
     describe "on a preloaded view", ->
 
       beforeEach ->
-        Mercury.preloadedViews = {'/evergreen/responses/blank.html': 'this is the preloaded content'}
+        Mercury.preloadedViews = {'/blank.html': 'this is the preloaded content'}
 
       afterEach ->
         Mercury.preloadedViews = {}
@@ -255,13 +255,13 @@ describe "Mercury.Dialog", ->
         it "alerts the user", ->
           @dialog.load()
           expect(@alertSpy.callCount).toEqual(1)
-          expect(@alertSpy.argsForCall[0]).toEqual(['Mercury was unable to load /evergreen/responses/blank.html for the "foo" dialog.'])
+          expect(@alertSpy.argsForCall[0]).toEqual(['Mercury was unable to load /blank.html for the "foo" dialog.'])
 
 
   describe "#loadContent", ->
 
     beforeEach ->
-      @dialog = new Mercury.Dialog('/evergreen/responses/blank.html', 'foo', {appendTo: '#test'})
+      @dialog = new Mercury.Dialog('/blank.html', 'foo', {appendTo: '#test'})
 
     it "sets loaded to be true", ->
       @dialog.loadContent()

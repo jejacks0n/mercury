@@ -218,7 +218,15 @@ describe "Mercury.Snippet class methods", ->
     it "pushes into the collection array", ->
       Mercury.Snippet.create('foo', {foo: 'bar'})
       expect(Mercury.Snippet.all.length).toEqual(1)
+      
+    describe "when an snuppet exist with an identical identity", ->
+      it "generates a unique identity", ->
+        Mercury.Snippet.load
+          snippet_1: {name: 'foo', options: {foo: 'bar'}}
+          snippet_2: {name: 'bar', options: {baz: 'pizza'}}
 
+        ret = Mercury.Snippet.create('noobie', {noobie: 'one'})
+        expect(ret.identity).toEqual('snippet_0')
 
   describe ".find", ->
 

@@ -68,10 +68,10 @@ Mercury.I18n['da'] =
 
   # ### General
   # Error Messages
-  "Mercury.Regions.%s is unsupported in this client. Supported browsers are %s.": "Mercury.Regions.%s er ustøttet i denne klient. Støttede browsere er %s."
+  "Mercury.Regions.%s is unsupported in this client. Supported browsers are %s.": "Mercury.Regions.%s er ikke understøttet i denne browser. Understøttede browsere er %s."
   "Mercury.PageEditor can only be instantiated once.": "Mercury.PageEditor kan kun blive instantieret én gang."
-  "Opera isn't a fully supported browser, your results may not be optimal.": "Opera er ikke en fuldt ud støttet browser. Dine resultater kan derfor være uoptimale."
-  "Mercury.PageEditor failed to load: %s\n\nPlease try refreshing.": "Mercury.PageEditor fejlede med at indlæse: %s\n\n Prøv venligst at opdatere siden."
+  "Opera isn't a fully supported browser, your results may not be optimal.": "Opera er ikke en fuldt ud understøttet. Dine resultater kan derfor være uoptimale."
+  "Mercury.PageEditor failed to load: %s\n\nPlease try refreshing.": "Mercury.PageEditor kunne ikke starte: %s\n\n Prøv venligst at opdatere siden."
   "Region type is malformed, no data-type provided, or \"%s\" is unknown for the \"%s\" region.": "Regionstype er forkert formateret. Enten blev ingen datatype angivet, ellers er \"%s\" ukendt for \"%s\"regionen."
   "Mercury was unable to save to the url: %s": "Mercury var ikke i stand til at gemme til addressen: %s"
   # Confirmations
@@ -100,12 +100,12 @@ Mercury.I18n['da'] =
   "Error: Unable to upload the file": "Fejl: Kunne ikke uploade filen"
   "Malformed response from server": "Deform svar fra server"
   "Too large": "For stor"
-  "Unsupported format": "Formatet er ikke støttet"
+  "Unsupported format": "Formatet er ikke understøttet"
   # Statuses
   "Processing...": "Forarbejder..."
   "Uploading...": "Uploader..."
   "Aborted": "Afbrudt"
-  "Successfully uploaded...": "Uploadningen lykkedes..."
+  "Successfully uploaded...": "Upload færdig..."
   "Name: %s": "Navn: %s"
   "Size: %s": "Størrelse: %s"
   "Type: %s": "Type: %s"
@@ -129,7 +129,7 @@ Mercury.I18n['da'] =
   "Existing Links": "Eksisterende links"
   "Bookmark": "Bogmærke"
   "Options": "Indstillinger"
-  "Link Target": "Link mål"
+  "Link Target": "Link Target"
   "Self (the same window or tab)": "Self (det samme vindue eller fane)"
   "Blank (a new window or tab)": "Blank (et nyt vindue eller fane)"
   "Top (removes any frames)": "Top (fjerner eventuelle rammer)"
@@ -141,7 +141,7 @@ Mercury.I18n['da'] =
   # Insert Media Modal (media.html)
   "Images": "Billeder"
   "Videos": "Videoer"
-  "YouTube Share URL": "YouTube delnings-URL"
+  "YouTube Share URL": "YouTube del-URL"
   "Vimeo URL": "Vimeo-URL"
   "Alignment": "Justering"
   "None": "Ingen"

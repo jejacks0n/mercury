@@ -22,8 +22,10 @@
  * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
+
  *
  * Minimum jQuery requirements are 1.7
+
  *
  * You can include the Rails jQuery ujs script here to get some nicer behaviors in modals, panels and lightviews when
  * using :remote => true within the contents rendered in them.
@@ -37,6 +39,7 @@
  * require mercury/support/history
  *
  * Require Mercury Editor itself.
+
  *
  * Require any localizations you wish to support
  * Example: es.locale, or fr.locale -- regional dialects are in each language file so never en_US for instance.
@@ -328,9 +331,30 @@ window.Mercury = {
     // You can see how the behavior matches up directly with the button names.  It's also important to note that the
     // callback functions are executed within the scope of the given region, so you have access to all it's methods.
     behaviors: {
-      //exit: function() { window.location.href = window.mercuryInstance.iframeSrc() },
       //foreColor: function(selection, options) { selection.wrap('<span style="color:' + options.value.toHex() + '">', true) },
       htmlEditor: function() { Mercury.modal('/mercury/modals/htmleditor.html', { title: 'HTML Editor', fullHeight: true, handler: 'htmlEditor' }); }
+      },
+
+
+    // ## Global Behaviors
+    //
+    // Global behaviors are much like behaviors, but are more "global".  Things like save, exit, etc. can be included
+    // here.  They'll only be called once, and execute within the scope of whatever editor is instantiated (eg.
+    // PageEditor).
+    //
+    // An example of changing how saving works:
+    //
+    //     save: function() {
+    //       var data = top.JSON.stringify(this.serialize(), null, '  ');
+    //       var content = '<textarea style="width:500px;height:200px" wrap="off">' + data + '</textarea>';
+    //       Mercury.modal(null, {title: 'Saving', closeButton: true, content: content})
+    //     }
+    //
+    // This is a nice way to add functionality, when the behaviors aren't region specific.  These can be triggered by a
+    // button, or manually with `Mercury.trigger('action', {action: 'barrelRoll'})`
+    globalBehaviors: {
+      exit: function() { window.location.href = this.iframeSrc() },
+      barrelRoll: function() { $('body').css({webkitTransform: 'rotate(360deg)'}) }
       },
 
 
@@ -343,6 +367,11 @@ window.Mercury = {
     csrfSelector: 'meta[name="csrf-token"]',
     csrfHeader: 'X-CSRF-Token',
 
+    // ## Editor URLs
+    //
+    // When loading a given page, you may want to tweak this regex.  It's to allow the url to differ from the page
+    // you're editing, and the url at which you access it.
+    editorUrlRegEx: /([http|https]:\/\/.[^\/]*)\/editor\/?(.*)/i,
 
     // ## Hijacking Links & Forms
     //
@@ -442,7 +471,7 @@ window.Mercury = {
   // place to add or change functionality.
   onload: function() {
     //Mercury.PageEditor.prototype.iframeSrc = function(url) { return '/testing'; }
-  }
+  },
 
 };
 /*!
@@ -13241,9 +13270,11 @@ Showdown.converter = function() {
 };
 (function() {
   var __slice = Array.prototype.slice;
+
   this.Mercury || (this.Mercury = {});
+
   jQuery.extend(this.Mercury, {
-    version: '0.2.3',
+    version: '0.3.0',
     Regions: Mercury.Regions || {},
     modalHandlers: Mercury.modalHandlers || {},
     lightviewHandlers: Mercury.lightviewHandlers || {},
@@ -13268,9 +13299,7 @@ Showdown.converter = function() {
       return window.alert(Mercury.I18n.apply(this, args));
     },
     warn: function(message, severity) {
-      if (severity == null) {
-        severity = 0;
-      }
+      if (severity == null) severity = 0;
       if (console) {
         try {
           return console.warn(message);
@@ -13307,9 +13336,7 @@ Showdown.converter = function() {
     },
     locale: function() {
       var locale, subLocale, topLocale;
-      if (Mercury.determinedLocale) {
-        return Mercury.determinedLocale;
-      }
+      if (Mercury.determinedLocale) return Mercury.determinedLocale;
       if (Mercury.config.localization.enabled) {
         locale = [];
         if (navigator.language && (locale = navigator.language.toString().split('-')).length) {
@@ -13339,25 +13366,28 @@ Showdown.converter = function() {
       }
     }
   });
+
 }).call(this);
 (function() {
+
   String.prototype.titleize = function() {
     return this[0].toUpperCase() + this.slice(1);
   };
+
   String.prototype.toHex = function() {
-    if (this[0] === '#') {
-      return this;
-    }
+    if (this[0] === '#') return this;
     return this.replace(/rgb(a)?\(([0-9|%]+)[\s|,]?\s?([0-9|%]+)[\s|,]?\s?([0-9|%]+)[\s|,]?\s?([0-9|.|%]+\s?)?\)/gi, function(x, alpha, r, g, b, a) {
       return "#" + (parseInt(r).toHex()) + (parseInt(g).toHex()) + (parseInt(b).toHex());
     });
   };
+
   String.prototype.regExpEscape = function() {
     var escaped, specials;
     specials = ['/', '.', '*', '+', '?', '|', '(', ')', '[', ']', '{', '}', '\\'];
     escaped = new RegExp('(\\' + specials.join('|\\') + ')', 'g');
     return this.replace(escaped, '\\$1');
   };
+
   String.prototype.printf = function() {
     var arg, chunk, chunks, index, offset, p, re, result, _len;
     chunks = this.split('%');
@@ -13390,6 +13420,7 @@ Showdown.converter = function() {
     }
     return result;
   };
+
   Number.prototype.toHex = function() {
     var result;
     result = this.toString(16).toUpperCase();
@@ -13399,6 +13430,7 @@ Showdown.converter = function() {
       return "0" + result;
     }
   };
+
   Number.prototype.toBytes = function() {
     var bytes, i;
     bytes = parseInt(this);
@@ -13413,7 +13445,9 @@ Showdown.converter = function() {
       return "" + bytes + " bytes";
     }
   };
+
   window.originalSetTimeout = window.setTimeout;
+
   window.setTimeout = function(arg1, arg2) {
     if (typeof arg1 === 'number') {
       return window.originalSetTimeout(arg2, arg1);
@@ -13421,10 +13455,12 @@ Showdown.converter = function() {
       return window.originalSetTimeout(arg1, arg2);
     }
   };
+
 }).call(this);
 (function() {
-  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+
   this.Mercury.PageEditor = (function() {
+
     function PageEditor(saveUrl, options) {
       var token;
       this.saveUrl = saveUrl != null ? saveUrl : null;
@@ -13432,7 +13468,7 @@ Showdown.converter = function() {
       if (window.mercuryInstance) {
         throw Mercury.I18n('Mercury.PageEditor can only be instantiated once.');
       }
-      if (this.options.visible !== false) {
+      if (!(this.options.visible === false || this.options.visible === 'no')) {
         this.options.visible = true;
       }
       this.visible = this.options.visible;
@@ -13443,8 +13479,10 @@ Showdown.converter = function() {
         Mercury.csrfToken = token;
       }
     }
+
     PageEditor.prototype.initializeInterface = function() {
-      var _ref, _ref2;
+      var _ref, _ref2,
+        _this = this;
       this.focusableElement = jQuery('<input>', {
         "class": 'mercury-focusable',
         type: 'text'
@@ -13460,17 +13498,16 @@ Showdown.converter = function() {
       this.toolbar = new Mercury.Toolbar(this.options);
       this.statusbar = new Mercury.Statusbar(this.options);
       this.resize();
-      this.iframe.on('load', __bind(function() {
-        return this.initializeFrame();
-      }, this));
-      return this.iframe.get(0).contentWindow.document.location.href = this.iframeSrc();
+      this.iframe.on('load', function() {
+        return _this.initializeFrame();
+      });
+      return this.iframe.get(0).contentWindow.document.location.href = this.iframeSrc(null, true);
     };
+
     PageEditor.prototype.initializeFrame = function() {
       var iframeWindow, stylesToInject;
       try {
-        if (this.iframe.data('loaded')) {
-          return;
-        }
+        if (this.iframe.data('loaded')) return;
         this.iframe.data('loaded', true);
         if (jQuery.browser.opera) {
           Mercury.notify("Opera isn't a fully supported browser, your results may not be optimal.");
@@ -13487,9 +13524,7 @@ Showdown.converter = function() {
           }
         };
         iframeWindow.Mercury = Mercury;
-        if (window.History && History.Adapter) {
-          iframeWindow.History = History;
-        }
+        if (window.History && History.Adapter) iframeWindow.History = History;
         this.bindEvents();
         this.resize();
         this.initializeRegions();
@@ -13499,9 +13534,7 @@ Showdown.converter = function() {
         if (iframeWindow.Event && iframeWindow.Event.fire) {
           iframeWindow.Event.fire(iframeWindow, 'mercury:ready');
         }
-        if (iframeWindow.onMercuryReady) {
-          iframeWindow.onMercuryReady();
-        }
+        if (iframeWindow.onMercuryReady) iframeWindow.onMercuryReady();
         return this.iframe.css({
           visibility: 'visible'
         });
@@ -13509,6 +13542,7 @@ Showdown.converter = function() {
         return Mercury.notify('Mercury.PageEditor failed to load: %s\n\nPlease try refreshing.', error);
       }
     };
+
     PageEditor.prototype.initializeRegions = function() {
       var region, _i, _j, _len, _len2, _ref, _ref2, _results;
       this.regions = [];
@@ -13517,9 +13551,7 @@ Showdown.converter = function() {
         region = _ref[_i];
         this.buildRegion(jQuery(region));
       }
-      if (!this.options.visible) {
-        return;
-      }
+      if (!this.options.visible) return;
       _ref2 = this.regions;
       _results = [];
       for (_j = 0, _len2 = _ref2.length; _j < _len2; _j++) {
@@ -13527,10 +13559,13 @@ Showdown.converter = function() {
         if (region.focus) {
           region.focus();
           break;
+        } else {
+          _results.push(void 0);
         }
       }
       return _results;
     };
+
     PageEditor.prototype.buildRegion = function(region) {
       var type;
       if (region.data('region')) {
@@ -13545,12 +13580,11 @@ Showdown.converter = function() {
           return false;
         }
         region = new Mercury.Regions[type](region, this.iframe.get(0).contentWindow);
-        if (this.previewing) {
-          region.togglePreview();
-        }
+        if (this.previewing) region.togglePreview();
       }
       return this.regions.push(region);
     };
+
     PageEditor.prototype.finalizeInterface = function() {
       var _ref;
       this.santizerElement = jQuery('<div>', {
@@ -13567,34 +13601,38 @@ Showdown.converter = function() {
         });
       }
     };
+
     PageEditor.prototype.bindEvents = function() {
-      Mercury.on('initialize:frame', __bind(function() {
-        return setTimeout(100, this.initializeFrame);
-      }, this));
-      Mercury.on('focus:frame', __bind(function() {
-        return this.iframe.focus();
-      }, this));
-      Mercury.on('focus:window', __bind(function() {
-        return setTimeout(10, __bind(function() {
-          return this.focusableElement.focus();
-        }, this));
-      }, this));
-      Mercury.on('toggle:interface', __bind(function() {
-        return this.toggleInterface();
-      }, this));
-      Mercury.on('reinitialize', __bind(function() {
-        return this.initializeRegions();
-      }, this));
-      Mercury.on('mode', __bind(function(event, options) {
+      var _this = this;
+      Mercury.on('initialize:frame', function() {
+        return setTimeout(100, _this.initializeFrame);
+      });
+      Mercury.on('focus:frame', function() {
+        return _this.iframe.focus();
+      });
+      Mercury.on('focus:window', function() {
+        return setTimeout(10, function() {
+          return _this.focusableElement.focus();
+        });
+      });
+      Mercury.on('toggle:interface', function() {
+        return _this.toggleInterface();
+      });
+      Mercury.on('reinitialize', function() {
+        return _this.initializeRegions();
+      });
+      Mercury.on('mode', function(event, options) {
         if (options.mode === 'preview') {
-          return this.previewing = !this.previewing;
+          return _this.previewing = !_this.previewing;
         }
-      }, this));
-      Mercury.on('action', __bind(function(event, options) {
-        if (options.action === 'save') {
-          return this.save();
-        }
-      }, this));
+      });
+      Mercury.on('action', function(event, options) {
+        var action;
+        action = Mercury.config.globalBehaviors[options.action] || _this[options.action];
+        if (typeof action !== 'function') return;
+        options.already_handled = true;
+        return action.call(_this, options);
+      });
       this.document.on('mousedown', function(event) {
         Mercury.trigger('hide:dialogs');
         if (Mercury.region) {
@@ -13603,33 +13641,30 @@ Showdown.converter = function() {
           }
         }
       });
-      jQuery(window).on('resize', __bind(function() {
-        return this.resize();
-      }, this));
-      jQuery(this.document).bind('keydown', __bind(function(event) {
-        if (!(event.ctrlKey || event.metaKey)) {
-          return;
-        }
+      jQuery(window).on('resize', function() {
+        return _this.resize();
+      });
+      jQuery(this.document).bind('keydown', function(event) {
+        if (!(event.ctrlKey || event.metaKey)) return;
         if (event.keyCode === 83) {
           Mercury.trigger('action', {
             action: 'save'
           });
           return event.preventDefault();
         }
-      }, this));
-      jQuery(window).bind('keydown', __bind(function(event) {
-        if (!(event.ctrlKey || event.metaKey)) {
-          return;
-        }
+      });
+      jQuery(window).bind('keydown', function(event) {
+        if (!(event.ctrlKey || event.metaKey)) return;
         if (event.keyCode === 83) {
           Mercury.trigger('action', {
             action: 'save'
           });
           return event.preventDefault();
         }
-      }, this));
+      });
       return window.onbeforeunload = this.beforeUnload;
     };
+
     PageEditor.prototype.toggleInterface = function() {
       if (this.visible) {
         if (this.previewing) {
@@ -13650,6 +13685,7 @@ Showdown.converter = function() {
       });
       return this.resize();
     };
+
     PageEditor.prototype.resize = function() {
       var height, toolbarHeight, width;
       width = jQuery(window).width();
@@ -13669,13 +13705,20 @@ Showdown.converter = function() {
       });
       return Mercury.trigger('resize');
     };
-    PageEditor.prototype.iframeSrc = function(url) {
-      if (url == null) {
-        url = null;
+
+    PageEditor.prototype.iframeSrc = function(url, params) {
+      var _base, _ref;
+      if (url == null) url = null;
+      if (params == null) params = false;
+      url = (url != null ? url : window.location.href).replace((_ref = (_base = Mercury.config).editorUrlRegEx) != null ? _ref : _base.editorUrlRegEx = /([http|https]:\/\/.[^\/]*)\/editor\/?(.*)/i, "$1/$2");
+      url = url.replace(/[\?|\&]mercury_frame=true/gi, '');
+      if (params) {
+        return "" + url + (url.indexOf('?') > -1 ? '&' : '?') + "mercury_frame=true";
+      } else {
+        return url;
       }
-      url = (url != null ? url : window.location.href).replace(/([http|https]:\/\/.[^\/]*)\/editor\/?(.*)/i, "$1/$2");
-      return "" + url + (url.indexOf('?') > -1 ? '&' : '?') + "mercury_frame=true";
     };
+
     PageEditor.prototype.hijackLinksAndForms = function() {
       var classname, element, ignored, _i, _j, _len, _len2, _ref, _ref2, _results;
       _ref = jQuery('a, form', this.document);
@@ -13691,38 +13734,40 @@ Showdown.converter = function() {
             continue;
           }
         }
-        _results.push(!ignored && (element.target === '' || element.target === '_self') && !jQuery(element).closest("." + Mercury.config.regions.className).length ? jQuery(element).attr('target', '_parent') : void 0);
+        if (!ignored && (element.target === '' || element.target === '_self') && !jQuery(element).closest("." + Mercury.config.regions.className).length) {
+          _results.push(jQuery(element).attr('target', '_parent'));
+        } else {
+          _results.push(void 0);
+        }
       }
       return _results;
     };
+
     PageEditor.prototype.beforeUnload = function() {
       if (Mercury.changes && !Mercury.silent) {
         return Mercury.I18n('You have unsaved changes.  Are you sure you want to leave without saving them first?');
       }
       return null;
     };
+
     PageEditor.prototype.getRegionByName = function(id) {
       var region, _i, _len, _ref;
       _ref = this.regions;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         region = _ref[_i];
-        if (region.name === id) {
-          return region;
-        }
+        if (region.name === id) return region;
       }
       return null;
     };
+
     PageEditor.prototype.save = function(callback) {
-      var data, method, url, _ref, _ref2;
+      var data, method, url, _ref, _ref2,
+        _this = this;
       url = (_ref = (_ref2 = this.saveUrl) != null ? _ref2 : Mercury.saveURL) != null ? _ref : this.iframeSrc();
       data = this.serialize();
       Mercury.log('saving', data);
-      if (this.options.saveStyle !== 'form') {
-        data = jQuery.toJSON(data);
-      }
-      if (this.options.saveMethod === 'PUT') {
-        method = 'PUT';
-      }
+      if (this.options.saveStyle !== 'form') data = jQuery.toJSON(data);
+      if (this.options.saveMethod === 'PUT') method = 'PUT';
       return jQuery.ajax(url, {
         headers: Mercury.ajaxHeaders(),
         type: method || 'POST',
@@ -13731,18 +13776,17 @@ Showdown.converter = function() {
           content: data,
           _method: method
         },
-        success: __bind(function() {
-          if (callback) {
-            callback();
-          }
+        success: function() {
           Mercury.changes = false;
-          return Mercury.trigger('saved');
-        }, this),
-        error: __bind(function() {
+          Mercury.trigger('saved');
+          if (typeof callback === 'function') return callback();
+        },
+        error: function() {
           return Mercury.notify('Mercury was unable to save to the url: %s', url);
-        }, this)
+        }
       });
     };
+
     PageEditor.prototype.serialize = function() {
       var region, serialized, _i, _len, _ref;
       serialized = {};
@@ -13753,17 +13797,23 @@ Showdown.converter = function() {
       }
       return serialized;
     };
+
     return PageEditor;
+
   })();
+
 }).call(this);
 (function() {
+
   this.Mercury.HistoryBuffer = (function() {
+
     function HistoryBuffer(maxLength) {
       this.maxLength = maxLength != null ? maxLength : 200;
       this.index = 0;
       this.stack = [];
       this.markerRegExp = /<em class="mercury-marker"><\/em>/g;
     }
+
     HistoryBuffer.prototype.push = function(item) {
       if (jQuery.type(item) === 'string') {
         if (this.stack[this.index] && this.stack[this.index].replace(this.markerRegExp, '') === item.replace(this.markerRegExp, '')) {
@@ -13774,35 +13824,36 @@ Showdown.converter = function() {
           return;
         }
       }
-      this.stack = this.stack.slice(0, this.index + 1);
+      this.stack = this.stack.slice(0, (this.index + 1));
       this.stack.push(item);
-      if (this.stack.length > this.maxLength) {
-        this.stack.shift();
-      }
+      if (this.stack.length > this.maxLength) this.stack.shift();
       return this.index = this.stack.length - 1;
     };
+
     HistoryBuffer.prototype.undo = function() {
-      if (this.index < 1) {
-        return null;
-      }
+      if (this.index < 1) return null;
       this.index -= 1;
       return this.stack[this.index];
     };
+
     HistoryBuffer.prototype.redo = function() {
-      if (this.index >= this.stack.length - 1) {
-        return null;
-      }
+      if (this.index >= this.stack.length - 1) return null;
       this.index += 1;
       return this.stack[this.index];
     };
+
     return HistoryBuffer;
+
   })();
+
 }).call(this);
 (function() {
+
   this.Mercury.tableEditor = function(table, cell, cellContent) {
     Mercury.tableEditor.load(table, cell, cellContent);
     return Mercury.tableEditor;
   };
+
   jQuery.extend(Mercury.tableEditor, {
     load: function(table, cell, cellContent) {
       this.table = table;
@@ -13814,9 +13865,7 @@ Showdown.converter = function() {
     },
     addColumn: function(position) {
       var i, intersecting, matchOptions, matching, newCell, row, rowSpan, sig, _len, _ref, _results;
-      if (position == null) {
-        position = 'after';
-      }
+      if (position == null) position = 'after';
       sig = this.cellSignatureFor(this.cell);
       _ref = this.table.find('tr');
       _results = [];
@@ -13828,16 +13877,27 @@ Showdown.converter = function() {
         } : {
           left: sig.left
         };
-        _results.push((matching = this.findCellByOptionsFor(row, matchOptions)) ? (newCell = jQuery("<" + (matching.cell.get(0).tagName) + ">").html(this.cellContent), this.setRowspanFor(newCell, matching.height), position === 'before' ? matching.cell.before(newCell) : matching.cell.after(newCell), i += matching.height - 1) : (intersecting = this.findCellByIntersectionFor(row, sig)) ? this.setColspanFor(intersecting.cell, intersecting.width + 1) : void 0);
+        if (matching = this.findCellByOptionsFor(row, matchOptions)) {
+          newCell = jQuery("<" + (matching.cell.get(0).tagName) + ">").html(this.cellContent);
+          this.setRowspanFor(newCell, matching.height);
+          if (position === 'before') {
+            matching.cell.before(newCell);
+          } else {
+            matching.cell.after(newCell);
+          }
+          _results.push(i += matching.height - 1);
+        } else if (intersecting = this.findCellByIntersectionFor(row, sig)) {
+          _results.push(this.setColspanFor(intersecting.cell, intersecting.width + 1));
+        } else {
+          _results.push(void 0);
+        }
       }
       return _results;
     },
     removeColumn: function() {
       var adjusting, cell, i, intersecting, matching, removing, row, sig, _i, _j, _len, _len2, _len3, _ref, _results;
       sig = this.cellSignatureFor(this.cell);
-      if (sig.width > 1) {
-        return;
-      }
+      if (sig.width > 1) return;
       removing = [];
       adjusting = [];
       _ref = this.table.find('tr');
@@ -13866,9 +13926,7 @@ Showdown.converter = function() {
     },
     addRow: function(position) {
       var cell, cellCount, colspan, newCell, newRow, previousRow, rowCount, rowspan, _i, _j, _k, _len, _len2, _len3, _ref, _ref2, _ref3;
-      if (position == null) {
-        position = 'after';
-      }
+      if (position == null) position = 'after';
       newRow = jQuery('<tr>');
       if ((rowspan = this.rowspanFor(this.cell)) > 1 && position === 'after') {
         this.row = jQuery(this.row.nextAll('tr')[rowspan - 2]);
@@ -13926,17 +13984,11 @@ Showdown.converter = function() {
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         cell = _ref[_i];
         rowspan = this.rowspanFor(cell);
-        if (prevRowspan && rowspan !== prevRowspan) {
-          rowspansMatch = false;
-        }
-        if (rowspan < minRowspan || !minRowspan) {
-          minRowspan = rowspan;
-        }
+        if (prevRowspan && rowspan !== prevRowspan) rowspansMatch = false;
+        if (rowspan < minRowspan || !minRowspan) minRowspan = rowspan;
         prevRowspan = rowspan;
       }
-      if (!rowspansMatch && this.rowspanFor(this.cell) > minRowspan) {
-        return;
-      }
+      if (!rowspansMatch && this.rowspanFor(this.cell) > minRowspan) return;
       if (minRowspan > 1) {
         for (i = 0, _ref2 = minRowspan - 2; 0 <= _ref2 ? i <= _ref2 : i >= _ref2; 0 <= _ref2 ? i++ : i--) {
           jQuery(this.row.nextAll('tr')[i]).remove();
@@ -13946,9 +13998,7 @@ Showdown.converter = function() {
       for (_j = 0, _len2 = _ref3.length; _j < _len2; _j++) {
         cell = _ref3[_j];
         sig = this.cellSignatureFor(cell);
-        if (sig.height === minRowspan) {
-          continue;
-        }
+        if (sig.height === minRowspan) continue;
         if (match = this.findCellByOptionsFor(this.row.nextAll('tr')[minRowspan - 1], {
           left: sig.left,
           forceAdjacent: true
@@ -13982,12 +14032,8 @@ Showdown.converter = function() {
     increaseColspan: function() {
       var cell;
       cell = this.cell.next('td, th');
-      if (!cell.length) {
-        return;
-      }
-      if (this.rowspanFor(cell) !== this.rowspanFor(this.cell)) {
-        return;
-      }
+      if (!cell.length) return;
+      if (this.rowspanFor(cell) !== this.rowspanFor(this.cell)) return;
       if (this.cellIndexFor(cell) > this.cellIndexFor(this.cell) + this.colspanFor(this.cell)) {
         return;
       }
@@ -13996,9 +14042,7 @@ Showdown.converter = function() {
     },
     decreaseColspan: function() {
       var newCell;
-      if (this.colspanFor(this.cell) === 1) {
-        return;
-      }
+      if (this.colspanFor(this.cell) === 1) return;
       this.setColspanFor(this.cell, this.colspanFor(this.cell) - 1);
       newCell = jQuery("<" + (this.cell.get(0).tagName) + ">").html(this.cellContent);
       this.setRowspanFor(newCell, this.rowspanFor(this.cell));
@@ -14019,9 +14063,7 @@ Showdown.converter = function() {
     decreaseRowspan: function() {
       var match, newCell, nextRow, sig;
       sig = this.cellSignatureFor(this.cell);
-      if (sig.height === 1) {
-        return;
-      }
+      if (sig.height === 1) return;
       nextRow = this.row.nextAll('tr')[sig.height - 2];
       if (match = this.findCellByOptionsFor(nextRow, {
         left: sig.left,
@@ -14084,9 +14126,7 @@ Showdown.converter = function() {
         cell = _ref[_i];
         sig = this.cellSignatureFor(cell);
         if (typeof options.right !== 'undefined') {
-          if (sig.right === options.right) {
-            return sig;
-          }
+          if (sig.right === options.right) return sig;
         }
         if (typeof options.left !== 'undefined') {
           if (options.width) {
@@ -14094,9 +14134,7 @@ Showdown.converter = function() {
               return sig;
             }
           } else if (!options.forceAdjacent) {
-            if (sig.left === options.left) {
-              return sig;
-            }
+            if (sig.left === options.left) return sig;
           } else if (options.forceAdjacent) {
             if (sig.left > options.left) {
               prev = jQuery(cell).prev('td, th');
@@ -14151,10 +14189,12 @@ Showdown.converter = function() {
       return jQuery(cell).attr('rowspan', value > 1 ? value : null);
     }
   });
+
 }).call(this);
 (function() {
-  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+
   this.Mercury.Dialog = (function() {
+
     function Dialog(url, name, options) {
       this.url = url;
       this.name = name;
@@ -14164,6 +14204,7 @@ Showdown.converter = function() {
       this.bindEvents();
       this.preload();
     }
+
     Dialog.prototype.build = function() {
       var _ref;
       this.element = jQuery('<div>', {
@@ -14172,16 +14213,17 @@ Showdown.converter = function() {
       });
       return this.element.appendTo((_ref = jQuery(this.options.appendTo).get(0)) != null ? _ref : 'body');
     };
+
     Dialog.prototype.bindEvents = function() {
       return this.element.on('mousedown', function(event) {
         return event.stopPropagation();
       });
     };
+
     Dialog.prototype.preload = function() {
-      if (this.options.preload) {
-        return this.load();
-      }
+      if (this.options.preload) return this.load();
     };
+
     Dialog.prototype.toggle = function() {
       if (this.visible) {
         return this.hide();
@@ -14189,9 +14231,11 @@ Showdown.converter = function() {
         return this.show();
       }
     };
+
     Dialog.prototype.resize = function() {
       return this.show();
     };
+
     Dialog.prototype.show = function() {
       Mercury.trigger('hide:dialogs', this);
       this.visible = true;
@@ -14206,59 +14250,58 @@ Showdown.converter = function() {
       }
       return this.appear();
     };
+
     Dialog.prototype.position = function(keepVisible) {};
+
     Dialog.prototype.appear = function() {
+      var _this = this;
       this.element.css({
         display: 'block',
         opacity: 0
       });
       return this.element.animate({
         opacity: 0.95
-      }, 200, 'easeInOutSine', __bind(function() {
-        if (!this.loaded) {
-          return this.load(__bind(function() {
-            return this.resize();
-          }, this));
+      }, 200, 'easeInOutSine', function() {
+        if (!_this.loaded) {
+          return _this.load(function() {
+            return _this.resize();
+          });
         }
-      }, this));
+      });
     };
+
     Dialog.prototype.hide = function() {
       this.element.hide();
       return this.visible = false;
     };
+
     Dialog.prototype.load = function(callback) {
-      if (!this.url) {
-        return;
-      }
+      var _this = this;
+      if (!this.url) return;
       if (Mercury.preloadedViews[this.url]) {
         this.loadContent(Mercury.preloadedViews[this.url]);
         if (Mercury.dialogHandlers[this.name]) {
           Mercury.dialogHandlers[this.name].call(this);
         }
-        if (callback) {
-          return callback();
-        }
+        if (callback) return callback();
       } else {
         return jQuery.ajax(this.url, {
-          success: __bind(function(data) {
-            this.loadContent(data);
-            if (Mercury.dialogHandlers[this.name]) {
-              Mercury.dialogHandlers[this.name].call(this);
+          success: function(data) {
+            _this.loadContent(data);
+            if (Mercury.dialogHandlers[_this.name]) {
+              Mercury.dialogHandlers[_this.name].call(_this);
             }
-            if (callback) {
-              return callback();
-            }
-          }, this),
-          error: __bind(function() {
-            this.hide();
-            if (this.button) {
-              this.button.removeClass('pressed');
-            }
-            return Mercury.notify('Mercury was unable to load %s for the "%s" dialog.', this.url, this.name);
-          }, this)
+            if (callback) return callback();
+          },
+          error: function() {
+            _this.hide();
+            if (_this.button) _this.button.removeClass('pressed');
+            return Mercury.notify('Mercury was unable to load %s for the "%s" dialog.', _this.url, _this.name);
+          }
         });
       }
     };
+
     Dialog.prototype.loadContent = function(data) {
       this.loaded = true;
       this.element.removeClass('loading');
@@ -14267,26 +14310,27 @@ Showdown.converter = function() {
         return this.element.localize(Mercury.locale());
       }
     };
+
     return Dialog;
+
   })();
+
 }).call(this);
 (function() {
-  var __hasProp = Object.prototype.hasOwnProperty, __extends = function(child, parent) {
-    for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; }
-    function ctor() { this.constructor = child; }
-    ctor.prototype = parent.prototype;
-    child.prototype = new ctor;
-    child.__super__ = parent.prototype;
-    return child;
-  }, __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
-  this.Mercury.Palette = (function() {
-    __extends(Palette, Mercury.Dialog);
+  var __hasProp = Object.prototype.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; };
+
+  this.Mercury.Palette = (function(_super) {
+
+    __extends(Palette, _super);
+
     function Palette(url, name, options) {
       this.url = url;
       this.name = name;
       this.options = options != null ? options : {};
       Palette.__super__.constructor.apply(this, arguments);
     }
+
     Palette.prototype.build = function() {
       var _ref;
       this.element = jQuery('<div>', {
@@ -14295,14 +14339,15 @@ Showdown.converter = function() {
       });
       return this.element.appendTo((_ref = jQuery(this.options.appendTo).get(0)) != null ? _ref : 'body');
     };
+
     Palette.prototype.bindEvents = function() {
-      Mercury.on('hide:dialogs', __bind(function(event, dialog) {
-        if (dialog !== this) {
-          return this.hide();
-        }
-      }, this));
+      var _this = this;
+      Mercury.on('hide:dialogs', function(event, dialog) {
+        if (dialog !== _this) return _this.hide();
+      });
       return Palette.__super__.bindEvents.apply(this, arguments);
     };
+
     Palette.prototype.position = function(keepVisible) {
       var position, width;
       this.element.css({
@@ -14323,26 +14368,27 @@ Showdown.converter = function() {
         visibility: 'visible'
       });
     };
+
     return Palette;
-  })();
+
+  })(Mercury.Dialog);
+
 }).call(this);
 (function() {
-  var __hasProp = Object.prototype.hasOwnProperty, __extends = function(child, parent) {
-    for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; }
-    function ctor() { this.constructor = child; }
-    ctor.prototype = parent.prototype;
-    child.prototype = new ctor;
-    child.__super__ = parent.prototype;
-    return child;
-  }, __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
-  this.Mercury.Select = (function() {
-    __extends(Select, Mercury.Dialog);
+  var __hasProp = Object.prototype.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; };
+
+  this.Mercury.Select = (function(_super) {
+
+    __extends(Select, _super);
+
     function Select(url, name, options) {
       this.url = url;
       this.name = name;
       this.options = options != null ? options : {};
       Select.__super__.constructor.apply(this, arguments);
     }
+
     Select.prototype.build = function() {
       var _ref;
       this.element = jQuery('<div>', {
@@ -14351,17 +14397,18 @@ Showdown.converter = function() {
       });
       return this.element.appendTo((_ref = jQuery(this.options.appendTo).get(0)) != null ? _ref : 'body');
     };
+
     Select.prototype.bindEvents = function() {
-      Mercury.on('hide:dialogs', __bind(function(event, dialog) {
-        if (dialog !== this) {
-          return this.hide();
-        }
-      }, this));
-      this.element.on('mousedown', __bind(function(event) {
+      var _this = this;
+      Mercury.on('hide:dialogs', function(event, dialog) {
+        if (dialog !== _this) return _this.hide();
+      });
+      this.element.on('mousedown', function(event) {
         return event.preventDefault();
-      }, this));
+      });
       return Select.__super__.bindEvents.apply(this, arguments);
     };
+
     Select.prototype.position = function(keepVisible) {
       var documentHeight, elementHeight, elementWidth, height, left, position, top;
       this.element.css({
@@ -14375,12 +14422,8 @@ Showdown.converter = function() {
       elementHeight = this.element.height();
       documentHeight = jQuery(document).height();
       top = position.top + (this.button.height() / 2) - (elementHeight / 2);
-      if (top < position.top - 100) {
-        top = position.top - 100;
-      }
-      if (top < 20) {
-        top = 20;
-      }
+      if (top < position.top - 100) top = position.top - 100;
+      if (top < 20) top = 20;
       height = this.loaded ? 'auto' : elementHeight;
       if (top + elementHeight >= documentHeight - 20) {
         height = documentHeight - top - 20;
@@ -14397,26 +14440,27 @@ Showdown.converter = function() {
         visibility: 'visible'
       });
     };
+
     return Select;
-  })();
+
+  })(Mercury.Dialog);
+
 }).call(this);
 (function() {
-  var __hasProp = Object.prototype.hasOwnProperty, __extends = function(child, parent) {
-    for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; }
-    function ctor() { this.constructor = child; }
-    ctor.prototype = parent.prototype;
-    child.prototype = new ctor;
-    child.__super__ = parent.prototype;
-    return child;
-  }, __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
-  this.Mercury.Panel = (function() {
-    __extends(Panel, Mercury.Dialog);
+  var __hasProp = Object.prototype.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; };
+
+  this.Mercury.Panel = (function(_super) {
+
+    __extends(Panel, _super);
+
     function Panel(url, name, options) {
       this.url = url;
       this.name = name;
       this.options = options != null ? options : {};
       Panel.__super__.constructor.apply(this, arguments);
     }
+
     Panel.prototype.build = function() {
       var _ref;
       this.element = jQuery('<div>', {
@@ -14436,17 +14480,17 @@ Showdown.converter = function() {
       }
       return this.element.appendTo((_ref = jQuery(this.options.appendTo).get(0)) != null ? _ref : 'body');
     };
+
     Panel.prototype.bindEvents = function() {
-      Mercury.on('resize', __bind(function() {
-        return this.position(this.visible);
-      }, this));
-      Mercury.on('hide:panels', __bind(function(event, panel) {
-        if (panel === this) {
-          return;
-        }
-        this.button.removeClass('pressed');
-        return this.hide();
-      }, this));
+      var _this = this;
+      Mercury.on('resize', function() {
+        return _this.position(_this.visible);
+      });
+      Mercury.on('hide:panels', function(event, panel) {
+        if (panel === _this) return;
+        _this.button.removeClass('pressed');
+        return _this.hide();
+      });
       this.titleElement.find('.mercury-panel-close').on('click', function(event) {
         event.preventDefault();
         return Mercury.trigger('hide:panels');
@@ -14454,20 +14498,23 @@ Showdown.converter = function() {
       this.element.on('mousedown', function(event) {
         return event.stopPropagation();
       });
-      this.element.on('ajax:beforeSend', __bind(function(event, xhr, options) {
-        return options.success = __bind(function(content) {
-          this.loadContent(content);
-          return this.resize();
-        }, this);
-      }, this));
+      this.element.on('ajax:beforeSend', function(event, xhr, options) {
+        return options.success = function(content) {
+          _this.loadContent(content);
+          return _this.resize();
+        };
+      });
       return Panel.__super__.bindEvents.apply(this, arguments);
     };
+
     Panel.prototype.show = function() {
       Mercury.trigger('hide:panels', this);
       return Panel.__super__.show.apply(this, arguments);
     };
+
     Panel.prototype.resize = function() {
-      var position, postWidth, preWidth;
+      var position, postWidth, preWidth,
+        _this = this;
       this.titleElement.find('.mercury-panel-close').css({
         opacity: 0
       });
@@ -14489,20 +14536,19 @@ Showdown.converter = function() {
       this.element.animate({
         left: position.left - (postWidth - preWidth),
         width: postWidth
-      }, 200, 'easeInOutSine', __bind(function() {
-        this.titleElement.find('.mercury-panel-close').animate({
+      }, 200, 'easeInOutSine', function() {
+        _this.titleElement.find('.mercury-panel-close').animate({
           opacity: 1
         }, 100);
-        this.paneElement.css({
+        _this.paneElement.css({
           display: 'block',
           width: postWidth
         });
-        return this.makeDraggable();
-      }, this));
-      if (!this.visible) {
-        return this.hide();
-      }
+        return _this.makeDraggable();
+      });
+      if (!this.visible) return this.hide();
     };
+
     Panel.prototype.position = function(keepVisible) {
       var elementWidth, height, left, offset, paneHeight;
       this.element.css({
@@ -14517,12 +14563,8 @@ Showdown.converter = function() {
         height: paneHeight,
         overflowY: paneHeight < 30 ? 'hidden' : 'auto'
       });
-      if (!this.moved) {
-        left = Mercury.displayRect.width - elementWidth - 20;
-      }
-      if (left <= 8) {
-        left = 8;
-      }
+      if (!this.moved) left = Mercury.displayRect.width - elementWidth - 20;
+      if (left <= 8) left = 8;
       if (this.pinned || elementWidth + offset.left > Mercury.displayRect.width - 20) {
         left = Mercury.displayRect.width - elementWidth - 20;
       }
@@ -14534,10 +14576,9 @@ Showdown.converter = function() {
         visibility: 'visible'
       });
       this.makeDraggable();
-      if (!keepVisible) {
-        return this.element.hide();
-      }
+      if (!keepVisible) return this.element.hide();
     };
+
     Panel.prototype.loadContent = function(data) {
       this.loaded = true;
       this.element.removeClass('loading');
@@ -14549,8 +14590,10 @@ Showdown.converter = function() {
         return this.paneElement.localize(Mercury.locale());
       }
     };
+
     Panel.prototype.makeDraggable = function() {
-      var elementWidth;
+      var elementWidth,
+        _this = this;
       elementWidth = this.element.width();
       return this.element.draggable({
         handle: 'h1',
@@ -14560,44 +14603,50 @@ Showdown.converter = function() {
         addClasses: false,
         iframeFix: true,
         containment: [8, 0, Mercury.displayRect.width - elementWidth - 20, 0],
-        stop: __bind(function() {
+        stop: function() {
           var left;
-          left = this.element.offset().left;
-          this.moved = true;
-          this.pinned = left > Mercury.displayRect.width - elementWidth - 30 ? true : false;
+          left = _this.element.offset().left;
+          _this.moved = true;
+          _this.pinned = left > Mercury.displayRect.width - elementWidth - 30 ? true : false;
           return true;
-        }, this)
+        }
       });
     };
+
     return Panel;
-  })();
+
+  })(Mercury.Dialog);
+
 }).call(this);
 (function() {
-  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+
   this.Mercury.modal = function(url, options) {
-    if (options == null) {
-      options = {};
-    }
+    if (options == null) options = {};
     Mercury.modal.show(url, options);
     return Mercury.modal;
   };
+
   jQuery.extend(Mercury.modal, {
     minWidth: 400,
     show: function(url, options) {
+      var _this = this;
       this.url = url;
       this.options = options != null ? options : {};
       Mercury.trigger('focus:window');
       this.initialize();
       if (this.visible) {
-        return this.update();
+        this.update();
       } else {
-        return this.appear();
+        this.appear();
+      }
+      if (this.options.content) {
+        return setTimeout(500, function() {
+          return _this.loadContent(_this.options.content);
+        });
       }
     },
     initialize: function() {
-      if (this.initialized) {
-        return;
-      }
+      if (this.initialized) return;
       this.build();
       this.bindEvents();
       return this.initialized = true;
@@ -14619,54 +14668,53 @@ Showdown.converter = function() {
       return this.overlay.appendTo((_ref2 = jQuery(this.options.appendTo).get(0)) != null ? _ref2 : 'body');
     },
     bindEvents: function() {
-      Mercury.on('refresh', __bind(function() {
-        return this.resize(true);
-      }, this));
-      Mercury.on('resize', __bind(function() {
-        return this.position();
-      }, this));
-      this.overlay.on('click', __bind(function() {
-        if (this.options.allowHideUsingOverlay) {
-          return this.hide();
-        }
-      }, this));
-      this.titleElement.find('a').on('click', __bind(function() {
-        return this.hide();
-      }, this));
-      this.element.on('ajax:beforeSend', __bind(function(event, xhr, options) {
-        return options.success = __bind(function(content) {
-          return this.loadContent(content);
-        }, this);
-      }, this));
-      return jQuery(document).on('keydown', __bind(function(event) {
-        if (event.keyCode === 27 && this.visible) {
-          return this.hide();
-        }
-      }, this));
+      var _this = this;
+      Mercury.on('refresh', function() {
+        return _this.resize(true);
+      });
+      Mercury.on('resize', function() {
+        return _this.position();
+      });
+      this.overlay.on('click', function() {
+        if (_this.options.allowHideUsingOverlay) return _this.hide();
+      });
+      this.titleElement.find('a').on('click', function() {
+        return _this.hide();
+      });
+      this.element.on('ajax:beforeSend', function(event, xhr, options) {
+        return options.success = function(content) {
+          return _this.loadContent(content);
+        };
+      });
+      return jQuery(document).on('keydown', function(event) {
+        if (event.keyCode === 27 && _this.visible) return _this.hide();
+      });
     },
     appear: function() {
+      var _this = this;
       this.showing = true;
       this.position();
       this.overlay.show();
       return this.overlay.animate({
         opacity: 1
-      }, 200, 'easeInOutSine', __bind(function() {
-        this.element.css({
-          top: -this.element.height()
+      }, 200, 'easeInOutSine', function() {
+        _this.element.css({
+          top: -_this.element.height()
         });
-        this.setTitle();
-        this.element.show();
-        return this.element.animate({
+        _this.setTitle();
+        _this.element.show();
+        return _this.element.animate({
           top: 0
-        }, 200, 'easeInOutSine', __bind(function() {
-          this.visible = true;
-          this.showing = false;
-          return this.load();
-        }, this));
-      }, this));
+        }, 200, 'easeInOutSine', function() {
+          _this.visible = true;
+          _this.showing = false;
+          return _this.load();
+        });
+      });
     },
     resize: function(keepVisible) {
-      var height, titleHeight, visibility, width;
+      var height, titleHeight, visibility, width,
+        _this = this;
       visibility = keepVisible ? 'visible' : 'hidden';
       titleHeight = this.titleElement.outerHeight();
       width = this.contentElement.outerWidth();
@@ -14681,9 +14729,7 @@ Showdown.converter = function() {
         display: 'block'
       });
       height = this.contentElement.outerHeight() + titleHeight;
-      if (width < this.minWidth) {
-        width = this.minWidth;
-      }
+      if (width < this.minWidth) width = this.minWidth;
       if (height > Mercury.displayRect.fullHeight - 20 || this.options.fullHeight) {
         height = Mercury.displayRect.fullHeight - 20;
       }
@@ -14691,31 +14737,31 @@ Showdown.converter = function() {
         left: (Mercury.displayRect.width - width) / 2,
         width: width,
         height: height
-      }, 200, 'easeInOutSine', __bind(function() {
+      }, 200, 'easeInOutSine', function() {
         var controlHeight;
-        this.contentElement.css({
+        _this.contentElement.css({
           visibility: 'visible',
           display: 'block'
         });
-        if (this.contentPane.length) {
-          this.contentElement.css({
+        if (_this.contentPane.length) {
+          _this.contentElement.css({
             height: height - titleHeight,
             overflow: 'visible'
           });
-          controlHeight = this.contentControl.length ? this.contentControl.outerHeight() : 0;
-          this.contentPane.css({
+          controlHeight = _this.contentControl.length ? _this.contentControl.outerHeight() : 0;
+          _this.contentPane.css({
             height: height - titleHeight - controlHeight - 40
           });
-          return this.contentPane.find('.mercury-display-pane').css({
+          return _this.contentPane.find('.mercury-display-pane').css({
             width: width - 40
           });
         } else {
-          return this.contentElement.css({
+          return _this.contentElement.css({
             height: height - titleHeight,
             overflow: 'auto'
           });
         }
-      }, this));
+      });
     },
     position: function() {
       var controlHeight, height, titleHeight, viewportWidth, width;
@@ -14736,9 +14782,7 @@ Showdown.converter = function() {
       });
       width = this.element.width();
       height = this.element.height();
-      if (width < this.minWidth) {
-        width = this.minWidth;
-      }
+      if (width < this.minWidth) width = this.minWidth;
       if (height > Mercury.displayRect.fullHeight - 20 || this.options.fullHeight) {
         height = Mercury.displayRect.fullHeight - 20;
       }
@@ -14775,34 +14819,31 @@ Showdown.converter = function() {
       return this.load();
     },
     load: function() {
+      var _this = this;
       this.setTitle();
-      if (!this.url) {
-        return;
-      }
+      if (!this.url) return;
       this.element.addClass('loading');
       if (Mercury.preloadedViews[this.url]) {
-        return setTimeout(10, __bind(function() {
-          return this.loadContent(Mercury.preloadedViews[this.url]);
-        }, this));
+        return setTimeout(10, function() {
+          return _this.loadContent(Mercury.preloadedViews[_this.url]);
+        });
       } else {
         return jQuery.ajax(this.url, {
           headers: Mercury.ajaxHeaders(),
           type: this.options.loadType || 'GET',
           data: this.options.loadData,
-          success: __bind(function(data) {
-            return this.loadContent(data);
-          }, this),
-          error: __bind(function() {
-            this.hide();
-            return Mercury.notify("Mercury was unable to load %s for the modal.", this.url);
-          }, this)
+          success: function(data) {
+            return _this.loadContent(data);
+          },
+          error: function() {
+            _this.hide();
+            return Mercury.notify("Mercury was unable to load %s for the modal.", _this.url);
+          }
         });
       }
     },
     loadContent: function(data, options) {
-      if (options == null) {
-        options = null;
-      }
+      if (options == null) options = null;
       this.initialize();
       this.options = options || this.options;
       this.setTitle();
@@ -14815,9 +14856,7 @@ Showdown.converter = function() {
       });
       this.contentPane = this.element.find('.mercury-display-pane-container');
       this.contentControl = this.element.find('.mercury-display-controls');
-      if (this.options.afterLoad) {
-        this.options.afterLoad.call(this);
-      }
+      if (this.options.afterLoad) this.options.afterLoad.call(this);
       if (this.options.handler) {
         if (Mercury.modalHandlers[this.options.handler]) {
           Mercury.modalHandlers[this.options.handler].call(this);
@@ -14831,16 +14870,21 @@ Showdown.converter = function() {
       return this.resize();
     },
     setTitle: function() {
-      return this.titleElement.find('span').html(Mercury.I18n(this.options.title));
+      var closeButton;
+      this.titleElement.find('span').html(Mercury.I18n(this.options.title));
+      closeButton = this.titleElement.find('a');
+      if (this.options.closeButton === false) {
+        return closeButton.hide();
+      } else {
+        return closeButton.show();
+      }
     },
     reset: function() {
       this.titleElement.find('span').html('');
       return this.contentElement.html('');
     },
     hide: function() {
-      if (this.showing) {
-        return;
-      }
+      if (this.showing) return;
       this.options = {};
       this.initialized = false;
       Mercury.trigger('focus:frame');
@@ -14850,33 +14894,37 @@ Showdown.converter = function() {
       return this.visible = false;
     }
   });
+
 }).call(this);
 (function() {
-  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+
   this.Mercury.lightview = function(url, options) {
-    if (options == null) {
-      options = {};
-    }
+    if (options == null) options = {};
     Mercury.lightview.show(url, options);
     return Mercury.lightview;
   };
+
   jQuery.extend(Mercury.lightview, {
     minWidth: 400,
     show: function(url, options) {
+      var _this = this;
       this.url = url;
       this.options = options != null ? options : {};
       Mercury.trigger('focus:window');
       this.initialize();
       if (this.visible) {
-        return this.update();
+        this.update();
       } else {
-        return this.appear();
+        this.appear();
+      }
+      if (this.options.content) {
+        return setTimeout(500, function() {
+          return _this.loadContent(_this.options.content);
+        });
       }
     },
     initialize: function() {
-      if (this.initialized) {
-        return;
-      }
+      if (this.initialized) return;
       this.build();
       this.bindEvents();
       return this.initialized = true;
@@ -14900,34 +14948,30 @@ Showdown.converter = function() {
       return this.overlay.appendTo((_ref2 = jQuery(this.options.appendTo).get(0)) != null ? _ref2 : 'body');
     },
     bindEvents: function() {
-      Mercury.on('refresh', __bind(function() {
-        return this.resize(true);
-      }, this));
-      Mercury.on('resize', __bind(function() {
-        if (this.visible) {
-          return this.position();
-        }
-      }, this));
-      this.overlay.on('click', __bind(function() {
-        if (!this.options.closeButton) {
-          return this.hide();
-        }
-      }, this));
-      this.titleElement.find('.mercury-lightview-close').on('click', __bind(function() {
-        return this.hide();
-      }, this));
-      this.element.on('ajax:beforeSend', __bind(function(event, xhr, options) {
-        return options.success = __bind(function(content) {
-          return this.loadContent(content);
-        }, this);
-      }, this));
-      return jQuery(document).on('keydown', __bind(function(event) {
-        if (event.keyCode === 27 && this.visible) {
-          return this.hide();
-        }
-      }, this));
+      var _this = this;
+      Mercury.on('refresh', function() {
+        return _this.resize(true);
+      });
+      Mercury.on('resize', function() {
+        if (_this.visible) return _this.position();
+      });
+      this.overlay.on('click', function() {
+        if (!_this.options.closeButton) return _this.hide();
+      });
+      this.titleElement.find('.mercury-lightview-close').on('click', function() {
+        return _this.hide();
+      });
+      this.element.on('ajax:beforeSend', function(event, xhr, options) {
+        return options.success = function(content) {
+          return _this.loadContent(content);
+        };
+      });
+      return jQuery(document).on('keydown', function(event) {
+        if (event.keyCode === 27 && _this.visible) return _this.hide();
+      });
     },
     appear: function() {
+      var _this = this;
       this.showing = true;
       this.position();
       this.overlay.show().css({
@@ -14935,22 +14979,23 @@ Showdown.converter = function() {
       });
       return this.overlay.animate({
         opacity: 1
-      }, 200, 'easeInOutSine', __bind(function() {
-        this.setTitle();
-        this.element.show().css({
+      }, 200, 'easeInOutSine', function() {
+        _this.setTitle();
+        _this.element.show().css({
           opacity: 0
         });
-        return this.element.stop().animate({
+        return _this.element.stop().animate({
           opacity: 1
-        }, 200, 'easeInOutSine', __bind(function() {
-          this.visible = true;
-          this.showing = false;
-          return this.load();
-        }, this));
-      }, this));
+        }, 200, 'easeInOutSine', function() {
+          _this.visible = true;
+          _this.showing = false;
+          return _this.load();
+        });
+      });
     },
     resize: function(keepVisible) {
-      var height, titleHeight, viewportHeight, viewportWidth, visibility, width;
+      var height, titleHeight, viewportHeight, viewportWidth, visibility, width,
+        _this = this;
       visibility = keepVisible ? 'visible' : 'hidden';
       viewportWidth = Mercury.displayRect.width;
       viewportHeight = Mercury.displayRect.fullHeight;
@@ -14973,42 +15018,38 @@ Showdown.converter = function() {
       if (height > viewportHeight - 20 || this.options.fullSize) {
         height = viewportHeight - 20;
       }
-      if (width < 300) {
-        width = 300;
-      }
-      if (height < 150) {
-        height = 150;
-      }
+      if (width < 300) width = 300;
+      if (height < 150) height = 150;
       return this.element.stop().animate({
         top: ((viewportHeight - height) / 2) + 10,
         left: (Mercury.displayRect.width - width) / 2,
         width: width,
         height: height
-      }, 200, 'easeInOutSine', __bind(function() {
+      }, 200, 'easeInOutSine', function() {
         var controlHeight;
-        this.contentElement.css({
+        _this.contentElement.css({
           visibility: 'visible',
           display: 'block'
         });
-        if (this.contentPane.length) {
-          this.contentElement.css({
+        if (_this.contentPane.length) {
+          _this.contentElement.css({
             height: height - titleHeight,
             overflow: 'visible'
           });
-          controlHeight = this.contentControl.length ? this.contentControl.outerHeight() : 0;
-          this.contentPane.css({
+          controlHeight = _this.contentControl.length ? _this.contentControl.outerHeight() : 0;
+          _this.contentPane.css({
             height: height - titleHeight - controlHeight - 40
           });
-          return this.contentPane.find('.mercury-display-pane').css({
+          return _this.contentPane.find('.mercury-display-pane').css({
             width: width - 40
           });
         } else {
-          return this.contentElement.css({
+          return _this.contentElement.css({
             height: height - titleHeight - 30,
             overflow: 'auto'
           });
         }
-      }, this));
+      });
     },
     position: function() {
       var controlHeight, height, titleHeight, viewportHeight, viewportWidth, width;
@@ -15036,12 +15077,8 @@ Showdown.converter = function() {
       if (height > viewportHeight - 20 || this.options.fullSize) {
         height = viewportHeight - 20;
       }
-      if (width < 300) {
-        width = 300;
-      }
-      if (height < 150) {
-        height = 150;
-      }
+      if (width < 300) width = 300;
+      if (height < 150) height = 150;
       titleHeight = this.titleElement.outerHeight();
       if (this.contentPane && this.contentPane.length) {
         this.contentElement.css({
@@ -15076,34 +15113,31 @@ Showdown.converter = function() {
       return this.load();
     },
     load: function() {
+      var _this = this;
       this.setTitle();
-      if (!this.url) {
-        return;
-      }
+      if (!this.url) return;
       this.element.addClass('loading');
       if (Mercury.preloadedViews[this.url]) {
-        return setTimeout(10, __bind(function() {
-          return this.loadContent(Mercury.preloadedViews[this.url]);
-        }, this));
+        return setTimeout(10, function() {
+          return _this.loadContent(Mercury.preloadedViews[_this.url]);
+        });
       } else {
         return jQuery.ajax(this.url, {
           headers: Mercury.ajaxHeaders(),
           type: this.options.loadType || 'GET',
           data: this.options.loadData,
-          success: __bind(function(data) {
-            return this.loadContent(data);
-          }, this),
-          error: __bind(function() {
-            this.hide();
-            return Mercury.notify('Mercury was unable to load %s for the lightview.', this.url);
-          }, this)
+          success: function(data) {
+            return _this.loadContent(data);
+          },
+          error: function() {
+            _this.hide();
+            return Mercury.notify('Mercury was unable to load %s for the lightview.', _this.url);
+          }
         });
       }
     },
     loadContent: function(data, options) {
-      if (options == null) {
-        options = null;
-      }
+      if (options == null) options = null;
       this.initialize();
       this.options = options || this.options;
       this.setTitle();
@@ -15116,9 +15150,7 @@ Showdown.converter = function() {
       });
       this.contentPane = this.element.find('.mercury-display-pane-container');
       this.contentControl = this.element.find('.mercury-display-controls');
-      if (this.options.afterLoad) {
-        this.options.afterLoad.call(this);
-      }
+      if (this.options.afterLoad) this.options.afterLoad.call(this);
       if (this.options.handler) {
         if (Mercury.modalHandlers[this.options.handler]) {
           Mercury.modalHandlers[this.options.handler].call(this);
@@ -15139,9 +15171,7 @@ Showdown.converter = function() {
       return this.contentElement.html('');
     },
     hide: function() {
-      if (this.showing) {
-        return;
-      }
+      if (this.showing) return;
       this.options = {};
       this.initialized = false;
       Mercury.trigger('focus:frame');
@@ -15151,16 +15181,19 @@ Showdown.converter = function() {
       return this.visible = false;
     }
   });
+
 }).call(this);
 (function() {
-  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+
   this.Mercury.Statusbar = (function() {
+
     function Statusbar(options) {
       this.options = options != null ? options : {};
       this.visible = this.options.visible;
       this.build();
       this.bindEvents();
     }
+
     Statusbar.prototype.build = function() {
       var _ref;
       this.element = jQuery('<div>', {
@@ -15179,21 +15212,25 @@ Showdown.converter = function() {
       }
       return this.element.appendTo((_ref = jQuery(this.options.appendTo).get(0)) != null ? _ref : 'body');
     };
+
     Statusbar.prototype.bindEvents = function() {
-      Mercury.on('region:update', __bind(function(event, options) {
+      var _this = this;
+      Mercury.on('region:update', function(event, options) {
         if (options.region && jQuery.type(options.region.path) === 'function') {
-          return this.setPath(options.region.path());
+          return _this.setPath(options.region.path());
         }
-      }, this));
-      return this.aboutElement.on('click', __bind(function() {
+      });
+      return this.aboutElement.on('click', function() {
         return Mercury.lightview('/mercury/lightviews/about.html', {
           title: "Mercury Editor v" + Mercury.version
         });
-      }, this));
+      });
     };
+
     Statusbar.prototype.height = function() {
       return this.element.outerHeight();
     };
+
     Statusbar.prototype.top = function() {
       var currentTop, top;
       top = this.element.offset().top;
@@ -15204,6 +15241,7 @@ Showdown.converter = function() {
         return top + this.element.outerHeight();
       }
     };
+
     Statusbar.prototype.setPath = function(elements) {
       var element, path, _i, _len;
       path = [];
@@ -15213,6 +15251,7 @@ Showdown.converter = function() {
       }
       return this.pathElement.html("<span><strong>" + (Mercury.I18n('Path:')) + " </strong>" + (path.reverse().join(' &raquo; ')) + "</span>");
     };
+
     Statusbar.prototype.show = function() {
       this.visible = true;
       this.element.css({
@@ -15223,24 +15262,31 @@ Showdown.converter = function() {
         opacity: 1
       }, 200, 'easeInOutSine');
     };
+
     Statusbar.prototype.hide = function() {
       this.visible = false;
       return this.element.css({
         visibility: 'hidden'
       });
     };
+
     return Statusbar;
+
   })();
+
 }).call(this);
 (function() {
-  var __hasProp = Object.prototype.hasOwnProperty, __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+  var __hasProp = Object.prototype.hasOwnProperty;
+
   this.Mercury.Toolbar = (function() {
+
     function Toolbar(options) {
       this.options = options != null ? options : {};
       this.visible = this.options.visible;
       this.build();
       this.bindEvents();
     }
+
     Toolbar.prototype.build = function() {
       var button, buttonName, buttons, container, expander, options, toolbar, toolbarName, _ref, _ref2;
       this.element = jQuery('<div>', {
@@ -15257,28 +15303,20 @@ Showdown.converter = function() {
       for (toolbarName in _ref2) {
         if (!__hasProp.call(_ref2, toolbarName)) continue;
         buttons = _ref2[toolbarName];
-        if (buttons._custom) {
-          continue;
-        }
+        if (buttons._custom) continue;
         toolbar = jQuery('<div>', {
           "class": "mercury-toolbar mercury-" + toolbarName + "-toolbar"
         }).appendTo(this.element);
-        if (buttons._regions) {
-          toolbar.attr('data-regions', buttons._regions);
-        }
+        if (buttons._regions) toolbar.attr('data-regions', buttons._regions);
         container = jQuery('<div>', {
           "class": 'mercury-toolbar-button-container'
         }).appendTo(toolbar);
         for (buttonName in buttons) {
           if (!__hasProp.call(buttons, buttonName)) continue;
           options = buttons[buttonName];
-          if (buttonName === '_regions') {
-            continue;
-          }
+          if (buttonName === '_regions') continue;
           button = this.buildButton(buttonName, options);
-          if (button) {
-            button.appendTo(container);
-          }
+          if (button) button.appendTo(container);
         }
         if (container.css('white-space') === 'nowrap') {
           expander = new Mercury.Toolbar.Expander(toolbarName, {
@@ -15295,11 +15333,10 @@ Showdown.converter = function() {
         width: '100%'
       });
     };
+
     Toolbar.prototype.buildButton = function(name, options) {
       var action, button, group, handled, opts, summary, title;
-      if (name[0] === '_') {
-        return false;
-      }
+      if (name[0] === '_') return false;
       switch (jQuery.type(options)) {
         case 'array':
           title = options[0], summary = options[1], handled = options[2];
@@ -15312,9 +15349,7 @@ Showdown.converter = function() {
             if (!__hasProp.call(options, action)) continue;
             opts = options[action];
             button = this.buildButton(action, opts);
-            if (button) {
-              button.appendTo(group);
-            }
+            if (button) button.appendTo(group);
           }
           return group;
         case 'string':
@@ -15325,29 +15360,47 @@ Showdown.converter = function() {
           throw Mercury.I18n('Unknown button structure -- please provide an array, object, or string for "%s".', name);
       }
     };
+
     Toolbar.prototype.bindEvents = function() {
-      Mercury.on('region:focused', __bind(function(event, options) {
+      var _this = this;
+      Mercury.on('region:focused', function(event, options) {
         var regions, toolbar, _i, _len, _ref, _results;
-        _ref = this.element.find(".mercury-toolbar");
+        _ref = _this.element.find(".mercury-toolbar");
         _results = [];
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           toolbar = _ref[_i];
           toolbar = jQuery(toolbar);
-          _results.push((regions = toolbar.data('regions')) ? regions.split(',').indexOf(options.region.type) > -1 ? toolbar.removeClass('disabled') : void 0 : void 0);
+          if (regions = toolbar.data('regions')) {
+            if (regions.split(',').indexOf(options.region.type) > -1) {
+              _results.push(toolbar.removeClass('disabled'));
+            } else {
+              _results.push(void 0);
+            }
+          } else {
+            _results.push(void 0);
+          }
         }
         return _results;
-      }, this));
-      Mercury.on('region:blurred', __bind(function(event, options) {
+      });
+      Mercury.on('region:blurred', function(event, options) {
         var regions, toolbar, _i, _len, _ref, _results;
-        _ref = this.element.find(".mercury-toolbar");
+        _ref = _this.element.find(".mercury-toolbar");
         _results = [];
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           toolbar = _ref[_i];
           toolbar = jQuery(toolbar);
-          _results.push((regions = toolbar.data('regions')) ? regions.split(',').indexOf(options.region.type) > -1 ? toolbar.addClass('disabled') : void 0 : void 0);
+          if (regions = toolbar.data('regions')) {
+            if (regions.split(',').indexOf(options.region.type) > -1) {
+              _results.push(toolbar.addClass('disabled'));
+            } else {
+              _results.push(void 0);
+            }
+          } else {
+            _results.push(void 0);
+          }
         }
         return _results;
-      }, this));
+      });
       this.element.on('click', function() {
         return Mercury.trigger('hide:dialogs');
       });
@@ -15355,6 +15408,7 @@ Showdown.converter = function() {
         return event.preventDefault();
       });
     };
+
     Toolbar.prototype.height = function() {
       if (this.visible) {
         return this.element.outerHeight();
@@ -15362,6 +15416,7 @@ Showdown.converter = function() {
         return 0;
       }
     };
+
     Toolbar.prototype.show = function() {
       this.visible = true;
       this.element.css({
@@ -15372,32 +15427,35 @@ Showdown.converter = function() {
         top: 0
       }, 200, 'easeInOutSine');
     };
+
     Toolbar.prototype.hide = function() {
       this.visible = false;
       return this.element.hide();
     };
+
     return Toolbar;
+
   })();
+
 }).call(this);
 (function() {
-  var __hasProp = Object.prototype.hasOwnProperty, __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+  var __hasProp = Object.prototype.hasOwnProperty;
+
   this.Mercury.Toolbar.Button = (function() {
+
     function Button(name, title, summary, types, options) {
       this.name = name;
       this.title = title;
       this.summary = summary != null ? summary : null;
       this.types = types != null ? types : {};
       this.options = options != null ? options : {};
-      if (this.title) {
-        this.title = Mercury.I18n(this.title);
-      }
-      if (this.summary) {
-        this.summary = Mercury.I18n(this.summary);
-      }
+      if (this.title) this.title = Mercury.I18n(this.title);
+      if (this.summary) this.summary = Mercury.I18n(this.summary);
       this.build();
       this.bindEvents();
       return this.element;
     }
+
     Button.prototype.build = function() {
       var mixed, type, url, _ref, _ref2, _results;
       this.element = jQuery('<div>', {
@@ -15411,102 +15469,104 @@ Showdown.converter = function() {
       for (type in _ref2) {
         if (!__hasProp.call(_ref2, type)) continue;
         mixed = _ref2[type];
-        _results.push((function() {
-          switch (type) {
-            case 'preload':
-              return true;
-            case 'regions':
-              this.element.addClass('disabled');
-              return this.handled[type] = jQuery.isFunction(mixed) ? mixed.call(this, this.name) : mixed;
-            case 'toggle':
-              return this.handled[type] = true;
-            case 'mode':
-              return this.handled[type] = mixed === true ? this.name : mixed;
-            case 'context':
-              return this.handled[type] = jQuery.isFunction(mixed) ? mixed : Mercury.Toolbar.Button.contexts[this.name];
-            case 'palette':
-              this.element.addClass("mercury-button-palette");
-              url = jQuery.isFunction(mixed) ? mixed.call(this, this.name) : mixed;
-              return this.handled[type] = new Mercury.Palette(url, this.name, this.defaultDialogOptions());
-            case 'select':
-              this.element.addClass("mercury-button-select").find('em').html(this.title);
-              url = jQuery.isFunction(mixed) ? mixed.call(this, this.name) : mixed;
-              return this.handled[type] = new Mercury.Select(url, this.name, this.defaultDialogOptions());
-            case 'panel':
-              this.element.addClass('mercury-button-panel');
-              url = jQuery.isFunction(mixed) ? mixed.call(this, this.name) : mixed;
-              this.handled['toggle'] = true;
-              return this.handled[type] = new Mercury.Panel(url, this.name, this.defaultDialogOptions());
-            case 'modal':
-              return this.handled[type] = jQuery.isFunction(mixed) ? mixed.apply(this, this.name) : mixed;
-            case 'lightview':
-              return this.handled[type] = jQuery.isFunction(mixed) ? mixed.apply(this, this.name) : mixed;
-            default:
-              throw Mercury.I18n('Unknown button type \"%s\" used for the \"%s\" button.', type, this.name);
-          }
-        }).call(this));
+        switch (type) {
+          case 'preload':
+            _results.push(true);
+            break;
+          case 'regions':
+            this.element.addClass('disabled');
+            _results.push(this.handled[type] = jQuery.isFunction(mixed) ? mixed.call(this, this.name) : mixed);
+            break;
+          case 'toggle':
+            _results.push(this.handled[type] = true);
+            break;
+          case 'mode':
+            _results.push(this.handled[type] = mixed === true ? this.name : mixed);
+            break;
+          case 'context':
+            _results.push(this.handled[type] = jQuery.isFunction(mixed) ? mixed : Mercury.Toolbar.Button.contexts[this.name]);
+            break;
+          case 'palette':
+            this.element.addClass("mercury-button-palette");
+            url = jQuery.isFunction(mixed) ? mixed.call(this, this.name) : mixed;
+            _results.push(this.handled[type] = new Mercury.Palette(url, this.name, this.defaultDialogOptions()));
+            break;
+          case 'select':
+            this.element.addClass("mercury-button-select").find('em').html(this.title);
+            url = jQuery.isFunction(mixed) ? mixed.call(this, this.name) : mixed;
+            _results.push(this.handled[type] = new Mercury.Select(url, this.name, this.defaultDialogOptions()));
+            break;
+          case 'panel':
+            this.element.addClass('mercury-button-panel');
+            url = jQuery.isFunction(mixed) ? mixed.call(this, this.name) : mixed;
+            this.handled['toggle'] = true;
+            _results.push(this.handled[type] = new Mercury.Panel(url, this.name, this.defaultDialogOptions()));
+            break;
+          case 'modal':
+            _results.push(this.handled[type] = jQuery.isFunction(mixed) ? mixed.apply(this, this.name) : mixed);
+            break;
+          case 'lightview':
+            _results.push(this.handled[type] = jQuery.isFunction(mixed) ? mixed.apply(this, this.name) : mixed);
+            break;
+          default:
+            throw Mercury.I18n('Unknown button type \"%s\" used for the \"%s\" button.', type, this.name);
+        }
       }
       return _results;
     };
+
     Button.prototype.bindEvents = function() {
-      Mercury.on('button', __bind(function(event, options) {
-        if (options.action === this.name) {
-          return this.element.click();
+      var _this = this;
+      Mercury.on('button', function(event, options) {
+        if (options.action === _this.name) return _this.element.click();
+      });
+      Mercury.on('mode', function(event, options) {
+        if (_this.handled.mode === options.mode && _this.handled.toggle) {
+          return _this.togglePressed();
         }
-      }, this));
-      Mercury.on('mode', __bind(function(event, options) {
-        if (this.handled.mode === options.mode && this.handled.toggle) {
-          return this.togglePressed();
-        }
-      }, this));
-      Mercury.on('region:update', __bind(function(event, options) {
+      });
+      Mercury.on('region:update', function(event, options) {
         var element;
-        if (this.handled.context && options.region && jQuery.type(options.region.currentElement) === 'function') {
+        if (_this.handled.context && options.region && jQuery.type(options.region.currentElement) === 'function') {
           element = options.region.currentElement();
-          if (element.length && this.handled.context.call(this, element, options.region.element)) {
-            return this.element.addClass('active');
+          if (element.length && _this.handled.context.call(_this, element, options.region.element)) {
+            return _this.element.addClass('active');
           } else {
-            return this.element.removeClass('active');
+            return _this.element.removeClass('active');
           }
         } else {
-          return this.element.removeClass('active');
+          return _this.element.removeClass('active');
         }
-      }, this));
-      Mercury.on('region:focused', __bind(function(event, options) {
-        if (this.handled.regions && options.region && options.region.type) {
-          if (this.handled.regions.indexOf(options.region.type) > -1) {
-            return this.element.removeClass('disabled');
+      });
+      Mercury.on('region:focused', function(event, options) {
+        if (_this.handled.regions && options.region && options.region.type) {
+          if (_this.handled.regions.indexOf(options.region.type) > -1) {
+            return _this.element.removeClass('disabled');
           } else {
-            return this.element.addClass('disabled');
+            return _this.element.addClass('disabled');
           }
         }
-      }, this));
-      Mercury.on('region:blurred', __bind(function() {
-        if (this.handled.regions) {
-          return this.element.addClass('disabled');
-        }
-      }, this));
-      this.element.on('mousedown', __bind(function() {
-        return this.element.addClass('active');
-      }, this));
-      this.element.on('mouseup', __bind(function() {
-        return this.element.removeClass('active');
-      }, this));
-      return this.element.on('click', __bind(function(event) {
+      });
+      Mercury.on('region:blurred', function() {
+        if (_this.handled.regions) return _this.element.addClass('disabled');
+      });
+      this.element.on('mousedown', function() {
+        return _this.element.addClass('active');
+      });
+      this.element.on('mouseup', function() {
+        return _this.element.removeClass('active');
+      });
+      return this.element.on('click', function(event) {
         var handled, mixed, type, _ref;
-        if (this.element.closest('.disabled').length) {
-          return;
-        }
+        if (_this.element.closest('.disabled').length) return;
         handled = false;
-        _ref = this.handled;
+        _ref = _this.handled;
         for (type in _ref) {
           if (!__hasProp.call(_ref, type)) continue;
           mixed = _ref[type];
           switch (type) {
             case 'toggle':
-              if (!this.handled.mode) {
-                this.togglePressed();
-              }
+              if (!_this.handled.mode) _this.togglePressed();
               break;
             case 'mode':
               handled = true;
@@ -15516,16 +15576,16 @@ Showdown.converter = function() {
               break;
             case 'modal':
               handled = true;
-              Mercury.modal(this.handled.modal, {
-                title: this.summary || this.title,
-                handler: this.name
+              Mercury.modal(_this.handled.modal, {
+                title: _this.summary || _this.title,
+                handler: _this.name
               });
               break;
             case 'lightview':
               handled = true;
-              Mercury.lightview(this.handled.lightview, {
-                title: this.summary || this.title,
-                handler: this.name,
+              Mercury.lightview(_this.handled.lightview, {
+                title: _this.summary || _this.title,
+                handler: _this.name,
                 closeButton: true
               });
               break;
@@ -15534,19 +15594,20 @@ Showdown.converter = function() {
             case 'panel':
               event.stopPropagation();
               handled = true;
-              this.handled[type].toggle();
+              _this.handled[type].toggle();
           }
         }
         if (!handled) {
           Mercury.trigger('action', {
-            action: this.name
+            action: _this.name
           });
         }
-        if (this.options['regions'] && this.options['regions'].length) {
+        if (_this.options['regions'] && _this.options['regions'].length) {
           return Mercury.trigger('focus:frame');
         }
-      }, this));
+      });
     };
+
     Button.prototype.defaultDialogOptions = function() {
       return {
         title: this.summary || this.title,
@@ -15556,11 +15617,15 @@ Showdown.converter = function() {
         "for": this.element
       };
     };
+
     Button.prototype.togglePressed = function() {
       return this.element.toggleClass('pressed');
     };
+
     return Button;
+
   })();
+
   this.Mercury.Toolbar.Button.contexts = {
     backColor: function(node) {
       return this.element.css('background-color', node.css('background-color'));
@@ -15578,15 +15643,11 @@ Showdown.converter = function() {
     },
     overline: function(node) {
       var parent, _i, _len, _ref;
-      if (node.css('text-decoration') === 'overline') {
-        return true;
-      }
+      if (node.css('text-decoration') === 'overline') return true;
       _ref = node.parentsUntil(this.element);
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         parent = _ref[_i];
-        if (jQuery(parent).css('text-decoration') === 'overline') {
-          return true;
-        }
+        if (jQuery(parent).css('text-decoration') === 'overline') return true;
       }
       return false;
     },
@@ -15621,10 +15682,12 @@ Showdown.converter = function() {
       return !!node.closest('ul', region.element).length;
     }
   };
+
 }).call(this);
 (function() {
-  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+
   this.Mercury.Toolbar.ButtonGroup = (function() {
+
     function ButtonGroup(name, options) {
       this.name = name;
       this.options = options != null ? options : {};
@@ -15633,6 +15696,7 @@ Showdown.converter = function() {
       this.regions = this.options._regions;
       return this.element;
     }
+
     ButtonGroup.prototype.build = function() {
       this.element = jQuery('<div>', {
         "class": "mercury-button-group mercury-" + this.name + "-group"
@@ -15641,57 +15705,58 @@ Showdown.converter = function() {
         return this.element.addClass('disabled');
       }
     };
+
     ButtonGroup.prototype.bindEvents = function() {
-      Mercury.on('region:update', __bind(function(event, options) {
+      var _this = this;
+      Mercury.on('region:update', function(event, options) {
         var context, element;
-        context = Mercury.Toolbar.ButtonGroup.contexts[this.name];
+        context = Mercury.Toolbar.ButtonGroup.contexts[_this.name];
         if (context) {
           if (options.region && jQuery.type(options.region.currentElement) === 'function') {
             element = options.region.currentElement();
-            if (element.length && context.call(this, element, options.region.element)) {
-              return this.element.removeClass('disabled');
+            if (element.length && context.call(_this, element, options.region.element)) {
+              return _this.element.removeClass('disabled');
             } else {
-              return this.element.addClass('disabled');
+              return _this.element.addClass('disabled');
             }
           }
         }
-      }, this));
-      Mercury.on('region:focused', __bind(function(event, options) {
-        if (this.regions && options.region && options.region.type) {
-          if (this.regions.indexOf(options.region.type) > -1) {
-            if (!this.options._context) {
-              return this.element.removeClass('disabled');
+      });
+      Mercury.on('region:focused', function(event, options) {
+        if (_this.regions && options.region && options.region.type) {
+          if (_this.regions.indexOf(options.region.type) > -1) {
+            if (!_this.options._context) {
+              return _this.element.removeClass('disabled');
             }
           } else {
-            return this.element.addClass('disabled');
+            return _this.element.addClass('disabled');
           }
         }
-      }, this));
-      return Mercury.on('region:blurred', __bind(function(event, options) {
-        if (this.options.regions) {
-          return this.element.addClass('disabled');
-        }
-      }, this));
+      });
+      return Mercury.on('region:blurred', function(event, options) {
+        if (_this.options.regions) return _this.element.addClass('disabled');
+      });
     };
+
     return ButtonGroup;
+
   })();
+
   this.Mercury.Toolbar.ButtonGroup.contexts = {
     table: function(node, region) {
       return !!node.closest('table', region).length;
     }
   };
+
 }).call(this);
 (function() {
-  var __hasProp = Object.prototype.hasOwnProperty, __extends = function(child, parent) {
-    for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; }
-    function ctor() { this.constructor = child; }
-    ctor.prototype = parent.prototype;
-    child.prototype = new ctor;
-    child.__super__ = parent.prototype;
-    return child;
-  }, __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
-  this.Mercury.Toolbar.Expander = (function() {
-    __extends(Expander, Mercury.Palette);
+  var __hasProp = Object.prototype.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; };
+
+  this.Mercury.Toolbar.Expander = (function(_super) {
+
+    __extends(Expander, _super);
+
     function Expander(name, options) {
       this.name = name;
       this.options = options;
@@ -15700,6 +15765,7 @@ Showdown.converter = function() {
       Expander.__super__.constructor.call(this, null, this.name, this.options);
       return this.element;
     }
+
     Expander.prototype.build = function() {
       var _ref;
       this.container.css({
@@ -15714,21 +15780,21 @@ Showdown.converter = function() {
       });
       return this.windowResize();
     };
+
     Expander.prototype.bindEvents = function() {
-      Mercury.on('hide:dialogs', __bind(function(event, dialog) {
-        if (dialog !== this) {
-          return this.hide();
-        }
-      }, this));
-      Mercury.on('resize', __bind(function() {
-        return this.windowResize();
-      }, this));
+      var _this = this;
+      Mercury.on('hide:dialogs', function(event, dialog) {
+        if (dialog !== _this) return _this.hide();
+      });
+      Mercury.on('resize', function() {
+        return _this.windowResize();
+      });
       Expander.__super__.bindEvents.apply(this, arguments);
-      this.trigger.click(__bind(function(event) {
+      this.trigger.click(function(event) {
         var button, hiddenButtons, _i, _len, _ref;
         event.stopPropagation();
         hiddenButtons = [];
-        _ref = this.container.find('.mercury-button');
+        _ref = _this.container.find('.mercury-button');
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           button = _ref[_i];
           button = jQuery(button);
@@ -15736,16 +15802,17 @@ Showdown.converter = function() {
             hiddenButtons.push(button.data('expander'));
           }
         }
-        this.loadContent(hiddenButtons.join(''));
-        return this.toggle();
-      }, this));
-      return this.element.click(__bind(function(event) {
+        _this.loadContent(hiddenButtons.join(''));
+        return _this.toggle();
+      });
+      return this.element.click(function(event) {
         var button, buttonName;
         buttonName = jQuery(event.target).closest('[data-button]').data('button');
-        button = this.container.find(".mercury-" + buttonName + "-button");
+        button = _this.container.find(".mercury-" + buttonName + "-button");
         return button.click();
-      }, this));
+      });
     };
+
     Expander.prototype.windowResize = function() {
       if (this.containerWidth > jQuery(window).width()) {
         this.trigger.show();
@@ -15754,6 +15821,7 @@ Showdown.converter = function() {
       }
       return this.hide();
     };
+
     Expander.prototype.position = function(keepVisible) {
       var position, width;
       this.element.css({
@@ -15774,18 +15842,20 @@ Showdown.converter = function() {
         visibility: 'visible'
       });
     };
+
     return Expander;
-  })();
+
+  })(Mercury.Palette);
+
 }).call(this);
 (function() {
-  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+
   this.Mercury.tooltip = function(forElement, content, options) {
-    if (options == null) {
-      options = {};
-    }
+    if (options == null) options = {};
     Mercury.tooltip.show(forElement, content, options);
     return Mercury.tooltip;
   };
+
   jQuery.extend(Mercury.tooltip, {
     show: function(forElement, content, options) {
       this.forElement = forElement;
@@ -15800,9 +15870,7 @@ Showdown.converter = function() {
       }
     },
     initialize: function() {
-      if (this.initialized) {
-        return;
-      }
+      if (this.initialized) return;
       this.build();
       this.bindEvents();
       return this.initialized = true;
@@ -15815,12 +15883,11 @@ Showdown.converter = function() {
       return this.element.appendTo((_ref = jQuery(this.options.appendTo).get(0)) != null ? _ref : 'body');
     },
     bindEvents: function() {
-      var parent, _i, _len, _ref;
-      Mercury.on('resize', __bind(function() {
-        if (this.visible) {
-          return this.position();
-        }
-      }, this));
+      var parent, _i, _len, _ref,
+        _this = this;
+      Mercury.on('resize', function() {
+        if (_this.visible) return _this.position();
+      });
       this.element.on('mousedown', function(event) {
         event.preventDefault();
         return event.stopPropagation();
@@ -15828,29 +15895,24 @@ Showdown.converter = function() {
       _ref = this.forElement.parentsUntil(jQuery('body', this.document));
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         parent = _ref[_i];
-        if (!(parent.scrollHeight > parent.clientHeight)) {
-          continue;
-        }
-        jQuery(parent).on('scroll', __bind(function() {
-          if (this.visible) {
-            return this.position();
-          }
-        }, this));
+        if (!(parent.scrollHeight > parent.clientHeight)) continue;
+        jQuery(parent).on('scroll', function() {
+          if (_this.visible) return _this.position();
+        });
       }
-      return jQuery(this.document).on('scroll', __bind(function() {
-        if (this.visible) {
-          return this.position();
-        }
-      }, this));
+      return jQuery(this.document).on('scroll', function() {
+        if (_this.visible) return _this.position();
+      });
     },
     appear: function() {
+      var _this = this;
       this.update();
       this.element.show();
       return this.element.animate({
         opacity: 1
-      }, 200, 'easeInOutSine', __bind(function() {
-        return this.visible = true;
-      }, this));
+      }, 200, 'easeInOutSine', function() {
+        return _this.visible = true;
+      });
     },
     update: function() {
       this.element.html(this.content);
@@ -15872,18 +15934,20 @@ Showdown.converter = function() {
       });
     },
     hide: function() {
-      if (!this.initialized) {
-        return;
-      }
+      if (!this.initialized) return;
       this.element.hide();
       return this.visible = false;
     }
   });
+
 }).call(this);
 (function() {
-  var __hasProp = Object.prototype.hasOwnProperty, __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+  var __hasProp = Object.prototype.hasOwnProperty;
+
   this.Mercury.Snippet = (function() {
+
     Snippet.all = [];
+
     Snippet.displayOptionsFor = function(name) {
       Mercury.modal(Mercury.config.snippets.optionsUrl.replace(':name', name), {
         title: 'Snippet Options',
@@ -15892,6 +15956,7 @@ Showdown.converter = function() {
       });
       return Mercury.snippet = null;
     };
+
     Snippet.create = function(name, options) {
       var identity, instance;
       identity = "snippet_" + this.all.length;
@@ -15899,17 +15964,17 @@ Showdown.converter = function() {
       this.all.push(instance);
       return instance;
     };
+
     Snippet.find = function(identity) {
       var snippet, _i, _len, _ref;
       _ref = this.all;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         snippet = _ref[_i];
-        if (snippet.identity === identity) {
-          return snippet;
-        }
+        if (snippet.identity === identity) return snippet;
       }
       return null;
     };
+
     Snippet.load = function(snippets) {
       var details, identity, instance, _results;
       _results = [];
@@ -15921,22 +15986,20 @@ Showdown.converter = function() {
       }
       return _results;
     };
+
     function Snippet(name, identity, options) {
       this.name = name;
       this.identity = identity;
-      if (options == null) {
-        options = {};
-      }
+      if (options == null) options = {};
       this.version = 0;
       this.data = '';
       this.history = new Mercury.HistoryBuffer();
       this.setOptions(options);
     }
+
     Snippet.prototype.getHTML = function(context, callback) {
       var element;
-      if (callback == null) {
-        callback = null;
-      }
+      if (callback == null) callback = null;
       element = jQuery('<div class="mercury-snippet" contenteditable="false">', context);
       element.attr({
         'data-snippet': this.identity
@@ -15948,29 +16011,29 @@ Showdown.converter = function() {
       this.loadPreview(element, callback);
       return element;
     };
+
     Snippet.prototype.getText = function(callback) {
       return "[--" + this.identity + "--]";
     };
+
     Snippet.prototype.loadPreview = function(element, callback) {
-      if (callback == null) {
-        callback = null;
-      }
+      var _this = this;
+      if (callback == null) callback = null;
       return jQuery.ajax(Mercury.config.snippets.previewUrl.replace(':name', this.name), {
         headers: Mercury.ajaxHeaders(),
         type: Mercury.config.snippets.method,
         data: this.options,
-        success: __bind(function(data) {
-          this.data = data;
+        success: function(data) {
+          _this.data = data;
           element.html(data);
-          if (callback) {
-            return callback();
-          }
-        }, this),
-        error: __bind(function() {
-          return Mercury.notify('Error loading the preview for the \"%s\" snippet.', this.name);
-        }, this)
+          if (callback) return callback();
+        },
+        error: function() {
+          return Mercury.notify('Error loading the preview for the \"%s\" snippet.', _this.name);
+        }
       });
     };
+
     Snippet.prototype.displayOptions = function() {
       Mercury.snippet = this;
       return Mercury.modal(Mercury.config.snippets.optionsUrl.replace(':name', this.name), {
@@ -15980,6 +16043,7 @@ Showdown.converter = function() {
         loadData: this.options
       });
     };
+
     Snippet.prototype.setOptions = function(options) {
       this.options = options;
       delete this.options['authenticity_token'];
@@ -15987,10 +16051,9 @@ Showdown.converter = function() {
       this.version += 1;
       return this.history.push(this.options);
     };
+
     Snippet.prototype.setVersion = function(version) {
-      if (version == null) {
-        version = null;
-      }
+      if (version == null) version = null;
       version = parseInt(version);
       if (version && this.history.stack[version - 1]) {
         this.version = version - 1;
@@ -15999,31 +16062,33 @@ Showdown.converter = function() {
       }
       return false;
     };
+
     Snippet.prototype.serialize = function() {
       return {
         name: this.name,
         options: this.options
       };
     };
+
     return Snippet;
+
   })();
+
 }).call(this);
 (function() {
-  var __hasProp = Object.prototype.hasOwnProperty, __extends = function(child, parent) {
-    for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; }
-    function ctor() { this.constructor = child; }
-    ctor.prototype = parent.prototype;
-    child.prototype = new ctor;
-    child.__super__ = parent.prototype;
-    return child;
-  }, __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
-  this.Mercury.SnippetToolbar = (function() {
-    __extends(SnippetToolbar, Mercury.Toolbar);
+  var __hasProp = Object.prototype.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; };
+
+  this.Mercury.SnippetToolbar = (function(_super) {
+
+    __extends(SnippetToolbar, _super);
+
     function SnippetToolbar(document, options) {
       this.document = document;
       this.options = options != null ? options : {};
       SnippetToolbar.__super__.constructor.call(this, this.options);
     }
+
     SnippetToolbar.prototype.build = function() {
       var button, buttonName, options, _ref, _ref2, _results;
       this.element = jQuery('<div>', {
@@ -16037,44 +16102,46 @@ Showdown.converter = function() {
         if (!__hasProp.call(_ref2, buttonName)) continue;
         options = _ref2[buttonName];
         button = this.buildButton(buttonName, options);
-        _results.push(button ? button.appendTo(this.element) : void 0);
+        if (button) {
+          _results.push(button.appendTo(this.element));
+        } else {
+          _results.push(void 0);
+        }
       }
       return _results;
     };
+
     SnippetToolbar.prototype.bindEvents = function() {
-      Mercury.on('show:toolbar', __bind(function(event, options) {
-        if (!options.snippet) {
-          return;
-        }
-        options.snippet.mouseout(__bind(function() {
-          return this.hide();
-        }, this));
-        return this.show(options.snippet);
-      }, this));
-      Mercury.on('hide:toolbar', __bind(function(event, options) {
-        if (!(options.type && options.type === 'snippet')) {
-          return;
-        }
-        return this.hide(options.immediately);
-      }, this));
-      this.element.mousemove(__bind(function() {
-        return clearTimeout(this.hideTimeout);
-      }, this));
-      this.element.mouseout(__bind(function() {
-        return this.hide();
-      }, this));
-      return jQuery(this.document).on('scroll', __bind(function() {
-        if (this.visible) {
-          return this.position();
-        }
-      }, this));
+      var _this = this;
+      Mercury.on('show:toolbar', function(event, options) {
+        if (!options.snippet) return;
+        options.snippet.mouseout(function() {
+          return _this.hide();
+        });
+        return _this.show(options.snippet);
+      });
+      Mercury.on('hide:toolbar', function(event, options) {
+        if (!(options.type && options.type === 'snippet')) return;
+        return _this.hide(options.immediately);
+      });
+      this.element.mousemove(function() {
+        return clearTimeout(_this.hideTimeout);
+      });
+      this.element.mouseout(function() {
+        return _this.hide();
+      });
+      return jQuery(this.document).on('scroll', function() {
+        if (_this.visible) return _this.position();
+      });
     };
+
     SnippetToolbar.prototype.show = function(snippet) {
       this.snippet = snippet;
       Mercury.tooltip.hide();
       this.position();
       return this.appear();
     };
+
     SnippetToolbar.prototype.position = function() {
       var left, offset, top;
       offset = this.snippet.offset();
@@ -16085,11 +16152,10 @@ Showdown.converter = function() {
         left: left
       });
     };
+
     SnippetToolbar.prototype.appear = function() {
       clearTimeout(this.hideTimeout);
-      if (this.visible) {
-        return;
-      }
+      if (this.visible) return;
       this.visible = true;
       this.element.css({
         display: 'block',
@@ -16099,40 +16165,43 @@ Showdown.converter = function() {
         opacity: 1
       }, 200, 'easeInOutSine');
     };
+
     SnippetToolbar.prototype.hide = function(immediately) {
-      if (immediately == null) {
-        immediately = false;
-      }
+      var _this = this;
+      if (immediately == null) immediately = false;
       clearTimeout(this.hideTimeout);
       if (immediately) {
         this.element.hide();
         return this.visible = false;
       } else {
-        return this.hideTimeout = setTimeout(500, __bind(function() {
-          this.element.stop().animate({
+        return this.hideTimeout = setTimeout(500, function() {
+          _this.element.stop().animate({
             opacity: 0
-          }, 300, 'easeInOutSine', __bind(function() {
-            return this.element.hide();
-          }, this));
-          return this.visible = false;
-        }, this));
+          }, 300, 'easeInOutSine', function() {
+            return _this.element.hide();
+          });
+          return _this.visible = false;
+        });
       }
     };
+
     return SnippetToolbar;
-  })();
+
+  })(Mercury.Toolbar);
+
 }).call(this);
 (function() {
-  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+
   this.Mercury.Region = (function() {
     var type;
+
     type = 'region';
+
     function Region(element, window, options) {
       this.element = element;
       this.window = window;
       this.options = options != null ? options : {};
-      if (!this.type) {
-        this.type = 'region';
-      }
+      if (!this.type) this.type = 'region';
       Mercury.log("building " + this.type, this.element, this.options);
       this.document = this.window.document;
       this.name = this.element.attr(Mercury.config.regions.identifier);
@@ -16142,60 +16211,49 @@ Showdown.converter = function() {
       this.pushHistory();
       this.element.data('region', this);
     }
+
     Region.prototype.build = function() {};
+
     Region.prototype.focus = function() {};
+
     Region.prototype.bindEvents = function() {
-      Mercury.on('mode', __bind(function(event, options) {
-        if (options.mode === 'preview') {
-          return this.togglePreview();
-        }
-      }, this));
-      Mercury.on('focus:frame', __bind(function() {
-        if (this.previewing || Mercury.region !== this) {
-          return;
-        }
-        return this.focus();
-      }, this));
-      Mercury.on('action', __bind(function(event, options) {
-        if (this.previewing || Mercury.region !== this) {
-          return;
-        }
-        if (options.action) {
-          return this.execCommand(options.action, options);
-        }
-      }, this));
-      this.element.on('mousemove', __bind(function(event) {
+      var _this = this;
+      Mercury.on('mode', function(event, options) {
+        if (options.mode === 'preview') return _this.togglePreview();
+      });
+      Mercury.on('focus:frame', function() {
+        if (_this.previewing || Mercury.region !== _this) return;
+        return _this.focus();
+      });
+      Mercury.on('action', function(event, options) {
+        if (_this.previewing || Mercury.region !== _this) return;
+        if (options.action) return _this.execCommand(options.action, options);
+      });
+      this.element.on('mousemove', function(event) {
         var snippet;
-        if (this.previewing || Mercury.region !== this) {
-          return;
-        }
+        if (_this.previewing || Mercury.region !== _this) return;
         snippet = jQuery(event.target).closest('.mercury-snippet');
         if (snippet.length) {
-          this.snippet = snippet;
+          _this.snippet = snippet;
           return Mercury.trigger('show:toolbar', {
             type: 'snippet',
-            snippet: this.snippet
+            snippet: _this.snippet
           });
         }
-      }, this));
-      return this.element.on('mouseout', __bind(function() {
-        if (this.previewing) {
-          return;
-        }
+      });
+      return this.element.on('mouseout', function() {
+        if (_this.previewing) return;
         return Mercury.trigger('hide:toolbar', {
           type: 'snippet',
           immediately: false
         });
-      }, this));
+      });
     };
+
     Region.prototype.content = function(value, filterSnippets) {
       var container, snippet, _i, _len, _ref;
-      if (value == null) {
-        value = null;
-      }
-      if (filterSnippets == null) {
-        filterSnippets = false;
-      }
+      if (value == null) value = null;
+      if (filterSnippets == null) filterSnippets = false;
       if (value !== null) {
         return this.element.html(value);
       } else {
@@ -16216,13 +16274,12 @@ Showdown.converter = function() {
         return container.html();
       }
     };
+
     Region.prototype.togglePreview = function() {
       if (this.previewing) {
         this.previewing = false;
         this.element.addClass(Mercury.config.regions.className).removeClass("" + Mercury.config.regions.className + "-preview");
-        if (Mercury.region === this) {
-          return this.focus();
-        }
+        if (Mercury.region === this) return this.focus();
       } else {
         this.previewing = true;
         this.element.addClass("" + Mercury.config.regions.className + "-preview").removeClass(Mercury.config.regions.className);
@@ -16231,20 +16288,19 @@ Showdown.converter = function() {
         });
       }
     };
+
     Region.prototype.execCommand = function(action, options) {
-      if (options == null) {
-        options = {};
-      }
+      if (options == null) options = {};
       this.focus();
-      if (action !== 'redo') {
-        this.pushHistory();
-      }
+      if (action !== 'redo') this.pushHistory();
       Mercury.log('execCommand', action, options.value);
-      return Mercury.changes = true;
+      if (!options.already_handled) return Mercury.changes = true;
     };
+
     Region.prototype.pushHistory = function() {
       return this.history.push(this.content());
     };
+
     Region.prototype.snippets = function() {
       var element, snippet, snippets, _i, _len, _ref;
       snippets = {};
@@ -16257,6 +16313,7 @@ Showdown.converter = function() {
       }
       return snippets;
     };
+
     Region.prototype.dataAttributes = function() {
       var attr, data, _i, _len, _ref;
       data = {};
@@ -16267,6 +16324,7 @@ Showdown.converter = function() {
       }
       return data;
     };
+
     Region.prototype.serialize = function() {
       return {
         type: this.type,
@@ -16275,17 +16333,20 @@ Showdown.converter = function() {
         snippets: this.snippets()
       };
     };
+
     return Region;
+
   })();
+
 }).call(this);
 (function() {
-  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; }, __hasProp = Object.prototype.hasOwnProperty;
+  var __hasProp = Object.prototype.hasOwnProperty;
+
   this.Mercury.uploader = function(file, options) {
-    if (Mercury.config.uploading.enabled) {
-      Mercury.uploader.show(file, options);
-    }
+    if (Mercury.config.uploading.enabled) Mercury.uploader.show(file, options);
     return Mercury.uploader;
   };
+
   jQuery.extend(Mercury.uploader, {
     show: function(file, options) {
       this.options = options != null ? options : {};
@@ -16294,17 +16355,13 @@ Showdown.converter = function() {
         alert("Error: " + this.file.errors);
         return;
       }
-      if (!this.supported()) {
-        return;
-      }
+      if (!this.supported()) return;
       Mercury.trigger('focus:window');
       this.initialize();
       return this.appear();
     },
     initialize: function() {
-      if (this.initialized) {
-        return;
-      }
+      if (this.initialized) return;
       this.build();
       this.bindEvents();
       return this.initialized = true;
@@ -16344,25 +16401,27 @@ Showdown.converter = function() {
       return this.overlay.appendTo((_ref2 = jQuery(this.options.appendTo).get(0)) != null ? _ref2 : 'body');
     },
     bindEvents: function() {
-      return Mercury.on('resize', __bind(function() {
-        return this.position();
-      }, this));
+      var _this = this;
+      return Mercury.on('resize', function() {
+        return _this.position();
+      });
     },
     appear: function() {
+      var _this = this;
       this.fillDisplay();
       this.position();
       this.overlay.show();
       return this.overlay.animate({
         opacity: 1
-      }, 200, 'easeInOutSine', __bind(function() {
-        this.element.show();
-        return this.element.animate({
+      }, 200, 'easeInOutSine', function() {
+        _this.element.show();
+        return _this.element.animate({
           opacity: 1
-        }, 200, 'easeInOutSine', __bind(function() {
-          this.visible = true;
-          return this.loadImage();
-        }, this));
-      }, this));
+        }, 200, 'easeInOutSine', function() {
+          _this.visible = true;
+          return _this.loadImage();
+        });
+      });
     },
     position: function() {
       var height, width;
@@ -16379,59 +16438,59 @@ Showdown.converter = function() {
       return this.element.find('.mercury-uploader-details').html(details.join('<br/>'));
     },
     loadImage: function() {
-      return this.file.readAsDataURL(__bind(function(result) {
-        this.element.find('.mercury-uploader-preview b').html(jQuery('<img>', {
+      var _this = this;
+      return this.file.readAsDataURL(function(result) {
+        _this.element.find('.mercury-uploader-preview b').html(jQuery('<img>', {
           src: result
         }));
-        return this.upload();
-      }, this));
+        return _this.upload();
+      });
     },
     upload: function() {
-      var xhr;
+      var xhr,
+        _this = this;
       xhr = new XMLHttpRequest;
-      jQuery.each(['onloadstart', 'onprogress', 'onload', 'onabort', 'onerror'], __bind(function(index, eventName) {
-        return xhr.upload[eventName] = __bind(function(event) {
-          return this.uploaderEvents[eventName].call(this, event);
-        }, this);
-      }, this));
-      xhr.onload = __bind(function(event) {
+      jQuery.each(['onloadstart', 'onprogress', 'onload', 'onabort', 'onerror'], function(index, eventName) {
+        return xhr.upload[eventName] = function(event) {
+          return _this.uploaderEvents[eventName].call(_this, event);
+        };
+      });
+      xhr.onload = function(event) {
         var response, src;
         if (event.currentTarget.status >= 400) {
-          this.updateStatus('Error: Unable to upload the file');
+          _this.updateStatus('Error: Unable to upload the file');
           Mercury.notify('Unable to process response: %s', event.currentTarget.status);
-          return this.hide();
+          return _this.hide();
         } else {
           try {
             response = Mercury.config.uploading.handler ? Mercury.config.uploading.handler(event.target.responseText) : jQuery.parseJSON(event.target.responseText);
             src = response.url || response.image.url;
-            if (!src) {
-              throw 'Malformed response from server.';
-            }
+            if (!src) throw 'Malformed response from server.';
             Mercury.trigger('action', {
               action: 'insertImage',
               value: {
                 src: src
               }
             });
-            return this.hide();
+            return _this.hide();
           } catch (error) {
-            this.updateStatus('Error: Unable to upload the file');
+            _this.updateStatus('Error: Unable to upload the file');
             Mercury.notify('Unable to process response: %s', error);
-            return this.hide();
+            return _this.hide();
           }
         }
-      }, this);
+      };
       xhr.open('post', Mercury.config.uploading.url, true);
       xhr.setRequestHeader('Accept', 'application/json, text/javascript, text/html, application/xml, text/xml, */*');
       xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
       xhr.setRequestHeader(Mercury.config.csrfHeader, Mercury.csrfToken);
-      return this.file.readAsBinaryString(__bind(function(result) {
+      return this.file.readAsBinaryString(function(result) {
         var multipart;
-        multipart = new Mercury.uploader.MultiPartPost(Mercury.config.uploading.inputName, this.file, result);
-        this.file.updateSize(multipart.delta);
+        multipart = new Mercury.uploader.MultiPartPost(Mercury.config.uploading.inputName, _this.file, result);
+        _this.file.updateSize(multipart.delta);
         xhr.setRequestHeader('Content-Type', 'multipart/form-data; boundary=' + multipart.boundary);
         return xhr.sendAsBinary(multipart.body);
-      }, this));
+      });
     },
     updateStatus: function(message, loaded) {
       var percent;
@@ -16445,24 +16504,23 @@ Showdown.converter = function() {
       }
     },
     hide: function(delay) {
-      if (delay == null) {
-        delay = 0;
-      }
-      return setTimeout(delay * 1000, __bind(function() {
-        return this.element.animate({
+      var _this = this;
+      if (delay == null) delay = 0;
+      return setTimeout(delay * 1000, function() {
+        return _this.element.animate({
           opacity: 0
-        }, 200, 'easeInOutSine', __bind(function() {
-          return this.overlay.animate({
+        }, 200, 'easeInOutSine', function() {
+          return _this.overlay.animate({
             opacity: 0
-          }, 200, 'easeInOutSine', __bind(function() {
-            this.overlay.hide();
-            this.element.hide();
-            this.reset();
-            this.visible = false;
+          }, 200, 'easeInOutSine', function() {
+            _this.overlay.hide();
+            _this.element.hide();
+            _this.reset();
+            _this.visible = false;
             return Mercury.trigger('focus:frame');
-          }, this));
-        }, this));
-      }, this));
+          });
+        });
+      });
     },
     reset: function() {
       this.element.find('.mercury-uploader-preview b').html('');
@@ -16492,7 +16550,9 @@ Showdown.converter = function() {
       }
     }
   });
+
   Mercury.uploader.File = (function() {
+
     function File(file) {
       var errors;
       this.file = file;
@@ -16508,42 +16568,41 @@ Showdown.converter = function() {
       if (!(Mercury.config.uploading.allowedMimeTypes.indexOf(this.type) > -1)) {
         errors.push(Mercury.I18n('Unsupported format'));
       }
-      if (errors.length) {
-        this.errors = errors.join(' / ');
-      }
+      if (errors.length) this.errors = errors.join(' / ');
     }
+
     File.prototype.readAsDataURL = function(callback) {
-      var reader;
-      if (callback == null) {
-        callback = null;
-      }
+      var reader,
+        _this = this;
+      if (callback == null) callback = null;
       reader = new FileReader();
       reader.readAsDataURL(this.file);
-      return reader.onload = __bind(function() {
-        if (callback) {
-          return callback(reader.result);
-        }
-      }, this);
+      return reader.onload = function() {
+        if (callback) return callback(reader.result);
+      };
     };
+
     File.prototype.readAsBinaryString = function(callback) {
-      var reader;
-      if (callback == null) {
-        callback = null;
-      }
+      var reader,
+        _this = this;
+      if (callback == null) callback = null;
       reader = new FileReader();
       reader.readAsBinaryString(this.file);
-      return reader.onload = __bind(function() {
-        if (callback) {
-          return callback(reader.result);
-        }
-      }, this);
+      return reader.onload = function() {
+        if (callback) return callback(reader.result);
+      };
     };
+
     File.prototype.updateSize = function(delta) {
       return this.fullSize = this.size + delta;
     };
+
     return File;
+
   })();
+
   Mercury.uploader.MultiPartPost = (function() {
+
     function MultiPartPost(inputName, file, contents, formInputs) {
       this.inputName = inputName;
       this.file = file;
@@ -16554,6 +16613,7 @@ Showdown.converter = function() {
       this.buildBody();
       this.delta = this.body.length - this.file.size;
     }
+
     MultiPartPost.prototype.buildBody = function() {
       var boundary, name, value, _ref;
       boundary = '--' + this.boundary;
@@ -16565,29 +16625,28 @@ Showdown.converter = function() {
       }
       return this.body += "" + boundary + "\r\nContent-Disposition: form-data; name=\"" + this.inputName + "\"; filename=\"" + this.file.name + "\"\r\nContent-Type: " + this.file.type + "\r\nContent-Transfer-Encoding: binary\r\n\r\n" + this.contents + "\r\n" + boundary + "--";
     };
+
     return MultiPartPost;
+
   })();
+
 }).call(this);
 (function() {
-  var __hasProp = Object.prototype.hasOwnProperty, __extends = function(child, parent) {
-    for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; }
-    function ctor() { this.constructor = child; }
-    ctor.prototype = parent.prototype;
-    child.prototype = new ctor;
-    child.__super__ = parent.prototype;
-    return child;
-  }, __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; }, __indexOf = Array.prototype.indexOf || function(item) {
-    for (var i = 0, l = this.length; i < l; i++) {
-      if (this[i] === item) return i;
-    }
-    return -1;
-  };
-  this.Mercury.Regions.Editable = (function() {
+  var __hasProp = Object.prototype.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; },
+    __indexOf = Array.prototype.indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
+
+  this.Mercury.Regions.Editable = (function(_super) {
     var type;
-    __extends(Editable, Mercury.Region);
+
+    __extends(Editable, _super);
+
     Editable.supported = document.designMode && !jQuery.browser.konqueror && !jQuery.browser.msie;
+
     Editable.supportedText = "Chrome 10+, Firefox 4+, Safari 5+";
+
     type = 'editable';
+
     function Editable(element, window, options) {
       this.element = element;
       this.window = window;
@@ -16595,11 +16654,10 @@ Showdown.converter = function() {
       this.type = 'editable';
       Editable.__super__.constructor.apply(this, arguments);
     }
+
     Editable.prototype.build = function() {
       var element, _i, _len, _ref;
-      if (jQuery.browser.mozilla && this.content() === '') {
-        this.content('&nbsp;');
-      }
+      if (jQuery.browser.mozilla && this.content() === '') this.content('&nbsp;');
       this.element.data({
         originalOverflow: this.element.css('overflow')
       });
@@ -16626,23 +16684,23 @@ Showdown.converter = function() {
         }
       }
     };
+
     Editable.prototype.bindEvents = function() {
+      var _this = this;
       Editable.__super__.bindEvents.apply(this, arguments);
-      Mercury.on('region:update', __bind(function() {
+      Mercury.on('region:update', function() {
         var anchor, currentElement, table;
-        if (this.previewing || Mercury.region !== this) {
-          return;
-        }
-        setTimeout(1, __bind(function() {
-          return this.selection().forceSelection(this.element.get(0));
-        }, this));
-        currentElement = this.currentElement();
+        if (_this.previewing || Mercury.region !== _this) return;
+        setTimeout(1, function() {
+          return _this.selection().forceSelection(_this.element.get(0));
+        });
+        currentElement = _this.currentElement();
         if (currentElement.length) {
-          table = currentElement.closest('table', this.element);
+          table = currentElement.closest('table', _this.element);
           if (table.length) {
             Mercury.tableEditor(table, currentElement.closest('tr, td'), '<br/>');
           }
-          anchor = currentElement.closest('a', this.element);
+          anchor = currentElement.closest('a', _this.element);
           if (anchor.length && anchor.attr('href')) {
             return Mercury.tooltip(anchor, "<a href=\"" + (anchor.attr('href')) + "\" target=\"_blank\">" + (anchor.attr('href')) + "</a>", {
               position: 'below'
@@ -16651,156 +16709,126 @@ Showdown.converter = function() {
             return Mercury.tooltip.hide();
           }
         }
-      }, this));
-      this.element.on('dragenter', __bind(function(event) {
-        if (this.previewing) {
-          return;
-        }
-        if (!Mercury.snippet) {
-          event.preventDefault();
-        }
+      });
+      this.element.on('dragenter', function(event) {
+        if (_this.previewing) return;
+        if (!Mercury.snippet) event.preventDefault();
         return event.originalEvent.dataTransfer.dropEffect = 'copy';
-      }, this));
-      this.element.on('dragover', __bind(function(event) {
-        if (this.previewing) {
-          return;
-        }
-        if (!Mercury.snippet) {
-          event.preventDefault();
-        }
+      });
+      this.element.on('dragover', function(event) {
+        if (_this.previewing) return;
+        if (!Mercury.snippet) event.preventDefault();
         event.originalEvent.dataTransfer.dropEffect = 'copy';
         if (jQuery.browser.webkit) {
-          clearTimeout(this.dropTimeout);
-          return this.dropTimeout = setTimeout(10, __bind(function() {
-            return this.element.trigger('possible:drop');
-          }, this));
+          clearTimeout(_this.dropTimeout);
+          return _this.dropTimeout = setTimeout(10, function() {
+            return _this.element.trigger('possible:drop');
+          });
         }
-      }, this));
-      this.element.on('drop', __bind(function(event) {
-        if (this.previewing) {
-          return;
-        }
-        clearTimeout(this.dropTimeout);
-        this.dropTimeout = setTimeout(1, __bind(function() {
-          return this.element.trigger('possible:drop');
-        }, this));
-        if (!event.originalEvent.dataTransfer.files.length) {
-          return;
-        }
+      });
+      this.element.on('drop', function(event) {
+        if (_this.previewing) return;
+        clearTimeout(_this.dropTimeout);
+        _this.dropTimeout = setTimeout(1, function() {
+          return _this.element.trigger('possible:drop');
+        });
+        if (!event.originalEvent.dataTransfer.files.length) return;
         event.preventDefault();
-        this.focus();
+        _this.focus();
         return Mercury.uploader(event.originalEvent.dataTransfer.files[0]);
-      }, this));
-      this.element.on('possible:drop', __bind(function() {
+      });
+      this.element.on('possible:drop', function() {
         var snippet;
-        if (this.previewing) {
-          return;
-        }
-        if (snippet = this.element.find('img[data-snippet]').get(0)) {
-          this.focus();
+        if (_this.previewing) return;
+        if (snippet = _this.element.find('img[data-snippet]').get(0)) {
+          _this.focus();
           Mercury.Snippet.displayOptionsFor(jQuery(snippet).data('snippet'));
-          return this.document.execCommand('undo', false, null);
+          return _this.document.execCommand('undo', false, null);
         }
-      }, this));
-      this.element.on('paste', __bind(function(event) {
-        if (this.previewing || Mercury.region !== this) {
-          return;
-        }
-        if (this.specialContainer) {
+      });
+      this.element.on('paste', function(event) {
+        if (_this.previewing || Mercury.region !== _this) return;
+        if (_this.specialContainer) {
           event.preventDefault();
           return;
         }
-        if (this.pasting) {
-          return;
-        }
+        if (_this.pasting) return;
         Mercury.changes = true;
-        return this.handlePaste(event.originalEvent);
-      }, this));
-      this.element.on('focus', __bind(function() {
-        if (this.previewing) {
-          return;
-        }
-        Mercury.region = this;
-        setTimeout(1, __bind(function() {
-          return this.selection().forceSelection(this.element.get(0));
-        }, this));
-        return Mercury.trigger('region:focused', {
-          region: this
+        return _this.handlePaste(event.originalEvent);
+      });
+      this.element.on('focus', function() {
+        if (_this.previewing) return;
+        Mercury.region = _this;
+        setTimeout(1, function() {
+          return _this.selection().forceSelection(_this.element.get(0));
         });
-      }, this));
-      this.element.on('blur', __bind(function() {
-        if (this.previewing) {
-          return;
-        }
+        return Mercury.trigger('region:focused', {
+          region: _this
+        });
+      });
+      this.element.on('blur', function() {
+        if (_this.previewing) return;
         Mercury.trigger('region:blurred', {
-          region: this
+          region: _this
         });
         return Mercury.tooltip.hide();
-      }, this));
-      this.element.on('click', __bind(function(event) {
-        if (this.previewing) {
+      });
+      this.element.on('click', function(event) {
+        if (_this.previewing) {
           return jQuery(event.target).closest('a').attr('target', '_parent');
         }
-      }, this));
-      this.element.on('dblclick', __bind(function(event) {
+      });
+      this.element.on('dblclick', function(event) {
         var image;
-        if (this.previewing) {
-          return;
-        }
-        image = jQuery(event.target).closest('img', this.element);
+        if (_this.previewing) return;
+        image = jQuery(event.target).closest('img', _this.element);
         if (image.length) {
-          this.selection().selectNode(image.get(0), true);
+          _this.selection().selectNode(image.get(0), true);
           return Mercury.trigger('button', {
             action: 'insertMedia'
           });
         }
-      }, this));
-      this.element.on('mouseup', __bind(function() {
-        if (this.previewing) {
-          return;
-        }
-        this.pushHistory();
+      });
+      this.element.on('mouseup', function() {
+        if (_this.previewing) return;
+        _this.pushHistory();
         return Mercury.trigger('region:update', {
-          region: this
+          region: _this
         });
-      }, this));
-      this.element.on('keydown', __bind(function(event) {
+      });
+      this.element.on('keydown', function(event) {
         var container;
-        if (this.previewing) {
-          return;
-        }
+        if (_this.previewing) return;
         switch (event.keyCode) {
           case 90:
-            if (!event.metaKey) {
-              return;
-            }
+            if (!event.metaKey) return;
             event.preventDefault();
             if (event.shiftKey) {
-              this.execCommand('redo');
+              _this.execCommand('redo');
             } else {
-              this.execCommand('undo');
+              _this.execCommand('undo');
             }
             return;
           case 13:
-            if (jQuery.browser.webkit && this.selection().commonAncestor().closest('li, ul, ol', this.element).length === 0) {
+            if (jQuery.browser.webkit && _this.selection().commonAncestor().closest('li, ul, ol', _this.element).length === 0) {
               event.preventDefault();
-              this.document.execCommand('insertParagraph', false, null);
-            } else if (this.specialContainer || jQuery.browser.opera) {
+              _this.document.execCommand('insertParagraph', false, null);
+            } else if (_this.specialContainer || jQuery.browser.opera) {
               event.preventDefault();
-              this.document.execCommand('insertHTML', false, '<br/>');
+              _this.document.execCommand('insertHTML', false, '<br/>');
             }
             break;
           case 9:
             event.preventDefault();
-            container = this.selection().commonAncestor();
-            if (container.closest('li', this.element).length) {
+            container = _this.selection().commonAncestor();
+            if (container.closest('li', _this.element).length) {
               if (!event.shiftKey) {
-                this.execCommand('indent');
+                _this.execCommand('indent');
               } else if (container.parents('ul, ol').length > 1) {
-                this.execCommand('outdent');
+                _this.execCommand('outdent');
               }
             } else {
-              this.execCommand('insertHTML', {
+              _this.execCommand('insertHTML', {
                 value: '&nbsp;&nbsp;'
               });
             }
@@ -16808,44 +16836,44 @@ Showdown.converter = function() {
         if (event.metaKey) {
           switch (event.keyCode) {
             case 66:
-              this.execCommand('bold');
+              _this.execCommand('bold');
               event.preventDefault();
               break;
             case 73:
-              this.execCommand('italic');
+              _this.execCommand('italic');
               event.preventDefault();
               break;
             case 85:
-              this.execCommand('underline');
+              _this.execCommand('underline');
               event.preventDefault();
           }
         }
-        return this.pushHistory(event.keyCode);
-      }, this));
-      return this.element.on('keyup', __bind(function() {
-        if (this.previewing) {
-          return;
-        }
+        return _this.pushHistory(event.keyCode);
+      });
+      return this.element.on('keyup', function() {
+        if (_this.previewing) return;
         Mercury.trigger('region:update', {
-          region: this
+          region: _this
         });
         return Mercury.changes = true;
-      }, this));
+      });
     };
+
     Editable.prototype.focus = function() {
+      var _this = this;
       if (Mercury.region !== this) {
-        setTimeout(10, __bind(function() {
-          return this.element.focus();
-        }, this));
+        setTimeout(10, function() {
+          return _this.element.focus();
+        });
         try {
           this.selection().selection.collapseToStart();
         } catch (e) {
 
         }
       } else {
-        setTimeout(10, __bind(function() {
-          return this.element.focus();
-        }, this));
+        setTimeout(10, function() {
+          return _this.element.focus();
+        });
       }
       Mercury.trigger('region:focused', {
         region: this
@@ -16854,17 +16882,12 @@ Showdown.converter = function() {
         region: this
       });
     };
+
     Editable.prototype.content = function(value, filterSnippets, includeMarker) {
       var container, content, element, index, selection, snippet, version, _i, _len, _len2, _ref, _ref2;
-      if (value == null) {
-        value = null;
-      }
-      if (filterSnippets == null) {
-        filterSnippets = true;
-      }
-      if (includeMarker == null) {
-        includeMarker = false;
-      }
+      if (value == null) value = null;
+      if (filterSnippets == null) filterSnippets = true;
+      if (includeMarker == null) includeMarker = false;
       if (value !== null) {
         container = jQuery('<div>').appendTo(this.document.createDocumentFragment());
         container.html(value);
@@ -16916,12 +16939,11 @@ Showdown.converter = function() {
           }
         }
         content = container.html();
-        if (includeMarker) {
-          selection.removeMarker();
-        }
+        if (includeMarker) selection.removeMarker();
         return content;
       }
     };
+
     Editable.prototype.togglePreview = function() {
       if (this.previewing) {
         this.element.get(0).contentEditable = true;
@@ -16938,18 +16960,15 @@ Showdown.converter = function() {
       }
       return Editable.__super__.togglePreview.apply(this, arguments);
     };
+
     Editable.prototype.execCommand = function(action, options) {
       var handler, sibling;
-      if (options == null) {
-        options = {};
-      }
+      if (options == null) options = {};
       Editable.__super__.execCommand.apply(this, arguments);
       if (handler = Mercury.config.behaviors[action] || Mercury.Regions.Editable.actions[action]) {
         handler.call(this, this.selection(), options);
       } else {
-        if (action === 'indent') {
-          sibling = this.element.get(0).previousSibling;
-        }
+        if (action === 'indent') sibling = this.element.get(0).previousSibling;
         if (action === 'insertHTML' && options.value && options.value.get) {
           options.value = jQuery('<div>').html(options.value).html();
         }
@@ -16968,54 +16987,55 @@ Showdown.converter = function() {
         });
       });
     };
+
     Editable.prototype.pushHistory = function(keyCode) {
-      var keyCodes, knownKeyCode, waitTime;
+      var keyCodes, knownKeyCode, waitTime,
+        _this = this;
       keyCodes = [13, 46, 8];
       waitTime = 2.5;
-      if (keyCode) {
-        knownKeyCode = keyCodes.indexOf(keyCode);
-      }
+      if (keyCode) knownKeyCode = keyCodes.indexOf(keyCode);
       clearTimeout(this.historyTimeout);
       if (knownKeyCode >= 0 && knownKeyCode !== this.lastKnownKeyCode) {
         this.history.push(this.content(null, false, true));
       } else if (keyCode) {
-        this.historyTimeout = setTimeout(waitTime * 1000, __bind(function() {
-          return this.history.push(this.content(null, false, true));
-        }, this));
+        this.historyTimeout = setTimeout(waitTime * 1000, function() {
+          return _this.history.push(_this.content(null, false, true));
+        });
       } else {
         this.history.push(this.content(null, false, true));
       }
       return this.lastKnownKeyCode = knownKeyCode;
     };
+
     Editable.prototype.selection = function() {
       return new Mercury.Regions.Editable.Selection(this.window.getSelection(), this.document);
     };
+
     Editable.prototype.path = function() {
       var container;
       container = this.selection().commonAncestor();
-      if (!container) {
-        return [];
-      }
+      if (!container) return [];
       if (container.get(0) === this.element.get(0)) {
         return [];
       } else {
         return container.parentsUntil(this.element);
       }
     };
+
     Editable.prototype.currentElement = function() {
       var element, selection;
       element = [];
       selection = this.selection();
       if (selection.range) {
         element = selection.commonAncestor();
-        if (element.get(0).nodeType === 3) {
-          element = element.parent();
-        }
+        if (element.get(0).nodeType === 3) element = element.parent();
       }
       return element;
     };
+
     Editable.prototype.handlePaste = function(event) {
-      var sanitizer, selection;
+      var sanitizer, selection,
+        _this = this;
       if (Mercury.config.pasting.sanitize === 'text' && event.clipboardData) {
         this.execCommand('insertHTML', {
           value: event.clipboardData.getData('text/plain')
@@ -17025,18 +17045,19 @@ Showdown.converter = function() {
         selection = this.selection();
         selection.placeMarker();
         sanitizer = jQuery('#mercury_sanitizer', this.document).focus();
-        return setTimeout(1, __bind(function() {
+        return setTimeout(1, function() {
           var content;
-          content = this.sanitize(sanitizer);
-          selection.selectMarker(this.element);
+          content = _this.sanitize(sanitizer);
+          selection.selectMarker(_this.element);
           selection.removeMarker();
-          this.element.focus();
-          return this.execCommand('insertHTML', {
+          _this.element.focus();
+          return _this.execCommand('insertHTML', {
             value: content
           });
-        }, this));
+        });
       }
     };
+
     Editable.prototype.sanitize = function(sanitizer) {
       var allowed, allowedAttributes, allowedTag, attr, content, element, _i, _j, _len, _len2, _ref, _ref2, _ref3, _ref4;
       sanitizer.find("." + Mercury.config.regions.className).remove();
@@ -17085,6 +17106,7 @@ Showdown.converter = function() {
       sanitizer.html('');
       return content;
     };
+
     Editable.actions = {
       insertRowBefore: function() {
         return Mercury.tableEditor.addRow('before');
@@ -17172,66 +17194,59 @@ Showdown.converter = function() {
       },
       editSnippet: function() {
         var snippet;
-        if (!this.snippet) {
-          return;
-        }
+        if (!this.snippet) return;
         snippet = Mercury.Snippet.find(this.snippet.data('snippet'));
         return snippet.displayOptions();
       },
       removeSnippet: function() {
-        if (this.snippet) {
-          this.snippet.remove();
-        }
+        if (this.snippet) this.snippet.remove();
         return Mercury.trigger('hide:toolbar', {
           type: 'snippet',
           immediately: true
         });
       }
     };
+
     return Editable;
-  })();
+
+  })(Mercury.Region);
+
   Mercury.Regions.Editable.Selection = (function() {
+
     function Selection(selection, context) {
       this.selection = selection;
       this.context = context;
-      if (!(this.selection.rangeCount >= 1)) {
-        return;
-      }
+      if (!(this.selection.rangeCount >= 1)) return;
       this.range = this.selection.getRangeAt(0);
       this.fragment = this.range.cloneContents();
       this.clone = this.range.cloneRange();
       this.collapsed = this.selection.isCollapsed;
     }
+
     Selection.prototype.commonAncestor = function(onlyTag) {
       var ancestor;
-      if (onlyTag == null) {
-        onlyTag = false;
-      }
-      if (!this.range) {
-        return null;
-      }
+      if (onlyTag == null) onlyTag = false;
+      if (!this.range) return null;
       ancestor = this.range.commonAncestorContainer;
-      if (ancestor.nodeType === 3 && onlyTag) {
-        ancestor = ancestor.parentNode;
-      }
+      if (ancestor.nodeType === 3 && onlyTag) ancestor = ancestor.parentNode;
       return jQuery(ancestor);
     };
+
     Selection.prototype.wrap = function(element, replace) {
-      if (replace == null) {
-        replace = false;
-      }
+      if (replace == null) replace = false;
       element = jQuery(element, this.context).html(this.fragment);
-      if (replace) {
-        this.replace(element);
-      }
+      if (replace) this.replace(element);
       return element;
     };
+
     Selection.prototype.textContent = function() {
       return this.range.cloneContents().textContent;
     };
+
     Selection.prototype.content = function() {
       return this.range.cloneContents();
     };
+
     Selection.prototype.is = function(elementType) {
       var content;
       content = this.content();
@@ -17240,11 +17255,10 @@ Showdown.converter = function() {
       }
       return false;
     };
+
     Selection.prototype.forceSelection = function(element) {
       var lastChild, range;
-      if (!jQuery.browser.webkit) {
-        return;
-      }
+      if (!jQuery.browser.webkit) return;
       range = this.context.createRange();
       if (this.range) {
         if (this.commonAncestor(true).closest('.mercury-snippet').length) {
@@ -17266,26 +17280,22 @@ Showdown.converter = function() {
         return this.selection.addRange(range);
       }
     };
+
     Selection.prototype.selectMarker = function(context) {
       var markers, range;
       markers = context.find('em.mercury-marker');
-      if (!markers.length) {
-        return;
-      }
+      if (!markers.length) return;
       range = this.context.createRange();
       range.setStartBefore(markers.get(0));
-      if (markers.length >= 2) {
-        range.setEndBefore(markers.get(1));
-      }
+      if (markers.length >= 2) range.setEndBefore(markers.get(1));
       markers.remove();
       this.selection.removeAllRanges();
       return this.selection.addRange(range);
     };
+
     Selection.prototype.placeMarker = function() {
       var rangeEnd, rangeStart;
-      if (!this.range) {
-        return;
-      }
+      if (!this.range) return;
       this.startMarker = jQuery('<em class="mercury-marker"/>', this.context).get(0);
       this.endMarker = jQuery('<em class="mercury-marker"/>', this.context).get(0);
       rangeEnd = this.range.cloneRange();
@@ -17299,10 +17309,12 @@ Showdown.converter = function() {
       this.selection.removeAllRanges();
       return this.selection.addRange(this.range);
     };
+
     Selection.prototype.removeMarker = function() {
       jQuery(this.startMarker).remove();
       return jQuery(this.endMarker).remove();
     };
+
     Selection.prototype.insertTextNode = function(string) {
       var node;
       node = this.context.createTextNode(string);
@@ -17311,10 +17323,9 @@ Showdown.converter = function() {
       this.range.selectNodeContents(node);
       return this.selection.addRange(this.range);
     };
+
     Selection.prototype.insertNode = function(element) {
-      if (element.get) {
-        element = element.get(0);
-      }
+      if (element.get) element = element.get(0);
       if (jQuery.type(element) === 'string') {
         element = jQuery(element, this.context).get(0);
       }
@@ -17323,20 +17334,16 @@ Showdown.converter = function() {
       this.range.selectNodeContents(element);
       return this.selection.addRange(this.range);
     };
+
     Selection.prototype.selectNode = function(node, removeExisting) {
-      if (removeExisting == null) {
-        removeExisting = false;
-      }
+      if (removeExisting == null) removeExisting = false;
       this.range.selectNode(node);
-      if (removeExisting) {
-        this.selection.removeAllRanges();
-      }
+      if (removeExisting) this.selection.removeAllRanges();
       return this.selection.addRange(this.range);
     };
+
     Selection.prototype.replace = function(element, collapse) {
-      if (element.get) {
-        element = element.get(0);
-      }
+      if (element.get) element = element.get(0);
       if (jQuery.type(element) === 'string') {
         element = jQuery(element, this.context).get(0);
       }
@@ -17344,28 +17351,29 @@ Showdown.converter = function() {
       this.range.insertNode(element);
       this.range.selectNodeContents(element);
       this.selection.addRange(this.range);
-      if (collapse) {
-        return this.range.collapse(false);
-      }
+      if (collapse) return this.range.collapse(false);
     };
+
     return Selection;
+
   })();
+
 }).call(this);
 (function() {
-  var __hasProp = Object.prototype.hasOwnProperty, __extends = function(child, parent) {
-    for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; }
-    function ctor() { this.constructor = child; }
-    ctor.prototype = parent.prototype;
-    child.prototype = new ctor;
-    child.__super__ = parent.prototype;
-    return child;
-  }, __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
-  this.Mercury.Regions.Markupable = (function() {
+  var __hasProp = Object.prototype.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; };
+
+  this.Mercury.Regions.Markupable = (function(_super) {
     var type;
-    __extends(Markupable, Mercury.Region);
+
+    __extends(Markupable, _super);
+
     Markupable.supported = document.getElementById;
+
     Markupable.supportedText = "IE 7+, Chrome 10+, Firefox 4+, Safari 5+, Opera 8+";
+
     type = 'markupable';
+
     function Markupable(element, window, options) {
       this.element = element;
       this.window = window;
@@ -17374,6 +17382,7 @@ Showdown.converter = function() {
       Markupable.__super__.constructor.apply(this, arguments);
       this.converter = new Showdown.converter();
     }
+
     Markupable.prototype.build = function() {
       var height, value, width;
       width = '100%';
@@ -17400,100 +17409,78 @@ Showdown.converter = function() {
       this.element = this.textarea;
       return this.resize();
     };
+
     Markupable.prototype.bindEvents = function() {
-      Mercury.on('mode', __bind(function(event, options) {
-        if (options.mode === 'preview') {
-          return this.togglePreview();
-        }
-      }, this));
-      Mercury.on('focus:frame', __bind(function() {
-        if (!this.previewing && Mercury.region === this) {
-          return this.focus();
-        }
-      }, this));
-      Mercury.on('action', __bind(function(event, options) {
-        if (this.previewing || Mercury.region !== this) {
-          return;
-        }
-        if (options.action) {
-          return this.execCommand(options.action, options);
-        }
-      }, this));
-      Mercury.on('unfocus:regions', __bind(function() {
-        if (this.previewing || Mercury.region !== this) {
-          return;
-        }
-        this.element.blur();
-        this.container.removeClass('focus');
+      var _this = this;
+      Mercury.on('mode', function(event, options) {
+        if (options.mode === 'preview') return _this.togglePreview();
+      });
+      Mercury.on('focus:frame', function() {
+        if (!_this.previewing && Mercury.region === _this) return _this.focus();
+      });
+      Mercury.on('action', function(event, options) {
+        if (_this.previewing || Mercury.region !== _this) return;
+        if (options.action) return _this.execCommand(options.action, options);
+      });
+      Mercury.on('unfocus:regions', function() {
+        if (_this.previewing || Mercury.region !== _this) return;
+        _this.element.blur();
+        _this.container.removeClass('focus');
         return Mercury.trigger('region:blurred', {
-          region: this
+          region: _this
         });
-      }, this));
-      this.element.on('dragenter', __bind(function(event) {
-        if (this.previewing) {
-          return;
-        }
+      });
+      this.element.on('dragenter', function(event) {
+        if (_this.previewing) return;
         event.preventDefault();
         return event.originalEvent.dataTransfer.dropEffect = 'copy';
-      }, this));
-      this.element.on('dragover', __bind(function(event) {
-        if (this.previewing) {
-          return;
-        }
+      });
+      this.element.on('dragover', function(event) {
+        if (_this.previewing) return;
         event.preventDefault();
         return event.originalEvent.dataTransfer.dropEffect = 'copy';
-      }, this));
-      this.element.on('drop', __bind(function(event) {
-        if (this.previewing) {
-          return;
-        }
+      });
+      this.element.on('drop', function(event) {
+        if (_this.previewing) return;
         if (Mercury.snippet) {
           event.preventDefault();
-          this.focus();
+          _this.focus();
           Mercury.Snippet.displayOptionsFor(Mercury.snippet);
         }
         if (event.originalEvent.dataTransfer.files.length) {
           event.preventDefault();
-          this.focus();
+          _this.focus();
           return Mercury.uploader(event.originalEvent.dataTransfer.files[0]);
         }
-      }, this));
-      this.element.on('focus', __bind(function() {
-        if (this.previewing) {
-          return;
-        }
-        Mercury.region = this;
-        this.container.addClass('focus');
+      });
+      this.element.on('focus', function() {
+        if (_this.previewing) return;
+        Mercury.region = _this;
+        _this.container.addClass('focus');
         return Mercury.trigger('region:focused', {
-          region: this
+          region: _this
         });
-      }, this));
-      this.element.on('keydown', __bind(function(event) {
+      });
+      this.element.on('keydown', function(event) {
         var end, lineText, number, selection, start, text;
-        if (this.previewing) {
-          return;
-        }
-        this.resize();
+        if (_this.previewing) return;
+        _this.resize();
         switch (event.keyCode) {
           case 90:
-            if (!event.metaKey) {
-              return;
-            }
+            if (!event.metaKey) return;
             event.preventDefault();
             if (event.shiftKey) {
-              this.execCommand('redo');
+              _this.execCommand('redo');
             } else {
-              this.execCommand('undo');
+              _this.execCommand('undo');
             }
             return;
           case 13:
-            selection = this.selection();
-            text = this.element.val();
+            selection = _this.selection();
+            text = _this.element.val();
             start = text.lastIndexOf('\n', selection.start);
             end = text.indexOf('\n', selection.end);
-            if (end < start) {
-              end = text.length;
-            }
+            if (end < start) end = text.length;
             if (text[start] === '\n') {
               start = text.lastIndexOf('\n', selection.start - 1);
             }
@@ -17512,62 +17499,56 @@ Showdown.converter = function() {
             break;
           case 9:
             event.preventDefault();
-            this.execCommand('insertHTML', {
+            _this.execCommand('insertHTML', {
               value: '  '
             });
         }
         if (event.metaKey) {
           switch (event.keyCode) {
             case 66:
-              this.execCommand('bold');
+              _this.execCommand('bold');
               event.preventDefault();
               break;
             case 73:
-              this.execCommand('italic');
+              _this.execCommand('italic');
               event.preventDefault();
               break;
             case 85:
-              this.execCommand('underline');
+              _this.execCommand('underline');
               event.preventDefault();
           }
         }
-        return this.pushHistory(event.keyCode);
-      }, this));
-      this.element.on('keyup', __bind(function() {
-        if (this.previewing) {
-          return;
-        }
+        return _this.pushHistory(event.keyCode);
+      });
+      this.element.on('keyup', function() {
+        if (_this.previewing) return;
         Mercury.changes = true;
-        this.resize();
+        _this.resize();
         return Mercury.trigger('region:update', {
-          region: this
+          region: _this
         });
-      }, this));
-      this.element.on('mouseup', __bind(function() {
-        if (this.previewing) {
-          return;
-        }
-        this.focus();
+      });
+      this.element.on('mouseup', function() {
+        if (_this.previewing) return;
+        _this.focus();
         return Mercury.trigger('region:focused', {
-          region: this
+          region: _this
         });
-      }, this));
-      return this.previewElement.on('click', __bind(function(event) {
-        if (this.previewing) {
+      });
+      return this.previewElement.on('click', function(event) {
+        if (_this.previewing) {
           return $(event.target).closest('a').attr('target', '_parent');
         }
-      }, this));
+      });
     };
+
     Markupable.prototype.focus = function() {
       return this.element.focus();
     };
+
     Markupable.prototype.content = function(value, filterSnippets) {
-      if (value == null) {
-        value = null;
-      }
-      if (filterSnippets == null) {
-        filterSnippets = true;
-      }
+      if (value == null) value = null;
+      if (filterSnippets == null) filterSnippets = true;
       if (value !== null) {
         if (jQuery.type(value) === 'string') {
           return this.element.val(value);
@@ -17579,12 +17560,14 @@ Showdown.converter = function() {
         return this.element.val();
       }
     };
+
     Markupable.prototype.contentAndSelection = function() {
       return {
         html: this.content(null, false),
         selection: this.selection().serialize()
       };
     };
+
     Markupable.prototype.togglePreview = function() {
       var value;
       if (this.previewing) {
@@ -17592,9 +17575,7 @@ Showdown.converter = function() {
         this.container.addClass(Mercury.config.regions.className).removeClass("" + Mercury.config.regions.className + "-preview");
         this.previewElement.hide();
         this.element.show();
-        if (Mercury.region === this) {
-          return this.focus();
-        }
+        if (Mercury.region === this) return this.focus();
       } else {
         this.previewing = true;
         this.container.addClass("" + Mercury.config.regions.className + "-preview").removeClass(Mercury.config.regions.className);
@@ -17607,39 +17588,40 @@ Showdown.converter = function() {
         });
       }
     };
+
     Markupable.prototype.execCommand = function(action, options) {
       var handler;
-      if (options == null) {
-        options = {};
-      }
+      if (options == null) options = {};
       Markupable.__super__.execCommand.apply(this, arguments);
       if (handler = Mercury.Regions.Markupable.actions[action]) {
         handler.call(this, this.selection(), options);
       }
       return this.resize();
     };
+
     Markupable.prototype.pushHistory = function(keyCode) {
-      var keyCodes, knownKeyCode, waitTime;
+      var keyCodes, knownKeyCode, waitTime,
+        _this = this;
       keyCodes = [13, 46, 8];
       waitTime = 2.5;
-      if (keyCode) {
-        knownKeyCode = keyCodes.indexOf(keyCode);
-      }
+      if (keyCode) knownKeyCode = keyCodes.indexOf(keyCode);
       clearTimeout(this.historyTimeout);
       if (knownKeyCode >= 0 && knownKeyCode !== this.lastKnownKeyCode) {
         this.history.push(this.contentAndSelection());
       } else if (keyCode) {
-        this.historyTimeout = setTimeout(waitTime * 1000, __bind(function() {
-          return this.history.push(this.contentAndSelection());
-        }, this));
+        this.historyTimeout = setTimeout(waitTime * 1000, function() {
+          return _this.history.push(_this.contentAndSelection());
+        });
       } else {
         this.history.push(this.contentAndSelection());
       }
       return this.lastKnownKeyCode = knownKeyCode;
     };
+
     Markupable.prototype.selection = function() {
       return new Mercury.Regions.Markupable.Selection(this.element);
     };
+
     Markupable.prototype.resize = function() {
       this.element.css({
         height: this.element.get(0).scrollHeight - 100
@@ -17648,7 +17630,9 @@ Showdown.converter = function() {
         height: this.element.get(0).scrollHeight
       });
     };
+
     Markupable.prototype.snippets = function() {};
+
     Markupable.actions = {
       undo: function() {
         return this.content(this.history.undo());
@@ -17731,47 +17715,49 @@ Showdown.converter = function() {
         return selection.replace(snippet.getText());
       }
     };
+
     return Markupable;
-  })();
+
+  })(Mercury.Region);
+
   Mercury.Regions.Markupable.Selection = (function() {
+
     function Selection(element) {
       this.element = element;
       this.el = this.element.get(0);
       this.getDetails();
     }
+
     Selection.prototype.serialize = function() {
       return {
         start: this.start,
         end: this.end
       };
     };
+
     Selection.prototype.getDetails = function() {
       this.length = this.el.selectionEnd - this.el.selectionStart;
       this.start = this.el.selectionStart;
       this.end = this.el.selectionEnd;
       return this.text = this.element.val().substr(this.start, this.length);
     };
+
     Selection.prototype.replace = function(text, select, placeCursor) {
       var changed, savedVal, val;
-      if (select == null) {
-        select = false;
-      }
-      if (placeCursor == null) {
-        placeCursor = false;
-      }
+      if (select == null) select = false;
+      if (placeCursor == null) placeCursor = false;
       this.getDetails();
       val = this.element.val();
       savedVal = this.element.val();
       this.element.val(val.substr(0, this.start) + text + val.substr(this.end, val.length));
       changed = this.element.val() !== savedVal;
-      if (select) {
-        this.select(this.start, this.start + text.length);
-      }
+      if (select) this.select(this.start, this.start + text.length);
       if (placeCursor) {
         this.select(this.start + text.length, this.start + text.length);
       }
       return changed;
     };
+
     Selection.prototype.select = function(start, end) {
       this.start = start;
       this.end = end;
@@ -17780,6 +17766,7 @@ Showdown.converter = function() {
       this.el.selectionEnd = this.end;
       return this.getDetails();
     };
+
     Selection.prototype.wrap = function(left, right) {
       this.getDetails();
       this.deselectNewLines();
@@ -17788,50 +17775,36 @@ Showdown.converter = function() {
         return this.select(this.start + left.length, this.start + left.length);
       }
     };
+
     Selection.prototype.wrapLine = function(left, right, selectAfter, reselect) {
       var end, savedSelection, start, text;
-      if (selectAfter == null) {
-        selectAfter = true;
-      }
-      if (reselect == null) {
-        reselect = false;
-      }
+      if (selectAfter == null) selectAfter = true;
+      if (reselect == null) reselect = false;
       this.getDetails();
       savedSelection = this.serialize();
       text = this.element.val();
       start = text.lastIndexOf('\n', this.start);
       end = text.indexOf('\n', this.end);
-      if (end < start) {
-        end = text.length;
-      }
-      if (text[start] === '\n') {
-        start = text.lastIndexOf('\n', this.start - 1);
-      }
+      if (end < start) end = text.length;
+      if (text[start] === '\n') start = text.lastIndexOf('\n', this.start - 1);
       this.select(start + 1, end);
       this.replace(left + this.text + right, selectAfter);
       if (reselect) {
         return this.select(savedSelection.start + left.length, savedSelection.end + left.length);
       }
     };
+
     Selection.prototype.unWrapLine = function(left, right, selectAfter, reselect) {
       var changed, end, leftRegExp, rightRegExp, savedSelection, start, text;
-      if (selectAfter == null) {
-        selectAfter = true;
-      }
-      if (reselect == null) {
-        reselect = false;
-      }
+      if (selectAfter == null) selectAfter = true;
+      if (reselect == null) reselect = false;
       this.getDetails();
       savedSelection = this.serialize();
       text = this.element.val();
       start = text.lastIndexOf('\n', this.start);
       end = text.indexOf('\n', this.end);
-      if (end < start) {
-        end = text.length;
-      }
-      if (text[start] === '\n') {
-        start = text.lastIndexOf('\n', this.start - 1);
-      }
+      if (end < start) end = text.length;
+      if (text[start] === '\n') start = text.lastIndexOf('\n', this.start - 1);
       this.select(start + 1, end);
       window.something = this.text;
       leftRegExp = new RegExp("^" + (left.regExpEscape()));
@@ -17841,17 +17814,14 @@ Showdown.converter = function() {
         return this.select(savedSelection.start - left.length, savedSelection.end - left.length);
       }
     };
+
     Selection.prototype.addList = function(type) {
       var end, index, line, lines, start, text;
       text = this.element.val();
       start = text.lastIndexOf('\n', this.start);
       end = text.indexOf('\n', this.end);
-      if (end < start) {
-        end = text.length;
-      }
-      if (text[start] === '\n') {
-        start = text.lastIndexOf('\n', this.start - 1);
-      }
+      if (end < start) end = text.length;
+      if (text[start] === '\n') start = text.lastIndexOf('\n', this.start - 1);
       this.select(start + 1, end);
       lines = this.text.split('\n');
       if (type === 'unordered') {
@@ -17868,47 +17838,52 @@ Showdown.converter = function() {
         })()).join('\n'), true);
       }
     };
+
     Selection.prototype.deselectNewLines = function() {
       var length, text;
       text = this.text;
       length = text.replace(/\n+$/g, '').length;
       return this.select(this.start, this.start + length);
     };
+
     Selection.prototype.placeMarker = function() {
       return this.wrap('[mercury-marker]', '[mercury-marker]');
     };
+
     Selection.prototype.removeMarker = function() {
       var end, start, val;
       val = this.element.val();
       start = val.indexOf('[mercury-marker]');
-      if (!(start > -1)) {
-        return;
-      }
+      if (!(start > -1)) return;
       end = val.indexOf('[mercury-marker]', start + 1) - '[mercury-marker]'.length;
       this.element.val(this.element.val().replace(/\[mercury-marker\]/g, ''));
       return this.select(start, end);
     };
+
     Selection.prototype.textContent = function() {
       return this.text;
     };
+
     return Selection;
+
   })();
+
 }).call(this);
 (function() {
-  var __hasProp = Object.prototype.hasOwnProperty, __extends = function(child, parent) {
-    for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; }
-    function ctor() { this.constructor = child; }
-    ctor.prototype = parent.prototype;
-    child.prototype = new ctor;
-    child.__super__ = parent.prototype;
-    return child;
-  }, __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
-  this.Mercury.Regions.Snippetable = (function() {
+  var __hasProp = Object.prototype.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; };
+
+  this.Mercury.Regions.Snippetable = (function(_super) {
     var type;
-    __extends(Snippetable, Mercury.Region);
+
+    __extends(Snippetable, _super);
+
     Snippetable.supported = document.getElementById;
+
     Snippetable.supportedText = "IE 7+, Chrome 10+, Firefox 4+, Safari 5+, Opera 8+";
+
     type = 'snippetable';
+
     function Snippetable(element, window, options) {
       this.element = element;
       this.window = window;
@@ -17917,6 +17892,7 @@ Showdown.converter = function() {
       Snippetable.__super__.constructor.apply(this, arguments);
       this.makeSortable();
     }
+
     Snippetable.prototype.build = function() {
       if (this.element.css('minHeight') === '0px') {
         return this.element.css({
@@ -17924,85 +17900,73 @@ Showdown.converter = function() {
         });
       }
     };
+
     Snippetable.prototype.bindEvents = function() {
+      var _this = this;
       Snippetable.__super__.bindEvents.apply(this, arguments);
-      Mercury.on('unfocus:regions', __bind(function(event) {
-        if (this.previewing) {
-          return;
-        }
-        if (Mercury.region === this) {
-          this.element.removeClass('focus');
-          this.element.sortable('destroy');
+      Mercury.on('unfocus:regions', function(event) {
+        if (_this.previewing) return;
+        if (Mercury.region === _this) {
+          _this.element.removeClass('focus');
+          _this.element.sortable('destroy');
           return Mercury.trigger('region:blurred', {
-            region: this
+            region: _this
           });
         }
-      }, this));
-      Mercury.on('focus:window', __bind(function(event) {
-        if (this.previewing) {
-          return;
-        }
-        if (Mercury.region === this) {
-          this.element.removeClass('focus');
-          this.element.sortable('destroy');
+      });
+      Mercury.on('focus:window', function(event) {
+        if (_this.previewing) return;
+        if (Mercury.region === _this) {
+          _this.element.removeClass('focus');
+          _this.element.sortable('destroy');
           return Mercury.trigger('region:blurred', {
-            region: this
+            region: _this
           });
         }
-      }, this));
-      this.element.on('mouseup', __bind(function() {
-        if (this.previewing) {
-          return;
-        }
-        this.focus();
+      });
+      this.element.on('mouseup', function() {
+        if (_this.previewing) return;
+        _this.focus();
         return Mercury.trigger('region:focused', {
-          region: this
+          region: _this
         });
-      }, this));
-      this.element.on('dragover', __bind(function(event) {
-        if (this.previewing) {
-          return;
-        }
+      });
+      this.element.on('dragover', function(event) {
+        if (_this.previewing) return;
         event.preventDefault();
         return event.originalEvent.dataTransfer.dropEffect = 'copy';
-      }, this));
-      this.element.on('drop', __bind(function(event) {
-        if (this.previewing || !Mercury.snippet) {
-          return;
-        }
-        this.focus();
+      });
+      this.element.on('drop', function(event) {
+        if (_this.previewing || !Mercury.snippet) return;
+        _this.focus();
         event.preventDefault();
         return Mercury.Snippet.displayOptionsFor(Mercury.snippet);
-      }, this));
-      jQuery(this.document).on('keydown', __bind(function(event) {
-        if (this.previewing || Mercury.region !== this) {
-          return;
-        }
+      });
+      jQuery(this.document).on('keydown', function(event) {
+        if (_this.previewing || Mercury.region !== _this) return;
         switch (event.keyCode) {
           case 90:
-            if (!event.metaKey) {
-              return;
-            }
+            if (!event.metaKey) return;
             event.preventDefault();
             if (event.shiftKey) {
-              return this.execCommand('redo');
+              return _this.execCommand('redo');
             } else {
-              return this.execCommand('undo');
+              return _this.execCommand('undo');
             }
         }
-      }, this));
-      return jQuery(this.document).on('keyup', __bind(function() {
-        if (this.previewing || Mercury.region !== this) {
-          return;
-        }
+      });
+      return jQuery(this.document).on('keyup', function() {
+        if (_this.previewing || Mercury.region !== _this) return;
         return Mercury.changes = true;
-      }, this));
+      });
     };
+
     Snippetable.prototype.focus = function() {
       Mercury.region = this;
       this.makeSortable();
       return this.element.addClass('focus');
     };
+
     Snippetable.prototype.togglePreview = function() {
       if (this.previewing) {
         this.makeSortable();
@@ -18012,17 +17976,18 @@ Showdown.converter = function() {
       }
       return Snippetable.__super__.togglePreview.apply(this, arguments);
     };
+
     Snippetable.prototype.execCommand = function(action, options) {
       var handler;
-      if (options == null) {
-        options = {};
-      }
+      if (options == null) options = {};
       Snippetable.__super__.execCommand.apply(this, arguments);
       if (handler = Mercury.Regions.Snippetable.actions[action]) {
         return handler.call(this, options);
       }
     };
+
     Snippetable.prototype.makeSortable = function() {
+      var _this = this;
       return this.element.sortable('destroy').sortable({
         document: this.document,
         scroll: false,
@@ -18031,21 +17996,22 @@ Showdown.converter = function() {
         opacity: 0.4,
         revert: 100,
         tolerance: 'pointer',
-        beforeStop: __bind(function() {
+        beforeStop: function() {
           Mercury.trigger('hide:toolbar', {
             type: 'snippet',
             immediately: true
           });
           return true;
-        }, this),
-        stop: __bind(function() {
-          setTimeout(100, __bind(function() {
-            return this.pushHistory();
-          }, this));
+        },
+        stop: function() {
+          setTimeout(100, function() {
+            return _this.pushHistory();
+          });
           return true;
-        }, this)
+        }
       });
     };
+
     Snippetable.actions = {
       undo: function() {
         return this.content(this.history.undo());
@@ -18054,167 +18020,186 @@ Showdown.converter = function() {
         return this.content(this.history.redo());
       },
       insertSnippet: function(options) {
-        var existing, snippet;
+        var existing, snippet,
+          _this = this;
         snippet = options.value;
         if ((existing = this.element.find("[data-snippet=" + snippet.identity + "]")).length) {
-          return existing.replaceWith(snippet.getHTML(this.document, __bind(function() {
-            return this.pushHistory();
-          }, this)));
+          return existing.replaceWith(snippet.getHTML(this.document, function() {
+            return _this.pushHistory();
+          }));
         } else {
-          return this.element.append(snippet.getHTML(this.document, __bind(function() {
-            return this.pushHistory();
-          }, this)));
+          return this.element.append(snippet.getHTML(this.document, function() {
+            return _this.pushHistory();
+          }));
         }
       },
       editSnippet: function() {
         var snippet;
-        if (!this.snippet) {
-          return;
-        }
+        if (!this.snippet) return;
         snippet = Mercury.Snippet.find(this.snippet.data('snippet'));
         return snippet.displayOptions();
       },
       removeSnippet: function() {
-        if (this.snippet) {
-          this.snippet.remove();
-        }
+        if (this.snippet) this.snippet.remove();
         return Mercury.trigger('hide:toolbar', {
           type: 'snippet',
           immediately: true
         });
       }
     };
+
     return Snippetable;
-  })();
+
+  })(Mercury.Region);
+
 }).call(this);
 (function() {
-  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+
   this.Mercury.dialogHandlers.backColor = function() {
-    return this.element.find('.picker, .last-picked').on('click', __bind(function(event) {
+    var _this = this;
+    return this.element.find('.picker, .last-picked').on('click', function(event) {
       var color;
       color = jQuery(event.target).css('background-color');
-      this.element.find('.last-picked').css({
+      _this.element.find('.last-picked').css({
         background: color
       });
-      this.button.css({
+      _this.button.css({
         backgroundColor: color
       });
       return Mercury.trigger('action', {
         action: 'backColor',
         value: color
       });
-    }, this));
+    });
   };
+
 }).call(this);
 (function() {
-  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+
   this.Mercury.dialogHandlers.foreColor = function() {
-    return this.element.find('.picker, .last-picked').on('click', __bind(function(event) {
+    var _this = this;
+    return this.element.find('.picker, .last-picked').on('click', function(event) {
       var color;
       color = jQuery(event.target).css('background-color');
-      this.element.find('.last-picked').css({
+      _this.element.find('.last-picked').css({
         background: color
       });
-      this.button.css({
+      _this.button.css({
         backgroundColor: color
       });
       return Mercury.trigger('action', {
         action: 'foreColor',
         value: color
       });
-    }, this));
+    });
   };
+
 }).call(this);
 (function() {
-  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+
   this.Mercury.dialogHandlers.formatblock = function() {
-    return this.element.find('[data-tag]').on('click', __bind(function(event) {
+    var _this = this;
+    return this.element.find('[data-tag]').on('click', function(event) {
       var tag;
       tag = jQuery(event.target).data('tag');
       return Mercury.trigger('action', {
         action: 'formatblock',
         value: tag
       });
-    }, this));
+    });
   };
+
 }).call(this);
 (function() {
-  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+
   this.Mercury.dialogHandlers.snippetPanel = function() {
-    this.element.find('input.filter').on('keyup', __bind(function() {
+    var _this = this;
+    this.element.find('input.filter').on('keyup', function() {
       var snippet, value, _i, _len, _ref, _results;
-      value = this.element.find('input.filter').val();
-      _ref = this.element.find('li[data-filter]');
+      value = _this.element.find('input.filter').val();
+      _ref = _this.element.find('li[data-filter]');
       _results = [];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         snippet = _ref[_i];
-        _results.push(LiquidMetal.score(jQuery(snippet).data('filter'), value) === 0 ? jQuery(snippet).hide() : jQuery(snippet).show());
+        if (LiquidMetal.score(jQuery(snippet).data('filter'), value) === 0) {
+          _results.push(jQuery(snippet).hide());
+        } else {
+          _results.push(jQuery(snippet).show());
+        }
       }
       return _results;
-    }, this));
+    });
     return this.element.find('img[data-snippet]').on('dragstart', function() {
       return Mercury.snippet = jQuery(this).data('snippet');
     });
   };
+
 }).call(this);
 (function() {
-  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+
   this.Mercury.dialogHandlers.style = function() {
-    return this.element.find('[data-class]').on('click', __bind(function(event) {
+    var _this = this;
+    return this.element.find('[data-class]').on('click', function(event) {
       var className;
       className = jQuery(event.target).data('class');
       return Mercury.trigger('action', {
         action: 'style',
         value: className
       });
-    }, this));
+    });
   };
+
 }).call(this);
 (function() {
-  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+
   this.Mercury.modalHandlers.htmlEditor = function() {
-    var content;
+    var content,
+      _this = this;
     content = Mercury.region.content(null, true, false);
     this.element.find('textarea').val(content);
-    return this.element.find('form').on('submit', __bind(function(event) {
+    return this.element.find('form').on('submit', function(event) {
       var value;
       event.preventDefault();
-      value = this.element.find('textarea').val().replace(/\n/g, '');
+      value = _this.element.find('textarea').val().replace(/\n/g, '');
       Mercury.trigger('action', {
         action: 'replaceHTML',
         value: value
       });
-      return this.hide();
-    }, this));
+      return _this.hide();
+    });
   };
+
 }).call(this);
 (function() {
-  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+
   this.Mercury.modalHandlers.insertCharacter = function() {
-    return this.element.find('.character').on('click', __bind(function(event) {
+    var _this = this;
+    return this.element.find('.character').on('click', function(event) {
       Mercury.trigger('action', {
         action: 'insertHTML',
         value: "&" + (jQuery(event.target).attr('data-entity')) + ";"
       });
-      return this.hide();
-    }, this));
+      return _this.hide();
+    });
   };
+
 }).call(this);
 (function() {
-  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+
   this.Mercury.modalHandlers.insertLink = function() {
-    var bookmarkSelect, container, existingLink, href, link, newBookmarkInput, selection, _i, _len, _ref;
+    var bookmarkSelect, container, existingLink, href, link, newBookmarkInput, selection, _i, _len, _ref,
+      _this = this;
     this.element.find('label input').on('click', function() {
       return jQuery(this).closest('label').next('.selectable').focus();
     });
     this.element.find('.selectable').on('focus', function() {
       return jQuery(this).prev('label').find('input[type=radio]').prop("checked", true);
     });
-    this.element.find('#link_target').on('change', __bind(function() {
-      this.element.find(".link-target-options").hide();
-      this.element.find("#" + (this.element.find('#link_target').val()) + "_options").show();
-      return this.resize(true);
-    }, this));
+    this.element.find('#link_target').on('change', function() {
+      _this.element.find(".link-target-options").hide();
+      _this.element.find("#" + (_this.element.find('#link_target').val()) + "_options").show();
+      return _this.resize(true);
+    });
     bookmarkSelect = this.element.find('#link_existing_bookmark');
     _ref = jQuery('a[name]', window.mercuryInstance.document);
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -18258,42 +18243,40 @@ Showdown.converter = function() {
         this.element.find('#link_text').val(selection.textContent());
       }
     }
-    return this.element.find('form').on('submit', __bind(function(event) {
+    return this.element.find('form').on('submit', function(event) {
       var args, attrs, content, target, type, value;
       event.preventDefault();
-      content = this.element.find('#link_text').val();
-      target = this.element.find('#link_target').val();
-      type = this.element.find('input[name=link_type]:checked').val();
+      content = _this.element.find('#link_text').val();
+      target = _this.element.find('#link_target').val();
+      type = _this.element.find('input[name=link_type]:checked').val();
       switch (type) {
         case 'existing_bookmark':
           attrs = {
-            href: "#" + (this.element.find('#link_existing_bookmark').val())
+            href: "#" + (_this.element.find('#link_existing_bookmark').val())
           };
           break;
         case 'new_bookmark':
           attrs = {
-            name: "" + (this.element.find('#link_new_bookmark').val())
+            name: "" + (_this.element.find('#link_new_bookmark').val())
           };
           break;
         default:
           attrs = {
-            href: this.element.find("#link_" + type).val()
+            href: _this.element.find("#link_" + type).val()
           };
       }
       switch (target) {
         case 'popup':
           args = {
-            width: parseInt(this.element.find('#link_popup_width').val()) || 500,
-            height: parseInt(this.element.find('#link_popup_height').val()) || 500,
+            width: parseInt(_this.element.find('#link_popup_width').val()) || 500,
+            height: parseInt(_this.element.find('#link_popup_height').val()) || 500,
             menubar: 'no',
             toolbar: 'no'
           };
           attrs['href'] = "javascript:void(window.open('" + attrs['href'] + "', 'popup_window', '" + (jQuery.param(args).replace(/&/g, ',')) + "'))";
           break;
         default:
-          if (target) {
-            attrs['target'] = target;
-          }
+          if (target) attrs['target'] = target;
       }
       value = {
         tagName: 'a',
@@ -18312,33 +18295,35 @@ Showdown.converter = function() {
           value: value
         });
       }
-      return this.hide();
-    }, this));
+      return _this.hide();
+    });
   };
+
 }).call(this);
 (function() {
-  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+
   this.Mercury.modalHandlers.insertMedia = function() {
-    var iframe, image, selection, src;
+    var iframe, image, selection, src,
+      _this = this;
     this.element.find('label input').on('click', function() {
       return jQuery(this).closest('label').next('.selectable').focus();
     });
-    this.element.find('.selectable').on('focus', __bind(function(event) {
+    this.element.find('.selectable').on('focus', function(event) {
       var element;
       element = jQuery(event.target);
       element.prev('label').find('input[type=radio]').prop("checked", true);
-      this.element.find(".media-options").hide();
-      this.element.find("#" + (element.attr('id').replace('media_', ''))).show();
-      return this.resize(true);
-    }, this));
+      _this.element.find(".media-options").hide();
+      _this.element.find("#" + (element.attr('id').replace('media_', ''))).show();
+      return _this.resize(true);
+    });
     if (Mercury.region && Mercury.region.selection) {
       selection = Mercury.region.selection();
       if (selection.is && (image = selection.is('img'))) {
         this.element.find('#media_image_url').val(image.attr('src'));
         this.element.find('#media_image_alignment').val(image.attr('align'));
-        setTimeout(300, __bind(function() {
-          return this.element.find('#media_image_url').focus();
-        }, this));
+        setTimeout(300, function() {
+          return _this.element.find('#media_image_url').focus();
+        });
       }
       if (selection.is && (iframe = selection.is('iframe'))) {
         src = iframe.attr('src');
@@ -18346,29 +18331,29 @@ Showdown.converter = function() {
           this.element.find('#media_youtube_url').val("http://youtu.be/" + (src.match(/\/embed\/(\w+)/)[1]));
           this.element.find('#media_youtube_width').val(iframe.width());
           this.element.find('#media_youtube_height').val(iframe.height());
-          setTimeout(300, __bind(function() {
-            return this.element.find('#media_youtube_url').focus();
-          }, this));
+          setTimeout(300, function() {
+            return _this.element.find('#media_youtube_url').focus();
+          });
         } else if (src.indexOf('http://player.vimeo.com') > -1) {
           this.element.find('#media_vimeo_url').val("http://vimeo.com/" + (src.match(/\/video\/(\w+)/)[1]));
           this.element.find('#media_vimeo_width').val(iframe.width());
           this.element.find('#media_vimeo_height').val(iframe.height());
-          setTimeout(300, __bind(function() {
-            return this.element.find('#media_vimeo_url').focus();
-          }, this));
+          setTimeout(300, function() {
+            return _this.element.find('#media_vimeo_url').focus();
+          });
         }
       }
     }
-    return this.element.find('form').on('submit', __bind(function(event) {
+    return this.element.find('form').on('submit', function(event) {
       var alignment, attrs, code, type, url, value;
       event.preventDefault();
-      type = this.element.find('input[name=media_type]:checked').val();
+      type = _this.element.find('input[name=media_type]:checked').val();
       switch (type) {
         case 'image_url':
           attrs = {
-            src: this.element.find('#media_image_url').val()
+            src: _this.element.find('#media_image_url').val()
           };
-          if (alignment = this.element.find('#media_image_alignment').val()) {
+          if (alignment = _this.element.find('#media_image_alignment').val()) {
             attrs['align'] = alignment;
           }
           Mercury.trigger('action', {
@@ -18377,15 +18362,15 @@ Showdown.converter = function() {
           });
           break;
         case 'youtube_url':
-          url = this.element.find('#media_youtube_url').val();
+          url = _this.element.find('#media_youtube_url').val();
           if (!/^http:\/\/youtu.be\//.test(url)) {
             Mercury.notify('Error: The provided youtube share url was invalid.');
             return;
           }
           code = url.replace('http://youtu.be/', '');
           value = jQuery('<iframe>', {
-            width: this.element.find('#media_youtube_width').val() || 560,
-            height: this.element.find('#media_youtube_height').val() || 349,
+            width: _this.element.find('#media_youtube_width').val() || 560,
+            height: _this.element.find('#media_youtube_height').val() || 349,
             src: "http://www.youtube.com/embed/" + code + "?wmode=transparent",
             frameborder: 0,
             allowfullscreen: 'true'
@@ -18396,15 +18381,15 @@ Showdown.converter = function() {
           });
           break;
         case 'vimeo_url':
-          url = this.element.find('#media_vimeo_url').val();
+          url = _this.element.find('#media_vimeo_url').val();
           if (!/^http:\/\/vimeo.com\//.test(url)) {
             Mercury.notify('Error: The provided vimeo url was invalid.');
             return;
           }
           code = url.replace('http://vimeo.com/', '');
           value = jQuery('<iframe>', {
-            width: this.element.find('#media_vimeo_width').val() || 400,
-            height: this.element.find('#media_vimeo_height').val() || 225,
+            width: _this.element.find('#media_vimeo_width').val() || 400,
+            height: _this.element.find('#media_vimeo_height').val() || 225,
             src: "http://player.vimeo.com/video/" + code + "?title=1&byline=1&portrait=0&color=ffffff",
             frameborder: 0
           });
@@ -18413,49 +18398,53 @@ Showdown.converter = function() {
             value: value
           });
       }
-      return this.hide();
-    }, this));
+      return _this.hide();
+    });
   };
+
 }).call(this);
 (function() {
-  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+
   this.Mercury.modalHandlers.insertSnippet = function() {
-    return this.element.find('form').on('submit', __bind(function(event) {
+    var _this = this;
+    return this.element.find('form').on('submit', function(event) {
       var serializedForm, snippet;
       event.preventDefault();
-      serializedForm = this.element.find('form').serializeObject();
+      serializedForm = _this.element.find('form').serializeObject();
       if (Mercury.snippet) {
         snippet = Mercury.snippet;
         snippet.setOptions(serializedForm);
         Mercury.snippet = null;
       } else {
-        snippet = Mercury.Snippet.create(this.options.snippetName, serializedForm);
+        snippet = Mercury.Snippet.create(_this.options.snippetName, serializedForm);
       }
       Mercury.trigger('action', {
         action: 'insertSnippet',
         value: snippet
       });
-      return this.hide();
-    }, this));
+      return _this.hide();
+    });
   };
+
 }).call(this);
 (function() {
-  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+
   this.Mercury.modalHandlers.insertTable = function() {
-    var firstCell, table;
+    var firstCell, table,
+      _this = this;
     table = this.element.find('#table_display table');
-    table.on('click', __bind(function(event) {
+    table.on('click', function(event) {
       var cell;
       cell = jQuery(event.target);
       table = cell.closest('table');
       table.find('.selected').removeAttr('class');
       cell.addClass('selected');
       return Mercury.tableEditor(table, cell, '&nbsp;');
-    }, this));
+    });
     firstCell = table.find('td, th').first();
     firstCell.addClass('selected');
     Mercury.tableEditor(table, firstCell, '&nbsp;');
-    this.element.find('input.action').on('click', __bind(function(event) {
+    this.element.find('input.action').on('click', function(event) {
       var action;
       action = jQuery(event.target).attr('name');
       switch (action) {
@@ -18480,23 +18469,23 @@ Showdown.converter = function() {
         case 'decreaseRowspan':
           return Mercury.tableEditor.decreaseRowspan();
       }
-    }, this));
-    this.element.find('#table_alignment').on('change', __bind(function() {
+    });
+    this.element.find('#table_alignment').on('change', function() {
       return table.attr({
-        align: this.element.find('#table_alignment').val()
+        align: _this.element.find('#table_alignment').val()
       });
-    }, this));
-    this.element.find('#table_border').on('keyup', __bind(function() {
+    });
+    this.element.find('#table_border').on('keyup', function() {
       return table.attr({
-        border: parseInt(this.element.find('#table_border').val())
+        border: parseInt(_this.element.find('#table_border').val())
       });
-    }, this));
-    this.element.find('#table_spacing').on('keyup', __bind(function() {
+    });
+    this.element.find('#table_spacing').on('keyup', function() {
       return table.attr({
-        cellspacing: parseInt(this.element.find('#table_spacing').val())
+        cellspacing: parseInt(_this.element.find('#table_spacing').val())
       });
-    }, this));
-    return this.element.find('form').on('submit', __bind(function(event) {
+    });
+    return this.element.find('form').on('submit', function(event) {
       var html, value;
       event.preventDefault();
       table.find('.selected').removeAttr('class');
@@ -18507,13 +18496,15 @@ Showdown.converter = function() {
         action: 'insertTable',
         value: value
       });
-      return this.hide();
-    }, this));
+      return _this.hide();
+    });
   };
+
 }).call(this);
 (function() {
-  if (Mercury.onload) {
-    Mercury.onload();
-  }
+
+  if (Mercury.onload) Mercury.onload();
+
   jQuery(window).trigger('mercury:loaded');
+
 }).call(this);

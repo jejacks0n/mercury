@@ -34,7 +34,7 @@
 #
 @Mercury ||= {}
 jQuery.extend @Mercury,
-  version: '0.2.3'
+  version: '0.3.0'
 
   # Mercury object namespaces
   Regions: Mercury.Regions || {}

@@ -15,23 +15,23 @@ Then /^(.+) should (not )?be visible$/ do |locator, boolean|
 end
 
 # scoping step for different windows
-When /^(.*) in the "([^"]*)" window$/ do |step, window|
+When /^(.*) in the "([^"]*)" window$/ do |s, window|
   page.driver.within_window(window) do
-    When(step)
+    step(s)
   end
 end
 
 
 ## Mercury general steps
 #------------------------------------------------------------------------------
-Given /^(?:|I )adjust the configuration to have: "([^"]*)"$/ do |javascript|
-  Rails.application.config.mercury_config = javascript
+Given /^(?:|I )adjust the configuration to have: \{([^\}]*)\}$/ do |javascript|
+  Rails.application.config.mercury_config = JSON.parse("{#{javascript}}")
 end
 
 # scoping step for the mercury content frame
-When /^(.*) in the content frame$/ do |step|
+When /^(.*) in the content frame$/ do |s|
   page.driver.within_frame('mercury_iframe') do
-    When(step)
+    step(s)
   end
 end
 
@@ -53,14 +53,14 @@ end
 ## Panel specific steps
 #------------------------------------------------------------------------------
 When /^(?:I )(?:open|close|toggle) the (.*?) panel$/ do |panel_locator|
-  When(%Q{I click on the "#{panel_locator}" button})
+  step(%Q{I click on the "#{panel_locator}" button})
 end
 
 
 ## Modal specific steps
 #------------------------------------------------------------------------------
 When /^(?:I )close the modal(?: window)?$/ do
-  When(%Q{I click on the modal close button})
+  step(%Q{I click on the modal close button})
 end
 
 
@@ -68,7 +68,7 @@ end
 #------------------------------------------------------------------------------
 # setting content
 Given /^the content of (.*?) (?:is|are|has|includes) (.*?)$/ do |region_locator, contents|
-  When(%Q{I set the contents of #{region_locator} to #{contents}})
+  step(%Q{I set the contents of #{region_locator} to #{contents}})
 end
 
 When /^(?:|I )(?:change|set) the contents? of (.*?) to (.*?)$/ do |region_locator, contents|
@@ -90,11 +90,11 @@ end
 
 # setting/making selections
 When /^(?:|I )(?:make|have) a selection$/ do
-  When(%Q{I have a selection for "span"})
+  step(%Q{I have a selection for "span"})
 end
 
 When /^(?:|I )(?:make|have) a selection (?:in (.*?) )?for "([^"]*)"$/ do |region_locator, selector|
-  Given(%Q{I can simulate complex javascript events})
+  step(%Q{I can simulate complex javascript events})
   # assume the first editable region if one wasn't provided'
   region_selector = region_selector_for(region_locator || 'the editable region')
   page.driver.within_frame('mercury_iframe') do
@@ -117,7 +117,7 @@ end
 
 # other events
 When /^(?:|I )double click on (.*?) in (.*?)$/ do |locator, region_locator|
-  Given(%Q{I can simulate complex javascript events})
+  step(%Q{I can simulate complex javascript events})
   selector = selector_for(locator)
   # assume the first editable region if one wasn't provided'
   region_selector = region_selector_for(region_locator || 'the editable region')
@@ -153,11 +153,8 @@ end
 # caching for the last save -- a request will still be made
 Given /^save results will be cached$/ do
   page.driver.execute_script <<-JAVASCRIPT
-    Mercury.PageEditor.prototype.oldSerialize = Mercury.PageEditor.prototype.serialize;
-    Mercury.PageEditor.prototype.serialize = function() {
-      results = this.oldSerialize.call(this, arguments);
-      window.cachedResults = results;
-      return results;
+    Mercury.PageEditor.prototype.save = function() {
+      window.cachedResults = this.serialize();
     }
   JAVASCRIPT
 end
@@ -179,17 +176,17 @@ end
 # in the modal window
 When /^(?:|I )(?:add|insert) a (row|column) (before|after)(?: it)?$/ do |row_or_column, before_or_after|
   name = "insert_#{row_or_column}_#{before_or_after}".camelcase(:lower)
-  When(%Q{I click on ".mercury-modal-content input[name=#{name}]"})
+  step(%Q{I click on ".mercury-modal-content input[name=#{name}]"})
 end
 
 When /^(?:|I )delete the(?: current)? (row|column)$/ do |row_or_column|
   name = "delete_#{row_or_column}".camelcase(:lower)
-  When(%Q{I click on ".mercury-modal-content input[name=#{name}]"})
+  step(%Q{I click on ".mercury-modal-content input[name=#{name}]"})
 end
 
 When /^(?:|I )(increase|decrease) the (rowspan|colspan)$/ do |increase_or_decrease, rowspan_or_colspan|
   name = "#{increase_or_decrease}_#{rowspan_or_colspan}".camelcase(:lower)
-  When(%Q{I click on ".mercury-modal-content input[name=#{name}]"})
+  step(%Q{I click on ".mercury-modal-content input[name=#{name}]"})
 end
 
 Then /^the selected cell should be (.*?)$/ do |locator|
@@ -238,7 +235,7 @@ When /^(?:|I )(?:drag|drop) (.*?) (?:into|on) (.*?)$/ do |snippet_locator, regio
 end
 
 When /^(?:|I )hover over (.*?)(?: in (.*?))?$/ do |locator, region_locator|
-  Given(%Q{I can simulate complex javascript events})
+  step(%Q{I can simulate complex javascript events})
   selector = selector_for(locator)
   region_selector = region_selector_for(region_locator || 'the editable region')
   page.driver.within_frame('mercury_iframe') do
@@ -256,8 +253,8 @@ When /^(?:|I )hover over (.*?)(?: in (.*?))?$/ do |locator, region_locator|
 end
 
 When /^(?:|I )edit the snippet$/ do
-  When(%{I hover over the snippet})
-  And(%{click on the edit snippet settings toolbar button})
+  step(%{I hover over the snippet})
+  step(%{click on the edit snippet settings toolbar button})
 end
 
 

@@ -8,7 +8,7 @@ class @Mercury.PageEditor
   constructor: (@saveUrl = null, @options = {}) ->
     throw Mercury.I18n('Mercury.PageEditor can only be instantiated once.') if window.mercuryInstance
 
-    @options.visible = true unless @options.visible == false
+    @options.visible = true unless (@options.visible == false || @options.visible == 'no')
     @visible = @options.visible
 
     window.mercuryInstance = @
@@ -166,7 +166,7 @@ class @Mercury.PageEditor
 
 
   iframeSrc: (url = null, params = false) ->
-    url = (url ? window.location.href).replace(Mercury.editorUrlRegEx ?= /([http|https]:\/\/.[^\/]*)\/editor\/?(.*)/i,  "$1/$2")
+    url = (url ? window.location.href).replace(Mercury.config.editorUrlRegEx ?= /([http|https]:\/\/.[^\/]*)\/editor\/?(.*)/i,  "$1/$2")
     url = url.replace(/[\?|\&]mercury_frame=true/gi, '')
     if params
       return "#{url}#{if url.indexOf('?') > -1 then '&' else '?'}mercury_frame=true"

@@ -96,8 +96,7 @@ Feature:
     Then the contents of the editable region should be "<div data-version='4' data-snippet='snippet_42' class='mercury-snippet' contenteditable='false'><strong>Jen</strong> likes Miller High Life</div> <b>content</b>"
 
 
-  Scenario: When a user saves, the snippets should be gone from the html, but the options are serialized
-    Given the options for the example snippet "snippet_42" are first_name: "Hipsters", favorite_beer: "PBR"
-    And the content of the editable region has that snippet
-
-    When I click on the "Save" button
+#  Scenario: When a user saves, the snippets should be gone from the html, but the options are serialized
+#    Given the options for the example snippet "snippet_42" are first_name: "Hipsters", favorite_beer: "PBR"
+#    And the content of the editable region has that snippet
+#    When I click on the "Save" button

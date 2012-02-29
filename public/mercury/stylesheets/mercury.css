@@ -22,10 +22,21 @@
  * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
+
+
  */
 
 
 /*
+
+
+
+
+
+
+
+
+
  */
 
 /*
@@ -33,6 +44,7 @@
  *---------------------------------------------------------------------------*/
 
 html, body {
+  -webkit-transition: -webkit-transform 3s;
   margin: 0;
   padding: 0;
   overflow: hidden;
@@ -709,7 +721,9 @@ form fieldset.buttons .commit input:hover {
   float: left;
   margin-left: 10px;
 }
-
+#mercury_table #table_options .inputs:first-child label {
+  width: 36%
+}
 /*
  * Statusbar
  *----------------------------------------------------------------------------*/

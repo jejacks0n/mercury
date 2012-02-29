@@ -5,20 +5,28 @@
     <%= csrf_meta_tags %>
     <title>Mercury Editor</title>
     <%= stylesheet_link_tag    'mercury', 'mercury_overrides' %>
-    <%= javascript_include_tag 'mercury' %>
+    <%= javascript_include_tag 'mercury', 'mercury_overrides' %>
   </head>
   <body>
-    <% if Rails.application.config.respond_to?(:mercury_config) %>
-      <%= javascript_tag("jQuery.extend(Mercury.config, #{Rails.application.config.mercury_config});") %>
-    <% end -%>
-
     <script type="text/javascript">
-      var saveUrl = null;
+      var saveUrl = null; // Set to the url that you want to save any given page to.
       var options = {
         saveStyle: null,  // 'form', or 'json' (default json)
         saveMethod: null, // 'POST', or 'PUT', (create, vs. update -- default POST)
         visible: null     // if the interface should start visible or not (default true)
       };
+
+      <!-- Mix in any configurations provided through Rails.application.config.mercury_config -->
+      <% if Rails.application.config.respond_to?(:mercury_config) %>
+        jQuery.extend(Mercury.config, <%= Rails.application.config.mercury_config.to_json.html_safe %>);
+      <% end -%>
+
+      <!-- Mix in any options for PageEditor provided through Rails.application.config.mercury_page_editor_config -->
+      <% if Rails.application.config.respond_to?(:mercury_page_editor_config) %>
+        jQuery.extend(options, <%= Rails.application.config.mercury_page_editor_config.to_json.html_safe %>);
+      <% end -%>
+
+      <!-- Instantiate the PageEditor -->
       new Mercury.PageEditor(saveUrl, options);
     </script>
   </body>

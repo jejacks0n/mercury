@@ -194,7 +194,7 @@ describe "Mercury.modal", ->
       spyOn(Mercury.modal, 'update').andCallFake(=>)
       @loadSpy = spyOn(Mercury.modal, 'load').andCallFake(=>)
       @positionSpy = spyOn(Mercury.modal, 'position').andCallFake(=>)
-      Mercury.modal('/evergreen/responses/blank.html', {appendTo: $('#test')})
+      Mercury.modal('/blank.html', {appendTo: $('#test')})
 
     it "calls position", ->
       Mercury.modal.appear()
@@ -239,7 +239,7 @@ describe "Mercury.modal", ->
 
     beforeEach ->
       spyOn(Mercury.modal, 'appear').andCallFake(=>)
-      Mercury.modal('/evergreen/responses/blank.html', {appendTo: $('#test')})
+      Mercury.modal('/blank.html', {appendTo: $('#test')})
       Mercury.modal.contentPane = $()
 
     it "will keep the content element visible if asked to do so", ->
@@ -293,7 +293,7 @@ describe "Mercury.modal", ->
     beforeEach ->
       spyOn(Mercury.modal, 'appear').andCallFake(=>)
       @ajaxSpy = spyOn($, 'ajax')
-      Mercury.modal('/evergreen/responses/blank.html', {appendTo: $('#test')})
+      Mercury.modal('/blank.html', {appendTo: $('#test')})
 
     it "does nothing if there's no url", ->
       Mercury.modal.url = null
@@ -314,7 +314,7 @@ describe "Mercury.modal", ->
 
       beforeEach ->
         @setTimeoutSpy = spyOn(window, 'setTimeout').andCallFake((timeout, callback) => callback())
-        Mercury.preloadedViews = {'/evergreen/responses/blank.html': 'this is the preloaded content'}
+        Mercury.preloadedViews = {'/blank.html': 'this is the preloaded content'}
 
       afterEach ->
         Mercury.preloadedViews = {}
@@ -361,7 +361,7 @@ describe "Mercury.modal", ->
           spy = spyOn(window, 'alert').andCallFake(=>)
           Mercury.modal.load()
           expect(spy.callCount).toEqual(1)
-          expect(spy.argsForCall[0]).toEqual(['Mercury was unable to load /evergreen/responses/blank.html for the modal.'])
+          expect(spy.argsForCall[0]).toEqual(['Mercury was unable to load /blank.html for the modal.'])
 
 
   describe "#loadContent", ->
@@ -369,7 +369,7 @@ describe "Mercury.modal", ->
     beforeEach ->
       spyOn(Mercury.modal, 'appear').andCallFake(=>)
       @resizeSpy = spyOn(Mercury.modal, 'resize').andCallFake(=>)
-      Mercury.modal('/evergreen/responses/blank.html', {appendTo: $('#test'), title: 'title'})
+      Mercury.modal('/blank.html', {appendTo: $('#test'), title: 'title'})
 
     it "accepts options and sets them to the instance options", ->
       Mercury.modal.loadContent('content', {title: 'title'})
@@ -435,19 +435,26 @@ describe "Mercury.modal", ->
 
     beforeEach ->
       spyOn(Mercury.modal, 'appear').andCallFake(=>)
-      Mercury.modal('/evergreen/responses/blank.html', {appendTo: $('#test'), title: 'title'})
+      Mercury.modal('/blank.html', {appendTo: $('#test'), title: 'title'})
 
     it "sets the the title contents to what was provided in the options", ->
       Mercury.modal.options = {title: 'new title'}
       Mercury.modal.setTitle()
       expect($('.mercury-modal-title span').html()).toEqual('new title')
+      expect($('.mercury-modal-title a').css('display')).toEqual('inline')
+
+    it "hides the close button if the options.closeButton is false", ->
+      Mercury.modal.options = {title: 'new title', closeButton: false}
+      Mercury.modal.setTitle()
+      expect($('.mercury-modal-title a').css('display')).toEqual('none')
+
 
 
   describe "#reset", ->
 
     beforeEach ->
       spyOn(Mercury.modal, 'appear').andCallFake(=>)
-      Mercury.modal('/evergreen/responses/blank.html', {appendTo: $('#test'), title: 'title'})
+      Mercury.modal('/blank.html', {appendTo: $('#test'), title: 'title'})
 
     it "clears the title and content elements", ->
       $('.mercury-modal-content').html('content')
@@ -460,7 +467,7 @@ describe "Mercury.modal", ->
 
     beforeEach ->
       spyOn(Mercury.modal, 'appear').andCallFake(=>)
-      Mercury.modal('/evergreen/responses/blank.html', {appendTo: $('#test')})
+      Mercury.modal('/blank.html', {appendTo: $('#test')})
 
     it "triggers the focus:frame event", ->
       spy = spyOn(Mercury, 'trigger').andCallFake(=>)

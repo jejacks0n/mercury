@@ -38,9 +38,11 @@ Gem::Specification.new do |s|
 
   # Gem Files
   s.extra_rdoc_files  = ["LICENSE"]
+  # = MANIFEST =
   s.files             = Dir['lib/**/*', 'vendor/assets/**/*', 'app/**/*', 'db/migrate/*', 'config/engine.rb']
   s.test_files        = `git ls-files -- {test,spec,features}/*`.split("\n")
   s.executables       = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
+  # = MANIFEST =
   s.require_paths     = ["lib"]
 
 end

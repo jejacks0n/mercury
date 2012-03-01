@@ -131,20 +131,6 @@ class @Mercury.Regions.Simple extends Mercury.Region
           event.preventDefault()
           @execCommand('insertHTML', {value: '  '})
 
-      if event.metaKey
-        switch event.keyCode
-          when 66 # b
-            @execCommand('bold')
-            event.preventDefault()
-
-          when 73 # i
-            @execCommand('italic')
-            event.preventDefault()
-
-          when 85 # u
-            @execCommand('underline')
-            event.preventDefault()
-
       @pushHistory(event.keyCode)
 
     @element.on 'keyup', =>

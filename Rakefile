@@ -222,7 +222,7 @@ task :gemspec do
     split("\n").
     sort.
     reject { |file| file =~ /^\./ }.
-    select { |file| file =~ %r{^(lib/|vendor/assets/|app/|db/migrate/|config/engine\.rb)} }.
+    reject { |file| file =~ %r{^(annotated_source|config\.ru|log/|pkg/|public/|script/|tmp/|features/|spec/|config/(?!engine\.rb))} }.
     map { |file| "    #{file}" }.
     join("\n")
   

@@ -203,3 +203,62 @@ unless ARGV.any? {|a| a =~ /^gems/} # Don't load anything when running the gems:
     end
   end
 end
+
+# Always build the gemspec before build
+task :release => :gemspec
+task :build => :gemspec
+
+desc "Generate the .gemspec manifest"
+task :gemspec do
+  # read spec file and split out manifest section
+  #
+  spec = File.read(File.join(File.dirname(__FILE__), 'mercury-rails.gemspec'))
+  head, manifest, tail = spec.split("  # = MANIFEST =\n")
+
+  replace_header(head, :date)
+
+  # determine file list from git ls-files
+  files = `git ls-files`.
+    split("\n").
+    sort.
+    reject { |file| file =~ /^\./ }.
+    select { |file| file =~ %r{^(lib/|vendor/assets/|app/|db/migrate/|config/engine\.rb)} }.
+    map { |file| "    #{file}" }.
+    join("\n")
+  
+  test_files = `git ls-files -- {test,spec,features}/*`.
+    split("\n").
+    sort.
+    map { |file| "    #{file}" }.
+    join("\n")
+  
+  executables = `git ls-files -- bin/*`.
+    split("\n").
+    sort.
+    map{ |f| "    #{File.basename(f)}" }.
+    join("\n")
+
+  # piece file back together and write
+  manifest = <<MANIFEST
+  s.files = %w[
+#{files}
+  ]
+  s.test_files = %w[
+#{test_files}
+  ]
+  s.executables = %w[
+#{executables}
+  ]
+MANIFEST
+  spec = [head, manifest, tail].join("  # = MANIFEST =\n")
+  File.open(File.join(File.dirname(__FILE__), 'mercury-rails.gemspec'), 'w') { |io| io.write(spec) }
+  puts "Updated mercury-rails.gemspec"
+end
+
+def replace_header(head, header_name)
+  head.sub!(/(\.#{header_name}\s*= ').*'/) { "#{$1}#{send(header_name)}'"}
+end
+
+def date
+  Date.today.to_s
+end

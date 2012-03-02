@@ -18026,21 +18026,6 @@ Showdown.converter = function() {
               value: '  '
             });
         }
-        if (event.metaKey) {
-          switch (event.keyCode) {
-            case 66:
-              _this.execCommand('bold');
-              event.preventDefault();
-              break;
-            case 73:
-              _this.execCommand('italic');
-              event.preventDefault();
-              break;
-            case 85:
-              _this.execCommand('underline');
-              event.preventDefault();
-          }
-        }
         return _this.pushHistory(event.keyCode);
       });
       this.element.on('keyup', function() {

@@ -22,10 +22,10 @@ Gem::Specification.new do |s|
 
 
   # Development Dependencies
-  s.add_development_dependency('sprockets-helpers')
+  s.add_development_dependency('sprockets', '~> 2.1')
   s.add_development_dependency('rocco', '>= 0.8.2')
   s.add_development_dependency('uglifier')
-  s.add_development_dependency('jquery-rails')
+  s.add_development_dependency('jquery-rails', '~> 1.0')
   s.add_development_dependency('sqlite3')
   s.add_development_dependency('ruby-debug19')
   s.add_development_dependency('evergreen', '>= 1.0.0')

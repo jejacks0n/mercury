@@ -4,6 +4,7 @@ log/*.log
 tmp/
 .sass-cache
 public/system
+public/assets
 pkg/
 mercury.ids
 .rvmrc

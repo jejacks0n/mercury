@@ -28,6 +28,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency('jquery-rails', '~> 1.0')
   s.add_development_dependency('sqlite3')
   s.add_development_dependency('ruby-debug19')
+  s.add_development_dependency('rspec-core')
   s.add_development_dependency('evergreen', '>= 1.0.0')
   s.add_development_dependency('selenium-webdriver', '>= 2.20.0')
   s.add_development_dependency('cucumber-rails', '>= 1.3.0')

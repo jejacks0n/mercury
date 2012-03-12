@@ -9,6 +9,7 @@ class @Mercury.PageEditor
     throw Mercury.I18n('Mercury.PageEditor can only be instantiated once.') if window.mercuryInstance
 
     @options.visible = true unless (@options.visible == false || @options.visible == 'no')
+    @option.saveDataType = 'json' unless (@options.saveDataType == false || @options.saveDataType)
     @visible = @options.visible
 
     window.mercuryInstance = @
@@ -206,7 +207,7 @@ class @Mercury.PageEditor
     jQuery.ajax url, {
       headers: Mercury.ajaxHeaders()
       type: method || 'POST'
-      dataType: @options.saveDataType || 'json'
+      dataType: @options.saveDataType,
       data: {content: data, _method: method}
       success: =>
         Mercury.changes = false

@@ -213,7 +213,8 @@ class @Mercury.PageEditor
         Mercury.changes = false
         Mercury.trigger('saved')
         callback() if typeof(callback) == 'function'
-      error: =>
+      error: (response) =>
+        Mercury.trigger('save_failed', response)
         Mercury.notify('Mercury was unable to save to the url: %s', url)
     }
 

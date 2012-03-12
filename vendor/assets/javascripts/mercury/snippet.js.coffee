@@ -12,7 +12,13 @@ class @Mercury.Snippet
 
 
   @create: (name, options) ->
-    identity = "snippet_#{@all.length}"
+    if @all.length > 0
+      identity = "snippet_0"
+      for snippet, i in @all
+        identity = "snippet_#{i+1}" if snippet.identity == identity
+    else
+      identity = "snippet_#{@all.length}"
+    
     instance = new Mercury.Snippet(name, identity, options)
     @all.push(instance)
     return instance

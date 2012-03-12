@@ -14475,7 +14475,7 @@ Showdown.converter = function() {
         "class": 'mercury-panel loading',
         style: 'display:none;'
       });
-      this.titleElement = jQuery("<h1><span>" + (Mercury.I18n(this.options.title)) + "<span></h1>").appendTo(this.element);
+      this.titleElement = jQuery("<h1><span>" + (Mercury.I18n(this.options.title)) + "</span></h1>").appendTo(this.element);
       this.paneElement = jQuery('<div>', {
         "class": 'mercury-panel-pane'
       }).appendTo(this.element);

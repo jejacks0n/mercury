@@ -13475,6 +13475,9 @@ Showdown.converter = function() {
       if (!(this.options.visible === false || this.options.visible === 'no')) {
         this.options.visible = true;
       }
+      if (!(this.options.saveDataType === false || this.options.saveDataType)) {
+        this.options.saveDataType = 'json';
+      }
       this.visible = this.options.visible;
       window.mercuryInstance = this;
       this.regions = [];
@@ -13767,7 +13770,7 @@ Showdown.converter = function() {
     PageEditor.prototype.save = function(callback) {
       var data, method, url, _ref, _ref2,
         _this = this;
-      url = (_ref = (_ref2 = this.saveUrl) != null ? _ref2 : Mercury.saveURL) != null ? _ref : this.iframeSrc();
+      url = (_ref = (_ref2 = this.saveUrl) != null ? _ref2 : Mercury.saveUrl) != null ? _ref : this.iframeSrc();
       data = this.serialize();
       Mercury.log('saving', data);
       if (this.options.saveStyle !== 'form') data = jQuery.toJSON(data);
@@ -13775,7 +13778,7 @@ Showdown.converter = function() {
       return jQuery.ajax(url, {
         headers: Mercury.ajaxHeaders(),
         type: method || 'POST',
-        dataType: this.options.saveDataType || 'json',
+        dataType: this.options.saveDataType,
         data: {
           content: data,
           _method: method
@@ -14471,7 +14474,7 @@ Showdown.converter = function() {
         "class": 'mercury-panel loading',
         style: 'display:none;'
       });
-      this.titleElement = jQuery("<h1>" + (Mercury.I18n(this.options.title)) + "</h1>").appendTo(this.element);
+      this.titleElement = jQuery("<h1><span>" + (Mercury.I18n(this.options.title)) + "<span></h1>").appendTo(this.element);
       this.paneElement = jQuery('<div>', {
         "class": 'mercury-panel-pane'
       }).appendTo(this.element);
@@ -14600,7 +14603,7 @@ Showdown.converter = function() {
         _this = this;
       elementWidth = this.element.width();
       return this.element.draggable({
-        handle: 'h1',
+        handle: 'h1 span',
         axis: 'x',
         opacity: 0.70,
         scroll: false,
@@ -15962,8 +15965,17 @@ Showdown.converter = function() {
     };
 
     Snippet.create = function(name, options) {
-      var identity, instance;
-      identity = "snippet_" + this.all.length;
+      var i, identity, instance, snippet, _len, _ref;
+      if (this.all.length > 0) {
+        identity = "snippet_0";
+        _ref = this.all;
+        for (i = 0, _len = _ref.length; i < _len; i++) {
+          snippet = _ref[i];
+          if (snippet.identity === identity) identity = "snippet_" + (i + 1);
+        }
+      } else {
+        identity = "snippet_" + this.all.length;
+      }
       instance = new Mercury.Snippet(name, identity, options);
       this.all.push(instance);
       return instance;
@@ -18025,21 +18037,6 @@ Showdown.converter = function() {
             _this.execCommand('insertHTML', {
               value: '  '
             });
-        }
-        if (event.metaKey) {
-          switch (event.keyCode) {
-            case 66:
-              _this.execCommand('bold');
-              event.preventDefault();
-              break;
-            case 73:
-              _this.execCommand('italic');
-              event.preventDefault();
-              break;
-            case 85:
-              _this.execCommand('underline');
-              event.preventDefault();
-          }
         }
         return _this.pushHistory(event.keyCode);
       });

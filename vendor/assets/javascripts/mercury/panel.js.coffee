@@ -6,7 +6,7 @@ class @Mercury.Panel extends Mercury.Dialog
 
   build: ->
     @element = jQuery('<div>', {class: 'mercury-panel loading', style: 'display:none;'})
-    @titleElement = jQuery("<h1>#{Mercury.I18n(@options.title)}</h1>").appendTo(@element)
+    @titleElement = jQuery("<h1><span>#{Mercury.I18n(@options.title)}<span></h1>").appendTo(@element)
     @paneElement = jQuery('<div>', {class: 'mercury-panel-pane'}).appendTo(@element)
 
     if @options.closeButton
@@ -100,7 +100,7 @@ class @Mercury.Panel extends Mercury.Dialog
   makeDraggable: ->
     elementWidth = @element.width()
     @element.draggable {
-      handle: 'h1',
+      handle: 'h1 span',
       axis: 'x',
       opacity: 0.70
       scroll: false,

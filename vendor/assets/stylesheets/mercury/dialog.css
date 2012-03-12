@@ -78,6 +78,10 @@
   cursor: move;
   text-shadow: 1px 1px 2px rgba(0,0,0, .9);
 }
+.mercury-panel h1 span {
+  display: block;
+  width: 100%;
+}
 .mercury-panel h1 a.mercury-panel-close {
   position: absolute;
   right: -5px;

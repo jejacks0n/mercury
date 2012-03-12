@@ -269,12 +269,12 @@ default it will use JSON, that JSON looks like:
     }
 
 Where it gets saved to is also up to you.. by default it submits a post to the current url, but you can adjust this by
-setting Mercury.saveURL, or passing it into the Mercury.PageEditor constructor.. how you do this is dependent on how
-you're using loading mercury (via the loader, or by using the route method).  In both situations setting Mercury.saveURL
+setting Mercury.saveUrl, or passing it into the Mercury.PageEditor constructor.. how you do this is dependent on how
+you're using loading mercury (via the loader, or by using the route method).  In both situations setting Mercury.saveUrl
 is the most consistent.
 
     jQuery(window).on('mercury:ready', function() {
-      Mercury.saveURL = '/contents';
+      Mercury.saveUrl = '/contents';
     });
 
 Assuming you have a ContentsController and a RESTful route, this will make it through to the create action.  Where you

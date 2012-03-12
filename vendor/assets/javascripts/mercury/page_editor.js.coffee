@@ -9,6 +9,7 @@ class @Mercury.PageEditor
     throw Mercury.I18n('Mercury.PageEditor can only be instantiated once.') if window.mercuryInstance
 
     @options.visible = true unless (@options.visible == false || @options.visible == 'no')
+    @options.saveDataType = 'json' unless (@options.saveDataType == false || @options.saveDataType)
     @visible = @options.visible
 
     window.mercuryInstance = @
@@ -198,7 +199,7 @@ class @Mercury.PageEditor
 
 
   save: (callback) ->
-    url = @saveUrl ? Mercury.saveURL ? @iframeSrc()
+    url = @saveUrl ? Mercury.saveUrl ? @iframeSrc()
     data = @serialize()
     Mercury.log('saving', data)
     data = jQuery.toJSON(data) unless @options.saveStyle == 'form'
@@ -206,7 +207,7 @@ class @Mercury.PageEditor
     jQuery.ajax url, {
       headers: Mercury.ajaxHeaders()
       type: method || 'POST'
-      dataType: @options.saveDataType || 'json'
+      dataType: @options.saveDataType,
       data: {content: data, _method: method}
       success: =>
         Mercury.changes = false

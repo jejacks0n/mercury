@@ -22,7 +22,7 @@ describe "Mercury.Panel", ->
       html = $('<div>').html(@panel.element).html()
       expect(html).toContain('class="mercury-panel loading"')
       expect(html).toContain('style="display:none;"')
-      expect(html).toContain('<h1>foo panel</h1><div class="mercury-panel-pane"></div>')
+      expect(html).toContain('<h1><span>foo panel<span></span></span></h1><div class="mercury-panel-pane"></div>')
       expect(html).not.toContain('class="mercury-panel-close"')
 
     it "appends to any element", ->
@@ -159,16 +159,14 @@ describe "Mercury.Panel", ->
     it "sets the element html to be the data passed to it", ->
       @panel.loadContent('<span>hello world!</span>')
       html = @panel.element.html()
-      expect(html).toContain('<h1>foo panel</h1>')
       expect(html).toContain('class="mercury-panel-pane"')
       expect(html).toContain('style="visibility: hidden;')
       expect(html).toContain('hello world!')
 
-    it "sets the element html to be the data passed to it", ->
+    it "sets the element html to be the data passed to it -- translated", ->
       Mercury.config.localization.enabled = true
       @panel.loadContent('<span>hello world!</span>')
       html = @panel.element.html()
-      expect(html).toContain('<h1>foo panel</h1>')
       expect(html).toContain('class="mercury-panel-pane"')
       expect(html).toContain('style="visibility: hidden;')
       expect(html).toContain('bork! bork!')

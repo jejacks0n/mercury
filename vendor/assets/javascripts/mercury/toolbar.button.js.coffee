@@ -49,10 +49,10 @@ class @Mercury.Toolbar.Button
           @handled[type] = new Mercury.Panel(url, @name, @defaultDialogOptions())
 
         when 'modal'
-          @handled[type] = if jQuery.isFunction(mixed) then mixed.apply(@, @name) else mixed
+          @handled[type] = if jQuery.isFunction(mixed) then mixed.call(@, @name) else mixed
 
         when 'lightview'
-          @handled[type] = if jQuery.isFunction(mixed) then mixed.apply(@, @name) else mixed
+          @handled[type] = if jQuery.isFunction(mixed) then mixed.call(@, @name) else mixed
 
         else throw Mercury.I18n('Unknown button type \"%s\" used for the \"%s\" button.', type, @name)
 

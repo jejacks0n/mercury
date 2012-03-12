@@ -13788,7 +13788,8 @@ Showdown.converter = function() {
           Mercury.trigger('saved');
           if (typeof callback === 'function') return callback();
         },
-        error: function() {
+        error: function(response) {
+          Mercury.trigger('save_failed', response);
           return Mercury.notify('Mercury was unable to save to the url: %s', url);
         }
       });
@@ -15510,10 +15511,10 @@ Showdown.converter = function() {
             _results.push(this.handled[type] = new Mercury.Panel(url, this.name, this.defaultDialogOptions()));
             break;
           case 'modal':
-            _results.push(this.handled[type] = jQuery.isFunction(mixed) ? mixed.apply(this, this.name) : mixed);
+            _results.push(this.handled[type] = jQuery.isFunction(mixed) ? mixed.call(this, this.name) : mixed);
             break;
           case 'lightview':
-            _results.push(this.handled[type] = jQuery.isFunction(mixed) ? mixed.apply(this, this.name) : mixed);
+            _results.push(this.handled[type] = jQuery.isFunction(mixed) ? mixed.call(this, this.name) : mixed);
             break;
           default:
             throw Mercury.I18n('Unknown button type \"%s\" used for the \"%s\" button.', type, this.name);

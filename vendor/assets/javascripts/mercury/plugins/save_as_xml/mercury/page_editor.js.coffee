@@ -1,7 +1,7 @@
 class Mercury.PageEditor extends Mercury.PageEditor
 
   save: ->
-    url = @saveUrl ? Mercury.saveURL ? @iframeSrc()
+    url = @saveUrl ? Mercury.saveUrl ? @iframeSrc()
     data = @serializeAsXml()
     console.log('saving', data)
     return

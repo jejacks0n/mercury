@@ -36,9 +36,9 @@ describe "Mercury.PageEditor", ->
       expect(window.mercuryInstance).toEqual(@pageEditor)
 
     it "accepts a saveUrl, and options", ->
-      @pageEditor = new Mercury.PageEditor('/foo/1', {foo: 'bar'})
+      @pageEditor = new Mercury.PageEditor('/foo/1', {foo: 'bar', saveDataType: 'text'})
       expect(@pageEditor.saveUrl).toEqual('/foo/1')
-      expect(@pageEditor.options).toEqual({foo: 'bar', visible: true})
+      expect(@pageEditor.options).toEqual({foo: 'bar', saveDataType: 'text', visible: true})
 
     it "sets the visible option to true unless it's set", ->
       @pageEditor = new Mercury.PageEditor('/foo/1', {foo: 'bar', visible: false})
@@ -650,12 +650,12 @@ describe "Mercury.PageEditor", ->
         expect(@ajaxSpy.argsForCall[0][0]).toEqual('/foo/bar')
 
         @pageEditor.saveUrl = null
-        Mercury.saveURL = '/foo/bit'
+        Mercury.saveUrl = '/foo/bit'
         @pageEditor.save()
         expect(@ajaxSpy.argsForCall[1][0]).toEqual('/foo/bit')
 
         @pageEditor.saveUrl = null
-        Mercury.saveURL = null
+        Mercury.saveUrl = null
         @pageEditor.save()
         expect(@ajaxSpy.argsForCall[2][0]).toEqual('/foo/baz')
 

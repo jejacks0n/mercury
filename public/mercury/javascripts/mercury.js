@@ -13788,7 +13788,8 @@ Showdown.converter = function() {
           Mercury.trigger('saved');
           if (typeof callback === 'function') return callback();
         },
-        error: function() {
+        error: function(response) {
+          Mercury.trigger('save_failed', response);
           return Mercury.notify('Mercury was unable to save to the url: %s', url);
         }
       });

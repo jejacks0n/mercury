@@ -4,7 +4,7 @@ module Mercury
   class Engine < Rails::Engine
 
     # Additional application configuration to include precompiled assets.
-    initializer :assets do |app|
+    initializer :assets, :group => :all do |app|
       app.config.assets.precompile += %w( mercury.js mercury.css mercury_overrides.css )
     end
 

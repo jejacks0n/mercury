@@ -13788,7 +13788,8 @@ Showdown.converter = function() {
           Mercury.trigger('saved');
           if (typeof callback === 'function') return callback();
         },
-        error: function() {
+        error: function(response) {
+          Mercury.trigger('save_failed', response);
           return Mercury.notify('Mercury was unable to save to the url: %s', url);
         }
       });
@@ -17373,6 +17374,141 @@ Showdown.converter = function() {
     return Selection;
 
   })();
+
+}).call(this);
+(function() {
+  var __hasProp = Object.prototype.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; };
+
+  this.Mercury.Regions.Image = (function(_super) {
+    var type;
+
+    __extends(Image, _super);
+
+    Image.supported = document.getElementById;
+
+    Image.supportedText = "IE 7+, Chrome 10+, Firefox 4+, Safari 5+, Opera 8+";
+
+    type = 'image';
+
+    function Image(element, window, options) {
+      this.element = element;
+      this.window = window;
+      this.options = options != null ? options : {};
+      this.type = 'image';
+      Image.__super__.constructor.apply(this, arguments);
+    }
+
+    Image.prototype.build = function() {
+      return this.element.addClass(Mercury.config.regions.className).removeClass("" + Mercury.config.regions.className + "-preview");
+    };
+
+    Image.prototype.bindEvents = function() {
+      var _this = this;
+      Mercury.on('mode', function(event, options) {
+        if (options.mode === 'preview') return _this.togglePreview();
+      });
+      Mercury.on('focus:frame', function() {
+        if (_this.previewing || Mercury.region !== _this) return;
+        return _this.focus();
+      });
+      Mercury.on('action', function(event, options) {
+        if (_this.previewing || Mercury.region !== _this) return;
+        if (options.action) return _this.execCommand(options.action, options);
+      });
+      this.element.on('dragenter', function(event) {
+        if (_this.previewing) return;
+        event.preventDefault();
+        return event.originalEvent.dataTransfer.dropEffect = 'copy';
+      });
+      this.element.on('dragover', function(event) {
+        if (_this.previewing) return;
+        event.preventDefault();
+        return event.originalEvent.dataTransfer.dropEffect = 'copy';
+      });
+      this.element.on('drop', function(event) {
+        if (_this.previewing) return;
+        if (event.originalEvent.dataTransfer.files.length) {
+          event.preventDefault();
+          _this.focus();
+          return Mercury.uploader(event.originalEvent.dataTransfer.files[0]);
+        }
+      });
+      return this.element.on('focus', function() {
+        return _this.focus();
+      });
+    };
+
+    Image.prototype.togglePreview = function() {
+      if (this.previewing) {
+        this.previewing = false;
+        return this.build();
+      } else {
+        this.previewing = true;
+        this.element.addClass("" + Mercury.config.regions.className + "-preview").removeClass(Mercury.config.regions.className);
+        return Mercury.trigger('region:blurred', {
+          region: this
+        });
+      }
+    };
+
+    Image.prototype.focus = function() {
+      if (this.previewing) return;
+      Mercury.region = this;
+      Mercury.trigger('region:focused', {
+        region: this
+      });
+      return Mercury.trigger('region:update', {
+        region: this
+      });
+    };
+
+    Image.prototype.execCommand = function(action, options) {
+      var handler;
+      if (options == null) options = {};
+      Image.__super__.execCommand.apply(this, arguments);
+      if (handler = Mercury.Regions.Image.actions[action]) {
+        return handler.call(this, options);
+      }
+    };
+
+    Image.prototype.pushHistory = function() {
+      return this.history.push({
+        src: this.element.attr('src')
+      });
+    };
+
+    Image.prototype.updateSrc = function(src) {
+      return this.element.attr('src', src);
+    };
+
+    Image.prototype.serialize = function() {
+      return {
+        type: this.type,
+        data: this.dataAttributes(),
+        attributes: {
+          src: this.element.attr('src')
+        }
+      };
+    };
+
+    Image.actions = {
+      undo: function() {
+        var prev;
+        if (prev = this.history.undo()) return this.updateSrc(prev.src);
+      },
+      redo: function() {
+        var next;
+        if (next = this.history.redo()) return this.updateSrc(next.src);
+      },
+      insertImage: function(options) {
+        return this.updateSrc(options.value.src);
+      }
+    };
+
+    return Image;
+
+  })(Mercury.Region);
 
 }).call(this);
 (function() {

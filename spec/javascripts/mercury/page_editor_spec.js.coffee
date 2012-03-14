@@ -711,14 +711,21 @@ describe "Mercury.PageEditor", ->
       describe "on failed ajax request", ->
 
         beforeEach ->
-          @ajaxSpy.andCallFake((url, options) => options.error() )
+          @ajaxSpy.andCallFake((url, options) => options.error({'response': 'object'}) )
 
-        it "alerts with the url", ->
-          spy = spyOn(window, 'alert').andCallFake(=>)
+        it "alerts and triggers save_failed with the url", ->
+          alert_spy = spyOn(window, 'alert').andCallFake(=>)
+          trigger_spy = spyOn(Mercury, 'trigger').andCallFake(=>)
+          
           @pageEditor.saveUrl = '/foo/bar'
           @pageEditor.save()
-          expect(spy.callCount).toEqual(1)
-          expect(spy.argsForCall[0]).toEqual(['Mercury was unable to save to the url: /foo/bar'])
+
+          expect(alert_spy.callCount).toEqual(1)
+          expect(alert_spy.argsForCall[0]).toEqual(['Mercury was unable to save to the url: /foo/bar'])
+          
+          expect(trigger_spy.callCount).toEqual(1)
+          expect(trigger_spy.argsForCall[0][0]).toEqual('save_failed')
+          expect(trigger_spy.argsForCall[0][1]).toBeDefined()
 
     describe "PUT", ->
 

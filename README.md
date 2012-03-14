@@ -162,6 +162,11 @@ Check this [wiki article](https://github.com/jejacks0n/mercury/wiki/Using-Mercur
 Editable Regions are HTML markup, and use the HTML5 contentEditable feature.  This is the core of what Mercury is about,
 and provides the most flexibility and visual representation of what the content will look like when saved.
 
+### Simple
+
+Simple Regions are plain text. Newlines and markup are not allowed. Simple Regions are appropriate for a title or headline,
+any area where you want the conent to be editable but not the style.
+
 ### Markupable
 
 These regions are based on Markdown syntax (specifically the github flavored version), and isn't as full featured as the
@@ -174,6 +179,11 @@ Snippetable regions only allow snippets.  There isn't any content editing in the
 be the way to go with complex markup and functionality.  Snippets are basically chunks of reusable markup, that can be
 defined by a developer and placed into content regions later.  More on this below.
 
+### Image
+
+The Image Region type should only be applied to single images. It results in that image being drag-and-drop replacable.
+This differs from the image handling in Editable regions, in that no content is in the area. This works well for logos
+and images you want to display with careful layout, and do not need any text.
 
 ## Loading / Ready State
 

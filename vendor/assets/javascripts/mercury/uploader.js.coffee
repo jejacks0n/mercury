@@ -35,10 +35,10 @@ jQuery.extend Mercury.uploader,
     return !!(xhr.upload && xhr.sendAsBinary && (Mercury.uploader.fileReaderSupported() || Mercury.uploader.formDataSupported()))
 
   fileReaderSupported: ->
-    !!('FileReader' in window)
+    !!(window.FileReader)
   
   formDataSupported: ->
-    !!('FormData' in window)
+    !!(window.FormData)
 
   build: ->
     @element = jQuery('<div>', {class: 'mercury-uploader', style: 'display:none'})

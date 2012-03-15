@@ -238,7 +238,7 @@ describe "Mercury.uploader", ->
       Mercury.uploader.loadImage()
       expect(spy.callCount).toEqual(1)
 
-  describe "#loadImage with FileReader", ->
+  describe "#loadImage without FileReader", ->
 
     beforeEach ->
       Mercury.uploader.options = {appendTo: '#test'}

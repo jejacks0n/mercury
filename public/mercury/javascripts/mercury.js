@@ -16357,7 +16357,8 @@ Showdown.converter = function() {
 
 }).call(this);
 (function() {
-  var __hasProp = Object.prototype.hasOwnProperty;
+  var __indexOf = Array.prototype.indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; },
+    __hasProp = Object.prototype.hasOwnProperty;
 
   this.Mercury.uploader = function(file, options) {
     if (Mercury.config.uploading.enabled) Mercury.uploader.show(file, options);
@@ -16384,9 +16385,8 @@ Showdown.converter = function() {
       return this.initialized = true;
     },
     supported: function() {
-      var fileReader, xhr;
+      var xhr;
       xhr = new XMLHttpRequest;
-      fileReader = window.FileReader;
       if (window.Uint8Array && window.ArrayBuffer && !XMLHttpRequest.prototype.sendAsBinary) {
         XMLHttpRequest.prototype.sendAsBinary = function(datastr) {
           var data, index, ui8a, _len;
@@ -16398,7 +16398,13 @@ Showdown.converter = function() {
           return this.send(ui8a.buffer);
         };
       }
-      return !!(xhr.upload && xhr.sendAsBinary && fileReader);
+      return !!(xhr.upload && xhr.sendAsBinary && (Mercury.uploader.fileReaderSupported() || Mercury.uploader.formDataSupported()));
+    },
+    fileReaderSupported: function() {
+      return !!(__indexOf.call(window, 'FileReader') >= 0);
+    },
+    formDataSupported: function() {
+      return !!(__indexOf.call(window, 'FormData') >= 0);
     },
     build: function() {
       var _ref, _ref2;
@@ -16456,15 +16462,19 @@ Showdown.converter = function() {
     },
     loadImage: function() {
       var _this = this;
-      return this.file.readAsDataURL(function(result) {
-        _this.element.find('.mercury-uploader-preview b').html(jQuery('<img>', {
-          src: result
-        }));
-        return _this.upload();
-      });
+      if (Mercury.uploader.fileReaderSupported()) {
+        return this.file.readAsDataURL(function(result) {
+          _this.element.find('.mercury-uploader-preview b').html(jQuery('<img>', {
+            src: result
+          }));
+          return _this.upload();
+        });
+      } else {
+        return this.upload();
+      }
     },
     upload: function() {
-      var xhr,
+      var formData, xhr,
         _this = this;
       xhr = new XMLHttpRequest;
       jQuery.each(['onloadstart', 'onprogress', 'onload', 'onabort', 'onerror'], function(index, eventName) {
@@ -16501,13 +16511,19 @@ Showdown.converter = function() {
       xhr.setRequestHeader('Accept', 'application/json, text/javascript, text/html, application/xml, text/xml, */*');
       xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
       xhr.setRequestHeader(Mercury.config.csrfHeader, Mercury.csrfToken);
-      return this.file.readAsBinaryString(function(result) {
-        var multipart;
-        multipart = new Mercury.uploader.MultiPartPost(Mercury.config.uploading.inputName, _this.file, result);
-        _this.file.updateSize(multipart.delta);
-        xhr.setRequestHeader('Content-Type', 'multipart/form-data; boundary=' + multipart.boundary);
-        return xhr.sendAsBinary(multipart.body);
-      });
+      if (Mercury.uploader.fileReaderSupported()) {
+        return this.file.readAsBinaryString(function(result) {
+          var multipart;
+          multipart = new Mercury.uploader.MultiPartPost(Mercury.config.uploading.inputName, _this.file, result);
+          _this.file.updateSize(multipart.delta);
+          xhr.setRequestHeader('Content-Type', 'multipart/form-data; boundary=' + multipart.boundary);
+          return xhr.sendAsBinary(multipart.body);
+        });
+      } else {
+        formData = new FormData();
+        formData.append(Mercury.config.uploading.inputName, this.file.file, this.file.file.name);
+        return xhr.send(formData);
+      }
     },
     updateStatus: function(message, loaded) {
       var percent;

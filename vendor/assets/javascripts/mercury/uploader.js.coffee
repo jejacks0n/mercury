@@ -25,7 +25,6 @@ jQuery.extend Mercury.uploader,
 
   supported: ->
     xhr = new XMLHttpRequest
-    fileReader = window.FileReader
 
     if window.Uint8Array && window.ArrayBuffer && !XMLHttpRequest.prototype.sendAsBinary
       XMLHttpRequest::sendAsBinary = (datastr) ->
@@ -33,8 +32,13 @@ jQuery.extend Mercury.uploader,
         ui8a[index] = (datastr.charCodeAt(index) & 0xff) for data, index in datastr
         @send(ui8a.buffer)
 
-    return !!(xhr.upload && xhr.sendAsBinary && fileReader)
+    return !!(xhr.upload && xhr.sendAsBinary && (Mercury.uploader.fileReaderSupported() || Mercury.uploader.formDataSupported()))
 
+  fileReaderSupported: ->
+    !!('FileReader' in window)
+  
+  formDataSupported: ->
+    !!('FormData' in window)
 
   build: ->
     @element = jQuery('<div>', {class: 'mercury-uploader', style: 'display:none'})
@@ -86,8 +90,11 @@ jQuery.extend Mercury.uploader,
 
 
   loadImage: ->
-    @file.readAsDataURL (result) =>
-      @element.find('.mercury-uploader-preview b').html(jQuery('<img>', {src: result}))
+    if Mercury.uploader.fileReaderSupported()
+      @file.readAsDataURL (result) =>
+        @element.find('.mercury-uploader-preview b').html(jQuery('<img>', {src: result}))
+        @upload()
+    else
       @upload()
 
 
@@ -121,16 +128,28 @@ jQuery.extend Mercury.uploader,
     xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest')
     xhr.setRequestHeader(Mercury.config.csrfHeader, Mercury.csrfToken)
 
-    @file.readAsBinaryString (result) =>
-      # build the multipart post string
-      multipart = new Mercury.uploader.MultiPartPost(Mercury.config.uploading.inputName, @file, result)
+    # Homespun multipart uploads. Chrome 18, Firefox 11.
+    #
+    if Mercury.uploader.fileReaderSupported()
+      @file.readAsBinaryString (result) =>
+        
+        multipart = new Mercury.uploader.MultiPartPost(Mercury.config.uploading.inputName, @file, result)
 
-      # update the content size so we can calculate
-      @file.updateSize(multipart.delta)
+        # update the content size so we can calculate
+        @file.updateSize(multipart.delta)
 
-      # set the content type and send
-      xhr.setRequestHeader('Content-Type', 'multipart/form-data; boundary=' + multipart.boundary)
-      xhr.sendAsBinary(multipart.body)
+        # set the content type and send
+        xhr.setRequestHeader('Content-Type', 'multipart/form-data; boundary=' + multipart.boundary)
+        xhr.sendAsBinary(multipart.body)
+    
+    # FormData based. Safari 5.1.2.
+    #
+    else
+      formData = new FormData()
+      formData.append(Mercury.config.uploading.inputName, @file.file, @file.file.name)
+
+      xhr.send(formData)
+
 
 
   updateStatus: (message, loaded) ->

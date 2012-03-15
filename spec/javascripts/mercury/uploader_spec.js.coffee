@@ -4,6 +4,8 @@ describe "Mercury.uploader", ->
 
   beforeEach ->
     Mercury.config.uploading.enabled = true
+    @fileReaderSupport = spyOn(Mercury.uploader, 'fileReaderSupported')
+    @fileReaderSupport.andCallFake(=> true)
     $.fx.off = true
     @mockFile = {
       size: 1024
@@ -220,6 +222,7 @@ describe "Mercury.uploader", ->
       Mercury.uploader.file = new Mercury.uploader.File(@mockFile)
       Mercury.uploader.build()
       spyOn(FileReader.prototype, 'readAsBinaryString').andCallFake(=>)
+      @fileReaderSupport.andCallFake(=> true)
       @readAsDataURLSpy = spyOn(Mercury.uploader.File.prototype, 'readAsDataURL').andCallFake((callback) => callback('data-url'))
 
     it "calls file.readAsDataURL", ->
@@ -229,6 +232,19 @@ describe "Mercury.uploader", ->
     it "sets the preview image src to the file contents", ->
       Mercury.uploader.loadImage()
       expect($('#test .mercury-uploader-preview img').attr('src')).toEqual('data-url')
+
+    it "calls upload", ->
+      spy = spyOn(Mercury.uploader, 'upload').andCallFake(=>)
+      Mercury.uploader.loadImage()
+      expect(spy.callCount).toEqual(1)
+
+  describe "#loadImage with FileReader", ->
+
+    beforeEach ->
+      Mercury.uploader.options = {appendTo: '#test'}
+      Mercury.uploader.file = new Mercury.uploader.File(@mockFile)
+      Mercury.uploader.build()
+      @fileReaderSupport.andCallFake(=> false)
 
     it "calls upload", ->
       spy = spyOn(Mercury.uploader, 'upload').andCallFake(=>)

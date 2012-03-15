@@ -16357,8 +16357,7 @@ Showdown.converter = function() {
 
 }).call(this);
 (function() {
-  var __indexOf = Array.prototype.indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; },
-    __hasProp = Object.prototype.hasOwnProperty;
+  var __hasProp = Object.prototype.hasOwnProperty;
 
   this.Mercury.uploader = function(file, options) {
     if (Mercury.config.uploading.enabled) Mercury.uploader.show(file, options);
@@ -16401,10 +16400,10 @@ Showdown.converter = function() {
       return !!(xhr.upload && xhr.sendAsBinary && (Mercury.uploader.fileReaderSupported() || Mercury.uploader.formDataSupported()));
     },
     fileReaderSupported: function() {
-      return !!(__indexOf.call(window, 'FileReader') >= 0);
+      return !!window.FileReader;
     },
     formDataSupported: function() {
-      return !!(__indexOf.call(window, 'FormData') >= 0);
+      return !!window.FormData;
     },
     build: function() {
       var _ref, _ref2;

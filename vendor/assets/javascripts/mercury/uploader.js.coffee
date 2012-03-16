@@ -199,11 +199,10 @@ jQuery.extend Mercury.uploader,
 class Mercury.uploader.File
 
   constructor: (@file) ->
-    @size = @file.size
-    @fullSize = @file.size
-    @readableSize = @file.size.toBytes()
-    @name = @file.fileName
-    @type = @file.type
+    @fullSize = @size = @file.size || @file.fileSize
+    @readableSize = @size.toBytes()
+    @name = @file.name || @file.fileName
+    @type = @file.type || @file.fileType
 
     # add any errors if we need to
     errors = []

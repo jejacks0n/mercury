@@ -16588,11 +16588,10 @@ Showdown.converter = function() {
     function File(file) {
       var errors;
       this.file = file;
-      this.size = this.file.size;
-      this.fullSize = this.file.size;
-      this.readableSize = this.file.size.toBytes();
-      this.name = this.file.fileName;
-      this.type = this.file.type;
+      this.fullSize = this.size = this.file.size || this.file.fileSize;
+      this.readableSize = this.size.toBytes();
+      this.name = this.file.name || this.file.fileName;
+      this.type = this.file.type || this.file.fileType;
       errors = [];
       if (this.size >= Mercury.config.uploading.maxFileSize) {
         errors.push(Mercury.I18n('Too large'));

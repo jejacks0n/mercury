@@ -35,7 +35,7 @@ describe "Mercury.Snippet", ->
     it "builds an element (in whatever context is provided", ->
       ret = @snippet.getHTML($(document))
       html = $('<div>').html(ret).html()
-      expect(html).toContain('class="mercury-snippet"')
+      expect(html).toContain('class="mercury-snippet foo-snippet"')
       expect(html).toContain('contenteditable="false"')
       expect(html).toContain('data-snippet="identity"')
       expect(html).toContain('data-version="1"')

@@ -44,9 +44,12 @@ class @Mercury.Snippet
 
 
   getHTML: (context, callback = null) ->
-    element = jQuery('<div class="mercury-snippet" contenteditable="false">', context)
-    element.attr({'data-snippet': @identity})
-    element.attr({'data-version': @version})
+    element = jQuery('<div>', {
+      class: "mercury-snippet #{@name}-snippet"
+      contenteditable: "false"
+      'data-snippet': @identity
+      'data-version': @version
+    }, context)
     element.html("[#{@identity}]")
     @loadPreview(element, callback)
     return element

@@ -312,7 +312,7 @@ describe "Mercury.Regions.Snippetable.actions", ->
 
       it "finds the snippet by it's identity and replaces it with the new snippet", ->
         @actions['insertSnippet'].call(@region, {value: Mercury.Snippet.find('snippet_1')})
-        expect($('#snippetable_region2').html()).toContain('class="mercury-snippet"')
+        expect($('#snippetable_region2').html()).toContain('class="mercury-snippet example-snippet"')
         expect($('#snippetable_region2').html()).toContain('contenteditable="false"')
         expect($('#snippetable_region2').html()).toContain('data-version="1"')
         expect($('#snippetable_region2').html()).toContain('data-snippet="snippet_1"')

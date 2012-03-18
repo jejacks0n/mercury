@@ -25,7 +25,7 @@ Feature:
     And fill in "Favorite Beer" with "Stella"
     And press "Insert Snippet"
     Then the modal window should not be visible
-    And the contents of the editable region should be "this is <div data-version='1' data-snippet='snippet_14' class='mercury-snippet' contenteditable='false'><strong>Jeremy</strong> likes Stella</div><span>simple</span> <b>content</b>"
+    And the contents of the editable region should be "this is <div data-version='1' data-snippet='snippet_14' class='mercury-snippet example-snippet' contenteditable='false'><strong>Jeremy</strong> likes Stella</div><span>simple</span> <b>content</b>"
 
 
   Scenario: A user can use the snippet toolbar to remove a snippet
@@ -52,7 +52,7 @@ Feature:
     When I fill in "First Name" with "Jeremy"
     And fill in "Favorite Beer" with "Stella"
     And press "Insert Snippet"
-    Then the contents of the editable region should be "<div data-version='2' data-snippet='snippet_42' class='mercury-snippet' contenteditable='false'><strong>Jeremy</strong> likes Stella</div> <b>content</b>"
+    Then the contents of the editable region should be "<div data-version='2' data-snippet='snippet_42' class='mercury-snippet example-snippet' contenteditable='false'><strong>Jeremy</strong> likes Stella</div> <b>content</b>"
 
 
   Scenario: A user can make changes to a snippets options, and they'll be versioned for undo and redo
@@ -63,7 +63,7 @@ Feature:
     And I fill in "First Name" with "Jeremy"
     And fill in "Favorite Beer" with "Stella"
     And press "Insert Snippet"
-    Then the contents of the editable region should be "<div data-version='2' data-snippet='snippet_42' class='mercury-snippet' contenteditable='false'><strong>Jeremy</strong> likes Stella</div> <b>content</b>"
+    Then the contents of the editable region should be "<div data-version='2' data-snippet='snippet_42' class='mercury-snippet example-snippet' contenteditable='false'><strong>Jeremy</strong> likes Stella</div> <b>content</b>"
 
     When I edit the snippet
     Then the "First Name" field should contain "Jeremy"
@@ -72,10 +72,10 @@ Feature:
     When fill in "First Name" with "Diesel"
     And fill in "Favorite Beer" with "Bells Hopslam"
     And press "Insert Snippet"
-    Then the content of the editable region should be "<div data-version='3' data-snippet='snippet_42' class='mercury-snippet' contenteditable='false'><strong>Diesel</strong> likes Bells Hopslam</div> <b>content</b>"
+    Then the content of the editable region should be "<div data-version='3' data-snippet='snippet_42' class='mercury-snippet example-snippet' contenteditable='false'><strong>Diesel</strong> likes Bells Hopslam</div> <b>content</b>"
 
     When I click on the "Undo" button
-    Then the contents of the editable region should be "<div data-version='2' data-snippet='snippet_42' class='mercury-snippet' contenteditable='false'><strong>Jeremy</strong> likes Stella</div> <b>content</b>"
+    Then the contents of the editable region should be "<div data-version='2' data-snippet='snippet_42' class='mercury-snippet example-snippet' contenteditable='false'><strong>Jeremy</strong> likes Stella</div> <b>content</b>"
 
     When I edit the snippet
     # todo: this is a bug
@@ -84,7 +84,7 @@ Feature:
 
     When I close the modal
     When I click on the "Redo" button
-    Then the contents of the editable region should be "<div data-version='3' data-snippet='snippet_42' class='mercury-snippet' contenteditable='false'><strong>Diesel</strong> likes Bells Hopslam</div> <b>content</b>"
+    Then the contents of the editable region should be "<div data-version='3' data-snippet='snippet_42' class='mercury-snippet example-snippet' contenteditable='false'><strong>Diesel</strong> likes Bells Hopslam</div> <b>content</b>"
 
     When I edit the snippet
     Then the "First Name" field should contain "Diesel"
@@ -93,7 +93,7 @@ Feature:
     When I fill in "First Name" with "Jen"
     And fill in "Favorite Beer" with "Miller High Life"
     And press "Insert Snippet"
-    Then the contents of the editable region should be "<div data-version='4' data-snippet='snippet_42' class='mercury-snippet' contenteditable='false'><strong>Jen</strong> likes Miller High Life</div> <b>content</b>"
+    Then the contents of the editable region should be "<div data-version='4' data-snippet='snippet_42' class='mercury-snippet example-snippet' contenteditable='false'><strong>Jen</strong> likes Miller High Life</div> <b>content</b>"
 
 
 #  Scenario: When a user saves, the snippets should be gone from the html, but the options are serialized

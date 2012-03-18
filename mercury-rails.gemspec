@@ -40,7 +40,7 @@ Gem::Specification.new do |s|
 
 
   # Gem Files
-  s.extra_rdoc_files  = ["LICENSE"]
+  s.extra_rdoc_files  = ["LICENSE", "POST_INSTALL"]
   # = MANIFEST =
   s.files             = Dir['lib/**/*', 'vendor/assets/**/*', 'app/**/*', 'db/migrate/*', 'config/engine.rb']
   s.test_files        = `git ls-files -- {test,spec,features}/*`.split("\n")

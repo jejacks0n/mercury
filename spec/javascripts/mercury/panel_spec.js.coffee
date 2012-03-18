@@ -22,7 +22,7 @@ describe "Mercury.Panel", ->
       html = $('<div>').html(@panel.element).html()
       expect(html).toContain('class="mercury-panel loading"')
       expect(html).toContain('style="display:none;"')
-      expect(html).toContain('<h1><span>foo panel<span></span></span></h1><div class="mercury-panel-pane"></div>')
+      expect(html).toContain('<h1><span>foo panel</span></h1><div class="mercury-panel-pane"></div>')
       expect(html).not.toContain('class="mercury-panel-close"')
 
     it "appends to any element", ->

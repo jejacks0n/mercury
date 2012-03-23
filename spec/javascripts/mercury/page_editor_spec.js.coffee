@@ -592,12 +592,12 @@ describe "Mercury.PageEditor", ->
       Mercury.PageEditor.prototype.initializeInterface = ->
       @pageEditor = new Mercury.PageEditor('', {appendTo: $('#test')})
       Mercury.silent = false
-      Mercury.changes = true
+      Mercury.trigger('set-changes', true)
 
     it "returns a message if changes were made", ->
       expect(@pageEditor.beforeUnload()).toEqual('You have unsaved changes.  Are you sure you want to leave without saving them first?')
 
-      Mercury.changes = false
+      Mercury.trigger('set-changes', false)
       expect(@pageEditor.beforeUnload()).toEqual(null)
 
     it "does nothing if in silent mode", ->
@@ -692,7 +692,7 @@ describe "Mercury.PageEditor", ->
           @ajaxSpy.andCallFake((url, options) => options.success('data') )
 
         it "sets changes back to false", ->
-          Mercury.changes = true
+          Mercury.trigger('set-changes', true)
           @pageEditor.save()
           expect(Mercury.changes).toEqual(false)
 

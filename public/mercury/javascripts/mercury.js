@@ -13784,7 +13784,7 @@ Showdown.converter = function() {
           _method: method
         },
         success: function() {
-          Mercury.changes = false;
+          Mercury.trigger('set-changes', false);
           Mercury.trigger('saved');
           if (typeof callback === 'function') return callback();
         },
@@ -16311,7 +16311,7 @@ Showdown.converter = function() {
       this.focus();
       if (action !== 'redo') this.pushHistory();
       Mercury.log('execCommand', action, options.value);
-      if (!options.already_handled) return Mercury.changes = true;
+      if (!options.already_handled) return Mercury.trigger('set-changes', true);
     };
 
     Region.prototype.pushHistory = function() {
@@ -16784,7 +16784,7 @@ Showdown.converter = function() {
           return;
         }
         if (_this.pasting) return;
-        Mercury.changes = true;
+        Mercury.trigger('set-changes', true);
         return _this.handlePaste(event.originalEvent);
       });
       this.element.on('focus', function() {
@@ -16886,7 +16886,7 @@ Showdown.converter = function() {
         Mercury.trigger('region:update', {
           region: _this
         });
-        return Mercury.changes = true;
+        return Mercury.trigger('set-changes', true);
       });
     };
 
@@ -17688,7 +17688,7 @@ Showdown.converter = function() {
       });
       this.element.on('keyup', function() {
         if (_this.previewing) return;
-        Mercury.changes = true;
+        Mercury.trigger('set-changes', true);
         _this.resize();
         return Mercury.trigger('region:update', {
           region: _this
@@ -18192,7 +18192,7 @@ Showdown.converter = function() {
       });
       this.element.on('keyup', function() {
         if (_this.previewing) return;
-        Mercury.changes = true;
+        Mercury.trigger('set-changes', true);
         _this.resize();
         return Mercury.trigger('region:update', {
           region: _this
@@ -18212,7 +18212,7 @@ Showdown.converter = function() {
           return;
         }
         if (_this.pasting) return;
-        Mercury.changes = true;
+        Mercury.trigger('set-changes', true);
         return _this.handlePaste(event.originalEvent);
       });
     };
@@ -18510,7 +18510,7 @@ Showdown.converter = function() {
       });
       return jQuery(this.document).on('keyup', function() {
         if (_this.previewing || Mercury.region !== _this) return;
-        return Mercury.changes = true;
+        return Mercury.trigger('set-changes', true);
       });
     };
 

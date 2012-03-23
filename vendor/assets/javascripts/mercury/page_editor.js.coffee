@@ -105,8 +105,9 @@ class @Mercury.PageEditor
     Mercury.on 'focus:frame', => @iframe.focus()
     Mercury.on 'focus:window', => setTimeout(10, => @focusableElement.focus())
     Mercury.on 'toggle:interface', => @toggleInterface()
+    Mercury.on 'toggle:preview', (event, data) => @togglePreview(data)
     Mercury.on 'reinitialize', => @initializeRegions()
-    Mercury.on 'mode', (event, options) => @previewing = !@previewing if options.mode == 'preview'
+    Mercury.on 'mode', (event, options) => Mercury.trigger('toggle:preview', !@previewing) if options.mode == 'preview'
     Mercury.on 'action', (event, options) =>
       action = Mercury.config.globalBehaviors[options.action] || @[options.action]
       return unless typeof(action) == 'function'
@@ -149,6 +150,8 @@ class @Mercury.PageEditor
     Mercury.trigger('mode', {mode: 'preview'})
     @resize()
 
+  togglePreview: (previewing) ->
+    @previewing = previewing
 
   resize: ->
     width = jQuery(window).width()

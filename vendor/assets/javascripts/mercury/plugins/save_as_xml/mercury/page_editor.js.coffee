@@ -12,7 +12,7 @@ class Mercury.PageEditor extends Mercury.PageEditor
       dataType: 'xml'
       data: data
       success: =>
-        Mercury.changes = false
+        Mercury.trigger('set-changes', false)
       error: =>
         alert("Mercury was unable to save to the url: #{url}")
     }

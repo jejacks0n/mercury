@@ -106,6 +106,7 @@ class @Mercury.PageEditor
     Mercury.on 'focus:window', => setTimeout(10, => @focusableElement.focus())
     Mercury.on 'toggle:interface', => @toggleInterface()
     Mercury.on 'toggle:preview', (event, data) => @togglePreview(data)
+    Mercury.on 'set-changes', (event, data) => @setChanges(data)
     Mercury.on 'reinitialize', => @initializeRegions()
     Mercury.on 'mode', (event, options) => Mercury.trigger('toggle:preview', !@previewing) if options.mode == 'preview'
     Mercury.on 'action', (event, options) =>
@@ -152,6 +153,11 @@ class @Mercury.PageEditor
 
   togglePreview: (previewing) ->
     @previewing = previewing
+
+  setChanges: (changes) ->
+    if Mercury.changes != changes
+      Mercury.changes = changes
+      Mercury.trigger('changes', changes)
 
   resize: ->
     width = jQuery(window).width()
@@ -213,7 +219,7 @@ class @Mercury.PageEditor
       dataType: @options.saveDataType,
       data: {content: data, _method: method}
       success: =>
-        Mercury.changes = false
+        Mercury.trigger('set-changes', false)
         Mercury.trigger('saved')
         callback() if typeof(callback) == 'function'
       error: (response) =>

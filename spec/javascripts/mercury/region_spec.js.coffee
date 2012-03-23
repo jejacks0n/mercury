@@ -223,7 +223,7 @@ describe "Mercury.Region", ->
   describe "#execCommand", ->
 
     beforeEach ->
-      Mercury.changes = false
+      Mercury.trigger('set-changes', false)
       @region = new Mercury.Region($('#region'), window)
 
     it "calls focus", ->
@@ -246,7 +246,7 @@ describe "Mercury.Region", ->
   describe "#pushHistory", ->
 
     beforeEach ->
-      Mercury.changes = false
+      Mercury.trigger('set-changes', false)
       @region = new Mercury.Region($('#region'), window)
 
     it "pushes the current content (html) of the region to the history buffer", ->

@@ -109,7 +109,7 @@ class @Mercury.Regions.Editable extends Mercury.Region
         event.preventDefault()
         return
       return if @pasting
-      Mercury.changes = true
+      Mercury.trigger('set-changes', true)
       @handlePaste(event.originalEvent)
 
     @element.on 'focus', =>
@@ -189,7 +189,7 @@ class @Mercury.Regions.Editable extends Mercury.Region
     @element.on 'keyup', =>
       return if @previewing
       Mercury.trigger('region:update', {region: @})
-      Mercury.changes = true
+      Mercury.trigger('set-changes', true)
 
 
   focus: ->

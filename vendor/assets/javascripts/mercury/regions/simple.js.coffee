@@ -135,7 +135,7 @@ class @Mercury.Regions.Simple extends Mercury.Region
 
     @element.on 'keyup', =>
       return if @previewing
-      Mercury.changes = true
+      Mercury.trigger('set-changes', true)
       @resize()
       Mercury.trigger('region:update', {region: @})
 
@@ -150,7 +150,7 @@ class @Mercury.Regions.Simple extends Mercury.Region
         event.preventDefault()
         return
       return if @pasting
-      Mercury.changes = true
+      Mercury.trigger('set-changes', true)
       @handlePaste(event.originalEvent)
 
 

@@ -129,7 +129,7 @@ class @Mercury.Regions.Markupable extends Mercury.Region
 
     @element.on 'keyup', =>
       return if @previewing
-      Mercury.changes = true
+      Mercury.trigger('set-changes', true)
       @resize()
       Mercury.trigger('region:update', {region: @})
 

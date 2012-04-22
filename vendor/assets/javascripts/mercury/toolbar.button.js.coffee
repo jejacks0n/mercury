@@ -34,19 +34,16 @@ class @Mercury.Toolbar.Button
 
         when 'palette'
           @element.addClass("mercury-button-palette")
-          url = if jQuery.isFunction(mixed) then mixed.call(@, @name) else mixed
-          @handled[type] = new Mercury.Palette(url, @name, @defaultDialogOptions())
+          @handled[type] = new Mercury.Palette(mixed, @name, @defaultDialogOptions())
 
         when 'select'
           @element.addClass("mercury-button-select").find('em').html(@title)
-          url = if jQuery.isFunction(mixed) then mixed.call(@, @name) else mixed
-          @handled[type] = new Mercury.Select(url, @name, @defaultDialogOptions())
+          @handled[type] = new Mercury.Select(mixed, @name, @defaultDialogOptions())
 
         when 'panel'
           @element.addClass('mercury-button-panel')
-          url = if jQuery.isFunction(mixed) then mixed.call(@, @name) else mixed
           @handled['toggle'] = true
-          @handled[type] = new Mercury.Panel(url, @name, @defaultDialogOptions())
+          @handled[type] = new Mercury.Panel(mixed, @name, @defaultDialogOptions())
 
         when 'modal'
           @handled[type] = if jQuery.isFunction(mixed) then mixed.call(@, @name) else mixed

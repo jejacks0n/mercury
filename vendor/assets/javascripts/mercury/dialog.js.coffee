@@ -7,7 +7,7 @@ class @Mercury.Dialog
 
   # The constructor expects a url to load, a name, and options.
   #
-  # @url _string_ used to load the contents, either using Ajax or by pulling content from preloadedViews
+  # @url _string_ or _function_ used to load the contents, either using Ajax or by pulling content from preloadedViews
   #
   # @name _string_ used in building of the element, and is assigned as part of the elements class (eg.
   #     `mercury-[name]-dialog`)
@@ -125,16 +125,18 @@ class @Mercury.Dialog
   # @callback _function_ will be called after the content is loaded.
   load: (callback) ->
     return unless @url
-    if Mercury.preloadedViews[@url]
+    url = if jQuery.isFunction(@url) then @url.call(@, @name) else @url
+
+    if Mercury.preloadedViews[url]
       # If there's a preloadedView defined for the url being requested, load that one.
-      @loadContent(Mercury.preloadedViews[@url])
+      @loadContent(Mercury.preloadedViews[url])
       # And call the dialog handler if there's one.  We've broken the handlers out into separate files so they can be
       # tested more easily, but you can define your own by putting them in dialogHandlers.
       Mercury.dialogHandlers[@name].call(@) if Mercury.dialogHandlers[@name]
       callback() if callback
     else
       # Otherwise make an Ajax request to get the content.
-      jQuery.ajax @url, {
+      jQuery.ajax url, {
         success: (data) =>
           @loadContent(data)
           Mercury.dialogHandlers[@name].call(@) if Mercury.dialogHandlers[@name]
@@ -143,7 +145,7 @@ class @Mercury.Dialog
           # If the Ajax fails, we hide the dialog and alert the user about the error.
           @hide()
           @button.removeClass('pressed') if @button
-          Mercury.notify('Mercury was unable to load %s for the "%s" dialog.', @url, @name)
+          Mercury.notify('Mercury was unable to load %s for the "%s" dialog.', url, @name)
       }
 
 

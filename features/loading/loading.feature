@@ -18,5 +18,8 @@ Feature:
     Then I should see "Editable region" in the content frame
 
 
+  # Latest selenium webdriver seems to consider the lightview hidden
+  @use_hidden_elements
   Scenario: A user can expect to see the status bar
     Then I should see "Mercury Editor v0.3.1" within the statusbar
+

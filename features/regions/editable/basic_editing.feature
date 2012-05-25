@@ -8,10 +8,10 @@ Feature:
     Given I am on an editable page
     And the editor won't prompt when leaving the page
 
-  Scenario: A user can expect all this!
+  # Scenario: A user can expect all this!
 
 
-#  Scenario: A user can set and unset bold content
+ Scenario: A user can set and unset bold content
     Given the content of the editable region is simple content
     And I make a selection
 
@@ -22,7 +22,7 @@ Feature:
     Then the contents of the editable region should be "this is <span>simple</span> <b>content</b>"
 
 
-#  Scenario: A user can italicize content
+ Scenario: A user can italicize content
     Given the content of the editable region is simple content
     And I make a selection
 
@@ -33,7 +33,7 @@ Feature:
     Then the contents of the editable region should be "this is <span>simple</span> <b>content</b>"
 
 
-#  Scenario: A user can overline content
+ Scenario: A user can overline content
     Given the content of the editable region is simple content
     And I make a selection
 
@@ -42,7 +42,7 @@ Feature:
     # doesn't remove overlines
 
 
-#  Scenario: A user can strikeout content
+ Scenario: A user can strikeout content
     Given the content of the editable region is simple content
     And I make a selection
 
@@ -52,7 +52,7 @@ Feature:
     When I click on the strikethrough editor button
     Then the contents of the editable region should be "this is <span>simple</span> <b>content</b>"
 
-#  Scenario: A user can underline content
+ Scenario: A user can underline content
     Given the content of the editable region is simple content
     And I make a selection
 
@@ -63,7 +63,7 @@ Feature:
     Then the contents of the editable region should be "this is <span>simple</span> <b>content</b>"
 
 
-#  Scenario: A user can make content superscript
+ Scenario: A user can make content superscript
     Given the content of the editable region is simple content
     And I make a selection
 
@@ -74,7 +74,7 @@ Feature:
     Then the contents of the editable region should be "this is <span>simple</span> <b>content</b>"
 
 
-#  Scenario: A user can make content subscript
+ Scenario: A user can make content subscript
     Given the content of the editable region is simple content
     And I make a selection
 
@@ -85,25 +85,25 @@ Feature:
     Then the contents of the editable region should be "this is <span>simple</span> <b>content</b>"
 
 
-#  Scenario: A user can justify content to the left, center, right, or fully justified
+ Scenario: A user can justify content to the left, center, right, or fully justified
     # firefox: this isn't possible on the first line due to a bug in gecko, so we have special content for it
     Given the content of the editable region has justifiable content
     And I make a selection
 
     When I click on the justify left editor button
-    Then the contents of the editable region should be "<div>first line</div><br><div align='left'>this is <span>justifiable</span><b>content</b></div> "
+    Then the contents of the editable region should be "<div>first line</div><br><div align='left'>this is <span>justifiable</span><b>content</b></div>"
 
     When I click on the justify center editor button
-    Then the contents of the editable region should be "<div>first line</div><br><div align='center'>this is <span>justifiable</span><b>content</b></div> "
+    Then the contents of the editable region should be "<div>first line</div><br><div align='center'>this is <span>justifiable</span><b>content</b></div>"
 
     When I click on the justify right editor button
-    Then the contents of the editable region should be "<div>first line</div><br><div align='right'>this is <span>justifiable</span><b>content</b></div> "
+    Then the contents of the editable region should be "<div>first line</div><br><div align='right'>this is <span>justifiable</span><b>content</b></div>"
 
     When I click on the full justification editor button
-    Then the contents of the editable region should be "<div>first line</div><br><div align='justify'>this is <span>justifiable</span><b>content</b></div> "
+    Then the contents of the editable region should be "<div>first line</div><br><div align='justify'>this is <span>justifiable</span><b>content</b></div>"
 
 
-#  Scenario: A user can make an unordered list
+ Scenario: A user can make an unordered list
     Given the content of the editable region is simple content
     And I make a selection
 
@@ -112,7 +112,7 @@ Feature:
 
     # todo: we should test enter and tab, and shift+tab in advanced editing
 
-#  Scenario: A user can make an ordered list
+ Scenario: A user can make an ordered list
     Given the content of the editable region is simple content
     And I make a selection
 
@@ -122,25 +122,25 @@ Feature:
     # todo: we should test enter and tab, and shift+tab in advanced editing
 
 
-#  Scenario: A user can indent and outdent content
+ Scenario: A user can indent and outdent content
     # firefox: this isn't possible on the first line due to a bug in gecko, so we have special content for it
     Given the content of the editable region has justifiable content
     And I make a selection
 
     When I click on the indent editor button
-    Then the contents of the editable region should be "<div>first line</div><br><blockquote>this is <span>justifiable</span><b>content</b></blockquote> "
+    Then the contents of the editable region should be "<div>first line</div><br><blockquote>this is <span>justifiable</span><b>content</b></blockquote>"
 
     When I click on the indent editor button
-    Then the contents of the editable region should be "<div>first line</div><br><blockquote><blockquote>this is <span>justifiable</span><b>content</b></blockquote></blockquote> "
+    Then the contents of the editable region should be "<div>first line</div><br><blockquote><blockquote>this is <span>justifiable</span><b>content</b></blockquote></blockquote>"
 
     When I click on the outdent editor button
-    Then the contents of the editable region should be "<div>first line</div><br><blockquote>this is <span>justifiable</span><b>content</b></blockquote> "
+    Then the contents of the editable region should be "<div>first line</div><br><blockquote>this is <span>justifiable</span><b>content</b></blockquote>"
 
     When I click on the outdent editor button
-    Then the contents of the editable region should be "<div>first line</div><br>this is <span>justifiable</span><b>content</b> "
+    Then the contents of the editable region should be "<div>first line</div><br>this is <span>justifiable</span><b>content</b>"
 
 
-#  Scenario: A user can insert horizontal rules
+ Scenario: A user can insert horizontal rules
     Given the content of the editable region is simple content
     And I make a selection
 
@@ -151,7 +151,7 @@ Feature:
     Then the contents of the editable region should be "this is&nbsp;<hr size='2' width='100%'><hr size='2' width='100%'> <b>content</b>"
 
 
-#  Scenario: A user can clean/remove formatting on their selection
+ Scenario: A user can clean/remove formatting on their selection
     Given the content of the editable region has wrapped content
     And I make a selection
 
@@ -159,7 +159,7 @@ Feature:
     Then the contents of the editable region should be "this is wrapped content"
 
 
-#  Scenario: A user can wrap content within predefined styles
+ Scenario: A user can wrap content within predefined styles
     Given the content of the editable region is simple content
     And I make a selection
 
@@ -168,7 +168,7 @@ Feature:
     Then the contents of the editable region should be "this is <span class='red'><span>simple</span></span> <b>content</b>"
 
 
-#  Scenario: A user can wrap content in formatted block tags
+ Scenario: A user can wrap content in formatted block tags
     Given the content of the editable region is simple content
     And I make a selection
 
@@ -177,7 +177,7 @@ Feature:
     Then the contents of the editable region should be "<h2>this is <span>simple</span> <b>content</b></h2>"
 
 
-#  Scenario: A user can set the background color of a selection
+ Scenario: A user can set the background color of a selection
     Given the content of the editable region is simple content
     And I make a selection
 
@@ -186,10 +186,11 @@ Feature:
     Then the contents of the editable region should be "this is <span style='background-color:#FF0000'><span>simple</span></span> <b>content</b>"
 
 
-#  Scenario: A user can set the foreground color
+ Scenario: A user can set the foreground color
     Given the content of the editable region is simple content
     And I make a selection
 
     When I click on the foreground color editor palette
     And click on the color red
     Then the contents of the editable region should be "this is <font color='rgb(255, 0, 0)'><span>simple</span></font> <b>content</b>"
+

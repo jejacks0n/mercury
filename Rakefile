@@ -1,16 +1,40 @@
 #!/usr/bin/env rake
-# Add your own tasks in files placed in lib/tasks ending in .rake,
-# for example lib/tasks/capistrano.rake, and they will automatically be available to Rake.
-
 begin
-  require 'bundler/gem_tasks'
+  require 'bundler/setup'
 rescue LoadError
   puts 'You must `gem install bundler` and `bundle install` to run rake tasks'
 end
+begin
+  require 'rdoc/task'
+rescue LoadError
+  require 'rdoc/rdoc'
+  require 'rake/rdoctask'
+  RDoc::Task = Rake::RDocTask
+end
 
-require File.expand_path('../config/application', __FILE__)
+RDoc::Task.new(:rdoc) do |rdoc|
+  rdoc.rdoc_dir = 'rdoc'
+  rdoc.title    = 'Mercury'
+  rdoc.options << '--line-numbers'
+  rdoc.rdoc_files.include('README.rdoc')
+  rdoc.rdoc_files.include('lib/**/*.rb')
+end
 
-Mercury::Application.load_tasks
+APP_RAKEFILE = File.expand_path("../spec/dummy/Rakefile", __FILE__)
+load 'rails/tasks/engine.rake'
+
+
+Bundler::GemHelper.install_tasks
+
+
+require 'cucumber/rake/task'
+require 'evergreen/tasks'
+
+Cucumber::Rake::Task.new(:cucumber) do |t|
+  # t.cucumber_opts = "features --format pretty"
+end
+
+task :default => ['spec:javascripts', :cucumber]
 
 #
 # Mercury build tasks
@@ -204,61 +228,3 @@ unless ARGV.any? {|a| a =~ /^gems/} # Don't load anything when running the gems:
   end
 end
 
-# Always build the gemspec before build
-task :release => :gemspec
-task :build => :gemspec
-
-desc "Generate the .gemspec manifest"
-task :gemspec do
-  # read spec file and split out manifest section
-  #
-  spec = File.read(File.join(File.dirname(__FILE__), 'mercury-rails.gemspec'))
-  head, manifest, tail = spec.split("  # = MANIFEST =\n")
-
-  replace_header(head, :date)
-
-  # determine file list from git ls-files
-  files = `git ls-files`.
-    split("\n").
-    sort.
-    reject { |file| file =~ /^\./ }.
-    reject { |file| file =~ %r{^(annotated_source|config\.ru|log/|pkg/|public/|script/|tmp/|features/|spec/|config/(?!engine\.rb))} }.
-    map { |file| "    #{file}" }.
-    join("\n")
-  
-  test_files = `git ls-files -- {test,spec,features}/*`.
-    split("\n").
-    sort.
-    map { |file| "    #{file}" }.
-    join("\n")
-  
-  executables = `git ls-files -- bin/*`.
-    split("\n").
-    sort.
-    map{ |f| "    #{File.basename(f)}" }.
-    join("\n")
-
-  # piece file back together and write
-  manifest = <<MANIFEST
-  s.files = %w[
-#{files}
-  ]
-  s.test_files = %w[
-#{test_files}
-  ]
-  s.executables = %w[
-#{executables}
-  ]
-MANIFEST
-  spec = [head, manifest, tail].join("  # = MANIFEST =\n")
-  File.open(File.join(File.dirname(__FILE__), 'mercury-rails.gemspec'), 'w') { |io| io.write(spec) }
-  puts "Updated mercury-rails.gemspec"
-end
-
-def replace_header(head, header_name)
-  head.sub!(/(\.#{header_name}\s*= ').*'/) { "#{$1}#{send(header_name)}'"}
-end
-
-def date
-  Date.today.to_s
-end

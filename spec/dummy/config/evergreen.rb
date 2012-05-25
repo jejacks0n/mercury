@@ -1,5 +1,9 @@
 # The following allows us to have a nested directory structure of specs.  With
 # a lot of specs this is needed.
+Evergreen.configure do |config|
+  config.root = Mercury::Engine.root
+end
+
 module Evergreen
   class Suite
     def specs

@@ -16,8 +16,9 @@ Gem::Specification.new do |s|
 
 
   # Runtime Dependencies
-  s.add_runtime_dependency('rails', '>= 3.1.0')
+  s.add_runtime_dependency('rails', '~> 3.2')
   s.add_runtime_dependency('paperclip', '>= 2.5.2')
+  s.add_runtime_dependency('coffee-script-source', '1.2.0')
   s.add_runtime_dependency('coffee-script')
 
 
@@ -27,8 +28,9 @@ Gem::Specification.new do |s|
   s.add_development_dependency('uglifier')
   s.add_development_dependency('jquery-rails')
   s.add_development_dependency('sqlite3')
-  s.add_development_dependency('ruby-debug19')
-  s.add_development_dependency('sprockets-helpers')
+  # These were breaking dev / test env on ruby 1.9.3-p194 with latest bundler and latest rails
+  # s.add_development_dependency('ruby-debug19')
+  # s.add_development_dependency('sprockets-helpers')
 
   s.add_development_dependency('rspec-core', '>= 2.8.0')
   s.add_development_dependency('evergreen', '>= 1.0.0')

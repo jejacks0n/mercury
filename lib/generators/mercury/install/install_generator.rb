@@ -16,7 +16,7 @@ module Mercury
       end
 
       def add_routes
-        route %Q{Mercury::Engine.routes}
+        route %Q{mount Mercury::Engine => '/'}
       end
 
       def copy_models

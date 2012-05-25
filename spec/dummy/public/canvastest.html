@@ -1,0 +1,103 @@
+<html>
+  <head>
+    <script src="/assets/mercury.js" type="text/javascript"></script>
+    <style>
+      #dropper {
+        border: 1px solid #999;
+        padding: 20px;
+      }
+
+    </style>
+  </head>
+
+  <body>
+    <div id="dropper">drop here</div>
+    <canvas id="canvas" width="100" height="100"></canvas>
+    <input id="png" type="button" value="png"/>
+    <input id="jpeg" type="button" value="jpeg"/>
+
+<script>
+// webkit needs the sendAsBinary method.
+if (window.Uint8Array && window.ArrayBuffer && !XMLHttpRequest.prototype.sendAsBinary) {
+  XMLHttpRequest.prototype.sendAsBinary = function(datastr) {
+    var data, index, ui8a, _len;
+    ui8a = new Uint8Array(datastr.length);
+    for (index = 0, _len = datastr.length; index < _len; index++) {
+      data = datastr[index];
+      ui8a[index] = datastr.charCodeAt(index) & 0xff;
+    }
+    return this.send(ui8a.buffer);
+  };
+}
+
+// get the canvas element
+var canvas = $('canvas').get(0);
+var context = canvas.getContext('2d');
+
+var image = new Image();
+image.onload = function() {
+  context.drawImage(image, 0, 15, 130, 110);
+  // draw a cicle
+  context.strokeStyle = '#000000';
+  context.fillStyle = '#0099FF';
+  context.beginPath();
+  context.arc(50, 50, 25, 0, Math.PI * 2, true);
+  context.closePath();
+  context.stroke();
+  context.fill();
+};
+image.src = '/assets/mercury/default-snippet.png';
+
+var dropper = $('#dropper');
+
+dropper.bind('dragenter', function(event) {
+  event.preventDefault();
+  event.originalEvent.dataTransfer.dropEffect = 'copy';
+});
+
+dropper.bind('dragover', function(event) {
+  event.preventDefault();
+  event.originalEvent.dataTransfer.dropEffect = 'copy';
+});
+
+dropper.bind('drop', function(event) {
+  event.preventDefault();
+
+  if (!event.originalEvent.dataTransfer.files.length) return;
+
+  var reader = new FileReader();
+  reader.readAsDataURL(event.originalEvent.dataTransfer.files[0]);
+  reader.onload = function() {
+    var image = new Image();
+    image.src = reader.result;
+    context.drawImage(image, 0, 15, 130, 110);
+  };
+
+});
+
+
+// get the binary contents of the canvas and submit them back to the server using a multipart form
+$('input').click(function() {
+  var xhr = new XMLHttpRequest;
+  xhr.onload = function(event) {
+    try {
+      console.debug(jQuery.parseJSON(event.target.responseText));
+    } catch (e) { alert('Unable to process response') }
+  };
+
+  var type = $(this).val();
+  var binary = atob(document.getElementById('canvas').toDataURL("image/" + type).replace('data:image/' + type + ';base64,', ''));
+  var multipart = new Mercury.uploader.MultiPartPost('image[image]', {name: 'test.' + type, size: 100, type: 'image/' + type}, binary);
+
+  xhr.open('post', Mercury.config.uploading.url, true);
+  xhr.setRequestHeader('Accept', 'application/json, text/javascript, text/html, application/xml, text/xml, */*');
+  xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+  xhr.setRequestHeader('X-CSRF-Token', Mercury.csrfToken);
+  xhr.setRequestHeader('Content-Type', 'multipart/form-data; boundary=' + multipart.boundary);
+  xhr.sendAsBinary(multipart.body);
+});
+
+</script>
+
+  </body>
+</html>

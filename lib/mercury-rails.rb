@@ -1,3 +1,7 @@
 require 'paperclip'
 
-require File.expand_path('../config/engine', File.dirname(__FILE__))
+# module Mercury
+# end
+
+require 'mercury/engine'
+

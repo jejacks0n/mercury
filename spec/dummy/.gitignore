@@ -1,0 +1,20 @@
+# Local config files
+config/database.yml
+config/mongoid.yml
+
+# Local DBs
+db/*.sqlite3
+
+# Logs
+log/*.log
+log/*.pid
+
+# Tempfiles
+tmp/**/*
+tmp/
+coverage
+capybara*
+
+# Assets
+public/system
+public/static

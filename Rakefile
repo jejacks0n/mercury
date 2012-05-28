@@ -46,12 +46,13 @@ namespace :mercury do
   desc "Builds the documentation using docco"
   task :document do
     require 'rocco'
-    output_dir = Rails.root.join('annotated_source').to_s
-    sources = Dir[Rails.root.join('app/assets/javascripts/*.js').to_s]
-    sources += Dir[Rails.root.join('app/assets/javascripts/**/*.coffee').to_s]
+    require 'redcarpet/compat'
+    output_dir = Mercury::Engine.root.join('annotated_source').to_s
+    sources = Dir[Mercury::Engine.root.join('app/assets/javascripts/*.js').to_s]
+    sources += Dir[Mercury::Engine.root.join('app/assets/javascripts/**/*.coffee').to_s]
     sources.each do |filename|
-      rocco = Rocco.new(filename, sources, {:template_file => Rails.root.join('annotated_source.template'), :docblocks => true})
-      dest = File.join(output_dir, filename.sub(Regexp.new("^#{Rails.root.join('app/assets/javascripts')}"), '').sub(Regexp.new("#{File.extname(filename)}$"),".html"))
+      rocco = Rocco.new(filename, sources, {:template_file => Mercury::Engine.root.join('annotated_source.template'), :docblocks => true})
+      dest = File.join(output_dir, filename.sub(Regexp.new("^#{Mercury::Engine.root.join('app/assets/javascripts')}"), '').sub(Regexp.new("#{File.extname(filename)}$"),".html"))
       puts "rocco: #{filename} -> #{dest}"
       FileUtils.mkdir_p File.dirname(dest)
       File.open(dest, 'wb') { |fd| fd.write(rocco.to_html) }
@@ -66,7 +67,7 @@ namespace :mercury do
     desc "Combines all dialog and model views into a js file"
     task :dialogs => :environment do
       input = Mercury::Engine.root.join('app/views')
-      File.open(Mercury::Engine.root.join('public/mercury/javascripts/mercury_dialogs.js'), 'w') do |file|
+      File.open(Mercury::Engine.root.join('distro/javascripts/mercury_dialogs.js'), 'w') do |file|
         file.write "if (!window.Mercury) window.Mercury = {preloadedViews: {}};\n"
         %w[lightviews modals palettes panels selects].each do |path|
           file.write "// -- #{path.upcase} --\n"
@@ -83,7 +84,7 @@ namespace :mercury do
     task :javascripts => :environment do
       config = Rails.application.config
       env    = Rails.application.assets
-      target = Pathname.new(File.join(Rails.public_path, config.assets.prefix))
+      target = Pathname.new(File.join(Mercury::Engine.root.join('distro'), 'build'))
       manifest = {}
 
       ['mercury.js', 'mercury/mercury.js'].each do |path|
@@ -103,30 +104,30 @@ namespace :mercury do
         end
       end
 
-      Dir[Rails.root.join('public/assets/mercury-*.js')].each do |filename|
-        copy_file(filename, Mercury::Engine.root.join('public/mercury/javascripts/mercury.js'))
+      Dir[Mercury::Engine.root.join('distro/build/mercury-*.js')].each do |filename|
+        copy_file(filename, Mercury::Engine.root.join('distro/javascripts/mercury.js'))
         remove(filename)
       end
 
-      Dir[Rails.root.join('public/assets/mercury/mercury-*.js')].each do |filename|
-        copy_file(filename, Mercury::Engine.root.join('public/mercury/javascripts/mercury.min.js'))
+      Dir[Mercury::Engine.root.join('distro/build/mercury/mercury-*.js')].each do |filename|
+        copy_file(filename, Mercury::Engine.root.join('distro/javascripts/mercury.min.js'))
         remove(filename)
         minified = Uglifier.compile(File.read(Mercury::Engine.root.join('app/assets/javascripts/mercury/dependencies/jquery-1.7.js')))
-        minified += Uglifier.compile(File.read(Mercury::Engine.root.join('public/mercury/javascripts/mercury.min.js')))
-        File.open(Mercury::Engine.root.join('public/mercury/javascripts/mercury.min.js'), 'w') do |file|
+        minified += Uglifier.compile(File.read(Mercury::Engine.root.join('distro/javascripts/mercury.min.js')))
+        File.open(Mercury::Engine.root.join('distro/javascripts/mercury.min.js'), 'w') do |file|
           file.write(File.read(Mercury::Engine.root.join('app/assets/javascripts/mercury.js')))
           file.write(minified)
         end
       end
 
-      copy_file(Mercury::Engine.root.join('app/assets/javascripts/mercury_loader.js'), Mercury::Engine.root.join('public/mercury/javascripts/mercury_loader.js'))
+      copy_file(Mercury::Engine.root.join('app/assets/javascripts/mercury_loader.js'), Mercury::Engine.root.join('distro/javascripts/mercury_loader.js'))
     end
 
     desc "Combine stylesheets into mercury.css and mercury.bundle.css (bundling images where possible)"
     task :stylesheets => :environment do
       config = Rails.application.config
       env    = Rails.application.assets
-      target = Pathname.new(File.join(Rails.public_path, config.assets.prefix))
+      target = Pathname.new(File.join(Mercury::Engine.root.join('distro'), 'build'))
       manifest = {}
 
       ['mercury.css'].each do |path|
@@ -146,12 +147,12 @@ namespace :mercury do
         end
       end
 
-      Dir[Rails.root.join('public/assets/mercury-*.css')].each do |filename|
-        copy_file(filename, Mercury::Engine.root.join('public/mercury/stylesheets/mercury.css'))
+      Dir[Mercury::Engine.root.join('distro/build/mercury-*.css')].each do |filename|
+        copy_file(filename, Mercury::Engine.root.join('distro/stylesheets/mercury.css'))
         remove(filename)
       end
 
-      bundled = File.read(Mercury::Engine.root.join('public/mercury/stylesheets/mercury.css'))
+      bundled = File.read(Mercury::Engine.root.join('distro/stylesheets/mercury.css'))
 
       # import image files using: url(data:image/gif;base64,XEQA7)
       bundled.gsub!(/url\(\/assets\/(.*?)\)/ix) do |m|
@@ -170,7 +171,7 @@ namespace :mercury do
       bundled.gsub!(/ \*/, "\n *")
       bundled.gsub!(/ \*\//, " */\n")
 
-      File.open(Mercury::Engine.root.join('public/mercury/stylesheets/mercury.bundle.css'), 'wb') do |file|
+      File.open(Mercury::Engine.root.join('distro/stylesheets/mercury.bundle.css'), 'wb') do |file|
         file.write(bundled)
       end
     end

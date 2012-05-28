@@ -5,6 +5,7 @@ tmp/
 .sass-cache
 public/system
 public/assets
+distro/build
 pkg/
 mercury.ids
 .rvmrc

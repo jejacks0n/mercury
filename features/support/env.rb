@@ -6,6 +6,7 @@
 
 require 'cucumber/rails'
 require 'capybara/firebug'
+require 'aruba/cucumber'
 
 # You can enable firebug in your tests by tagging them @firebug.
 # To change the version of firebug use the FIREBUG_VERSION environment variable.

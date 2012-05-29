@@ -1,12 +1,13 @@
 # -*- encoding: utf-8 -*-
 $:.push File.expand_path("../lib", __FILE__)
+require 'mercury/version'
 
 Gem::Specification.new do |s|
 
   # General Gem Information
   s.name        = 'mercury-rails'
   s.date        = '2011-11-15'
-  s.version     = '0.3.1'
+  s.version     = Mercury::VERSION
   s.authors     = ['Jeremy Jackson']
   s.email       = ['jejacks0n@gmail.com']
   s.homepage    = 'http://github.com/jejacks0n/mercury'
@@ -17,28 +18,23 @@ Gem::Specification.new do |s|
 
   # Runtime Dependencies
   s.add_runtime_dependency('rails', '~> 3.2')
-  s.add_runtime_dependency('paperclip', '>= 2.5.2')
   s.add_runtime_dependency('coffee-script-source', '1.2.0')
   s.add_runtime_dependency('coffee-script')
-
 
   # Development Dependencies
   s.add_development_dependency('sprockets', '~> 2.1')
   s.add_development_dependency('rocco')
   s.add_development_dependency('uglifier')
-  s.add_development_dependency('jquery-rails')
-  s.add_development_dependency('sqlite3')
   s.add_development_dependency('sprockets-rails')
 
-  # These were breaking dev / test env on ruby 1.9.3-p194 with latest bundler and latest rails
-  # s.add_development_dependency('ruby-debug19')
-
+  # Testing dependencies
   s.add_development_dependency('rspec-core', '>= 2.8.0')
   s.add_development_dependency('evergreen', '>= 1.0.0')
   s.add_development_dependency('selenium-webdriver', '>= 2.20.0')
   s.add_development_dependency('cucumber-rails', '>= 1.3.0')
   s.add_development_dependency('capybara')
   s.add_development_dependency('capybara-firebug', '>= 1.1.0')
+  s.add_development_dependency('aruba')
   s.add_development_dependency('database_cleaner')
 
 

@@ -1,7 +1,5 @@
-require 'paperclip'
-
-# module Mercury
-# end
+module Mercury
+end
 
 require 'mercury/engine'
 

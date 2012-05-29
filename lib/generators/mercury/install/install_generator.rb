@@ -12,7 +12,7 @@ module Mercury
                    :desc => 'Full installation will install the layout and css overrides for easier customization.'
 
       def copy_config
-        copy_file 'vendor/assets/javascripts/mercury.js', 'app/assets/javascripts/mercury.js'
+        copy_file 'app/assets/javascripts/mercury.js', 'app/assets/javascripts/mercury.js'
       end
 
       def add_routes

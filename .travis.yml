@@ -2,5 +2,12 @@ rvm:
   - 1.9.2
   - 1.9.3
 before_script:
-  - sh -e /etc/init.d/xvfb start
-  - export DISPLAY=:99.0
+  - 'cp spec/dummy/config/database.travisci.yml spec/dummy/config/database.yml'
+  - 'sh -e /etc/init.d/xvfb start'
+env:
+  - DISPLAY=':99.0'
+script: bundle exec rake --trace
+notifications:
+  email:
+    - gvarela@gmail.com
+

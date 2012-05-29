@@ -113,16 +113,20 @@ This generator puts the mercury base file (configuration) into your project in /
 and includes the base mercury routes.  It can optionally install the layout and a css overrides file, models, as well as
 an authentication helper that allows you to restrict access to editing.  Check the options by using `--help`.
 
+### Images Backend
+
+Mercury has a basic facility for allowing image uploads. There is a generator that can act as a starting point for a back end 
+integration included. You can disable this feature completely in the mercury config file. To install run:
+
+    rails generate mercury:install:images
+
 For Mongoid + MongoDB, you can use the `--orm=mongoid` option on the generator to get the required models added to your
 app.  Make sure to add `gem "mongoid-paperclip", :require => "mongoid_paperclip` to your Gemfile as well.  Thanks to
 [chandresh](https://github.com/chandresh) for this tip.
 
-If you're using ActiveRecord, make sure you get the migrations that you'll need for image uploading (if not you can
-disable the feature in mercury.js if you don't want it).
+If you're using ActiveRecord, make sure to migrate your database 
 
-    rake mercury_engine:install:migrations
     rake db:migrate
-
 
 ## Usage
 

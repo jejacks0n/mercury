@@ -30,7 +30,7 @@ module Mercury
       def copy_layout_and_css_overrides
         if options[:full] || yes?("Install the layout and CSS overrides files? [yN]")
           copy_file 'app/views/layouts/mercury.html.erb', 'app/views/layouts/mercury.html.erb'
-          copy_file 'vendor/assets/stylesheets/mercury_overrides.css', 'app/assets/stylesheets/mercury_overrides.css'
+          copy_file 'app/assets/stylesheets/mercury_overrides.css', 'app/assets/stylesheets/mercury_overrides.css'
         end
       end
 

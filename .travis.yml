@@ -5,8 +5,7 @@ before_script:
   - 'cp spec/dummy/config/database.travisci.yml spec/dummy/config/database.yml'
   - 'sh -e /etc/init.d/xvfb start'
 env:
-  - DISPLAY=':99.0'
-  - CUCUMBER_OPTS='-f progress'
+  - DISPLAY=':99.0' CUCUMBER_OPTS='-f progress'
 script: bundle exec rake --trace
 notifications:
   email:

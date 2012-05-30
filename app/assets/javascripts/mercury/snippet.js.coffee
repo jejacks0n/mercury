@@ -2,12 +2,12 @@ class @Mercury.Snippet
 
   @all: []
 
-  @displayOptionsFor: (name) ->
-    Mercury.modal Mercury.config.snippets.optionsUrl.replace(':name', name), {
+  @displayOptionsFor: (name, options = {}) ->
+    Mercury.modal Mercury.config.snippets.optionsUrl.replace(':name', name), jQuery.extend({
       title: 'Snippet Options'
       handler: 'insertSnippet'
       snippetName: name
-    }
+    }, options)
     Mercury.snippet = null
 
 
@@ -18,7 +18,7 @@ class @Mercury.Snippet
         identity = "snippet_#{i+1}" if snippet.identity == identity
     else
       identity = "snippet_#{@all.length}"
-    
+
     instance = new Mercury.Snippet(name, identity, options)
     @all.push(instance)
     return instance
@@ -39,12 +39,13 @@ class @Mercury.Snippet
   constructor: (@name, @identity, options = {}) ->
     @version = 0
     @data = ''
+    @wrapperTag = 'div'
     @history = new Mercury.HistoryBuffer()
     @setOptions(options)
 
 
   getHTML: (context, callback = null) ->
-    element = jQuery('<div>', {
+    element = jQuery("<#{@wrapperTag}>", {
       class: "mercury-snippet #{@name}-snippet"
       contenteditable: "false"
       'data-snippet': @identity
@@ -86,6 +87,7 @@ class @Mercury.Snippet
   setOptions: (@options) ->
     delete(@options['authenticity_token'])
     delete(@options['utf8'])
+    @wrapperTag = @options.wrapperTag if @options.wrapperTag
     @version += 1
     @history.push(@options)
 

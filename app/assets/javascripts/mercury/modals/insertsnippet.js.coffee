@@ -10,3 +10,4 @@
       snippet = Mercury.Snippet.create(@options.snippetName, serializedForm)
     Mercury.trigger('action', {action: 'insertSnippet', value: snippet})
     @hide()
+

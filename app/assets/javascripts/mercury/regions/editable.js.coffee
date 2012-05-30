@@ -93,9 +93,9 @@ class @Mercury.Regions.Editable extends Mercury.Region
     # read: http://www.quirksmode.org/blog/archives/2009/09/the_html5_drag.html
     @element.on 'possible:drop', =>
       return if @previewing
-      if snippet = @element.find('img[data-snippet]').get(0)
+      if snippetPlaceHolder = @element.find('img[data-snippet]').get(0)
         @focus()
-        Mercury.Snippet.displayOptionsFor(jQuery(snippet).data('snippet'))
+        Mercury.Snippet.displayOptionsFor(jQuery(snippetPlaceHolder).data('snippet'))
         @document.execCommand('undo', false, null)
 
     # custom paste handling: we have to do some hackery to get the pasted content since it's not exposed normally

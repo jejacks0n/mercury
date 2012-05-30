@@ -55,6 +55,14 @@ jQuery.extend @Mercury,
     jQuery(window).on("mercury:#{eventName}", callback)
 
 
+  off: (eventName, callback) ->
+    jQuery(window).off("mercury:#{eventName}", callback)
+
+
+  one: (eventName, callback) ->
+    jQuery(window).one("mercury:#{eventName}", callback)
+
+
   trigger: (eventName, options) ->
     Mercury.log(eventName, options)
     jQuery(window).trigger("mercury:#{eventName}", options)

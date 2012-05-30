@@ -155,6 +155,7 @@ Given /^save results will be cached$/ do
   page.driver.execute_script <<-JAVASCRIPT
     Mercury.PageEditor.prototype.save = function() {
       window.cachedResults = this.serialize();
+      Mercury.changes = false;
     }
   JAVASCRIPT
 end

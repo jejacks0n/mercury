@@ -29,15 +29,19 @@ class @Mercury.PageEditor
     @resize()
 
     @iframe.on 'load', => @initializeFrame()
-    @iframe.get(0).contentWindow.document.location.href = @iframeSrc(null, true)
-
+    @iframe.one 'load', => @bindEvents()
+    @loadIframeSrc(null)
 
   initializeFrame: ->
     try
       return if @iframe.data('loaded')
       @iframe.data('loaded', true)
       Mercury.notify("Opera isn't a fully supported browser, your results may not be optimal.") if jQuery.browser.opera
+
+      # set document reference of iframe
       @document = jQuery(@iframe.get(0).contentWindow.document)
+
+      # inject styles for document to be able to highlight regions and other tools
       stylesToInject = Mercury.config.injectedStyles.replace(/{{regionClass}}/g, Mercury.config.regions.className)
       jQuery("<style mercury-styles=\"true\">").html(stylesToInject).appendTo(@document.find('head'))
 
@@ -48,10 +52,13 @@ class @Mercury.PageEditor
       iframeWindow.Mercury = Mercury
       iframeWindow.History = History if window.History && History.Adapter
 
-      @bindEvents()
+      # (re) initialize the editor against the new document
+      @bindDocumentEvents()
       @resize()
       @initializeRegions()
       @finalizeInterface()
+
+      # trigger ready events
       Mercury.trigger('ready')
       jQuery(iframeWindow).trigger('mercury:ready')
       iframeWindow.Event.fire(iframeWindow, 'mercury:ready') if iframeWindow.Event && iframeWindow.Event.fire
@@ -94,10 +101,24 @@ class @Mercury.PageEditor
     @santizerElement = jQuery('<div>', {id: 'mercury_sanitizer', contenteditable: 'true', style: 'position:fixed;width:100px;height:100px;top:0;left:-100px;opacity:0;overflow:hidden'})
     @santizerElement.appendTo(@options.appendTo ? @document.find('body'))
 
+    @snippetToolbar.release() if @snippetToolbar
     @snippetToolbar = new Mercury.SnippetToolbar(@document)
 
     @hijackLinksAndForms()
     Mercury.trigger('mode', {mode: 'preview'}) unless @options.visible
+
+
+  bindDocumentEvents: ->
+    @document.on 'mousedown', (event) ->
+      Mercury.trigger('hide:dialogs')
+      if Mercury.region
+        Mercury.trigger('unfocus:regions') unless jQuery(event.target).closest(".#{Mercury.config.regions.className}").get(0) == Mercury.region.element.get(0)
+
+    jQuery(@document).bind 'keydown', (event) =>
+      return unless event.ctrlKey || event.metaKey
+      if (event.keyCode == 83) # meta+S
+        Mercury.trigger('action', {action: 'save'})
+        event.preventDefault()
 
 
   bindEvents: ->
@@ -113,19 +134,8 @@ class @Mercury.PageEditor
       options.already_handled = true
       action.call(@, options)
 
-    @document.on 'mousedown', (event) ->
-      Mercury.trigger('hide:dialogs')
-      if Mercury.region
-        Mercury.trigger('unfocus:regions') unless jQuery(event.target).closest(".#{Mercury.config.regions.className}").get(0) == Mercury.region.element.get(0)
-
     jQuery(window).on 'resize', =>
       @resize()
-
-    jQuery(@document).bind 'keydown', (event) =>
-      return unless event.ctrlKey || event.metaKey
-      if (event.keyCode == 83) # meta+S
-        Mercury.trigger('action', {action: 'save'})
-        event.preventDefault()
 
     jQuery(window).bind 'keydown', (event) =>
       return unless event.ctrlKey || event.metaKey
@@ -167,13 +177,23 @@ class @Mercury.PageEditor
 
 
   iframeSrc: (url = null, params = false) ->
+    # remove the /editor segment of the url if it gets passed through
     url = (url ? window.location.href).replace(Mercury.config.editorUrlRegEx ?= /([http|https]:\/\/.[^\/]*)\/editor\/?(.*)/i,  "$1/$2")
     url = url.replace(/[\?|\&]mercury_frame=true/gi, '')
+    url = url.replace(/\&_=i\d+/gi, '')
     if params
-      return "#{url}#{if url.indexOf('?') > -1 then '&' else '?'}mercury_frame=true"
+      # add a param allowing the server to know that the request is coming from mercury
+      # and add a cache busting param so we don't get stale content
+      return "#{url}#{if url.indexOf('?') > -1 then '&' else '?'}mercury_frame=true&_=#{new Date().getTime()}"
     else
       return url
 
+  loadIframeSrc: (url)->
+    # clear any existing events if we are loading a new iframe to replace the existing one
+    @document.off() if @document
+
+    @iframe.data('loaded', false)
+    @iframe.get(0).contentWindow.document.location.href = @iframeSrc(url, true)
 
   hijackLinksAndForms: ->
     for element in jQuery('a, form', @document)
@@ -223,3 +243,4 @@ class @Mercury.PageEditor
     serialized = {}
     serialized[region.name] = region.serialize() for region in @regions
     return serialized
+

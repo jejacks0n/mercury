@@ -4,6 +4,7 @@ describe "Mercury.PageEditor", ->
 
   beforeEach ->
     Mercury.config.regions.className = 'custom-region-class'
+    Date.prototype.getTime = -> 1234
 
   afterEach ->
     @pageEditor = null
@@ -96,6 +97,16 @@ describe "Mercury.PageEditor", ->
       @pageEditor = new Mercury.PageEditor('', {appendTo: $('#test')})
       expect(@resizeSpy.callCount).toEqual(1)
 
+    it "binds to iframe load event", ->
+      initializeFrameSpy = spyOn(Mercury.PageEditor.prototype, 'initializeFrame')
+      bindEventsSpy = spyOn(Mercury.PageEditor.prototype, 'bindEvents')
+
+      @pageEditor = new Mercury.PageEditor('', {appendTo: $('#test')})
+      @pageEditor.iframe.trigger('load')
+
+      expect(initializeFrameSpy.callCount).toEqual(1)
+      expect(bindEventsSpy.callCount).toEqual(1)
+
 
   describe "#initializeFrame", ->
 
@@ -138,11 +149,6 @@ describe "Mercury.PageEditor", ->
       window.History = {Adapter: 'foo'}
       @pageEditor.initializeFrame()
       expect(@pageEditor.iframe.get(0).contentWindow.History).toEqual(window.History)
-
-    it "calls bindEvents", ->
-      @finalizeInterfaceSpy.andCallFake(=>)
-      @pageEditor.initializeFrame()
-      expect(@bindEventsSpy.callCount).toEqual(1)
 
     it "calls resize", ->
       @finalizeInterfaceSpy.andCallFake(=>)
@@ -325,6 +331,7 @@ describe "Mercury.PageEditor", ->
       @pageEditor = new Mercury.PageEditor('', {appendTo: $('#test')})
       @pageEditor.document = $(document)
       @pageEditor.bindEvents()
+      @pageEditor.bindDocumentEvents()
 
     describe "custom event: initialize:frame", ->
 
@@ -537,8 +544,33 @@ describe "Mercury.PageEditor", ->
       Mercury.config.editorUrlRegEx = original
 
     it "adds query params", ->
-      expect(@pageEditor.iframeSrc('http://foo.com/editor/path', true)).toEqual('http://foo.com/path?mercury_frame=true')
-      expect(@pageEditor.iframeSrc('http://foo.com/editor/path?something=true', true)).toEqual('http://foo.com/path?something=true&mercury_frame=true')
+      expect(@pageEditor.iframeSrc('http://foo.com/editor/path', true)).toEqual('http://foo.com/path?mercury_frame=true&_=1234')
+      expect(@pageEditor.iframeSrc('http://foo.com/editor/path?something=true', true)).toEqual('http://foo.com/path?something=true&mercury_frame=true&_=1234')
+
+
+  describe "#loadIframeSrc", ->
+
+    beforeEach ->
+      Mercury.PageEditor.prototype.initializeFrame = ->
+      @pageEditor = new Mercury.PageEditor('', {appendTo: $('#test')})
+
+    it 'unbinds events to @document', ->
+      @pageEditor.document = {off: ->}
+      documentSpy = spyOn(@pageEditor.document, 'off')
+      @pageEditor.loadIframeSrc()
+      expect(documentSpy).toHaveBeenCalled()
+
+    it 'resets the iframe loaded data attribute', ->
+      @pageEditor.iframe.data('loaded', true)
+      @pageEditor.loadIframeSrc()
+      expect(@pageEditor.iframe.data('loaded')).toEqual(false)
+
+    it 'sets the iframe source', ->
+      iframe = {contentWindow: {document: {location: {}}}}
+      @pageEditor.iframe = {data: (->), get: -> iframe}
+      @pageEditor.loadIframeSrc('boo')
+      expect(iframe.contentWindow.document.location.href).toEqual('boo?mercury_frame=true&_=1234')
+
 
 
   describe "#hijackLinksAndForms", ->
@@ -716,13 +748,13 @@ describe "Mercury.PageEditor", ->
         it "alerts and triggers save_failed with the url", ->
           alert_spy = spyOn(window, 'alert').andCallFake(=>)
           trigger_spy = spyOn(Mercury, 'trigger').andCallFake(=>)
-          
+
           @pageEditor.saveUrl = '/foo/bar'
           @pageEditor.save()
 
           expect(alert_spy.callCount).toEqual(1)
           expect(alert_spy.argsForCall[0]).toEqual(['Mercury was unable to save to the url: /foo/bar'])
-          
+
           expect(trigger_spy.callCount).toEqual(1)
           expect(trigger_spy.argsForCall[0][0]).toEqual('save_failed')
           expect(trigger_spy.argsForCall[0][1]).toBeDefined()

@@ -1,6 +1,7 @@
 class @Mercury.SnippetToolbar extends Mercury.Toolbar
 
   constructor: (@document, @options = {}) ->
+    @_boundEvents = []
     super(@options)
 
 
@@ -14,14 +15,17 @@ class @Mercury.SnippetToolbar extends Mercury.Toolbar
 
 
   bindEvents: ->
-    Mercury.on 'show:toolbar', (event, options) =>
+    @bindReleasableEvent Mercury, 'show:toolbar', (event, options) =>
       return unless options.snippet
       options.snippet.mouseout => @hide()
       @show(options.snippet)
 
-    Mercury.on 'hide:toolbar', (event, options) =>
+    @bindReleasableEvent Mercury, 'hide:toolbar', (event, options) =>
       return unless options.type && options.type == 'snippet'
       @hide(options.immediately)
+
+    @bindReleasableEvent jQuery(@document), 'scroll', =>
+      @position() if @visible
 
     @element.mousemove =>
       clearTimeout(@hideTimeout)
@@ -29,8 +33,10 @@ class @Mercury.SnippetToolbar extends Mercury.Toolbar
     @element.mouseout =>
       @hide()
 
-    jQuery(@document).on 'scroll', =>
-      @position() if @visible
+
+  bindReleasableEvent: (target, eventName, handler)->
+    target.on eventName, handler
+    @_boundEvents.push [target, eventName, handler]
 
 
   show: (@snippet) ->
@@ -69,4 +75,10 @@ class @Mercury.SnippetToolbar extends Mercury.Toolbar
         @element.stop().animate {opacity: 0}, 300, 'easeInOutSine', =>
           @element.hide()
         @visible = false
+
+  release: ->
+    @element.off()
+    @element.remove()
+    target.off(eventName, handler) for [target, eventName, handler] in @_boundEvents
+    @_boundEvents = []
 

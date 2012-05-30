@@ -36,6 +36,11 @@ class @Mercury.Snippet
       @all.push(instance)
 
 
+  @clearAll = ->
+    delete @all
+    @all = []
+
+
   constructor: (@name, @identity, options = {}) ->
     @version = 0
     @data = ''

@@ -1,4 +1,4 @@
-@announce
+# @announce
 Feature:
   As a developer
   In order to use mercury

@@ -44,12 +44,19 @@
  * General Layout
  *---------------------------------------------------------------------------*/
 
+/* Disable text sizing in webkit (ipad/iphone etc -- should apply to mercury only) */
+
+html {
+  -webkit-text-size-adjust: none;
+}
+
 html, body {
   -webkit-transition: -webkit-transform 3s;
   margin: 0;
   padding: 0;
   overflow: hidden;
 }
+
 .mercury-iframe {
   position: absolute;
   top: 0;
@@ -162,27 +169,28 @@ html, body {
   margin: 0;
 }
 .mercury-form fieldset.buttons .commit input {
-  padding: 8px 14px 9px !important;
+  -webkit-background-clip: padding;
+  -moz-background-clip: padding;
+  background-clip: padding-box;
+  border-radius: 0.4em;
+  display: block;
   font-family: 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', sans-serif;
-  font-size: 1.3em;
-  background-color: #222;
-  background-repeat: repeat-x;
-  display: inline-block;
-  color: #FFF;
-  text-decoration: none;
-  -moz-border-radius: 5px;
-  -webkit-border-radius: 5px;
-  -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
-  -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
-  text-shadow: 0 -1px 1px rgba(0, 0, 0, 0.25);
-  border: 0;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.25);
-  position: relative;
+  font-size: 1.2em;
+  background: #268bd2;
+  border: 1px solid #16527c;
+  color: #fff;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
   cursor: pointer;
   line-height: normal;
+  padding: 0.4em 0.8em;
 }
 .mercury-form fieldset.buttons .commit input:hover {
-  background-color: #000;
+  color: #fff;
+  background: #2482c5;
+  border: 1px solid #0f3550;
+  -webkit-box-shadow: inset 0 1px 4px rgba(255, 255, 255, 0.7);
+  -moz-box-shadow: inset 0 1px 4px rgba(255, 255, 255, 0.7);
+  box-shadow: inset 0 1px 4px rgba(255, 255, 255, 0.7);
 }
 /*
  * Dialogs
@@ -229,13 +237,13 @@ html, body {
 .mercury-panel {
   position: absolute;
   z-index: 10011;
-  background-color: #111;
+  background-color: #f5f5f5;
   opacity: .9;
   box-shadow: 1px 1px 4px rgba(0,0,0, .5);
   -moz-box-shadow: 1px 1px 4px rgba(0,0,0, .5);
   border-radius: 4px;
   -moz-border-radius: 4px;
-  color: #FFF;
+  color: #333;
   font-family: Helvetica, Tahoma, Arial, sans-serif;
   font-size: 9.5pt;
   max-width: 500px;
@@ -256,14 +264,19 @@ html, body {
   -webkit-user-select: none;
   -moz-user-select: none;
   user-select: none;
-  font-size: 10pt;
+  -moz-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+  -webkit-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
   -moz-border-radius-topleft: 4px;
   -moz-border-radius-topright: 4px;
   border-top-left-radius: 4px;
   border-top-right-radius: 4px;
+  color: #f5f5f5;
+  font-size: 10pt;
+  text-shadow: 1px 1px 2px rgba(0,0,0, .9);
+  border-bottom: 1px solid #222;
   height: 15px;
   cursor: move;
-  text-shadow: 1px 1px 2px rgba(0,0,0, .9);
 }
 .mercury-panel h1 span {
   display: block;
@@ -562,7 +575,7 @@ html, body {
   height: 100%;
   opacity: 0;
   display: none;
-  background: rgba(0,0,0, .65);
+  background: rgba(255,255,255, .8);
 }
 .mercury-modal {
   position: fixed;

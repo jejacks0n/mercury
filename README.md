@@ -355,3 +355,5 @@ Mercury is fully tested using Jasmine (via Evergreen) and Cucumber.  You can clo
 Licensed under the [MIT License](http://creativecommons.org/licenses/MIT/)
 
 Copyright 2011 [Jeremy Jackson](https://github.com/jejacks0n)
+
+Icons from [GLYPHICONS](http://www.glyphicons.com/)

@@ -74,26 +74,31 @@
 .mercury-form li.boolean label {
   width: auto;
 }
-.mercury-form fieldset.buttons {
+.mercury-form fieldset.buttons,
+.mercury-form fieldset.actions {
   clear: both;
   padding: 0;
   background: none;
   border: none;
   text-align: left;
 }
-.mercury-form fieldset.buttons ol {
+.mercury-form fieldset.buttons ol,
+.mercury-form fieldset.actions ol {
   margin: 0 -2px 0 0;
   float: right;
 }
-.mercury-form fieldset.buttons ol li {
+.mercury-form fieldset.buttons ol li,
+.mercury-form fieldset.actions ol li {
   float: left;
   padding-left: 0.5em;
   padding-right: 0;
 }
-.mercury-form fieldset.buttons .commit {
+.mercury-form fieldset.buttons .commit,
+.mercury-form fieldset.actions .action {
   margin: 0;
 }
-.mercury-form fieldset.buttons .commit input {
+.mercury-form fieldset.buttons .commit input,
+.mercury-form fieldset.actions .action input {
   -webkit-background-clip: padding;
   -moz-background-clip: padding;
   background-clip: padding-box;
@@ -109,7 +114,8 @@
   line-height: normal;
   padding: 0.4em 0.8em;
 }
-.mercury-form fieldset.buttons .commit input:hover {
+.mercury-form fieldset.buttons .commit input:hover,
+.mercury-form fieldset.actions .action input:hover {
   color: #fff;
   background: #2482c5;
   border: 1px solid #0f3550;

@@ -31,6 +31,7 @@ Translations and contributors:
 - Danish ([martinjlowm](https://github.com/martinjlowm))
 - Swedish ([stefanm](https://github.com/stefanm))
 - Korean ([dorajistyle](https://github.com/dorajistyle))
+- Simplified Chinese ([董劭田 DONG Shaotian](https://github.com/richarddong))
 
 ## Awesomeness
 
@@ -83,6 +84,7 @@ functionality, etc.) so here's a list of some other editors that you might want 
 - [TinyMCE](http://tinymce.moxiecode.com/)
 - [CKEditor](http://ckeditor.com/)
 - [NicEdit](http://nicedit.com/)
+- [Raptor Editor](http://www.raptor-editor.com/) -- one of the developers is rude, but it looks like a promising start
 
 
 ## Features

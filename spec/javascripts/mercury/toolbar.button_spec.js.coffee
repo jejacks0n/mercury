@@ -87,6 +87,22 @@ describe "Mercury.Toolbar.Button", ->
       jasmine.simulate.click(@button.get(0))
       expect(@button.hasClass('pressed')).toEqual(false)
 
+    it "builds a panel button with a custom panel object", ->
+      namespace = {}
+      namespace.customPanel = ->
+      namespace.customPanel::toggle = ->
+        'toggled'
+      handler = (name)->
+        new namespace.customPanel()
+
+      constructorSpy = spyOn(namespace, 'customPanel').andCallThrough()
+      panelSpy = spyOn(Mercury, 'Panel')
+
+      @button = new Mercury.Toolbar.Button('customFoo', 'title', 'summary', {panel: handler}, {appendDialogsTo: $('#test')})
+      expect(constructorSpy).toHaveBeenCalled()
+      expect(panelSpy).wasNotCalled()
+
+
     it "builds palette buttons", ->
       @button = new Mercury.Toolbar.Button('foo', 'title', 'summary', {palette: '/blank.html'}, {appendDialogsTo: $('#test')})
       expect($('#test .mercury-palette').length).toEqual(1)
@@ -267,6 +283,20 @@ describe "Mercury.Toolbar.Button", ->
 
         jasmine.simulate.click(@button.get(0))
         expect(spy.callCount).toEqual(2)
+
+    it "shows and hides the custom panel", ->
+      namespace = {}
+      namespace.customPanel = ->
+      namespace.customPanel::toggle = ->
+        'toggled'
+      handler = (name)->
+        new namespace.customPanel()
+
+      toggleSpy = spyOn(namespace.customPanel.prototype, 'toggle')
+      @button = new Mercury.Toolbar.Button('foo', 'title', 'summary', {panel: handler}, {appendDialogsTo: $('#test')})
+
+      jasmine.simulate.click(@button.get(0))
+      expect(toggleSpy).toHaveBeenCalled()
 
 
 describe "Mercury.Toolbar.Button.contexts", ->

@@ -4,28 +4,10 @@ begin
 rescue LoadError
   puts 'You must `gem install bundler` and `bundle install` to run rake tasks'
 end
-begin
-  require 'rdoc/task'
-rescue LoadError
-  require 'rdoc/rdoc'
-  require 'rake/rdoctask'
-  RDoc::Task = Rake::RDocTask
-end
-
-RDoc::Task.new(:rdoc) do |rdoc|
-  rdoc.rdoc_dir = 'rdoc'
-  rdoc.title    = 'Mercury'
-  rdoc.options << '--line-numbers'
-  rdoc.rdoc_files.include('README.rdoc')
-  rdoc.rdoc_files.include('lib/**/*.rb')
-end
 
 APP_RAKEFILE = File.expand_path("../spec/dummy/Rakefile", __FILE__)
 load 'rails/tasks/engine.rake'
-
-
 Bundler::GemHelper.install_tasks
-
 
 require 'cucumber/rake/task'
 require 'evergreen/tasks'
@@ -42,22 +24,6 @@ task :default => ['spec:javascripts', :cucumber]
 namespace :mercury do
   require 'uglifier'
   require 'sprockets-rails'
-
-  desc "Builds the documentation using docco"
-  task :document do
-    require 'rocco'
-    require 'redcarpet/compat'
-    output_dir = Mercury::Engine.root.join('annotated_source').to_s
-    sources = Dir[Mercury::Engine.root.join('app/assets/javascripts/*.js').to_s]
-    sources += Dir[Mercury::Engine.root.join('app/assets/javascripts/**/*.coffee').to_s]
-    sources.each do |filename|
-      rocco = Rocco.new(filename, sources, {:template_file => Mercury::Engine.root.join('annotated_source.template'), :docblocks => true})
-      dest = File.join(output_dir, filename.sub(Regexp.new("^#{Mercury::Engine.root.join('app/assets/javascripts')}"), '').sub(Regexp.new("#{File.extname(filename)}$"),".html"))
-      puts "rocco: #{filename} -> #{dest}"
-      FileUtils.mkdir_p File.dirname(dest)
-      File.open(dest, 'wb') { |fd| fd.write(rocco.to_html) }
-    end
-  end
 
   desc "Builds Mercury into the distribution ready package"
   task :build => ['build:dialogs', 'build:javascripts', 'build:stylesheets']

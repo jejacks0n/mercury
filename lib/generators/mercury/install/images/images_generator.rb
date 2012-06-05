@@ -6,6 +6,8 @@ module Mercury
         include Rails::Generators::Migration
         source_root File.expand_path("../templates", __FILE__)
 
+        desc "Installs image processing migrations and model."
+
         class_option :orm, :default => 'active_record', :banner => 'mongoid',
                      :desc => 'ORM for required models -- active_record, or mongoid'
 

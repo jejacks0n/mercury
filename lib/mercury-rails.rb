@@ -1,5 +1,2 @@
-module Mercury
-end
-
-require 'mercury/engine'
+require 'mercury/rails'
 

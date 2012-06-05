@@ -16,17 +16,10 @@ module Mercury
         route %Q{mount Mercury::Engine => '/'}
       end
 
-
       def copy_layout_and_css_overrides
         if options[:full] || yes?("Install the layout and CSS overrides files? [yN]")
           copy_file 'app/views/layouts/mercury.html.erb', 'app/views/layouts/mercury.html.erb'
           copy_file 'app/assets/stylesheets/mercury_overrides.css', 'app/assets/stylesheets/mercury_overrides.css'
-        end
-      end
-
-      def copy_authentication_overrides
-        if options[:full] || yes?("Install the authentication file so you can restrict access to editing? [yN]")
-          copy_file 'lib/mercury/authentication.rb'
         end
       end
 

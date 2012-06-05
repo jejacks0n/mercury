@@ -1,7 +1,7 @@
-require "rails"
+require 'rails'
 
 module Mercury
-  class Engine < Rails::Engine
+  class Engine < ::Rails::Engine
 
     # Additional application configuration to include precompiled assets.
     initializer :assets, :group => :all do |app|

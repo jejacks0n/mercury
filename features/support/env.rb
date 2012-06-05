@@ -4,6 +4,7 @@
 # instead of editing this one. Cucumber will automatically load all features/**/*.rb
 # files.
 
+ENV["RAILS_ROOT"] = File.expand_path('../../../spec/dummy', __FILE__)
 require 'cucumber/rails'
 # require 'capybara/firebug'
 require 'aruba/cucumber'

@@ -1,10 +1,7 @@
 class @Mercury.Region
-  type = 'region'
 
   constructor: (@element, @window, @options = {}) ->
-    @type = 'region' unless @type
-    Mercury.log("building #{@type}", @element, @options)
-
+    Mercury.log("building #{@type()}", @element, @options)
     @document = @window.document
     @name = @element.attr(Mercury.config.regions.identifier)
     @history = new Mercury.HistoryBuffer()
@@ -12,6 +9,9 @@ class @Mercury.Region
     @bindEvents()
     @pushHistory()
     @element.data('region', @)
+
+
+  type: -> 'unknown'
 
 
   build: ->
@@ -33,7 +33,7 @@ class @Mercury.Region
 
     @element.on 'mousemove', (event) =>
       return if @previewing || Mercury.region != @
-      snippet = jQuery(event.target).closest('.mercury-snippet')
+      snippet = jQuery(event.target).closest('[data-snippet]')
       if snippet.length
         @snippet = snippet
         Mercury.trigger('show:toolbar', {type: 'snippet', snippet: @snippet})
@@ -52,7 +52,7 @@ class @Mercury.Region
       container.html(@element.html().replace(/^\s+|\s+$/g, ''))
 
       # replace snippet contents to be an identifier
-      if filterSnippets then for snippet in container.find('.mercury-snippet')
+      if filterSnippets then for snippet in container.find('[data-snippet]')
         snippet = jQuery(snippet)
         snippet.attr({contenteditable: null, 'data-version': null})
         snippet.html("[#{snippet.data('snippet')}]")
@@ -63,7 +63,7 @@ class @Mercury.Region
   togglePreview: ->
     if @previewing
       @previewing = false
-      @element.attr(Mercury.config.regions.attribute, @type)
+      @element.attr(Mercury.config.regions.attribute, @type())
       @focus() if Mercury.region == @
     else
       @previewing = true
@@ -100,7 +100,7 @@ class @Mercury.Region
 
   serialize: ->
     return {
-      type: @type
+      type: @type()
       data: @dataAttributes()
       value: @content(null, true)
       snippets: @snippets()

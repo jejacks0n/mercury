@@ -22,7 +22,7 @@ describe "Mercury.Regions.Image", ->
 
      it "sets it's type", ->
        @region = new Mercury.Regions.Image(@regionElement, window)
-       expect(@region.type).toEqual('image')
+       expect(@region.type()).toEqual('image')
 
      it "calls build", ->
        @region = new Mercury.Regions.Image(@regionElement, window)

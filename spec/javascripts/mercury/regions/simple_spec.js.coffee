@@ -22,7 +22,7 @@ describe "Mercury.Regions.Simple", ->
 
      it "sets it's type", ->
        @region = new Mercury.Regions.Simple(@regionElement, window)
-       expect(@region.type).toEqual('simple')
+       expect(@region.type()).toEqual('simple')
 
      it "calls build", ->
        @region = new Mercury.Regions.Simple(@regionElement, window)

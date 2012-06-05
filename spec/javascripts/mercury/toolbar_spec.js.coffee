@@ -133,18 +133,18 @@ describe "Mercury.Toolbar", ->
 
       it "enables toolbars based on the region type", ->
         $('.mercury-editable-toolbar').addClass('disabled')
-        Mercury.trigger('region:focused', {region: {type: 'editable'}})
+        Mercury.trigger('region:focused', {region: {type: -> 'editable'}})
         expect($('.mercury.editable-toolbar').hasClass('disabled')).toEqual(false)
 
         $('.mercury-editable-toolbar').addClass('disabled')
-        Mercury.trigger('region:focused', {region: {type: 'markupable'}})
+        Mercury.trigger('region:focused', {region: {type: -> 'markupable'}})
         expect($('.mercury.editable-toolbar').hasClass('disabled')).toEqual(false)
 
     describe "custom event: region:blurred", ->
 
       it "disables toolbars for the region type", ->
         $('.mercury-editable-toolbar').removeClass('disabled')
-        Mercury.trigger('region:blurred', {region: {type: 'editable'}})
+        Mercury.trigger('region:blurred', {region: {type: -> 'editable'}})
         expect($('.mercury-editable-toolbar').hasClass('disabled')).toEqual(true)
 
     describe "click", ->

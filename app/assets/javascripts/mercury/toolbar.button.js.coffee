@@ -72,8 +72,8 @@ class @Mercury.Toolbar.Button
         @element.removeClass('active')
 
     Mercury.on 'region:focused', (event, options) =>
-      if @handled.regions && options.region && options.region.type
-        if @handled.regions.indexOf(options.region.type) > -1
+      if @handled.regions && options.region && options.region.type()
+        if @handled.regions.indexOf(options.region.type()) > -1
           @element.removeClass('disabled')
         else
           @element.addClass('disabled')

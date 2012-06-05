@@ -32,6 +32,9 @@ module Mercury
 
         def add_gemfile_dependencies
           prepend_to_file "Gemfile", %Q{gem 'paperclip'}
+          if options[:orm] == 'mongoid'
+            prepend_to_file "Gemfile", %Q{gem 'mongoid-paperclip', :require => 'mongoid_paperclip'}
+          end
         end
 
         # Implement the required interface for Rails::Generators::Migration.

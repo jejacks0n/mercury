@@ -6,7 +6,7 @@ describe "Mercury.Toolbar.Button", ->
     Mercury.displayRect = {0, 0, 500, 200}
     Mercury.Toolbar.Button.contexts.foo = -> true
     @region = {
-      type: 'editable'
+      type: -> 'editable'
       element: $('<div class="mercury-region">')
       currentElement: -> $('<div>')
     }

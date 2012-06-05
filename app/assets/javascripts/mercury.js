@@ -455,8 +455,8 @@ window.Mercury = {
       '[data-mercury] table { border: 1px dotted red; min-width: 6px; }' +
       '[data-mercury] th    { border: 1px dotted red; min-width: 6px; }' +
       '[data-mercury] td    { border: 1px dotted red; min-width: 6px; }' +
-      '.mercury-textarea    { border: 0; box-sizing: border-box; -moz-box-sizing: border-box; -webkit-box-sizing: border-box; resize: none; }' +
-      '.mercury-textarea:focus { outline: none; }'
+      '[data-mercury] .mercury-textarea       { border: 0; box-sizing: border-box; -moz-box-sizing: border-box; -webkit-box-sizing: border-box; resize: none; }' +
+      '[data-mercury] .mercury-textarea:focus { outline: none; }'
   },
 
   // ## Silent Mode

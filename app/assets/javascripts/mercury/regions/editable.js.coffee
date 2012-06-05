@@ -2,11 +2,10 @@ class @Mercury.Regions.Editable extends Mercury.Region
   # No IE support yet because it doesn't follow the W3C standards for HTML5 contentEditable (aka designMode).
   @supported: document.designMode && !jQuery.browser.konqueror && !jQuery.browser.msie
   @supportedText: "Chrome 10+, Firefox 4+, Safari 5+"
-
   type = 'editable'
+  type: -> type
 
   constructor: (@element, @window, @options = {}) ->
-    @type = 'editable'
     super
 
 
@@ -26,7 +25,7 @@ class @Mercury.Regions.Editable extends Mercury.Region
     @element.get(0).contentEditable = true
 
     # make all snippets not editable, and set their versions to 1
-    for element in @element.find('.mercury-snippet')
+    for element in @element.find('[data-snippet]')
       element.contentEditable = false
       jQuery(element).attr('data-version', '1')
 
@@ -509,7 +508,7 @@ class Mercury.Regions.Editable.Selection
     range = @context.createRange()
 
     if @range
-      if @commonAncestor(true).closest('.mercury-snippet').length
+      if @commonAncestor(true).closest('[data-snippet]').length
         lastChild = @context.createTextNode("\x00")
         element.appendChild(lastChild)
     else

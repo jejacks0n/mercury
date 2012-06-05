@@ -1,16 +1,10 @@
-# todo:
-# context for the toolbar buttons and groups needs to change so we can do the following:
-# how to handle context for buttons?  if the cursor is within a bold area (**bo|ld**), or selecting it -- it would be
-# nice if we could activate the bold button for instance.
-
 class @Mercury.Regions.Markupable extends Mercury.Region
   @supported: document.getElementById
   @supportedText: "IE 7+, Chrome 10+, Firefox 4+, Safari 5+, Opera 8+"
-
   type = 'markupable'
+  type: -> type
 
   constructor: (@element, @window, @options = {}) ->
-    @type = 'markupable'
     super
     @converter = new Showdown.converter()
 
@@ -18,13 +12,18 @@ class @Mercury.Regions.Markupable extends Mercury.Region
   build: ->
     width = '100%'
     height = @element.height()
-
     value = @element.html().replace(/^\s+|\s+$/g, '').replace('&gt;', '>')
-    @element.removeClass(Mercury.config.regions.className)
-    @textarea = jQuery('<textarea>', @document).val(value)
-    @textarea.attr('class', @element.attr('class')).addClass('mercury-textarea')
-    @textarea.css({border: 0, background: 'transparent', display: 'block', 'overflow-y': 'hidden', width: width, height: height, fontFamily: '"Courier New", Courier, monospace'})
-    @element.addClass(Mercury.config.regions.className)
+
+    @textarea = jQuery('<textarea>', @document).val(value).addClass('mercury-textarea')
+    @textarea.css
+      border: 0
+      background: 'transparent'
+      display: 'block'
+      'overflow-y': 'hidden'
+      width: width
+      height: height
+      fontFamily: '"Courier New", Courier, monospace'
+
     @element.empty().append(@textarea)
 
     @previewElement = jQuery('<div>', @document)
@@ -164,13 +163,13 @@ class @Mercury.Regions.Markupable extends Mercury.Region
   togglePreview: ->
     if @previewing
       @previewing = false
-      @container.addClass(Mercury.config.regions.className).removeClass("#{Mercury.config.regions.className}-preview")
+#      @container.addClass(Mercury.config.regions.className).removeClass("#{Mercury.config.regions.className}-preview")
       @previewElement.hide()
       @element.show()
       @focus() if Mercury.region == @
     else
       @previewing = true
-      @container.addClass("#{Mercury.config.regions.className}-preview").removeClass(Mercury.config.regions.className)
+#      @container.addClass("#{Mercury.config.regions.className}-preview").removeClass(Mercury.config.regions.className)
       value = @converter.makeHtml(@element.val())
       @previewElement.html(value)
       @previewElement.show()

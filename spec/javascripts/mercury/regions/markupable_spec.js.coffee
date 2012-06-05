@@ -23,7 +23,7 @@ describe "Mercury.Regions.Markupable", ->
 
      it "sets it's type", ->
        @region = new Mercury.Regions.Markupable(@regionElement, window)
-       expect(@region.type).toEqual('markupable')
+       expect(@region.type()).toEqual('markupable')
 
      it "creates a markdown converter using Showdown", ->
        spy = spyOn(Showdown, 'converter').andCallFake(=>)

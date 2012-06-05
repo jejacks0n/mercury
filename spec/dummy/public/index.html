@@ -2,27 +2,25 @@
   <head>
     <!-- add prototype and styles to ensure that libraries don't collide and css doesn't conflict -->
     <title>Mercury Editor Regression Testing</title>
-    <script src="/prototype.js" type="text/javascript"></script>
-    <style type="text/css">
-      body { border: 1px dotted #000; padding: 10px; }
-      input { padding: 20px !important }
-      .mercury-toolbar-container { display: none !important }
-    </style>
-
     <meta name="viewport" content="width=device-width, maximum-scale=1.0, initial-scale=1.0">
+    <link href="/assets/application.css" media="all" rel="stylesheet" type="text/css" />
+
+    <!-- include prototype so we know we can use any other javascript framework -->
+    <script src="/assets/prototype.js" type="text/javascript"></script>
 
     <!-- include the loader -->
+    <script src="/assets/prototype.js" type="text/javascript"></script>
     <script src="/assets/mercury/support/history.js" type="text/javascript"></script>
     <script src="/assets/mercury_loader.js" type="text/javascript"></script>
 
-    <!-- preload snippets -->
+    <!-- custom implementation examples -->
     <script type="text/javascript">
-      // it's worth mentioning that mercury is not loaded in the first request, but should be loaded in the second.
       History.Adapter.bind(window, 'statechange', function() {
         var state = History.getState();
         console.debug(state.data, state.title, state.url);
       });
 
+      // preload snippets
       Event.observe(window, "mercury:ready", function() {
         Mercury.saveURL = '/contents';
         Mercury.Snippet.load({
@@ -45,112 +43,29 @@
 
       var newRegionIndex = 1;
       var newRegionType = 0;
-      var regionTypes = ['editable', 'markupable', 'snippetable'];
+      var regionTypes = ['editable', 'simple', 'snippetable', 'markupable'];
       function addRegion() {
         if (newRegionType >= regionTypes.length) newRegionType = 0;
         var container = new Element('div', {style: 'position:relative;margin-bottom:20px;'});
-        container.update('<div class="remove" onclick="this.up().remove()">&times;</div><div class="mercury-region" id="new_' + regionTypes[newRegionType] + '_' + newRegionIndex + '" data-type="' + regionTypes[newRegionType] + '">new <b>' + regionTypes[newRegionType] + '</b> region ' + newRegionIndex + '</div>');
-        $('content').insertBefore(container, $('dynamic_regions'));
-        Mercury.trigger('reinitialize');
+        container.update('<div class="remove" onclick="this.up().remove()">&times;</div><div data-mercury="' + regionTypes[newRegionType] + '" id="new_' + regionTypes[newRegionType] + '_' + newRegionIndex + '">new <b>' + regionTypes[newRegionType] + '</b> region ' + newRegionIndex + '</div>');
+        $('dynamic_regions').insert(container, {position: 'top'});
         newRegionIndex += 1;
         newRegionType += 1;
+        Mercury.trigger('reinitialize');
       }
     </script>
-
-    <!-- styles for the content layout -->
-    <style type="text/css">
-      body, td {
-        font: normal normal normal 100%/normal 'Helvetica Neue', Helvetica, Arial, sans-serif;
-      }
-      h1 {
-        color: #09F;
-        margin: 20px 0 0 0;
-        font-weight: 200;
-      }
-      h2 {
-        font-weight: 200;
-        margin: 15px 0 0 0;
-        border-bottom: 1px solid #CCC;
-      }
-      #forms form {
-        display: inline;
-      }
-      #content {
-        min-width: 500px;
-        width: 70%;
-        margin: 20px auto;
-      }
-      #controls {
-        position: absolute;
-        top: 20px;
-        left: 20px;
-        padding: 10px;
-        margin: 0;
-        border: 1px solid #999;
-        background: rgba(255, 255, 255, 0.8);
-        border-radius: 3px;
-        -moz-border-radius: 3px;
-        -webkit-border-radius: 3px;
-        list-style-type: none;
-      }
-      #controls div {
-        color: #333;
-        text-transform: lowercase;
-        text-decoration: none;
-        cursor: pointer;
-      }
-      .mercury-snippet {
-        background: rgba(0, 0, 0, 0.5);
-        color: #FFF;
-        width: 300px;
-        height: 100px;
-        margin: 1px 0;
-        border-radius: 3px;
-        -moz-border-radius: 3px;
-        -webkit-border-radius: 3px;
-      }
-      #snippetable1 {
-        float: left;
-        width: 100%;
-        margin-bottom: 20px;
-      }
-      #snippetable1 .mercury-snippet {
-        float: left;
-        width: 33%;
-        border: 1px solid #000;
-      }
-      div.remove {
-        position: absolute;
-        right: 0;
-        top: -10px;
-        border: 1px solid red;
-        border-radius: 50px;
-        -moz-border-radius: 50px;
-        -webkit-border-radius: 50px;
-        background: #600;
-        color: #FFF;
-        width: 20px;
-        height: 20px;
-        line-height: 18px;
-        text-align: center;
-        cursor: pointer;
-      }
-    </style>
   </head>
   <body>
 
-  <div id="content">
-
     <ul id="controls">
-      <li><div onclick="alert(Mercury.version)">Mercury Version</div></li>
-      <li><div onclick="Mercury.trigger('toggle:interface')">Toggle Interface</div></li>
-      <li><div onclick="addRegion()">Add & Reinitialize Regions</div></li>
-      <li><div onclick="var num = 1; History.pushState({state: num}, 'Mercury Editor -- With history.pushState!', '?pushstate=' + num);">history.pushState</div></li>
-      <li><div onclick="History.go(-1);">History.go(-1)</div></li>
-      <li><div onclick="History.back();">History.back()</div></li>
-      <li><div onclick="History.forward();">History.forward()</div></li>
+      <li><a href="javascript:Mercury.trigger('toggle:interface')">Toggle Interface</a></li>
+      <li><a href="javascript:var num = 1; History.pushState({state: num}, 'Mercury Editor -- With history.pushState!', '?pushstate=' + num);">history.pushState</a></li>
+      <li><a href="javascript:History.go(-1);">History.go(-1)</a></li>
+      <li><a href="javascript:History.back();">History.back()</a></li>
+      <li><a href="javascript:History.forward();">History.forward()</a></li>
     </ul>
 
+    <!-- begin forms -->
     <h1>Forms (with various methods and targets)</h1>
     <div id="forms">
       <form id="form1" action="/mercury/test_page" method="post" target="_top">
@@ -172,7 +87,9 @@
         <input type="submit" name="commit" value="get foo">
       </form>
     </div>
+    <!-- end forms -->
 
+    <!-- begin links -->
     <h1>Links (With various targets)</h1>
     <div id="links">
       <a id="anchor1" href="/mercury/test_page" target="_top">_top</a>
@@ -182,12 +99,17 @@
       <a id="anchor5" href="/mercury/test_page" class="lightview" target="_self">_self .lightview</a>
       <a id="anchor6" href="/mercury/test_page" target="foo">foo</a>
     </div>
+    <!-- end links -->
 
-    <h1>Dynamic Regions</h1>
-    <div id="dynamic_regions"></div>
+    <!-- begin dynamic regions -->
+    <h1>Dynamic Regions (<a href="javascript:addRegion()">Add a Region</a>)</h1>
+    <div id="dynamic_regions">
+    </div>
+    <!-- end dynamic -->
 
-    <h1>Editable region</h1>
-    <div id="editable1" class="mercury-region" data-type="editable">
+    <!-- begin full region 1 -->
+    <h1>Full region</h1>
+    <div id="full_1" data-mercury="editable">
       If the first line of content isn't wrapped in an element you can't set justification (mozilla only bug).
 
       <h2>text with a meta tag (that will be removed)</h2>
@@ -202,85 +124,30 @@
       <h2>table with header and definition cells</h2>
       <table border="1">
         <tbody>
-          <tr>
-            <th>R1C1</th>
-            <th colspan="5">R1C2</th>
-          </tr>
-          <tr>
-            <th colspan="2">R2C1</th>
-            <th rowspan="2">R2C2</th>
-            <th>R2C3</th>
-            <th rowspan="5">R2C4</th>
-            <th>R2C5</th>
-          </tr>
-          <tr>
-            <td colspan="2">R3C1</td>
-            <td>R3C2</td>
-            <td>R3C3</td>
-          </tr>
-          <tr>
-            <td>R4C1</td>
-            <td>R4C2</td>
-            <td rowspan="4">R4C3</td>
-            <td>R4C4</td>
-            <td>R4C5</td>
-          </tr>
-          <tr>
-            <td>R5C1</td>
-            <td>R5C2</td>
-            <td>R5C3</td>
-            <td>R5C4</td>
-          </tr>
-          <tr>
-            <th rowspan="2">R6C1</th>
-            <th rowspan="2">R6C2</th>
-            <th>R6C3</th>
-            <th>R6C4</th>
-          </tr>
-          <tr>
-            <td>R7C1</td>
-            <td>R7C2</td>
-            <td>R7C3</td>
-          </tr>
-          <tr>
-            <td colspan="2">R8C1</td>
-            <td colspan="4">R7C2</td>
-          </tr>
+          <tr><th>R1C1</th><th colspan="5">R1C2</th></tr>
+          <tr><th colspan="2">R2C1</th><th rowspan="2">R2C2</th><th>R2C3</th><th rowspan="5">R2C4</th><th>R2C5</th></tr>
+          <tr><td colspan="2">R3C1</td><td>R3C2</td><td>R3C3</td></tr>
+          <tr><td>R4C1</td><td>R4C2</td><td rowspan="4">R4C3</td><td>R4C4</td><td>R4C5</td></tr>
+          <tr><td>R5C1</td><td>R5C2</td><td>R5C3</td><td>R5C4</td></tr>
+          <tr><th rowspan="2">R6C1</th><th rowspan="2">R6C2</th><th>R6C3</th><th>R6C4</th></tr>
+          <tr><td>R7C1</td><td>R7C2</td><td>R7C3</td></tr>
+          <tr><td colspan="2">R8C1</td><td colspan="4">R7C2</td></tr>
         </tbody>
       </table>
 
       <h2>table without tbody or border</h2>
       <table>
-        <tr>
-          <th>R1C1</th>
-          <th colspan="2">R1C2</th>
-        </tr>
-        <tr>
-          <td rowspan="2">R2C1</td>
-          <td>R2C2</td>
-          <td>R2C3</td>
-        </tr>
-        <tr>
-          <td>R3C1</td>
-          <td>R3C2</td>
-        </tr>
+        <tr><th>R1C1</th><th colspan="2">R1C2</th></tr>
+        <tr><td rowspan="2">R2C1</td><td>R2C2</td><td>R2C3</td></tr>
+        <tr><td>R3C1</td><td>R3C2</td></tr>
       </table>
 
       <h2>fixed width table (column where all colspans > 1, row where all rowspans > 1)</h2>
       <table border="1" width="200">
         <tbody>
-          <tr>
-            <td rowspan="2">R1C1</td>
-            <td colspan="2" rowspan="2">R1C2</td>
-          </tr>
+          <tr><td rowspan="2">R1C1</td><td colspan="2" rowspan="2">R1C2</td></tr>
           <tr></tr>
-          <tr>
-            <td>R3C1</td>
-            <td colspan="2">R3C2</td>
-          </tr>
-          <tr>
-            <td>R4C1</td>
-            <td colspan="2">R4C3</td>
+          <tr><td>R3C1</td><td colspan="2">R3C2</td></tr>
           </tr>
         </tbody>
       </table>
@@ -298,45 +165,65 @@
       <img alt="clippy" src="/assets/mercury/temp-logo.png"><a href="#bookmark1">link for #bookmark1</a>
 
       <h2>snippet that's pre-loaded</h2>
-      <div class="mercury-snippet" data-snippet="snippet_0">snippet0</div>
+      <div data-snippet="snippet_0">snippet0</div>
 
       <h2>bookmark links</h2>
       <a name="bookmark1">Bookmark1</a><br/><a name="bookmark2">Bookmark2</a>
 
       <br/><br/>
       Additional content not wrapped in anything
-
-      <h2>youtube and vimeo iframes with content surrounding it</h2>
-      <!--123<iframe style="width: 560px; height: 349px; " src="http://www.youtube.com/embed/0pXYp72dwl0?wmode=transparent" frameborder="0" allowfullscreen="true"></iframe>123321-->
-      <!--<iframe style="width: 400px; height: 225px; " src="http://player.vimeo.com/video/615344?title=1&amp;byline=1&amp;portrait=0&amp;color=ffffff" frameborder="0"></iframe>123-->
     </div>
+    <!-- end full region 1 -->
 
-    <h1>Snippetable region</h1>
-    <div id="snippetable1" class="mercury-region" data-type="snippetable">
-      <div class="mercury-snippet" data-snippet="snippet_2">snippet2</div>
-      <div class="mercury-snippet" data-snippet="snippet_3">snippet3</div>
-      <div class="mercury-snippet" data-snippet="snippet_4">snippet4</div>
-      <div class="mercury-snippet" data-snippet="snippet_5">snippet5</div>
-      <div class="mercury-snippet" data-snippet="snippet_6">snippet6</div>
-      <div class="mercury-snippet" data-snippet="snippet_7">snippet7</div>
-      <div class="mercury-snippet" data-snippet="snippet_8">snippet8</div>
-      <div class="mercury-snippet" data-snippet="snippet_9">snippet9</div>
+    <!-- begin full region 2 -->
+    <h1>Full region (single snippet and no content)</h1>
+    <div id="full_2" data-mercury="editable">
+      <div data-snippet="snippet_1">snippet1</div>
     </div>
+    <!-- end full region 2 -->
 
-    <h1>Editable region (single snippet and no content)</h1>
-    <div id="editable2" class="mercury-region" data-type="editable">
-      <div class="mercury-snippet" data-snippet="snippet_10">snippet10</div>
+    <!-- begin full region 3 -->
+    <h1>Full region (fixed width/height and overflow)</h1>
+    <div id="full_3" data-mercury="editable" style="width:200px;height:90px;">
+      wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
+      <br/>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/><a href="#offset_test">8</a><br/>9<br/>10<br/>11<br/>12<br/>13<br/>14<br/>15
     </div>
+    <!-- end full region 3 -->
 
-    <h1>Snippetable region (iframe snippet that contains flash)</h1>
-    <div id="snippetable2" class="mercury-region" data-type="snippetable">
-      <div class="mercury-snippet" data-snippet="snippet_11">snippet11</div>
-      <div class="mercury-snippet" data-snippet="snippet_12">snippet12</div>
-      <iframe class="mercury-snippet" data-snippet="snippet_13"  width="560" height="349" src="http://www.youtube.com/embed/0pXYp72dwl0?wmode=transparent" frameborder="0" allowfullscreen="true"></iframe>
+    <!-- begin simple region 1 -->
+    <h1>Simple region (h1 tag)</h1>
+    <h1 id="simple_1" data-mercury="simple">This is a simple editable field</h1>
+    <!-- end simple region 1 -->
+
+    <!-- begin simple region 2 -->
+    <h1>Simple region (h2 tag with fixed width)</h1>
+    <h2 id="simple_2" data-mercury="simple" style="width:200px">This is a simple editable field which is much longer. It should wrap when displaying, and when editing.</h2>
+    <!-- end simple region 2 -->
+
+    <!-- begin snippets region 1 -->
+    <h1>Snippets region</h1>
+    <div id="snippets_1" data-mercury="snippetable">
+      <div class="example-snippet" data-snippet="snippet_2">snippet2</div>
+      <div class="example-snippet" data-snippet="snippet_3">snippet3</div>
+      <div class="example-snippet" data-snippet="snippet_4">snippet4</div>
+      <div class="example-snippet" data-snippet="snippet_5">snippet5</div>
+      <div class="example-snippet" data-snippet="snippet_6">snippet6</div>
     </div>
+    <br clear="both"/>
+    <!-- end snippets region 1 -->
 
-    <h1>Markupable region (with markdown)</h1>
-    <div id="markupable1" class="mercury-region" data-type="markupable">
+    <!-- begin snippets region 2 -->
+    <h1>Snippets region (iframe snippet that contains flash)</h1>
+    <div id="snippets_2" data-mercury="snippetable">
+      <div class="example-snippet" data-snippet="snippet_7">snippet7</div>
+      <div class="example-snippet" data-snippet="snippet_8">snippet8</div>
+      <iframe class="example-snippet" data-snippet="snippet_9" width="560" height="349" src="http://www.youtube.com/embed/0pXYp72dwl0?wmode=transparent" frameborder="0" allowfullscreen="true"></iframe>
+    </div>
+    <!-- end snippets region 2 -->
+
+    <!-- begin markdown region 1 -->
+    <h1>Markdown region</h1>
+    <div id="markdown_1" data-mercury="markupable">
 ## notes ##
 **whitespace** in markupable regions is _important_.
 
@@ -370,23 +257,12 @@
 ## paragraph with bold, italics, etc. ##
 Turkey corned beef ham, chuck ham hock **venison _drumstick_ ** tongue ribeye. Beef tongue pancetta, short ribs meatball headcheese jowl bacon swine t-bone shoulder venison. Hamburger short loin turkey flank short ribs tail. Chicken tri-tip sausage, bresaola sirloin turkey hamburger <sub>headcheese</sub> shank rump. Pork ground round t-bone, ham hock sirloin biltong chicken fatback pork belly pastrami pancetta jowl tail. Cow ribeye pork chop, flank sirloin tail short loin pork loin chicken boudin pastrami. Boudin chuck shankle, spare ribs pancetta <sup>fatback</sup> bresaola.
     </div>
+    <!-- end markdown region 1 -->
 
-    <h1>Editable region (fixed width/height and overflow)</h1>
-    <div id="editable3" class="mercury-region" data-type="editable" style="width:200px;height:90px;">
-      wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
-      <br/>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/><a href="#offset_test">8</a><br/>9<br/>10<br/>11<br/>12<br/>13<br/>14<br/>15
-    </div>
-
-    <h1>Simple region (h1 tag)</h1>
-    <h1 id="simple-field" class="mercury-region" data-type="simple">This is a simple editable field</h1>
-
-    <h1>Simple region (h2 tag with wrapping)</h1>
-    <h2 id="simple-field-wrapping" class="mercury-region" data-type="simple" style="width:200px">This is a simple editable field which is much longer. It should wrap when displaying, and when editing.</h2>
-
+    <!-- begin image region 1 -->
     <h1>Image region</h1>
-    <img id="bunny-image" class="mercury-region" data-type="image" src="/images/bunny.gif" />
-
-  </div>
+    <img id="image_1" data-mercury="image" src="/images/bunny.gif" alt=""/>
+    <!-- end image region 1 -->
 
   </body>
 </html>

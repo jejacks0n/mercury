@@ -27,7 +27,7 @@ describe "Mercury.Regions.Snippetable", ->
 
     it "sets it's type", ->
       @region = new Mercury.Regions.Snippetable(@regionElement, window)
-      expect(@region.type).toEqual('snippetable')
+      expect(@region.type()).toEqual('snippetable')
 
     it "calls build", ->
       @region = new Mercury.Regions.Snippetable(@regionElement, window)
@@ -312,7 +312,7 @@ describe "Mercury.Regions.Snippetable.actions", ->
 
       it "finds the snippet by it's identity and replaces it with the new snippet", ->
         @actions['insertSnippet'].call(@region, {value: Mercury.Snippet.find('snippet_1')})
-        expect($('#snippetable_region2').html()).toContain('class="mercury-snippet example-snippet"')
+        expect($('#snippetable_region2').html()).toContain('class="example-snippet"')
         expect($('#snippetable_region2').html()).toContain('contenteditable="false"')
         expect($('#snippetable_region2').html()).toContain('data-version="1"')
         expect($('#snippetable_region2').html()).toContain('data-snippet="snippet_1"')
@@ -328,7 +328,7 @@ describe "Mercury.Regions.Snippetable.actions", ->
 
       it "appends the new snippet html to the element", ->
         @actions['insertSnippet'].call(@region, {value: Mercury.Snippet.find('snippet_2')})
-        expect($('#snippetable_region2 .mercury-snippet').length).toEqual(2)
+        expect($('#snippetable_region2 [data-snippet]').length).toEqual(2)
 
       it "pushes to the history after it's been rendered", ->
         spyOn(Mercury.Snippet.prototype, 'getHTML').andCallFake((x, callback) => callback() if callback)
@@ -340,7 +340,7 @@ describe "Mercury.Regions.Snippetable.actions", ->
   describe ".editSnippet", ->
 
     beforeEach ->
-      @region.snippet = $('#snippetable_region2 .mercury-snippet')
+      @region.snippet = $('#snippetable_region2 [data-snippet]')
 
     it "finds and displays the options for the given snippet", ->
       spy = spyOn(Mercury.Snippet.prototype, 'displayOptions')

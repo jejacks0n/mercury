@@ -1,11 +1,11 @@
 class @Mercury.Regions.Snippetable extends Mercury.Region
   @supported: document.getElementById
   @supportedText: "IE 7+, Chrome 10+, Firefox 4+, Safari 5+, Opera 8+"
-
   type = 'snippetable'
+  type: -> type
 
   constructor: (@element, @window, @options = {}) ->
-    @type = 'snippetable'
+    Mercury.log("building #{type}", @element, @options)
     super
     @makeSortable()
 
@@ -85,7 +85,7 @@ class @Mercury.Regions.Snippetable extends Mercury.Region
       document: @document,
       scroll: false, #scrolling is buggy
       containment: 'parent',
-      items: '.mercury-snippet',
+      items: '[data-snippet]',
       opacity: 0.4,
       revert: 100,
       tolerance: 'pointer',

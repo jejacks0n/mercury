@@ -1,13 +1,110 @@
-/*
- * This is a manifest file that'll be compiled into application.css, which will include all the files
- * listed below.
- *
- * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
- * or vendor/assets/stylesheets of plugins, if any, can be referenced here using a relative path.
- *
- * You're free to add application-wide styles to this file and they'll appear at the top of the
- * compiled file, but it's generally better to create a new file per style scope.
- *
- *= require_self
- *= require_tree .
-*/
+//
+//= require_self
+//= require_tree .
+
+body {
+  border: 1px dotted #000;
+  padding: 10px;
+}
+body, td {
+  font: normal normal normal 12px/normal 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+
+h1 {
+  color: #09F;
+  margin: 20px 0 0 0;
+  font-weight: 200;
+}
+h2 {
+  font-weight: 200;
+  margin: 15px 0 0 0;
+  border-bottom: 1px solid #CCC;
+}
+
+#controls {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  padding: 10px;
+  margin: 0;
+  border: 1px solid #999;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  list-style-type: none;
+  a {
+    color: #333;
+    text-transform: lowercase;
+    text-decoration: none;
+    cursor: pointer;
+  }
+}
+
+#forms {
+  form {
+    display: inline;
+  }
+}
+
+#links {
+}
+
+#dynamic_regions {
+  .remove {
+    position: absolute;
+    right: 0;
+    top: -10px;
+    border: 1px solid #fff;
+    border-radius: 50px;
+    -moz-border-radius: 50px;
+    -webkit-border-radius: 50px;
+    background: #666;
+    color: #fff;
+    width: 20px;
+    height: 20px;
+    line-height: 20px;
+    text-align: center;
+    cursor: pointer;
+  }
+}
+
+#full_1, #full_2 {
+  [data-snippet] {
+    width: 33%;
+    height: 60px;
+    border: 1px solid #600;
+    background: #F00;
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+  }
+}
+
+#snippets_1 {
+  margin-bottom: 20px;
+  .example-snippet {
+    float: left;
+    width: 33%;
+    height: 60px;
+    border: 1px solid #999;
+    background: #ccc;
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+  }
+}
+
+#snippets_2 {
+  margin-bottom: 20px;
+  .example-snippet {
+    width: 200px;
+    height: 60px;
+    border: 1px solid #999;
+    background: #ccc;
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+  }
+}

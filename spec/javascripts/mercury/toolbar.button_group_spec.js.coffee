@@ -50,7 +50,7 @@ describe "Mercury.Toolbar.ButtonGroup", ->
 
       beforeEach ->
         @region = {
-          type: 'editable'
+          type: -> 'editable'
           element: $('<div class="mercury-region">')
         }
 

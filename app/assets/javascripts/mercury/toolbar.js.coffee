@@ -56,13 +56,13 @@ class @Mercury.Toolbar
       for toolbar in @element.find(".mercury-toolbar")
         toolbar = jQuery(toolbar)
         if regions = toolbar.data('regions')
-          toolbar.removeClass('disabled') if regions.split(',').indexOf(options.region.type) > -1
+          toolbar.removeClass('disabled') if regions.split(',').indexOf(options.region.type()) > -1
 
     Mercury.on 'region:blurred', (event, options) =>
       for toolbar in @element.find(".mercury-toolbar")
         toolbar = jQuery(toolbar)
         if regions = toolbar.data('regions')
-          toolbar.addClass('disabled') if regions.split(',').indexOf(options.region.type) > -1
+          toolbar.addClass('disabled') if regions.split(',').indexOf(options.region.type()) > -1
 
     @element.on 'click', ->
       Mercury.trigger('hide:dialogs')

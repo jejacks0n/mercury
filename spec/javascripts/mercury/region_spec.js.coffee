@@ -127,17 +127,17 @@ describe "Mercury.Region", ->
 
       it "does nothing if in preview mode", ->
         @region.previewing = true
-        jasmine.simulate.mousemove($('#region_with_snippet .mercury-snippet').get(0))
+        jasmine.simulate.mousemove($('#region_with_snippet .example-snippet').get(0))
         expect(@triggerSpy.callCount).toEqual(0)
 
       it "does nothing if it's not the active region", ->
         Mercury.region = {}
-        jasmine.simulate.mousemove($('#region_with_snippet .mercury-snippet').get(0))
+        jasmine.simulate.mousemove($('#region_with_snippet .example-snippet').get(0))
         expect(@triggerSpy.callCount).toEqual(0)
 
       it "shows the snippet toolbar if a snippet was moused over", ->
         Mercury.region = @region
-        jasmine.simulate.mousemove($('#region_with_snippet .mercury-snippet').get(0))
+        jasmine.simulate.mousemove($('#region_with_snippet .example-snippet').get(0))
         expect(@triggerSpy.callCount).toEqual(1)
         expect(@triggerSpy.argsForCall[0][0]).toEqual('show:toolbar')
 
@@ -166,11 +166,11 @@ describe "Mercury.Region", ->
 
       it "returns the html of the element", ->
         content = @region.content()
-        expect(content).toEqual('contents<div class="mercury-snippet" data-snippet="snippet_1" data-version="1">snippet</div>')
+        expect(content).toEqual('contents<div class="example-snippet" data-snippet="snippet_1" data-version="1">snippet</div>')
 
       it "replaces snippet content with an indentifier if asked", ->
         content = @region.content(null, true)
-        expect(content).toEqual('contents<div class="mercury-snippet" data-snippet="snippet_1">[snippet_1]</div>')
+        expect(content).toEqual('contents<div class="example-snippet" data-snippet="snippet_1">[snippet_1]</div>')
 
     describe "setting html", ->
 
@@ -195,9 +195,8 @@ describe "Mercury.Region", ->
       it "sets previewing to true", ->
         expect(@region.previewing).toEqual(true)
 
-      it "swaps classes on the element", ->
-        expect(@region.element.hasClass('custom-region-class')).toEqual(false)
-        expect(@region.element.hasClass('custom-region-class-preview')).toEqual(true)
+      it "removes the data attribute", ->
+        expect(@region.element.attr('custom-region-attribute')).toEqual(null)
 
       it "triggers a blur event", ->
         expect(@triggerSpy.callCount).toEqual(1)
@@ -212,9 +211,8 @@ describe "Mercury.Region", ->
       it "sets previewing to false", ->
         expect(@region.previewing).toEqual(false)
 
-      it "swaps classes on the element", ->
-        expect(@region.element.hasClass('custom-region-class-preview')).toEqual(false)
-        expect(@region.element.hasClass('custom-region-class')).toEqual(true)
+      it "adds the correct data attribute back", ->
+        expect(@region.element.attr('custom-region-attribute')).toEqual('unknown')
 
       it "calls focus if it's the active region", ->
         expect(@focusSpy.callCount).toEqual(1)
@@ -280,7 +278,7 @@ describe "Mercury.Region", ->
 
       it "returns an object with it's type, value, and snippets", ->
         serialized = @region.serialize()
-        expect(serialized.type).toEqual('region')
+        expect(serialized.type).toEqual('unknown')
         expect(serialized.value).toEqual('contents')
         expect(serialized.snippets).toEqual({})
         expect(serialized.data).toEqual({})
@@ -292,7 +290,7 @@ describe "Mercury.Region", ->
 
       it "returns an object with it's type, value, data and snippets", ->
         serialized = @region.serialize()
-        expect(serialized.type).toEqual('region')
+        expect(serialized.type).toEqual('unknown')
         expect(serialized.value).toEqual('contents')
         expect(serialized.snippets).toEqual({})
         expect(serialized.data).toEqual({scope: 'scope', version: '1'})

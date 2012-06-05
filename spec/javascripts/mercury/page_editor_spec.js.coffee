@@ -271,7 +271,7 @@ describe "Mercury.PageEditor", ->
 
     it "throws an exception when the data-type isn't known", ->
       expect(=> @pageEditor.buildRegion($('#region4'))).toThrow('Region type is malformed, no data-type provided, or "Unknown" is unknown for the "region4" region.')
-      $('#region4').attr('data-type', 'foo')
+      $('#region4').attr('custom-region-attribute', 'foo')
       expect(=> @pageEditor.buildRegion($('#region4'))).toThrow('Region type is malformed, no data-type provided, or "Foo" is unknown for the "region4" region.')
 
     it "doesn't re-instantiate the region if the element's already initialized", ->

@@ -22,7 +22,7 @@ describe "Mercury.Regions.Editable", ->
 
      it "sets it's type", ->
        @region = new Mercury.Regions.Editable(@regionElement, window)
-       expect(@region.type).toEqual('editable')
+       expect(@region.type()).toEqual('editable')
 
      it "calls build", ->
        @region = new Mercury.Regions.Editable(@regionElement, window)

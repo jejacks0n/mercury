@@ -1,16 +1,11 @@
-# todo:
-# context for the toolbar buttons and groups needs to change so we can do the following:
-# how to handle context for buttons?  if the cursor is within a bold area (**bo|ld**), or selecting it -- it would be
-# nice if we could activate the bold button for instance.
-
 class @Mercury.Regions.Simple extends Mercury.Region
   @supported: document.getElementById
   @supportedText: "IE 7+, Chrome 10+, Firefox 4+, Safari 5+, Opera 8+"
-
   type = 'simple'
+  type: -> type
 
   constructor: (@element, @window, @options = {}) ->
-    @type = 'simple'
+    Mercury.log("building #{type}", @element, @options)
     super
 
 
@@ -23,9 +18,7 @@ class @Mercury.Regions.Simple extends Mercury.Region
       height = @element.height() # 'auto'
 
     value = @element.text()
-    @element.removeClass(Mercury.config.regions.className)
-    @textarea = jQuery('<textarea>', @document).val(value)
-    @textarea.attr('class', @element.attr('class')).addClass('mercury-textarea')
+    @textarea = jQuery('<textarea>', @document).val(value).addClass('mercury-textarea')
     @textarea.css
       border: 0
       background: 'transparent'
@@ -44,7 +37,7 @@ class @Mercury.Regions.Simple extends Mercury.Region
       display: 'inherit'
       lineHeight: 'inherit'
       textAlign: 'inherit'
-    @element.addClass(Mercury.config.regions.className)
+
     @element.empty().append(@textarea)
 
     @container = @element

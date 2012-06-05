@@ -3,7 +3,7 @@ describe "Mercury.Region", ->
   template 'mercury/region.html'
 
   beforeEach ->
-    Mercury.config.regions.className = 'custom-region-class'
+    Mercury.config.regions.attribute = 'custom-region-attribute'
     Mercury.config.regions.dataAttributes = []
 
   afterEach ->

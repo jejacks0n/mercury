@@ -42,8 +42,7 @@ class @Mercury.PageEditor
       @document = jQuery(@iframe.get(0).contentWindow.document)
 
       # inject styles for document to be able to highlight regions and other tools
-      stylesToInject = Mercury.config.injectedStyles.replace(/{{regionClass}}/g, Mercury.config.regions.className)
-      jQuery("<style mercury-styles=\"true\">").html(stylesToInject).appendTo(@document.find('head'))
+      jQuery("<style mercury-styles=\"true\">").html(Mercury.config.injectedStyles).appendTo(@document.find('head'))
 
       # jquery: make jQuery evaluate scripts within the context of the iframe window
       iframeWindow = @iframe.get(0).contentWindow
@@ -71,7 +70,7 @@ class @Mercury.PageEditor
 
   initializeRegions: ->
     @regions = []
-    @buildRegion(jQuery(region)) for region in jQuery(".#{Mercury.config.regions.className}", @document)
+    @buildRegion(jQuery(region)) for region in jQuery("[#{Mercury.config.regions.attribute}]", @document)
     return unless @options.visible
     for region in @regions
       if region.focus
@@ -83,11 +82,7 @@ class @Mercury.PageEditor
     if region.data('region')
       region = region.data('region')
     else
-      type = (
-        region.data('type') ||
-        ( jQuery.type(Mercury.config.regions.determineType) == 'function' && Mercury.config.regions.determineType(region) ) ||
-        'unknown'
-      ).titleize()
+      type = (region.data('type') || Mercury.config.regions.determineType?(region) || 'unknown').titleize()
       throw Mercury.I18n('Region type is malformed, no data-type provided, or "%s" is unknown for the "%s" region.', type, region.attr('id') || 'unknown') if type == 'Unknown' || !Mercury.Regions[type]
       if !Mercury.Regions[type].supported
         Mercury.notify('Mercury.Regions.%s is unsupported in this client. Supported browsers are %s.', type, Mercury.Regions[type].supportedText)
@@ -112,7 +107,7 @@ class @Mercury.PageEditor
     @document.on 'mousedown', (event) ->
       Mercury.trigger('hide:dialogs')
       if Mercury.region
-        Mercury.trigger('unfocus:regions') unless jQuery(event.target).closest(".#{Mercury.config.regions.className}").get(0) == Mercury.region.element.get(0)
+        Mercury.trigger('unfocus:regions') unless jQuery(event.target).closest("[#{Mercury.config.regions.attribute}]").get(0) == Mercury.region.element.get(0)
 
     jQuery(@document).bind 'keydown', (event) =>
       return unless event.ctrlKey || event.metaKey
@@ -202,7 +197,7 @@ class @Mercury.PageEditor
         if jQuery(element).hasClass(classname)
           ignored = true
           continue
-      if !ignored && (element.target == '' || element.target == '_self') && !jQuery(element).closest(".#{Mercury.config.regions.className}").length
+      if !ignored && (element.target == '' || element.target == '_self') && !jQuery(element).closest("[#{Mercury.config.regions.attribute}]").length
         jQuery(element).attr('target', '_parent')
 
 

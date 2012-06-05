@@ -63,11 +63,11 @@ class @Mercury.Region
   togglePreview: ->
     if @previewing
       @previewing = false
-      @element.addClass(Mercury.config.regions.className).removeClass("#{Mercury.config.regions.className}-preview")
+      @element.attr(Mercury.config.regions.attribute, @type)
       @focus() if Mercury.region == @
     else
       @previewing = true
-      @element.addClass("#{Mercury.config.regions.className}-preview").removeClass(Mercury.config.regions.className)
+      @element.removeAttr(Mercury.config.regions.attribute)
       Mercury.trigger('region:blurred', {region: @})
 
 

@@ -3,7 +3,7 @@ describe "Mercury.PageEditor", ->
   template 'mercury/page_editor.html'
 
   beforeEach ->
-    Mercury.config.regions.className = 'custom-region-class'
+    Mercury.config.regions.attribute = 'custom-region-attribute'
     Date.prototype.getTime = -> 1234
 
   afterEach ->

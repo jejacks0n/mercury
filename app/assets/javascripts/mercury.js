@@ -220,28 +220,27 @@ window.Mercury = {
     //
     // You can customize some aspects of how regions are found, identified, and saved.
     //
-    // className: Mercury identifies editable regions by a className.  This classname has to be added in your HTML in
-    // advance, and is the only real code/naming exposed in the implementation of Mercury.  To allow this to be as
-    // configurable as possible, you can set the name of the class.  When switching to preview mode, this configuration
-    // is also used to generate a class to indicate that Mercury is in preview mode by appending it with '-preview' (so
-    // by default it would be mercury-region-preview)
+    // attribute: Mercury identifies editable regions by a data-mercury attribute.  This attribute has to be added in
+    // your HTML in advance, and is the only real code/naming exposed in the implementation of Mercury.  To allow this
+    // to be as configurable as possible, you can set the name of this attribute.  If you change this, you should adjust
+    // the injected styles as well.
     //
     // identifier: This is used as a unique identifier for any given region (and thus should be unique to the page).
     // By default this is the id attribute but can be changed to a data attribute should you want to use something
     // custom instead.
     //
-    // determineType: This function is called after checking the data-type attribute for the correct field type. Use
-    // it if you want to programatically set the type based on inspection of the region.
-    //
     // dataAttributes: The dataAttributes is an array of data attributes that will be serialized and returned to the
     // server upon saving.  These attributes, when applied to a Mercury region element, will be automatically serialized
     // and submitted with the AJAX request sent when a page is saved.  These are expected to be HTML5 data attributes,
     // and 'data-' will automatically be prepended to each item in this directive. (ex. ['scope', 'version'])
+    //
+    // determineType: This function is called after checking the data-type attribute for the correct field type. Use
+    // it if you want to dynamically set the type based on inspection of the region.
     regions: {
-      className: 'mercury-region',
+      attribute: 'data-mercury',
       identifier: 'id',
-      // determineType: function(region){},
       dataAttributes: []
+      // determineType: function(region){},
       },
 
 
@@ -448,14 +447,15 @@ window.Mercury = {
     // Mercury tries to stay as much out of your code as possible, but because regions appear within your document we
     // need to include a few styles to indicate regions, as well as the different states of them (eg. focused).  These
     // styles are injected into your document, and as simple as they might be, you may want to change them.
-    //
-    // {{regionClass}} will be automatically replaced with whatever you have set in the regions.class config directive.
     injectedStyles: '' +
-      '.{{regionClass}} { min-height: 10px; outline: 1px dotted #09F } ' +
-      '.{{regionClass}}:focus, .{{regionClass}}.focus { outline: none; -webkit-box-shadow: 0 0 10px #09F, 0 0 1px #045; box-shadow: 0 0 10px #09F, 0 0 1px #045 }' +
-      '.{{regionClass}}:after { content: "."; display: block; visibility: hidden; clear: both; height: 0; overflow: hidden; }' +
-      '.{{regionClass}} table, .{{regionClass}} td, .{{regionClass}} th { border: 1px dotted red; min-width: 6px; }' +
-      '.mercury-textarea { border: 0; box-sizing: border-box; -moz-box-sizing: border-box; -webkit-box-sizing: border-box; resize: none; }' +
+      '[data-mercury]       { min-height: 10px; outline: 1px dotted #09F } ' +
+      '[data-mercury]:focus { outline: none; -webkit-box-shadow: 0 0 10px #09F, 0 0 1px #045; box-shadow: 0 0 10px #09F, 0 0 1px #045 }' +
+      '[data-mercury].focus { outline: none; -webkit-box-shadow: 0 0 10px #09F, 0 0 1px #045; box-shadow: 0 0 10px #09F, 0 0 1px #045 }' +
+      '[data-mercury]:after { content: "."; display: block; visibility: hidden; clear: both; height: 0; overflow: hidden; }' +
+      '[data-mercury] table { border: 1px dotted red; min-width: 6px; }' +
+      '[data-mercury] th    { border: 1px dotted red; min-width: 6px; }' +
+      '[data-mercury] td    { border: 1px dotted red; min-width: 6px; }' +
+      '.mercury-textarea    { border: 0; box-sizing: border-box; -moz-box-sizing: border-box; -webkit-box-sizing: border-box; resize: none; }' +
       '.mercury-textarea:focus { outline: none; }'
   },
 

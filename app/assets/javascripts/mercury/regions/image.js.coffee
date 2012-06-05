@@ -16,9 +16,8 @@ class @Mercury.Regions.Image extends Mercury.Region
     # We've going to drive all the interaction with events
     # in bindEvent. Here we just highlight the elements to it
     # appears "changeable" to the user.
-    @element.
-      addClass( Mercury.config.regions.className ).
-      removeClass( "#{Mercury.config.regions.className}-preview" )
+#    @element.addClass( Mercury.config.regions.className ).
+#      removeClass( "#{Mercury.config.regions.className}-preview" )
 
   bindEvents: ->
     # This is standard stuff, take from the region parent
@@ -65,12 +64,11 @@ class @Mercury.Regions.Image extends Mercury.Region
   togglePreview: ->
     if @previewing
       @previewing = false
+      @element.attr(Mercury.config.regions.attribute, @type)
       @build()
     else
       @previewing = true
-      @element.
-        addClass( "#{Mercury.config.regions.className}-preview" ).
-        removeClass( Mercury.config.regions.className )
+      @element.removeAttr(Mercury.config.regions.attribute)
       Mercury.trigger('region:blurred', {region: @})
   
   focus: ->

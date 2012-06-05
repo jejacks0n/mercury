@@ -11,8 +11,8 @@ Gem::Specification.new do |s|
   s.authors     = ['Jeremy Jackson']
   s.email       = ['jejacks0n@gmail.com']
   s.homepage    = 'http://github.com/jejacks0n/mercury'
-  s.summary     = %Q{A fully featured and advanced HTML5 WYSIWYG editor written in CoffeeScript on top of Rails 3.1}
-  s.description = %Q{A fully featured and advanced HTML5 WYSIWYG editor written in CoffeeScript on top of the Rails 3.1 asset stack}
+  s.summary     = %Q{Mercury Editor: The Rails HTML5 WYSIWYG editor}
+  s.description = %Q{A fully featured and advanced HTML5 WYSIWYG editor written in CoffeeScript on top of the Rails asset pipeline}
   s.licenses    = ['MIT']
 
 

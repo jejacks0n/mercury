@@ -1,5 +1,4 @@
 rvm:
-  - 1.9.2
   - 1.9.3
 before_script:
   - 'cp spec/dummy/config/database.travisci.yml spec/dummy/config/database.yml'

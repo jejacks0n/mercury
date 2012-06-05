@@ -146,7 +146,7 @@ jQuery.extend Mercury.lightview,
     return unless @url
     @element.addClass('loading')
     if Mercury.preloadedViews[@url]
-      setTimeout(10, => @loadContent(Mercury.preloadedViews[@url]))
+      setTimeout((=> @loadContent(Mercury.preloadedViews[@url])), 10)
     else
       jQuery.ajax @url, {
         headers: Mercury.ajaxHeaders()

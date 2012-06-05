@@ -326,7 +326,7 @@ describe "Mercury.lightview", ->
     describe "on a preloaded view", ->
 
       beforeEach ->
-        @setTimeoutSpy = spyOn(window, 'setTimeout').andCallFake((timeout, callback) => callback())
+        @setTimeoutSpy = spyOn(window, 'setTimeout').andCallFake((callback, timeout) => callback())
         Mercury.preloadedViews = {'/blank.html': 'this is the preloaded content'}
 
       afterEach ->

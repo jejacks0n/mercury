@@ -93,7 +93,7 @@ class @Mercury.Regions.Snippetable extends Mercury.Region
         Mercury.trigger('hide:toolbar', {type: 'snippet', immediately: true})
         return true
       stop: =>
-        setTimeout(100, => @pushHistory())
+        setTimeout((=> @pushHistory()), 100)
         return true
     }
 

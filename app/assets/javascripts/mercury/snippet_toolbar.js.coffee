@@ -71,10 +71,11 @@ class @Mercury.SnippetToolbar extends Mercury.Toolbar
       @element.hide()
       @visible = false
     else
-      @hideTimeout = setTimeout 500, =>
+      @hideTimeout = setTimeout =>
         @element.stop().animate {opacity: 0}, 300, 'easeInOutSine', =>
           @element.hide()
         @visible = false
+      , 500
 
   release: ->
     @element.off()

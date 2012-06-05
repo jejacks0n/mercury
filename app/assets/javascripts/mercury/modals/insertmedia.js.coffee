@@ -19,7 +19,7 @@
     if selection.is && image = selection.is('img')
       @element.find('#media_image_url').val(image.attr('src'))
       @element.find('#media_image_alignment').val(image.attr('align'))
-      setTimeout 300, => @element.find('#media_image_url').focus()
+      setTimeout((=> @element.find('#media_image_url').focus()), 300)
 
     # if we're editing an iframe (assume it's a video for now)
     if selection.is && iframe = selection.is('iframe')
@@ -29,13 +29,13 @@
         @element.find('#media_youtube_url').val("http://youtu.be/#{src.match(/\/embed\/(\w+)/)[1]}")
         @element.find('#media_youtube_width').val(iframe.width())
         @element.find('#media_youtube_height').val(iframe.height())
-        setTimeout 300, => @element.find('#media_youtube_url').focus()
+        setTimeout((=> @element.find('#media_youtube_url').focus()), 300)
       else if src.indexOf('http://player.vimeo.com') > -1
         # it's a vimeo video
         @element.find('#media_vimeo_url').val("http://vimeo.com/#{src.match(/\/video\/(\w+)/)[1]}")
         @element.find('#media_vimeo_width').val(iframe.width())
         @element.find('#media_vimeo_height').val(iframe.height())
-        setTimeout 300, => @element.find('#media_vimeo_url').focus()
+        setTimeout((=> @element.find('#media_vimeo_url').focus()), 300)
 
 
   # build the image or youtube embed on form submission

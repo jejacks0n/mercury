@@ -47,7 +47,7 @@ class @Mercury.Regions.Editable extends Mercury.Region
 
     Mercury.on 'region:update', =>
       return if @previewing || Mercury.region != @
-      setTimeout(1, => @selection().forceSelection(@element.get(0)))
+      setTimeout((=> @selection().forceSelection(@element.get(0))), 1)
       currentElement = @currentElement()
       if currentElement.length
         # setup the table editor if we're inside a table
@@ -71,14 +71,14 @@ class @Mercury.Regions.Editable extends Mercury.Region
       event.originalEvent.dataTransfer.dropEffect = 'copy'
       if jQuery.browser.webkit
         clearTimeout(@dropTimeout)
-        @dropTimeout = setTimeout(10, => @element.trigger('possible:drop'))
+        @dropTimeout = setTimeout((=> @element.trigger('possible:drop')), 10)
 
     @element.on 'drop', (event) =>
       return if @previewing
 
       # handle dropping snippets
       clearTimeout(@dropTimeout)
-      @dropTimeout = setTimeout(1, => @element.trigger('possible:drop'))
+      @dropTimeout = setTimeout((=> @element.trigger('possible:drop')), 1)
 
       # handle any files that were dropped
       return unless event.originalEvent.dataTransfer.files.length
@@ -115,7 +115,7 @@ class @Mercury.Regions.Editable extends Mercury.Region
     @element.on 'focus', =>
       return if @previewing
       Mercury.region = @
-      setTimeout(1, => @selection().forceSelection(@element.get(0)))
+      setTimeout((=> @selection().forceSelection(@element.get(0))), 1)
       Mercury.trigger('region:focused', {region: @})
 
     @element.on 'blur', =>
@@ -194,13 +194,13 @@ class @Mercury.Regions.Editable extends Mercury.Region
 
   focus: ->
     if Mercury.region != @
-      setTimeout(10, => @element.focus())
+      setTimeout((=> @element.focus()), 10)
       try
         @selection().selection.collapseToStart()
       catch e
         # intentially do nothing
     else
-      setTimeout(10, => @element.focus())
+      setTimeout((=> @element.focus()), 10)
 
     Mercury.trigger('region:focused', {region: @})
     Mercury.trigger('region:update', {region: @})
@@ -308,7 +308,7 @@ class @Mercury.Regions.Editable extends Mercury.Region
       @history.push(@content(null, false, true))
     else if keyCode
       # set a timeout for pushing to the history
-      @historyTimeout = setTimeout(waitTime * 1000, => @history.push(@content(null, false, true)))
+      @historyTimeout = setTimeout((=> @history.push(@content(null, false, true))), waitTime * 1000)
     else
       # push to the history immediately
       @history.push(@content(null, false, true))
@@ -349,7 +349,7 @@ class @Mercury.Regions.Editable extends Mercury.Region
       sanitizer = jQuery('#mercury_sanitizer', @document).focus()
 
       # set 1ms timeout to allow paste event to complete
-      setTimeout 1, =>
+      setTimeout =>
         # sanitize the content
         content = @sanitize(sanitizer)
 
@@ -360,11 +360,12 @@ class @Mercury.Regions.Editable extends Mercury.Region
         # paste sanitized content
         @element.focus()
         @execCommand('insertHTML', {value: content})
+      , 1
 
 
   sanitize: (sanitizer) ->
     # always remove nested regions
-    sanitizer.find(".#{Mercury.config.regions.className}").remove()
+    sanitizer.find("[#{Mercury.config.regions.attribute}]").remove()
 
     if Mercury.config.pasting.sanitize
       switch Mercury.config.pasting.sanitize

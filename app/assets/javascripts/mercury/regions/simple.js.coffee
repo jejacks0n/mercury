@@ -223,7 +223,7 @@ class @Mercury.Regions.Simple extends Mercury.Region
       @history.push(@contentAndSelection())
     else if keyCode
       # set a timeout for pushing to the history
-      @historyTimeout = setTimeout(waitTime * 1000, => @history.push(@contentAndSelection()))
+      @historyTimeout = setTimeout((=> @history.push(@contentAndSelection())), waitTime * 1000)
     else
       # push to the history immediately
       @history.push(@contentAndSelection())

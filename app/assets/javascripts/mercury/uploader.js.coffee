@@ -161,7 +161,7 @@ jQuery.extend Mercury.uploader,
 
 
   hide: (delay = 0) ->
-    setTimeout delay * 1000, =>
+    setTimeout =>
       @element.animate {opacity: 0}, 200, 'easeInOutSine', =>
         @overlay.animate {opacity: 0}, 200, 'easeInOutSine', =>
           @overlay.hide()
@@ -169,6 +169,7 @@ jQuery.extend Mercury.uploader,
           @reset()
           @visible = false
           Mercury.trigger('focus:frame')
+    , delay * 1000
 
 
   reset: ->

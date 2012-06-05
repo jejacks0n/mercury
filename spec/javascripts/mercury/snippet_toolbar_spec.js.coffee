@@ -189,12 +189,12 @@ describe "Mercury.SnippetToolbar", ->
         expect(@setTimeoutSpy.callCount).toEqual(1)
 
       it "hides the element", ->
-        @setTimeoutSpy.andCallFake((timeout, callback) => callback())
+        @setTimeoutSpy.andCallFake((callback, timeout) => callback())
         @snippetToolbar.hide()
         expect(@snippetToolbar.element.css('display')).toEqual('none')
 
       it "sets visible", ->
-        @setTimeoutSpy.andCallFake((timeout, callback) => callback())
+        @setTimeoutSpy.andCallFake((callback, timeout) => callback())
         @snippetToolbar.hide()
         expect(@snippetToolbar.visible).toEqual(false)
 

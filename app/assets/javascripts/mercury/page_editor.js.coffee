@@ -117,9 +117,9 @@ class @Mercury.PageEditor
 
 
   bindEvents: ->
-    Mercury.on 'initialize:frame', => setTimeout(100, @initializeFrame)
+    Mercury.on 'initialize:frame', => setTimeout(@initializeFrame, 100)
     Mercury.on 'focus:frame', => @iframe.focus()
-    Mercury.on 'focus:window', => setTimeout(10, => @focusableElement.focus())
+    Mercury.on 'focus:window', => setTimeout((=> @focusableElement.focus()), 10)
     Mercury.on 'toggle:interface', => @toggleInterface()
     Mercury.on 'reinitialize', => @initializeRegions()
     Mercury.on 'mode', (event, options) => @previewing = !@previewing if options.mode == 'preview'

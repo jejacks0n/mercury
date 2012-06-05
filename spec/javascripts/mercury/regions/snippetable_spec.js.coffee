@@ -262,7 +262,7 @@ describe "Mercury.Regions.Snippetable", ->
 
     it "pushes to the history after dragging", ->
       spy = spyOn(Mercury.Regions.Snippetable.prototype, 'pushHistory').andCallFake(=>)
-      spyOn(window, 'setTimeout').andCallFake((timeout, callback)=> callback())
+      spyOn(window, 'setTimeout').andCallFake((callback, timeout)=> callback())
       @sortableSpy.andCallFake((arg) => if arg == 'destroy' then return @region.element else arg.stop())
       @region.makeSortable()
       expect(spy.callCount).toEqual(1)

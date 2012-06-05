@@ -288,27 +288,27 @@ describe "Mercury.uploader", ->
       @setTimeoutSpy.andCallFake(=>)
       Mercury.uploader.hide(1)
       expect(@setTimeoutSpy.callCount).toEqual(1)
-      expect(@setTimeoutSpy.argsForCall[0][0]).toEqual(1000)
+      expect(@setTimeoutSpy.argsForCall[0][1]).toEqual(1000)
 
     it "hides the overlay and element", ->
-      @setTimeoutSpy.andCallFake((timeout, callback) => callback())
+      @setTimeoutSpy.andCallFake((callback, timeout) => callback())
       Mercury.uploader.hide()
       expect($('#test .mercury-uploader').css('opacity')).toEqual('0')
       expect($('#test .mercury-uploader-overlay').css('opacity')).toEqual('0')
 
     it "calls reset", ->
-      @setTimeoutSpy.andCallFake((timeout, callback) => callback())
+      @setTimeoutSpy.andCallFake((callback, timeout) => callback())
       spy = spyOn(Mercury.uploader, 'reset').andCallFake(=>)
       Mercury.uploader.hide()
       expect(spy.callCount).toEqual(1)
 
     it "sets visible to false", ->
-      @setTimeoutSpy.andCallFake((timeout, callback) => callback())
+      @setTimeoutSpy.andCallFake((callback, timeout) => callback())
       Mercury.uploader.hide()
       expect(Mercury.uploader.visible).toEqual(false)
 
     it "focuses the frame", ->
-      @setTimeoutSpy.andCallFake((timeout, callback) => callback())
+      @setTimeoutSpy.andCallFake((callback, timeout) => callback())
       spy = spyOn(Mercury, 'trigger').andCallFake(=>)
       Mercury.uploader.hide()
       expect(spy.callCount).toEqual(1)

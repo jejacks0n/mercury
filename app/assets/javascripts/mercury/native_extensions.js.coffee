@@ -47,9 +47,3 @@ Number::toBytes = ->
     bytes /= 1024
     i += 1
   return if i then "#{bytes.toFixed(2)}#{['', ' kb', ' Mb', ' Gb', ' Tb', ' Pb', ' Eb'][i]}" else "#{bytes} bytes"
-
-
-# make setTimeout not suck for coffeescript
-window.originalSetTimeout = window.setTimeout
-window.setTimeout = (arg1, arg2) ->
-  if typeof(arg1) == 'number' then window.originalSetTimeout(arg2, arg1) else window.originalSetTimeout(arg1, arg2)

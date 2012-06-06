@@ -51,14 +51,16 @@
 
       when 'youtube_url'
         url = @element.find('#media_youtube_url').val()
-        unless /^http:\/\/youtu.be\//.test(url)
+        unless /^https?:\/\/youtu.be\//.test(url)
           Mercury.notify('Error: The provided youtube share url was invalid.')
           return
-        code = url.replace('http://youtu.be/', '')
+        code = url.replace(/https?:\/\/youtu.be\//, '')
+        protocol = 'http'
+        protocol = 'https' if /^https:/.test(url)
         value = jQuery('<iframe>', {
           width: @element.find('#media_youtube_width').val() || 560,
           height: @element.find('#media_youtube_height').val() || 349,
-          src: "http://www.youtube.com/embed/#{code}?wmode=transparent",
+          src: "#{protocol}://www.youtube.com/embed/#{code}?wmode=transparent",
           frameborder: 0,
           allowfullscreen: 'true'
         })
@@ -66,14 +68,16 @@
 
       when 'vimeo_url'
         url = @element.find('#media_vimeo_url').val()
-        unless /^http:\/\/vimeo.com\//.test(url)
+        unless /^https?:\/\/vimeo.com\//.test(url)
           Mercury.notify('Error: The provided vimeo url was invalid.')
           return
-        code = url.replace('http://vimeo.com/', '')
+        code = url.replace(/^https?:\/\/vimeo.com\//, '')
+        protocol = 'http'
+        protocol = 'https' if /^https:/.test(url)
         value = jQuery('<iframe>', {
           width: @element.find('#media_vimeo_width').val() || 400,
           height: @element.find('#media_vimeo_height').val() || 225,
-          src: "http://player.vimeo.com/video/#{code}?title=1&byline=1&portrait=0&color=ffffff",
+          src: "#{protocol}://player.vimeo.com/video/#{code}?title=1&byline=1&portrait=0&color=ffffff",
           frameborder: 0
         })
         Mercury.trigger('action', {action: 'insertHTML', value: value})

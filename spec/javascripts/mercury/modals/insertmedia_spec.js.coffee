@@ -133,12 +133,20 @@ describe "Mercury.modalHandlers.insertMedia", ->
     describe "a youtube video", ->
 
       beforeEach ->
-        $('#media_youtube_url').val('http://youtu.be/foo')
         $('#media_youtube_width').val(100)
         $('#media_youtube_height').val('42')
         $('input[value=youtube_url]').prop('checked', true)
 
+      it "doesn't allow bogus urls", ->
+        $('#media_youtube_url').val('http://example.com')
+        lastAlert = ''
+        spy = spyOn(window, 'alert').andCallFake((msg) -> lastAlert = msg)
+        jasmine.simulate.click($('#submit').get(0))
+        expect(spy.callCount).toEqual(1)
+        expect(lastAlert).toEqual('Error: The provided youtube share url was invalid.')
+
       it "triggers an action with the proper values", ->
+        $('#media_youtube_url').val('http://youtu.be/foo')
         jasmine.simulate.click($('#submit').get(0))
         expect(@triggerSpy.callCount).toEqual(1)
         expect(@triggerSpy.argsForCall[0][0]).toEqual('action')
@@ -148,6 +156,17 @@ describe "Mercury.modalHandlers.insertMedia", ->
         expect(value).toContain('42px')
         expect(value).toContain('src="http://www.youtube.com/embed/foo?wmode=transparent"')
 
+      it "triggers an action with the proper values using https", ->
+        $('#media_youtube_url').val('https://youtu.be/foo')
+        jasmine.simulate.click($('#submit').get(0))
+        expect(@triggerSpy.callCount).toEqual(1)
+        expect(@triggerSpy.argsForCall[0][0]).toEqual('action')
+        expect(@triggerSpy.argsForCall[0][1]['action']).toEqual('insertHTML')
+        value = $('<div>').html(@triggerSpy.argsForCall[0][1]['value']).html()
+        expect(value).toContain('100px')
+        expect(value).toContain('42px')
+        expect(value).toContain('src="https://www.youtube.com/embed/foo?wmode=transparent"')
+
     describe "a vimeo video", ->
 
       beforeEach ->
@@ -156,7 +175,16 @@ describe "Mercury.modalHandlers.insertMedia", ->
         $('#media_vimeo_height').val('42')
         $('input[value=vimeo_url]').prop('checked', true)
 
+      it "doesn't allow bogus urls", ->
+        $('#media_vimeo_url').val('http://example.com')
+        lastAlert = ''
+        spy = spyOn(window, 'alert').andCallFake((msg) -> lastAlert = msg)
+        jasmine.simulate.click($('#submit').get(0))
+        expect(spy.callCount).toEqual(1)
+        expect(lastAlert).toEqual('Error: The provided vimeo url was invalid.')
+
       it "triggers an action with the proper values", ->
+        $('#media_vimeo_url').val('http://vimeo.com/foo')
         jasmine.simulate.click($('#submit').get(0))
         expect(@triggerSpy.callCount).toEqual(1)
         expect(@triggerSpy.argsForCall[0][0]).toEqual('action')
@@ -165,3 +193,14 @@ describe "Mercury.modalHandlers.insertMedia", ->
         expect(value).toContain('100px')
         expect(value).toContain('42px')
         expect(value).toContain('http://player.vimeo.com/video/foo?title=1&amp;byline=1&amp;portrait=0&amp;color=ffffff')
+
+      it "triggers an action with the proper values using https", ->
+        $('#media_vimeo_url').val('https://vimeo.com/foo')
+        jasmine.simulate.click($('#submit').get(0))
+        expect(@triggerSpy.callCount).toEqual(1)
+        expect(@triggerSpy.argsForCall[0][0]).toEqual('action')
+        expect(@triggerSpy.argsForCall[0][1]['action']).toEqual('insertHTML')
+        value = $('<div>').html(@triggerSpy.argsForCall[0][1]['value']).html()
+        expect(value).toContain('100px')
+        expect(value).toContain('42px')
+        expect(value).toContain('https://player.vimeo.com/video/foo?title=1&amp;byline=1&amp;portrait=0&amp;color=ffffff')

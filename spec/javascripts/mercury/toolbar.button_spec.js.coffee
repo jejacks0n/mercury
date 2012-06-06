@@ -3,7 +3,7 @@ describe "Mercury.Toolbar.Button", ->
   template 'mercury/toolbar.button.html'
 
   beforeEach ->
-    Mercury.displayRect = {0, 0, 500, 200}
+    Mercury.displayRect = {top: 0, left: 0, width: 500, height: 200}
     Mercury.Toolbar.Button.contexts.foo = -> true
     @region = {
       type: -> 'full'

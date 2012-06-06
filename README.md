@@ -5,9 +5,9 @@
 Mercury Editor is a fully featured editor much like TinyMCE or CKEditor, but with a different usage paradigm.  It
 expects that an entire page is something that can be editable, and allows different types of editable regions to be
 specified.  It displays a single toolbar for every region on the page, and uses the HTML5 contentEditable features on
-block elements, instead of iframes, which allows for CSS to be applied in ways that most other editors can't handle.
+block elements, instead of iframes, which allows for CSS to be applied in ways that many other editors can't handle.
 
-Mercury has been written using CoffeeScript and jQuery for the Javascript portions, and is written on top of Rails 3.1.
+Mercury has been written using CoffeeScript and jQuery for the Javascript portions, and is written on top of Rails 3.2.
 
 
 ## Translations
@@ -18,26 +18,28 @@ desire and time to do a translation for the project it would be awesome to hear 
 to fork the project, create a locale file with your translation, and submit a pull request -- that way you get full
 credit for your contributions.
 
-Some [examples are here](https://github.com/jejacks0n/mercury/tree/master/vendor/assets/javascripts/mercury/locales),
+Some [examples are here](https://github.com/jejacks0n/mercury/tree/master/app/assets/javascripts/mercury/locales),
 and there's more on the [wiki page](https://github.com/jejacks0n/mercury/wiki/Localization-&-Translations).
 
 Translations and contributors:
-- French ([adamantx](https://github.com/adamantx))
-- Spanish ([javiercr](https://github.com/javiercr))
-- Portuguese ([yakko](https://github.com/yakko))
-- Dutch ([kieranklaassen](https://github.com/kieranklaassen))
-- Italian ([gcastagneti](https://github.com/gcastagnet))
-- German ([poke](https://github.com/poke))
+- Arabic ([mohamagdy](https://github.com/mohamagdy))
 - Danish ([martinjlowm](https://github.com/martinjlowm))
-- Swedish ([stefanm](https://github.com/stefanm))
+- German ([poke](https://github.com/poke))
+- Spanish ([javiercr](https://github.com/javiercr))
+- French ([adamantx](https://github.com/adamantx))
+- Italian ([gcastagneti](https://github.com/gcastagnet))
 - Korean ([dorajistyle](https://github.com/dorajistyle))
+- Dutch ([kieranklaassen](https://github.com/kieranklaassen))
+- Portuguese ([yakko](https://github.com/yakko))
+- Swedish ([stefanm](https://github.com/stefanm))
 - Simplified Chinese ([董劭田 DONG Shaotian](https://github.com/richarddong))
+
 
 ## Awesomeness
 
-Ryan Bates over at the awesome [railscasts site](http://railscasts.com) has put together a really nice RailsCast that
-walks you through getting Mercury Editor installed, setup and working in a Rails 3.1.1 application.  It's definitely
-worth checking out.  [Watch the RailsCast](http://railscasts.com/episodes/296-mercury-editor)
+Ryan Bates with the awesome [RailsCast](http://railscasts.com) site has put together a really nice RailsCast that walks
+you through getting Mercury Editor installed, setup and working in a Rails application -- and is definitely worth
+checking out.  [Watch the RailsCast](http://railscasts.com/episodes/296-mercury-editor)
 
 Mercury has been added as a Featured Project on Pivotal Tracker!  If you're interested in what's planned, check out the
 [Mercury Tracker Project](https://www.pivotaltracker.com/projects/295823).
@@ -47,7 +49,7 @@ Mercury has been added as a Featured Project on Pivotal Tracker!  If you're inte
 
 Mercury has been written for the future, and thus doesn't support legacy browsers or browsers that don't follow the W3C
 specifications for content editing.  Any browser will be supported if they support the W3C specification in the future,
-but there aren't plans for adding support for alternate implementations at this time.
+but there aren't plans currently for adding support for alternate implementations at this time.
 
 Supported Browsers:
 
@@ -84,7 +86,7 @@ functionality, etc.) so here's a list of some other editors that you might want 
 - [TinyMCE](http://tinymce.moxiecode.com/)
 - [CKEditor](http://ckeditor.com/)
 - [NicEdit](http://nicedit.com/)
-- [Raptor Editor](http://www.raptor-editor.com/) -- one of the developers is rude, but it looks like a promising start
+- [Raptor Editor](http://www.raptor-editor.com/)
 
 
 ## Features
@@ -97,7 +99,7 @@ The feature list is actually pretty long, so here's a short list that need highl
 - Image Uploading: Drag images from your desktop and they'll be automatically uploaded and inserted.
 - Table Editing: Advanced table editing and creation, including support for multiple column and rows spans.
 - Snippets: Insert and edit predefined and reusable bits of markup/code using drag and drop.
-- Custom Regions: We provide Markdown, HTML, and Snippet region types by default.
+- Custom Regions: We provide Full HTML, Markdown, Snippet, Image, and Simple region types by default.
 - I18n: Built in low profile translation and internationalization system.
 
 
@@ -109,34 +111,44 @@ Include the gem in your Gemfile and bundle to install the gem.
 
     gem 'mercury-rails'
 
-You can also get the configuration file, css, and routes by running the generator.
+You can also get the configuration file and overrides by running the install generator.
 
     rails generate mercury:install
 
-This generator puts the mercury base file (configuration) into your project in /app/assets/javascripts/mercury.js,
-and includes the base mercury routes.  It can optionally install the layout and a css overrides file, models, as well as
-an authentication helper that allows you to restrict access to editing.  Check the options by using `--help`.
+This generator puts a mercury configuration file into your project in /app/assets/javascripts/mercury.js.  This file
+also functions as a manifest using sprockets `require` to include dependencies.  The install generator can optionally
+install the layout and css files.
 
-### Images Backend
+### Image Processing / Uploading
 
-Mercury has a basic facility for allowing image uploads. There is a generator that can act as a starting point for a back end 
-integration included. You can disable this feature completely in the mercury config file. To install run:
+Mercury has a basic facility for allowing image uploads, and we provide a generator that can act as a starting point for
+your own back end integration.  To install run the generator.
 
     rails generate mercury:install:images
 
-For Mongoid + MongoDB, you can use the `--orm=mongoid` option on the generator to get the required models added to your
-app.  Make sure to add `gem "mongoid-paperclip", :require => "mongoid_paperclip` to your Gemfile as well.  Thanks to
-[chandresh](https://github.com/chandresh) for this tip.
+For Mongoid + MongoDB, you can use the `--orm=mongoid` option on the generator to get the appropriate model added to
+your app.  This generator also puts paperclip (and mongoid_paperclip if needed) into your Gemfile, so make sure to
+`bundle` or make your own adjustments.
 
-If you're using ActiveRecord, make sure to migrate your database 
+If you're using ActiveRecord, make sure to migrate your database.  You can also disable this feature entirely in the
+mercury configuration if you don't plan on allowing image uploading.
 
-    rake db:migrate
+### Authentication
+
+Mercury provides a generator for giving you a basic authentication implementation.  You can run this generator and write
+your own logic into the authentication file it provides.
+
+    rails generate mercury:install:authentication
+
+This provides a simple method for restricting the actions in the default MercuryController to only users who have the
+required privileges.  Since this can vary largely from application to application, it's a basic approach that assumes
+you'll write in what you want.
+
 
 ## Usage
 
 There's a glob route that captures everything beginning with `/editor`, so for instance to edit an `/about_us` page, you
-should access it at the `/editor/about_us` path.  You may want to define this route in your own routes file to restrict
-access to it (only admins or something).
+should access it at the `/editor/about_us` path.
 
 For performance reasons you may also want to notify Mercury when the page is ready to be initialized.  To do this just
 trigger the initialize:frame event from within your normal application layouts.  You can do this when the DOM is ready
@@ -146,12 +158,19 @@ this because it gives you some load performance improvements, but it's not requi
     jQuery(parent).trigger('initialize:frame');
 
 Mercury has an expectation that content regions will be on the page (not required, but probably useful).  To define
-content regions that Mercury will make editable you need to add a `mercury-region` class attribute to an element (this
-class is configurable).  Then specify what region type by using the `data-type` attribute -- which can be *editable*,
-*markupable*, or *snippetable*.  It's important for saving that an id attribute be set on regions, you should always
-include one.  Region types are outlined below.
+content regions that Mercury will make editable you need to add a `data-mercury` attribute to an element.  This
+attribute is used to specify the region type.  Mercury provides some default region types, but you can also create your
+own.  Region types are outlined below, and the available values for the `data-mercury` attribute are:
 
-    <div id="primary" class="mercury-region" data-type="editable">
+- full
+- simple
+- markdown
+- snippets
+- image (should only be applied to img tags)
+
+It's important for saving that an id attribute *always* be set on regions, so you should always include one.
+
+    <div id="primary" data-mercury="full">
       default content
     </div>
 
@@ -165,33 +184,34 @@ Check this [wiki article](https://github.com/jejacks0n/mercury/wiki/Using-Mercur
 
 ## Region Types
 
-### Editable
+### Full Region
 
-Editable Regions are HTML markup, and use the HTML5 contentEditable feature.  This is the core of what Mercury is about,
-and provides the most flexibility and visual representation of what the content will look like when saved.
+Full regions are for full HTML markup and utilize the HTML5 contentEditable feature.  These are the core of what
+Mercury does, and provide the most flexibility and visual representation of what the content will look like when saved.
 
-### Simple
+### Simple Region
 
-Simple Regions are plain text. Newlines and markup are not allowed. Simple Regions are appropriate for a title or headline,
-any area where you want the conent to be editable but not the style.
+Simple regions are designed for plain text.  Newlines and markup are not allowed.  Simple Regions are appropriate for
+titles, headlines, or any area where you want the conent to be editable but not the style.
 
-### Markupable
+### Markdown Region
 
-These regions are based on Markdown syntax (specifically the github flavored version), and isn't as full featured as the
-editable region type -- primarily because markdown is meant to be simple, so to keep it such you can't do things like
-set colors etc.  This region type is super useful if you want to keep the markup clean and simple.
+Markdown regions are based on Markdown syntax (specifically the github flavored version), and aren't as full featured as
+the full region type -- primarily because Markdown is meant to be simple.  To keep it simple you can't do things like
+set colors etc.  This region type is useful if you want to keep the markup clean and simple.
 
-### Snippetable
+### Snippets Region
 
-Snippetable regions only allow snippets.  There isn't any content editing in these regions, but snippets can sometimes
-be the way to go with complex markup and functionality.  Snippets are basically chunks of reusable markup, that can be
-defined by a developer and placed into content regions later.  More on this below.
+Snippet regions only allow snippets and don't have a concept of content editing within them.  Snippets can be the way to
+go with complex markup and functionality, and are basically chunks of reusable markup that can be defined by a developer
+and placed into content regions later.  More on this below.
 
-### Image
+### Image Region
 
-The Image Region type should only be applied to single images. It results in that image being drag-and-drop replacable.
-This differs from the image handling in Editable regions, in that no content is in the area. This works well for logos
-and images you want to display with careful layout, and do not need any text.
+The image region type should only be applied to an image tag.  It results in the image being drag-and-drop replacable.
+This differs from the image handling in full regions, in that no content is in the area.  This works well for logos
+and images you want to display with careful layout, and do not need any content functionality.
+
 
 ## Loading / Ready State
 
@@ -204,10 +224,6 @@ that when it's ready.
 
     jQuery(window).on('mercury:ready', function() { Mercury.saveUrl = '/content'; });
 
-#### Prototype
-
-    Event.observe(window, 'mercury:ready', function() { Mercury.saveUrl = '/content'; });
-
 #### Mercury
 
     if (parent.Mercury) {
@@ -218,22 +234,30 @@ that when it's ready.
 
     function onMercuryReady() { Mercury.saveUrl = '/content'; }
 
+#### Prototype
+
+    Event.observe(window, 'mercury:ready', function() { Mercury.saveUrl = '/content'; });
+
 
 ## Snippets
 
 Snippets are reusable and configurable chunks of markup.  They can be defined by developers, and then placed anywhere in
-content regions.  When you drag a snippet into a region you'll be prompted to enter options, and after entering options
-the snippet will be rendered into the page as a preview.  Snippets can be dragged around (in snippetable regions) and
-edited or removed.
+content regions that support them.  When you drag a snippet into a region you'll be prompted to enter options, and after
+entering options the snippet will be rendered into the page as a preview.  Snippets can be dragged around (in
+snippets regions), edited or removed.
 
 Mercury does very little to save content and snippets for you, but it does provide the ability to load snippets from
-your own storage implementation.  Here's an example of loading existing snippet options back into Mercury.
+your own storage implementation.  Here's an example of loading existing snippet options back into Mercury using jQuery.
 
     jQuery(window).on('mercury:ready', function() {
       Mercury.Snippet.load({
         snippet_1: {name: 'example', options: {'options[favorite_beer]': "Bells Hopslam", 'options[first_name]': "Jeremy"}}
       });
     });
+
+Snippet contents (when saved) are removed from the content.  Their options and their placement does come through in the
+content however, and you're responsible for rendering your own snippet content when the page is being rendered.  You can
+read more on the [wiki article about snippets](https://github.com/jejacks0n/mercury/wiki/Snippets).
 
 
 ## Reinitializing Regions
@@ -254,15 +278,15 @@ request will try to dynamically replace or load new content.
 ## Saving Content / Rendering Content
 
 Note: Mercury doesn't implement saving or rendering of content.  We leave this part up to you because it can vary in so
-many different ways.. You may want to implement content versioning, use a nosql data store like mongo etc. and we don't
-want to force our opinions.
+many ways.  You may want to implement content versioning, use a nosql data store like mongo etc. and we don't want to
+force our opinions.
 
 Mercury will submit JSON or form values back to the server on save, and this can be adjusted in the configuration.  By
 default it will use JSON, that JSON looks like:
 
     {
       "region_name": {
-        "type": "editable",
+        "type": "full",
         "value": "[contents with a snippet]",
         "snippets": {
           "snippet_1": {
@@ -276,8 +300,8 @@ default it will use JSON, that JSON looks like:
       }
     }
 
-Where it gets saved to is also up to you.. by default it submits a post to the current url, but you can adjust this by
-setting Mercury.saveUrl, or passing it into the Mercury.PageEditor constructor.. how you do this is dependent on how
+Where it gets saved to is also up to you.  By default it submits a post to the current url, but you can adjust this by
+setting Mercury.saveUrl, or passing it into the Mercury.PageEditor constructor.  How you do this is dependent on how
 you're using loading mercury (via the loader, or by using the route method).  In both situations setting Mercury.saveUrl
 is the most consistent.
 
@@ -297,12 +321,12 @@ I'm interested in what solutions people are looking for and end up using for thi
 you write something (eg. a middleware layer, an nginx module, or just something simple to get the job done).
 
 
-## Adding Authentication
+## Images
 
-When you install Mercury using the generator (`rails g mercury:install`) you can optionally install an authentication
-file into your application (at `lib/mercury/authentication.rb`).  This is a simple method for restricting the actions in
-the MercuryController to only users who have the required privileges.  Since this can vary largely from application to
-application, it's a basic approach that lets you write in what you want.
+The toolbar images have been created by the awesome [Mode Set](http://modeset.com/) guys (using
+[GLYPHICONS](http://www.glyphicons.com/)).  They follow a simplistic design aesthetic to minimize the complexity of
+creating / finding your own.  You're welcome to contribute your own to the PSD that can be found within the project so
+others can potentially build from or use your own contributions.
 
 
 ## Project Details
@@ -338,9 +362,11 @@ plugins, it was not.
 
 #### Rails
 
-With the asset handling that comes bundled with Rails 3.1, Rails Engines, and the gem tools, there really wasn't any
+With the asset handling that comes bundled with Rails 3.1+, Rails Engines, and the gem tools, there really wasn't any
 other option.  The javascript from Mercury can be used by any back end system, and isn't limited to Rails.  Many of the
-features do require a back end, and those features would have to be written in whatever language you wanted support for.
+features do require a back end however, and those features would have to be written in whatever language you wanted
+support for.
+
 The coffeescript files can be found in the repo, and I would be fully supportive of anyone who wanted to add support for
 different back end frameworks or languages.  There's a server specification in the wiki that will help as well.
 

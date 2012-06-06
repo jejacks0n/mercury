@@ -126,9 +126,9 @@ module MercurySelectorsHelpers
   def region_selector_for(locator)
     case locator.downcase
 
-      when 'the first editable region', 'the editable region' then '#full_1'
-      when 'the first markupable region', 'the markupable region', 'the markdown region' then '#markdown_1'
-      when 'the first snippetable region', 'the first snippet region', 'the snippetable region', 'the snippet region' then '#snippets_1'
+      when 'the first full region', 'the full region' then '#full_1'
+      when 'the first markdown region', 'the markdown region' then '#markdown_1'
+      when 'the first snippets region', 'the first snippet region', 'the snippets region', 'the snippet region' then '#snippets_1'
 
       else locator
     end

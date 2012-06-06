@@ -11,7 +11,7 @@
     <!-- include the loader -->
     <script src="/assets/prototype.js" type="text/javascript"></script>
     <script src="/assets/mercury/support/history.js" type="text/javascript"></script>
-    <script src="/assets/mercury_loader.js" type="text/javascript"></script>
+    <script src="/mercury/javascripts/mercury_loader.js" type="text/javascript"></script>
 
     <!-- custom implementation examples -->
     <script type="text/javascript">
@@ -43,7 +43,7 @@
 
       var newRegionIndex = 1;
       var newRegionType = 0;
-      var regionTypes = ['editable', 'simple', 'snippetable', 'markupable'];
+      var regionTypes = ['full', 'simple', 'snippets', 'markdown'];
       function addRegion() {
         if (newRegionType >= regionTypes.length) newRegionType = 0;
         var container = new Element('div', {style: 'position:relative;margin-bottom:20px;'});
@@ -109,7 +109,7 @@
 
     <!-- begin full region 1 -->
     <h1>Full region</h1>
-    <div id="full_1" data-mercury="editable">
+    <div id="full_1" data-mercury="full">
       If the first line of content isn't wrapped in an element you can't set justification (mozilla only bug).
 
       <h2>text with a meta tag (that will be removed)</h2>
@@ -177,14 +177,14 @@
 
     <!-- begin full region 2 -->
     <h1>Full region (single snippet and no content)</h1>
-    <div id="full_2" data-mercury="editable">
+    <div id="full_2" data-mercury="full">
       <div data-snippet="snippet_1">snippet1</div>
     </div>
     <!-- end full region 2 -->
 
     <!-- begin full region 3 -->
     <h1>Full region (fixed width/height and overflow)</h1>
-    <div id="full_3" data-mercury="editable" style="width:200px;height:90px;">
+    <div id="full_3" data-mercury="full" style="width:200px;height:90px;">
       wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
       <br/>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/><a href="#offset_test">8</a><br/>9<br/>10<br/>11<br/>12<br/>13<br/>14<br/>15
     </div>
@@ -192,17 +192,17 @@
 
     <!-- begin simple region 1 -->
     <h1>Simple region (h1 tag)</h1>
-    <h1 id="simple_1" data-mercury="simple">This is a simple editable field</h1>
+    <h1 id="simple_1" data-mercury="simple">This is a simple region</h1>
     <!-- end simple region 1 -->
 
     <!-- begin simple region 2 -->
     <h1>Simple region (h2 tag with fixed width)</h1>
-    <h2 id="simple_2" data-mercury="simple" style="width:200px">This is a simple editable field which is much longer. It should wrap when displaying, and when editing.</h2>
+    <h2 id="simple_2" data-mercury="simple" style="width:200px">This is a simple region which is much longer. It should wrap when displaying, and when editing.</h2>
     <!-- end simple region 2 -->
 
     <!-- begin snippets region 1 -->
     <h1>Snippets region</h1>
-    <div id="snippets_1" data-mercury="snippetable">
+    <div id="snippets_1" data-mercury="snippets">
       <div class="example-snippet" data-snippet="snippet_2">snippet2</div>
       <div class="example-snippet" data-snippet="snippet_3">snippet3</div>
       <div class="example-snippet" data-snippet="snippet_4">snippet4</div>
@@ -214,7 +214,7 @@
 
     <!-- begin snippets region 2 -->
     <h1>Snippets region (iframe snippet that contains flash)</h1>
-    <div id="snippets_2" data-mercury="snippetable">
+    <div id="snippets_2" data-mercury="snippets">
       <div class="example-snippet" data-snippet="snippet_7">snippet7</div>
       <div class="example-snippet" data-snippet="snippet_8">snippet8</div>
       <iframe class="example-snippet" data-snippet="snippet_9" width="560" height="349" src="http://www.youtube.com/embed/0pXYp72dwl0?wmode=transparent" frameborder="0" allowfullscreen="true"></iframe>
@@ -223,9 +223,9 @@
 
     <!-- begin markdown region 1 -->
     <h1>Markdown region</h1>
-    <div id="markdown_1" data-mercury="markupable">
+    <div id="markdown_1" data-mercury="markdown">
 ## notes ##
-**whitespace** in markupable regions is _important_.
+**whitespace** in markdown regions is _important_.
 
 ## ordered list ##
 1. list item 1

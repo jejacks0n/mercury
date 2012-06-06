@@ -5,7 +5,7 @@ describe "Mercury.Toolbar.ButtonGroup", ->
   beforeEach ->
     Mercury.Toolbar.ButtonGroup.contexts.foo = -> false
     @region = {
-      element: $('<div class="mercury-region">')
+      element: $('<div>')
       currentElement: -> $('<div>')
     }
 
@@ -50,8 +50,8 @@ describe "Mercury.Toolbar.ButtonGroup", ->
 
       beforeEach ->
         @region = {
-          type: -> 'editable'
-          element: $('<div class="mercury-region">')
+          type: -> 'full'
+          element: $('<div>')
         }
 
       it "disables if the region type isn't supported", ->
@@ -61,7 +61,7 @@ describe "Mercury.Toolbar.ButtonGroup", ->
         expect(@buttonGroup.hasClass('disabled')).toEqual(true)
 
       it "enables if the region type is supported", ->
-        @buttonGroup = new Mercury.Toolbar.ButtonGroup('foo', {_regions: ['editable']})
+        @buttonGroup = new Mercury.Toolbar.ButtonGroup('foo', {_regions: ['full']})
         @buttonGroup.addClass('disabled')
         Mercury.trigger('region:focused', {region: @region})
         expect(@buttonGroup.hasClass('disabled')).toEqual(false)
@@ -69,7 +69,7 @@ describe "Mercury.Toolbar.ButtonGroup", ->
     describe "custom event: region:blurred", ->
 
       it "disables if it's a button group for specific region types", ->
-        @buttonGroup = new Mercury.Toolbar.ButtonGroup('foo', {_regions: ['editable']})
+        @buttonGroup = new Mercury.Toolbar.ButtonGroup('foo', {_regions: ['full']})
         @buttonGroup.removeClass('disabled')
         Mercury.trigger('region:blurred', {region: @region})
 

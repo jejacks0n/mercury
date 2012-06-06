@@ -1,7 +1,7 @@
-class @Mercury.Regions.Markupable extends Mercury.Region
+class @Mercury.Regions.Markdown extends Mercury.Region
   @supported: document.getElementById
   @supportedText: "IE 7+, Chrome 10+, Firefox 4+, Safari 5+, Opera 8+"
-  type = 'markupable'
+  type = 'markdown'
   type: -> type
 
   constructor: (@element, @window, @options = {}) ->
@@ -163,13 +163,13 @@ class @Mercury.Regions.Markupable extends Mercury.Region
   togglePreview: ->
     if @previewing
       @previewing = false
-#      @container.addClass(Mercury.config.regions.className).removeClass("#{Mercury.config.regions.className}-preview")
+      @container.attr(Mercury.config.regions.attribute, type)
       @previewElement.hide()
       @element.show()
       @focus() if Mercury.region == @
     else
       @previewing = true
-#      @container.addClass("#{Mercury.config.regions.className}-preview").removeClass(Mercury.config.regions.className)
+      @container.removeAttr(Mercury.config.regions.attribute)
       value = @converter.makeHtml(@element.val())
       @previewElement.html(value)
       @previewElement.show()
@@ -180,7 +180,7 @@ class @Mercury.Regions.Markupable extends Mercury.Region
   execCommand: (action, options = {}) ->
     super
 
-    handler.call(@, @selection(), options) if handler = Mercury.Regions.Markupable.actions[action]
+    handler.call(@, @selection(), options) if handler = Mercury.Regions.Markdown.actions[action]
     @resize()
 
 
@@ -208,7 +208,7 @@ class @Mercury.Regions.Markupable extends Mercury.Region
 
 
   selection: ->
-    return new Mercury.Regions.Markupable.Selection(@element)
+    return new Mercury.Regions.Markdown.Selection(@element)
 
 
   resize: ->
@@ -260,7 +260,7 @@ class @Mercury.Regions.Markupable extends Mercury.Region
       }
       selection.unWrapLine("#{wrapper[0]}", "#{wrapper[1]}") for wrapperName, wrapper of wrappers
       if options.value == 'blockquote'
-        Mercury.Regions.Markupable.actions.indent.call(@, selection, options)
+        Mercury.Regions.Markdown.actions.indent.call(@, selection, options)
         return
       selection.wrapLine("#{wrappers[options.value][0]}", "#{wrappers[options.value][1]}")
 
@@ -288,7 +288,7 @@ class @Mercury.Regions.Markupable extends Mercury.Region
 
 
 # Helper class for managing selection and getting information from it
-class Mercury.Regions.Markupable.Selection
+class Mercury.Regions.Markdown.Selection
 
   constructor: (@element) ->
     @el = @element.get(0)

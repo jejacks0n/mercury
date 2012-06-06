@@ -12,7 +12,7 @@ Feature:
 
 
 #  Scenario: A user can insert and edit an image
-    Given the content of the editable region is simple content
+    Given the content of the full region is simple content
     And I make a selection
 
     When I click on the "Insert Media" button
@@ -21,7 +21,7 @@ Feature:
 
     When I fill in "URL" with "/assets/mercury/temp-logo.png"
     And press "Insert Media"
-    Then the contents of the editable region should be "this is <img src='/assets/mercury/temp-logo.png'> <b>content</b>"
+    Then the contents of the full region should be "this is <img src='/assets/mercury/temp-logo.png'> <b>content</b>"
     And the modal window should not be visible
 
     When I make a selection for "img"
@@ -30,30 +30,30 @@ Feature:
 
     When I fill in "URL" with "/assets/mercury/default-snippet.png"
     And press "Insert Media"
-    Then the contents of the editable region should be "this is <img src='/assets/mercury/default-snippet.png'> <b>content</b>"
+    Then the contents of the full region should be "this is <img src='/assets/mercury/default-snippet.png'> <b>content</b>"
 
 
 #  Scenario: A user can insert and edit an image with an alignment set
-    Given the content of the editable region is simple content
+    Given the content of the full region is simple content
     And I make a selection
 
     When I click on the "Insert Media" button
     When I fill in "media_image_url" with "/assets/mercury/temp-logo.png"
     And select "Right" from "Alignment"
     And press "Insert Media"
-    Then the contents of the editable region should be "this is <img src='/assets/mercury/temp-logo.png' align='right'> <b>content</b>"
+    Then the contents of the full region should be "this is <img src='/assets/mercury/temp-logo.png' align='right'> <b>content</b>"
 
     When I make a selection for "img"
     And click on the "Insert Media" button
     And select "Absolute Middle" from "Alignment"
     And press "Insert Media"
-    Then the contents of the editable region should be "this is <img src='/assets/mercury/temp-logo.png' align='absmiddle'> <b>content</b>"
+    Then the contents of the full region should be "this is <img src='/assets/mercury/temp-logo.png' align='absmiddle'> <b>content</b>"
 
 
   Scenario: A user can edit an image by double clicking it
-    Given the content of the editable region has an image
+    Given the content of the full region has an image
 
-    When I double click on the first image in the editable region
+    When I double click on the first image in the full region
     Then the modal window should be visible
     And I should see "Insert Media (images and videos)" within the modal title
     And the "media_image_url" field should contain "/assets/mercury/temp-logo.png"
@@ -61,11 +61,11 @@ Feature:
     When I fill in "URL" with "/assets/mercury/default-snippet.png"
     And select "Absolute Middle" from "Alignment"
     And press "Insert Media"
-    Then the contents of the editable region should be "this is <img src='/assets/mercury/default-snippet.png' align='absmiddle'> <b>content</b>"
+    Then the contents of the full region should be "this is <img src='/assets/mercury/default-snippet.png' align='absmiddle'> <b>content</b>"
 
 
   Scenario: A user can embed and edit a youtube video
-    Given the content of the editable region is simple content
+    Given the content of the full region is simple content
     And I make a selection
 
     When I click on the "Insert Media" button
@@ -74,7 +74,7 @@ Feature:
     And fill in "Width" with "400"
     And fill in "Height" with "200"
     And press "Insert Media"
-    Then the contents of the editable region should be "this is <iframe allowfullscreen='true' src='http://www.youtube.com/embed/Pny4hoN8eII?wmode=transparent' style='width: 400px; height: 200px;' frameborder='0'></iframe> <b>content</b>"
+    Then the contents of the full region should be "this is <iframe allowfullscreen='true' src='http://www.youtube.com/embed/Pny4hoN8eII?wmode=transparent' style='width: 400px; height: 200px;' frameborder='0'></iframe> <b>content</b>"
 
     When I make a selection for "iframe"
     And click on the "Insert Media" button
@@ -84,11 +84,11 @@ Feature:
     And fill in "Width" with "500"
     And fill in "Height" with "300"
     And press "Insert Media"
-    Then the contents of the editable region should be "this is <iframe allowfullscreen='true' src='http://www.youtube.com/embed/Pny4hoN8eI?wmode=transparent' style='width: 500px; height: 300px;' frameborder='0'></iframe> <b>content</b>"
+    Then the contents of the full region should be "this is <iframe allowfullscreen='true' src='http://www.youtube.com/embed/Pny4hoN8eI?wmode=transparent' style='width: 500px; height: 300px;' frameborder='0'></iframe> <b>content</b>"
 
 
 #  Scenario: A user can embed and edit a vimeo video
-    Given the content of the editable region is simple content
+    Given the content of the full region is simple content
     And I make a selection
 
     When I click on the "Insert Media" button
@@ -97,7 +97,7 @@ Feature:
     And fill in "Width" with "400"
     And fill in "Height" with "200"
     And press "Insert Media"
-    Then the contents of the editable region should be "this is <iframe src='http://player.vimeo.com/video/25708134?title=1&amp;byline=1&amp;portrait=0&amp;color=ffffff' style='width: 400px; height: 200px;' frameborder='0'></iframe> <b>content</b>"
+    Then the contents of the full region should be "this is <iframe src='http://player.vimeo.com/video/25708134?title=1&amp;byline=1&amp;portrait=0&amp;color=ffffff' style='width: 400px; height: 200px;' frameborder='0'></iframe> <b>content</b>"
 
     When I make a selection for "iframe"
     And click on the "Insert Media" button
@@ -107,4 +107,4 @@ Feature:
     And fill in "Width" with "500"
     And fill in "Height" with "300"
     And press "Insert Media"
-    Then the contents of the editable region should be "this is <iframe src='http://player.vimeo.com/video/2570813?title=1&amp;byline=1&amp;portrait=0&amp;color=ffffff' style='width: 500px; height: 300px;' frameborder='0'></iframe> <b>content</b>"
+    Then the contents of the full region should be "this is <iframe src='http://player.vimeo.com/video/2570813?title=1&amp;byline=1&amp;portrait=0&amp;color=ffffff' style='width: 500px; height: 300px;' frameborder='0'></iframe> <b>content</b>"

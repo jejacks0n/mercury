@@ -78,7 +78,7 @@ When /^(?:|I )(?:change|set) the contents? of (.*?) to (.*?)$/ do |region_locato
     find("##{region_id}", :message => "Unable to locate a region matching '##{region_id}'")
     page.driver.execute_script <<-JAVASCRIPT
       var element = top.jQuery(document).find('##{region_id}');
-      if (element.data('type') == 'markupable') {
+      if (element.data('type') == 'markdown') {
         element.find('textarea').val(#{content});
       } else {
         var region = top.mercuryInstance.getRegionByName('#{region_id}');
@@ -95,19 +95,19 @@ end
 
 When /^(?:|I )(?:make|have) a selection (?:in (.*?) )?for "([^"]*)"$/ do |region_locator, selector|
   step(%Q{I can simulate complex javascript events})
-  # assume the first editable region if one wasn't provided'
-  region_selector = region_selector_for(region_locator || 'the editable region')
+  # assume the first full region if one wasn't provided'
+  region_selector = region_selector_for(region_locator || 'the full region')
   page.driver.within_frame('mercury_iframe') do
     find("#{region_selector}", :message => "Unable to locate a region matching '#{region_selector}'")
     find("#{region_selector} #{selector}", :message => "Unable to locate a match for '#{selector}' inside '#{region_locator}'")
     page.driver.execute_script <<-JAVASCRIPT
       var element = top.jQuery(document).find('#{region_selector}');
-      if (element.data('type') == 'markupable') {
+      if (element.data('type') == 'markdown') {
         alert('unimplemented');
         throw('unimplemented');
       } else {
         var selectedElement = element.find('#{selector}');
-        var selection = new top.Mercury.Regions.Editable.Selection(window.getSelection(), document);
+        var selection = new top.Mercury.Regions.Full.Selection(window.getSelection(), document);
         selection.selectNode(selectedElement.get(0));
         selectedElement.simulate('mouseup');
       }
@@ -119,8 +119,8 @@ end
 When /^(?:|I )double click on (.*?) in (.*?)$/ do |locator, region_locator|
   step(%Q{I can simulate complex javascript events})
   selector = selector_for(locator)
-  # assume the first editable region if one wasn't provided'
-  region_selector = region_selector_for(region_locator || 'the editable region')
+  # assume the first full region if one wasn't provided'
+  region_selector = region_selector_for(region_locator || 'the full region')
   page.driver.within_frame('mercury_iframe') do
     find("#{region_selector}", :message => "Unable to locate a region matching '#{region_selector}'")
     find("#{region_selector} #{selector}", :message => "Unable to locate a match for '#{selector}' inside '#{region_locator}'")
@@ -137,7 +137,7 @@ Then /^the contents? of (.*?) should be "([^"]*)"$/ do |region_locator, content|
     find("#{region_selector}", :message => "Unable to locate a region matching '#{region_selector}'")
     results = page.driver.execute_script <<-JAVASCRIPT
       var element = top.jQuery(document).find('#{region_selector}');
-      if (element.data('type') == 'markupable') {
+      if (element.data('type') == 'markdown') {
         return element.find('textarea').val();
       } else {
         return element.html();
@@ -222,7 +222,7 @@ When /^(?:|I )(?:drag|drop) (.*?) (?:into|on) (.*?)$/ do |snippet_locator, regio
     find("##{region_id}", :message => "Unable to locate a region matching '##{region_id}'")
     page.driver.execute_script <<-JAVASCRIPT
       var element = top.jQuery(document).find('##{region_id}');
-      if (element.data('type') == 'markupable') {
+      if (element.data('type') == 'markdown') {
         alert('unimplemented');
         throw('unimplemented');
       } else {
@@ -238,12 +238,12 @@ end
 When /^(?:|I )hover over (.*?)(?: in (.*?))?$/ do |locator, region_locator|
   step(%Q{I can simulate complex javascript events})
   selector = selector_for(locator)
-  region_selector = region_selector_for(region_locator || 'the editable region')
+  region_selector = region_selector_for(region_locator || 'the full region')
   page.driver.within_frame('mercury_iframe') do
     find("#{region_selector}", :message => "Unable to locate a region matching '#{region_selector}'")
     page.driver.execute_script <<-JAVASCRIPT
       var element = top.jQuery(document).find('#{region_selector}');
-      if (element.data('type') == 'markupable') {
+      if (element.data('type') == 'markdown') {
         alert('unimplemented');
         throw('unimplemented');
       } else {
@@ -263,12 +263,12 @@ end
 #------------------------------------------------------------------------------
 #When /^(?:|I )drop an image into (.*?) from a different browser/ do |region_locator|
 #  Given(%Q{I can simulate complex javascript events})
-#  region_selector = region_selector_for(region_locator || 'the editable region')
+#  region_selector = region_selector_for(region_locator || 'the full region')
 #  page.driver.within_frame('mercury_iframe') do
 #    find("#{region_selector}", :message => "Unable to locate a region matching '#{region_selector}'")
 #    page.driver.execute_script <<-JAVASCRIPT
 #      var element = top.jQuery(document).find('#{region_selector}');
-#      if (element.data('type') == 'markupable') {
+#      if (element.data('type') == 'markdown') {
 #        alert('unimplemented');
 #        throw('unimplemented');
 #      } else {

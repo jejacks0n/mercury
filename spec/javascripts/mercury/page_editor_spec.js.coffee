@@ -256,8 +256,8 @@ describe "Mercury.PageEditor", ->
     beforeEach ->
       @resizeSpy = spyOn(Mercury.PageEditor.prototype, 'resize').andCallFake(=>)
       Mercury.PageEditor.prototype.initializeFrame = ->
-      Mercury.Regions.Editable = -> {region: true}
-      Mercury.Regions.Editable.supported = true
+      Mercury.Regions.Full = -> {region: true}
+      Mercury.Regions.Full.supported = true
       @pageEditor = new Mercury.PageEditor('', {appendTo: $('#test')})
 
     it "instantiates the region and pushes it into the regions array", ->
@@ -282,16 +282,16 @@ describe "Mercury.PageEditor", ->
 
     it "calls togglePreview on the region if in preview mode", ->
       callCount = 0
-      Mercury.Regions.Editable = -> {region: true, togglePreview: -> callCount += 1 }
-      Mercury.Regions.Editable.supported = true
+      Mercury.Regions.Full = -> {region: true, togglePreview: -> callCount += 1 }
+      Mercury.Regions.Full.supported = true
       @pageEditor.previewing = true
       @pageEditor.buildRegion($('#region2'))
       expect(callCount).toEqual(1)
 
     it "doesn't call togglePreview if not in preview mode", ->
       callCount = 0
-      Mercury.Regions.Editable = -> {region: true, togglePreview: -> callCount += 1 }
-      Mercury.Regions.Editable.supported = true
+      Mercury.Regions.Full = -> {region: true, togglePreview: -> callCount += 1 }
+      Mercury.Regions.Full.supported = true
       @pageEditor.buildRegion($('#region2'))
       expect(callCount).toEqual(0)
 

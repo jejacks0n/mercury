@@ -12,7 +12,7 @@ Feature:
 
 
 #  Scenario: A user can insert a table
-    Given the content of the editable region is simple content
+    Given the content of the full region is simple content
     And I make a selection
 
     When I click on the "Insert Table" button
@@ -53,57 +53,57 @@ Feature:
     And fill in "Border" with "2"
     And fill in "Spacing" with "2"
     And press "Insert Table"
-    Then the contents of the editable region should be "this is&nbsp;<table align='right' border='2' cellspacing='2'><tbody><tr><td rowspan='2'><br></td><td><br></td><td><br></td><td><br></td></tr><tr><td colspan='2'><br></td><td><br></td></tr><tr><td><br></td><td><br></td><td><br></td><td><br></td></tr></tbody></table> <b>content</b>"
+    Then the contents of the full region should be "this is&nbsp;<table align='right' border='2' cellspacing='2'><tbody><tr><td rowspan='2'><br></td><td><br></td><td><br></td><td><br></td></tr><tr><td colspan='2'><br></td><td><br></td></tr><tr><td><br></td><td><br></td><td><br></td><td><br></td></tr></tbody></table> <b>content</b>"
     And the modal window should not be visible
 
 
-#  Scenario: A user can edit a table after inserting one (in an editable region)
-    Given the content of the editable region has a table
+#  Scenario: A user can edit a table after inserting one (in a full region)
+    Given the content of the full region has a table
     And I make a selection
 
     When I click on the add row before editor button
     Then the table row count should be 3
-    And the contents of the editable region should be "this is a <table><tbody><tr><td><br></td><td><br></td></tr><tr><td><span>1</span></td><td><span>2</span></td></tr><tr><td><span>3</span></td><td><span>4</span></td></tr></tbody></table> <b>content</b>"
+    And the contents of the full region should be "this is a <table><tbody><tr><td><br></td><td><br></td></tr><tr><td><span>1</span></td><td><span>2</span></td></tr><tr><td><span>3</span></td><td><span>4</span></td></tr></tbody></table> <b>content</b>"
 
     When I click on the add row after editor button
     Then the table row count should be 4
-    And the contents of the editable region should be "this is a <table><tbody><tr><td><br></td><td><br></td></tr><tr><td><span>1</span></td><td><span>2</span></td></tr><tr><td><br></td><td><br></td></tr><tr><td><span>3</span></td><td><span>4</span></td></tr></tbody></table> <b>content</b>"
+    And the contents of the full region should be "this is a <table><tbody><tr><td><br></td><td><br></td></tr><tr><td><span>1</span></td><td><span>2</span></td></tr><tr><td><br></td><td><br></td></tr><tr><td><span>3</span></td><td><span>4</span></td></tr></tbody></table> <b>content</b>"
 
     When I click on the add column before editor button
     Then the column count should be 3
-    And the contents of the editable region should be "this is a <table><tbody><tr><td><br></td><td><br></td><td><br></td></tr><tr><td><br></td><td><span>1</span></td><td><span>2</span></td></tr><tr><td><br></td><td><br></td><td><br></td></tr><tr><td><br></td><td><span>3</span></td><td><span>4</span></td></tr></tbody></table> <b>content</b>"
+    And the contents of the full region should be "this is a <table><tbody><tr><td><br></td><td><br></td><td><br></td></tr><tr><td><br></td><td><span>1</span></td><td><span>2</span></td></tr><tr><td><br></td><td><br></td><td><br></td></tr><tr><td><br></td><td><span>3</span></td><td><span>4</span></td></tr></tbody></table> <b>content</b>"
 
     When I click on the add column after editor button
     Then the column count should be 4
-    And the contents of the editable region should be "this is a <table><tbody><tr><td><br></td><td><br></td><td><br></td><td><br></td></tr><tr><td><br></td><td><span>1</span></td><td><br></td><td><span>2</span></td></tr><tr><td><br></td><td><br></td><td><br></td><td><br></td></tr><tr><td><br></td><td><span>3</span></td><td><br></td><td><span>4</span></td></tr></tbody></table> <b>content</b>"
+    And the contents of the full region should be "this is a <table><tbody><tr><td><br></td><td><br></td><td><br></td><td><br></td></tr><tr><td><br></td><td><span>1</span></td><td><br></td><td><span>2</span></td></tr><tr><td><br></td><td><br></td><td><br></td><td><br></td></tr><tr><td><br></td><td><span>3</span></td><td><br></td><td><span>4</span></td></tr></tbody></table> <b>content</b>"
 
     When I click on the delete row editor button
     Then the table row count should be 3
-    And the contents of the editable region should be "this is a <table><tbody><tr><td><br></td><td><br></td><td><br></td><td><br></td></tr><tr><td><br></td><td><br></td><td><br></td><td><br></td></tr><tr><td><br></td><td><span>3</span></td><td><br></td><td><span>4</span></td></tr></tbody></table> <b>content</b>"
+    And the contents of the full region should be "this is a <table><tbody><tr><td><br></td><td><br></td><td><br></td><td><br></td></tr><tr><td><br></td><td><br></td><td><br></td><td><br></td></tr><tr><td><br></td><td><span>3</span></td><td><br></td><td><span>4</span></td></tr></tbody></table> <b>content</b>"
 
     When I make a selection
     And click on the delete column editor button
     Then the table column count should be 3
-    And the contents of the editable region should be "this is a <table><tbody><tr><td><br></td><td><br></td><td><br></td></tr><tr><td><br></td><td><br></td><td><br></td></tr><tr><td><br></td><td><br></td><td><span>4</span></td></tr></tbody></table> <b>content</b>"
+    And the contents of the full region should be "this is a <table><tbody><tr><td><br></td><td><br></td><td><br></td></tr><tr><td><br></td><td><br></td><td><br></td></tr><tr><td><br></td><td><br></td><td><span>4</span></td></tr></tbody></table> <b>content</b>"
 
 
-#  Scenario: A user can adjust the colspans of a table (in an editable region)
-    Given the content of the editable region has a table
+#  Scenario: A user can adjust the colspans of a table (in a full region)
+    Given the content of the full region has a table
     And I make a selection
 
     When I click on the increase colspan editor button
-    Then the contents of the editable region should be "this is a <table><tbody><tr><td colspan='2'><span>1</span></td></tr><tr><td><span>3</span></td><td><span>4</span></td></tr></tbody></table> <b>content</b>"
+    Then the contents of the full region should be "this is a <table><tbody><tr><td colspan='2'><span>1</span></td></tr><tr><td><span>3</span></td><td><span>4</span></td></tr></tbody></table> <b>content</b>"
 
     When I click on the decrease colspan editor button
-    Then the contents of the editable region should be "this is a <table><tbody><tr><td><span>1</span></td><td><br></td></tr><tr><td><span>3</span></td><td><span>4</span></td></tr></tbody></table> <b>content</b>"
+    Then the contents of the full region should be "this is a <table><tbody><tr><td><span>1</span></td><td><br></td></tr><tr><td><span>3</span></td><td><span>4</span></td></tr></tbody></table> <b>content</b>"
 
 
-#  Scenario: A user can adjust the rowspans of a table (in an editable region)
-    Given the content of the editable region has a table
+#  Scenario: A user can adjust the rowspans of a table (in a full region)
+    Given the content of the full region has a table
     And I make a selection
 
     When I click on the increase rowspan editor button
-    Then the contents of the editable region should be "this is a <table><tbody><tr><td rowspan='2'><span>1</span></td><td><span>2</span></td></tr><tr><td><span>4</span></td></tr></tbody></table> <b>content</b>"
+    Then the contents of the full region should be "this is a <table><tbody><tr><td rowspan='2'><span>1</span></td><td><span>2</span></td></tr><tr><td><span>4</span></td></tr></tbody></table> <b>content</b>"
 
     When I click on the decrease rowspan editor button
-    Then the contents of the editable region should be "this is a <table><tbody><tr><td><span>1</span></td><td><span>2</span></td></tr><tr><td><br></td><td><span>4</span></td></tr></tbody></table> <b>content</b>"
+    Then the contents of the full region should be "this is a <table><tbody><tr><td><span>1</span></td><td><span>2</span></td></tr><tr><td><br></td><td><span>4</span></td></tr></tbody></table> <b>content</b>"

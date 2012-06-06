@@ -253,7 +253,7 @@
 .mercury-editable-toolbar .mercury-htmlEditor-button                 { background-position: -612px 0 }
 .mercury-editable-toolbar .mercury-htmlEditor-button.active          { background-position: -612px -18px }
 /*
- * Toolbar: Snippetable Region Toolbar
+ * Toolbar: Snippets Region Toolbar
  *----------------------------------------------------------------------------*/
 .mercury-snippet-toolbar {
   position: absolute;

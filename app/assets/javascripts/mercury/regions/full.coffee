@@ -1,8 +1,8 @@
-class @Mercury.Regions.Editable extends Mercury.Region
+class @Mercury.Regions.Full extends Mercury.Region
   # No IE support yet because it doesn't follow the W3C standards for HTML5 contentEditable (aka designMode).
   @supported: document.designMode && !jQuery.browser.konqueror && !jQuery.browser.msie
   @supportedText: "Chrome 10+, Firefox 4+, Safari 5+"
-  type = 'editable'
+  type = 'full'
   type: -> type
 
   constructor: (@element, @window, @options = {}) ->
@@ -276,7 +276,7 @@ class @Mercury.Regions.Editable extends Mercury.Region
     super
 
     # use a custom handler if there's one, otherwise use execCommand
-    if handler = Mercury.config.behaviors[action] || Mercury.Regions.Editable.actions[action]
+    if handler = Mercury.config.behaviors[action] || Mercury.Regions.Full.actions[action]
       handler.call(@, @selection(), options)
     else
       sibling = @element.get(0).previousSibling if action == 'indent'
@@ -316,7 +316,7 @@ class @Mercury.Regions.Editable extends Mercury.Region
 
 
   selection: ->
-    return new Mercury.Regions.Editable.Selection(@window.getSelection(), @document)
+    return new Mercury.Regions.Full.Selection(@window.getSelection(), @document)
 
 
   path: ->
@@ -466,7 +466,7 @@ class @Mercury.Regions.Editable extends Mercury.Region
 
 
 # Helper class for managing selection and getting information from it
-class Mercury.Regions.Editable.Selection
+class Mercury.Regions.Full.Selection
 
   constructor: (@selection, @context) ->
     return unless @selection.rangeCount >= 1

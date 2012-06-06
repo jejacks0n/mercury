@@ -37,16 +37,16 @@ window.Mercury = {
     // behaviors.  Any top level object put here will create a new toolbar.  Buttons are simply nested inside the
     // toolbars, along with button groups.
     //
-    // Some toolbars are custom (the snippetable toolbar for instance), and to denote that use _custom: true.  You can
-    // then build the toolbar yourself with it's own behavior.
+    // Some toolbars are custom (the snippets toolbar for instance), and to denote that use _custom: true.  You can then
+    // build the toolbar yourself with it's own behavior.
     //
     // Buttons can be grouped, and a button group is simply a way to wrap buttons for styling -- they can also handle
-    // enabling or disabling all the buttons within it by using a context.  The table button group is a good example
-    // of this.
+    // enabling or disabling all the buttons within it by using a context.  The table button group is a good example of
+    // this.
     //
-    // It's important to note that each of the button names (keys), in each toolbar object must be unique, regardless
-    // of if it's in a button group, or nested, etc.  This is because styling is applied to them by name, and because
-    // their name is used in the event that's fired when you click on them.
+    // It's important to note that each of the button names (keys), in each toolbar object must be unique, regardless of
+    // if it's in a button group, or nested, etc.  This is because styling is applied to them by name, and because their
+    // name is used in the event that's fired when you click on them.
     //
     // Button format: `[label, description, {type: action, type: action, etc}]`
     //
@@ -76,8 +76,8 @@ window.Mercury = {
     //   1. a string, denoting the name of the mode
     //   note: it's assumed that when a specific mode is turned on, all other modes will be turned off, which happens
     //         automatically, thus putting the editor into a specific "state"
-    // - regions:   allows buttons to be enabled/disabled based on what region type has focus, expects the action to be:
-    //   1. an array of region types (eg. ['editable', 'markupable'])
+    // - regions:   allows buttons to be enabled/disabled based on what region type has focus, expects:
+    //   1. an array of region types (eg. ['full', 'markdown'])
     // - preload:   allows some dialog views to be loaded when the button is created instead of on first open, expects:
     //   1. a boolean true / false
     //   note: this is only used by panels, selects, and palettes
@@ -101,10 +101,10 @@ window.Mercury = {
           redo:                ['Redo', 'Redo your last action'],
           sep:                 ' '
           },
-        insertLink:            ['Link', 'Insert Link', { modal: '/mercury/modals/link.html', regions: ['editable', 'markupable'] }],
-        insertMedia:           ['Media', 'Insert Media (images and videos)', { modal: '/mercury/modals/media.html', regions: ['editable', 'markupable'] }],
-        insertTable:           ['Table', 'Insert Table', { modal: '/mercury/modals/table.html', regions: ['editable', 'markupable'] }],
-        insertCharacter:       ['Character', 'Special Characters', { modal: '/mercury/modals/character.html', regions: ['editable', 'markupable'] }],
+        insertLink:            ['Link', 'Insert Link', { modal: '/mercury/modals/link.html', regions: ['full', 'markdown'] }],
+        insertMedia:           ['Media', 'Insert Media (images and videos)', { modal: '/mercury/modals/media.html', regions: ['full', 'markdown'] }],
+        insertTable:           ['Table', 'Insert Table', { modal: '/mercury/modals/table.html', regions: ['full', 'markdown'] }],
+        insertCharacter:       ['Character', 'Special Characters', { modal: '/mercury/modals/character.html', regions: ['full', 'markdown'] }],
         snippetPanel:          ['Snippet', 'Snippet Panel', { panel: '/mercury/panels/snippets.html' }],
         sep2:                  ' ',
         historyPanel:          ['History', 'Page Version History', { panel: '/mercury/panels/history.html' }],
@@ -113,7 +113,7 @@ window.Mercury = {
         },
 
       editable: {
-        _regions:              ['editable', 'markupable'],
+        _regions:              ['full', 'markdown'],
         predefined:            {
           style:               ['Style', null, { select: '/mercury/selects/style.html', preload: true }],
           sep1:                ' ',
@@ -121,17 +121,17 @@ window.Mercury = {
           sep2:                '-'
           },
         colors:                {
-          backColor:           ['Background Color', null, { palette: '/mercury/palettes/backcolor.html', context: true, preload: true, regions: ['editable'] }],
+          backColor:           ['Background Color', null, { palette: '/mercury/palettes/backcolor.html', context: true, preload: true, regions: ['full'] }],
           sep1:                ' ',
-          foreColor:           ['Text Color', null, { palette: '/mercury/palettes/forecolor.html', context: true, preload: true, regions: ['editable'] }],
+          foreColor:           ['Text Color', null, { palette: '/mercury/palettes/forecolor.html', context: true, preload: true, regions: ['full'] }],
           sep2:                '-'
           },
         decoration:            {
           bold:                ['Bold', null, { context: true }],
           italic:              ['Italicize', null, { context: true }],
-          overline:            ['Overline', null, { context: true, regions: ['editable'] }],
-          strikethrough:       ['Strikethrough', null, { context: true, regions: ['editable'] }],
-          underline:           ['Underline', null, { context: true, regions: ['editable'] }],
+          overline:            ['Overline', null, { context: true, regions: ['full'] }],
+          strikethrough:       ['Strikethrough', null, { context: true, regions: ['full'] }],
+          underline:           ['Underline', null, { context: true, regions: ['full'] }],
           sep:                 '-'
           },
         script:                {
@@ -140,10 +140,10 @@ window.Mercury = {
           sep: '-'
           },
         justify:               {
-          justifyLeft:         ['Align Left', null, { context: true, regions: ['editable'] }],
-          justifyCenter:       ['Center', null, { context: true, regions: ['editable'] }],
-          justifyRight:        ['Align Right', null, { context: true, regions: ['editable'] }],
-          justifyFull:         ['Justify Full', null, { context: true, regions: ['editable'] }],
+          justifyLeft:         ['Align Left', null, { context: true, regions: ['full'] }],
+          justifyCenter:       ['Center', null, { context: true, regions: ['full'] }],
+          justifyRight:        ['Align Right', null, { context: true, regions: ['full'] }],
+          justifyFull:         ['Justify Full', null, { context: true, regions: ['full'] }],
           sep:                 '-'
           },
         list:                  {
@@ -158,12 +158,12 @@ window.Mercury = {
           },
         table:                 {
           _context:            true,
-          insertRowBefore:     ['Insert Table Row', 'Insert a table row before the cursor', { regions: ['editable'] }],
-          insertRowAfter:      ['Insert Table Row', 'Insert a table row after the cursor', { regions: ['editable'] }],
-          deleteRow:           ['Delete Table Row', 'Delete this table row', { regions: ['editable'] }],
-          insertColumnBefore:  ['Insert Table Column', 'Insert a table column before the cursor', { regions: ['editable'] }],
-          insertColumnAfter:   ['Insert Table Column', 'Insert a table column after the cursor', { regions: ['editable'] }],
-          deleteColumn:        ['Delete Table Column', 'Delete this table column', { regions: ['editable'] }],
+          insertRowBefore:     ['Insert Table Row', 'Insert a table row before the cursor', { regions: ['full'] }],
+          insertRowAfter:      ['Insert Table Row', 'Insert a table row after the cursor', { regions: ['full'] }],
+          deleteRow:           ['Delete Table Row', 'Delete this table row', { regions: ['full'] }],
+          insertColumnBefore:  ['Insert Table Column', 'Insert a table column before the cursor', { regions: ['full'] }],
+          insertColumnAfter:   ['Insert Table Column', 'Insert a table column after the cursor', { regions: ['full'] }],
+          deleteColumn:        ['Delete Table Column', 'Delete this table column', { regions: ['full'] }],
           sep1:                ' ',
           increaseColspan:     ['Increase Cell Columns', 'Increase the cells colspan'],
           decreaseColspan:     ['Decrease Cell Columns', 'Decrease the cells colspan and add a new cell'],
@@ -176,15 +176,15 @@ window.Mercury = {
           sep1:                '-'
           },
         formatting:            {
-          removeFormatting:    ['Remove Formatting', 'Remove formatting for the selection', { regions: ['editable'] }],
+          removeFormatting:    ['Remove Formatting', 'Remove formatting for the selection', { regions: ['full'] }],
           sep2:                ' '
           },
         editors:               {
-          htmlEditor:          ['Edit HTML', 'Edit the HTML content', { regions: ['editable'] }]
+          htmlEditor:          ['Edit HTML', 'Edit the HTML content', { regions: ['full'] }]
           }
         },
 
-      snippetable: {
+      snippets: {
         _custom:               true,
         actions:               {
           editSnippet:         ['Edit Snippet Settings'],
@@ -307,7 +307,7 @@ window.Mercury = {
     // If you want to add behaviors to specific region types, you can mix them into the actions property of any region
     // type.
     //
-    //     Mercury.Regions.Editable.actions.htmlEditor = function() {}
+    //     Mercury.Regions.Full.actions.htmlEditor = function() {}
     //
     // You can see how the behavior matches up directly with the button names.  It's also important to note that the
     // callback functions are executed within the scope of the given region, so you have access to all it's methods.
@@ -348,11 +348,13 @@ window.Mercury = {
     csrfSelector: 'meta[name="csrf-token"]',
     csrfHeader: 'X-CSRF-Token',
 
+
     // ## Editor URLs
     //
     // When loading a given page, you may want to tweak this regex.  It's to allow the url to differ from the page
     // you're editing, and the url at which you access it.
     editorUrlRegEx: /([http|https]:\/\/.[^\/]*)\/editor\/?(.*)/i,
+
 
     // ## Hijacking Links & Forms
     //

@@ -12,7 +12,7 @@ Feature:
 
 
 #  Scenario: A user can insert special characters
-    Given the content of the editable region is simple content
+    Given the content of the full region is simple content
     And I make a selection
 
     When I click on the "Insert Character" button
@@ -21,4 +21,4 @@ Feature:
 
     When I click on the sweet snowman
     Then the modal window should not be visible
-    And the contents of the editable region should be "this is ☃ <b>content</b>"
+    And the contents of the full region should be "this is ☃ <b>content</b>"

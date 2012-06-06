@@ -1,9 +1,9 @@
-describe "Mercury.Regions.Snippetable", ->
+describe "Mercury.Regions.Snippets", ->
 
-  template 'mercury/regions/snippetable.html'
+  template 'mercury/regions/snippets.html'
 
   beforeEach ->
-    @regionElement = $('#snippetable_region1')
+    @regionElement = $('#snippets_region1')
 
   afterEach ->
     @region = null
@@ -12,50 +12,50 @@ describe "Mercury.Regions.Snippetable", ->
   describe "constructor", ->
 
     beforeEach ->
-      @buildSpy = spyOn(Mercury.Regions.Snippetable.prototype, 'build').andCallFake(=>)
-      @bindEventsSpy = spyOn(Mercury.Regions.Snippetable.prototype, 'bindEvents').andCallFake(=>)
-      @makeSortableSpy = spyOn(Mercury.Regions.Snippetable.prototype, 'makeSortable').andCallFake(=>)
+      @buildSpy = spyOn(Mercury.Regions.Snippets.prototype, 'build').andCallFake(=>)
+      @bindEventsSpy = spyOn(Mercury.Regions.Snippets.prototype, 'bindEvents').andCallFake(=>)
+      @makeSortableSpy = spyOn(Mercury.Regions.Snippets.prototype, 'makeSortable').andCallFake(=>)
 
     it "expects an element and window", ->
-      @region = new Mercury.Regions.Snippetable(@regionElement, window)
-      expect(@region.element.get(0)).toEqual($('#snippetable_region1').get(0))
+      @region = new Mercury.Regions.Snippets(@regionElement, window)
+      expect(@region.element.get(0)).toEqual($('#snippets_region1').get(0))
       expect(@region.window).toEqual(window)
 
     it "accepts options", ->
-      @region = new Mercury.Regions.Snippetable(@regionElement, window, {foo: 'something'})
+      @region = new Mercury.Regions.Snippets(@regionElement, window, {foo: 'something'})
       expect(@region.options).toEqual({foo: 'something'})
 
     it "sets it's type", ->
-      @region = new Mercury.Regions.Snippetable(@regionElement, window)
-      expect(@region.type()).toEqual('snippetable')
+      @region = new Mercury.Regions.Snippets(@regionElement, window)
+      expect(@region.type()).toEqual('snippets')
 
     it "calls build", ->
-      @region = new Mercury.Regions.Snippetable(@regionElement, window)
+      @region = new Mercury.Regions.Snippets(@regionElement, window)
       expect(@buildSpy.callCount).toEqual(1)
 
     it "calls bindEvents", ->
-      @region = new Mercury.Regions.Snippetable(@regionElement, window)
+      @region = new Mercury.Regions.Snippets(@regionElement, window)
       expect(@bindEventsSpy.callCount).toEqual(1)
 
     it "makes the snippets sortable", ->
-      @region = new Mercury.Regions.Snippetable(@regionElement, window)
+      @region = new Mercury.Regions.Snippets(@regionElement, window)
       expect(@makeSortableSpy.callCount).toEqual(1)
 
 
   describe "#build", ->
 
     beforeEach ->
-      spyOn(Mercury.Regions.Snippetable.prototype, 'bindEvents').andCallFake(=>)
+      spyOn(Mercury.Regions.Snippets.prototype, 'bindEvents').andCallFake(=>)
 
     it "sets the element min-height to 20 if it's min-height is 0 (or not set)", ->
-      @region = new Mercury.Regions.Snippetable(@regionElement, window)
-      expect($('#snippetable_region1').css('minHeight')).toEqual('20px')
+      @region = new Mercury.Regions.Snippets(@regionElement, window)
+      expect($('#snippets_region1').css('minHeight')).toEqual('20px')
 
 
   describe "observed events", ->
 
     beforeEach ->
-      @region = new Mercury.Regions.Snippetable(@regionElement, window)
+      @region = new Mercury.Regions.Snippets(@regionElement, window)
       Mercury.region = @region
 
     describe "custom event: unfocus:regions", ->
@@ -121,33 +121,33 @@ describe "Mercury.Regions.Snippetable", ->
     describe "keydown on document (for undo / redo)", ->
 
       it "calls execCommand with undo on meta+z", ->
-        spy = spyOn(Mercury.Regions.Snippetable.prototype, 'execCommand')
+        spy = spyOn(Mercury.Regions.Snippets.prototype, 'execCommand')
         jasmine.simulate.keydown(document, {shiftKey: false, metaKey: true, keyCode: 90})
         expect(spy.callCount).toEqual(1)
         expect(spy.argsForCall[0]).toEqual(['undo'])
 
       it "calls execCommand with redo on shift+meta+z", ->
-        spy = spyOn(Mercury.Regions.Snippetable.prototype, 'execCommand')
+        spy = spyOn(Mercury.Regions.Snippets.prototype, 'execCommand')
         jasmine.simulate.keydown(document, {shiftKey: true, metaKey: true, keyCode: 90})
         expect(spy.callCount).toEqual(1)
         expect(spy.argsForCall[0]).toEqual(['redo'])
 
       it "does nothing if previewing", ->
         @region.previewing = true
-        spy = spyOn(Mercury.Regions.Snippetable.prototype, 'execCommand')
+        spy = spyOn(Mercury.Regions.Snippets.prototype, 'execCommand')
         jasmine.simulate.keydown(document, {shiftKey: true, metaKey: true, keyCode: 90})
         expect(spy.callCount).toEqual(0)
 
       it "does nothing if it's not the active region", ->
         Mercury.region = null
-        spy = spyOn(Mercury.Regions.Snippetable.prototype, 'execCommand')
+        spy = spyOn(Mercury.Regions.Snippets.prototype, 'execCommand')
         jasmine.simulate.keydown(document, {shiftKey: true, metaKey: true, keyCode: 90})
         expect(spy.callCount).toEqual(0)
 
     describe "mouseup", ->
 
       it "calls focus", ->
-        spy = spyOn(Mercury.Regions.Snippetable.prototype, 'focus')
+        spy = spyOn(Mercury.Regions.Snippets.prototype, 'focus')
         jasmine.simulate.mouseup(@region.element.get(0))
         expect(spy.callCount).toEqual(1)
 
@@ -158,7 +158,7 @@ describe "Mercury.Regions.Snippetable", ->
 
       it "does nothing if previewing", ->
         @region.previewing = true
-        spy = spyOn(Mercury.Regions.Snippetable.prototype, 'focus')
+        spy = spyOn(Mercury.Regions.Snippets.prototype, 'focus')
         jasmine.simulate.mouseup(@region.element.get(0))
         expect(spy.callCount).toEqual(0)
 
@@ -181,7 +181,7 @@ describe "Mercury.Regions.Snippetable", ->
   describe "#focus", ->
 
     beforeEach ->
-      @region = new Mercury.Regions.Snippetable(@regionElement, window)
+      @region = new Mercury.Regions.Snippets(@regionElement, window)
 
     it "sets the active mercury region", ->
       Mercury.region = null
@@ -189,19 +189,19 @@ describe "Mercury.Regions.Snippetable", ->
       expect(Mercury.region).toEqual(@region)
 
     it "makes the snippets sortable again", ->
-      spy = spyOn(Mercury.Regions.Snippetable.prototype, 'makeSortable')
+      spy = spyOn(Mercury.Regions.Snippets.prototype, 'makeSortable')
       @region.focus()
       expect(spy.callCount).toEqual(1)
 
     it "adds the focus class to the element", ->
       @region.focus()
-      expect($('#snippetable_region1').hasClass('focus')).toEqual(true)
+      expect($('#snippets_region1').hasClass('focus')).toEqual(true)
 
 
   describe "#togglePreview", ->
 
     beforeEach ->
-      @region = new Mercury.Regions.Snippetable(@regionElement, window)
+      @region = new Mercury.Regions.Snippets(@regionElement, window)
 
     describe "when not previewing", ->
 
@@ -214,7 +214,7 @@ describe "Mercury.Regions.Snippetable", ->
       it "removes the focus class", ->
         @regionElement.addClass('focus')
         @region.togglePreview()
-        expect($('#snippetable_region1').hasClass('focus')).toEqual(false)
+        expect($('#snippets_region1').hasClass('focus')).toEqual(false)
 
     describe "when previewing", ->
 
@@ -222,7 +222,7 @@ describe "Mercury.Regions.Snippetable", ->
         @region.previewing = true
 
       it "makes the snippets sortable again", ->
-        spy = spyOn(Mercury.Regions.Snippetable.prototype, 'makeSortable')
+        spy = spyOn(Mercury.Regions.Snippets.prototype, 'makeSortable')
         @region.togglePreview()
         expect(spy.callCount).toEqual(1)
 
@@ -230,9 +230,9 @@ describe "Mercury.Regions.Snippetable", ->
   describe "#execCommand", ->
 
     beforeEach ->
-      @region = new Mercury.Regions.Snippetable(@regionElement, window)
-      Mercury.Regions.Snippetable.actions['foo'] = ->
-      @handlerSpy = spyOn(Mercury.Regions.Snippetable.actions, 'foo')
+      @region = new Mercury.Regions.Snippets(@regionElement, window)
+      Mercury.Regions.Snippets.actions['foo'] = ->
+      @handlerSpy = spyOn(Mercury.Regions.Snippets.actions, 'foo')
 
     it "calls a handler (from the actions) if one exists", ->
       @region.execCommand('foo', {value: 'something'})
@@ -243,7 +243,7 @@ describe "Mercury.Regions.Snippetable", ->
   describe "#makeSortable", ->
 
     beforeEach ->
-      @region = new Mercury.Regions.Snippetable(@regionElement, window)
+      @region = new Mercury.Regions.Snippets(@regionElement, window)
       @sortableSpy = spyOn($.fn, 'sortable')
 
     it "makes the snippets sortable", ->
@@ -261,7 +261,7 @@ describe "Mercury.Regions.Snippetable", ->
       expect(spy.argsForCall[0]).toEqual(['hide:toolbar', {type: 'snippet', immediately: true}])
 
     it "pushes to the history after dragging", ->
-      spy = spyOn(Mercury.Regions.Snippetable.prototype, 'pushHistory').andCallFake(=>)
+      spy = spyOn(Mercury.Regions.Snippets.prototype, 'pushHistory').andCallFake(=>)
       spyOn(window, 'setTimeout').andCallFake((callback, timeout)=> callback())
       @sortableSpy.andCallFake((arg) => if arg == 'destroy' then return @region.element else arg.stop())
       @region.makeSortable()
@@ -269,18 +269,18 @@ describe "Mercury.Regions.Snippetable", ->
 
 
 
-describe "Mercury.Regions.Snippetable.actions", ->
+describe "Mercury.Regions.Snippets.actions", ->
 
-  template 'mercury/regions/snippetable.html'
+  template 'mercury/regions/snippets.html'
 
   beforeEach ->
-    @region = new Mercury.Regions.Snippetable($('#snippetable_region2'), window)
-    @actions = Mercury.Regions.Snippetable.actions
+    @region = new Mercury.Regions.Snippets($('#snippets_region2'), window)
+    @actions = Mercury.Regions.Snippets.actions
 
   describe ".undo", ->
 
     it "calls undo on the history buffer and sets the content", ->
-      htmlSpy = spyOn(Mercury.Regions.Snippetable.prototype, 'content').andCallFake(=>)
+      htmlSpy = spyOn(Mercury.Regions.Snippets.prototype, 'content').andCallFake(=>)
       historySpy = spyOn(@region.history, 'undo').andCallFake(=> 'history -1')
       @actions['undo'].call(@region)
       expect(historySpy.callCount).toEqual(1)
@@ -291,7 +291,7 @@ describe "Mercury.Regions.Snippetable.actions", ->
   describe ".redo", ->
 
     it "calls redo on the history buffer and sets the content", ->
-      htmlSpy = spyOn(Mercury.Regions.Snippetable.prototype, 'content').andCallFake(=>)
+      htmlSpy = spyOn(Mercury.Regions.Snippets.prototype, 'content').andCallFake(=>)
       historySpy = spyOn(@region.history, 'redo').andCallFake(=> 'history +1')
       @actions['redo'].call(@region)
       expect(historySpy.callCount).toEqual(1)
@@ -312,15 +312,15 @@ describe "Mercury.Regions.Snippetable.actions", ->
 
       it "finds the snippet by it's identity and replaces it with the new snippet", ->
         @actions['insertSnippet'].call(@region, {value: Mercury.Snippet.find('snippet_1')})
-        expect($('#snippetable_region2').html()).toContain('class="example-snippet"')
-        expect($('#snippetable_region2').html()).toContain('contenteditable="false"')
-        expect($('#snippetable_region2').html()).toContain('data-version="1"')
-        expect($('#snippetable_region2').html()).toContain('data-snippet="snippet_1"')
-        expect($('#snippetable_region2').html()).toContain('[snippet_1]')
+        expect($('#snippets_region2').html()).toContain('class="example-snippet"')
+        expect($('#snippets_region2').html()).toContain('contenteditable="false"')
+        expect($('#snippets_region2').html()).toContain('data-version="1"')
+        expect($('#snippets_region2').html()).toContain('data-snippet="snippet_1"')
+        expect($('#snippets_region2').html()).toContain('[snippet_1]')
 
       it "pushes to the history after it's been rendered", ->
         spyOn(Mercury.Snippet.prototype, 'getHTML').andCallFake((x, callback) => callback() if callback)
-        spy = spyOn(Mercury.Regions.Snippetable.prototype, 'pushHistory').andCallFake(=>)
+        spy = spyOn(Mercury.Regions.Snippets.prototype, 'pushHistory').andCallFake(=>)
         @actions['insertSnippet'].call(@region, {value: Mercury.Snippet.find('snippet_1')})
         expect(spy.callCount).toEqual(1)
 
@@ -328,11 +328,11 @@ describe "Mercury.Regions.Snippetable.actions", ->
 
       it "appends the new snippet html to the element", ->
         @actions['insertSnippet'].call(@region, {value: Mercury.Snippet.find('snippet_2')})
-        expect($('#snippetable_region2 [data-snippet]').length).toEqual(2)
+        expect($('#snippets_region2 [data-snippet]').length).toEqual(2)
 
       it "pushes to the history after it's been rendered", ->
         spyOn(Mercury.Snippet.prototype, 'getHTML').andCallFake((x, callback) => callback() if callback)
-        spy = spyOn(Mercury.Regions.Snippetable.prototype, 'pushHistory').andCallFake(=>)
+        spy = spyOn(Mercury.Regions.Snippets.prototype, 'pushHistory').andCallFake(=>)
         @actions['insertSnippet'].call(@region, {value: Mercury.Snippet.find('snippet_2')})
         expect(spy.callCount).toEqual(1)
 
@@ -340,7 +340,7 @@ describe "Mercury.Regions.Snippetable.actions", ->
   describe ".editSnippet", ->
 
     beforeEach ->
-      @region.snippet = $('#snippetable_region2 [data-snippet]')
+      @region.snippet = $('#snippets_region2 [data-snippet]')
 
     it "finds and displays the options for the given snippet", ->
       spy = spyOn(Mercury.Snippet.prototype, 'displayOptions')
@@ -357,11 +357,11 @@ describe "Mercury.Regions.Snippetable.actions", ->
   describe ".removeSnippet", ->
 
     beforeEach ->
-      @region.snippet = $('#snippetable_region2 .mercury-snippet')
+      @region.snippet = $('#snippets_region2 .mercury-snippet')
 
     it "removes the snippet if there's an active one", ->
       @actions['removeSnippet'].call(@region)
-      expect($('#snippetable_region2 .mercury-snippet').length).toEqual(0)
+      expect($('#snippets_region2 .mercury-snippet').length).toEqual(0)
 
     it "triggers the hide:toolbar event", ->
       spy = spyOn(Mercury, 'trigger').andCallFake(=>)

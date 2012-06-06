@@ -1,35 +1,35 @@
-describe "Mercury.Regions.Editable", ->
+describe "Mercury.Regions.Full", ->
 
-  template 'mercury/regions/editable.html'
+  template 'mercury/regions/full.html'
 
   beforeEach ->
-    @regionElement = $('#editable_region1')
+    @regionElement = $('#full_region1')
 
   describe "constructor", ->
 
      beforeEach ->
-       @buildSpy = spyOn(Mercury.Regions.Editable.prototype, 'build').andCallFake(=>)
-       @bindEventsSpy = spyOn(Mercury.Regions.Editable.prototype, 'bindEvents').andCallFake(=>)
+       @buildSpy = spyOn(Mercury.Regions.Full.prototype, 'build').andCallFake(=>)
+       @bindEventsSpy = spyOn(Mercury.Regions.Full.prototype, 'bindEvents').andCallFake(=>)
 
      it "expects an element and window", ->
-       @region = new Mercury.Regions.Editable(@regionElement, window)
-       expect(@region.element.get(0)).toEqual($('#editable_region1').get(0))
+       @region = new Mercury.Regions.Full(@regionElement, window)
+       expect(@region.element.get(0)).toEqual($('#full_region1').get(0))
        expect(@region.window).toEqual(window)
 
      it "accepts options", ->
-       @region = new Mercury.Regions.Editable(@regionElement, window, {foo: 'something'})
+       @region = new Mercury.Regions.Full(@regionElement, window, {foo: 'something'})
        expect(@region.options).toEqual({foo: 'something'})
 
      it "sets it's type", ->
-       @region = new Mercury.Regions.Editable(@regionElement, window)
-       expect(@region.type()).toEqual('editable')
+       @region = new Mercury.Regions.Full(@regionElement, window)
+       expect(@region.type()).toEqual('full')
 
      it "calls build", ->
-       @region = new Mercury.Regions.Editable(@regionElement, window)
+       @region = new Mercury.Regions.Full(@regionElement, window)
        expect(@buildSpy.callCount).toEqual(1)
 
      it "calls bindEvents", ->
-       @region = new Mercury.Regions.Editable(@regionElement, window)
+       @region = new Mercury.Regions.Full(@regionElement, window)
        expect(@bindEventsSpy.callCount).toEqual(1)
 
 
@@ -326,13 +326,13 @@ describe "Mercury.Regions.Editable", ->
 
 
 
-describe "Mercury.Regions.Editable.actions", ->
+describe "Mercury.Regions.Full.actions", ->
 
-  template 'mercury/regions/editable.html'
+  template 'mercury/regions/full.html'
 
   beforeEach ->
-    #@region = new Mercury.Regions.Editable($('#editable_region1'), window)
-    #@actions = Mercury.Regions.Editable.actions
+    #@region = new Mercury.Regions.Full($('#full_region1'), window)
+    #@actions = Mercury.Regions.Full.actions
 
   #
   # behaviors

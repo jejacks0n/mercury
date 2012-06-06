@@ -181,15 +181,13 @@ class @Mercury.Regions.Simple extends Mercury.Region
     if @previewing
       @previewing = false
       @element = @container
+      @container.attr(Mercury.config.regions.attribute, type)
       @build()
       @focus() if Mercury.region == @
-      # @container.addClass(Mercury.config.regions.className).removeClass("#{Mercury.config.regions.className}-preview")
-      # @previewElement.hide()
-      # @element.show()
     else
       @previewing = true
-      @container.addClass("#{Mercury.config.regions.className}-preview").removeClass(Mercury.config.regions.className)
       value = jQuery('<div></div>').text(@element.val()).html()
+      @container.removeAttr(Mercury.config.regions.attribute)
       @container.html(value)
       Mercury.trigger('region:blurred', {region: @})
 

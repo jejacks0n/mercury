@@ -9,7 +9,7 @@ class @Mercury.SnippetToolbar extends Mercury.Toolbar
     @element = jQuery('<div>', {class: 'mercury-toolbar mercury-snippet-toolbar', style: 'display:none'})
     @element.appendTo(jQuery(@options.appendTo).get(0) ? 'body')
 
-    for own buttonName, options of Mercury.config.toolbars.snippetable
+    for own buttonName, options of Mercury.config.toolbars.snippets
       button = @buildButton(buttonName, options)
       button.appendTo(@element) if button
 

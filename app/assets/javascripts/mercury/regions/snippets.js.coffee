@@ -1,7 +1,7 @@
-class @Mercury.Regions.Snippetable extends Mercury.Region
+class @Mercury.Regions.Snippets extends Mercury.Region
   @supported: document.getElementById
   @supportedText: "IE 7+, Chrome 10+, Firefox 4+, Safari 5+, Opera 8+"
-  type = 'snippetable'
+  type = 'snippets'
   type: -> type
 
   constructor: (@element, @window, @options = {}) ->
@@ -77,7 +77,7 @@ class @Mercury.Regions.Snippetable extends Mercury.Region
 
   execCommand: (action, options = {}) ->
     super
-    handler.call(@, options) if handler = Mercury.Regions.Snippetable.actions[action]
+    handler.call(@, options) if handler = Mercury.Regions.Snippets.actions[action]
 
 
   makeSortable: ->

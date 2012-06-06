@@ -3,7 +3,7 @@ describe "Mercury.Regions.Simple", ->
   template 'mercury/regions/simple.html'
 
   beforeEach ->
-    @regionElement = $('#editable_region1')
+    @regionElement = $('#simple_region1')
 
   describe "constructor", ->
 
@@ -13,7 +13,7 @@ describe "Mercury.Regions.Simple", ->
 
      it "expects an element and window", ->
        @region = new Mercury.Regions.Simple(@regionElement, window)
-       expect(@region.element.get(0)).toEqual($('#editable_region1').get(0))
+       expect(@region.element.get(0)).toEqual($('#simple_region1').get(0))
        expect(@region.window).toEqual(window)
 
      it "accepts options", ->

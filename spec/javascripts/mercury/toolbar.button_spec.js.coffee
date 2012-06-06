@@ -6,8 +6,8 @@ describe "Mercury.Toolbar.Button", ->
     Mercury.displayRect = {0, 0, 500, 200}
     Mercury.Toolbar.Button.contexts.foo = -> true
     @region = {
-      type: -> 'editable'
-      element: $('<div class="mercury-region">')
+      type: -> 'full'
+      element: $('<div>')
       currentElement: -> $('<div>')
     }
     Mercury.preloadedViews['/nothing'] = 'nothing'
@@ -166,7 +166,7 @@ describe "Mercury.Toolbar.Button", ->
         expect(@button.hasClass('disabled')).toEqual(true)
 
       it "enables if the region type is supported", ->
-        @button = new Mercury.Toolbar.Button('foo', 'title', 'summary', {context: true, regions: ['editable']})
+        @button = new Mercury.Toolbar.Button('foo', 'title', 'summary', {context: true, regions: ['full']})
         @button.addClass('disabled')
         Mercury.trigger('region:focused', {region: @region})
         expect(@button.hasClass('disabled')).toEqual(false)
@@ -174,7 +174,7 @@ describe "Mercury.Toolbar.Button", ->
     describe "custom event: region:blurred", ->
 
       it "disables if it's a button for specific region types", ->
-        @button = new Mercury.Toolbar.Button('foo', 'title', 'summary', {context: true, regions: ['editable']})
+        @button = new Mercury.Toolbar.Button('foo', 'title', 'summary', {context: true, regions: ['full']})
         @button.addClass('disabled')
         Mercury.trigger('region:blurred', {region: @region})
         expect(@button.hasClass('disabled')).toEqual(true)
@@ -219,7 +219,7 @@ describe "Mercury.Toolbar.Button", ->
 
       it "triggers a focus:frame event", ->
         spy = spyOn(Mercury, 'trigger').andCallFake(=>)
-        @button = new Mercury.Toolbar.Button('foo', 'title', 'summary', {}, {regions: ['editable']})
+        @button = new Mercury.Toolbar.Button('foo', 'title', 'summary', {}, {regions: ['full']})
 
         jasmine.simulate.click(@button.get(0))
         expect(spy.argsForCall[1]).toEqual(['focus:frame'])

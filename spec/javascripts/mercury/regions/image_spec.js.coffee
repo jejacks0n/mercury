@@ -3,7 +3,7 @@ describe "Mercury.Regions.Image", ->
   template 'mercury/regions/image.html'
 
   beforeEach ->
-    @regionElement = $('#editable_region1')
+    @regionElement = $('#image_region1')
 
   describe "constructor", ->
 
@@ -13,7 +13,7 @@ describe "Mercury.Regions.Image", ->
 
      it "expects an element and window", ->
        @region = new Mercury.Regions.Image(@regionElement, window)
-       expect(@region.element.get(0)).toEqual($('#editable_region1').get(0))
+       expect(@region.element.get(0)).toEqual($('#image_region1').get(0))
        expect(@region.window).toEqual(window)
 
      it "accepts options", ->

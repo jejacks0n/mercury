@@ -2,26 +2,6 @@
  * Mercury Editor is a CoffeeScript and jQuery based WYSIWYG editor.  Documentation and other useful information can be
  * found at https://github.com/jejacks0n/mercury
  *
- * Supported browsers:
- *   - Firefox 4+
- *   - Chrome 10+
- *   - Safari 5+
- *
- * Copyright (c) 2011 Jeremy Jackson
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
- * documentation files (the "Software"), to deal in the Software without restriction, including without limitation the
- * rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit
- * persons to whom the Software is furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the
- * Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
- * WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
- * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
- * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- *
  *= require_self
  *
  * Minimum jQuery requirements are 1.7
@@ -31,11 +11,7 @@
  * using :remote => true within the contents rendered in them.
  * require jquery_ujs
  *
- * If you want to override Mercury functionality, you can do so in a custom file that binds to the mercury:loaded event,
- * or do so at the end of the current file (mercury.js).  There's an example that will help you get started.
- * require mercury_overrides
- *
- * Add all requires for the support libraries that integrate nicely with Mercury Editor.
+ * Add any requires for the support libraries that integrate nicely with Mercury Editor.
  * require mercury/support/history
  *
  * Require Mercury Editor itself.
@@ -47,6 +23,9 @@
  *
  * Add all requires for plugins that extend or change the behavior of Mercury Editor.
  * require mercury/plugins/save_as_xml/plugin.js
+ *
+ * Require any files you want to use that either extend, or change the default Mercury behavior.
+ * require mercury_overrides
  */
 window.Mercury = {
 
@@ -467,13 +446,6 @@ window.Mercury = {
   // ## Debug Mode
   //
   // Turning debug mode on will log events and other various things (using console.debug if available).
-  debug: false,
-
-  // The onload method is provided as a callback in case you want to override default Mercury Editor behavior.  It will
-  // be called directly after the Mercury scripts have loaded, but before anything has been initialized.  It's a good
-  // place to add or change functionality.
-  onload: function() {
-    //Mercury.PageEditor.prototype.iframeSrc = function(url) { return '/testing'; }
-  },
+  debug: false
 
 };

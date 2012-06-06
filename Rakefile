@@ -86,7 +86,7 @@ namespace :mercury do
         end
       end
 
-      copy_file(Mercury::Engine.root.join('app/assets/javascripts/mercury_loader.js'), Mercury::Engine.root.join('distro/javascripts/mercury_loader.js'))
+      #copy_file(Mercury::Engine.root.join('app/assets/javascripts/mercury_loader.js'), Mercury::Engine.root.join('distro/javascripts/mercury_loader.js'))
     end
 
     desc "Combine stylesheets into mercury.css and mercury.bundle.css (bundling images where possible)"

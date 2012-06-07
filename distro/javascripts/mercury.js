@@ -438,7 +438,7 @@ window.Mercury = {
       '[data-mercury] th    { border: 1px dotted red; min-width: 6px; }' +
       '[data-mercury] td    { border: 1px dotted red; min-width: 6px; }' +
       '[data-mercury] .mercury-textarea       { border: 0; box-sizing: border-box; -moz-box-sizing: border-box; -webkit-box-sizing: border-box; resize: none; }' +
-      '[data-mercury] .mercury-textarea:focus { outline: none; }'
+      '[data-mercury] .mercury-textarea:focus { outline: none; -webkit-box-shadow: none; -moz-box-shadow: none; box-shadow: none; }'
   },
 
   // ## Silent Mode
@@ -13252,7 +13252,7 @@ Showdown.converter = function() {
   this.Mercury || (this.Mercury = {});
 
   jQuery.extend(this.Mercury, {
-    version: '0.5.0',
+    version: '0.6.0',
     Regions: Mercury.Regions || {},
     modalHandlers: Mercury.modalHandlers || {},
     lightviewHandlers: Mercury.lightviewHandlers || {},
@@ -13443,8 +13443,9 @@ Showdown.converter = function() {
         throw Mercury.I18n('Mercury.PageEditor can only be instantiated once.');
       }
       if (!(this.options.visible === false || this.options.visible === 'false')) {
-        this.visible = this.options.visible = true;
+        this.options.visible = true;
       }
+      this.visible = this.options.visible;
       if (!(this.options.saveDataType === false || this.options.saveDataType)) {
         this.options.saveDataType = 'json';
       }

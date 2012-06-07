@@ -10,7 +10,7 @@
   height: 100%;
   opacity: 0;
   display: none;
-  background: rgba(255,255,255, .8);
+  background: rgba(255, 255, 255, .8);
 }
 .mercury-modal {
   position: fixed;

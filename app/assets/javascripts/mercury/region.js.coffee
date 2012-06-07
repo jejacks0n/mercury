@@ -36,7 +36,7 @@ class @Mercury.Region
       snippet = jQuery(event.target).closest('[data-snippet]')
       if snippet.length
         @snippet = snippet
-        Mercury.trigger('show:toolbar', {type: 'snippet', snippet: @snippet})
+        Mercury.trigger('show:toolbar', {type: 'snippet', snippet: @snippet}) if @snippet.data('snippet')
 
     @element.on 'mouseout', =>
       return if @previewing
@@ -87,6 +87,7 @@ class @Mercury.Region
     snippets = {}
     for element in @element.find('[data-snippet]')
       snippet = Mercury.Snippet.find(jQuery(element).data('snippet'))
+      continue unless snippet
       snippet.setVersion(jQuery(element).data('version'))
       snippets[snippet.identity] = snippet.serialize()
     return snippets

@@ -11,6 +11,7 @@ class @Mercury.Regions.Snippets extends Mercury.Region
 
 
   build: ->
+    jQuery(snippet).attr('data-version', 0) for snippet in @element.find('[data-snippet]')
     @element.css({minHeight: 20}) if @element.css('minHeight') == '0px'
 
 

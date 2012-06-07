@@ -173,11 +173,13 @@ describe "Mercury.PageEditor", ->
       expect(spy.argsForCall[0]).toEqual(['ready'])
 
     it "fires the ready event (jQuery.trigger)", ->
-      spy = spyOn(jQuery.fn, 'trigger').andCallFake(=>)
+      mock = {trigger: ->}
+      @pageEditor.iframe.get(0).contentWindow.jQuery = -> mock
+      spy = spyOn(mock, 'trigger').andCallFake(=>)
       @finalizeInterfaceSpy.andCallFake(=>)
       @pageEditor.initializeFrame()
-      expect(spy.callCount).toEqual(2)
-      expect(spy.argsForCall[0]).toEqual(['mercury:ready', undefined])
+      expect(spy.callCount).toEqual(1)
+      expect(spy.argsForCall[0]).toEqual(['mercury:ready'])
 
     it "fires the ready event (Event.fire)", ->
       @finalizeInterfaceSpy.andCallFake(=>)
@@ -319,7 +321,7 @@ describe "Mercury.PageEditor", ->
 
     it "fires a mode event to put things into preview mode if it's not visible yet", ->
       spy = spyOn(Mercury, 'trigger').andCallFake(=>)
-      @pageEditor.options.visible = false
+      @pageEditor.visible = false
       @pageEditor.finalizeInterface()
       expect(spy.callCount).toEqual(1)
 
@@ -467,13 +469,12 @@ describe "Mercury.PageEditor", ->
       beforeEach ->
         @pageEditor.visible = true
 
-      it "triggers an extra preview mode event if currently previewing", ->
-        @pageEditor.previewing = true
+      it "triggers an preview mode event if not currently previewing", ->
+        @pageEditor.previewing = false
         spy = spyOn(Mercury, 'trigger').andCallFake(=>)
         @pageEditor.toggleInterface()
-        expect(spy.callCount).toEqual(3)
+        expect(spy.callCount).toEqual(2)
         expect(spy.argsForCall[0]).toEqual(['mode', {mode: 'preview'}])
-        expect(spy.argsForCall[1]).toEqual(['mode', {mode: 'preview'}])
 
       it "sets visible to false", ->
         @pageEditor.toggleInterface()

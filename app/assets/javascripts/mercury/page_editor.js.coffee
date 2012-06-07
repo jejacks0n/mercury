@@ -31,6 +31,7 @@ class @Mercury.PageEditor
     @iframe.one 'load', => @bindEvents()
     @loadIframeSrc(null)
 
+
   initializeFrame: ->
     try
       return if @iframe.data('loaded')
@@ -142,15 +143,17 @@ class @Mercury.PageEditor
 
   toggleInterface: ->
     if @visible
-      Mercury.trigger('mode', {mode: 'preview'}) if @previewing
       @visible = false
       @toolbar.hide()
       @statusbar.hide()
+      Mercury.trigger('mode', {mode: 'preview'}) unless @previewing
+      @previewing = true
     else
       @visible = true
       @toolbar.show()
       @statusbar.show()
-    Mercury.trigger('mode', {mode: 'preview'})
+      Mercury.trigger('mode', {mode: 'preview'})
+      @previewing = false
     @resize()
 
 
@@ -182,12 +185,14 @@ class @Mercury.PageEditor
     else
       return url
 
+
   loadIframeSrc: (url)->
     # clear any existing events if we are loading a new iframe to replace the existing one
     @document.off() if @document
 
     @iframe.data('loaded', false)
     @iframe.get(0).contentWindow.document.location.href = @iframeSrc(url, true)
+
 
   hijackLinksAndForms: ->
     for element in jQuery('a, form', @document)

@@ -13443,12 +13443,11 @@ Showdown.converter = function() {
         throw Mercury.I18n('Mercury.PageEditor can only be instantiated once.');
       }
       if (!(this.options.visible === false || this.options.visible === 'no')) {
-        this.options.visible = true;
+        this.visible = true;
       }
       if (!(this.options.saveDataType === false || this.options.saveDataType)) {
         this.options.saveDataType = 'json';
       }
-      this.visible = this.options.visible;
       window.mercuryInstance = this;
       this.regions = [];
       this.initializeInterface();
@@ -13509,7 +13508,9 @@ Showdown.converter = function() {
         this.initializeRegions();
         this.finalizeInterface();
         Mercury.trigger('ready');
-        jQuery(iframeWindow).trigger('mercury:ready');
+        if (iframeWindow.jQuery) {
+          iframeWindow.jQuery(iframeWindow).trigger('mercury:ready');
+        }
         if (iframeWindow.Event && iframeWindow.Event.fire) {
           iframeWindow.Event.fire(iframeWindow, 'mercury:ready');
         }
@@ -13530,7 +13531,7 @@ Showdown.converter = function() {
         region = _ref[_i];
         this.buildRegion(jQuery(region));
       }
-      if (!this.options.visible) return;
+      if (!this.visible) return;
       _ref2 = this.regions;
       _results = [];
       for (_j = 0, _len2 = _ref2.length; _j < _len2; _j++) {
@@ -13575,7 +13576,7 @@ Showdown.converter = function() {
       if (this.snippetToolbar) this.snippetToolbar.release();
       this.snippetToolbar = new Mercury.SnippetToolbar(this.document);
       this.hijackLinksAndForms();
-      if (!this.options.visible) {
+      if (!this.visible) {
         return Mercury.trigger('mode', {
           mode: 'preview'
         });
@@ -13651,22 +13652,25 @@ Showdown.converter = function() {
 
     PageEditor.prototype.toggleInterface = function() {
       if (this.visible) {
-        if (this.previewing) {
+        this.visible = false;
+        this.toolbar.hide();
+        this.statusbar.hide();
+        console.debug('hiding', this.previewing);
+        if (!this.previewing) {
           Mercury.trigger('mode', {
             mode: 'preview'
           });
         }
-        this.visible = false;
-        this.toolbar.hide();
-        this.statusbar.hide();
+        this.previewing = true;
       } else {
         this.visible = true;
         this.toolbar.show();
         this.statusbar.show();
+        Mercury.trigger('mode', {
+          mode: 'preview'
+        });
+        this.previewing = false;
       }
-      Mercury.trigger('mode', {
-        mode: 'preview'
-      });
       return this.resize();
     };
 

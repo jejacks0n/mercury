@@ -119,7 +119,7 @@ This generator puts a mercury configuration file into your project in /app/asset
 also functions as a manifest using sprockets `require` to include dependencies.  The install generator can optionally
 install the layout and css files.
 
-### Image Processing / Uploading
+#### Image Processing / Uploading
 
 Mercury has a basic facility for allowing image uploads, and we provide a generator that can act as a starting point for
 your own back end integration.  To install run the generator.
@@ -133,7 +133,7 @@ your app.  This generator also puts paperclip (and mongoid_paperclip if needed) 
 If you're using ActiveRecord, make sure to migrate your database.  You can also disable this feature entirely in the
 mercury configuration if you don't plan on allowing image uploading.
 
-### Authentication
+#### Authentication
 
 Mercury provides a generator for giving you a basic authentication implementation.  You can run this generator and write
 your own logic into the authentication file it provides.
@@ -143,6 +143,11 @@ your own logic into the authentication file it provides.
 This provides a simple method for restricting the actions in the default MercuryController to only users who have the
 required privileges.  Since this can vary largely from application to application, it's a basic approach that assumes
 you'll write in what you want.
+
+### For Non-Rails Environments
+
+[Download the zip file](https://github.com/downloads/jejacks0n/mercury/mercury-v0.6.0.zip), and then follow the
+installation instructions on the [wiki article](https://github.com/jejacks0n/mercury/wiki/Using-Mercury-without-Rails).
 
 
 ## Usage
@@ -179,7 +184,8 @@ For more advanced ways to integrate Mercury Editor with your Rails application c
 
 ### Using Mercury without Rails
 
-Check this [wiki article](https://github.com/jejacks0n/mercury/wiki/Using-Mercury-without-Rails)
+If you're looking to use Mercury without Rails, you should start by checking this
+[wiki article](https://github.com/jejacks0n/mercury/wiki/Using-Mercury-without-Rails).
 
 
 ## Region Types

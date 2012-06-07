@@ -13442,8 +13442,8 @@ Showdown.converter = function() {
       if (window.mercuryInstance) {
         throw Mercury.I18n('Mercury.PageEditor can only be instantiated once.');
       }
-      if (!(this.options.visible === false || this.options.visible === 'no')) {
-        this.visible = true;
+      if (!(this.options.visible === false || this.options.visible === 'false')) {
+        this.visible = this.options.visible = true;
       }
       if (!(this.options.saveDataType === false || this.options.saveDataType)) {
         this.options.saveDataType = 'json';
@@ -13655,7 +13655,6 @@ Showdown.converter = function() {
         this.visible = false;
         this.toolbar.hide();
         this.statusbar.hide();
-        console.debug('hiding', this.previewing);
         if (!this.previewing) {
           Mercury.trigger('mode', {
             mode: 'preview'
@@ -16265,10 +16264,12 @@ Showdown.converter = function() {
         snippet = jQuery(event.target).closest('[data-snippet]');
         if (snippet.length) {
           _this.snippet = snippet;
-          return Mercury.trigger('show:toolbar', {
-            type: 'snippet',
-            snippet: _this.snippet
-          });
+          if (_this.snippet.data('snippet')) {
+            return Mercury.trigger('show:toolbar', {
+              type: 'snippet',
+              snippet: _this.snippet
+            });
+          }
         }
       });
       return this.element.on('mouseout', function() {
@@ -16338,6 +16339,7 @@ Showdown.converter = function() {
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         element = _ref[_i];
         snippet = Mercury.Snippet.find(jQuery(element).data('snippet'));
+        if (!snippet) continue;
         snippet.setVersion(jQuery(element).data('version'));
         snippets[snippet.identity] = snippet.serialize();
       }
@@ -18135,29 +18137,11 @@ Showdown.converter = function() {
           region: _this
         });
       });
-      this.element.on('dragenter', function(event) {
-        if (_this.previewing) return;
-        event.preventDefault();
-        return event.originalEvent.dataTransfer.dropEffect = 'copy';
-      });
-      this.element.on('dragover', function(event) {
-        if (_this.previewing) return;
-        event.preventDefault();
-        return event.originalEvent.dataTransfer.dropEffect = 'copy';
-      });
-      this.element.on('drop', function(event) {
-        if (_this.previewing) return;
-        if (Mercury.snippet) {
-          event.preventDefault();
-          _this.focus();
-          Mercury.Snippet.displayOptionsFor(Mercury.snippet);
-        }
-        if (event.originalEvent.dataTransfer.files.length) {
-          event.preventDefault();
-          _this.focus();
-          return Mercury.uploader(event.originalEvent.dataTransfer.files[0]);
-        }
-      });
+      return this.bindElementEvents();
+    };
+
+    Simple.prototype.bindElementEvents = function() {
+      var _this = this;
       this.element.on('focus', function() {
         if (_this.previewing) return;
         Mercury.region = _this;
@@ -18278,6 +18262,7 @@ Showdown.converter = function() {
         this.element = this.container;
         this.container.attr(Mercury.config.regions.attribute, type);
         this.build();
+        this.bindElementEvents();
         if (Mercury.region === this) return this.focus();
       } else {
         this.previewing = true;
@@ -18469,6 +18454,12 @@ Showdown.converter = function() {
     }
 
     Snippets.prototype.build = function() {
+      var snippet, _i, _len, _ref;
+      _ref = this.element.find('[data-snippet]');
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        snippet = _ref[_i];
+        jQuery(snippet).attr('data-version', 0);
+      }
       if (this.element.css('minHeight') === '0px') {
         return this.element.css({
           minHeight: 20

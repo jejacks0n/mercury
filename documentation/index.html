@@ -1,105 +1,95 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Mercury Editor - Documentation</title>
-  <link href="/mercury/assets/stylesheets/application.css" media="screen" rel="stylesheet" type="text/css"/>
+  <title>Mercury Editor: Documentation</title>
+  <link href="/mercury/assets/stylesheets/bootstrap.min.css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="/mercury/assets/stylesheets/bootstrap-responsive.min.css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="/mercury/assets/stylesheets/application.css" media="all" rel="stylesheet" type="text/css"/>
+
+  <script src="/mercury/assets/javascripts/jquery.min.js" type="text/javascript"></script>
+  <script src="/mercury/assets/javascripts/bootstrap.min.js" type="text/javascript"></script>
   <script src="/mercury/assets/javascripts/application.js" type="text/javascript"></script>
-  <!--[if lt IE 7]>
-    <script type="text/javascript" src="/mercury/assets/javascripts/unitpngfix.js"></script>
-  <![endif]-->
 </head>
 <body>
 
-  <div id="background"></div>
+  <div id="navigation" class="navbar navbar-fixed-top">
+    <a class="hidden-tablet hidden-phone" href="https://github.com/jejacks0n/mercury"><img style="position: absolute; z-index: 2000; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"></a>
+    <div class="navbar-inner">
+      <div class="container">
+        <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="brand" href="/mercury">Mercury Editor</a>
+        <div class="nav-collapse collapse">
+          <ul class="nav">
+            <li><a href="/mercury/downloads">Downloads</a></li>
+            <li class="active"><a href="/mercury/documentation">Documentation</a></li>
+            <li><a href="/mercury/walkthrough">Walkthrough</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
 
-  <h1 id="logo"><a href="/mercury">Mercury Editor</a></h1>
+  <div id="body" class="container">
 
-  <ul id="navigation">
-    <li><a href="/mercury">Home</a></li>
-    <li><a href="/mercury/downloads">Downloads</a></li>
-    <li><a href="/mercury/walkthrough">Walkthrough</a></li>
-    <li class="active"><a href="/mercury/documentation">Documentation</a></li>
-    <li><a href="/mercury/annotated_source">Annotated Source</a></li>
-  </ul>
-
-  <div id="primary">
     <h1>Documentation</h1>
 
-    <p>Mercury Editor is a fully featured editor much like TinyMCE or CKEditor, but with a different usage paradigm.  It
-    expects that an entire page is something that can be editable, and allows different types of editable regions to be
-    specified.  It displays a single toolbar for every region on the page, and uses the HTML5 contentEditable features on
-    block elements, instead of iframes, which allows for CSS to be applied in ways that most other editors can't handle.</p>
+    <p>Mercury Editor is a fully featured editor much like TinyMCE or CKEditor, but with a different usage paradigm.  It expects that an entire page is something that can be editable, and allows different types of editable regions to be specified.  It displays a single toolbar for every region on the page, and uses the HTML5 contentEditable features on block elements, instead of iframes, which allows for CSS to be applied in ways that many other editors can't handle.</p>
+    <p>Mercury has been written using CoffeeScript and jQuery for the Javascript portions, and is written on top of Rails 3.2.</p>
 
-    <p>Mercury has been written using CoffeeScript and jQuery for the Javascript portions, and is written on top of Rails 3.1.</p>
-
-    <h2>Translations</h2>
-
-    <p>Hey international open source contributors, want to contribute to the Mercury Editor project without having to do much
-    coding?  We're looking for good translations.  If you have a good grasp of english, another common language, and have
-    the desire and time to do a translation for the project it would be awesome to hear from you.  The easiest way to submit
-    is to fork the project, create a locale file with your translation, and submit a pull request -- in this way you can get
-    full credit for your contributions.  There's an <a target="_blank" href="https://github.com/jejacks0n/mercury/tree/master/vendor/assets/javascripts/mercury/locales">example file</a> provided.</p>
-
+    <h2><a name="translations" class="anchor" href="#translations"><span class="mini-icon mini-icon-link"></span></a>Translations</h2>
+    <p>Hey international open source contributors, want to contribute to the Mercury Editor project without having to do much coding?  We're looking for good translations.  If you have a good grasp of english, another language, and have the desire and time to do a translation for the project it would be awesome to hear from you.  The easiest way to submit is to fork the project, create a locale file with your translation, and submit a pull request -- that way you get full credit for your contributions.</p>
+    <p>Some <a href="https://github.com/jejacks0n/mercury/tree/master/app/assets/javascripts/mercury/locales">examples are here</a>, and there's more on the <a href="https://github.com/jejacks0n/mercury/wiki/Localization-&amp;-Translations">wiki page</a>.</p>
+    <p>Translations and contributors:</p>
     <ul>
-    <li>French (pending)</li>
-    <li>German</li>
-    <li>Spanish (provided by <a href="https://github.com/javiercr" target="_blank">javiercr</a>)</li>
-    <li>Japanese</li>
-    <li>Chinese</li>
-    <li>Dutch (pending)</li>
-    <li>Portuguese (pending)</li>
+    <li>Arabic (<a href="https://github.com/mohamagdy">mohamagdy</a>)</li>
+    <li>Danish (<a href="https://github.com/martinjlowm">martinjlowm</a>)</li>
+    <li>German (<a href="https://github.com/poke">poke</a>)</li>
+    <li>Spanish (<a href="https://github.com/javiercr">javiercr</a>)</li>
+    <li>French (<a href="https://github.com/adamantx">adamantx</a>)</li>
+    <li>Italian (<a href="https://github.com/gcastagnet">gcastagneti</a>)</li>
+    <li>Korean (<a href="https://github.com/dorajistyle">dorajistyle</a>)</li>
+    <li>Dutch (<a href="https://github.com/kieranklaassen">kieranklaassen</a>)</li>
+    <li>Portuguese (<a href="https://github.com/yakko">yakko</a>)</li>
+    <li>Swedish (<a href="https://github.com/stefanm">stefanm</a>)</li>
+    <li>Simplified Chinese (<a href="https://github.com/richarddong">董劭田 DONG Shaotian</a>)</li>
     </ul>
 
-    <h2>Awesomeness</h2>
+    <h2><a name="awesomeness" class="anchor" href="#awesomeness"><span class="mini-icon mini-icon-link"></span></a>Awesomeness</h2>
+    <p>Ryan Bates with the awesome <a href="http://railscasts.com">RailsCast</a> site has put together a really nice RailsCast that walks you through getting Mercury Editor installed, setup and working in a Rails application -- and is definitely worth checking out.  <a href="http://railscasts.com/episodes/296-mercury-editor">Watch the RailsCast</a></p>
+    <p>Mercury has been added as a Featured Project on Pivotal Tracker!  If you're interested in what's planned, check out the <a href="https://www.pivotaltracker.com/projects/295823">Mercury Tracker Project</a>.</p>
 
-    <p>Ryan Bates over at the awesome <a href="http://railscasts.com" target="_blank">railscasts site</a> has put together a really nice RailsCast that
-    walks you through getting Mercury Editor installed, setup and working in a Rails 3.1.1 application.  It's definitely
-    worth checking out.  <a href="http://railscasts.com/episodes/296-mercury-editor" target="_blank">Watch the RailsCast</a></p>
-
-    <p>Mercury has been added as a Featured Project on Pivotal Tracker!  If you're interested in what's planned, check out the
-    <a href="https://www.pivotaltracker.com/projects/295823" target="_blank">Mercury Tracker Project</a>.</p>
-
-    <h2>Browser Support</h2>
-
-    <p>Mercury has been written for the future, and thus doesn't support legacy browsers or browsers that don't follow the W3C
-    specifications for content editing.  Any browser will be supported if they support the W3C specification in the future,
-    but there aren't plans for adding support for alternate implementations at this time.</p>
-
+    <h2><a name="browser-support" class="anchor" href="#browser-support"><span class="mini-icon mini-icon-link"></span></a>Browser Support</h2>
+    <p>Mercury has been written for the future, and thus doesn't support legacy browsers or browsers that don't follow the W3C specifications for content editing.  Any browser will be supported if they support the W3C specification in the future, but there aren't plans currently for adding support for alternate implementations at this time.</p>
     <p>Supported Browsers:</p>
-
     <ul>
     <li>Chrome 10+</li>
     <li>Safari 5+</li>
     <li>Firefox 4+</li>
     </ul>
 
-    <h2>The Story</h2>
+    <h2><a name="a-demo" class="anchor" href="#a-demo"><span class="mini-icon mini-icon-link"></span></a>A Demo</h2>
+    <p>Feel free to check out <a href="http://jejacks0n.github.com/mercury/">the demo</a>.  The demo will be updated quite a bit in the next weeks, so feel free to check back every now and then.. We'll be adding a full walkthrough that details each of the major features shortly.  If you would like to see how Mercury was implemented in the demo check the gh-pages branch, it's a useful resource to see how you can integrate the Mercury bundle.</p>
 
-    <p>I was looking for a fully featured editor that didn't use iframes to edit the content, and there weren't any decent
-    ones.  My primary goal was to have areas that were editable, but that also allowed CSS to flow naturally.  A few have
-    cropped up since then (Aloha Editor for instance), and as good as they are, none had all the features I was looking for.</p>
-
-    <p>Mercury was written to be as simple as possible, while also providing an advanced feature set.  Instead of complex
-    configuration, we chose a mix of configuration and code simplicity, which should give you a much better chance at
-    customizing Mercury to suit your exact needs.  This doesn't mean there's not configuration, and what's there provides
-    much of what you'll need, but efforts were taken to keep it simple and powerful.</p>
-
-    <p>Even though it's a great editor, Mercury Editor may not be the best for your needs (based on browser support,
-    functionality, etc.) so here's a list of some other editors that you might want to check out:</p>
-
+    <h2><a name="the-story" class="anchor" href="#the-story"><span class="mini-icon mini-icon-link"></span></a>The Story</h2>
+    <p>I was looking for a fully featured editor that didn't use iframes to edit the content, and there weren't any decent ones.  My primary goal was to have areas that were editable, but that also allowed CSS to flow naturally.  A few have cropped up since then (Aloha Editor for instance), and as good as they are, none had all the features I was looking for.</p>
+    <p>Mercury was written to be as simple as possible, while also providing an advanced feature set.  Instead of complex configuration, we chose a mix of configuration and code simplicity, which should give you a much better chance at customizing Mercury to suit your exact needs.  This doesn't mean there's not configuration, and what's there provides much of what you'll need, but efforts were taken to keep it simple and powerful.</p>
+    <p>Even though it's a great editor, Mercury Editor may not be the best for your needs (based on browser support, functionality, etc.) so here's a list of some other editors that you might want to check out:</p>
     <ul>
-    <li><a href="http://www.aloha-editor.org/" target="_blank">Aloha Editor</a></li>
-    <li><a href="http://jhtmlarea.codeplex.com/" target="_blank">jHtmlArea</a></li>
-    <li><a href="http://markitup.jaysalvat.com/home/" target="_blank">MarkItUp</a></li>
-    <li><a href="http://tinymce.moxiecode.com/" target="_blank">TinyMCE</a></li>
-    <li><a href="http://ckeditor.com/" target="_blank">CKEditor</a></li>
-    <li><a href="http://nicedit.com/" target="_blank">NicEdit</a></li>
+    <li><a href="http://www.aloha-editor.org/">Aloha Editor</a></li>
+    <li><a href="http://jhtmlarea.codeplex.com/">jHtmlArea</a></li>
+    <li><a href="http://markitup.jaysalvat.com/home/">MarkItUp</a></li>
+    <li><a href="http://tinymce.moxiecode.com/">TinyMCE</a></li>
+    <li><a href="http://ckeditor.com/">CKEditor</a></li>
+    <li><a href="http://nicedit.com/">NicEdit</a></li>
+    <li><a href="http://www.raptor-editor.com/">Raptor Editor</a></li>
     </ul>
 
-    <h2>Features</h2>
-
+    <h2><a name="features" class="anchor" href="#features"><span class="mini-icon mini-icon-link"></span></a>Features</h2>
     <p>The feature list is actually pretty long, so here's a short list that need highlighting.</p>
-
     <ul>
     <li>Previewing: Preview content while you're working to see exactly how it'll look.</li>
     <li>Link Tools: Insert and edit links, including TOC/Bookmark links.</li>
@@ -107,275 +97,182 @@
     <li>Image Uploading: Drag images from your desktop and they'll be automatically uploaded and inserted.</li>
     <li>Table Editing: Advanced table editing and creation, including support for multiple column and rows spans.</li>
     <li>Snippets: Insert and edit predefined and reusable bits of markup/code using drag and drop.</li>
+    <li>Custom Regions: We provide Full HTML, Markdown, Snippet, Image, and Simple region types by default.</li>
     <li>I18n: Built in low profile translation and internationalization system.</li>
     </ul>
 
-    <h2>Installation</h2>
+    <h2><a name="installation" class="anchor" href="#installation"><span class="mini-icon mini-icon-link"></span></a>Installation</h2>
 
-    <h3>For Rails</h3>
-
+    <h3><a name="for-rails" class="anchor" href="#for-rails"><span class="mini-icon mini-icon-link"></span></a>For Rails</h3>
     <p>Include the gem in your Gemfile and bundle to install the gem.</p>
-
     <pre>
-      gem 'mercury-rails'
-    </pre>
-
-    <p>Make sure you get the migrations that you'll need.</p>
-
+    gem 'mercury-rails'</pre>
+    <p>You can also get the configuration file and overrides by running the install generator.</p>
     <pre>
-      rake mercury_engine:install:migrations
-      rake db:migrate
-    </pre>
+    rails generate mercury:install</pre>
+    <p>This generator puts a mercury configuration file into your project in /app/assets/javascripts/mercury.js.  This file also functions as a manifest using sprockets <code>require</code> to include dependencies.  The install generator can optionally install the layout and css files.</p>
 
-    <p>You can also get the configuration file, css, and routes by running the generator.</p>
-
+    <h3><a name="image-processing--uploading" class="anchor" href="#image-processing--uploading"><span class="mini-icon mini-icon-link"></span></a>Image Processing / Uploading</h3>
+    <p>Mercury has a basic facility for allowing image uploads, and we provide a generator that can act as a starting point for your own back end integration.  To install run the generator.</p>
     <pre>
-      rails generate mercury:install
-    </pre>
+    rails generate mercury:install:images</pre>
+    <p>For Mongoid + MongoDB, you can use the <code>--orm=mongoid</code> option on the generator to get the appropriate model added to your app.  This generator also puts paperclip (and mongoid_paperclip if needed) into your Gemfile, so make sure to <code>bundle</code> or make your own adjustments.</p>
+    <p>If you're using ActiveRecord, make sure to migrate your database.  You can also disable this feature entirely in the mercury configuration if you don't plan on allowing image uploading.</p>
 
-    <p>This generator puts the mercury base file (configuration) into your project in /app/assets/javascripts/mercury.js.</p>
-
-    <h2>Usage</h2>
-
-    <p>There's a glob route that captures everything beginning with <code>/editor</code>, so for instance to edit an <code>/about_us</code> page, you
-    should access it at the <code>/editor/about_us</code> path.  You may want to define this route in your own routes file to restrict
-    access to it (only admins or something).</p>
-
-    <p>For performance reasons you may also want to notify Mercury when the page is ready to be initialized.  To do this just
-    trigger the initialize:frame event from within your normal application layouts.  You can do this when the DOM is ready
-    to be interacted with (eg. dom:loaded, document.ready), or at the bottom of your body tag.  It's recommended that you do
-    this because it gives you some load performance improvements, but it's not required.</p>
-
+    <h3><a name="authentication" class="anchor" href="#authentication"><span class="mini-icon mini-icon-link"></span></a>Authentication</h3>
+    <p>Mercury provides a generator for giving you a basic authentication implementation.  You can run this generator and write your own logic into the authentication file it provides.</p>
     <pre>
-      jQuery(top).trigger('initialize:frame');
-    </pre>
+    rails generate mercury:install:authentication</pre>
+    <p>This provides a simple method for restricting the actions in the default MercuryController to only users who have the required privileges.  Since this can vary largely from application to application, it's a basic approach that assumes you'll write in what you want.</p>
 
-    <p>Or if you're not using jQuery:</p>
-
+    <h2><a name="usage" class="anchor" href="#usage"><span class="mini-icon mini-icon-link"></span></a>Usage</h2>
+    <p>There's a glob route that captures everything beginning with <code>/editor</code>, so for instance to edit an <code>/about_us</code> page, you should access it at the <code>/editor/about_us</code> path.</p>
+    <p>For performance reasons you may also want to notify Mercury when the page is ready to be initialized.  To do this just trigger the initialize:frame event from within your normal application layouts.  You can do this when the DOM is ready to be interacted with (eg. dom:loaded, document.ready), or at the bottom of your body tag.  It's recommended that you do this because it gives you some load performance improvements, but it's not required.</p>
     <pre>
-      if (top.Mercury) {
-        top.Mercury.trigger('initialize:frame');
-      }
-    </pre>
-
-    <p>Mercury has an expectation that content regions will be on the page (not required, but probably useful).  To define
-    content regions that Mercury will make editable you need to add a <code>mercury-region</code> class attribute to an element (this
-    class is configurable).  Then specify what region type by using the <code>data-type</code> attribute -- which can be <em>editable</em>,
-    <em>markupable</em>, or <em>snippetable</em>.  It's important for saving that an id attribute be set on regions, you should always
-    include one.  Region types are outlined below.</p>
-
+    jQuery(parent).trigger('initialize:frame');</pre>
+    <p>Mercury has an expectation that content regions will be on the page (not required, but probably useful).  To define content regions that Mercury will make editable you need to add a <code>data-mercury</code> attribute to an element.  This attribute is used to specify the region type.  Mercury provides some default region types, but you can also create your own.  Region types are outlined below, and the available values for the <code>data-mercury</code> attribute are:</p>
+    <ul>
+    <li>full</li>
+    <li>simple</li>
+    <li>markdown</li>
+    <li>snippets</li>
+    <li>image (should only be applied to img tags)</li>
+    </ul>
+    <p>It's important for saving that an id attribute <em>always</em> be set on regions, so you should always include one.</p>
     <pre>
-      &lt;div id="primary" class="mercury-region" data-type="editable"&gt;
-        default content
-      &lt;/div&gt;
-    </pre>
+    &lt;div id="primary" data-mercury="full"&gt;
+      default content
+    &lt;/div&gt;</pre>
+    <p>For more advanced ways to integrate Mercury Editor with your Rails application check out this <a href="https://github.com/jejacks0n/mercury/wiki/Rails-Integration-Techniques">wiki article</a>.</p>
 
-    <h3>Using Mercury without Rails</h3>
+    <h3><a name="using-mercury-without-rails" class="anchor" href="#using-mercury-without-rails"><span class="mini-icon mini-icon-link"></span></a>Using Mercury without Rails</h3>
+    <p>If you're looking to use Mercury without Rails, you should start by checking this <a href="https://github.com/jejacks0n/mercury/wiki/Using-Mercury-without-Rails">wiki article</a>.</p>
 
-    <p>Check this <a href="https://github.com/jejacks0n/mercury/wiki/Using-Mercury-without-Rails" target="_blank">wiki article</a></p>
+    <h2><a name="region-types" class="anchor" href="#region-types"><span class="mini-icon mini-icon-link"></span></a>Region Types</h2>
 
-    <h2>Region Types</h2>
+    <h3><a name="full-region" class="anchor" href="#full-region"><span class="mini-icon mini-icon-link"></span></a>Full Region</h3>
+    <p>Full regions are for full HTML markup and utilize the HTML5 contentEditable feature.  These are the core of what Mercury does, and provide the most flexibility and visual representation of what the content will look like when saved.</p>
 
-    <h3>Editable</h3>
+    <h3><a name="simple-region" class="anchor" href="#simple-region"><span class="mini-icon mini-icon-link"></span></a>Simple Region</h3>
+    <p>Simple regions are designed for plain text.  Newlines and markup are not allowed.  Simple Regions are appropriate for titles, headlines, or any area where you want the conent to be editable but not the style.</p>
 
-    <p>Editable Regions are HTML markup, and use the HTML5 contentEditable feature.  This is the core of what Mercury is about,
-    and provides the most flexibility and visual representation of what the content will look like when saved.</p>
+    <h3><a name="markdown-region" class="anchor" href="#markdown-region"><span class="mini-icon mini-icon-link"></span></a>Markdown Region</h3>
+    <p>Markdown regions are based on Markdown syntax (specifically the github flavored version), and aren't as full featured as the full region type -- primarily because Markdown is meant to be simple.  To keep it simple you can't do things like set colors etc.  This region type is useful if you want to keep the markup clean and simple.</p>
 
-    <h3>Markupable</h3>
+    <h3><a name="snippets-region" class="anchor" href="#snippets-region"><span class="mini-icon mini-icon-link"></span></a>Snippets Region</h3>
+    <p>Snippet regions only allow snippets and don't have a concept of content editing within them.  Snippets can be the way to go with complex markup and functionality, and are basically chunks of reusable markup that can be defined by a developer and placed into content regions later.  More on this below.</p>
 
-    <p>These regions are based on Markdown syntax (specifically the github flavored version), and isn't as full featured as the
-    editable region type -- primarily because markdown is meant to be simple, so to keep it such you can't do things like
-    set colors etc.  This region type is super useful if you want to keep the markup clean and simple.</p>
+    <h3><a name="image-region" class="anchor" href="#image-region"><span class="mini-icon mini-icon-link"></span></a>Image Region</h3>
+    <p>The image region type should only be applied to an image tag.  It results in the image being drag-and-drop replacable. This differs from the image handling in full regions, in that no content is in the area.  This works well for logos and images you want to display with careful layout, and do not need any content functionality.</p>
 
-    <h3>Snippetable</h3>
+    <h2><a name="loading--ready-state" class="anchor" href="#loading--ready-state"><span class="mini-icon mini-icon-link"></span></a>Loading / Ready State</h2>
+    <p>When Mercury loads it will fire an event telling the document that it's initialized, available and ready.  You can do several things once Mercury is loaded, and we expose as many ways to do this as possible.  You can bind to the event using jQuery, Prototype, or Mercury directly.  Or if you'd prefer you can just create a method and Mercury will call that when it's ready.</p>
 
-    <p>Snippetable regions only allow snippets.  There isn't any content editing in these regions, but snippets can sometimes
-    be the way to go with complex markup and functionality.  Snippets are basically chunks of reusable markup, that can be
-    defined by a developer and placed into content regions later.  More on this below.</p>
-
-    <h2>Loading / Ready State</h2>
-
-    <p>When Mercury loads it will fire an event telling the document that it's initialized, available and ready.  You can do
-    several things once Mercury is loaded, and we expose as many ways to do this as possible.  You can bind to the event
-    using jQuery, Prototype, or Mercury directly.  Or if you'd prefer you can just create a method and Mercury will call
-    that when it's ready.</p>
-
-    <h4>jQuery</h4>
-
+    <h4><a name="jquery" class="anchor" href="#jquery"><span class="mini-icon mini-icon-link"></span></a>jQuery</h4>
     <pre>
-      jQuery(window).bind('mercury:ready', function() { Mercury.saveUrl = '/content'; });
-    </pre>
+    jQuery(window).on('mercury:ready', function() { Mercury.saveUrl = '/content'; });</pre>
 
-    <h4>Prototype</h4>
-
+    <h4><a name="mercury" class="anchor" href="#mercury"><span class="mini-icon mini-icon-link"></span></a>Mercury</h4>
     <pre>
-      Event.observe(window, 'mercury:ready', function() { Mercury.saveUrl = '/content'; });
-    </pre>
+    if (parent.Mercury) {
+      parent.Mercury.on('ready', function() { Mercury.saveUrl = '/content'; });
+    }</pre>
 
-    <h4>Mercury</h4>
-
+    <h4><a name="function-declaration" class="anchor" href="#function-declaration"><span class="mini-icon mini-icon-link"></span></a>Function Declaration</h4>
     <pre>
-      if (top.Mercury) {
-        top.Mercury.on('ready', function() { Mercury.saveUrl = '/content'; });
-      }
-    </pre>
+    function onMercuryReady() { Mercury.saveUrl = '/content'; }</pre>
 
-    <h4>Function Declaration</h4>
-
+    <h4><a name="prototype" class="anchor" href="#prototype"><span class="mini-icon mini-icon-link"></span></a>Prototype</h4>
     <pre>
-      function onMercuryReady() { Mercury.saveUrl = '/content'; }
-    </pre>
+    Event.observe(window, 'mercury:ready', function() { Mercury.saveUrl = '/content'; });</pre>
 
-    <h2>Snippets</h2>
-
-    <p>Snippets are reusable and configurable chunks of markup.  They can be defined by developers, and then placed anywhere in
-    content regions.  When you drag a snippet into a region you'll be prompted to enter options, and after entering options
-    the snippet will be rendered into the page as a preview.  Snippets can be dragged around (in snippetable regions) and
-    edited or removed.</p>
-
-    <p>Mercury does very little to save content and snippets for you, but it does provide the ability to load snippets from
-    your own storage implementation.  Here's an example of loading existing snippet options back into Mercury.</p>
-
+    <h2><a name="snippets" class="anchor" href="#snippets"><span class="mini-icon mini-icon-link"></span></a>Snippets</h2>
+    <p>Snippets are reusable and configurable chunks of markup.  They can be defined by developers, and then placed anywhere in content regions that support them.  When you drag a snippet into a region you'll be prompted to enter options, and after entering options the snippet will be rendered into the page as a preview.  Snippets can be dragged around (in snippets regions), edited or removed.</p>
+    <p>Mercury does very little to save content and snippets for you, but it does provide the ability to load snippets from your own storage implementation.  Here's an example of loading existing snippet options back into Mercury using jQuery.</p>
     <pre>
-      jQuery(window).bind('mercury:ready', function() {
-        Mercury.Snippet.load({
-          snippet_1: {name: 'example', options: {'options[favorite_beer]': "Bells Hopslam", 'options[first_name]': "Jeremy"}}
-        });
+    jQuery(window).on('mercury:ready', function() {
+      Mercury.Snippet.load({
+        snippet_1: {name: 'example', options: {'options[favorite_beer]': "Bells Hopslam", 'options[first_name]': "Jeremy"}}
       });
-    </pre>
+    });</pre>
+    <p>Snippet contents (when saved) are removed from the content.  Their options and their placement does come through in the content however, and you're responsible for rendering your own snippet content when the page is being rendered.  You can read more on the <a href="https://github.com/jejacks0n/mercury/wiki/Snippets">wiki article about snippets</a>.</p>
 
-    <h2>Reinitializing Regions</h2>
-
-    <p>If you're using things like history.pushState, pjax, or just simply dynamically replacing / loading new content into
-    your pages, you can reinitialize regions afterwards by using:</p>
-
-    <pre>
-      Mercury.trigger('reinitialize')
-    </pre>
-
-    <p>This will find any new regions and initialize them, leaving the existing ones intact.  There's more details that you'll
-    need to understand before taking advantage of all the possible features, but this will likely work for most cases.</p>
-
-    <p>In more advanced cases, you may want to load new snippets, and potentially prompt to save the contents before loading
-    the new content -- so content isn't lost.  The handling of these aspects is up to you, as Mercury can't know if an ajax
-    request will try to dynamically replace or load new content.</p>
-
-    <h2>Saving Content / Rendering Content</h2>
-
-    <p>Note: Mercury doesn't implement saving or rendering of content.  We leave this part up to you because it can vary in so
-    many different ways.. You may want to implement content versioning, use a nosql data store like mongo etc. and we don't
-    want to force our opinions.</p>
-
-    <p>Mercury will submit JSON or form values back to the server on save, and this can be adjusted in the configuration.  By
-    default it will use JSON, that JSON looks like:</p>
+    <h2><a name="reinitializing-regions" class="anchor" href="#reinitializing-regions"><span class="mini-icon mini-icon-link"></span></a>Reinitializing Regions</h2>
+    <p>If you're using things like history.pushState, pjax, or just simply dynamically replacing / loading new content into your pages, you can reinitialize regions afterwards by using:</p>
 
     <pre>
-      {
-        "region_name": {
-          "type": "editable",
-          "value": "[contents with a snippet]",
-          "snippets": {
-            "snippet_1": {
-              "name": "example",
-              "options": {
-                "options[favorite_beer]": "Bells Hopslam",
-                "options[first_name]": "Jeremy"
-              }
+    Mercury.trigger('reinitialize')</pre>
+
+    <p>This will find any new regions and initialize them, leaving the existing ones intact.  There's more details that you'll need to understand before taking advantage of all the possible features, but this will likely work for most cases.</p>
+    <p>In more advanced cases, you may want to load new snippets, and potentially prompt to save the contents before loading the new content -- so content isn't lost.  The handling of these aspects is up to you, as Mercury can't know if an ajax request will try to dynamically replace or load new content.</p>
+
+    <h2><a name="saving-content--rendering-content" class="anchor" href="#saving-content--rendering-content"><span class="mini-icon mini-icon-link"></span></a>Saving Content / Rendering Content</h2>
+    <p>Note: Mercury doesn't implement saving or rendering of content.  We leave this part up to you because it can vary in so many ways.  You may want to implement content versioning, use a nosql data store like mongo etc. and we don't want to force our opinions.</p>
+    <p>Mercury will submit JSON or form values back to the server on save, and this can be adjusted in the configuration.  By default it will use JSON, that JSON looks like:</p>
+    <pre>
+    {
+      "region_name": {
+        "type": "full",
+        "value": "[contents with a snippet]",
+        "snippets": {
+          "snippet_1": {
+            "name": "example",
+            "options": {
+              "options[favorite_beer]": "Bells Hopslam",
+              "options[first_name]": "Jeremy"
             }
           }
         }
       }
-    </pre>
-
-    <p>Where it gets saved to is also up to you.. by default it submits a post to the current url, but you can adjust this by
-    setting Mercury.saveURL, or passing it into the Mercury.PageEditor constructor.. how you do this is dependent on how
-    you're using loading mercury (via the loader, or by using the route method).  In both situations setting Mercury.saveURL
-    is the most consistent.</p>
-
+    }</pre>
+    <p>Where it gets saved to is also up to you.  By default it submits a post to the current url, but you can adjust this by setting Mercury.saveUrl, or passing it into the Mercury.PageEditor constructor.  How you do this is dependent on how you're using loading mercury (via the loader, or by using the route method).  In both situations setting Mercury.saveUrl is the most consistent.</p>
     <pre>
-      jQuery(window).bind('mercury:ready', function() {
-        Mercury.saveURL = '/contents';
-      });
-    </pre>
+    jQuery(window).on('mercury:ready', function() {
+      Mercury.saveUrl = '/contents';
+    });</pre>
+    <p>Assuming you have a ContentsController and a RESTful route, this will make it through to the create action.  Where you can store the content in whatever way you think is appropriate for your project.</p>
+    <p>Rendering content is up to you as well.. Now that you have content saved, you can add that content back to your pages, and there's a lot of ways you could approach this.  In the past I've used Nokogiri to find and replace the contents of regions, and do some additional handling for putting snippets back into the content.  You could also use regular expressions to do this, which is probably faster, but maybe not as safe.</p>
+    <p>I'm interested in what solutions people are looking for and end up using for this, so feel free to shoot me a line if you write something (eg. a middleware layer, an nginx module, or just something simple to get the job done).</p>
 
-    <p>Assuming you have a ContentsController and a RESTful route, this will make it through to the create action.  Where you
-    can store the content in whatever way you think is appropriate for your project.</p>
+    <h2><a name="images" class="anchor" href="#images"><span class="mini-icon mini-icon-link"></span></a>Images</h2>
+    <p>The toolbar images have been created by the awesome <a href="http://modeset.com/">Mode Set</a> guys (using <a href="http://www.glyphicons.com/">GLYPHICONS</a>).  They follow a simplistic design aesthetic to minimize the complexity of creating / finding your own.  You're welcome to contribute your own to the PSD that can be found within the project so others can potentially build from or use your own contributions.</p>
 
-    <p>Rendering content is up to you as well.. Now that you have content saved, you can add that content back to your pages,
-    and there's a lot of ways you could approach this.  In the past I've used Nokogiri to find and replace the contents of
-    regions, and do some additional handling for putting snippets back into the content.  You could also use regular
-    expressions to do this, which is probably faster, but maybe not as safe.</p>
+    <h2><a name="project-details" class="anchor" href="#project-details"><span class="mini-icon mini-icon-link"></span></a>Project Details</h2>
 
-    <p>I'm interested in what solutions people are looking for and end up using for this, so feel free to shoot me a line if
-    you write something (eg. a middleware layer, an nginx module, or just something simple to get the job done).</p>
+    <h3><a name="wysiwyg-editors-suck" class="anchor" href="#wysiwyg-editors-suck"><span class="mini-icon mini-icon-link"></span></a>WYSIWYG Editors Suck</h3>
+    <p>They just do.  Which as I've learned, is primarily due to the browser implementations.  Don't get me wrong, what the browsers have implemented is amazing, because it's hard stuff, plain and simple.  But if you're expecting a WYSIWYG editor to solve all your content problems you're wrong.  A better perception is that it will solve many of them, but shifts some into a new area.</p>
+    <p>With that being said, Mercury tries to solve many of those issues and succeeds to a great degree, but it seems to be nearly impossible (impractical at least) to address everything, and the browsers don't expose enough to fix some things. This is true for every editor that I've looked into as well, and will likely just take time as the browser vendors begin to prioritize and fix these issues.</p>
+    <p>It's important to understand this, and the details are more suited for long nerdy blog posts, so they won't be covered here.</p>
 
-    <h2>Project Details</h2>
+    <h3><a name="the-code-and-why" class="anchor" href="#the-code-and-why"><span class="mini-icon mini-icon-link"></span></a>The Code and Why</h3>
 
-    <h3>WYSIWYG Editors Suck</h3>
+    <h4><a name="coffeescript" class="anchor" href="#coffeescript"><span class="mini-icon mini-icon-link"></span></a>CoffeeScript</h4>
+    <p>Mercury has been written entirely in CoffeeScript because it simplifies a lot of the patterns that are used, and allows for very readable code.  The goal was to provide good readable code that could be adjusted based on need, instead of a complex configuration that makes the code harder to understand and tweak.</p>
 
-    <p>They just do.  Which as I've learned, is primarily due to the browser implementations.  Don't get me wrong, what the
-    browsers have implemented is amazing, because it's hard stuff, plain and simple.  But if you're expecting a WYSIWYG
-    editor to solve all your content problems you're wrong.  A better perception is that it will solve many of them, but
-    shifts some into a new area.</p>
+    <h4><a name="jquery-1" class="anchor" href="#jquery-1"><span class="mini-icon mini-icon-link"></span></a>jQuery</h4>
+    <p>jQuery was used as the javascript library, but is primarily used for the selectors, traversing, and manipulating the DOM.  Chaining is kept to a minimum for readability, and even though much of Mercury could've been written as jQuery plugins, it was not.</p>
 
-    <p>With that being said, Mercury tries to solve many of those issues and succeeds to a great degree, but it seems to be
-    nearly impossible (impractical at least) to address everything, and the browsers don't expose enough to fix some things.
-    This is true for every editor that I've looked into as well, and will likely just take time as the browser vendors begin
-    to prioritize and fix these issues.</p>
+    <h4><a name="rails" class="anchor" href="#rails"><span class="mini-icon mini-icon-link"></span></a>Rails</h4>
+    <p>With the asset handling that comes bundled with Rails 3.1+, Rails Engines, and the gem tools, there really wasn't any other option.  The javascript from Mercury can be used by any back end system, and isn't limited to Rails.  Many of the features do require a back end however, and those features would have to be written in whatever language you wanted support for.</p>
+    <p>The coffeescript files can be found in the repo, and I would be fully supportive of anyone who wanted to add support for different back end frameworks or languages.  There's a server specification in the wiki that will help as well.</p>
 
-    <p>It's important to understand this, and the details are more suited for long nerdy blog posts, so they won't be covered
-    here.</p>
-
-    <h3>The Code and Why</h3>
-
-    <h4>CoffeeScript</h4>
-
-    <p>Mercury has been written entirely in CoffeeScript because it simplifies a lot of the patterns that are used, and allows
-    for very readable code.  The goal was to provide good readable code that could be adjusted based on need, instead of a
-    complex configuration that makes the code harder to understand and tweak.</p>
-
-    <h4>jQuery</h4>
-
-    <p>jQuery was used as the javascript library, but is primarily used for the selectors, traversing, and manipulating the
-    DOM.  Chaining is kept to a minimum for readability, and even though much of Mercury could've been written as jQuery
-    plugins, it was not.</p>
-
-    <h4>Rails</h4>
-
-    <p>With the asset handling that comes bundled with Rails 3.1, Rails Engines, and the gem tools, there really wasn't any
-    other option.  The javascript from Mercury can be used by any back end system, and isn't limited to Rails.  Many of the
-    features do require a back end, and those features would have to be written in whatever language you wanted support for.
-    The coffeescript files can be found in the repo, and I would be fully supportive of anyone who wanted to add support for
-    different back end frameworks or languages.  There's a server specification in the wiki that will help as well.</p>
-
-    <h4>Specs / Integration Tests</h4>
-
+    <h4><a name="specs--integration-tests" class="anchor" href="#specs--integration-tests"><span class="mini-icon mini-icon-link"></span></a>Specs / Integration Tests</h4>
     <p>Mercury is fully tested using Jasmine (via Evergreen) and Cucumber.  You can clone the project to run the full suite.</p>
-
     <pre>
-      rake spec:javascripts
-      rake cucumber
-    </pre>
+    rake spec:javascripts
+    rake cucumber</pre>
 
-    <h2>License</h2>
+    <h2><a name="license" class="anchor" href="#license"><span class="mini-icon mini-icon-link"></span></a>License</h2>
+    <p>Licensed under the <a href="http://creativecommons.org/licenses/MIT/">MIT License</a></p>
+    <p>Copyright 2011 <a href="https://github.com/jejacks0n">Jeremy Jackson</a></p>
+    <p>Icons from <a href="http://www.glyphicons.com/">GLYPHICONS</a></p>
 
-    <p>Licensed under the <a href="http://creativecommons.org/licenses/MIT/" target="_blank">MIT License</a></p>
+    <div id="footer">
+      <p class="pull-right"><a href="#">Back to top</a></p>
+      <p>Code Licensed under the <a href="http://creativecommons.org/licenses/MIT/">MIT License</a>.  Copyright 2011 Jeremy Jackson. All rights reserved.</p>
+      <p>Icons from <a href="http://glyphicons.com">Glyphicons Free</a>, licensed under <a href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>.</p>
+    </div>
 
-    <p>Copyright 2011 <a href="https://github.com/jejacks0n" target="_blank">Jeremy Jackson</a></p>
   </div>
-
-  <div id="secondary">
-    <h2>More information?</h2>
-    <p>For more information, including all the nerdy details check out the <a href="/mercury/walkthrough">full walkthrough</a> of all the features.</p>
-    <p>If you're looking for the source code and all that developer friendly stuff, check out <a href="https://github.com/jejacks0n/mercury">the project on github.</a></p>
-    <p>Check out the <a href="http://railscasts.com/episodes/296-mercury-editor" target="blank">Railscast</a> for a quick introduction on how to get the gem setup in a Rails project.</p>
-    <br/>
-  </div>
-
-  <div id="footer">
-    <hr>
-    Copyright 2011 Jeremy Jackson. All rights reserved.
-  </div>
-
 </body>
 </html>

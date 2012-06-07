@@ -1,104 +1,181 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Mercury Editor - Home</title>
-  <link href="/mercury/assets/stylesheets/application.css" media="screen" rel="stylesheet" type="text/css"/>
+  <title>Mercury Editor: The Rails HTML5 WYSIWYG Editor</title>
+  <link href="/mercury/assets/stylesheets/bootstrap.min.css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="/mercury/assets/stylesheets/bootstrap-responsive.min.css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="/mercury/assets/stylesheets/application.css" media="all" rel="stylesheet" type="text/css"/>
+
+  <script src="/mercury/assets/javascripts/jquery.min.js" type="text/javascript"></script>
+  <script src="/mercury/assets/javascripts/bootstrap.min.js" type="text/javascript"></script>
   <script src="/mercury/assets/javascripts/application.js" type="text/javascript"></script>
-  <script src="/mercury/mercury/javascripts/mercury_loader.js?src=mercury&pack=bundled" type="text/javascript"></script>
+
+  <script src="/mercury/assets/javascripts/mercury_loader.js?src=/mercury/assets&pack=bundled&visible=false" type="text/javascript"></script>
   <script src="http://twitterjs.googlecode.com/svn/trunk/src/twitter.min.js" type="text/javascript"></script>
-  <!--[if lt IE 7]>
-    <script type="text/javascript" src="/mercury/assets/javascripts/unitpngfix.js"></script>
-  <![endif]-->
+
+  <script type="text/javascript">
+    jQuery(window).on('mercury:ready', function() {
+      // do whatever additional loading that should happen here
+      // you can also make simple changes to default functionality here
+      Mercury.PageEditor.prototype.save = function() {
+        var data = this.serialize();
+        var lightview = Mercury.lightview(null, {title: 'Saving', closeButton: true});
+        setTimeout(function() {
+          var textarea = '<textarea style="width:100%;height:300px" wrap="off">' + top.JSON.stringify(data, null, '  ') + '</textarea>';
+          lightview.loadContent('<div style="width:500px">Saving in the demo is disabled, but you can see what would be sent to the server below.' + textarea + '</div>');
+        }, 500);
+      }
+
+    });
+
+    function toggleMercury() {
+      if (Mercury) {
+        Mercury.trigger('toggle:interface');
+      } else {
+        alert("Sorry, but Mercury Editor isn't supported by your current browser.  Try Chrome, Firefox, or Safari.");
+      }
+    }
+  </script>
 </head>
-<body>
+<body class="home">
 
-  <div id="background"></div>
-
-  <h1 id="logo"><a href="/mercury">Mercury Editor</a></h1>
-
-  <ul id="navigation">
-    <li class="active"><a href="/mercury">Home</a></li>
-    <li><a href="/mercury/downloads">Downloads</a></li>
-    <li><a href="/mercury/walkthrough">Walkthrough</a></li>
-    <li><a href="/mercury/documentation">Documentation</a></li>
-    <li><a href="/mercury/annotated_source">Annotated Source</a></li>
-  </ul>
-
-  <div id="primary" class="intro">
-    <ul id="aspects">
-      <li class="simple">
-        <strong>Simple</strong>
-        <span>Mercury comes bundled as a Rails Engine, so just include it in your Gemfile.  Or grab the package if you're not using Rails.</span>
-      </li>
-      <li class="unobtrusive">
-        <strong>Unobtrusive</strong>
-        <span>We don't put any code in your page so you're free to use whatever frameworks you want without having to worry.</span>
-      </li>
-      <li class="configurable">
-        <strong>Configurable</strong>
-        <span>Easily add or remove toolbar items. Any toolbar item can be tied to an action using behaviors and the command pattern.</span>
-      </li>
-      <li class="extendable">
-        <strong>Extendable</strong>
-        <span>HTML and Markdown is supported by default, but you can just extend the base regions to build your own types.</span>
-      </li>
-    </ul>
-
-    <hr/>
-
-    <div id="actions">
-      <h2 class="brief">Mercury is built to handle your content needs.</h2>
-
-      <div class="action">
-        <a class="button green" href="/mercury/downloads">Download now</a>
-        Download the package.
-      </div>
-
-      <div class="action">
-        <a class="button blue" href="#" onclick="if (window.Mercury) { Mercury.trigger('toggle:interface') } else { alert('Sorry, but Mercury Editor isn\'t supported by your current browser.  Try Chrome, Firefox, or Safari.'); }">Test it out</a>
-        Check out all the features.
+  <div id="navigation" class="navbar navbar-fixed-top">
+    <a class="hidden-tablet hidden-phone" href="https://github.com/jejacks0n/mercury"><img style="position: absolute; z-index: 2000; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"></a>
+    <div class="navbar-inner">
+      <div class="container">
+        <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="brand" class="active" href="/mercury">Mercury Editor</a>
+        <div class="nav-collapse collapse">
+          <ul class="nav">
+            <li><a href="/mercury/downloads">Downloads</a></li>
+            <li><a href="/mercury/documentation">Documentation</a></li>
+            <li><a href="/mercury/walkthrough">Walkthrough</a></li>
+          </ul>
+        </div>
       </div>
     </div>
+  </div>
 
-    <hr/>
+  <div id="body" class="container">
 
-    <div id="features" class="mercury-region" data-type="editable">
-      <h2>Core features</h2>
-      <ul>
-        <li><strong>Previewing<br/></strong>Preview content while you're working to see exactly how it'll look.</li>
-        <li><strong>Link Tools<br/></strong>Insert and edit links, including TOC/Bookmark links.</li>
-        <li><strong>Media Tools<br/></strong>Insert and edit images, youtube videos, and vimeo videos.</li>
-        <li><strong>Image Uploading<br/></strong>Drag images from your desktop to automatically uploaded and insert them.</li>
-        <li><strong>Table Editing<br/></strong>Advanced table editing and creation.</li>
-        <li><strong>Snippets<br/></strong>Insert and edit predefined and reusable bits of markup/code using drag and drop.</li>
-        <li><strong>Custom Regions<br/></strong>We provide Markdown, HTML, and Snippet region types by default.</li>
-        <li><strong>I18n<br/></strong>Built in low profile translation and internationalization system.</li>
+    <div id="hero" class="hero-unit">
+      <div id="hero_content" data-mercury="full">
+        <h1>Mercury Editor</h1>
+        <br/>
+        <h2>Mercury is a <strong>full featured</strong> HTML5 editor. It was built from the ground up to help your team <strong>get the most</strong> out of <strong>content editing</strong> in modern browsers.</h2>
+      </div>
+      <br/>
+      <br/>
+      <div class="installation">gem 'mercury-rails'<br/>rails generate mercury:install</div>
+      <br/>
+      <br/>
+      <p class="buttons">
+        <a href="javascript:toggleMercury()" class="btn btn-primary btn-large">Check out the Demo</a>
+        <a href="https://github.com/jejacks0n/mercury" class="btn btn-large">View project on GitHub</a>
+        <a href="https://github.com/downloads/jejacks0n/mercury/mercury-v0.6.0.zip" class="btn btn-large">Download Mercury <small>(v0.6.0)</small></a>
+      </p>
+    </div>
+
+    <div id="social">
+      <ul class="support-links">
+        <li><a href="https://github.com/jejacks0n/mercury/issues?direction=desc&sort=created&state=open">Submit Issues</a></li>
+        <li><a href="https://github.com/jejacks0n/mercury/wiki">The Mercury Wiki</a></li>
+        <li><a href="https://www.pivotaltracker.com/projects/295823">Pivotal Tracker Project</a></li>
+      </ul>
+      <ul class="buttons">
+        <li><iframe src="http://markdotto.github.com/github-buttons/github-btn.html?user=jejacks0n&repo=mercury&type=watch&count=true" allowtransparency="true" frameborder="0" scrolling="0" width="110px" height="20px"></iframe></li>
+        <li><iframe src="http://markdotto.github.com/github-buttons/github-btn.html?user=jejacks0n&repo=mercury&type=fork&count=true" allowtransparency="true" frameborder="0" scrolling="0" width="95px" height="20px"></iframe></li>
+        <li><a href="https://twitter.com/share" class="twitter-share-button">Tweet</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></li>
       </ul>
     </div>
+
+    <hr class="soften"/>
+
+    <div id="marketing">
+      <h1 id="marketing_title" data-mercury="simple">Built to handle your content needs.</h1>
+      <p id="marketing_byline" class="marketing-byline" data-mercury="simple">Built from the ground up to help your team get the most out of content editing in modern browsers.</p>
+      <div class="row">
+        <div id="marketing_simple" class="span4" data-mercury="full">
+          <img class="icon" src="/mercury/assets/images/aspect-simple.png">
+          <h2>Simple</h2>
+          <p>Mercury comes bundled as a Rails Engine, so just include it in your Gemfile.  Or grab download the package if you're not using Rails.</p>
+        </div>
+        <div id="marketing_unobtrusive" class="span4" data-mercury="full">
+          <img class="icon" src="/mercury/assets/images/aspect-unobtrusive.png">
+          <h2>Unobtrusive</h2>
+          <p>We don't put javascript or css into your page so you're free to use whatever frameworks you want without having to worry.</p>
+        </div>
+        <div id="marketing_configurable" class="span4" data-mercury="full">
+          <img class="icon" src="/mercury/assets/images/aspect-configurable.png">
+          <h2>Configurable</h2>
+          <p>Easily add or remove toolbar items. Any toolbar item can be tied to an action using behaviors and the command pattern.</p>
+        </div>
+      </div>
+      <div class="row">
+        <div id="marketing_extendable" class="span4" data-mercury="full">
+          <img class="icon" src="/mercury/assets/images/aspect-extendable.png">
+          <h2>Extendable</h2>
+          <p>Full HTML, Simple, Markdown, Snippet and Image regions are supported by default, but you can just extend the base regions to build your own types.</p>
+        </div>
+        <div id="marketing_html5" class="span4" data-mercury="full">
+          <img class="icon" src="/mercury/assets/images/aspect-html.png">
+          <h2>HTML5</h2>
+          <p>Built on top of the new HTML5 contentEditable, it naturally supports the new HTML5 elements, syntax, and JavaScript APIs.</p>
+        </div>
+        <div id="marketing_open_source" class="span4" data-mercury="full">
+          <img class="icon" src="/mercury/assets/images/aspect-open-source.png">
+          <h2>Open-source</h2>
+          <p>Built for and maintained by the community via <a href="https://github.com">GitHub</a>.  You can track or report issues and contribute code or translations.</p>
+        </div>
+      </div>
+    </div>
+
+    <hr class="soften"/>
+
+    <div id="additional" class="row">
+      <div id="features" class="span6" data-mercury="full">
+        <h2>Core Features</h2>
+        <ul>
+          <li><strong>Previewing<br/></strong>Preview content while you're working to see exactly how it'll look.</li>
+          <li><strong>Link Tools<br/></strong>Insert and edit links, including TOC/Bookmark links.</li>
+          <li><strong>Media Tools<br/></strong>Insert and edit images, youtube videos, and vimeo videos.</li>
+          <li><strong>Image Uploading<br/></strong>Drag images from your desktop to automatically uploaded and insert them.</li>
+          <li><strong>Table Editing<br/></strong>Advanced table editing and creation.</li>
+          <li><strong>Snippets<br/></strong>Insert and edit predefined and reusable bits of markup/code using drag and drop.</li>
+          <li><strong>Custom Regions<br/></strong>We provide Markdown, HTML, and Snippet region types by default.</li>
+          <li><strong>I18n<br/></strong>Built in low profile translation and internationalization system.</li>
+        </ul>
+      </div>
+      <div id="more_info" class="span6" data-mercury="full">
+        <h2>More Info?</h2>
+        <h3>Browser Support</h3>
+        <p>
+          To keep Mercury simple, we've supported all browsers that have implemented the complete <a href="http://www.w3.org/TR/2008/WD-html5-20080610/editing.html" target="_blank">W3C contentEditable specification</a>.
+          <ul>
+            <li>Firefox 4+</li>
+            <li>Chrome 10+</li>
+            <li>Safari 5+</li>
+          </ul>
+        </p>
+        <h3>Feature Walkthrough</h3>
+        <p>For more information, including the nerdy details check out the <a href="/mercury/walkthrough">full walkthrough</a> of all the features.</p>
+        <h3>The RailsCast</h3>
+        <p>Check out the <a href="http://railscasts.com/episodes/296-mercury-editor" target="blank">RailsCast</a> for a quick introduction on how to get the gem setup in a Rails project.</p>
+        <h3>Open-Source Project</h3>
+        <p>If you're looking for the source code and all that developer friendly stuff, check out <a href="https://github.com/jejacks0n/mercury">the project on Github.</a></p>
+      </div>
+    </div>
+
+    <div id="footer">
+      <p class="pull-right"><a href="#">Back to top</a></p>
+      <p>Code Licensed under the <a href="http://creativecommons.org/licenses/MIT/">MIT License</a>.  Copyright 2011 Jeremy Jackson. All rights reserved.</p>
+      <p>Icons from <a href="http://glyphicons.com">Glyphicons Free</a>, licensed under <a href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>.</p>
+    </div>
+
   </div>
-
-  <div id="secondary" class="mercury-region" data-type="editable">
-    <h2>Mercury is a <strong>full featured</strong> HTML5 editor. It was built from the ground up to help your team <strong>get the most</strong> out of <strong>content editing</strong> in modern browsers.</h2>
-
-    <h2>Supported Browsers</h2>
-    <p>To keep Mercury simple, we support all browsers that have implemented the complete <a href="http://www.w3.org/TR/2008/WD-html5-20080610/editing.html" target="_blank">W3C contentEditable specification</a>.</p>
-    <ul>
-      <li>Firefox 4+</li>
-      <li>Chrome 10+</li>
-      <li>Safari 5+</li>
-    </ul>
-    <br/>
-
-    <h2>More information?</h2>
-    <p>For more information, including all the nerdy details check out the <a href="/mercury/walkthrough">full walkthrough</a> of all the features.</p>
-    <p>If you're looking for the source code and all that developer friendly stuff, check out <a href="https://github.com/jejacks0n/mercury">the project on github.</a></p>
-    <p>Check out the <a href="http://railscasts.com/episodes/296-mercury-editor" target="blank">Railscast</a> for a quick introduction on how to get the gem setup in a Rails project.</p>
-  </div>
-
-  <div id="footer">
-    <hr>
-    Copyright 2011 Jeremy Jackson. All rights reserved.
-  </div>
-
 </body>
 </html>

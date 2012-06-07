@@ -1,51 +1,76 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Mercury Editor - Downloads</title>
-  <link href="/mercury/assets/stylesheets/application.css" media="screen" rel="stylesheet" type="text/css"/>
+  <title>Mercury Editor: Downloads</title>
+  <link href="/mercury/assets/stylesheets/bootstrap.min.css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="/mercury/assets/stylesheets/bootstrap-responsive.min.css" media="all" rel="stylesheet" type="text/css"/>
+  <link href="/mercury/assets/stylesheets/application.css" media="all" rel="stylesheet" type="text/css"/>
+
+  <script src="/mercury/assets/javascripts/jquery.min.js" type="text/javascript"></script>
+  <script src="/mercury/assets/javascripts/bootstrap.min.js" type="text/javascript"></script>
   <script src="/mercury/assets/javascripts/application.js" type="text/javascript"></script>
-  <!--[if lt IE 7]>
-    <script type="text/javascript" src="/mercury/assets/javascripts/unitpngfix.js"></script>
-  <![endif]-->
 </head>
 <body>
 
-  <div id="background"></div>
+  <div id="navigation" class="navbar navbar-fixed-top">
+    <a class="hidden-tablet hidden-phone" href="https://github.com/jejacks0n/mercury"><img style="position: absolute; z-index: 2000; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"></a>
+    <div class="navbar-inner">
+      <div class="container">
+        <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="brand" href="/mercury">Mercury Editor</a>
+        <div class="nav-collapse collapse">
+          <ul class="nav">
+            <li class="active"><a href="/mercury/downloads">Downloads</a></li>
+            <li><a href="/mercury/documentation">Documentation</a></li>
+            <li><a href="/mercury/walkthrough">Walkthrough</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
 
-  <h1 id="logo"><a href="/mercury">Mercury Editor</a></h1>
+  <div id="body" class="container">
 
-  <ul id="navigation">
-    <li><a href="/mercury">Home</a></li>
-    <li class="active"><a href="/mercury/downloads">Downloads</a></li>
-    <li><a href="/mercury/walkthrough">Walkthrough</a></li>
-    <li><a href="/mercury/documentation">Documentation</a></li>
-    <li><a href="/mercury/annotated_source">Annotated Source</a></li>
-  </ul>
+    <h1>Downloads</h1>
 
-  <div id="primary">
-    <h1>File Downloads</h1>
-    <ul>
+    <p>Mercury Editor comes as a Rails Engine, but if you'd like to use Mercury outside of a typical Rails application, you can download these packages and use them.</p>
+    <p>Mercury expects a back end for many of its features, so you may have to duplicate some of that functionality in your own application.  For information on how to do that you'll want to read the <a href="https://github.com/jejacks0n/mercury/wiki/Using-Mercury-without-Rails">Using Mercury without Rails</a> and <a href="https://github.com/jejacks0n/mercury/wiki/Server-Specification">Server Specification</a> Wiki pages.</p>
+
+    <h2>Current Release</h2>
+    <ul class="current">
+      <li><a href="https://github.com/downloads/jejacks0n/mercury/mercury-v0.6.0.zip">mercury-v0.6.0.zip</a></li>
+    </ul>
+
+    <h3>Uncompressed Downloads</h3>
+    <p>You can download more current files if you like living on the edge.  These files represent where the project will be headed in the next release, and may or may not be stable.</p>
+    <ul class="developer">
+      <li><a href="https://raw.github.com/jejacks0n/mercury/master/distro/javascripts/mercury.js">mercury.js</a></li>
+      <li><a href="https://raw.github.com/jejacks0n/mercury/master/distro/javascripts/mercury_dialogs.js">mercury_dialogs.js</a></li>
+      <li><a href="https://raw.github.com/jejacks0n/mercury/master/distro/javascripts/mercury_loader.js">mercury_loader.js</a></li>
+      <li><a href="https://raw.github.com/jejacks0n/mercury/master/distro/javascripts/mercury.bundle.css">mercury.bundle.css</a></li>
+    </ul>
+
+    <h3>Older Releases</h3>
+    <p>Here's the older releases if you need them too.</p>
+    <ul class="older">
       <li><a href="https://github.com/downloads/jejacks0n/mercury/mercury-v0.2.0.zip">mercury-v0.2.0.zip</a></li>
       <li><a href="https://github.com/downloads/jejacks0n/mercury/mercury-v0.1.4.zip">mercury-v0.1.4.zip</a></li>
     </ul>
 
-    <h1>Uncompressed Downloads</h1>
-    <p>You can download more current files <a href="https://github.com/jejacks0n/mercury/tree/master/public/mercury" target="_blank">here</a> if you like living on the edge.  These files represent where the project will be headed in the next release, and may or may not be stable.</p>
+
+
+    <p>We'll be adding the full walkthrough soon (promise!).  But while you wait, you can watch an awesome <a href="http://railscasts.com/episodes/296-mercury-editor" target="_blank">RailsCast</a> about getting it up and running in a Rails project.</p>
+
+    <div id="footer">
+      <p class="pull-right"><a href="#">Back to top</a></p>
+      <p>Code Licensed under the <a href="http://creativecommons.org/licenses/MIT/">MIT License</a>.  Copyright 2011 Jeremy Jackson. All rights reserved.</p>
+      <p>Icons from <a href="http://glyphicons.com">Glyphicons Free</a>, licensed under <a href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>.</p>
+    </div>
 
   </div>
-
-  <div id="secondary">
-    <h2>More information?</h2>
-    <p>For more information, including all the nerdy details check out the <a href="/mercury/walkthrough">full walkthrough</a> of all the features.</p>
-    <p>If you're looking for the source code and all that developer friendly stuff, check out <a href="https://github.com/jejacks0n/mercury">the project on github.</a></p>
-    <p>Check out the <a href="http://railscasts.com/episodes/296-mercury-editor" target="blank">Railscast</a> for a quick introduction on how to get the gem setup in a Rails project.</p>
-    <br/>
-  </div>
-
-  <div id="footer">
-    <hr>
-    Copyright 2011 Jeremy Jackson. All rights reserved.
-  </div>
-
 </body>
 </html>

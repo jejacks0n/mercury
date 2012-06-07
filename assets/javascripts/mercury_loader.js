@@ -30,7 +30,7 @@
 // script.  These, or your own packages can be specified to the loader in query params (read below for details).
 if (!window.mercuryPackages) window.mercuryPackages = {
   development: {javascripts: 'mercury.js', stylesheets: 'mercury.css'},
-  bundled: {javascripts: 'javascripts/mercury.js,javascripts/mercury_dialogs.js', stylesheets: 'stylesheets/mercury.bundle.css'}
+  bundled: {javascripts: 'javascripts/mercury/mercury.js,javascripts/mercury/mercury_dialogs.js', stylesheets: 'stylesheets/mercury/mercury.bundle.css'}
 };
 
 
@@ -99,6 +99,7 @@ if (!window.mercuryPackages) window.mercuryPackages = {
         if (!match || !match[1]) continue;
 
         match[1].replace(/([^&=]*)=([^&=]*)/g, function (m, attr, value) {
+          if (['true', 'false'].indexOf(value) >= 0) value = JSON.parse(value);
           options[attr] = value;
         });
       }
@@ -138,7 +139,7 @@ if (!window.mercuryPackages) window.mercuryPackages = {
               document.body.style.visibility = 'visible';
               document.body.style.display = 'block';
               // Instantiate the PageEditor, passing in the options that were provided to the loader.
-              new Mercury.PageEditor(null, {visible: false});
+              new Mercury.PageEditor(null, options);
               // If there's a mercuryLoaded function available, call it.   You can provide one before the loading script
               // and it will be called after everything is loaded, but before everything is initialized.  You can bind
               // to the mercury:ready event or use Mercury.bind('ready', function() {}).

@@ -58,7 +58,7 @@ class @Mercury.PageEditor
 
       # trigger ready events
       Mercury.trigger('ready')
-      jQuery(iframeWindow).trigger('mercury:ready')
+      iframeWindow.jQuery(iframeWindow).trigger('mercury:ready') if iframeWindow.jQuery
       iframeWindow.Event.fire(iframeWindow, 'mercury:ready') if iframeWindow.Event && iframeWindow.Event.fire
       iframeWindow.onMercuryReady() if iframeWindow.onMercuryReady
 

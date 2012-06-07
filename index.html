@@ -2,13 +2,13 @@
 <html>
 <head>
   <title>Mercury Editor: The Rails HTML5 WYSIWYG Editor</title>
+  <meta charset='utf-8'>
   <link href="/mercury/assets/stylesheets/bootstrap.min.css" media="all" rel="stylesheet" type="text/css"/>
   <link href="/mercury/assets/stylesheets/bootstrap-responsive.min.css" media="all" rel="stylesheet" type="text/css"/>
   <link href="/mercury/assets/stylesheets/application.css" media="all" rel="stylesheet" type="text/css"/>
 
   <script src="/mercury/assets/javascripts/jquery.min.js" type="text/javascript"></script>
   <script src="/mercury/assets/javascripts/bootstrap.min.js" type="text/javascript"></script>
-  <script src="/mercury/assets/javascripts/application.js" type="text/javascript"></script>
 
   <script src="/mercury/assets/javascripts/mercury_loader.js?src=/mercury/assets&pack=bundled&visible=false" type="text/javascript"></script>
   <script src="http://twitterjs.googlecode.com/svn/trunk/src/twitter.min.js" type="text/javascript"></script>
@@ -102,17 +102,17 @@
         <div id="marketing_simple" class="span4" data-mercury="full">
           <img class="icon" src="/mercury/assets/images/aspect-simple.png">
           <h2>Simple</h2>
-          <p>Mercury comes bundled as a Rails Engine, so just include it in your Gemfile.  Or grab download the package if you're not using Rails.</p>
+          <p>Mercury comes bundled as a Rails Engine, so just include it in your Gemfile.  Or download the current bundled package if you're not using Rails.</p>
         </div>
         <div id="marketing_unobtrusive" class="span4" data-mercury="full">
           <img class="icon" src="/mercury/assets/images/aspect-unobtrusive.png">
           <h2>Unobtrusive</h2>
-          <p>We don't put javascript or css into your page so you're free to use whatever frameworks you want without having to worry.</p>
+          <p>We don't inject javascript or css into your production pages so you're free to use whatever frameworks you want without having to worry about conflicts.</p>
         </div>
         <div id="marketing_configurable" class="span4" data-mercury="full">
           <img class="icon" src="/mercury/assets/images/aspect-configurable.png">
           <h2>Configurable</h2>
-          <p>Easily add or remove toolbar items. Any toolbar item can be tied to an action using behaviors and the command pattern.</p>
+          <p>Easily add or remove toolbar items or create entirely new tools.  Any toolbar item can be tied to an action using behaviors and the command pattern.</p>
         </div>
       </div>
       <div class="row">
@@ -124,12 +124,60 @@
         <div id="marketing_html5" class="span4" data-mercury="full">
           <img class="icon" src="/mercury/assets/images/aspect-html.png">
           <h2>HTML5</h2>
-          <p>Built on top of the new HTML5 contentEditable, it naturally supports the new HTML5 elements, syntax, and JavaScript APIs.</p>
+          <p>Built on top of the HTML5 contentEditable features, it natively supports the all the fancy new HTML5 elements, syntax, and JavaScript APIs.</p>
         </div>
         <div id="marketing_open_source" class="span4" data-mercury="full">
           <img class="icon" src="/mercury/assets/images/aspect-open-source.png">
           <h2>Open-source</h2>
-          <p>Built for and maintained by the community via <a href="https://github.com">GitHub</a>.  You can track or report issues and contribute code or translations.</p>
+          <p>Built for and maintained by the community via <a href="https://github.com">GitHub</a>.  You can track or report issues and contribute code or translations, and keep up with the project.</p>
+        </div>
+      </div>
+    </div>
+
+    <div id="regions">
+      <h1>Useful right out of the box.</h1>
+      <p class="marketing-byline">Mercury comes with some predefined regions that will cover all your basic needs.</p>
+
+      <div class="row">
+        <div id="snippets" class="span12" data-mercury="snippets">
+          <div class="row">
+            <div class="span6" data-snippet="">
+              <div class="contents">
+                <h3>Full HTML Regions</h3>
+                <p>Full regions are for full HTML markup and utilize the HTML5 contentEditable feature.  These are the core of what Mercury Editor does, and provide the most flexibility and visual representation of what the content will look like when saved.</p>
+              </div>
+            </div>
+            <div class="span6" data-snippet="">
+              <div class="contents">
+                <h3>Simple Regions</h3>
+                <p>Simple regions are designed for plain text.  Newlines and markup are not allowed.  Simple Regions are appropriate for titles, headlines, or any area where you want the conent to be editable but not the style.</p>
+              </div>
+            </div>
+            <div class="span6" data-snippet="">
+              <div class="contents">
+                <h3>Markdown Regions</h3>
+                <p>Markdown regions are based on Markdown syntax (specifically the <a href="http://github.github.com/github-flavored-markdown/" target="_blank">github flavored</a> version), and aren't as full featured as the full region type.  This region type is useful if you want to keep the markup clean and simple.</p>
+              </div>
+            </div>
+            <div class="span6" data-snippet="">
+              <div class="contents">
+                <h3>Snippets Regions</h3>
+                <p>Snippet regions only allow snippets and don't have a concept of content editing within them.  Snippets can be the way to go with complex markup and functionality, and are chunks of reusable markup that can be defined by a developer and placed into content anywhere.</p>
+              </div>
+            </div>
+            <div class="span6" data-snippet="">
+              <div class="contents">
+                <h3>Image Regions</h3>
+                <p>The image region type should only be applied to an image tag.  It results in the image being drag-and-drop replacable.  This works well for logos and images you want to display with careful layout, and do not need any content functionality.</p>
+              </div>
+            </div>
+            <div class="span6" data-snippet="">
+              <div class="contents">
+                <h3>Custom Regions</h3>
+                <p>When the provided regions don't give you what you need, create your own based on your specific content needs.  This allows you to provide complex functionality that your content authors and editors might need.  You'll be the most loved developer.</p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -137,18 +185,16 @@
     <hr class="soften"/>
 
     <div id="additional" class="row">
-      <div id="features" class="span6" data-mercury="full">
-        <h2>Core Features</h2>
-        <ul>
-          <li><strong>Previewing<br/></strong>Preview content while you're working to see exactly how it'll look.</li>
-          <li><strong>Link Tools<br/></strong>Insert and edit links, including TOC/Bookmark links.</li>
-          <li><strong>Media Tools<br/></strong>Insert and edit images, youtube videos, and vimeo videos.</li>
-          <li><strong>Image Uploading<br/></strong>Drag images from your desktop to automatically uploaded and insert them.</li>
-          <li><strong>Table Editing<br/></strong>Advanced table editing and creation.</li>
-          <li><strong>Snippets<br/></strong>Insert and edit predefined and reusable bits of markup/code using drag and drop.</li>
-          <li><strong>Custom Regions<br/></strong>We provide Markdown, HTML, and Snippet region types by default.</li>
-          <li><strong>I18n<br/></strong>Built in low profile translation and internationalization system.</li>
-        </ul>
+      <div id="features" class="span6" data-mercury="markdown">
+## Core Features ##
+- <strong>Previewing<br/></strong>Preview content while you're working to see exactly how it'll look.
+- <strong>Link Tools<br/></strong>Insert and edit links, including TOC/Bookmark links.
+- <strong>Media Tools<br/></strong>Insert and edit images, youtube videos, and vimeo videos.
+- <strong>Image Uploading<br/></strong>Drag images from your desktop to automatically uploaded and insert them.
+- <strong>Table Editing<br/></strong>Advanced table editing and creation.
+- <strong>Snippets<br/></strong>Insert and edit predefined and reusable bits of markup/code using drag and drop.
+- <strong>Custom Regions<br/></strong>We provide Markdown, HTML, and Snippet region types by default.
+- <strong>I18n<br/></strong>Built in low profile translation and internationalization system.
       </div>
       <div id="more_info" class="span6" data-mercury="full">
         <h2>More Info?</h2>

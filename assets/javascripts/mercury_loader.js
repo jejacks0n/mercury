@@ -30,7 +30,7 @@
 // script.  These, or your own packages can be specified to the loader in query params (read below for details).
 if (!window.mercuryPackages) window.mercuryPackages = {
   development: {javascripts: 'mercury.js', stylesheets: 'mercury.css'},
-  bundled: {javascripts: 'javascripts/mercury/mercury.js,javascripts/mercury/mercury_dialogs.js', stylesheets: 'stylesheets/mercury/mercury.bundle.css'}
+  bundled: {javascripts: 'javascripts/mercury/mercury.min.js,javascripts/mercury/mercury_dialogs.js', stylesheets: 'stylesheets/mercury/mercury.bundle.css'}
 };
 
 

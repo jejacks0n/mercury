@@ -60,31 +60,10 @@ class @Mercury.Regions.Simple extends Mercury.Region
       @container.removeClass('focus')
       Mercury.trigger('region:blurred', {region: @})
 
-    @element.on 'dragenter', (event) =>
-      return if @previewing
-      event.preventDefault()
-      event.originalEvent.dataTransfer.dropEffect = 'copy'
+    @bindElementEvents()
 
-    @element.on 'dragover', (event) =>
-      return if @previewing
-      event.preventDefault()
-      event.originalEvent.dataTransfer.dropEffect = 'copy'
 
-    @element.on 'drop', (event) =>
-      return if @previewing
-
-      # handle dropping snippets
-      if Mercury.snippet
-        event.preventDefault()
-        @focus()
-        Mercury.Snippet.displayOptionsFor(Mercury.snippet)
-
-      # handle any files that were dropped
-      if event.originalEvent.dataTransfer.files.length
-        event.preventDefault()
-        @focus()
-        Mercury.uploader(event.originalEvent.dataTransfer.files[0])
-
+  bindElementEvents: ->
     @element.on 'focus', =>
       return if @previewing
       Mercury.region = @
@@ -183,6 +162,7 @@ class @Mercury.Regions.Simple extends Mercury.Region
       @element = @container
       @container.attr(Mercury.config.regions.attribute, type)
       @build()
+      @bindElementEvents()
       @focus() if Mercury.region == @
     else
       @previewing = true

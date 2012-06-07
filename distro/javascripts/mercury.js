@@ -13489,9 +13489,6 @@ Showdown.converter = function() {
       try {
         if (this.iframe.data('loaded')) return;
         this.iframe.data('loaded', true);
-        if (jQuery.browser.opera) {
-          Mercury.notify("Opera isn't a fully supported browser, your results may not be optimal.");
-        }
         this.document = jQuery(this.iframe.get(0).contentWindow.document);
         jQuery("<style mercury-styles=\"true\">").html(Mercury.config.injectedStyles).appendTo(this.document.find('head'));
         iframeWindow = this.iframe.get(0).contentWindow;
@@ -16690,7 +16687,7 @@ Showdown.converter = function() {
 
     Full.supported = document.designMode && !jQuery.browser.konqueror && !jQuery.browser.msie;
 
-    Full.supportedText = "Chrome 10+, Firefox 4+, Safari 5+";
+    Full.supportedText = "Chrome 10+, Firefox 4+, Safari 5+, Opera 11.64+";
 
     type = 'full';
 
@@ -17420,7 +17417,7 @@ Showdown.converter = function() {
 
     Image.supported = document.getElementById;
 
-    Image.supportedText = "IE 7+, Chrome 10+, Firefox 4+, Safari 5+, Opera 8+";
+    Image.supportedText = "Chrome 10+, Firefox 4+, IE 7+, Safari 5+, Opera 8+";
 
     type = 'image';
 
@@ -17555,7 +17552,7 @@ Showdown.converter = function() {
 
     Markdown.supported = document.getElementById;
 
-    Markdown.supportedText = "IE 7+, Chrome 10+, Firefox 4+, Safari 5+, Opera 8+";
+    Markdown.supportedText = "Chrome 10+, Firefox 4+, IE 7+, Safari 5+, Opera 8+";
 
     type = 'markdown';
 
@@ -18065,7 +18062,7 @@ Showdown.converter = function() {
 
     Simple.supported = document.getElementById;
 
-    Simple.supportedText = "IE 7+, Chrome 10+, Firefox 4+, Safari 5+, Opera 8+";
+    Simple.supportedText = "Chrome 10+, Firefox 4+, IE 7+, Safari 5+, Opera 8+";
 
     type = 'simple';
 
@@ -18437,7 +18434,7 @@ Showdown.converter = function() {
 
     Snippets.supported = document.getElementById;
 
-    Snippets.supportedText = "IE 7+, Chrome 10+, Firefox 4+, Safari 5+, Opera 8+";
+    Snippets.supportedText = "Chrome 10+, Firefox 4+, IE 7+, Safari 5+, Opera 8+";
 
     type = 'snippets';
 

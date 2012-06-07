@@ -54,8 +54,10 @@ but there aren't plans currently for adding support for alternate implementation
 Supported Browsers:
 
 - Chrome 10+
-- Safari 5+
 - Firefox 4+
+- Safari 5+
+- Opera 11.64+
+- Mobile Safari (iOS 5+)
 
 
 ## A Demo

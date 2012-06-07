@@ -1,7 +1,7 @@
 class @Mercury.Regions.Full extends Mercury.Region
   # No IE support yet because it doesn't follow the W3C standards for HTML5 contentEditable (aka designMode).
   @supported: document.designMode && !jQuery.browser.konqueror && !jQuery.browser.msie
-  @supportedText: "Chrome 10+, Firefox 4+, Safari 5+"
+  @supportedText: "Chrome 10+, Firefox 4+, Safari 5+, Opera 11.64+"
   type = 'full'
   type: -> type
 

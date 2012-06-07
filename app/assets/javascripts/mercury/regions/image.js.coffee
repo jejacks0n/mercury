@@ -2,7 +2,7 @@
 # into the page, but provides no editing of other DOM attributes at this time.
 class @Mercury.Regions.Image extends Mercury.Region
   @supported: document.getElementById
-  @supportedText: "IE 7+, Chrome 10+, Firefox 4+, Safari 5+, Opera 8+"
+  @supportedText: "Chrome 10+, Firefox 4+, IE 7+, Safari 5+, Opera 8+"
   type = 'image'
   type: -> type
 

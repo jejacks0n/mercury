@@ -37,7 +37,6 @@ class @Mercury.PageEditor
     try
       return if @iframe.data('loaded')
       @iframe.data('loaded', true)
-      Mercury.notify("Opera isn't a fully supported browser, your results may not be optimal.") if jQuery.browser.opera
 
       # set document reference of iframe
       @document = jQuery(@iframe.get(0).contentWindow.document)

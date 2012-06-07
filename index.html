@@ -14,6 +14,9 @@
   <script src="http://twitterjs.googlecode.com/svn/trunk/src/twitter.min.js" type="text/javascript"></script>
 
   <script type="text/javascript">
+    jQuery(function() {
+      $('.browser').tooltip({});
+    });
     jQuery(window).on('mercury:ready', function() {
       // do whatever additional loading that should happen here
       // you can also make simple changes to default functionality here
@@ -25,14 +28,13 @@
           lightview.loadContent('<div style="width:500px">Saving in the demo is disabled, but you can see what would be sent to the server below.' + textarea + '</div>');
         }, 500);
       }
-
     });
 
     function toggleMercury() {
-      if (Mercury) {
-        Mercury.trigger('toggle:interface');
+      if (typeof(Mercury) == 'undefined') {
+        alert("Sorry, but Mercury Editor isn't supported by your current browser.\n\nBrowsers that support the required HTML5 spec:\n\n  Chrome 10+\n  Firefox 4+\n  Safari 5+\n  Opera 11.64+\n  Mobile Safari (iOS 5+)");
       } else {
-        alert("Sorry, but Mercury Editor isn't supported by your current browser.  Try Chrome, Firefox, or Safari.");
+        Mercury.trigger('toggle:interface');
       }
     }
   </script>
@@ -98,6 +100,20 @@
     <div id="marketing">
       <h1 id="marketing_title" data-mercury="simple">Built to handle your content needs.</h1>
       <p id="marketing_byline" class="marketing-byline" data-mercury="simple">Built from the ground up to help your team get the most out of content editing in modern browsers.</p>
+
+      <div id="support">
+        <div>
+          <img class="browser" title="Chrome 10+" alt="Chrome" src="/mercury/assets/images/browsers/chrome.png" width="31" height="31"/>
+          <img class="browser" title="Firefox 4+" alt="Firefox" src="/mercury/assets/images/browsers/firefox.png" width="31" height="31"/>
+          <img class="browser" title="Safari 5+" alt="Safari" src="/mercury/assets/images/browsers/safari.png" width="31" height="31"/>
+          <img class="browser" title="Opera 11.64+" alt="Opera" src="/mercury/assets/images/browsers/opera.png" width="31" height="31"/>
+          <img title="IE 9+" alt="IE" src="/mercury/assets/images/browsers/ie.png" width="31" height="31"/>
+          <img class="browser" title="Mobile Safari (iOS 5+)" alt="Mobile Safari" src="/mercury/assets/images/browsers/mobile-safari.png" width="31" height="31"/>
+        </div>
+        <br/>
+        <p>All browsers that implement the complete <a href="http://www.w3.org/TR/2008/WD-html5-20080610/editing.html" target="_blank">W3C contentEditable specification</a> are supported.</p>
+      </div>
+
       <div class="row">
         <div id="marketing_simple" class="span4" data-mercury="full">
           <img class="icon" src="/mercury/assets/images/aspect-simple.png">
@@ -129,14 +145,16 @@
         <div id="marketing_open_source" class="span4" data-mercury="full">
           <img class="icon" src="/mercury/assets/images/aspect-open-source.png">
           <h2>Open-source</h2>
-          <p>Built for and maintained by the community via <a href="https://github.com" target="blank">GitHub</a>.  You can track or report issues and contribute code or translations, and keep up with the project.</p>
+          <p>Built for and maintained by the community via <a href="https://github.com" target="blank">GitHub</a>.  You can track or report issues, contribute code or translations, and keep up with the project.</p>
         </div>
       </div>
     </div>
 
+    <hr class="soften"/>
+
     <div id="regions">
-      <h1>Useful right out of the box.</h1>
-      <p class="marketing-byline">Mercury comes with some predefined regions that will cover all your basic needs.</p>
+      <h1>Flexible and useful out of the box.</h1>
+      <p class="marketing-byline">Mercury comes with some predefined regions that will cover all your content editing needs.</p>
 
       <div class="row">
         <div id="snippets" class="span12" data-mercury="snippets">
@@ -144,37 +162,37 @@
             <div class="span6" data-snippet="">
               <div class="contents">
                 <h3>Full HTML Regions</h3>
-                <p>Full regions are for full HTML markup and utilize the HTML5 contentEditable feature.  These are the core of what Mercury Editor does, and provide the most flexibility and visual representation of what the content will look like when saved.</p>
+                <p>Full HTML markup that utilizes the HTML5 contentEditable feature.  These are the core of what Mercury Editor does, and provide the most flexibility.</p>
               </div>
             </div>
             <div class="span6" data-snippet="">
               <div class="contents">
                 <h3>Simple Regions</h3>
-                <p>Simple regions are designed for plain text.  Newlines and markup are not allowed.  Simple Regions are appropriate for titles, headlines, or any area where you want the conent to be editable but not the style.</p>
+                <p>Plain text, newlines and markup aren't allowed.  Appropriate for titles, headlines, or any area where you want just the content and not the styles.</p>
               </div>
             </div>
             <div class="span6" data-snippet="">
               <div class="contents">
                 <h3>Markdown Regions</h3>
-                <p>Markdown regions are based on Markdown syntax (specifically the <a href="http://github.github.com/github-flavored-markdown/" target="_blank">github flavored</a> version), and aren't as full featured as the full region type.  This region type is useful if you want to keep the markup clean and simple.</p>
+                <p>Based on the <a href="http://github.github.com/github-flavored-markdown/" target="_blank">Github flavored</a> Markdown syntax.  These are useful if you want to keep the markup flexible, while still clean and simple.</p>
               </div>
             </div>
             <div class="span6" data-snippet="">
               <div class="contents">
                 <h3>Snippets Regions</h3>
-                <p>Snippet regions only allow snippets and don't have a concept of content editing within them.  Snippets can be the way to go with complex markup and functionality, and are chunks of reusable markup that can be defined by a developer and placed into content anywhere.</p>
+                <p>Allows snippets but not content.  Snippets are chunks of reusable markup or code defined by a developer and can be placed into content later.</p>
               </div>
             </div>
             <div class="span6" data-snippet="">
               <div class="contents">
                 <h3>Image Regions</h3>
-                <p>The image region type should only be applied to an image tag.  It results in the image being drag-and-drop replacable.  This works well for logos and images you want to display with careful layout, and do not need any content functionality.</p>
+                <p>Only applied to image tags, it results in the image being drag-and-drop replaceable.  Great for images you don't want within content regions.</p>
               </div>
             </div>
             <div class="span6" data-snippet="">
               <div class="contents">
                 <h3>Custom Regions</h3>
-                <p>When the provided regions don't give you what you need, create your own based on your specific content needs.  This allows you to provide complex functionality that your content authors and editors might need.  You'll be the most loved developer.</p>
+                <p>When the provided regions don't give you what you need, create your own based on your specific needs.  You'll be the most appreciated developer.</p>
               </div>
             </div>
           </div>
@@ -184,35 +202,58 @@
 
     <hr class="soften"/>
 
-    <div id="additional" class="row">
-      <div id="features" class="span6" data-mercury="markdown">
-## Core Features ##
-- <strong>Previewing<br/></strong>Preview content while you're working to see exactly how it'll look.
-- <strong>Link Tools<br/></strong>Insert and edit links, including TOC/Bookmark links.
-- <strong>Media Tools<br/></strong>Insert and edit images, youtube videos, and vimeo videos.
-- <strong>Image Uploading<br/></strong>Drag images from your desktop to automatically uploaded and insert them.
-- <strong>Table Editing<br/></strong>Advanced table editing and creation.
-- <strong>Snippets<br/></strong>Insert and edit predefined and reusable bits of markup/code using drag and drop.
-- <strong>Custom Regions<br/></strong>We provide Markdown, HTML, and Snippet region types by default.
-- <strong>I18n<br/></strong>Built in low profile translation and internationalization system.
+    <div id="additional">
+      <div class="row">
+        <div class="span2">
+          <h3><i class="icon-search"></i> Preview</h3>
+          <p>Preview content while you're working to see exactly how it'll look.</p>
+        </div>
+        <div class="span2">
+          <h3><i class="icon-flag"></i> Localization</h3>
+          <p>Built in low profile translation and internationalization system.</p>
+        </div>
+        <div class="span2">
+          <h3><i class="icon-share-alt"></i> Link Tools</h3>
+          <p>Insert and edit links, including TOC & Bookmark links.</p>
+        </div>
+        <div class="span2">
+          <h3><i class="icon-picture"></i> Media Tools</h3>
+          <p>Insert and edit images, youtube videos, and vimeo videos.</p>
+        </div>
+        <div class="span2">
+          <h3><i class="icon-th"></i> Table Editing</h3>
+          <p>Advanced visual table editing and creation within content.</p>
+        </div>
+        <div class="span2">
+          <h3><i class="icon-file"></i> Snippets</h3>
+          <p>Insert predefined reusable bits of markup using drag and drop.</p>
+        </div>
       </div>
-      <div id="more_info" class="span6" data-mercury="full">
-        <h2>More Info?</h2>
-        <h3>Browser Support</h3>
-        <p>
-          To keep Mercury simple, we've supported all browsers that have implemented the complete <a href="http://www.w3.org/TR/2008/WD-html5-20080610/editing.html" target="_blank">W3C contentEditable specification</a>.
-          <ul>
-            <li>Firefox 4+</li>
-            <li>Chrome 10+</li>
-            <li>Safari 5+</li>
-          </ul>
-        </p>
-        <h3>Feature Walkthrough</h3>
-        <p>For more information, including the nerdy details check out the <a href="/mercury/walkthrough">full walkthrough</a> of all the features.</p>
-        <h3>The RailsCast</h3>
-        <p>Check out the <a href="http://railscasts.com/episodes/296-mercury-editor" target="_blank">RailsCast</a> for a quick introduction on how to get the gem setup in a Rails project.</p>
-        <h3>Open-Source Project</h3>
-        <p>If you're looking for the source code and all that developer friendly stuff, check out <a href="https://github.com/jejacks0n/mercury">the project on Github.</a></p>
+      <div class="row">
+        <div class="span2">
+          <h3><i class="icon-upload"></i> Image Upload</h3>
+          <p>Drag images from your desktop to automatically uploaded and insert them.</p>
+        </div>
+        <div class="span2">
+          <h3><i class="icon-edit"></i> Regions</h3>
+          <p>Build from the existing HTML, markdown, snippet, simple, and image regions.</p>
+        </div>
+        <div class="span2">
+          <h3><i class="icon-play"></i> Rails</h3>
+          <p>Build on top of Rails and the asset pipeline.  Watch the <a href="http://railscasts.com/episodes/296-mercury-editor" target="_blank">RailsCast</a> for an introduction.</p>
+        </div>
+        <div class="span2">
+          <h3><i class="icon-check"></i> Tested</h3>
+          <p>Tested using <a href="http://pivotal.github.com/jasmine/" target="_blank">Jasmine</a> and <a href="http://cukes.info/" target="_blank">Cucumber</a> to ensure production ready code.</p>
+        </div>
+        <div class="span2">
+          <h3><i class="icon-ok-circle"></i> Licensing</h3>
+          <p>Released under the <a href="http://creativecommons.org/licenses/MIT/" target="_blank">MIT License</a> so you can do what you want.</p>
+        </div>
+        <div class="span2">
+          <h3><i class="icon-heart"></i> Love</h3>
+          <p>Made with love, contributed to by many amazing developers and designers.</p>
+        </div>
       </div>
     </div>
 

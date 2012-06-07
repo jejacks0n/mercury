@@ -2,11 +2,6 @@
  * Mercury Editor is a CoffeeScript and jQuery based WYSIWYG editor.  Documentation and other useful information can be
  * found at https://github.com/jejacks0n/mercury
  *
- * Supported browsers:
- *   - Firefox 4+
- *   - Chrome 10+
- *   - Safari 5+
- *
  * Copyright (c) 2011 Jeremy Jackson
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated

@@ -10,8 +10,13 @@
   <script src="/mercury/assets/javascripts/jquery.min.js" type="text/javascript"></script>
   <script src="/mercury/assets/javascripts/bootstrap.min.js" type="text/javascript"></script>
   <script src="/mercury/assets/javascripts/application.js" type="text/javascript"></script>
+  <script>
+    jQuery(function() {
+      $('#subnav').scrollspy();
+    });
+  </script>
 </head>
-<body>
+<body data-spy="scroll">
 
   <div id="navigation" class="navbar navbar-fixed-top">
     <a class="hidden-tablet hidden-phone" href="https://github.com/jejacks0n/mercury"><img style="position: absolute; z-index: 2000; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"></a>
@@ -39,6 +44,56 @@
     <h1>Feature Walkthrough</h1>
 
     <p>We'll be adding the full walkthrough soon (promise!).  But while you wait, you can watch an awesome <a href="http://railscasts.com/episodes/296-mercury-editor" target="_blank">RailsCast</a> about getting it up and running in a Rails project.</p>
+
+    <div id="subnav">
+      <ul class="nav nav-pills">
+        <li><a href="#saving_wt">Saving</a></li>
+        <li><a href="#previewing_wt">Previewing</a></li>
+        <li><a href="#links_wt">Links</a></li>
+        <li><a href="#media_wt">Media</a></li>
+        <li><a href="#tables_wt">Tables</a></li>
+        <li><a href="#characters_wt">Characters</a></li>
+        <li><a href="#snippets_wt">Snippets</a></li>
+        <li><a href="#regions_wt">Regions</a></li>
+        <li><a href="#images_wt">Images</a></li>
+      </ul>
+    </div>
+
+    <div id="saving_wt">
+      <h2>Saving</h2>
+    </div>
+
+    <div id="previewing_wt">
+      <h2>Previewing</h2>
+    </div>
+
+    <div id="links_wt">
+      <h2>Links</h2>
+    </div>
+
+    <div id="media_wt">
+      <h2>Media</h2>
+    </div>
+
+    <div id="tables_wt">
+      <h2>Tables</h2>
+    </div>
+
+    <div id="characters_wt">
+      <h2>Characters</h2>
+    </div>
+
+    <div id="snippets_wt">
+      <h2>Snippets</h2>
+    </div>
+
+    <div id="regions_wt">
+      <h2>Regions</h2>
+    </div>
+
+    <div id="images_wt">
+      <h2>Images</h2>
+    </div>
 
     <div id="footer">
       <p class="pull-right"><a href="#">Back to top</a></p>

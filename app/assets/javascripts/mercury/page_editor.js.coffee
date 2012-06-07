@@ -8,7 +8,7 @@ class @Mercury.PageEditor
   constructor: (@saveUrl = null, @options = {}) ->
     throw Mercury.I18n('Mercury.PageEditor can only be instantiated once.') if window.mercuryInstance
 
-    @visible = true unless (@options.visible == false || @options.visible == 'no')
+    @visible = @options.visible = true unless (@options.visible == false || @options.visible == 'false')
     @options.saveDataType = 'json' unless (@options.saveDataType == false || @options.saveDataType)
 
     window.mercuryInstance = @

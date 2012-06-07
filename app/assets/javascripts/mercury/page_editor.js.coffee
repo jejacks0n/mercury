@@ -8,9 +8,8 @@ class @Mercury.PageEditor
   constructor: (@saveUrl = null, @options = {}) ->
     throw Mercury.I18n('Mercury.PageEditor can only be instantiated once.') if window.mercuryInstance
 
-    @options.visible = true unless (@options.visible == false || @options.visible == 'no')
+    @visible = true unless (@options.visible == false || @options.visible == 'no')
     @options.saveDataType = 'json' unless (@options.saveDataType == false || @options.saveDataType)
-    @visible = @options.visible
 
     window.mercuryInstance = @
     @regions = []
@@ -71,7 +70,7 @@ class @Mercury.PageEditor
   initializeRegions: ->
     @regions = []
     @buildRegion(jQuery(region)) for region in jQuery("[#{Mercury.config.regions.attribute}]", @document)
-    return unless @options.visible
+    return unless @visible
     for region in @regions
       if region.focus
         region.focus()
@@ -100,7 +99,7 @@ class @Mercury.PageEditor
     @snippetToolbar = new Mercury.SnippetToolbar(@document)
 
     @hijackLinksAndForms()
-    Mercury.trigger('mode', {mode: 'preview'}) unless @options.visible
+    Mercury.trigger('mode', {mode: 'preview'}) unless @visible
 
 
   bindDocumentEvents: ->

@@ -26,7 +26,7 @@ describe "Mercury.dialogHandlers.foreColor", ->
       spy = spyOn(Mercury, 'trigger').andCallFake(=>)
       jasmine.simulate.click($('#white').get(0))
       expect(spy.callCount).toEqual(1)
-      expect(spy.argsForCall[0]).toEqual(['action', {action: 'foreColor', value: 'rgb(255, 255, 255)'}])
+      expect(spy.argsForCall[0]).toEqual(['action', {action: 'foreColor', value: '#FFFFFF'}])
 
 
   describe "when any other element is clicked", ->

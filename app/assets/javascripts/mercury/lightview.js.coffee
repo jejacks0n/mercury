@@ -210,7 +210,6 @@ class @Mercury.Lightview
   hide: ->
     return if @showing
     @options = {}
-    @initialized = false
 
     Mercury.trigger('focus:frame')
     @element.hide()

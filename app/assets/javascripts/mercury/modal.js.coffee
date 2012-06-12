@@ -204,13 +204,10 @@ class @Mercury.Modal
   hide: ->
     return if @showing
     @options = {}
-    @initialized = false
 
     Mercury.trigger('focus:frame')
     @element.hide()
     @overlay.hide()
     @reset()
-    @element.remove()
-    @overlay.remove()
 
     @visible = false

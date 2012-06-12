@@ -19,6 +19,7 @@
  *
  * Require any localizations you wish to support
  * Example: es.locale, or fr.locale -- regional dialects are in each language file so never en_US for instance.
+ * Make sure you enable the localization feature in the configuration.
  * require mercury/locales/swedish_chef.locale
  *
  * Add all requires for plugins that extend or change the behavior of Mercury Editor.
@@ -13252,7 +13253,7 @@ Showdown.converter = function() {
   this.Mercury || (this.Mercury = {});
 
   jQuery.extend(this.Mercury, {
-    version: '0.6.0',
+    version: '0.7.0',
     Regions: Mercury.Regions || {},
     modalHandlers: Mercury.modalHandlers || {},
     lightviewHandlers: Mercury.lightviewHandlers || {},
@@ -13649,6 +13650,7 @@ Showdown.converter = function() {
     };
 
     PageEditor.prototype.toggleInterface = function() {
+      var _this = this;
       if (this.visible) {
         this.visible = false;
         this.toolbar.hide();
@@ -13661,6 +13663,11 @@ Showdown.converter = function() {
         this.previewing = true;
       } else {
         this.visible = true;
+        this.iframe.animate({
+          top: this.toolbar.height(true)
+        }, 200, 'easeInOutSine', function() {
+          return _this.resize();
+        });
         this.toolbar.show();
         this.statusbar.show();
         Mercury.trigger('mode', {
@@ -13856,6 +13863,12 @@ Showdown.converter = function() {
       this.columnCount = this.getColumnCount();
       return this.rowCount = this.getRowCount();
     },
+    addColumnBefore: function() {
+      return this.addColumn('before');
+    },
+    addColumnAfter: function() {
+      return this.addColumn('after');
+    },
     addColumn: function(position) {
       var i, intersecting, matchOptions, matching, newCell, row, rowSpan, sig, _len, _ref, _results;
       if (position == null) position = 'after';
@@ -13916,6 +13929,12 @@ Showdown.converter = function() {
         _results.push(this.setColspanFor(cell, this.colspanFor(cell) - 1));
       }
       return _results;
+    },
+    addRowBefore: function() {
+      return this.addRow('before');
+    },
+    addRowAfter: function() {
+      return this.addRow('after');
     },
     addRow: function(position) {
       var cell, cellCount, colspan, newCell, newRow, previousRow, rowCount, rowspan, _i, _j, _k, _len, _len2, _len3, _ref, _ref2, _ref3;
@@ -14614,37 +14633,50 @@ Showdown.converter = function() {
 (function() {
 
   this.Mercury.modal = function(url, options) {
+    var _base;
     if (options == null) options = {};
-    Mercury.modal.show(url, options);
-    return Mercury.modal;
+    (_base = Mercury.modal).instance || (_base.instance = new Mercury.Modal(url, options));
+    Mercury.modal.instance.show(url, options);
+    return Mercury.modal.instance;
   };
 
-  jQuery.extend(Mercury.modal, {
-    minWidth: 400,
-    show: function(url, options) {
-      var _this = this;
+  this.Mercury.Modal = (function() {
+
+    function Modal(url, options) {
       this.url = url;
       this.options = options != null ? options : {};
+    }
+
+    Modal.prototype.show = function(url, options) {
+      var _base,
+        _this = this;
+      if (url == null) url = null;
+      if (options == null) options = null;
+      this.url = url || this.url;
+      this.options = options || this.options;
+      (_base = this.options).minWidth || (_base.minWidth = 400);
       Mercury.trigger('focus:window');
-      this.initialize();
+      this.initializeModal();
       if (this.visible) {
         this.update();
       } else {
         this.appear();
       }
       if (this.options.content) {
-        return setTimeout(500, function() {
+        return setTimeout((function() {
           return _this.loadContent(_this.options.content);
-        });
+        }), 500);
       }
-    },
-    initialize: function() {
+    };
+
+    Modal.prototype.initializeModal = function() {
       if (this.initialized) return;
       this.build();
       this.bindEvents();
       return this.initialized = true;
-    },
-    build: function() {
+    };
+
+    Modal.prototype.build = function() {
       var _ref, _ref2;
       this.element = jQuery('<div>', {
         "class": 'mercury-modal loading'
@@ -14659,8 +14691,9 @@ Showdown.converter = function() {
       this.contentElement = this.element.find('.mercury-modal-content');
       this.element.appendTo((_ref = jQuery(this.options.appendTo).get(0)) != null ? _ref : 'body');
       return this.overlay.appendTo((_ref2 = jQuery(this.options.appendTo).get(0)) != null ? _ref2 : 'body');
-    },
-    bindEvents: function() {
+    };
+
+    Modal.prototype.bindEvents = function() {
       var _this = this;
       Mercury.on('refresh', function() {
         return _this.resize(true);
@@ -14682,8 +14715,9 @@ Showdown.converter = function() {
       return jQuery(document).on('keydown', function(event) {
         if (event.keyCode === 27 && _this.visible) return _this.hide();
       });
-    },
-    appear: function() {
+    };
+
+    Modal.prototype.appear = function() {
       var _this = this;
       this.showing = true;
       this.position();
@@ -14704,8 +14738,9 @@ Showdown.converter = function() {
           return _this.load();
         });
       });
-    },
-    resize: function(keepVisible) {
+    };
+
+    Modal.prototype.resize = function(keepVisible) {
       var height, titleHeight, visibility, width,
         _this = this;
       visibility = keepVisible ? 'visible' : 'hidden';
@@ -14722,9 +14757,9 @@ Showdown.converter = function() {
         display: 'block'
       });
       height = this.contentElement.outerHeight() + titleHeight;
-      if (width < this.minWidth) width = this.minWidth;
-      if (height > Mercury.displayRect.fullHeight - 20 || this.options.fullHeight) {
-        height = Mercury.displayRect.fullHeight - 20;
+      if (width < this.options.minWidth) width = this.options.minWidth;
+      if (height > Mercury.displayRect.fullHeight || this.options.fullHeight) {
+        height = Mercury.displayRect.fullHeight;
       }
       return this.element.stop().animate({
         left: (Mercury.displayRect.width - width) / 2,
@@ -14741,12 +14776,12 @@ Showdown.converter = function() {
             height: height - titleHeight,
             overflow: 'visible'
           });
-          controlHeight = _this.contentControl.length ? _this.contentControl.outerHeight() : 0;
+          controlHeight = _this.contentControl.length ? _this.contentControl.outerHeight() + 10 : 0;
           _this.contentPane.css({
-            height: height - titleHeight - controlHeight - 40
+            height: height - titleHeight - controlHeight - 20
           });
           return _this.contentPane.find('.mercury-display-pane').css({
-            width: width - 40
+            width: width - 20
           });
         } else {
           return _this.contentElement.css({
@@ -14755,8 +14790,9 @@ Showdown.converter = function() {
           });
         }
       });
-    },
-    position: function() {
+    };
+
+    Modal.prototype.position = function() {
       var controlHeight, height, titleHeight, viewportWidth, width;
       viewportWidth = Mercury.displayRect.width;
       if (this.contentPane) {
@@ -14775,9 +14811,9 @@ Showdown.converter = function() {
       });
       width = this.element.width();
       height = this.element.height();
-      if (width < this.minWidth) width = this.minWidth;
-      if (height > Mercury.displayRect.fullHeight - 20 || this.options.fullHeight) {
-        height = Mercury.displayRect.fullHeight - 20;
+      if (width < this.options.minWidth) width = this.options.minWidth;
+      if (height > Mercury.displayRect.fullHeight || this.options.fullHeight) {
+        height = Mercury.displayRect.fullHeight;
       }
       titleHeight = this.titleElement.outerHeight();
       if (this.contentPane && this.contentPane.length) {
@@ -14785,12 +14821,12 @@ Showdown.converter = function() {
           height: height - titleHeight,
           overflow: 'visible'
         });
-        controlHeight = this.contentControl.length ? this.contentControl.outerHeight() : 0;
+        controlHeight = this.contentControl.length ? this.contentControl.outerHeight() + 10 : 0;
         this.contentPane.css({
-          height: height - titleHeight - controlHeight - 40
+          height: height - titleHeight - controlHeight - 20
         });
         this.contentPane.find('.mercury-display-pane').css({
-          width: width - 40
+          width: width - 20
         });
       } else {
         this.contentElement.css({
@@ -14805,13 +14841,15 @@ Showdown.converter = function() {
         display: this.visible ? 'block' : 'none',
         visibility: 'visible'
       });
-    },
-    update: function() {
+    };
+
+    Modal.prototype.update = function() {
       this.reset();
       this.resize();
       return this.load();
-    },
-    load: function() {
+    };
+
+    Modal.prototype.load = function() {
       var _this = this;
       this.setTitle();
       if (!this.url) return;
@@ -14834,10 +14872,11 @@ Showdown.converter = function() {
           }
         });
       }
-    },
-    loadContent: function(data, options) {
+    };
+
+    Modal.prototype.loadContent = function(data, options) {
       if (options == null) options = null;
-      this.initialize();
+      this.initializeModal();
       this.options = options || this.options;
       this.setTitle();
       this.loaded = true;
@@ -14852,17 +14891,28 @@ Showdown.converter = function() {
       if (this.options.afterLoad) this.options.afterLoad.call(this);
       if (this.options.handler) {
         if (Mercury.modalHandlers[this.options.handler]) {
-          Mercury.modalHandlers[this.options.handler].call(this);
+          if (typeof Mercury.modalHandlers[this.options.handler] === 'function') {
+            Mercury.modalHandlers[this.options.handler].call(this);
+          } else {
+            jQuery.extend(this, Mercury.modalHandlers[this.options.handler]);
+            this.initialize();
+          }
         } else if (Mercury.lightviewHandlers[this.options.handler]) {
-          Mercury.lightviewHandlers[this.options.handler].call(this);
+          if (typeof Mercury.lightviewHandlers[this.options.handler] === 'function') {
+            Mercury.lightviewHandlers[this.options.handler].call(this);
+          } else {
+            jQuery.extend(this, Mercury.lightviewHandlers[this.options.handler]);
+            this.initialize();
+          }
         }
       }
       if (Mercury.config.localization.enabled) {
         this.element.localize(Mercury.locale());
       }
       return this.resize();
-    },
-    setTitle: function() {
+    };
+
+    Modal.prototype.setTitle = function() {
       var closeButton;
       this.titleElement.find('span').html(Mercury.I18n(this.options.title));
       closeButton = this.titleElement.find('a');
@@ -14871,58 +14921,71 @@ Showdown.converter = function() {
       } else {
         return closeButton.show();
       }
-    },
-    reset: function() {
+    };
+
+    Modal.prototype.reset = function() {
       this.titleElement.find('span').html('');
       return this.contentElement.html('');
-    },
-    hide: function() {
+    };
+
+    Modal.prototype.hide = function() {
       if (this.showing) return;
       this.options = {};
-      this.initialized = false;
       Mercury.trigger('focus:frame');
       this.element.hide();
       this.overlay.hide();
       this.reset();
       return this.visible = false;
-    }
-  });
+    };
+
+    return Modal;
+
+  })();
 
 }).call(this);
 (function() {
 
   this.Mercury.lightview = function(url, options) {
+    var _base;
     if (options == null) options = {};
-    Mercury.lightview.show(url, options);
-    return Mercury.lightview;
+    (_base = Mercury.lightview).instance || (_base.instance = new Mercury.Lightview(url, options));
+    Mercury.lightview.instance.show(url, options);
+    return Mercury.lightview.instance;
   };
 
-  jQuery.extend(Mercury.lightview, {
-    minWidth: 400,
-    show: function(url, options) {
-      var _this = this;
+  this.Mercury.Lightview = (function() {
+
+    function Lightview(url, options) {
       this.url = url;
       this.options = options != null ? options : {};
+    }
+
+    Lightview.prototype.show = function(url, options) {
+      var _this = this;
+      this.url = url || this.url;
+      this.options = options || this.options;
       Mercury.trigger('focus:window');
-      this.initialize();
+      this.initializeLightview();
       if (this.visible) {
         this.update();
       } else {
         this.appear();
       }
       if (this.options.content) {
-        return setTimeout(500, function() {
+        return setTimeout((function() {
           return _this.loadContent(_this.options.content);
-        });
+        }), 500);
       }
-    },
-    initialize: function() {
+    };
+
+    Lightview.prototype.initializeLightview = function() {
       if (this.initialized) return;
       this.build();
       this.bindEvents();
       return this.initialized = true;
-    },
-    build: function() {
+    };
+
+    Lightview.prototype.build = function() {
       var _ref, _ref2;
       this.element = jQuery('<div>', {
         "class": 'mercury-lightview loading'
@@ -14939,8 +15002,9 @@ Showdown.converter = function() {
       this.contentElement = this.element.find('.mercury-lightview-content');
       this.element.appendTo((_ref = jQuery(this.options.appendTo).get(0)) != null ? _ref : 'body');
       return this.overlay.appendTo((_ref2 = jQuery(this.options.appendTo).get(0)) != null ? _ref2 : 'body');
-    },
-    bindEvents: function() {
+    };
+
+    Lightview.prototype.bindEvents = function() {
       var _this = this;
       Mercury.on('refresh', function() {
         return _this.resize(true);
@@ -14962,8 +15026,9 @@ Showdown.converter = function() {
       return jQuery(document).on('keydown', function(event) {
         if (event.keyCode === 27 && _this.visible) return _this.hide();
       });
-    },
-    appear: function() {
+    };
+
+    Lightview.prototype.appear = function() {
       var _this = this;
       this.showing = true;
       this.position();
@@ -14985,8 +15050,9 @@ Showdown.converter = function() {
           return _this.load();
         });
       });
-    },
-    resize: function(keepVisible) {
+    };
+
+    Lightview.prototype.resize = function(keepVisible) {
       var height, titleHeight, viewportHeight, viewportWidth, visibility, width,
         _this = this;
       visibility = keepVisible ? 'visible' : 'hidden';
@@ -15043,8 +15109,9 @@ Showdown.converter = function() {
           });
         }
       });
-    },
-    position: function() {
+    };
+
+    Lightview.prototype.position = function() {
       var controlHeight, height, titleHeight, viewportHeight, viewportWidth, width;
       viewportWidth = Mercury.displayRect.width;
       viewportHeight = Mercury.displayRect.fullHeight;
@@ -15099,13 +15166,15 @@ Showdown.converter = function() {
         display: this.visible ? 'block' : 'none',
         visibility: 'visible'
       });
-    },
-    update: function() {
+    };
+
+    Lightview.prototype.update = function() {
       this.reset();
       this.resize();
       return this.load();
-    },
-    load: function() {
+    };
+
+    Lightview.prototype.load = function() {
       var _this = this;
       this.setTitle();
       if (!this.url) return;
@@ -15128,10 +15197,11 @@ Showdown.converter = function() {
           }
         });
       }
-    },
-    loadContent: function(data, options) {
+    };
+
+    Lightview.prototype.loadContent = function(data, options) {
       if (options == null) options = null;
-      this.initialize();
+      this.initializeLightview();
       this.options = options || this.options;
       this.setTitle();
       this.loaded = true;
@@ -15146,34 +15216,49 @@ Showdown.converter = function() {
       if (this.options.afterLoad) this.options.afterLoad.call(this);
       if (this.options.handler) {
         if (Mercury.modalHandlers[this.options.handler]) {
-          Mercury.modalHandlers[this.options.handler].call(this);
+          if (typeof Mercury.modalHandlers[this.options.handler] === 'function') {
+            Mercury.modalHandlers[this.options.handler].call(this);
+          } else {
+            jQuery.extend(this, Mercury.modalHandlers[this.options.handler]);
+            this.initialize();
+          }
         } else if (Mercury.lightviewHandlers[this.options.handler]) {
-          Mercury.lightviewHandlers[this.options.handler].call(this);
+          if (typeof Mercury.lightviewHandlers[this.options.handler] === 'function') {
+            Mercury.lightviewHandlers[this.options.handler].call(this);
+          } else {
+            jQuery.extend(this, Mercury.lightviewHandlers[this.options.handler]);
+            this.initialize();
+          }
         }
       }
       if (Mercury.config.localization.enabled) {
         this.element.localize(Mercury.locale());
       }
       return this.resize();
-    },
-    setTitle: function() {
+    };
+
+    Lightview.prototype.setTitle = function() {
       return this.titleElement.find('span').html(Mercury.I18n(this.options.title));
-    },
-    reset: function() {
+    };
+
+    Lightview.prototype.reset = function() {
       this.titleElement.find('span').html('');
       return this.contentElement.html('');
-    },
-    hide: function() {
+    };
+
+    Lightview.prototype.hide = function() {
       if (this.showing) return;
       this.options = {};
-      this.initialized = false;
       Mercury.trigger('focus:frame');
       this.element.hide();
       this.overlay.hide();
       this.reset();
       return this.visible = false;
-    }
-  });
+    };
+
+    return Lightview;
+
+  })();
 
 }).call(this);
 (function() {
@@ -15402,8 +15487,9 @@ Showdown.converter = function() {
       });
     };
 
-    Toolbar.prototype.height = function() {
-      if (this.visible) {
+    Toolbar.prototype.height = function(force) {
+      if (force == null) force = false;
+      if (this.visible || force) {
         return this.element.outerHeight();
       } else {
         return 0;
@@ -18750,90 +18836,135 @@ Showdown.converter = function() {
 }).call(this);
 (function() {
 
-  this.Mercury.modalHandlers.insertLink = function() {
-    var bookmarkSelect, container, existingLink, href, link, newBookmarkInput, selection, _i, _len, _ref,
-      _this = this;
-    this.element.find('label input').on('click', function() {
-      return jQuery(this).closest('label').next('.selectable').focus();
-    });
-    this.element.find('.selectable').on('focus', function() {
-      return jQuery(this).prev('label').find('input[type=radio]').prop("checked", true);
-    });
-    this.element.find('#link_target').on('change', function() {
-      _this.element.find(".link-target-options").hide();
-      _this.element.find("#" + (_this.element.find('#link_target').val()) + "_options").show();
-      return _this.resize(true);
-    });
-    bookmarkSelect = this.element.find('#link_existing_bookmark');
-    _ref = jQuery('a[name]', window.mercuryInstance.document);
-    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-      link = _ref[_i];
-      bookmarkSelect.append(jQuery('<option>', {
-        value: jQuery(link).attr('name')
-      }).text(jQuery(link).text()));
-    }
-    if (Mercury.region && Mercury.region.selection) {
+  this.Mercury.modalHandlers.insertLink = {
+    initialize: function() {
+      var _this = this;
+      this.element.find('.control-label input').on('click', this.onLabelChecked);
+      this.element.find('.controls .optional, .controls .required').on('focus', this.onInputFocused);
+      this.element.find('#link_target').on('change', function() {
+        return _this.onChangeTarget();
+      });
+      this.initializeForm();
+      return this.element.find('form').on('submit', function(event) {
+        event.preventDefault();
+        _this.validateForm();
+        if (!_this.valid) {
+          _this.resize();
+          return;
+        }
+        _this.submitForm();
+        return _this.hide();
+      });
+    },
+    initializeForm: function() {
+      var a, bookmarkSelect, href, newBookmarkInput, selection;
+      this.fillExistingBookmarks();
+      if (!(Mercury.region && Mercury.region.selection)) return;
       selection = Mercury.region.selection();
-      if (selection && selection.commonAncestor) {
-        container = selection.commonAncestor(true).closest('a');
-      }
-      if (container && container.length) {
-        existingLink = container;
-        this.element.find('#link_text_container').hide();
-        if (container.attr('href') && container.attr('href').indexOf('#') === 0) {
-          bookmarkSelect.val(container.attr('href').replace(/[^#]*#/, ''));
-          bookmarkSelect.prev('label').find('input[type=radio]').prop("checked", true);
-        } else {
-          this.element.find('#link_external_url').val(container.attr('href'));
-        }
-        if (container.attr('name')) {
-          newBookmarkInput = this.element.find('#link_new_bookmark');
-          newBookmarkInput.val(container.attr('name'));
-          newBookmarkInput.prev('label').find('input[type=radio]').prop("checked", true);
-        }
-        if (container.attr('target')) {
-          this.element.find('#link_target').val(container.attr('target'));
-        }
-        if (container.attr('href') && container.attr('href').indexOf('javascript:void') === 0) {
-          href = container.attr('href');
-          this.element.find('#link_external_url').val(href.match(/window.open\('([^']+)',/)[1]);
-          this.element.find('#link_target').val('popup');
-          this.element.find('#link_popup_width').val(href.match(/width=(\d+),/)[1]);
-          this.element.find('#link_popup_height').val(href.match(/height=(\d+),/)[1]);
-          this.element.find('#popup_options').show();
-        }
-      }
       if (selection.textContent) {
         this.element.find('#link_text').val(selection.textContent());
       }
-    }
-    return this.element.find('form').on('submit', function(event) {
+      if (selection && selection.commonAncestor) {
+        a = selection.commonAncestor(true).closest('a');
+      }
+      if (!(a && a.length)) return false;
+      this.editing = a;
+      this.element.find('#link_text_container').hide();
+      if (a.attr('href') && a.attr('href').indexOf('#') === 0) {
+        bookmarkSelect = this.element.find('#link_existing_bookmark');
+        bookmarkSelect.val(a.attr('href').replace(/[^#]*#/, ''));
+        bookmarkSelect.closest('.control-group').find('input[type=radio]').prop('checked', true);
+      } else {
+        this.element.find('#link_external_url').val(a.attr('href'));
+      }
+      if (a.attr('name')) {
+        newBookmarkInput = this.element.find('#link_new_bookmark');
+        newBookmarkInput.val(a.attr('name'));
+        newBookmarkInput.closest('.control-group').find('input[type=radio]').prop('checked', true);
+      }
+      if (a.attr('target')) {
+        this.element.find('#link_target').val(a.attr('target'));
+      }
+      if (a.attr('href') && a.attr('href').indexOf('javascript:void') === 0) {
+        href = a.attr('href');
+        this.element.find('#link_external_url').val(href.match(/window.open\('([^']+)',/)[1]);
+        this.element.find('#link_target').val('popup');
+        this.element.find('#link_popup_width').val(href.match(/width=(\d+),/)[1]);
+        this.element.find('#link_popup_height').val(href.match(/height=(\d+),/)[1]);
+        return this.element.find('#popup_options').show();
+      }
+    },
+    fillExistingBookmarks: function() {
+      var bookmarkSelect, tag, _i, _len, _ref, _results;
+      bookmarkSelect = this.element.find('#link_existing_bookmark');
+      _ref = jQuery('a[name]', window.mercuryInstance.document);
+      _results = [];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        tag = _ref[_i];
+        _results.push(bookmarkSelect.append(jQuery('<option>', {
+          value: jQuery(tag).attr('name')
+        }).text(jQuery(tag).text())));
+      }
+      return _results;
+    },
+    onLabelChecked: function() {
+      var forInput;
+      forInput = jQuery(this).closest('.control-label').attr('for');
+      return jQuery(this).closest('.control-group').find("#" + forInput).focus();
+    },
+    onInputFocused: function() {
+      return jQuery(this).closest('.control-group').find('input[type=radio]').prop('checked', true);
+    },
+    onChangeTarget: function() {
+      this.element.find(".link-target-options").hide();
+      this.element.find("#" + (this.element.find('#link_target').val()) + "_options").show();
+      return this.resize(true);
+    },
+    addInputError: function(input, message) {
+      input.after('<span class="help-inline error-message">' + Mercury.I18n(message) + '</span>').closest('.control-group').addClass('error');
+      return this.valid = false;
+    },
+    clearInputErrors: function() {
+      this.element.find('.control-group.error').removeClass('error').find('.error-message').remove();
+      return this.valid = true;
+    },
+    validateForm: function() {
+      var el, type;
+      this.clearInputErrors();
+      type = this.element.find('input[name=link_type]:checked').val();
+      el = this.element.find("#link_" + type);
+      if (!el.val()) this.addInputError(el, "can't be blank");
+      if (!this.editing) {
+        el = this.element.find('#link_text');
+        if (!el.val()) return this.addInputError(el, "can't be blank");
+      }
+    },
+    submitForm: function() {
       var args, attrs, content, target, type, value;
-      event.preventDefault();
-      content = _this.element.find('#link_text').val();
-      target = _this.element.find('#link_target').val();
-      type = _this.element.find('input[name=link_type]:checked').val();
+      content = this.element.find('#link_text').val();
+      target = this.element.find('#link_target').val();
+      type = this.element.find('input[name=link_type]:checked').val();
       switch (type) {
         case 'existing_bookmark':
           attrs = {
-            href: "#" + (_this.element.find('#link_existing_bookmark').val())
+            href: "#" + (this.element.find('#link_existing_bookmark').val())
           };
           break;
         case 'new_bookmark':
           attrs = {
-            name: "" + (_this.element.find('#link_new_bookmark').val())
+            name: "" + (this.element.find('#link_new_bookmark').val())
           };
           break;
         default:
           attrs = {
-            href: _this.element.find("#link_" + type).val()
+            href: this.element.find("#link_" + type).val()
           };
       }
       switch (target) {
         case 'popup':
           args = {
-            width: parseInt(_this.element.find('#link_popup_width').val()) || 500,
-            height: parseInt(_this.element.find('#link_popup_height').val()) || 500,
+            width: parseInt(this.element.find('#link_popup_width').val()) || 500,
+            height: parseInt(this.element.find('#link_popup_height').val()) || 500,
             menubar: 'no',
             toolbar: 'no'
           };
@@ -18847,127 +18978,164 @@ Showdown.converter = function() {
         attrs: attrs,
         content: content
       };
-      if (existingLink) {
-        Mercury.trigger('action', {
+      if (this.editing) {
+        return Mercury.trigger('action', {
           action: 'replaceLink',
           value: value,
-          node: existingLink.get(0)
+          node: this.editing.get(0)
         });
       } else {
-        Mercury.trigger('action', {
+        return Mercury.trigger('action', {
           action: 'insertLink',
           value: value
         });
       }
-      return _this.hide();
-    });
+    }
   };
 
 }).call(this);
 (function() {
 
-  this.Mercury.modalHandlers.insertMedia = function() {
-    var iframe, image, selection, src,
-      _this = this;
-    this.element.find('label input').on('click', function() {
-      return jQuery(this).closest('label').next('.selectable').focus();
-    });
-    this.element.find('.selectable').on('focus', function(event) {
-      var element;
-      element = jQuery(event.target);
-      element.prev('label').find('input[type=radio]').prop("checked", true);
-      _this.element.find(".media-options").hide();
-      _this.element.find("#" + (element.attr('id').replace('media_', ''))).show();
-      return _this.resize(true);
-    });
-    if (Mercury.region && Mercury.region.selection) {
+  this.Mercury.modalHandlers.insertMedia = {
+    initialize: function() {
+      var _this = this;
+      this.element.find('.control-label input').on('click', this.onLabelChecked);
+      this.element.find('.controls .optional, .controls .required').on('focus', function(event) {
+        return _this.onInputFocused($(event.target));
+      });
+      this.focus('#media_image_url');
+      this.initializeForm();
+      return this.element.find('form').on('submit', function(event) {
+        event.preventDefault();
+        _this.validateForm();
+        if (!_this.valid) {
+          _this.resize();
+          return;
+        }
+        _this.submitForm();
+        return _this.hide();
+      });
+    },
+    initializeForm: function() {
+      var iframe, image, selection, src;
+      if (!(Mercury.region && Mercury.region.selection)) return;
       selection = Mercury.region.selection();
-      if (selection.is && (image = selection.is('img'))) {
+      if (image = typeof selection.is === "function" ? selection.is('img') : void 0) {
         this.element.find('#media_image_url').val(image.attr('src'));
         this.element.find('#media_image_alignment').val(image.attr('align'));
-        setTimeout((function() {
-          return _this.element.find('#media_image_url').focus();
-        }), 300);
+        this.focus('#media_image_url');
       }
-      if (selection.is && (iframe = selection.is('iframe'))) {
+      if (iframe = typeof selection.is === "function" ? selection.is('iframe') : void 0) {
         src = iframe.attr('src');
-        if (src.indexOf('http://www.youtube.com') > -1) {
-          this.element.find('#media_youtube_url').val("http://youtu.be/" + (src.match(/\/embed\/(\w+)/)[1]));
+        if (/^https?:\/\/www.youtube.com\//i.test(src)) {
+          this.element.find('#media_youtube_url').val("" + (src.match(/^https?/)[0]) + "://youtu.be/" + (src.match(/\/embed\/(\w+)/)[1]));
           this.element.find('#media_youtube_width').val(iframe.width());
           this.element.find('#media_youtube_height').val(iframe.height());
-          setTimeout((function() {
-            return _this.element.find('#media_youtube_url').focus();
-          }), 300);
-        } else if (src.indexOf('http://player.vimeo.com') > -1) {
-          this.element.find('#media_vimeo_url').val("http://vimeo.com/" + (src.match(/\/video\/(\w+)/)[1]));
+          return this.focus('#media_youtube_url');
+        } else if (/^https?:\/\/player.vimeo.com\//i.test(src)) {
+          this.element.find('#media_vimeo_url').val("" + (src.match(/^https?/)[0]) + "://vimeo.com/" + (src.match(/\/video\/(\w+)/)[1]));
           this.element.find('#media_vimeo_width').val(iframe.width());
           this.element.find('#media_vimeo_height').val(iframe.height());
-          setTimeout((function() {
-            return _this.element.find('#media_vimeo_url').focus();
-          }), 300);
+          return this.focus('#media_vimeo_url');
         }
       }
-    }
-    return this.element.find('form').on('submit', function(event) {
+    },
+    focus: function(selector) {
+      var _this = this;
+      return setTimeout((function() {
+        return _this.element.find(selector).focus();
+      }), 300);
+    },
+    onLabelChecked: function() {
+      var forInput;
+      forInput = jQuery(this).closest('.control-label').attr('for');
+      return jQuery(this).closest('.control-group').find("#" + forInput).focus();
+    },
+    onInputFocused: function(input) {
+      input.closest('.control-group').find('input[type=radio]').prop('checked', true);
+      if (input.closest('.media-options').length) return;
+      this.element.find(".media-options").hide();
+      this.element.find("#" + (input.attr('id').replace('media_', '')) + "_options").show();
+      return this.resize(true);
+    },
+    addInputError: function(input, message) {
+      input.after('<span class="help-inline error-message">' + Mercury.I18n(message) + '</span>').closest('.control-group').addClass('error');
+      return this.valid = false;
+    },
+    clearInputErrors: function() {
+      this.element.find('.control-group.error').removeClass('error').find('.error-message').remove();
+      return this.valid = true;
+    },
+    validateForm: function() {
+      var el, type, url;
+      this.clearInputErrors();
+      type = this.element.find('input[name=media_type]:checked').val();
+      el = this.element.find("#media_" + type);
+      switch (type) {
+        case 'youtube_url':
+          url = this.element.find('#media_youtube_url').val();
+          if (!/^https?:\/\/youtu.be\//.test(url)) {
+            return this.addInputError(el, "is invalid");
+          }
+          break;
+        case 'vimeo_url':
+          url = this.element.find('#media_vimeo_url').val();
+          if (!/^https?:\/\/vimeo.com\//.test(url)) {
+            return this.addInputError(el, "is invalid");
+          }
+          break;
+        default:
+          if (!el.val()) return this.addInputError(el, "can't be blank");
+      }
+    },
+    submitForm: function() {
       var alignment, attrs, code, protocol, type, url, value;
-      event.preventDefault();
-      type = _this.element.find('input[name=media_type]:checked').val();
+      type = this.element.find('input[name=media_type]:checked').val();
       switch (type) {
         case 'image_url':
           attrs = {
-            src: _this.element.find('#media_image_url').val()
+            src: this.element.find('#media_image_url').val()
           };
-          if (alignment = _this.element.find('#media_image_alignment').val()) {
+          if (alignment = this.element.find('#media_image_alignment').val()) {
             attrs['align'] = alignment;
           }
-          Mercury.trigger('action', {
+          return Mercury.trigger('action', {
             action: 'insertImage',
             value: attrs
           });
-          break;
         case 'youtube_url':
-          url = _this.element.find('#media_youtube_url').val();
-          if (!/^https?:\/\/youtu.be\//.test(url)) {
-            Mercury.notify('Error: The provided youtube share url was invalid.');
-            return;
-          }
+          url = this.element.find('#media_youtube_url').val();
           code = url.replace(/https?:\/\/youtu.be\//, '');
           protocol = 'http';
           if (/^https:/.test(url)) protocol = 'https';
           value = jQuery('<iframe>', {
-            width: _this.element.find('#media_youtube_width').val() || 560,
-            height: _this.element.find('#media_youtube_height').val() || 349,
+            width: parseInt(this.element.find('#media_youtube_width').val(), 10) || 560,
+            height: parseInt(this.element.find('#media_youtube_height').val(), 10) || 349,
             src: "" + protocol + "://www.youtube.com/embed/" + code + "?wmode=transparent",
             frameborder: 0,
             allowfullscreen: 'true'
           });
-          Mercury.trigger('action', {
+          return Mercury.trigger('action', {
             action: 'insertHTML',
             value: value
           });
-          break;
         case 'vimeo_url':
-          url = _this.element.find('#media_vimeo_url').val();
-          if (!/^https?:\/\/vimeo.com\//.test(url)) {
-            Mercury.notify('Error: The provided vimeo url was invalid.');
-            return;
-          }
+          url = this.element.find('#media_vimeo_url').val();
           code = url.replace(/^https?:\/\/vimeo.com\//, '');
           protocol = 'http';
           if (/^https:/.test(url)) protocol = 'https';
           value = jQuery('<iframe>', {
-            width: _this.element.find('#media_vimeo_width').val() || 400,
-            height: _this.element.find('#media_vimeo_height').val() || 225,
+            width: parseInt(this.element.find('#media_vimeo_width').val(), 10) || 400,
+            height: parseInt(this.element.find('#media_vimeo_height').val(), 10) || 225,
             src: "" + protocol + "://player.vimeo.com/video/" + code + "?title=1&byline=1&portrait=0&color=ffffff",
             frameborder: 0
           });
-          Mercury.trigger('action', {
+          return Mercury.trigger('action', {
             action: 'insertHTML',
             value: value
           });
       }
-      return _this.hide();
-    });
+    }
   };
 
 }).call(this);
@@ -18997,75 +19165,76 @@ Showdown.converter = function() {
 }).call(this);
 (function() {
 
-  this.Mercury.modalHandlers.insertTable = function() {
-    var firstCell, table,
-      _this = this;
-    table = this.element.find('#table_display table');
-    table.on('click', function(event) {
-      var cell;
-      cell = jQuery(event.target);
-      table = cell.closest('table');
-      table.find('.selected').removeAttr('class');
-      cell.addClass('selected');
-      return Mercury.tableEditor(table, cell, '&nbsp;');
-    });
-    firstCell = table.find('td, th').first();
-    firstCell.addClass('selected');
-    Mercury.tableEditor(table, firstCell, '&nbsp;');
-    this.element.find('input.action').on('click', function(event) {
-      var action;
-      action = jQuery(event.target).attr('name');
-      switch (action) {
-        case 'insertRowBefore':
-          return Mercury.tableEditor.addRow('before');
-        case 'insertRowAfter':
-          return Mercury.tableEditor.addRow('after');
-        case 'deleteRow':
-          return Mercury.tableEditor.removeRow();
-        case 'insertColumnBefore':
-          return Mercury.tableEditor.addColumn('before');
-        case 'insertColumnAfter':
-          return Mercury.tableEditor.addColumn('after');
-        case 'deleteColumn':
-          return Mercury.tableEditor.removeColumn();
-        case 'increaseColspan':
-          return Mercury.tableEditor.increaseColspan();
-        case 'decreaseColspan':
-          return Mercury.tableEditor.decreaseColspan();
-        case 'increaseRowspan':
-          return Mercury.tableEditor.increaseRowspan();
-        case 'decreaseRowspan':
-          return Mercury.tableEditor.decreaseRowspan();
-      }
-    });
-    this.element.find('#table_alignment').on('change', function() {
-      return table.attr({
-        align: _this.element.find('#table_alignment').val()
+  this.Mercury.modalHandlers.insertTable = {
+    initialize: function() {
+      var _this = this;
+      this.table = this.element.find('#table_display table');
+      this.table.on('click', function(event) {
+        return _this.onCellClick($(event.target));
       });
-    });
-    this.element.find('#table_border').on('keyup', function() {
-      return table.attr({
-        border: parseInt(_this.element.find('#table_border').val())
+      this.element.find('#table_alignment').on('change', function() {
+        return _this.setTableAlignment();
       });
-    });
-    this.element.find('#table_spacing').on('keyup', function() {
-      return table.attr({
-        cellspacing: parseInt(_this.element.find('#table_spacing').val())
+      this.element.find('#table_border').on('keyup', function() {
+        return _this.setTableBorder();
       });
-    });
-    return this.element.find('form').on('submit', function(event) {
+      this.element.find('#table_spacing').on('keyup', function() {
+        return _this.setTableCellSpacing();
+      });
+      this.element.find('[data-action]').on('click', function(event) {
+        event.preventDefault();
+        return _this.onActionClick(jQuery(event.target).data('action'));
+      });
+      this.selectFirstCell();
+      return this.element.find('form').on('submit', function(event) {
+        event.preventDefault();
+        _this.submitForm();
+        return _this.hide();
+      });
+    },
+    selectFirstCell: function() {
+      var firstCell;
+      firstCell = this.table.find('td, th').first();
+      firstCell.addClass('selected');
+      return Mercury.tableEditor(this.table, firstCell, '&nbsp;');
+    },
+    onCellClick: function(cell) {
+      this.cell = cell;
+      this.table = this.cell.closest('table');
+      this.table.find('.selected').removeAttr('class');
+      this.cell.addClass('selected');
+      return Mercury.tableEditor(this.table, this.cell, '&nbsp;');
+    },
+    onActionClick: function(action) {
+      if (!action) return;
+      return Mercury.tableEditor[action]();
+    },
+    setTableAlignment: function() {
+      return this.table.attr({
+        align: this.element.find('#table_alignment').val()
+      });
+    },
+    setTableBorder: function() {
+      return this.table.attr({
+        border: parseInt(this.element.find('#table_border').val(), 10) || 1
+      });
+    },
+    setTableCellSpacing: function() {
+      return this.table.attr({
+        cellspacing: parseInt(this.element.find('#table_spacing').val(), 10) || 1
+      });
+    },
+    submitForm: function() {
       var html, value;
-      event.preventDefault();
-      table.find('.selected').removeAttr('class');
-      table.find('td, th').html('<br/>');
-      html = jQuery('<div>').html(table).html();
+      this.table.find('.selected').removeAttr('class');
+      this.table.find('td, th').html('<br/>');
+      html = jQuery('<div>').html(this.table).html();
       value = html.replace(/^\s+|\n/gm, '').replace(/(<\/.*?>|<table.*?>|<tbody>|<tr>)/g, '$1\n');
-      Mercury.trigger('action', {
+      return Mercury.trigger('action', {
         action: 'insertTable',
         value: value
       });
-      return _this.hide();
-    });
+    }
   };
 
 }).call(this);

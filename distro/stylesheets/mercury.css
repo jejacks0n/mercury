@@ -1457,6 +1457,7 @@ legend {
   display: block;
   position: relative;
   margin-left: 10px;
+  margin-bottom: 0;
   font-weight: bold;
   width: auto;
   padding: 0;

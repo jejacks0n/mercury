@@ -4,12 +4,18 @@ and other useful info can be found at: https://github.com/jejacks0n/mercury
 
 Here's a post install checklist:
 
-* Setup the database for image processing (ActiveRecord only) by running:
+* Adjust your application.js & css files to not `require_tree .`
 
-  rake mercury_engine:install:migrations
-  rake db:migrate
+* Learn about, and change configurations in app/assets/javascripts/mercury.js.
 
-* Learn about, and make configuration adjustments in the mercury.js file.
+* If installed, you can make changes to the provided layout and css files too.
 
-* If installed, check out mercury.html.erb and mercury_overrides.css for more
-  customization info.
+* If you want image processing and uploading (using paperclip by default):
+
+  rails g mercury:install:images (use --orm=mongoid for MongoDB)
+  bundle
+  rake db:migrate (if using ActiveRecord)
+
+* For a basic example of authentication for Mercury, install the example:
+
+  rails g mercury:install:authentication

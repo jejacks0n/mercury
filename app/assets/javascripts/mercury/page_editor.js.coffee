@@ -21,7 +21,7 @@ class @Mercury.PageEditor
   initializeInterface: ->
     @focusableElement = jQuery('<input>', {class: 'mercury-focusable', type: 'text'}).appendTo(@options.appendTo ? 'body')
 
-    @iframe = jQuery('<iframe>', {id: 'mercury_iframe', class: 'mercury-iframe', seamless: 'true', frameborder: '0', src: 'about:blank'})
+    @iframe = jQuery('<iframe>', {id: 'mercury_iframe', class: 'mercury-iframe', frameborder: '0', src: 'about:blank'})
     @iframe.appendTo(jQuery(@options.appendTo).get(0) ? 'body')
 
     @toolbar = new Mercury.Toolbar(@options)

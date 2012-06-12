@@ -365,6 +365,7 @@ class @Mercury.Regions.Full extends Mercury.Region
   sanitize: (sanitizer) ->
     # always remove nested regions
     sanitizer.find("[#{Mercury.config.regions.attribute}]").remove()
+    sanitizer.find('[src*="webkit-fake-url://"]').remove()
 
     if Mercury.config.pasting.sanitize
       switch Mercury.config.pasting.sanitize

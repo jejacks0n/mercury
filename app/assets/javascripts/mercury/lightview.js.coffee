@@ -1,19 +1,26 @@
 @Mercury.lightview = (url, options = {}) ->
-  Mercury.lightview.show(url, options)
-  return Mercury.lightview
+  Mercury.lightview.instance ||= new Mercury.Lightview(url, options)
+  Mercury.lightview.instance.show(url, options)
+  return Mercury.lightview.instance
 
-jQuery.extend Mercury.lightview,
-  minWidth: 400
 
-  show: (@url, @options = {}) ->
+class @Mercury.Lightview
+
+  constructor: (@url, @options = {}) ->
+
+
+  show: (url, options) ->
+    @url = url || @url
+    @options = options || @options
+
     Mercury.trigger('focus:window')
-    @initialize()
+    @initializeLightview()
     if @visible then @update() else @appear()
     if @options.content
-      setTimeout 500, => @loadContent(@options.content)
+      setTimeout((=> @loadContent(@options.content)), 500)
 
 
-  initialize: ->
+  initializeLightview: ->
     return if @initialized
     @build()
     @bindEvents()
@@ -160,7 +167,7 @@ jQuery.extend Mercury.lightview,
 
 
   loadContent: (data, options = null) ->
-    @initialize()
+    @initializeLightview()
     @options = options || @options
     @setTitle()
     @loaded = true
@@ -175,9 +182,17 @@ jQuery.extend Mercury.lightview,
     @options.afterLoad.call(@) if @options.afterLoad
     if @options.handler
       if Mercury.modalHandlers[@options.handler]
-        Mercury.modalHandlers[@options.handler].call(@)
+        if typeof(Mercury.modalHandlers[@options.handler]) == 'function'
+          Mercury.modalHandlers[@options.handler].call(@)
+        else
+          jQuery.extend(@, Mercury.modalHandlers[@options.handler])
+          @initialize()
       else if Mercury.lightviewHandlers[@options.handler]
-        Mercury.lightviewHandlers[@options.handler].call(@)
+        if typeof(Mercury.lightviewHandlers[@options.handler]) == 'function'
+          Mercury.lightviewHandlers[@options.handler].call(@)
+        else
+          jQuery.extend(@, Mercury.lightviewHandlers[@options.handler])
+          @initialize()
 
     @element.localize(Mercury.locale()) if Mercury.config.localization.enabled
     @resize()

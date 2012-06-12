@@ -1,19 +1,27 @@
 @Mercury.modal = (url, options = {}) ->
-  Mercury.modal.show(url, options)
-  return Mercury.modal
+  Mercury.modal.instance ||= new Mercury.Modal(url, options)
+  Mercury.modal.instance.show(url, options)
+  return Mercury.modal.instance
 
-jQuery.extend Mercury.modal,
-  minWidth: 400
 
-  show: (@url, @options = {}) ->
+class @Mercury.Modal
+
+  constructor: (@url, @options = {}) ->
+
+
+  show: (url = null, options = null) ->
+    @url = url || @url
+    @options = options || @options
+    @options.minWidth ||= 400
+
     Mercury.trigger('focus:window')
-    @initialize()
+    @initializeModal()
     if @visible then @update() else @appear()
     if @options.content
-      setTimeout 500, => @loadContent(@options.content)
+      setTimeout((=> @loadContent(@options.content)), 500)
 
 
-  initialize: ->
+  initializeModal: ->
     return if @initialized
     @build()
     @bindEvents()
@@ -51,7 +59,7 @@ jQuery.extend Mercury.modal,
         @loadContent(content)
 
     jQuery(document).on 'keydown', (event) =>
-       @hide() if event.keyCode == 27 && @visible
+      @hide() if event.keyCode == 27 && @visible
 
 
   appear: ->
@@ -81,7 +89,7 @@ jQuery.extend Mercury.modal,
 
     height = @contentElement.outerHeight() + titleHeight
 
-    width = @minWidth if width < @minWidth
+    width = @options.minWidth if width < @options.minWidth
     height = Mercury.displayRect.fullHeight - 20 if height > Mercury.displayRect.fullHeight - 20 || @options.fullHeight
 
     @element.stop().animate {left: (Mercury.displayRect.width - width) / 2, width: width, height: height}, 200, 'easeInOutSine', =>
@@ -105,7 +113,7 @@ jQuery.extend Mercury.modal,
     width = @element.width()
     height = @element.height()
 
-    width = @minWidth if width < @minWidth
+    width = @options.minWidth if width < @options.minWidth
     height = Mercury.displayRect.fullHeight - 20 if height > Mercury.displayRect.fullHeight - 20 || @options.fullHeight
 
     titleHeight = @titleElement.outerHeight()
@@ -151,7 +159,7 @@ jQuery.extend Mercury.modal,
 
 
   loadContent: (data, options = null) ->
-    @initialize()
+    @initializeModal()
     @options = options || @options
     @setTitle()
     @loaded = true
@@ -166,9 +174,17 @@ jQuery.extend Mercury.modal,
     @options.afterLoad.call(@) if @options.afterLoad
     if @options.handler
       if Mercury.modalHandlers[@options.handler]
-        Mercury.modalHandlers[@options.handler].call(@)
+        if typeof(Mercury.modalHandlers[@options.handler]) == 'function'
+          Mercury.modalHandlers[@options.handler].call(@)
+        else
+          jQuery.extend(@, Mercury.modalHandlers[@options.handler])
+          @initialize()
       else if Mercury.lightviewHandlers[@options.handler]
-        Mercury.lightviewHandlers[@options.handler].call(@)
+        if typeof(Mercury.lightviewHandlers[@options.handler]) == 'function'
+          Mercury.lightviewHandlers[@options.handler].call(@)
+        else
+          jQuery.extend(@, Mercury.lightviewHandlers[@options.handler])
+          @initialize()
 
     @element.localize(Mercury.locale()) if Mercury.config.localization.enabled
     @resize()

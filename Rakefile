@@ -78,7 +78,7 @@ namespace :mercury do
       Dir[Mercury::Engine.root.join('distro/build/mercury/mercury-*.js')].each do |filename|
         copy_file(filename, Mercury::Engine.root.join('distro/javascripts/mercury.min.js'))
         remove(filename)
-        minified = Uglifier.compile(File.read(Mercury::Engine.root.join('app/assets/javascripts/mercury/dependencies/jquery-1.7.js')))
+        minified = '' #Uglifier.compile(File.read(Mercury::Engine.root.join('app/assets/javascripts/mercury/dependencies/jquery-1.7.js')))
         minified += Uglifier.compile(File.read(Mercury::Engine.root.join('distro/javascripts/mercury.min.js')))
         File.open(Mercury::Engine.root.join('distro/javascripts/mercury.min.js'), 'w') do |file|
           file.write(File.read(Mercury::Engine.root.join('app/assets/javascripts/mercury.js')))

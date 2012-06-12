@@ -1,3 +1,4 @@
+require('/assets/jquery-1.7.js');
 require('/assets/mercury.js');
 
 jasmine.simulate = {

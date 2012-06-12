@@ -2,10 +2,8 @@
  * Mercury Editor is a CoffeeScript and jQuery based WYSIWYG editor.  Documentation and other useful information can be
  * found at https://github.com/jejacks0n/mercury
  *
- *= require_self
- *
  * Minimum jQuery requirements are 1.7
- *= require mercury/dependencies/jquery-1.7
+ *= require_self
  *
  * You can include the Rails jQuery ujs script here to get some nicer behaviors in modals, panels and lightviews when
  * using :remote => true within the contents rendered in them.

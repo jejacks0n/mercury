@@ -11,7 +11,9 @@
     @element.find('form').on 'submit', (event) =>
       event.preventDefault()
       @validateForm()
-      return unless @valid
+      unless @valid
+        @resize()
+        return
       @submitForm()
       @hide()
 
@@ -89,7 +91,7 @@
         @addInputError(el, "can't be blank") unless el.val()
 
 
-submitForm: ->
+  submitForm: ->
     type = @element.find('input[name=media_type]:checked').val()
 
     switch type

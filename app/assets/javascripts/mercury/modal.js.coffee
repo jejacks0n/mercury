@@ -90,15 +90,15 @@ class @Mercury.Modal
     height = @contentElement.outerHeight() + titleHeight
 
     width = @options.minWidth if width < @options.minWidth
-    height = Mercury.displayRect.fullHeight - 20 if height > Mercury.displayRect.fullHeight - 20 || @options.fullHeight
+    height = Mercury.displayRect.fullHeight if height > Mercury.displayRect.fullHeight || @options.fullHeight
 
     @element.stop().animate {left: (Mercury.displayRect.width - width) / 2, width: width, height: height}, 200, 'easeInOutSine', =>
       @contentElement.css({visibility: 'visible', display: 'block'})
       if @contentPane.length
         @contentElement.css({height: height - titleHeight, overflow: 'visible'})
-        controlHeight = if @contentControl.length then @contentControl.outerHeight() else 0
-        @contentPane.css({height: height - titleHeight - controlHeight - 40})
-        @contentPane.find('.mercury-display-pane').css({width: width - 40})
+        controlHeight = if @contentControl.length then @contentControl.outerHeight() + 10 else 0
+        @contentPane.css({height: height - titleHeight - controlHeight - 20})
+        @contentPane.find('.mercury-display-pane').css({width: width - 20})
       else
         @contentElement.css({height: height - titleHeight, overflow: 'auto'})
 
@@ -114,14 +114,14 @@ class @Mercury.Modal
     height = @element.height()
 
     width = @options.minWidth if width < @options.minWidth
-    height = Mercury.displayRect.fullHeight - 20 if height > Mercury.displayRect.fullHeight - 20 || @options.fullHeight
+    height = Mercury.displayRect.fullHeight if height > Mercury.displayRect.fullHeight || @options.fullHeight
 
     titleHeight = @titleElement.outerHeight()
     if @contentPane && @contentPane.length
       @contentElement.css({height: height - titleHeight, overflow: 'visible'})
-      controlHeight = if @contentControl.length then @contentControl.outerHeight() else 0
-      @contentPane.css({height: height - titleHeight - controlHeight - 40})
-      @contentPane.find('.mercury-display-pane').css({width: width - 40})
+      controlHeight = if @contentControl.length then @contentControl.outerHeight() + 10 else 0
+      @contentPane.css({height: height - titleHeight - controlHeight - 20})
+      @contentPane.find('.mercury-display-pane').css({width: width - 20})
     else
       @contentElement.css({height: height - titleHeight, overflow: 'auto'})
 
@@ -210,5 +210,7 @@ class @Mercury.Modal
     @element.hide()
     @overlay.hide()
     @reset()
+    @element.remove()
+    @overlay.remove()
 
     @visible = false

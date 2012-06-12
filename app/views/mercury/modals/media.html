@@ -1,4 +1,4 @@
-<form id="mercury_media" class="form-horizontal" style="width:600px">
+<form id="mercury_media" class="form-horizontal" style="width:615px">
 
   <div class="form-inputs mercury-display-pane-container">
 
@@ -9,7 +9,7 @@
           <input name="media_type" type="radio" value="image_url" checked="checked"/>URL
         </label>
         <div class="controls">
-          <input class="string url optional" id="media_image_url" name="media[image_url]" size="50" type="text">
+          <input class="span6 string url optional" id="media_image_url" name="media[image_url]" size="50" type="text">
         </div>
       </div>
     </fieldset>
@@ -21,7 +21,7 @@
           <input name="media_type" type="radio" value="youtube_url"/>YouTube URL
         </label>
         <div class="controls">
-          <input class="string url optional" id="media_youtube_url" name="media[youtube_url]" size="50" type="text" placeholder="http://youtu.be/Pny4hoN8eII">
+          <input class="span6 string url optional" id="media_youtube_url" name="media[youtube_url]" size="50" type="text" placeholder="http://youtu.be/Pny4hoN8eII">
         </div>
       </div>
       <div class="control-group url optional">
@@ -29,7 +29,7 @@
           <input name="media_type" type="radio" value="vimeo_url"/>Vimeo URL
         </label>
         <div class="controls">
-          <input class="string url optional" id="media_vimeo_url" name="media[vimeo_url]" size="50" type="text" placeholder="http://vimeo.com/25708134">
+          <input class="span6 string url optional" id="media_vimeo_url" name="media[vimeo_url]" size="50" type="text" placeholder="http://vimeo.com/25708134">
         </div>
       </div>
     </fieldset>
@@ -57,13 +57,13 @@
         <div class="control-group number optional">
           <label class="number optional control-label" for="media_youtube_width">Width</label>
           <div class="controls">
-            <input class="number optional" id="media_youtube_width" name="media[youtube_width]" size="50" type="number" value="560">
+            <input class="span2 number optional" id="media_youtube_width" name="media[youtube_width]" size="50" type="number" value="560">
           </div>
         </div>
         <div class="control-group number optional">
           <label class="number optional control-label" for="media_youtube_height">Height</label>
           <div class="controls">
-            <input class="number optional" id="media_youtube_height" name="media[youtube_height]" size="50" type="number" value="349">
+            <input class="span2 number optional" id="media_youtube_height" name="media[youtube_height]" size="50" type="number" value="349">
           </div>
         </div>
       </div>
@@ -71,13 +71,13 @@
         <div class="control-group number optional">
           <label class="number optional control-label" for="media_vimeo_width">Width</label>
           <div class="controls">
-            <input class="number optional" id="media_vimeo_width" name="media[vimeo_width]" size="50" type="number" value="400">
+            <input class="span2 number optional" id="media_vimeo_width" name="media[vimeo_width]" size="50" type="number" value="400">
           </div>
         </div>
         <div class="control-group number optional">
           <label class="number optional control-label" for="media_vimeo_height">Height</label>
           <div class="controls">
-            <input class="number optional" id="media_vimeo_height" name="media[vimeo_height]" size="50" type="number" value="225">
+            <input class="span2 number optional" id="media_vimeo_height" name="media[vimeo_height]" size="50" type="number" value="225">
           </div>
         </div>
       </div>
@@ -85,7 +85,7 @@
 
   </div>
   <div class="form-actions mercury-display-controls">
-    <input class="submit" name="commit" type="submit" value="Insert Media"/>
+    <input class="btn btn-primary" name="commit" type="submit" value="Insert Media"/>
   </div>
 
 </form>

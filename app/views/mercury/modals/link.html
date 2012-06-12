@@ -1,4 +1,4 @@
-<form id="mercury_link" class="form-horizontal" style="width:600px">
+<form id="mercury_link" class="form-horizontal" style="width:615px">
 
   <div class="form-inputs mercury-display-pane-container">
 
@@ -6,7 +6,7 @@
       <div class="control-group string optional">
         <label class="string optional control-label" for="link_text">Link Content</label>
         <div class="controls">
-          <input class="string optional" id="link_text" name="link[text]" size="50" type="text">
+          <input class="span6 string optional" id="link_text" name="link[text]" size="50" type="text">
         </div>
       </div>
     </fieldset>
@@ -18,7 +18,7 @@
           <input name="link_type" type="radio" value="external_url" checked="checked"/>URL
         </label>
         <div class="controls">
-          <input class="string url optional" id="link_external_url" name="link[external_url]" size="50" type="text">
+          <input class="span6 string url optional" id="link_external_url" name="link[external_url]" size="50" type="text">
         </div>
       </div>
     </fieldset>
@@ -60,13 +60,13 @@
         <div class="control-group number optional">
           <label class="number optional control-label" for="link_popup_width">Popup Width</label>
           <div class="controls">
-            <input class="number optional" id="link_popup_width" name="link[popup_width]" size="50" type="number">
+            <input class="span2 number optional" id="link_popup_width" name="link[popup_width]" size="50" type="number" value="960">
           </div>
         </div>
         <div class="control-group number optional">
           <label class="number optional control-label" for="link_popup_height">Popup Height</label>
           <div class="controls">
-            <input class="number optional" id="link_popup_height" name="link[popup_height]" size="50" type="number">
+            <input class="span2 number optional" id="link_popup_height" name="link[popup_height]" size="50" type="number" value="800">
           </div>
         </div>
       </div>
@@ -75,7 +75,7 @@
   </div>
 
   <div class="form-actions mercury-display-controls">
-    <input name="commit" type="submit" value="Insert Link">
+    <input class="btn btn-primary" name="commit" type="submit" value="Insert Link">
   </div>
 
 </form>

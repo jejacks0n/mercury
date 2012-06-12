@@ -14,7 +14,9 @@
     @element.find('form').on 'submit', (event) =>
       event.preventDefault()
       @validateForm()
-      return unless @valid
+      unless @valid
+        @resize()
+        return
       @submitForm()
       @hide()
 

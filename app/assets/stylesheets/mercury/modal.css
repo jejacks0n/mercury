@@ -98,13 +98,13 @@
 .mercury-modal .mercury-display-pane-container {
   overflow: auto;
   margin: -20px -20px 0;
-  padding: 20px 20px 10px;
+  padding: 20px 20px 0;
 }
 .mercury-modal .mercury-display-pane-container .mercury-display-pane {
   float: left;
 }
 .mercury-modal .mercury-display-controls {
-  padding: 15px 0 0;
+  padding-right: 0;
   border-top: 1px solid #CCC;
   text-align: right;
 }
@@ -121,10 +121,6 @@
   margin: 0 0 -2px 0;
   border: 2px solid #CCC;
   width: 100%;
-}
-#mercury_html_editor .mercury-modal-controls {
-  border: 0;
-  margin-top: -2px;
 }
 /* character */
 #mercury_character .character {
@@ -150,28 +146,20 @@
 }
 /* table */
 #mercury_table #table_display {
-  width: 285px;
-  height: 285px;
   float: left;
+  width: 225px;
+  height: 259px;
   padding: 10px;
-  background: #F6F6F6;
-  border: 1px solid #CCC;
-  border-radius: 7px;
-  -moz-border-radius: 7px;
-  overflow:  auto;
+  margin-right: 13px;
+  overflow: auto;
+}
+#mercury_table #table_display .controls {
+  margin: 0;
 }
 #mercury_table #table_display table {
   width: 100%;
   height: 100%;
 }
-#mercury_table #table_display td.selected {
+#mercury_table #table_display .selected {
   background: #09F;
-}
-#mercury_table #table_options {
-  width: 383px;
-  float: left;
-  margin-left: 10px;
-}
-#mercury_table #table_options .inputs:first-child label {
-  width: 36%
 }

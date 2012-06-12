@@ -1,6 +1,7 @@
 /*
  *= require_self
- *= require ./form
+ *= require ./bootstrap-ish
+ *= require ./bootstrap-overrides
  *= require ./dialog
  *= require ./lightview
  *= require ./modal
@@ -8,7 +9,6 @@
  *= require ./toolbar
  *= require ./tooltip
  *= require ./uploader
- *= require ./buttons
  *= require ./all_images
  */
 

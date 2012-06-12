@@ -2,8 +2,8 @@
 
   <div class="form-inputs mercury-display-pane-container">
 
-    <fieldset>
-      <div class="control-group table optional">
+    <fieldset id="table_display">
+      <div class="control-group optional">
         <div class="controls">
           <table border="1" cellspacing="0">
             <tr>
@@ -70,13 +70,13 @@
       <div class="control-group number optional">
         <label class="number optional control-label" for="table_border">Border</label>
         <div class="controls">
-          <input class="number optional" id="table_border" name="table[border]" size="50" type="number" value="1">
+          <input class="span1 number optional" id="table_border" name="table[border]" size="50" type="number" value="1">
         </div>
       </div>
       <div class="control-group number optional">
         <label class="number optional control-label" for="table_spacing">Spacing</label>
         <div class="controls">
-          <input class="number optional" id="table_spacing" name="table[spacing]" size="50" type="number" value="0">
+          <input class="span1 number optional" id="table_spacing" name="table[spacing]" size="50" type="number" value="0">
         </div>
       </div>
     </fieldset>
@@ -84,7 +84,7 @@
   </div>
 
   <div class="form-actions mercury-display-controls">
-    <input class="submit" name="commit" type="submit" value="Insert Table"/>
+    <input class="btn btn-primary" name="commit" type="submit" value="Insert Table"/>
   </div>
 
 </form>

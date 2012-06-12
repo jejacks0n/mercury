@@ -1,7 +1,7 @@
 @Mercury.modalHandlers.insertTable = {
 
   initialize: ->
-    @table = @element.find('.table table')
+    @table = @element.find('#table_display table')
 
     @table.on 'click', (event) => @onCellClick($(event.target))
 

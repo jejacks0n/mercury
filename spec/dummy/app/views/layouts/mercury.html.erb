@@ -9,6 +9,11 @@
   </head>
   <body>
     <script type="text/javascript">
+      // Mix in configurations provided through Rails.application.config.mercury_config (for cucumber testing)
+      <% if Rails.application.config.respond_to?(:mercury_config) %>
+      jQuery.extend(Mercury.config, <%= Rails.application.config.mercury_config.to_json.html_safe %>);
+      <% end -%>
+
       // Set to the url that you want to save any given page to, leave null for default handling.
       var saveUrl = null;
 

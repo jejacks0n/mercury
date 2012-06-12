@@ -6,7 +6,7 @@
 
 ENV["RAILS_ROOT"] = File.expand_path('../../../spec/dummy', __FILE__)
 require 'cucumber/rails'
-# require 'capybara/firebug'
+require 'capybara/firebug'
 require 'aruba/cucumber'
 
 # You can enable firebug in your tests by tagging them @firebug.

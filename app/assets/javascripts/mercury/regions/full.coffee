@@ -490,7 +490,13 @@ class Mercury.Regions.Full.Selection
 
 
   textContent: ->
-    return @range.cloneContents().textContent
+    return @content().textContent
+
+
+  htmlContent: ->
+    content = @content()
+    return jQuery('<div>').html(content).html()
+    return null
 
 
   content: ->

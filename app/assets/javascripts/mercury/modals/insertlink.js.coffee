@@ -1,6 +1,9 @@
 @Mercury.modalHandlers.insertLink = {
 
   initialize: ->
+    @editing = false
+    @content = null
+
     # make the inputs work with the radio buttons
     @element.find('.control-label input').on('click', @onLabelChecked)
     @element.find('.controls .optional, .controls .required').on('focus', @onInputFocused)
@@ -32,12 +35,18 @@
     @element.find('#link_text').val(selection.textContent()) if selection.textContent
 
     # if we're editing a link prefill the information
+
     a = selection.commonAncestor(true).closest('a') if selection && selection.commonAncestor
-    return false unless a && a.length
-    @editing = a
+    img = /<img/.test(selection.htmlContent()) if selection.htmlContent
+    return false unless img || a && a.length
 
     # don't allow changing the content on edit
     @element.find('#link_text_container').hide()
+
+    @content = selection.htmlContent() if img
+
+    return false unless a && a.length
+    @editing = a
 
     # fill in the external url or bookmark select based on what it looks like
     if a.attr('href') && a.attr('href').indexOf('#') == 0
@@ -106,7 +115,7 @@
     el = @element.find("#link_#{type}")
     @addInputError(el, "can't be blank") unless el.val()
 
-    unless @editing
+    if !@editing && !@content
       el = @element.find('#link_text')
       @addInputError(el, "can't be blank") unless el.val()
 
@@ -133,7 +142,7 @@
       else
         attrs['target'] = target if target
 
-    value = {tagName: 'a', attrs: attrs, content: content}
+    value = {tagName: 'a', attrs: attrs, content: @content || content}
 
     if @editing
       Mercury.trigger('action', {action: 'replaceLink', value: value, node: @editing.get(0)})

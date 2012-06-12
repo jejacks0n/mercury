@@ -109,22 +109,16 @@
   text-align: right;
 }
 /*
- * Forms
+ * Specific Modals (eg. htmlEditor)
  *----------------------------------------------------------------------------*/
-.mercury-modal textarea {
+/* html editor */
+#mercury_html_editor textarea {
   resize: none;
   padding: 0;
   box-sizing: border-box;
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
-}
-/*
- * Specific Modals (eg. htmlEditor)
- *----------------------------------------------------------------------------*/
-/* html editor */
-#mercury_html_editor textarea {
   margin: 0 0 -2px 0;
-  padding: 0;
   border: 2px solid #CCC;
   width: 100%;
 }

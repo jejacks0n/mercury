@@ -1,75 +1,81 @@
-<form id="mercury_link" class="mercury-form" style="width:600px">
+<form id="mercury_link" class="form-horizontal" style="width:600px">
 
-  <div class="mercury-display-pane-container">
-    <div class="mercury-display-pane">
+  <div class="form-inputs mercury-display-pane-container">
 
-      <fieldset class="inputs" id="link_text_container">
-        <ol>
-          <li id="link_text_input" class="string input optional stringish">
-            <label class="label" for="link_text">Link Content</label>
-            <input id="link_text" name="link[text]" type="text"/>
-          </li>
-        </ol>
-      </fieldset>
+    <fieldset id="link_text_container">
+      <div class="control-group string optional">
+        <label class="string optional control-label" for="link_text">Link Content</label>
+        <div class="controls">
+          <input class="string optional" id="link_text" name="link[text]" size="50" type="text">
+        </div>
+      </div>
+    </fieldset>
 
-      <fieldset class="inputs">
-        <legend><span>Standard Links</span></legend>
-        <ol>
-          <li id="link_external_url_input" class="string input optional stringish">
-            <label class="label" for="link_external_url"><input name="link_type" type="radio" value="external_url" checked="checked"/>URL</label>
-            <input class="selectable" id="link_external_url" name="link[external_url]" type="text"/>
-          </li>
-        </ol>
-      </fieldset>
+    <fieldset>
+      <legend>Standard Links</legend>
+      <div class="control-group url optional">
+        <label class="url optional control-label" for="link_external_url">
+          <input name="link_type" type="radio" value="external_url" checked="checked"/>URL
+        </label>
+        <div class="controls">
+          <input class="string url optional" id="link_external_url" name="link[external_url]" size="50" type="text">
+        </div>
+      </div>
+    </fieldset>
 
-      <fieldset class="inputs">
-        <legend><span>Index / Bookmark Links</span></legend>
-        <ol>
-          <li id="link_existing_bookmark_input" class="select input optional">
-            <label class="label" for="link_existing_bookmark"><input name="link_type" type="radio" value="existing_bookmark"/>Existing Links</label>
-            <select class="selectable" id="link_existing_bookmark" name="link[existing_bookmark]"></select>
-          </li>
-          <li id="link_new_bookmark_input" class="string input optional stringish">
-            <label class="label" for="link_new_bookmark"><input name="link_type" type="radio" value="new_bookmark"/>Bookmark</label>
-            <input class="selectable" id="link_new_bookmark" name="link[new_bookmark]" type="text"/>
-          </li>
-        </ol>
-      </fieldset>
+    <fieldset>
+      <legend>Index / Bookmark Links</legend>
+      <div class="control-group select optional">
+        <label class="select optional control-label" for="link_existing_bookmark">
+          <input name="link_type" type="radio" value="existing_bookmark"/>Existing Links
+        </label>
+        <div class="controls">
+          <select class="select optional" id="link_existing_bookmark" name="link[existing_bookmark]"></select>
+        </div>
+      </div>
+      <div class="control-group string optional">
+        <label class="string optional control-label" for="link_new_bookmark">
+          <input name="link_type" type="radio" value="new_bookmark"/>Bookmark
+        </label>
+        <div class="controls">
+          <input class="string optional" id="link_new_bookmark" name="link[new_bookmark]" size="50" type="text">
+        </div>
+      </div>
+    </fieldset>
 
-      <fieldset class="inputs">
-        <legend><span>Options</span></legend>
-        <ol>
-          <li id="link_target_input" class="select input optional">
-            <label class="label" for="link_target">Link Target</label>
-            <select id="link_target" name="link[target]">
-              <option value="">Self (the same window or tab)</option>
-              <option value="_blank">Blank (a new window or tab)</option>
-              <option value="_top">Top (removes any frames)</option>
-              <option value="popup">Popup Window (javascript new window popup)</option>
-            </select>
-          </li>
-          <div id="popup_options" class="link-target-options" style="display:none">
-            <li id="link_popup_width_input" class="string input optional stringish">
-              <label class="label" for="link_popup_width">Popup Width</label>
-              <input id="link_popup_width" name="link[popup_width]" type="text"/>
-            </li>
-            <li id="link_popup_height_input" class="string input optional stringish">
-              <label class="label" for="link_popup_height">Popup Height</label>
-              <input id="link_popup_height" name="link[popup_height]" type="text"/>
-            </li>
+    <fieldset>
+      <legend>Options</legend>
+      <div class="control-group select optional">
+        <label class="select optional control-label" for="link_target">Link Target</label>
+        <div class="controls">
+          <select class="select optional" id="link_target" name="link[target]">
+            <option value="">Self (the same window or tab)</option>
+            <option value="_blank">Blank (a new window or tab)</option>
+            <option value="_top">Top (removes any frames)</option>
+            <option value="popup">Popup Window (javascript new window popup)</option>
+          </select>
+        </div>
+      </div>
+      <div id="popup_options" class="link-target-options" style="display:none">
+        <div class="control-group number optional">
+          <label class="number optional control-label" for="link_popup_width">Popup Width</label>
+          <div class="controls">
+            <input class="number optional" id="link_popup_width" name="link[popup_width]" size="50" type="number">
           </div>
-        </ol>
-      </fieldset>
+        </div>
+        <div class="control-group number optional">
+          <label class="number optional control-label" for="link_popup_height">Popup Height</label>
+          <div class="controls">
+            <input class="number optional" id="link_popup_height" name="link[popup_height]" size="50" type="number">
+          </div>
+        </div>
+      </div>
+    </fieldset>
 
-    </div>
   </div>
 
-  <div class="mercury-display-controls">
-    <fieldset class="buttons">
-      <ol>
-        <li class="commit button"><input class="submit" name="commit" type="submit" value="Insert Link"/></li>
-      </ol>
-    </fieldset>
+  <div class="form-actions mercury-display-controls">
+    <input name="commit" type="submit" value="Insert Link">
   </div>
 
 </form>

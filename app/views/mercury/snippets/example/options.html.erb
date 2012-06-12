@@ -1,34 +1,15 @@
-<%= form_for 'options', { :html => { :class => 'mercury-form', :style => 'width:600px' } } do |f| %>
-
-  <div class="mercury-display-pane-container">
-    <div class="mercury-display-pane">
-      <fieldset class="inputs">
-        <ol>
-          <li class="string input optional stringish" id="options_first_name_input">
-            <label class="label" for="options_first_name">First Name</label>
-            <input id="options_first_name" name="options[first_name]" type="text" value="<%= @options[:first_name] %>"/>
-          </li>
-        </ol>
-      </fieldset>
-
-      <fieldset class="inputs">
-        <legend><span>Options</span></legend>
-        <ol>
-          <li class="string input optional stringish" id="options_favorite_beer_input">
-            <label class="label" for="options_favorite_beer">Favorite Beer</label>
-            <input id="options_favorite_beer" name="options[favorite_beer]" type="text" value="<%= @options[:favorite_beer] %>"/>
-          </li>
-        </ol>
-      </fieldset>
-    </div>
-  </div>
-
-  <div class="mercury-display-controls">
-    <fieldset class="buttons">
-      <ol>
-        <li class="commit button"><input class="submit" name="commit" type="submit" value="Insert Snippet"/></li>
-      </ol>
+<%= form_for 'options', {html: {class: 'form-horizontal', style: 'width:600px'}} do |f| %>
+  <div class="form-inputs">
+    <label for="options_first_name">First Name</label>
+    <input id="options_first_name" name="options[first_name]" type="text" value="<%= @options[:first_name] %>"/>
+    <fieldset>
+      <legend>Options</legend>
+      <label class="label" for="options_favorite_beer">Favorite Beer</label>
+      <input id="options_favorite_beer" name="options[favorite_beer]" type="text" value="<%= @options[:favorite_beer] %>"/>
     </fieldset>
   </div>
 
+  <div class="form-actions">
+    <input name="commit" type="submit" value="Insert Snippet"/>
+  </div>
 <% end %>

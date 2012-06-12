@@ -1,30 +1,67 @@
 <form>
-  <fieldset id="link_text_container">
-    <input id="link_text" name="link[text]" type="text"/>
-  </fieldset>
 
-  <label for="link_external_url"><input id="checkbox1" name="link_type" type="radio" value="external_url" checked="checked"/>URL</label>
-  <input class="selectable" id="link_external_url" name="link[external_url]" type="text"/>
-
-  <label for="link_existing_bookmark"><input id="checkbox2" name="link_type" type="radio" value="existing_bookmark"/>Existing Links</label>
-  <select class="selectable" id="link_existing_bookmark" name="link[existing_bookmark]"></select>
-
-  <label for="link_new_bookmark"><input name="link_type" type="radio" value="new_bookmark"/>Bookmark</label>
-  <input class="selectable" id="link_new_bookmark" name="link[new_bookmark]" type="text"/>
-
-  <select id="link_target" name="link[target]">
-    <option value="">Self (the same window or tab)</option>
-    <option value="_blank">Blank (a new window or tab)</option>
-    <option value="_top">Top (removes any frames)</option>
-    <option value="popup">Popup Window (javascript new window popup)</option>
-  </select>
-
-  <div class="link-target-options" id="popup_options" style="display:none">
-    <input id="link_popup_width" name="link[popup_width]" type="text"/>
-    <input id="link_popup_height" name="link[popup_height]" type="text"/>
+  <div id="link_text_container" class="control-group string optional">
+    <label class="string optional control-label" for="link_text">Link Content</label>
+    <div class="controls">
+      <input class="string optional" id="link_text" name="link[text]" size="50" type="text">
+    </div>
   </div>
 
-  <input id="submit" type="submit"/>
+  <div class="control-group url optional">
+    <label class="url optional control-label" for="link_external_url">
+      <input name="link_type" type="radio" value="external_url" checked="checked"/>URL
+    </label>
+    <div class="controls">
+      <input class="string url optional" id="link_external_url" name="link[external_url]" size="50" type="text">
+    </div>
+  </div>
+
+  <div class="control-group select optional">
+    <label class="select optional control-label" for="link_existing_bookmark">
+      <input name="link_type" type="radio" value="existing_bookmark"/>Existing Links
+    </label>
+    <div class="controls">
+      <select class="select optional" id="link_existing_bookmark" name="link[existing_bookmark]"></select>
+    </div>
+  </div>
+  <div class="control-group string optional">
+    <label class="string optional control-label" for="link_new_bookmark">
+      <input name="link_type" type="radio" value="new_bookmark"/>Bookmark
+    </label>
+    <div class="controls">
+      <input class="string optional" id="link_new_bookmark" name="link[new_bookmark]" size="50" type="text">
+    </div>
+  </div>
+
+  <div class="control-group select optional">
+    <label class="select optional control-label" for="link_target">Link Target</label>
+    <div class="controls">
+      <select class="select optional" id="link_target" name="link[target]">
+        <option value="">Self (the same window or tab)</option>
+        <option value="_blank">Blank (a new window or tab)</option>
+        <option value="_top">Top (removes any frames)</option>
+        <option value="popup">Popup Window (javascript new window popup)</option>
+      </select>
+    </div>
+  </div>
+  <div id="popup_options" class="link-target-options" style="display:none">
+    <div class="control-group number optional">
+      <label class="number optional control-label" for="link_popup_width">Popup Width</label>
+      <div class="controls">
+        <input class="number optional" id="link_popup_width" name="link[popup_width]" size="50" type="number">
+      </div>
+    </div>
+    <div class="control-group number optional">
+      <label class="number optional control-label" for="link_popup_height">Popup Height</label>
+      <div class="controls">
+        <input class="number optional" id="link_popup_height" name="link[popup_height]" size="50" type="number">
+      </div>
+    </div>
+  </div>
+
+  <input name="commit" type="submit" value="Insert Link">
+
 </form>
+
 <a name="link1">Link One</a>
 <a name="link2">Link Two</a>

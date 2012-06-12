@@ -1,27 +1,73 @@
 <form>
-  <div id="table_display">
-    <table id="table" border="1" cellspacing="0"><tr><td id="cell1"></td></tr><tr><td id="cell2"></td></tr></table>
+
+  <div class="control-group table optional">
+    <div class="controls">
+      <table border="1" cellspacing="0">
+        <tr>
+          <td id="cell1">&nbsp;</td>
+        </tr>
+        <tr>
+          <td id="cell2">&nbsp;</td>
+        </tr>
+      </table>
+    </div>
   </div>
 
-  <input class="action" name="insertRowBefore" type="button" value="Add Before">
-  <input class="action" name="insertRowAfter" type="button" value="Add After">
-  <input class="action" name="deleteRow" type="button" value="Remove">
-  <input class="action" name="insertColumnBefore" type="button" value="Add Before">
-  <input class="action" name="insertColumnAfter" type="button" value="Add After">
-  <input class="action" name="deleteColumn" type="button" value="Remove">
-  <input class="action" name="increaseRowspan" type="button" value="+">
-  <input class="action" name="decreaseRowspan" type="button" value="-">
-  <input class="action" name="increaseColspan" type="button" value="+">
-  <input class="action" name="decreaseColspan" type="button" value="-">
+  <div class="control-group buttons optional">
+    <label class="buttons optional control-label">Rows</label>
+    <div class="controls btn-group">
+      <button class="btn" data-action="addRowBefore">Add Before</button>
+      <button class="btn" data-action="addRow">Add After</button>
+      <button class="btn" data-action="removeRow">Remove</button>
+    </div>
+  </div>
+  <div class="control-group buttons optional">
+    <label class="buttons optional control-label">Columns</label>
+    <div class="controls btn-group">
+      <button class="btn" data-action="addColumnBefore">Add Before</button>
+      <button class="btn" data-action="addColumn">Add After</button>
+      <button class="btn" data-action="removeColumn">Remove</button>
+    </div>
+  </div>
+  <hr/>
+  <div class="control-group buttons optional">
+    <label class="buttons optional control-label">Row Span</label>
+    <div class="controls btn-group">
+      <button class="btn" data-action="increaseRowspan">+</button>
+      <button class="btn" data-action="decreaseRowspan">-</button>
+    </div>
+  </div>
+  <div class="control-group buttons optional">
+    <label class="buttons optional control-label">Column Span</label>
+    <div class="controls btn-group">
+      <button class="btn" data-action="increaseColspan">+</button>
+      <button class="btn" data-action="decreaseColspan">-</button>
+    </div>
+  </div>
 
-  <select id="table_alignment" name="table[alignment]">
-    <option value="">None</option>
-    <option value="left">Left</option>
-    <option value="right" id="right_option">Right</option>
-  </select>
+  <div class="control-group select optional">
+    <label class="select optional control-label" for="table_alignment">Alignment</label>
+    <div class="controls">
+      <select class="select optional" id="table_alignment" name="table[alignment]">
+        <option value="">None</option>
+        <option value="right">Right</option>
+        <option value="left">Left</option>
+      </select>
+    </div>
+  </div>
+  <div class="control-group number optional">
+    <label class="number optional control-label" for="table_border">Border</label>
+    <div class="controls">
+      <input class="number optional" id="table_border" name="table[border]" size="50" type="number" value="1">
+    </div>
+  </div>
+  <div class="control-group number optional">
+    <label class="number optional control-label" for="table_spacing">Spacing</label>
+    <div class="controls">
+      <input class="number optional" id="table_spacing" name="table[spacing]" size="50" type="number" value="0">
+    </div>
+  </div>
 
-  <input id="table_border" type="text" value="1"/>
-  <input id="table_spacing" type="text" value="0"/>
+  <input class="submit" name="commit" type="submit" value="Insert Table"/>
 
-  <input id="submit" type="submit"/>
 </form>

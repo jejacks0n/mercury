@@ -1,4 +1,5 @@
 @Mercury.modalHandlers.insertSnippet = ->
+
   @element.find('form').on 'submit', (event) =>
     event.preventDefault()
     serializedForm = @element.find('form').serializeObject()

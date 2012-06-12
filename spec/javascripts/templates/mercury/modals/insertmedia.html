@@ -1,35 +1,77 @@
 <form>
-  <label for="media_image_url"><input id="checkbox1" name="media_type" type="radio" value="image_url" checked="checked"/>URL</label>
-  <input class="selectable" id="media_image_url" name="media[image_url]" type="text"/>
 
-  <label for="media_youtube_url"><input id="checkbox2" name="media_type" type="radio" value="youtube_url"/>YouTube Share URL</label>
-  <input class="selectable" id="media_youtube_url" name="media[youtube_url]" type="text"/>
-
-  <label for="media_vimeo_url"><input name="media_type" type="radio" value="vimeo_url"/>Vimeo URL</label>
-  <input class="selectable" id="media_vimeo_url" name="media[vimeo_url]" type="text"/>
-
-  <div class="media-options" id="image_url">
-    <select id="media_image_alignment" name="media[image_alignment]">
-      <option value="">None</option>
-      <option value="left">Left</option>
-      <option value="right">Right</option>
-      <option value="top">Top</option>
-      <option value="middle">Middle</option>
-      <option value="bottom">Bottom</option>
-      <option value="absmiddle">Absolute Middle</option>
-      <option value="absbottom">Absolute Bottom</option>
-    </select>
+  <div class="control-group url optional">
+    <label class="url optional control-label" for="media_image_url">
+      <input name="media_type" type="radio" value="image_url" checked="checked"/>URL
+    </label>
+    <div class="controls">
+      <input class="string url optional" id="media_image_url" name="media[image_url]" size="50" type="text">
+    </div>
   </div>
 
-  <div class="media-options" id="youtube_url" style="display:none">
-    <input id="media_youtube_width" name="media[youtube_width]" type="text" value="560"/>
-    <input id="media_youtube_height" name="media[youtube_height]" type="text" value="349"/>
+  <div class="control-group url optional">
+    <label class="url optional control-label" for="media_youtube_url">
+      <input name="media_type" type="radio" value="youtube_url"/>Youtube Share URL
+    </label>
+    <div class="controls">
+      <input class="string url optional" id="media_youtube_url" name="media[youtube_url]" size="50" type="text" placeholder="http://youtu.be/Pny4hoN8eII">
+    </div>
+  </div>
+  <div class="control-group url optional">
+    <label class="url optional control-label" for="media_vimeo_url">
+      <input name="media_type" type="radio" value="vimeo_url"/>Vimeo URL
+    </label>
+    <div class="controls">
+      <input class="string url optional" id="media_vimeo_url" name="media[vimeo_url]" size="50" type="text" placeholder="http://vimeo.com/25708134">
+    </div>
   </div>
 
-  <div class="media-options" id="vimeo_url" style="display:none">
-    <input id="media_vimeo_width" name="media[vimeo_width]" type="text" value="400"/>
-    <input id="media_vimeo_height" name="media[vimeo_height]" type="text" value="225"/>
+  <div class="media-options" id="image_url_options">
+    <div class="control-group select optional">
+      <label class="select optional control-label" for="media_image_alignment">Alignment</label>
+      <div class="controls">
+        <select class="select optional" id="media_image_alignment" name="media[image_alignment]">
+          <option value="">None</option>
+          <option value="left">Left</option>
+          <option value="right">Right</option>
+          <option value="top">Top</option>
+          <option value="middle">Middle</option>
+          <option value="bottom">Bottom</option>
+          <option value="absmiddle">Absolute Middle</option>
+          <option value="absbottom">Absolute Bottom</option>
+        </select>
+      </div>
+    </div>
+  </div>
+  <div class="media-options" id="youtube_url_options" style="display:none">
+    <div class="control-group number optional">
+      <label class="number optional control-label" for="media_youtube_width">Width</label>
+      <div class="controls">
+        <input class="number optional" id="media_youtube_width" name="media[youtube_width]" size="50" type="number" value="560">
+      </div>
+    </div>
+    <div class="control-group number optional">
+      <label class="number optional control-label" for="media_youtube_height">Height</label>
+      <div class="controls">
+        <input class="number optional" id="media_youtube_height" name="media[youtube_height]" size="50" type="number" value="349">
+      </div>
+    </div>
+  </div>
+  <div class="media-options" id="vimeo_url_options" style="display:none">
+    <div class="control-group number optional">
+      <label class="number optional control-label" for="media_vimeo_width">Width</label>
+      <div class="controls">
+        <input class="number optional" id="media_vimeo_width" name="media[vimeo_width]" size="50" type="number" value="400">
+      </div>
+    </div>
+    <div class="control-group number optional">
+      <label class="number optional control-label" for="media_vimeo_height">Height</label>
+      <div class="controls">
+        <input class="number optional" id="media_vimeo_height" name="media[vimeo_height]" size="50" type="number" value="225">
+      </div>
+    </div>
   </div>
 
-  <input id="submit" type="submit"/>
+  <input class="submit" name="commit" type="submit" value="Insert Media"/>
+
 </form>

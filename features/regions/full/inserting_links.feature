@@ -11,7 +11,7 @@ Feature:
   # Scenario: A user can expect all this!
 
 
- Scenario: A user can insert and edit a link to an external site
+  Scenario: A user can insert and edit a link to an external site
     Given the content of the full region is simple content
     And I make a selection
 
@@ -32,7 +32,7 @@ Feature:
     Then the contents of the full region should be "this is <a href='http://cnn.com'>simple</a> <b>content</b>"
 
 
- Scenario: A user can insert and edit a link with a target set
+  Scenario: A user can insert and edit a link with a target set
     Given the content of the full region is simple content
     And I make a selection
 
@@ -48,7 +48,7 @@ Feature:
     Then the contents of the full region should be "this is <a target='_top' href='http://google.com'>simple</a> <b>content</b>"
 
 
- Scenario: A user can insert a link to an external site and open it in a popup
+  Scenario: A user can insert a link to an external site and open it in a popup
     Given the content of the full region is simple content
     And I make a selection
 
@@ -65,7 +65,7 @@ Feature:
     And the "Popup Height" field should contain "200"
 
 
- Scenario: A user can insert a bookmark and then link to it
+  Scenario: A user can insert a bookmark and then link to it
     Given the content of the full region is simple content
     And I make a selection
 

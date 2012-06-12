@@ -10,6 +10,14 @@ jQuery.extend Mercury.tableEditor,
     @rowCount = @getRowCount()
 
 
+  addColumnBefore: ->
+    @addColumn('before')
+
+
+  addColumnAfter: ->
+    @addColumn('after')
+
+
   addColumn: (position = 'after') ->
     sig = @cellSignatureFor(@cell)
 
@@ -40,6 +48,14 @@ jQuery.extend Mercury.tableEditor,
 
     jQuery(cell).remove() for cell in removing
     @setColspanFor(cell, @colspanFor(cell) - 1) for cell in adjusting
+
+
+  addRowBefore: ->
+    @addRow('before')
+
+
+  addRowAfter: ->
+    @addRow('after')
 
 
   addRow: (position = 'after') ->

@@ -69,8 +69,8 @@ Feature:
     And I make a selection
 
     When I click on the "Insert Media" button
-    And choose "YouTube Share URL"
-    And fill in "YouTube Share URL" with "http://youtu.be/Pny4hoN8eII"
+    And choose "YouTube URL"
+    And fill in "YouTube URL" with "http://youtu.be/Pny4hoN8eII"
     And fill in "Width" with "400"
     And fill in "Height" with "200"
     And press "Insert Media"
@@ -80,7 +80,7 @@ Feature:
     And click on the "Insert Media" button
     Then the "media_youtube_url" field should contain "http://youtu.be/Pny4hoN8eII"
 
-    When I fill in "YouTube Share URL" with "http://youtu.be/Pny4hoN8eI"
+    When I fill in "YouTube URL" with "http://youtu.be/Pny4hoN8eI"
     And fill in "Width" with "500"
     And fill in "Height" with "300"
     And press "Insert Media"

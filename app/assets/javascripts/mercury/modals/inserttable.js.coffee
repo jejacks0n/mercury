@@ -1,54 +1,62 @@
-@Mercury.modalHandlers.insertTable = ->
-  table = @element.find('#table_display table')
+@Mercury.modalHandlers.insertTable = {
 
-  # make td's selectable
-  table.on 'click', (event) =>
-    cell = jQuery(event.target)
-    table = cell.closest('table')
-    table.find('.selected').removeAttr('class')
-    cell.addClass('selected')
-    Mercury.tableEditor(table, cell, '&nbsp;')
+  initialize: ->
+    @table = @element.find('.table table')
 
-  # select the first td
-  firstCell = table.find('td, th').first()
-  firstCell.addClass('selected')
-  Mercury.tableEditor(table, firstCell, '&nbsp;')
+    @table.on 'click', (event) => @onCellClick($(event.target))
 
-  # make the buttons work
-  @element.find('input.action').on 'click', (event) =>
-    action = jQuery(event.target).attr('name')
-    switch action
-      when 'insertRowBefore' then Mercury.tableEditor.addRow('before')
-      when 'insertRowAfter' then Mercury.tableEditor.addRow('after')
-      when 'deleteRow' then Mercury.tableEditor.removeRow()
-      when 'insertColumnBefore' then Mercury.tableEditor.addColumn('before')
-      when 'insertColumnAfter' then Mercury.tableEditor.addColumn('after')
-      when 'deleteColumn' then Mercury.tableEditor.removeColumn()
-      when 'increaseColspan' then Mercury.tableEditor.increaseColspan()
-      when 'decreaseColspan' then Mercury.tableEditor.decreaseColspan()
-      when 'increaseRowspan' then Mercury.tableEditor.increaseRowspan()
-      when 'decreaseRowspan' then Mercury.tableEditor.decreaseRowspan()
+    @element.find('#table_alignment').on 'change', => @setTableAlignment()
+    @element.find('#table_border').on 'keyup', => @setTableBorder()
+    @element.find('#table_spacing').on 'keyup', => @setTableCellSpacing()
+    @element.find('[data-action]').on 'click', (event) =>
+      event.preventDefault()
+      @onActionClick(jQuery(event.target).data('action'))
 
-  # set the alignment
-  @element.find('#table_alignment').on 'change', =>
-    table.attr({align: @element.find('#table_alignment').val()})
+    @selectFirstCell()
 
-  # set the border
-  @element.find('#table_border').on 'keyup', =>
-    table.attr({border: parseInt(@element.find('#table_border').val())})
+    @element.find('form').on 'submit', (event) =>
+      event.preventDefault()
+      @submitForm()
+      @hide()
 
-  # set the cellspacing
-  @element.find('#table_spacing').on 'keyup', =>
-    table.attr({cellspacing: parseInt(@element.find('#table_spacing').val())})
 
-  # build the table on form submission
-  @element.find('form').on 'submit', (event) =>
-    event.preventDefault()
-    table.find('.selected').removeAttr('class')
-    table.find('td, th').html('<br/>')
+  selectFirstCell: ->
+    firstCell = @table.find('td, th').first()
+    firstCell.addClass('selected')
+    Mercury.tableEditor(@table, firstCell, '&nbsp;')
 
-    html = jQuery('<div>').html(table).html()
+
+  onCellClick: (@cell) ->
+    @table = @cell.closest('table')
+    @table.find('.selected').removeAttr('class')
+    @cell.addClass('selected')
+    Mercury.tableEditor(@table, @cell, '&nbsp;')
+
+
+  onActionClick: (action) ->
+    return unless action
+    Mercury.tableEditor[action]()
+
+
+  setTableAlignment: ->
+    @table.attr({align: @element.find('#table_alignment').val()})
+
+
+  setTableBorder: ->
+    @table.attr({border: parseInt(@element.find('#table_border').val(), 10) || 1})
+
+
+  setTableCellSpacing: ->
+    @table.attr({cellspacing: parseInt(@element.find('#table_spacing').val(), 10) || 1})
+
+
+  submitForm: ->
+    @table.find('.selected').removeAttr('class')
+    @table.find('td, th').html('<br/>')
+
+    html = jQuery('<div>').html(@table).html()
     value = html.replace(/^\s+|\n/gm, '').replace(/(<\/.*?>|<table.*?>|<tbody>|<tr>)/g, '$1\n')
 
     Mercury.trigger('action', {action: 'insertTable', value: value})
-    @hide()
+
+}

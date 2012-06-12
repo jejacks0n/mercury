@@ -176,18 +176,18 @@ end
 #------------------------------------------------------------------------------
 # in the modal window
 When /^(?:|I )(?:add|insert) a (row|column) (before|after)(?: it)?$/ do |row_or_column, before_or_after|
-  name = "insert_#{row_or_column}_#{before_or_after}".camelcase(:lower)
-  step(%Q{I click on ".mercury-modal-content input[name=#{name}]"})
+  name = "add_#{row_or_column}_#{before_or_after}".camelcase(:lower)
+  step(%Q{I click on ".mercury-modal-content button[data-action='#{name}']"})
 end
 
 When /^(?:|I )delete the(?: current)? (row|column)$/ do |row_or_column|
-  name = "delete_#{row_or_column}".camelcase(:lower)
-  step(%Q{I click on ".mercury-modal-content input[name=#{name}]"})
+  name = "remove_#{row_or_column}".camelcase(:lower)
+  step(%Q{I click on ".mercury-modal-content button[data-action='#{name}']"})
 end
 
 When /^(?:|I )(increase|decrease) the (rowspan|colspan)$/ do |increase_or_decrease, rowspan_or_colspan|
   name = "#{increase_or_decrease}_#{rowspan_or_colspan}".camelcase(:lower)
-  step(%Q{I click on ".mercury-modal-content input[name=#{name}]"})
+  step(%Q{I click on ".mercury-modal-content button[data-action=#{name}]"})
 end
 
 Then /^the selected cell should be (.*?)$/ do |locator|

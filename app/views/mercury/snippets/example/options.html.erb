@@ -1,15 +1,30 @@
-<%= form_for 'options', {html: {class: 'form-horizontal', style: 'width:600px'}} do |f| %>
-  <div class="form-inputs">
-    <label for="options_first_name">First Name</label>
-    <input id="options_first_name" name="options[first_name]" type="text" value="<%= @options[:first_name] %>"/>
+<%= form_for 'options', {html: {class: 'form-horizontal', style: 'width:615px'}} do |f| %>
+
+  <div class="form-inputs mercury-display-pane-container">
+
+    <fieldset>
+      <div class="control-group string optional">
+        <label class="string optional control-label" for="options_first_name">First Name</label>
+        <div class="controls">
+          <input class="span6 string optional" id="options_first_name" name="options[first_name]" size="50" type="text" value="<%= @options[:first_name] %>">
+        </div>
+      </div>
+    </fieldset>
+
     <fieldset>
       <legend>Options</legend>
-      <label class="label" for="options_favorite_beer">Favorite Beer</label>
-      <input id="options_favorite_beer" name="options[favorite_beer]" type="text" value="<%= @options[:favorite_beer] %>"/>
+      <div class="control-group string optional">
+        <label class="string optional control-label" for="options_favorite_beer">First Name</label>
+        <div class="controls">
+          <input class="span6 string optional" id="options_favorite_beer" name="options[favorite_beer]" size="50" type="text" value="<%= @options[:favorite_beer] %>">
+        </div>
+      </div>
     </fieldset>
+
   </div>
 
-  <div class="form-actions">
-    <input name="commit" type="submit" value="Insert Snippet"/>
+  <div class="form-actions mercury-display-controls">
+    <input class="btn btn-primary" name="commit" type="submit" value="Insert Snippet"/>
   </div>
+
 <% end %>

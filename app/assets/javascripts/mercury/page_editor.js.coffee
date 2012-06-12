@@ -150,6 +150,7 @@ class @Mercury.PageEditor
       @previewing = true
     else
       @visible = true
+      @iframe.animate({top: @toolbar.height(true)}, 200, 'easeInOutSine', => @resize())
       @toolbar.show()
       @statusbar.show()
       Mercury.trigger('mode', {mode: 'preview'})

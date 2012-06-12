@@ -180,6 +180,14 @@ describe "Mercury.Toolbar", ->
       it "returns 0", ->
         expect(@toolbar.height()).toEqual(0)
 
+    describe "when forced", ->
+
+      beforeEach ->
+        @toolbar = new Mercury.Toolbar({appendTo: '#test', visible: false})
+
+      it "returns the element outerheight", ->
+        expect(@toolbar.height(true)).toEqual($('.mercury-toolbar-container').outerHeight())
+
 
   describe "#show", ->
 

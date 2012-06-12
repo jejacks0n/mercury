@@ -71,8 +71,8 @@ class @Mercury.Toolbar
       event.preventDefault()
 
 
-  height: ->
-    if @visible then @element.outerHeight() else 0
+  height: (force = false) ->
+    if @visible || force then @element.outerHeight() else 0
 
 
   show: ->

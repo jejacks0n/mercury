@@ -74,6 +74,8 @@ Mercury.I18n['nl'] =
   "Mercury.PageEditor failed to load: %s\n\nPlease try refreshing.": "Mercury.PageEditor failed to load: %s\n\nPlease try refreshing."
   "Region type is malformed, no data-type provided, or \"%s\" is unknown for the \"%s\" region.": "Region type is malformed, no data-type provided, or \"%s\" is unknown for the \"%s\" region."
   "Mercury was unable to save to the url: %s": "Mercury was unable to save to the url: %s"
+  "invalid": "ongeldig"
+  "can't be blank": "niet leeg"
   # Confirmations
   "You have unsaved changes.  Are you sure you want to leave without saving them first?": "Je hebt nog niet opgeslagen. Weet je zeker dat je de pagina wilt verlaten zonder eerst op te slaan?"
 
@@ -110,10 +112,6 @@ Mercury.I18n['nl'] =
   "Size: %s": "Grootte: %s"
   "Type: %s": "Type: %s"
 
-  # Inserting Media
-  "Error: The provided youtube share url was invalid.": "Irrur: Zee prufeeded youtube shere-a url ves infeleed."
-  "Error: The provided vimeo url was invalid.": "Irrur: Zee prufeeded vimeo url ves infeleed."
-
   # Statusbar
   "Path:": "Pad"
 
@@ -141,7 +139,7 @@ Mercury.I18n['nl'] =
   # Insert Media Modal (media.html)
   "Images": "Afbeeldingen"
   "Videos": "Video's"
-  "YouTube Share URL": "Youtube deel URL"
+  "YouTube URL": "Youtube URL"
   "Vimeo URL": "Vimeo URL"
   "Alignment": "Uitlijning"
   "None": "Geen"

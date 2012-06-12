@@ -74,6 +74,8 @@ Mercury.I18n['swedish_chef'] =
   "Mercury.PageEditor failed to load: %s\n\nPlease try refreshing.": "Mercury.PegeEdeetur feeeled tu lued: %s\n\nPleese-a try reffresheeng."
   "Region type is malformed, no data-type provided, or \"%s\" is unknown for the \"%s\" region.": "Regeeun type-a is melffurmed, nu deta-type-a prufeeded, oor \"%s\" is unknoon fur zee \"%s\" regeeun."
   "Mercury was unable to save to the url: %s": "Mercury ves uneble-a tu sefe-a tu zee url: %s"
+  "invalid": "infeleed"
+  "can't be blank": "cun't be-a blunk"
   # Confirmations
   "You have unsaved changes.  Are you sure you want to leave without saving them first?": "Yuoo hefe-a unsefed chunges.  Ere-a yuoo soore-a yuoo vunt tu leefe-a veethuoot sefeeng zeem furst?"
 
@@ -110,10 +112,6 @@ Mercury.I18n['swedish_chef'] =
   "Size: %s": "Seeze-a: %s"
   "Type: %s": "Type-a: %s"
 
-  # Inserting Media
-  "Error: The provided youtube share url was invalid.": "Irrur: Zee prufeeded youtube shere-a url ves infeleed."
-  "Error: The provided vimeo url was invalid.": "Irrur: Zee prufeeded vimeo url ves infeleed."
-
   # Statusbar
   "Path:": "Pet:"
 
@@ -141,7 +139,7 @@ Mercury.I18n['swedish_chef'] =
   # Insert Media Modal (media.html)
   "Images": "Imeges"
   "Videos": "Feedeus"
-  "YouTube Share URL": "YouTube Shere-a URL"
+  "YouTube URL": "YouTube URL"
   "Vimeo URL": "Vimeo URL"
   "Alignment": "Eleegnment"
   "None": "Nune-a"

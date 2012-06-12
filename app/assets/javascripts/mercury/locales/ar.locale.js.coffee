@@ -74,6 +74,8 @@ Mercury.I18n['ar'] =
   "Mercury.PageEditor failed to load: %s\n\nPlease try refreshing.": "Mercury.PageEditor غير قاد على تحميل: %s\n\nمن فضلك حدث الصفحة ."
   "Region type is malformed, no data-type provided, or \"%s\" is unknown for the \"%s\" region.": "نوع المساحة تالف, لا يوجد نوع , أو \"%s\" غير معروف للمساحة \"%s\""
   "Mercury was unable to save to the url: %s": "غير قادر على حفظ الرابط: %s"
+  "invalid": "باطل"
+  "can't be blank": "لا يمكن أن تكون فارغة"
   # Confirmations
   "You have unsaved changes.Are you sure you want to leave without saving them first?": "لديك تغييرات غير محفوظة. هل أنت متأكد أنك تريد أن تترك دون حفظها أولا؟"
 
@@ -110,10 +112,6 @@ Mercury.I18n['ar'] =
   "Size: %s": "حجم: %s"
   "Type: %s": "نوع: %s"
 
-  # Inserting Media
-  "Error: The provided youtube share url was invalid.": "خطأ: عنوان اليوتيوب غير صحيح"
-  "Error: The provided vimeo url was invalid.": "خطأ: عنوان فيميو غير صحيح"
-
   # Statusbar
   "Path:": "مسار:"
 
@@ -141,7 +139,7 @@ Mercury.I18n['ar'] =
   # Insert Media Modal (media.html)
   "Images": "صور"
   "Videos": "فيديو"
-  "YouTube Share URL": "رابط يوتيوب"
+  "YouTube URL": "رابط يوتيوب"
   "Vimeo URL": "رابط فيميو"
   "Alignment": "المحاذاة"
   "None": "لا شيء"

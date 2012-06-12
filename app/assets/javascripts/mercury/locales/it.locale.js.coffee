@@ -74,6 +74,8 @@ Mercury.I18n['it'] =
   "Mercury.PageEditor failed to load: %s\n\nPlease try refreshing.": "È fallito il caricamento di Mercury.PageEditor: %s\n\nProva a ricaricare la pagina."
   "Region type is malformed, no data-type provided, or \"%s\" is unknown for the \"%s\" region.": "Il tipo di regione è malformato, data-type non è stato fornito, o \"%s\" è sconosciuto per la regione \"%s\"."
   "Mercury was unable to save to the url: %s": "Mercury non è stato in grado di salvare l'url: %s"
+  "invalid": "non valido"
+  "can't be blank": "non può essere vuota"
   # Confirmations
   "You have unsaved changes.  Are you sure you want to leave without saving them first?": "Hai cambiamenti non salvati. Sei sicuro di voler abbandonare questa pagina senza prima salvarli?"
 
@@ -110,10 +112,6 @@ Mercury.I18n['it'] =
   "Size: %s": "Grandezza: %s"
   "Type: %s": "Tipo: %s"
 
-  # Inserting Media
-  "Error: The provided youtube share url was invalid.": "Errore: l'url della condivisione di youtube non è valido"
-  "Error: The provided vimeo url was invalid.": "Errore: l'url vimeo non è valido"
-
   # Statusbar
   "Path:": "Percorso"
 
@@ -141,7 +139,7 @@ Mercury.I18n['it'] =
   # Insert Media Modal (media.html)
   "Images": "Immagini"
   "Videos": "Video"
-  "YouTube Share URL": "URL YouTube"
+  "YouTube URL": "URL YouTube"
   "Vimeo URL": "URL Vimeo"
   "Alignment": "Allineamento"
   "None": "Nessuno"

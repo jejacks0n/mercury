@@ -74,6 +74,8 @@ Mercury.I18n['ko'] =
   "Mercury.PageEditor failed to load: %s\n\nPlease try refreshing.": "Mercury.PageEditor 가 읽기에 실패했습니다. : %s\n\n새로고침을 해보세요."
   "Region type is malformed, no data-type provided, or \"%s\" is unknown for the \"%s\" region.": "위치 종류가 올바르지 않거나 데이터 타입이 제공되지 않았습니다. 혹은 \"%s\"가 \"%s\" 위치에 알려지지 않았습니다."
   "Mercury was unable to save to the url: %s": "머큐리는 그 경로에 저장 할 수 없습니다.: %s"
+  "invalid": "무효"
+  "can't be blank": "비워 둘 수 없습니다"
   # Confirmations
   "You have unsaved changes.  Are you sure you want to leave without saving them first?": "저장하지 않은 변경사항이 있습니다. 저장하지 않고 이 페이지를 벗어나시겠습니까?"
 
@@ -110,10 +112,6 @@ Mercury.I18n['ko'] =
   "Size: %s": "용량: %s"
   "Type: %s": "형식: %s"
 
-  # Inserting Media
-  "Error: The provided youtube share url was invalid.": "오류 : 존재하지 않는 유투브 공유 주소입니다."
-  "Error: The provided vimeo url was invalid.": "오류 : 존재하지 않는 비메오 주소 입니다."
-
   # Statusbar
   "Path:": "경로:"
 
@@ -141,7 +139,7 @@ Mercury.I18n['ko'] =
   # Insert Media Modal (media.html)
   "Images": "그림:"
   "Videos": "영상:"
-  "YouTube Share URL": "유투브 공유 URL"
+  "YouTube URL": "유투브 URL"
   "Vimeo URL": "비메오 URL"
   "Alignment": "정렬"
   "None": "정렬 안함"

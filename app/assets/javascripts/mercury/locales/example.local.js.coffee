@@ -74,6 +74,8 @@ Mercury.I18n['en'] =
   "Mercury.PageEditor failed to load: %s\n\nPlease try refreshing.": ""
   "Region type is malformed, no data-type provided, or \"%s\" is unknown for the \"%s\" region.": ""
   "Mercury was unable to save to the url: %s": ""
+  "invalid": ""
+  "can't be blank": ""
   # Confirmations
   "You have unsaved changes.  Are you sure you want to leave without saving them first?": ""
 
@@ -141,7 +143,7 @@ Mercury.I18n['en'] =
   # Insert Media Modal (media.html)
   "Images": ""
   "Videos": ""
-  "YouTube Share URL": ""
+  "YouTube URL": ""
   "Vimeo URL": ""
   "Alignment": ""
   "None": ""

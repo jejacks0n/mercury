@@ -76,6 +76,8 @@ Mercury.I18n['zh'] =
     "Mercury.PageEditor failed to load: %s\n\nPlease try refreshing.": "Mercury.PageEditor 载入失败：%s\n\n请尝试刷新一下本页。"
     "Region type is malformed, no data-type provided, or \"%s\" is unknown for the \"%s\" region.": "地区不正确，没有提供数据类型，或“%s”不在“%s”区域中。"
     "Mercury was unable to save to the url: %s": "Mercury 无法保存至这一 URL：%s"
+    "invalid": "无效"
+    "can't be blank": "不能为空"
     # Confirmations
     "You have unsaved changes.  Are you sure you want to leave without saving them first?": "您还有未保存的修改，确定要放弃修改并离开吗？"
 
@@ -112,10 +114,6 @@ Mercury.I18n['zh'] =
     "Size: %s": "文件大小：%s"
     "Type: %s": "文件类型：%s"
 
-    # Inserting Media
-    "Error: The provided youtube share url was invalid.": "错误：您输入的 YouTube 分享链接无效。"
-    "Error: The provided vimeo url was invalid.": "错误：您输入的 Vimeo 分享链接无效。"
-
     # Statusbar
     "Path:": "路径："
 
@@ -143,7 +141,7 @@ Mercury.I18n['zh'] =
     # Insert Media Modal (media.html)
     "Images": "图片"
     "Videos": "视频"
-    "YouTube Share URL": "YouTube 分享链接"
+    "YouTube URL": "YouTube 分享链接"
     "Vimeo URL": "Vimeo 分享链接"
     "Alignment": "对齐方式"
     "None": "默认"

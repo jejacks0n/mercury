@@ -74,6 +74,8 @@ Mercury.I18n['da'] =
   "Mercury.PageEditor failed to load: %s\n\nPlease try refreshing.": "Mercury.PageEditor kunne ikke starte: %s\n\n Prøv venligst at opdatere siden."
   "Region type is malformed, no data-type provided, or \"%s\" is unknown for the \"%s\" region.": "Regionstype er forkert formateret. Enten blev ingen datatype angivet, ellers er \"%s\" ukendt for \"%s\"regionen."
   "Mercury was unable to save to the url: %s": "Mercury var ikke i stand til at gemme til addressen: %s"
+  "invalid": "ugyldig"
+  "can't be blank": "kan ikke være tomt"
   # Confirmations
   "You have unsaved changes.  Are you sure you want to leave without saving them first?": "Du har ændringer der ikke er blevet gemt. Er du sikker på, at du vil forlade siden uden først at gemme dem?"
 
@@ -110,10 +112,6 @@ Mercury.I18n['da'] =
   "Size: %s": "Størrelse: %s"
   "Type: %s": "Type: %s"
 
-  # Inserting Media
-  "Error: The provided youtube share url was invalid.": "Fejl: Den angivede delningsadressen for YouTube er forkert."
-  "Error: The provided vimeo url was invalid.": "Fejl: Den angivede Vimeo-adresse er forkert."
-
   # Statusbar
   "Path:": "Sti:"
 
@@ -141,7 +139,7 @@ Mercury.I18n['da'] =
   # Insert Media Modal (media.html)
   "Images": "Billeder"
   "Videos": "Videoer"
-  "YouTube Share URL": "YouTube del-URL"
+  "YouTube URL": "YouTube-URL"
   "Vimeo URL": "Vimeo-URL"
   "Alignment": "Justering"
   "None": "Ingen"

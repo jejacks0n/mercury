@@ -148,6 +148,7 @@ class @Mercury.PageEditor
       @statusbar.hide()
       Mercury.trigger('mode', {mode: 'preview'}) unless @previewing
       @previewing = true
+      @resize()
     else
       @visible = true
       @iframe.animate({top: @toolbar.height(true)}, 200, 'easeInOutSine', => @resize())
@@ -155,7 +156,6 @@ class @Mercury.PageEditor
       @statusbar.show()
       Mercury.trigger('mode', {mode: 'preview'})
       @previewing = false
-    @resize()
 
 
   resize: ->

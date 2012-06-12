@@ -13253,7 +13253,7 @@ Showdown.converter = function() {
   this.Mercury || (this.Mercury = {});
 
   jQuery.extend(this.Mercury, {
-    version: '0.7.0',
+    version: '0.7.1',
     Regions: Mercury.Regions || {},
     modalHandlers: Mercury.modalHandlers || {},
     lightviewHandlers: Mercury.lightviewHandlers || {},
@@ -13661,6 +13661,7 @@ Showdown.converter = function() {
           });
         }
         this.previewing = true;
+        return this.resize();
       } else {
         this.visible = true;
         this.iframe.animate({
@@ -13673,9 +13674,8 @@ Showdown.converter = function() {
         Mercury.trigger('mode', {
           mode: 'preview'
         });
-        this.previewing = false;
+        return this.previewing = false;
       }
-      return this.resize();
     };
 
     PageEditor.prototype.resize = function() {

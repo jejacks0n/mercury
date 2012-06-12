@@ -1967,14 +1967,15 @@ label input[type=radio] {
 /* table */
 #mercury_table #table_display {
   float: left;
-  width: 225px;
-  height: 259px;
-  padding: 10px;
   margin-right: 13px;
   overflow: auto;
+  padding: 0;
 }
 #mercury_table #table_display .controls {
   margin: 0;
+  width: 225px;
+  height: 259px;
+  padding: 10px;
 }
 #mercury_table #table_display table {
   width: 100%;

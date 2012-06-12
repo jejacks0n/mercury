@@ -332,8 +332,8 @@
  #mercury_html_editor textarea { resize: none; padding: 0; box-sizing: border-box; -moz-box-sizing: border-box; -webkit-box-sizing: border-box; margin: 0 0 -2px 0; border: 2px solid #CCC; width: 100%; }
  #mercury_character .character { float: left; width: 20px; height: 20px; border: 1px solid #999; background: #FFF; margin: 0 2px 2px 0; text-align: center; font-size: 11pt; line-height: 23px; cursor: pointer; }
  #mercury_character .character:hover { position: relative; margin: -11px -5px 1px -5px; width: 32px; height: 32px; font-size: 19pt; line-height: 35px; background: #DDD; }
- #mercury_table #table_display { float: left; width: 225px; height: 259px; padding: 10px; margin-right: 13px; overflow: auto; }
- #mercury_table #table_display .controls { margin: 0; }
+ #mercury_table #table_display { float: left; margin-right: 13px; overflow: auto; padding: 0; }
+ #mercury_table #table_display .controls { margin: 0; width: 225px; height: 259px; padding: 10px; }
  #mercury_table #table_display table { width: 100%; height: 100%; }
  #mercury_table #table_display .selected { background: #09F; }
  .mercury-statusbar { position: fixed; -webkit-user-select: none; -moz-user-select: none; user-select: none; box-sizing: border-box; -moz-box-sizing: border-box; -webkit-box-sizing: border-box; z-index: 10020; bottom: 0; left: 0; width: 100%; height: 23px; cursor: default; padding: 0 10px; background: #E2E1E2; border-top: 1px solid #727272; font-family: Helvetica, Tahoma, Arial, sans-serif; font-size: 8.5pt; line-height: 23px; color: #222; }

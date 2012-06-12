@@ -3,7 +3,7 @@ class @Mercury.PageEditor
   # options
   # saveStyle: 'form', or 'json' (defaults to json)
   # saveDataType: 'xml', 'json', 'jsonp', 'script', 'text', 'html' (defaults to json)
-  # saveMethod: 'POST', or 'PUT', create or update actions on save (defaults to POST)
+  # saveMethod: 'POST', or 'PUT', create or update actions on save (defaults to PUT)
   # visible: boolean, if the interface should start visible or not (defaults to true)
   constructor: (@saveUrl = null, @options = {}) ->
     throw Mercury.I18n('Mercury.PageEditor can only be instantiated once.') if window.mercuryInstance
@@ -222,12 +222,11 @@ class @Mercury.PageEditor
     url = @saveUrl ? Mercury.saveUrl ? @iframeSrc()
     data = @serialize()
     Mercury.log('saving', data)
-    data = jQuery.toJSON(data) unless @options.saveStyle == 'form'
     method = 'PUT' if @options.saveMethod == 'PUT'
-    jQuery.ajax url, {
+    options = {
       headers: Mercury.ajaxHeaders()
-      type: method || 'POST'
-      dataType: @options.saveDataType,
+      type: method || 'PUT'
+      dataType: @options.saveDataType
       data: {content: data, _method: method}
       success: =>
         Mercury.changes = false
@@ -237,6 +236,10 @@ class @Mercury.PageEditor
         Mercury.trigger('save_failed', response)
         Mercury.notify('Mercury was unable to save to the url: %s', url)
     }
+    if @options.saveStyle != 'form'
+      options['data'] = jQuery.toJSON({content: data, _method: method})
+      options['contentType'] = 'application/json'
+    jQuery.ajax url, options
 
 
   serialize: ->

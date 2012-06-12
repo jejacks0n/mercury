@@ -16,7 +16,7 @@
   position: fixed;
   z-index: 10040;
   top: 20px;
-  background: #EFEFEF;
+  background: rgba(239, 239, 239, .7);
   opacity: 0;
   overflow: hidden;
   display: none;

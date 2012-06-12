@@ -12,7 +12,7 @@
   width: 100%;
   height: 100%;
   opacity: .95;
-  background: rgba(0, 0, 0, .65);
+  background: rgba(255, 255, 255, .8);
 }
 .mercury-uploader {
   position: absolute;
@@ -23,13 +23,13 @@
   height: 150px;
   overflow: hidden;
   padding: 15px;
-  background: rgba(0,0,0, .70);
+  background: rgba(239, 239, 239, .70);
   border-radius: 10px;
   -moz-border-radius: 10px;
   -moz-box-shadow: 0 0 40px rgba(0, 0, 0, .9);
   box-shadow: 0 0 40px rgba(0, 0, 0, .9);
   font: normal normal normal 12px/normal Helvetica, Tahoma, Arial, sans-serif;
-  color: #CCC;
+  color: #000;
 }
 .mercury-uploader .mercury-uploader-preview {
   float: left;

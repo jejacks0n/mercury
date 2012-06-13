@@ -201,6 +201,7 @@
 }
 .mercury-snippet-panel ul li img {
   float: left;
+  cursor: move;
 }
 .mercury-snippet-panel ul li h4,
 .mercury-snippet-panel ul li .description {

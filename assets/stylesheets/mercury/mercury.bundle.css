@@ -297,7 +297,7 @@
  .mercury-snippet-panel input.filter { outline: none; font-size: 1em; border-radius: 30px; moz-border-radius: 30px; box-sizing: border-box; -moz-box-sizing: border-box; -webkit-box-sizing: border-box; width: 100%; padding-left: 20px; background-color: #FFF; background-repeat: no-repeat; }
  .mercury-snippet-panel ul { font-size: .9em; padding: 10px 0 0 0; margin: 0; list-style-type: none; }
  .mercury-snippet-panel ul li { clear: both; padding-top: 20px; }
- .mercury-snippet-panel ul li img { float: left; }
+ .mercury-snippet-panel ul li img { float: left; cursor: move; }
  .mercury-snippet-panel ul li h4, .mercury-snippet-panel ul li .description { float: right; width: 245px; }
  .mercury-snippet-panel ul li h4 { margin-bottom: 5px; }
  .mercury-history-panel, .mercury-notes-panel { width: 250px; }

@@ -37,7 +37,6 @@
   <div id="body" class="container">
 
     <h1>Documentation</h1>
-
 <p>Mercury Editor is a fully featured editor much like TinyMCE or CKEditor, but with a different usage paradigm.  It
 expects that an entire page is something that can be editable, and allows different types of editable regions to be
 specified.  It displays a single toolbar for every region on the page, and uses the HTML5 contentEditable features on
@@ -46,37 +45,10 @@ block elements, instead of iframes, which allows for CSS to be applied in ways t
 <p>Mercury has been written using CoffeeScript and jQuery for the Javascript portions, and is written on top of Rails 3.2.</p>
 
 <h2>
-<a name="translations" class="anchor" href="#translations"><span class="mini-icon mini-icon-link"></span></a>Translations</h2>
-
-<p>Hey international open source contributors, want to contribute to the Mercury Editor project without having to do much
-coding?  We're looking for good translations.  If you have a good grasp of english, another language, and have the
-desire and time to do a translation for the project it would be awesome to hear from you.  The easiest way to submit is
-to fork the project, create a locale file with your translation, and submit a pull request -- that way you get full
-credit for your contributions.</p>
-
-<p>Some <a href="https://github.com/jejacks0n/mercury/tree/master/app/assets/javascripts/mercury/locales">examples are here</a>,
-and there's more on the <a href="https://github.com/jejacks0n/mercury/wiki/Localization-&amp;-Translations">wiki page</a>.</p>
-
-<p>Translations and contributors:</p>
-
-<ul>
-<li>Arabic (<a href="https://github.com/mohamagdy">mohamagdy</a>)</li>
-<li>Danish (<a href="https://github.com/martinjlowm">martinjlowm</a>)</li>
-<li>German (<a href="https://github.com/poke">poke</a>)</li>
-<li>Spanish (<a href="https://github.com/javiercr">javiercr</a>)</li>
-<li>French (<a href="https://github.com/adamantx">adamantx</a>)</li>
-<li>Italian (<a href="https://github.com/gcastagnet">gcastagneti</a>)</li>
-<li>Korean (<a href="https://github.com/dorajistyle">dorajistyle</a>)</li>
-<li>Dutch (<a href="https://github.com/kieranklaassen">kieranklaassen</a>)</li>
-<li>Portuguese (<a href="https://github.com/yakko">yakko</a>)</li>
-<li>Swedish (<a href="https://github.com/stefanm">stefanm</a>)</li>
-<li>Simplified Chinese (<a href="https://github.com/richarddong">董劭田 DONG Shaotian</a>)</li>
-</ul><h2>
 <a name="awesomeness" class="anchor" href="#awesomeness"><span class="mini-icon mini-icon-link"></span></a>Awesomeness</h2>
 
-<p>Ryan Bates with the awesome <a href="http://railscasts.com">RailsCast</a> site has put together a really nice RailsCast that walks
-you through getting Mercury Editor installed, setup and working in a Rails application -- and is definitely worth
-checking out.  <a href="http://railscasts.com/episodes/296-mercury-editor">Watch the RailsCast</a></p>
+<p>Ryan Bates has created an awesome <a href="http://railscasts.com/episodes/296-mercury-editor">RailsCast</a> that walks you through
+getting Mercury Editor installed, setup and working in a Rails application.  Check it out!</p>
 
 <p>Mercury has been added as a Featured Project on Pivotal Tracker!  If you're interested in what's planned, check out the
 <a href="https://www.pivotaltracker.com/projects/295823">Mercury Tracker Project</a>.</p>
@@ -96,7 +68,13 @@ but there aren't plans currently for adding support for alternate implementation
 <li>Safari 5+</li>
 <li>Opera 11.64+</li>
 <li>Mobile Safari (iOS 5+)</li>
-</ul>
+</ul><h2>
+<a name="a-demo" class="anchor" href="#a-demo"><span class="mini-icon mini-icon-link"></span></a>A Demo</h2>
+
+<p>Feel free to check out <a href="http://jejacks0n.github.com/mercury/">the demo</a>.  We'll be adding a full walkthrough that goes
+into detail for each of the major features.  If you would like to see how Mercury was implemented in the demo check the
+<a href="https://github.com/jejacks0n/mercury/tree/gh-pages">gh-pages</a> branch, it's a useful resource to see how you can
+integrate the Mercury bundle into a non-rails project since it's a static site.</p>
 
 <h2>
 <a name="the-story" class="anchor" href="#the-story"><span class="mini-icon mini-icon-link"></span></a>The Story</h2>
@@ -124,7 +102,7 @@ functionality, etc.) so here's a list of some other editors that you might want 
 </ul><h2>
 <a name="features" class="anchor" href="#features"><span class="mini-icon mini-icon-link"></span></a>Features</h2>
 
-<p>The feature list is actually pretty long, so here's a short list that need highlighting.</p>
+<p>The feature list is actually pretty long, so here's a short list that should be highlighted.</p>
 
 <ul>
 <li>Previewing: Preview content while you're working to see exactly how it'll look.</li>
@@ -187,7 +165,7 @@ you'll write in what you want.</p>
 <h3>
 <a name="for-non-rails-environments" class="anchor" href="#for-non-rails-environments"><span class="mini-icon mini-icon-link"></span></a>For Non-Rails Environments</h3>
 
-<p><a href="https://github.com/downloads/jejacks0n/mercury/mercury-v0.7.1.zip">Download the zip file</a>, and then follow the
+<p><a href="https://github.com/downloads/jejacks0n/mercury/mercury-v0.8.0.zip">Download the zip file</a>, and then follow the
 installation instructions on the <a href="https://github.com/jejacks0n/mercury/wiki/Using-Mercury-without-Rails">wiki article</a>.</p>
 
 <h2>
@@ -394,6 +372,35 @@ you write something (eg. a middleware layer, an nginx module, or just something 
 <a href="http://www.glyphicons.com/">GLYPHICONS</a>).  They follow a simplistic design aesthetic to minimize the complexity of
 creating / finding your own.  You're welcome to contribute your own to the PSD that can be found within the project so
 others can potentially build from or use your own contributions.</p>
+
+<h2>
+<a name="internationalization--translations" class="anchor" href="#internationalization--translations"><span class="mini-icon mini-icon-link"></span></a>Internationalization / Translations</h2>
+
+<p>Mercury has support for the following locales.  If you'd like to contribute one, the easiest way is to fork the project,
+create a locale file with your translation, and submit a pull request -- that way you get full credit for your
+contributions.</p>
+
+<p>Some <a href="https://github.com/jejacks0n/mercury/tree/master/app/assets/javascripts/mercury/locales">examples are here</a>,
+and there's more on the <a href="https://github.com/jejacks0n/mercury/wiki/Localization-&amp;-Translations">wiki page</a>.</p>
+
+<p>Translations and contributors:</p>
+
+<ul>
+<li>Arabic (<a href="https://github.com/mohamagdy">mohamagdy</a>)</li>
+<li>Danish (<a href="https://github.com/martinjlowm">martinjlowm</a>)</li>
+<li>German (<a href="https://github.com/poke">poke</a>)</li>
+<li>Spanish (<a href="https://github.com/javiercr">javiercr</a>)</li>
+<li>French (<a href="https://github.com/adamantx">adamantx</a>)</li>
+<li>Italian (<a href="https://github.com/gcastagnet">gcastagneti</a>)</li>
+<li>Korean (<a href="https://github.com/dorajistyle">dorajistyle</a>)</li>
+<li>Dutch (<a href="https://github.com/kieranklaassen">kieranklaassen</a>)</li>
+<li>Portuguese (<a href="https://github.com/yakko">yakko</a>)</li>
+<li>Swedish (<a href="https://github.com/stefanm">stefanm</a>)</li>
+<li>Simplified Chinese (<a href="https://github.com/richarddong">董劭田 DONG Shaotian</a>)</li>
+</ul><p>To add translations to your installation you'll first need to turn it on in the configuration and set the prefered
+locale to one of those that's listed above (eg. <code>fr-CA</code>, or <code>pt-BR</code>).  All you have to do after that is include the
+locale you want to use.  You can do this in the configuration file directly using a sprockets <code>require</code> statement.
+Examples are provided.</p>
 
 <h2>
 <a name="project-details" class="anchor" href="#project-details"><span class="mini-icon mini-icon-link"></span></a>Project Details</h2>

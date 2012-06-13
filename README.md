@@ -10,36 +10,10 @@ block elements, instead of iframes, which allows for CSS to be applied in ways t
 Mercury has been written using CoffeeScript and jQuery for the Javascript portions, and is written on top of Rails 3.2.
 
 
-## Translations
-
-Hey international open source contributors, want to contribute to the Mercury Editor project without having to do much
-coding?  We're looking for good translations.  If you have a good grasp of english, another language, and have the
-desire and time to do a translation for the project it would be awesome to hear from you.  The easiest way to submit is
-to fork the project, create a locale file with your translation, and submit a pull request -- that way you get full
-credit for your contributions.
-
-Some [examples are here](https://github.com/jejacks0n/mercury/tree/master/app/assets/javascripts/mercury/locales),
-and there's more on the [wiki page](https://github.com/jejacks0n/mercury/wiki/Localization-&-Translations).
-
-Translations and contributors:
-- Arabic ([mohamagdy](https://github.com/mohamagdy))
-- Danish ([martinjlowm](https://github.com/martinjlowm))
-- German ([poke](https://github.com/poke))
-- Spanish ([javiercr](https://github.com/javiercr))
-- French ([adamantx](https://github.com/adamantx))
-- Italian ([gcastagneti](https://github.com/gcastagnet))
-- Korean ([dorajistyle](https://github.com/dorajistyle))
-- Dutch ([kieranklaassen](https://github.com/kieranklaassen))
-- Portuguese ([yakko](https://github.com/yakko))
-- Swedish ([stefanm](https://github.com/stefanm))
-- Simplified Chinese ([董劭田 DONG Shaotian](https://github.com/richarddong))
-
-
 ## Awesomeness
 
-Ryan Bates with the awesome [RailsCast](http://railscasts.com) site has put together a really nice RailsCast that walks
-you through getting Mercury Editor installed, setup and working in a Rails application -- and is definitely worth
-checking out.  [Watch the RailsCast](http://railscasts.com/episodes/296-mercury-editor)
+Ryan Bates has created an awesome [RailsCast](http://railscasts.com/episodes/296-mercury-editor) that walks you through
+getting Mercury Editor installed, setup and working in a Rails application.  Check it out!
 
 Mercury has been added as a Featured Project on Pivotal Tracker!  If you're interested in what's planned, check out the
 [Mercury Tracker Project](https://www.pivotaltracker.com/projects/295823).
@@ -62,10 +36,10 @@ Supported Browsers:
 
 ## A Demo
 
-Feel free to check out [the demo](http://jejacks0n.github.com/mercury/).  The demo will be updated quite a bit in the
-next weeks, so feel free to check back every now and then.. We'll be adding a full walkthrough that details each of the
-major features shortly.  If you would like to see how Mercury was implemented in the demo check the gh-pages branch,
-it's a useful resource to see how you can integrate the Mercury bundle.
+Feel free to check out [the demo](http://jejacks0n.github.com/mercury/).  We'll be adding a full walkthrough that goes
+into detail for each of the major features.  If you would like to see how Mercury was implemented in the demo check the
+[gh-pages](https://github.com/jejacks0n/mercury/tree/gh-pages) branch, it's a useful resource to see how you can
+integrate the Mercury bundle into a non-rails project since it's a static site.
 
 
 ## The Story
@@ -93,7 +67,7 @@ functionality, etc.) so here's a list of some other editors that you might want 
 
 ## Features
 
-The feature list is actually pretty long, so here's a short list that need highlighting.
+The feature list is actually pretty long, so here's a short list that should be highlighted.
 
 - Previewing: Preview content while you're working to see exactly how it'll look.
 - Link Tools: Insert and edit links, including TOC/Bookmark links.
@@ -335,6 +309,34 @@ The toolbar images have been created by the awesome [Mode Set](http://modeset.co
 [GLYPHICONS](http://www.glyphicons.com/)).  They follow a simplistic design aesthetic to minimize the complexity of
 creating / finding your own.  You're welcome to contribute your own to the PSD that can be found within the project so
 others can potentially build from or use your own contributions.
+
+
+## Internationalization / Translations
+
+Mercury has support for the following locales.  If you'd like to contribute one, the easiest way is to fork the project,
+create a locale file with your translation, and submit a pull request -- that way you get full credit for your
+contributions.
+
+Some [examples are here](https://github.com/jejacks0n/mercury/tree/master/app/assets/javascripts/mercury/locales),
+and there's more on the [wiki page](https://github.com/jejacks0n/mercury/wiki/Localization-&-Translations).
+
+Translations and contributors:
+- Arabic ([mohamagdy](https://github.com/mohamagdy))
+- Danish ([martinjlowm](https://github.com/martinjlowm))
+- German ([poke](https://github.com/poke))
+- Spanish ([javiercr](https://github.com/javiercr))
+- French ([adamantx](https://github.com/adamantx))
+- Italian ([gcastagneti](https://github.com/gcastagnet))
+- Korean ([dorajistyle](https://github.com/dorajistyle))
+- Dutch ([kieranklaassen](https://github.com/kieranklaassen))
+- Portuguese ([yakko](https://github.com/yakko))
+- Swedish ([stefanm](https://github.com/stefanm))
+- Simplified Chinese ([董劭田 DONG Shaotian](https://github.com/richarddong))
+
+To add translations to your installation you'll first need to turn it on in the configuration and set the prefered
+locale to one of those that's listed above (eg. `fr-CA`, or `pt-BR`).  All you have to do after that is include the
+locale you want to use.  You can do this in the configuration file directly using a sprockets `require` statement.
+Examples are provided.
 
 
 ## Project Details

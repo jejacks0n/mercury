@@ -100,8 +100,8 @@ class @Mercury.Snippet
   setVersion: (version = null) ->
     version = parseInt(version)
     if version && @history.stack[version - 1]
-      @version = version - 1
-      @options = @history.stack[@version]
+      @version = version
+      @options = @history.stack[version - 1]
       return true
     return false
 

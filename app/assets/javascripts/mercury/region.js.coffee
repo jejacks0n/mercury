@@ -88,7 +88,6 @@ class @Mercury.Region
     for element in @element.find('[data-snippet]')
       snippet = Mercury.Snippet.find(jQuery(element).data('snippet'))
       continue unless snippet
-      snippet.setVersion(jQuery(element).data('version'))
       snippets[snippet.identity] = snippet.serialize()
     return snippets
 

@@ -163,11 +163,11 @@ describe "Mercury.Snippet", ->
 
     it "sets the version", ->
       @snippet.setVersion(5)
-      expect(@snippet.version).toEqual(4)
+      expect(@snippet.version).toEqual(5)
 
     it "accepts a version (can be a string)", ->
       @snippet.setVersion('2')
-      expect(@snippet.version).toEqual(1)
+      expect(@snippet.version).toEqual(2)
 
     it "pulls the version out of the history buffer", ->
       @snippet.setVersion(3)

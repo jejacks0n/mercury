@@ -78,9 +78,8 @@ Feature:
     Then the contents of the full region should be "<div data-version='2' data-snippet='snippet_42' class='example-snippet' contenteditable='false'><strong>Jeremy</strong> likes Stella</div> <b>content</b>"
 
     When I edit the snippet
-    # todo: this is a bug
-#    Then the "First Name" field should contain "Jeremy"
-#    And the "Favorite Beer" field should contain "Stella"
+    Then the "First Name" field should contain "Jeremy"
+    And the "Favorite Beer" field should contain "Stella"
 
     When I close the modal
     When I click on the "Redo" button

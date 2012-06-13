@@ -216,7 +216,9 @@ class @Mercury.Regions.Full extends Mercury.Region
         element.contentEditable = false
         element = jQuery(element)
         if snippet = Mercury.Snippet.find(element.data('snippet'))
-          unless element.data('version')
+          if element.data('version')
+            snippet.setVersion(element.data('version'))
+          else
             try
               version = parseInt(element.html().match(/\/(\d+)\]/)[1])
               if version

@@ -661,7 +661,7 @@ describe "Mercury.PageEditor", ->
     describe "POST", ->
       beforeEach ->
         Mercury.PageEditor.prototype.initializeInterface = ->
-        @pageEditor = new Mercury.PageEditor('', {appendTo: $('#test'), saveDataType: 'text'})
+        @pageEditor = new Mercury.PageEditor('', {appendTo: $('#test'), saveDataType: 'text', saveMethod: 'POST'})
         @iframeSrcSpy = spyOn(Mercury.PageEditor.prototype, 'iframeSrc').andCallFake(=> '/foo/baz')
         @ajaxSpy = spyOn($, 'ajax')
 
@@ -697,7 +697,7 @@ describe "Mercury.PageEditor", ->
         Mercury.config.saveStyle = 'json'
         spyOn(Mercury.PageEditor.prototype, 'serialize').andCallFake(=> {region1: 'region1'})
         @pageEditor.save()
-        expect(@ajaxSpy.argsForCall[0][1]['data']).toEqual({content: '{"region1":"region1"}' })
+        expect(@ajaxSpy.argsForCall[0][1]['data']).toEqual('{"content":{"region1":"region1"}}')
 
       it "can serialize as form values", ->
         @ajaxSpy.andCallFake(=>)
@@ -764,7 +764,7 @@ describe "Mercury.PageEditor", ->
 
       beforeEach ->
         Mercury.PageEditor.prototype.initializeInterface = ->
-        @pageEditor = new Mercury.PageEditor('', {appendTo: $('#test'), saveMethod: 'PUT'})
+        @pageEditor = new Mercury.PageEditor('', {appendTo: $('#test'), saveMethod: 'FOO'})
         @iframeSrcSpy = spyOn(Mercury.PageEditor.prototype, 'iframeSrc').andCallFake(=> '/foo/baz')
         @ajaxSpy = spyOn($, 'ajax')
 
@@ -772,7 +772,7 @@ describe "Mercury.PageEditor", ->
         @ajaxSpy.andCallFake(=>)
         spyOn(Mercury.PageEditor.prototype, 'serialize').andCallFake(=> {region1: 'region1'})
         @pageEditor.save()
-        expect(@ajaxSpy.argsForCall[0][1]['data']['_method']).toEqual('PUT')
+        expect(test=@ajaxSpy.argsForCall[0][1]['data']).toContain('"_method":"PUT"')
 
 
   describe "#serialize", ->

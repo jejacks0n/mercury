@@ -221,13 +221,21 @@ class @Mercury.PageEditor
   save: (callback) ->
     url = @saveUrl ? Mercury.saveUrl ? @iframeSrc()
     data = @serialize()
+    data = {content: data}
+
+    if @options.saveMethod == 'POST'
+      method = 'POST'
+    else
+      method = 'PUT'
+      data['_method'] = method
+
     Mercury.log('saving', data)
-    method = 'PUT' if @options.saveMethod == 'PUT'
+
     options = {
       headers: Mercury.ajaxHeaders()
-      type: method || 'PUT'
+      type: method
       dataType: @options.saveDataType
-      data: {content: data, _method: method}
+      data: data
       success: =>
         Mercury.changes = false
         Mercury.trigger('saved')
@@ -237,7 +245,7 @@ class @Mercury.PageEditor
         Mercury.notify('Mercury was unable to save to the url: %s', url)
     }
     if @options.saveStyle != 'form'
-      options['data'] = jQuery.toJSON({content: data, _method: method})
+      options['data'] = jQuery.toJSON(data)
       options['contentType'] = 'application/json'
     jQuery.ajax url, options
 

@@ -262,7 +262,7 @@
  .btn-group > .btn { margin-right: 0; }
  form { margin-bottom: 0; }
  fieldset { margin-bottom: 15px; background: #F6F6F6; border: 1px solid #CCC; border-radius: 7px; padding: 10px; }
- legend { display: block; position: relative; margin-left: 10px; font-weight: bold; width: auto; padding: 0; font-size: 12px; color: #333333; border: 0; line-height: 1px; }
+ legend { display: block; position: relative; margin-left: 10px; margin-bottom: 0; font-weight: bold; width: auto; padding: 0; font-size: 12px; color: #333333; border: 0; line-height: 1px; }
  select { width: auto; }
  .form-actions { margin-top: 0; margin-bottom: 0; background-color: transparent; }
  .control-group { margin-bottom: 0; }
@@ -297,7 +297,7 @@
  .mercury-snippet-panel input.filter { outline: none; font-size: 1em; border-radius: 30px; moz-border-radius: 30px; box-sizing: border-box; -moz-box-sizing: border-box; -webkit-box-sizing: border-box; width: 100%; padding-left: 20px; background-color: #FFF; background-repeat: no-repeat; }
  .mercury-snippet-panel ul { font-size: .9em; padding: 10px 0 0 0; margin: 0; list-style-type: none; }
  .mercury-snippet-panel ul li { clear: both; padding-top: 20px; }
- .mercury-snippet-panel ul li img { float: left; }
+ .mercury-snippet-panel ul li img { float: left; cursor: move; }
  .mercury-snippet-panel ul li h4, .mercury-snippet-panel ul li .description { float: right; width: 245px; }
  .mercury-snippet-panel ul li h4 { margin-bottom: 5px; }
  .mercury-history-panel, .mercury-notes-panel { width: 250px; }

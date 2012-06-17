@@ -6,7 +6,6 @@ mercury.ids
 
 # Local config files
 Gemfile.lock
-database.yml
 mongoid.yml
 
 # Script files
@@ -17,7 +16,7 @@ distro/build
 pkg/
 
 # Databases
-db/
+spec/dummy/db/*.sqlite3
 
 # Logs
 log/

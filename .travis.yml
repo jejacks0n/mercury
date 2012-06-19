@@ -5,7 +5,5 @@ before_script:
 env:
   - DISPLAY=':99.0' CUCUMBER_OPTS='-f progress'
 script: bundle exec rake --trace
-notifications:
-  email:
-    - gvarela@gmail.com
+
 

@@ -1,7 +1,7 @@
 @Mercury.modal = (url, options = {}) ->
-  Mercury.modal.instance ||= new Mercury.Modal(url, options)
-  Mercury.modal.instance.show(url, options)
-  return Mercury.modal.instance
+  instance = new Mercury.Modal(url, options)
+  instance.show()
+  return instance
 
 
 class @Mercury.Modal

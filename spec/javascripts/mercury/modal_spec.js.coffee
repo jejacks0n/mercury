@@ -16,7 +16,7 @@ describe "Mercury.modal", ->
     $(window).unbind('mercury:resize')
     $(document).unbind('keydown')
 
-  describe "singleton method", ->
+  describe "builder method", ->
 
     beforeEach ->
       @showSpy = spyOn(Mercury.Modal.prototype, 'show').andCallFake(=>)
@@ -27,7 +27,7 @@ describe "Mercury.modal", ->
 
     it "returns an instance", ->
       ret = Mercury.modal('/foo')
-      expect(ret).toEqual(Mercury.modal.instance)
+      expect(ret.constructor).toEqual(Mercury.Modal)
       expect(ret).toEqual(new Mercury.Modal('/foo'))
 
 

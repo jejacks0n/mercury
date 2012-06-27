@@ -134,7 +134,6 @@ Mercury.I18n['nl'] =
   "Popup Window (javascript new window popup)": "Popup (nieuw venster door javascript)"
   "Popup Width": "Popup breedte"
   "Popup Height": "Popup hoogte"
-  "Insert Link": "Voeg link toe"
 
   # Insert Media Modal (media.html)
   "Images": "Afbeeldingen"
@@ -162,11 +161,8 @@ Mercury.I18n['nl'] =
   "Columns": "Kolommen"
   "Row Span": "Rij breedte"
   "Column Span": "Kolom breedte"
-  "Options": "Opties"
-  "Alignment": "Uitlijning"
   "Border": "Rand"
   "Spacing": "Spacing"
-  "Insert Table": "Voeg tabel toe"
 
   # HTML Editor Modal (htmleditor.html)
   "HTML Editor": "HTML editor"

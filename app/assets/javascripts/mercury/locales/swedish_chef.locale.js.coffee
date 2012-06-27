@@ -134,7 +134,6 @@ Mercury.I18n['swedish_chef'] =
   "Popup Window (javascript new window popup)": "Pupoop Veendoo (jefescreept noo veendoo pupoop)"
   "Popup Width": "Pupoop Veedt"
   "Popup Height": "Pupoop Heeeght"
-  "Insert Link": "Insert Leenk"
 
   # Insert Media Modal (media.html)
   "Images": "Imeges"
@@ -162,11 +161,8 @@ Mercury.I18n['swedish_chef'] =
   "Columns": "Culoomns"
   "Row Span": "Roo Spun"
   "Column Span": "Culoomn Spun"
-  "Options": "Oopshuns"
-  "Alignment": "Eleegnment"
   "Border": "Burder"
   "Spacing": "Speceeng"
-  "Insert Table": "Insert Teble-a"
 
   # HTML Editor Modal (htmleditor.html)
   "HTML Editor": "HTML Ideetur"

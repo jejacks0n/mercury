@@ -134,7 +134,6 @@ Mercury.I18n['es'] =
   "Popup Window (javascript new window popup)": "Ventana Popup (nueva ventana popup con javascript)"
   "Popup Width": "Ancho de Popup"
   "Popup Height": "Alto de Popup"
-  "Insert Link": "Insertar Enlace"
 
   # Insert Media Modal (media.html)
   "Images": "Imágenes"
@@ -162,11 +161,8 @@ Mercury.I18n['es'] =
   "Columns": "Columnas"
   "Row Span": "Unir Fila"
   "Column Span": "Unir Columna"
-  "Options": "Opciones"
-  "Alignment": "Alineación"
   "Border": "Borde"
   "Spacing": "Espaciado"
-  "Insert Table": "Insertar Tabla"
 
   # HTML Editor Modal (htmleditor.html)
   "HTML Editor": "Editor HTML"

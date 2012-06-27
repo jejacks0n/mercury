@@ -134,7 +134,6 @@ Mercury.I18n['ko'] =
   "Popup Window (javascript new window popup)": "팝업 창 (자바스크립트로 새 창을 띄웁니다.)"
   "Popup Width": "팝업 창 넓이"
   "Popup Height": "팝업 창 높이"
-  "Insert Link": "링크 추가"
 
   # Insert Media Modal (media.html)
   "Images": "그림:"
@@ -162,11 +161,8 @@ Mercury.I18n['ko'] =
   "Columns": "컬럼"
   "Row Span": "열 합치기"
   "Column Span": "컬럼 합치기"
-  "Options": "설정"
-  "Alignment": "정렬"
   "Border": "외곽선"
   "Spacing": "여백"
-  "Insert Table": "표 추가"
 
   # HTML Editor Modal (htmleditor.html)
   "HTML Editor": "HTML 편집기"

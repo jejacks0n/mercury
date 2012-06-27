@@ -136,7 +136,6 @@ Mercury.I18n['zh'] =
     "Popup Window (javascript new window popup)": "弹出窗口"
     "Popup Width": "弹出窗口宽度"
     "Popup Height": "弹出窗口高度"
-    "Insert Link": "插入链接"
 
     # Insert Media Modal (media.html)
     "Images": "图片"
@@ -164,11 +163,8 @@ Mercury.I18n['zh'] =
     "Columns": "列"
     "Row Span": "行跨度"
     "Column Span": "列跨度"
-    "Options": "选项"
-    "Alignment": "对齐方式"
     "Border": "边框线宽度"
     "Spacing": "单元格间距"
-    "Insert Table": "插入表格"
 
     # HTML Editor Modal (htmleditor.html)
     "HTML Editor": "HTML 编辑器"

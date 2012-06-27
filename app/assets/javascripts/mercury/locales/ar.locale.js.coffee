@@ -134,7 +134,6 @@ Mercury.I18n['ar'] =
   "Popup Window (javascript new window popup)": "نافذة منبثقة (جافا سكريبت نافذة منبثقة جديد)"
   "Popup Width": "عرض  النافذة المنبثقة"
   "Popup Height": "طول  النافذة المنبثقة"
-  "Insert Link": "إدراج رابط"
 
   # Insert Media Modal (media.html)
   "Images": "صور"
@@ -162,11 +161,8 @@ Mercury.I18n['ar'] =
   "Columns": "أعمدة"
   "Row Span": "إمتداد الصف"
   "Column Span": "إمتداد العمود"
-  "Options": "الخيارات"
-  "Alignment": "المحاذاة"
   "Border": "الحدود"
   "Spacing": "تباعد"
-  "Insert Table": "إدراج جدول"
 
   # HTML Editor Modal (htmleditor.html)
   "HTML Editor": "HTML محرر"

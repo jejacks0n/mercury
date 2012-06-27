@@ -134,7 +134,6 @@ Mercury.I18n['sv'] =
   "Popup Window (javascript new window popup)": "Popupfönster (javascript nytt fönster)"
   "Popup Width": "Bredd för popup"
   "Popup Height": "Höjd för popup"
-  "Insert Link": "Infoga länk"
 
   # Insert Media Modal (media.html)
   "Images": "Bilder"
@@ -162,11 +161,8 @@ Mercury.I18n['sv'] =
   "Columns": "Kolumner"
   "Row Span": "Rad-vidd"
   "Column Span": "Kolumn-vidd"
-  "Options": "Inställningar"
-  "Alignment": "Justering"
   "Border": "Ram"
   "Spacing": "Mellanrum"
-  "Insert Table": "Infoga tabell"
 
   # HTML Editor Modal (htmleditor.html)
   "HTML Editor": "HTML-redigerare"

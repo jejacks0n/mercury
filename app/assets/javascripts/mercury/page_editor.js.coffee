@@ -161,7 +161,7 @@ class @Mercury.PageEditor
   resize: ->
     width = jQuery(window).width()
     height = @statusbar.top()
-    toolbarHeight = @toolbar.height()
+    toolbarHeight = @toolbar.top() + @toolbar.height()
 
     Mercury.displayRect = {top: toolbarHeight, left: 0, width: width, height: height - toolbarHeight, fullHeight: height}
 

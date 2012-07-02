@@ -155,7 +155,7 @@ It's important for saving that an id attribute *always* be set on regions, so yo
       default content
     </div>
 
-For more advanced ways to integrate Mercury Editor with your Rails application check out this
+For more advanced ways to integrate Mercury Editor with your Rails application (such as not using the /editor routing prefix) check out this
 [wiki article](https://github.com/jejacks0n/mercury/wiki/Rails-Integration-Techniques).
 
 ### Using Mercury without Rails

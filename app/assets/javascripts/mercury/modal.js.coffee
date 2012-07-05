@@ -67,7 +67,7 @@ class @Mercury.Modal
     @position()
 
     @overlay.show()
-    @overlay.animate {opacity: 1}, 200, 'easeInOutSine', =>
+    @overlay.animate {opacity: Mercury.config.modalOverlayOpacity || 1}, 200, 'easeInOutSine', =>
       @element.css({top: -@element.height()})
       @setTitle()
       @element.show()

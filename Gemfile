@@ -3,6 +3,8 @@ source 'http://rubygems.org'
 #Dependencies for the dummy app
 gem 'jquery-rails'
 gem 'sqlite3'
+gem 'activerecord'
+gem 'actionmailer'
 
 
 # Gems used only for assets and not required

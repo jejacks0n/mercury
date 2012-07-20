@@ -41,13 +41,19 @@
   setTableAlignment: ->
     @table.attr({align: @element.find('#table_alignment').val()})
 
-
   setTableBorder: ->
-    @table.attr({border: parseInt(@element.find('#table_border').val(), 10) || 1})
-
+    border = parseInt(@element.find('#table_border').val(), 10)
+    if isNaN(border)
+      @table.removeAttr('border')
+    else
+      @table.attr({border: border})
 
   setTableCellSpacing: ->
-    @table.attr({cellspacing: parseInt(@element.find('#table_spacing').val(), 10) || 1})
+    cellspacing = parseInt(@element.find('#table_spacing').val(), 10)
+    if isNaN(cellspacing)
+      @table.removeAttr('cellspacing')
+    else
+      @table.attr({cellspacing: cellspacing})
 
 
   submitForm: ->

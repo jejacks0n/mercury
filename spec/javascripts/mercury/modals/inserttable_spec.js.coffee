@@ -118,6 +118,11 @@ describe "Mercury.modalHandlers.insertTable", ->
       jasmine.simulate.keyup($('#table_border').get(0))
       expect($('table').attr('border')).toEqual('2')
 
+    it "removes the property if empty value specified", ->
+      $('#table_border').val('')
+      jasmine.simulate.keyup($('#table_border').get(0))
+      expect($('table').attr('border')).toEqual(undefined)
+
 
   describe "changing the cellspacing", ->
 
@@ -133,6 +138,11 @@ describe "Mercury.modalHandlers.insertTable", ->
       $('#table_spacing').val('12x')
       jasmine.simulate.keyup($('#table_spacing').get(0))
       expect($('table').attr('cellspacing')).toEqual('12')
+
+    it "removes the property if empty value specified", ->
+      $('#table_spacing').val('')
+      jasmine.simulate.keyup($('#table_spacing').get(0))
+      expect($('table').attr('cellspacing')).toEqual(undefined)
 
 
   describe "submitting", ->

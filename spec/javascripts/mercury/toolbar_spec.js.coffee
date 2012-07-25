@@ -188,6 +188,28 @@ describe "Mercury.Toolbar", ->
       it "returns the element outerheight", ->
         expect(@toolbar.height(true)).toEqual($('.mercury-toolbar-container').outerHeight())
 
+  describe "#top", ->
+
+    beforeEach ->
+      spyOn(Mercury.Toolbar.prototype, 'buildButton').andCallFake(=> $('<div>'))
+      spyOn(Mercury.Toolbar.prototype, 'bindEvents').andCallFake(=>)
+
+    describe "when visible", ->
+
+      beforeEach ->
+        @toolbar = new Mercury.Toolbar({appendTo: '#test', visible: true})
+
+      it "returns the element offests top", ->
+        expect(@toolbar.top()).toEqual($('.mercury-toolbar-container').offset().top)
+
+    describe "when not visible", ->
+
+      beforeEach ->
+        @toolbar = new Mercury.Toolbar({appendTo: '#test', visible: false})
+
+      it "returns the element offests top", ->
+        expect(@toolbar.top()).toEqual(0)
+
 
   describe "#show", ->
 

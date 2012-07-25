@@ -74,6 +74,8 @@ class @Mercury.Toolbar
   height: (force = false) ->
     if @visible || force then @element.outerHeight() else 0
 
+  top: ->
+    if @visible then @element.offset().top else 0
 
   show: ->
     @visible = true

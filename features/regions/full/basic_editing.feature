@@ -147,10 +147,10 @@ Feature:
     And I make a selection
 
     When I click on the insert hr editor button
-    Then the contents of the full region should be "this is&nbsp;<hr size='2' width='100%'> <b>content</b>"
+    Then the contents of the full region should be "this is&nbsp;<hr> <b>content</b>"
 
     When I click on the insert hr editor button
-    Then the contents of the full region should be "this is&nbsp;<hr size='2' width='100%'><hr size='2' width='100%'> <b>content</b>"
+    Then the contents of the full region should be "this is&nbsp;<hr><hr> <b>content</b>"
 
 
   Scenario: A user can clean/remove formatting on their selection

@@ -425,7 +425,7 @@ class @Mercury.Regions.Full extends Mercury.Region
 
     redo: -> @content(@history.redo())
 
-    horizontalRule: -> this.execCommand('insertHorizontalRule')
+    horizontalRule: -> @execCommand('insertHTML', {value: '<hr/>'})
 
     removeFormatting: (selection) -> selection.insertTextNode(selection.textContent())
 

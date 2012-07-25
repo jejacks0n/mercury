@@ -28,6 +28,17 @@ Feature:
     And the contents of the full region should be "this is <div data-version='1' data-snippet='snippet_14' class='example-snippet' contenteditable='false'><strong>Jeremy</strong> likes Stella</div><span>simple</span> <b>content</b>"
 
 
+  Scenario: A user can drag and drop snippets with no options into a full region
+    Given the content of the full region is simple content
+    And I make a selection
+
+    When I open the snippet panel
+    And I drag the snippet with no options into the full region
+    Then the modal window should not be visible
+
+    And the contents of the full region should be "this is <div data-version='1' data-snippet='snippet_14' class='no_options-snippet' contenteditable='false'><strong>No Option Snippet</strong></div><span>simple</span> <b>content</b>"
+
+
   Scenario: A user can use the snippet toolbar to remove a snippet
     Given the options for the example snippet "snippet_42" are first_name: "Jeremy", favorite_beer: "Stella"
     And the content of the full region has that snippet

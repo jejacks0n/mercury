@@ -220,6 +220,9 @@ When /^(?:|I )(?:drag|drop) (.*?) (?:into|on) (.*?)$/ do |snippet_locator, regio
   region_id = region_selector_for(region_locator).gsub('#', '')
   page.driver.within_frame('mercury_iframe') do
     find("##{region_id}", :message => "Unable to locate a region matching '##{region_id}'")
+    data = " data-snippet=\"#{snippet_name}\""
+    data << ' data-options="false"' if snippet_name == 'no_options'
+
     page.driver.execute_script <<-JAVASCRIPT
       var element = top.jQuery(document).find('##{region_id}');
       if (element.data('type') == 'markdown') {
@@ -228,7 +231,7 @@ When /^(?:|I )(?:drag|drop) (.*?) (?:into|on) (.*?)$/ do |snippet_locator, regio
       } else {
         var region = top.mercuryInstance.getRegionByName('#{region_id}');
         region.selection().range.collapse(true);
-        document.execCommand('insertHTML', false, '<img data-snippet="#{snippet_name}" src="/assets/mercury/default-snippet.png">');
+        document.execCommand('insertHTML', false, '<img #{data} src="/assets/mercury/default-snippet.png">');
         element.trigger('possible:drop');
       }
     JAVASCRIPT

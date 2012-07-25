@@ -7,4 +7,4 @@
 
   # when an element is dragged, set it so we have a global object
   @element.find('img[data-snippet]').on 'dragstart', ->
-    Mercury.snippet = jQuery(@).data('snippet')
+    Mercury.snippet = {name: jQuery(@).data('snippet'), hasOptions: !(jQuery(@).data('options') == false)}

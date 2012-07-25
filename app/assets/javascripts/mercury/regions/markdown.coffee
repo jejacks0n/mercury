@@ -65,7 +65,7 @@ class @Mercury.Regions.Markdown extends Mercury.Region
       if Mercury.snippet
         event.preventDefault()
         @focus()
-        Mercury.Snippet.displayOptionsFor(Mercury.snippet)
+        Mercury.Snippet.displayOptionsFor(Mercury.snippet.name, {}, Mercury.snippet.hasOptions)
 
       # handle any files that were dropped
       if event.originalEvent.dataTransfer.files.length

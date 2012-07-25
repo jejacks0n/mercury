@@ -202,21 +202,45 @@ describe "Mercury.Snippet class methods", ->
 
     beforeEach ->
       @modalSpy = spyOn(Mercury, 'modal').andCallFake(=>)
+      @triggerSpy = spyOn(Mercury, 'trigger').andCallFake(=>)
 
-    it "opens a modal with the name in the url", ->
-      Mercury.Snippet.displayOptionsFor('foo')
-      expect(@modalSpy.callCount).toEqual(1)
-      expect(@modalSpy.argsForCall[0]).toEqual(["/mercury/snippets/foo/options.html", {title: 'Snippet Options', handler: 'insertSnippet', snippetName: 'foo'}])
+    describe "with options", ->
 
-    it "sets the snippet back to nothing", ->
-      Mercury.snippet = 'foo'
-      Mercury.Snippet.displayOptionsFor('foo')
-      expect(Mercury.snippet).toEqual(null)
+      it "opens a modal with the name in the url", ->
+        Mercury.Snippet.displayOptionsFor('foo')
+        expect(@modalSpy.callCount).toEqual(1)
+        expect(@modalSpy.argsForCall[0]).toEqual(["/mercury/snippets/foo/options.html", {title: 'Snippet Options', handler: 'insertSnippet', snippetName: 'foo'}])
 
-    it "can pass options to the modal", ->
-      Mercury.Snippet.displayOptionsFor('foo', {option1: 'option1'})
-      expect(@modalSpy.callCount).toEqual(1)
-      expect(@modalSpy.argsForCall[0]).toEqual(["/mercury/snippets/foo/options.html", {title: 'Snippet Options', handler: 'insertSnippet', snippetName: 'foo', option1: 'option1'}])
+      it "sets the snippet back to nothing", ->
+        Mercury.snippet = 'foo'
+        Mercury.Snippet.displayOptionsFor('foo')
+        expect(Mercury.snippet).toEqual(null)
+
+      it "can pass options to the modal", ->
+        Mercury.Snippet.displayOptionsFor('foo', {option1: 'option1'})
+        expect(@modalSpy.callCount).toEqual(1)
+        expect(@modalSpy.argsForCall[0]).toEqual(["/mercury/snippets/foo/options.html", {title: 'Snippet Options', handler: 'insertSnippet', snippetName: 'foo', option1: 'option1'}])
+
+      it "doesn't trigger an event to insert the snippet", ->
+        Mercury.Snippet.displayOptionsFor('foo')
+        expect(@triggerSpy.callCount).toEqual(0)
+
+    describe "without options", ->
+
+      it "triggers an event to insert the snippet", ->
+        Mercury.Snippet.displayOptionsFor('foo', {}, false)
+        expect(@triggerSpy.callCount).toEqual(1)
+        expect(@triggerSpy.argsForCall[0][0]).toEqual('action')
+        expect(@triggerSpy.argsForCall[0][1]['action']).toEqual('insertSnippet')
+
+      it "doesn't open a modal", ->
+        Mercury.Snippet.displayOptionsFor('foo', {}, false)
+        expect(@modalSpy.callCount).toEqual(0)
+
+      it "sets the snippet back to nothing", ->
+        Mercury.snippet = 'foo'
+        Mercury.Snippet.displayOptionsFor('foo', {}, false)
+        expect(Mercury.snippet).toEqual(null)
 
 
   describe ".create", ->

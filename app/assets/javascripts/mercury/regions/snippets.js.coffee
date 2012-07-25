@@ -46,7 +46,7 @@ class @Mercury.Regions.Snippets extends Mercury.Region
       return if @previewing || ! Mercury.snippet
       @focus()
       event.preventDefault()
-      Mercury.Snippet.displayOptionsFor(Mercury.snippet)
+      Mercury.Snippet.displayOptionsFor(Mercury.snippet.name, {}, Mercury.snippet.hasOptions)
 
     jQuery(@document).on 'keydown', (event) =>
       return if @previewing || Mercury.region != @

@@ -2,12 +2,16 @@ class @Mercury.Snippet
 
   @all: []
 
-  @displayOptionsFor: (name, options = {}) ->
-    Mercury.modal Mercury.config.snippets.optionsUrl.replace(':name', name), jQuery.extend({
-      title: 'Snippet Options'
-      handler: 'insertSnippet'
-      snippetName: name
-    }, options)
+  @displayOptionsFor: (name, options = {}, displayOptions = true) ->
+    if displayOptions
+      Mercury.modal Mercury.config.snippets.optionsUrl.replace(':name', name), jQuery.extend({
+        title: 'Snippet Options'
+        handler: 'insertSnippet'
+        snippetName: name
+      }, options)
+    else
+      snippet = Mercury.Snippet.create(name)
+      Mercury.trigger('action', {action: 'insertSnippet', value: snippet})
     Mercury.snippet = null
 
 

@@ -138,6 +138,7 @@ module MercurySelectorsHelpers
     case locator.downcase
 
       when 'the example snippet' then 'example'
+      when 'the snippet with no options' then 'no_options'
 
       else locator
     end

@@ -94,7 +94,7 @@ class @Mercury.Regions.Full extends Mercury.Region
       return if @previewing
       if snippetPlaceHolder = @element.find('img[data-snippet]').get(0)
         @focus()
-        Mercury.Snippet.displayOptionsFor(jQuery(snippetPlaceHolder).data('snippet'))
+        Mercury.Snippet.displayOptionsFor(jQuery(snippetPlaceHolder).data('snippet'), {}, jQuery(snippetPlaceHolder).data('options'))
         @document.execCommand('undo', false, null)
 
     # custom paste handling: we have to do some hackery to get the pasted content since it's not exposed normally

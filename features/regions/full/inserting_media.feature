@@ -49,6 +49,24 @@ Feature:
     And press "Insert Media"
     Then the contents of the full region should be "this is <img src='/assets/mercury/temp-logo.png' align='absmiddle'> <b>content</b>"
 
+#  Scenario: A user can insert and edit an image with an explicit float setting
+    Given the content of the full region is simple content
+    And I make a selection
+
+    When I click on the "Insert Media" button
+    When I fill in "media_image_url" with "/assets/mercury/temp-logo.png"
+    And select "Right" from "Float"
+    And press "Insert Media"
+    Then the contents of the full region should be "this is <img style='float: right;' src='/assets/mercury/temp-logo.png'> <b>content</b>"
+
+    When I make a selection for "img"
+    And click on the "Insert Media" button
+    And select "Absolute Middle" from "Alignment"
+    And select "None" from "Float"
+    And press "Insert Media"
+    Then the contents of the full region should be "this is <img src='/assets/mercury/temp-logo.png' align='absmiddle'> <b>content</b>"
+
+
 
   Scenario: A user can edit an image by double clicking it
     Given the content of the full region has an image

@@ -24,8 +24,8 @@ class @Mercury.PageEditor
     @iframe = jQuery('<iframe>', {id: 'mercury_iframe', class: 'mercury-iframe', frameborder: '0', src: 'about:blank'})
     @iframe.appendTo(jQuery(@options.appendTo).get(0) ? 'body')
 
-    @toolbar = new Mercury.Toolbar(@options)
-    @statusbar = new Mercury.Statusbar(@options)
+    @toolbar = new Mercury.Toolbar(jQuery.extend(true, {}, @options, @options.toolbarOptions))
+    @statusbar = new Mercury.Statusbar(jQuery.extend(true, {}, @options, @options.statusbarOptions))
     @resize()
 
     @iframe.on 'load', => @initializeFrame()

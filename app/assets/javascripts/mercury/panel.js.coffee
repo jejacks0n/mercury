@@ -57,6 +57,7 @@ class @Mercury.Panel extends Mercury.Dialog
       @titleElement.find('.mercury-panel-close').animate({opacity: 1}, 100)
 
       @paneElement.css({display: 'block', width: postWidth})
+      jQuery(@paneElement.find('.focusable').get(0)).focus()
       @makeDraggable()
 
     @hide() unless @visible

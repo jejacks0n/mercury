@@ -1,6 +1,5 @@
 /*
  *= require_self
- *= require ./bootstrap-ish
  *= require ./bootstrap-overrides
  *= require ./dialog
  *= require ./lightview

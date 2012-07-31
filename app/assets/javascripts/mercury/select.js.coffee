@@ -20,7 +20,7 @@ class @Mercury.Select extends Mercury.Dialog
 
   position: (keepVisible) ->
     @element.css({top: 0, left: 0, display: 'block', visibility: 'hidden'})
-    position = @button.offset()
+    position = @button.position()
     elementWidth = @element.width()
     elementHeight = @element.height()
     documentHeight = jQuery(document).height()

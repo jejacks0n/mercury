@@ -17,16 +17,20 @@
  * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- *= require_self
- *= require mercury/mercury
  */
 
 $linkColor: #09F !default;
 $linkColorHover: darken($linkColor, 15%) !default;
+
+@import '/assets/mercury/mercury.css';
+@import 'mercury-bootstrap-overrides';
 
 #mercury_about a { color: $linkColor; }
 #mercury_table #table_display .selected { background: $linkColor; }
 .mercury-uploader .mercury-uploader-progress div.mercury-uploader-indicator div {
   background-color: $linkColor;
   border: 1px solid $linkColorHover;
+}
+.mercury-toolbar {
+  background: red;
 }

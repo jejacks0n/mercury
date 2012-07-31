@@ -1,0 +1,61 @@
+/*
+ * Bootsrap Overrides (overrides what's in bootstrap-ish)
+ *---------------------------------------------------------------------------*/
+.btn-group > .btn {
+  margin-right: 0;
+}
+form {
+  margin-bottom: 0;
+}
+fieldset {
+  margin-bottom: 15px;
+  background: #F6F6F6;
+  border: 1px solid #CCC;
+  border-radius: 7px;
+  padding: 10px;
+}
+legend {
+  display: block;
+  position: relative;
+  margin-left: 10px;
+  margin-bottom: 0;
+  font-weight: bold;
+  width: auto;
+  padding: 0;
+  font-size: 12px;
+  color: #333333;
+  border: 0;
+  line-height: 1px;
+}
+select {
+  width: auto;
+}
+.form-actions {
+  margin-top: 0;
+  margin-bottom: 0;
+  background-color: transparent;
+}
+.control-group {
+  margin-bottom: 0;
+}
+legend + .control-group {
+  margin-top: 0;
+  -webkit-margin-top-collapse: separate;
+}
+.form-horizontal .control-group {
+  margin-bottom: 0;
+}
+.form-horizontal .controls {
+  margin-left: 150px;
+}
+.form-horizontal hr {
+  margin-left: 150px;
+  border: 0;
+  border-top: 1px solid #ccc;
+}
+label input[type=radio] {
+  margin-right: 5px;
+}
+.form-actions {
+  padding-bottom: 0;
+}

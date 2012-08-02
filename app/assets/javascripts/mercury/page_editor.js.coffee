@@ -236,9 +236,9 @@ class @Mercury.PageEditor
       type: method
       dataType: @options.saveDataType
       data: data
-      success: =>
+      success: (response) =>
         Mercury.changes = false
-        Mercury.trigger('saved')
+        Mercury.trigger('saved', response)
         callback() if typeof(callback) == 'function'
       error: (response) =>
         Mercury.trigger('save_failed', response)

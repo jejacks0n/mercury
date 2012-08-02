@@ -740,7 +740,7 @@ describe "Mercury.PageEditor", ->
           spy = spyOn(Mercury, 'trigger').andCallFake(=>)
           @pageEditor.save()
           expect(spy.callCount).toEqual(1)
-          expect(spy.argsForCall[0]).toEqual(['saved'])
+          expect(spy.argsForCall[0]).toEqual(['saved', 'data'])
 
       describe "on failed ajax request", ->
 

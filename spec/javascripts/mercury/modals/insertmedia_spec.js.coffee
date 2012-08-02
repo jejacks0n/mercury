@@ -53,7 +53,7 @@ describe "Mercury.modalHandlers.insertMedia", ->
 
       beforeEach ->
         @focusSpy = spyOn($.fn, 'focus').andCallThrough()
-        @selection = {is: -> $('<img>', {src: '/foo.gif', align: 'right'})}
+        @selection = {is: -> $('<img>', {src: '/foo.gif', align: 'right', style: 'float: left;'})}
         Mercury.region = selection: => @selection
         @insertMedia.initialize()
 
@@ -66,6 +66,9 @@ describe "Mercury.modalHandlers.insertMedia", ->
 
       it "sets the image alignment option", ->
         expect($('#media_image_alignment').val()).toEqual('right')
+
+      it "sets the image float option", ->
+        expect($('#media_image_float').val()).toEqual('left')
 
     describe "an existing youtube video", ->
 
@@ -176,13 +179,14 @@ describe "Mercury.modalHandlers.insertMedia", ->
       beforeEach ->
         $('#media_image_url').val('http://domain/foo.gif')
         $('#media_image_alignment').val('right')
+        $('#media_image_float').val('left')
 
       it "triggers an action with the proper values", ->
         jasmine.simulate.click($('input[type=submit]').get(0))
         expect(@triggerSpy.callCount).toEqual(1)
         expect(@triggerSpy.argsForCall[0][0]).toEqual('action')
         expect(@triggerSpy.argsForCall[0][1]['action']).toEqual('insertImage')
-        expect(@triggerSpy.argsForCall[0][1]['value']).toEqual({src: 'http://domain/foo.gif', align: 'right'})
+        expect(@triggerSpy.argsForCall[0][1]['value']).toEqual({src: 'http://domain/foo.gif', align: 'right', style: 'float: left;'})
 
     describe "a youtube video", ->
 

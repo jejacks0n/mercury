@@ -46,6 +46,9 @@
   width: 1px;
   background: #727272;
 }
+.mercury-button {
+  cursor: pointer;
+}
 .mercury-button em {
   display: block;
   font-style: normal;

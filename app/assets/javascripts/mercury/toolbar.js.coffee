@@ -8,7 +8,7 @@ class @Mercury.Toolbar
 
   build: ->
     @element = jQuery('<div>', {class: 'mercury-toolbar-container', style: 'width:10000px'})
-    @element.css({display: 'none'}) unless @visible
+    @element.css({width: '100%'})
     @element.appendTo(jQuery(@options.appendTo).get(0) ? 'body')
 
     for own toolbarName, buttons of Mercury.config.toolbars
@@ -28,7 +28,7 @@ class @Mercury.Toolbar
 
       toolbar.addClass('disabled') if Mercury.config.toolbars['primary'] && toolbarName != 'primary'
 
-    @element.css({width: '100%'})
+    @element.css({display: 'none'}) unless @visible
 
 
   buildButton: (name, options) ->

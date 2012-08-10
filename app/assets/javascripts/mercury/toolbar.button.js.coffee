@@ -89,32 +89,47 @@ class @Mercury.Toolbar.Button
 
     @element.on 'click', (event) =>
       if @element.closest('.disabled').length then return
+      @handleClick(event)
 
-      handled = false
-      for own type, mixed of @handled
-        switch type
-          when 'toggle'
-            @togglePressed() unless @handled.mode
 
-          when 'mode'
-            handled = true
-            Mercury.trigger('mode', {mode: mixed})
+  handleClick: (event) ->
+    handled = false
+    for own type, mixed of @handled
+      switch type
+        when 'toggle'
+          @togglePressed() unless @handled.mode
 
-          when 'modal'
-            handled = true
-            Mercury.modal(@handled.modal, {title: @summary || @title, handler: @name})
+        when 'mode'
+          handled = true
+          Mercury.trigger('mode', {mode: mixed})
 
-          when 'lightview'
-            handled = true
-            Mercury.lightview(@handled.lightview, {title: @summary || @title, handler: @name, closeButton: true})
+        when 'modal'
+          handled = @handleModal(event)
 
-          when 'palette', 'select', 'panel'
-            event.stopPropagation()
-            handled = true
-            @handled[type].toggle()
+        when 'lightview'
+          handled = @handleLightview(event)
 
-      Mercury.trigger('action', {action: @name}) unless handled
-      Mercury.trigger('focus:frame') if @options['regions'] && @options['regions'].length
+        when 'palette', 'select', 'panel'
+          handled = @handleDialog(event, type)
+
+    Mercury.trigger('action', {action: @name}) unless handled
+    Mercury.trigger('focus:frame') if @options['regions'] && @options['regions'].length
+
+
+  handleModal: (event) ->
+    Mercury.modal(@handled.modal, {title: @summary || @title, handler: @name})
+    return true
+
+
+  handleLightview: (event) ->
+    Mercury.lightview(@handled.lightview, {title: @summary || @title, handler: @name, closeButton: true})
+    return true
+
+
+  handleDialog: (event, type) ->
+    event.stopPropagation()
+    @handled[type].toggle()
+    return true
 
 
   defaultDialogOptions: ->

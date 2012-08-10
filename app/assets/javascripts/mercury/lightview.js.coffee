@@ -12,6 +12,7 @@ class @Mercury.Lightview
   show: (url, options) ->
     @url = url || @url
     @options = options || @options
+    @options.ujsHandling = true unless @options.ujsHandling == false
 
     Mercury.trigger('focus:window')
     @initializeLightview()
@@ -53,9 +54,10 @@ class @Mercury.Lightview
     @titleElement.find('.mercury-lightview-close').on 'click', =>
       @hide()
 
-    @element.on 'ajax:beforeSend', (event, xhr, options) =>
-      options.success = (content) =>
-        @loadContent(content)
+    if @options.ujsHandling
+      @element.on 'ajax:beforeSend', (event, xhr, options) =>
+        options.success = (content) =>
+          @loadContent(content)
 
     jQuery(document).on 'keydown', (event) =>
        @hide() if event.keyCode == 27 && @visible
@@ -181,7 +183,9 @@ class @Mercury.Lightview
 
     @options.afterLoad.call(@) if @options.afterLoad
     if @options.handler
-      if Mercury.modalHandlers[@options.handler]
+      if typeof(@options.handler) == 'function'
+        @options.handler.call(@)
+      else if Mercury.modalHandlers[@options.handler]
         if typeof(Mercury.modalHandlers[@options.handler]) == 'function'
           Mercury.modalHandlers[@options.handler].call(@)
         else

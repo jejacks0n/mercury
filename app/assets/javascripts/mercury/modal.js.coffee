@@ -13,6 +13,7 @@ class @Mercury.Modal
     @url = url || @url
     @options = options || @options
     @options.minWidth ||= 400
+    @options.ujsHandling = true unless @options.ujsHandling == false
 
     Mercury.trigger('focus:window')
     @initializeModal()
@@ -54,9 +55,10 @@ class @Mercury.Modal
     @titleElement.find('a').on 'click', =>
       @hide()
 
-    @element.on 'ajax:beforeSend', (event, xhr, options) =>
-      options.success = (content) =>
-        @loadContent(content)
+    if @options.ujsHandling
+      @element.on 'ajax:beforeSend', (event, xhr, options) =>
+        options.success = (content) =>
+          @loadContent(content)
 
     jQuery(document).on 'keydown', (event) =>
       @hide() if event.keyCode == 27 && @visible
@@ -173,7 +175,9 @@ class @Mercury.Modal
 
     @options.afterLoad.call(@) if @options.afterLoad
     if @options.handler
-      if Mercury.modalHandlers[@options.handler]
+      if typeof(@options.handler) == 'function'
+        @options.handler.call(@)
+      else if Mercury.modalHandlers[@options.handler]
         if typeof(Mercury.modalHandlers[@options.handler]) == 'function'
           Mercury.modalHandlers[@options.handler].call(@)
         else
@@ -187,6 +191,7 @@ class @Mercury.Modal
           @initialize()
 
     @element.localize(Mercury.locale()) if Mercury.config.localization.enabled
+    @element.find('.modal-close').on('click', @hide)
     @resize()
 
 
@@ -196,12 +201,16 @@ class @Mercury.Modal
     if @options.closeButton == false then closeButton.hide() else closeButton.show()
 
 
+  serializeForm: ->
+    return @element.find('form').serializeObject() || {}
+
+
   reset: ->
     @titleElement.find('span').html('')
     @contentElement.html('')
 
 
-  hide: ->
+  hide: =>
     return if @showing
     @options = {}
 

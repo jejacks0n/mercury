@@ -48,7 +48,6 @@ namespace :mercury do
 
     desc "Combine javascripts into mercury.js and mercury.min.js"
     task :javascripts => :environment do
-      config = Rails.application.config
       env    = Rails.application.assets
       target = Pathname.new(File.join(Mercury::Engine.root.join('distro'), 'build'))
       manifest = {}
@@ -72,6 +71,7 @@ namespace :mercury do
 
       Dir[Mercury::Engine.root.join('distro/build/mercury-*.js')].each do |filename|
         copy_file(filename, Mercury::Engine.root.join('distro/javascripts/mercury.js'))
+        copy_file(filename, Mercury::Engine.root.join('app/assets/javascripts/mercury/mercury-compiled.js'))
         remove(filename)
       end
 
@@ -91,7 +91,6 @@ namespace :mercury do
 
     desc "Combine stylesheets into mercury.css and mercury.bundle.css (bundling images where possible)"
     task :stylesheets => :environment do
-      config = Rails.application.config
       env    = Rails.application.assets
       target = Pathname.new(File.join(Mercury::Engine.root.join('distro'), 'build'))
       manifest = {}

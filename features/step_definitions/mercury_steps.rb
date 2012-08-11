@@ -262,26 +262,6 @@ When /^(?:|I )edit the snippet$/ do
 end
 
 
-## Dropping image specific steps
-#------------------------------------------------------------------------------
-#When /^(?:|I )drop an image into (.*?) from a different browser/ do |region_locator|
-#  Given(%Q{I can simulate complex javascript events})
-#  region_selector = region_selector_for(region_locator || 'the full region')
-#  page.driver.within_frame('mercury_iframe') do
-#    find("#{region_selector}", :message => "Unable to locate a region matching '#{region_selector}'")
-#    page.driver.execute_script <<-JAVASCRIPT
-#      var element = top.jQuery(document).find('#{region_selector}');
-#      if (element.data('type') == 'markdown') {
-#        alert('unimplemented');
-#        throw('unimplemented');
-#      } else {
-#        element.find('#{region_selector}').simulate('drop', {'text/html': '<img src="testing.gif"/>'});
-#      }
-#    JAVASCRIPT
-#  end
-#end
-
-
 ## Javascript event simulation steps
 #------------------------------------------------------------------------------
 Given /^(?:|I )can simulate complex javascript events$/ do

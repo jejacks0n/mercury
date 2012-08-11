@@ -183,9 +183,7 @@ class @Mercury.Lightview
 
     @options.afterLoad.call(@) if @options.afterLoad
     if @options.handler
-      if typeof(@options.handler) == 'function'
-        @options.handler.call(@)
-      else if Mercury.modalHandlers[@options.handler]
+      if Mercury.modalHandlers[@options.handler]
         if typeof(Mercury.modalHandlers[@options.handler]) == 'function'
           Mercury.modalHandlers[@options.handler].call(@)
         else
@@ -199,6 +197,7 @@ class @Mercury.Lightview
           @initialize()
 
     @element.localize(Mercury.locale()) if Mercury.config.localization.enabled
+    @element.find('.lightview-close').on('click', @hide)
     @resize()
 
 
@@ -206,12 +205,16 @@ class @Mercury.Lightview
     @titleElement.find('span').html(Mercury.I18n(@options.title))
 
 
+  serializeForm: ->
+    return @element.find('form').serializeObject() || {}
+
+
   reset: ->
     @titleElement.find('span').html('')
     @contentElement.html('')
 
 
-  hide: ->
+  hide: =>
     return if @showing
     @options = {}
 

@@ -28,7 +28,7 @@ describe "Mercury.lightview", ->
     it "returns an instance", ->
       ret = Mercury.lightview('/foo')
       expect(ret).toEqual(Mercury.lightview.instance)
-      expect(ret).toEqual(new Mercury.Lightview('/foo'))
+      expect(ret.show).toEqual(Mercury.Lightview.prototype.show)
 
 
   describe "#show", ->
@@ -37,6 +37,14 @@ describe "Mercury.lightview", ->
       @initializeSpy = spyOn(Mercury.Lightview.prototype, 'initializeLightview').andCallFake(=>)
       @updateSpy = spyOn(Mercury.Lightview.prototype, 'update').andCallFake(=>)
       @appearSpy = spyOn(Mercury.Lightview.prototype, 'appear').andCallFake(=>)
+
+    it "sets options.ujsHandling to true unless set to false", ->
+      instance = new Mercury.Lightview()
+      instance.show()
+      expect(instance.options.ujsHandling).toEqual(true)
+      instance = new Mercury.Lightview('', {ujsHandling: false})
+      instance.show()
+      expect(instance.options.ujsHandling).toEqual(false)
 
     it "triggers the focus:window event", ->
       spy = spyOn(Mercury, 'trigger').andCallFake(=>)
@@ -441,6 +449,12 @@ describe "Mercury.lightview", ->
       @lightview.loadContent('<span>foo</span>')
       expect($('.mercury-lightview-content').html()).toEqual('<span>Bork!</span>')
 
+    it "makes any element with the lightview-close class close the lightview", ->
+      spy = spyOn(@lightview, 'hide').andCallFake(=>)
+      @lightview.loadContent('<span class="lightview-close">foo</span>')
+      jasmine.simulate.click(@lightview.contentElement.find('.lightview-close').get(0))
+      expect(spy.callCount).toEqual(1)
+
     it "calls resize", ->
       @lightview.loadContent('content')
       expect(@resizeSpy.callCount).toEqual(1)
@@ -456,6 +470,24 @@ describe "Mercury.lightview", ->
       @lightview.options = {title: 'new title'}
       @lightview.setTitle()
       expect($('.mercury-lightview-title span').html()).toEqual('new title')
+
+
+  describe "#serializeForm", ->
+
+    beforeEach ->
+      spyOn(Mercury.Lightview.prototype, 'appear').andCallFake(=>)
+      @lightview = Mercury.lightview('/blank.html', {appendTo: $('#test'), title: 'title'})
+
+    describe "without a form", ->
+
+      it "returns an empty object", ->
+        expect(@lightview.serializeForm()).toEqual({})
+
+    describe "with a form", ->
+
+      it "returns an object of the serialized form", ->
+        @lightview.loadContent('<form><input name="options[foo]" value="bar"/></form>')
+        expect(@lightview.serializeForm()).toEqual({options: {foo: 'bar'}})
 
 
   describe "#reset", ->

@@ -28,7 +28,7 @@ describe "Mercury.modal", ->
     it "returns an instance", ->
       ret = Mercury.modal('/foo')
       expect(ret.constructor).toEqual(Mercury.Modal)
-      expect(ret).toEqual(new Mercury.Modal('/foo'))
+      expect(ret.show).toEqual(Mercury.Modal.prototype.show)
 
 
   describe "#show", ->
@@ -37,6 +37,14 @@ describe "Mercury.modal", ->
       @initializeSpy = spyOn(Mercury.Modal.prototype, 'initializeModal').andCallFake(=>)
       @updateSpy = spyOn(Mercury.Modal.prototype, 'update').andCallFake(=>)
       @appearSpy = spyOn(Mercury.Modal.prototype, 'appear').andCallFake(=>)
+
+    it "sets options.ujsHandling to true unless set to false", ->
+      instance = new Mercury.Modal()
+      instance.show()
+      expect(instance.options.ujsHandling).toEqual(true)
+      instance = new Mercury.Modal('', {ujsHandling: false})
+      instance.show()
+      expect(instance.options.ujsHandling).toEqual(false)
 
     it "triggers the focus:window event", ->
       spy = spyOn(Mercury, 'trigger').andCallFake(=>)
@@ -433,6 +441,12 @@ describe "Mercury.modal", ->
       @modal.loadContent('<span>foo</span>')
       expect($('.mercury-modal-content').html()).toEqual('<span>Bork!</span>')
 
+    it "makes any element with the modal-close class close the modal", ->
+      spy = spyOn(@modal, 'hide').andCallFake(=>)
+      @modal.loadContent('<span class="modal-close">foo</span>')
+      jasmine.simulate.click(@modal.contentElement.find('.modal-close').get(0))
+      expect(spy.callCount).toEqual(1)
+
     it "calls resize", ->
       @modal.loadContent('content')
       expect(@resizeSpy.callCount).toEqual(1)
@@ -454,6 +468,24 @@ describe "Mercury.modal", ->
       @modal.options = {title: 'new title', closeButton: false}
       @modal.setTitle()
       expect($('.mercury-modal-title a').css('display')).toEqual('none')
+
+
+  describe "#serializeForm", ->
+
+    beforeEach ->
+      spyOn(Mercury.Modal.prototype, 'appear').andCallFake(=>)
+      @modal = Mercury.modal('/blank.html', {appendTo: $('#test'), title: 'title'})
+
+    describe "without a form", ->
+
+      it "returns an empty object", ->
+        expect(@modal.serializeForm()).toEqual({})
+
+    describe "with a form", ->
+
+      it "returns an object of the serialized form", ->
+        @modal.loadContent('<form><input name="options[foo]" value="bar"/></form>')
+        expect(@modal.serializeForm()).toEqual({options: {foo: 'bar'}})
 
 
   describe "#reset", ->

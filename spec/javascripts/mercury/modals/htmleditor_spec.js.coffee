@@ -22,7 +22,7 @@ describe "Mercury.modalHandlers.htmlEditor", ->
       spy = spyOn(Mercury, 'trigger').andCallFake(=>)
       jasmine.simulate.click($('#submit').get(0))
       expect(spy.callCount).toEqual(1)
-      expect(spy.argsForCall[0]).toEqual(['action', {action: 'replaceHTML', value: '<span>html content</span>'}])
+      expect(spy.argsForCall[0]).toEqual(['action', {action: 'replaceHTML', value: '<span>html \ncontent</span>'}])
 
     it "hides the modal", ->
       spy = spyOn(@modal, 'hide').andCallFake(=>)

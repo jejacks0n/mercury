@@ -175,9 +175,7 @@ class @Mercury.Modal
 
     @options.afterLoad.call(@) if @options.afterLoad
     if @options.handler
-      if typeof(@options.handler) == 'function'
-        @options.handler.call(@)
-      else if Mercury.modalHandlers[@options.handler]
+      if Mercury.modalHandlers[@options.handler]
         if typeof(Mercury.modalHandlers[@options.handler]) == 'function'
           Mercury.modalHandlers[@options.handler].call(@)
         else

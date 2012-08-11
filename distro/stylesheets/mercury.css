@@ -19,55 +19,10 @@
  *
 
 
- */
-
-
-/*
-
-
-
-
-
-
-
-
-
-
 
  */
 
-/*
- * General Layout
- *---------------------------------------------------------------------------*/
 
-/* Disable text sizing in webkit (ipad/iphone etc -- should apply to mercury only) */
-
-html {
-  -webkit-text-size-adjust: none;
-}
-
-html, body {
-  -webkit-transition: -webkit-transform 3s;
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-}
-
-.mercury-iframe {
-  position: absolute;
-  top: 0;
-  width: 100%;
-  visibility: hidden;
-}
-.mercury-focusable {
-  position: absolute;
-  opacity: 0;
-}
-
-.filter {
-  margin: 0;
-  padding: 0;
-}
 /*!
  * This file is a derivative of the Twitter Bootstrap CSS.  It only includes the form and button css.
  *
@@ -1437,6 +1392,51 @@ input[type="submit"].btn.btn-mini {
   filter: alpha(opacity=75);
 }
 /*
+
+
+
+
+
+
+
+
+
+
+ */
+
+/*
+ * General Layout
+ *---------------------------------------------------------------------------*/
+
+/* Disable text sizing in webkit (ipad/iphone etc -- should apply to mercury only) */
+
+html {
+  -webkit-text-size-adjust: none;
+}
+
+html, body {
+  -webkit-transition: -webkit-transform 3s;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.mercury-iframe {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  visibility: hidden;
+}
+.mercury-focusable {
+  position: absolute;
+  opacity: 0;
+}
+
+.filter {
+  margin: 0;
+  padding: 0;
+}
+/*
  * Bootsrap Overrides (overrides what's in bootstrap-ish)
  *---------------------------------------------------------------------------*/
 
@@ -1516,11 +1516,12 @@ label input[type=radio] {
   border-radius: 2px;
   -moz-border-radius: 2px;
   margin-top: -1px;
-  background-color: #E2E1E2;
+  background-color: #FFFFFF;
 	box-shadow: 1px 1px 4px rgba(0,0,0, .5);
 	-moz-box-shadow: 1px 1px 4px rgba(0,0,0, .5);
   font-family: Helvetica, Tahoma, Arial, sans-serif;
   font-size: 8.5pt;
+  color: #333;
 }
 .mercury-dialog.loading,
 .mercury-select.loading,
@@ -1541,7 +1542,7 @@ label input[type=radio] {
  * Panels
  *----------------------------------------------------------------------------*/
 .mercury-panel {
-  position: absolute;
+  position: fixed;
   z-index: 10011;
   background-color: #f5f5f5;
   opacity: .9;
@@ -1565,6 +1566,7 @@ label input[type=radio] {
   margin: 0;
   background: #333;
   white-space: nowrap;
+  line-height: normal;
 }
 .mercury-panel h1 {
   -webkit-user-select: none;
@@ -1686,6 +1688,7 @@ label input[type=radio] {
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
   width: 100%;
+  height: auto;
   padding-left: 20px;
   background-color: #FFF;
   background-repeat: no-repeat;
@@ -2068,6 +2071,9 @@ label input[type=radio] {
   width: 1px;
   background: #727272;
 }
+.mercury-button {
+  cursor: pointer;
+}
 .mercury-button em {
   display: block;
   font-style: normal;
@@ -2449,9 +2455,9 @@ label input[type=radio] {
   background: -moz-repeating-linear-gradient(top left -30deg, rgba(255,255,255, 0.17), rgba(255,255,255, 0.17) 15px, rgba(255,255,255, 0) 15px, rgba(255,255,255, 0) 30px),
               -moz-linear-gradient(rgba(255,255,255, 0.1) 0%, rgba(255,255,255, 0.37) 100%);
   background-color: #09F;
+  border: 1px solid #0083DA;
   box-shadow: inset 0 1px 0 0 rgba(255,255,255, 0.4), inset 0 -1px 1px rgba(0,0,0, 0.2);
   -moz-box-shadow: inset 0 1px 0 0 rgba(255,255,255, 0.4), inset 0 -1px 1px rgba(0,0,0, 0.2);
-  border: 1px solid #0083DA;
 }
 .mercury-uploader .mercury-uploader-progress div.mercury-uploader-indicator div b {
   display: none;
@@ -2540,6 +2546,10 @@ form fieldset.buttons .commit input {
 .mercury-expander-button[data-button=historyPanel] em     { background-image: url(/assets/mercury/toolbar/primary/historypanel.png) }
 .mercury-primary-toolbar .mercury-notesPanel-button em,
 .mercury-expander-button[data-button=notesPanel] em       { background-image: url(/assets/mercury/toolbar/primary/notespanel.png) }
+.mercury-primary-toolbar .mercury-userPanel-button em,
+.mercury-expander-button[data-button=userPanel] em        { background-image: url(/assets/mercury/toolbar/primary/user.png) }
+.mercury-primary-toolbar .mercury-toolsPanel-button em,
+.mercury-expander-button[data-button=toolsPanel] em       { background-image: url(/assets/mercury/toolbar/primary/tools.png) }
 .mercury-editable-toolbar .mercury-button {
   background-image: url(/assets/mercury/toolbar/editable/buttons.png);
 }

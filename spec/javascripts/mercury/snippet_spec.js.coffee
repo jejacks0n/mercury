@@ -189,7 +189,7 @@ describe "Mercury.Snippet", ->
 
     it "returns an object with name and options", ->
       ret = @snippet.serialize()
-      expect(ret).toEqual({name: 'foo', options: {foo: 'bar'}})
+      expect(ret).toEqual({name: 'foo', foo: 'bar'})
 
 
 

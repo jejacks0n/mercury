@@ -124,7 +124,4 @@ class @Mercury.Snippet
 
 
   serialize: ->
-    return {
-      name: @name
-      options: @options
-    }
+    return $.extend(@options, {name: @name})

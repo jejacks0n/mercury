@@ -8,6 +8,7 @@ class @Mercury.Snippet
         title: 'Snippet Options'
         handler: 'insertSnippet'
         snippetName: name
+        loadType: Mercury.config.snippets.method
       }, options)
     else
       snippet = Mercury.Snippet.create(name)

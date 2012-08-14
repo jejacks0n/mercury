@@ -209,7 +209,7 @@ describe "Mercury.Snippet class methods", ->
       it "opens a modal with the name in the url", ->
         Mercury.Snippet.displayOptionsFor('foo')
         expect(@modalSpy.callCount).toEqual(1)
-        expect(@modalSpy.argsForCall[0]).toEqual(["/mercury/snippets/foo/options.html", {title: 'Snippet Options', handler: 'insertSnippet', snippetName: 'foo'}])
+        expect(@modalSpy.argsForCall[0]).toEqual(["/mercury/snippets/foo/options.html", {title: 'Snippet Options', handler: 'insertSnippet', snippetName: 'foo', loadType : 'POST'}])
 
       it "sets the snippet back to nothing", ->
         Mercury.snippet = 'foo'
@@ -219,7 +219,7 @@ describe "Mercury.Snippet class methods", ->
       it "can pass options to the modal", ->
         Mercury.Snippet.displayOptionsFor('foo', {option1: 'option1'})
         expect(@modalSpy.callCount).toEqual(1)
-        expect(@modalSpy.argsForCall[0]).toEqual(["/mercury/snippets/foo/options.html", {title: 'Snippet Options', handler: 'insertSnippet', snippetName: 'foo', option1: 'option1'}])
+        expect(@modalSpy.argsForCall[0]).toEqual(["/mercury/snippets/foo/options.html", {title: 'Snippet Options', handler: 'insertSnippet', snippetName: 'foo', loadType: 'POST', option1: 'option1'}])
 
       it "doesn't trigger an event to insert the snippet", ->
         Mercury.Snippet.displayOptionsFor('foo')

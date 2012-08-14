@@ -123,27 +123,6 @@ module MercurySelectorsHelpers
     end
   end
 
-  def region_selector_for(locator)
-    case locator.downcase
-
-      when 'the first full region', 'the full region' then '#full_1'
-      when 'the first markdown region', 'the markdown region' then '#markdown_1'
-      when 'the first snippets region', 'the first snippet region', 'the snippets region', 'the snippet region' then '#snippets_1'
-
-      else locator
-    end
-  end
-
-  def snippet_name_for(locator)
-    case locator.downcase
-
-      when 'the example snippet' then 'example'
-      when 'the snippet with no options' then 'no_options'
-
-      else locator
-    end
-  end
-
 end
 
 World(MercurySelectorsHelpers)

@@ -28,8 +28,8 @@ class @Mercury.PageEditor
     @statusbar = new Mercury.Statusbar(jQuery.extend(true, {}, @options, @options.statusbarOptions))
     @resize()
 
-    @iframe.on 'load', => @initializeFrame()
     @iframe.one 'load', => @bindEvents()
+    @iframe.on 'load', => @initializeFrame()
     @loadIframeSrc(null)
 
 

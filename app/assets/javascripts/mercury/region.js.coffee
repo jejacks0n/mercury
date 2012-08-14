@@ -28,7 +28,7 @@ class @Mercury.Region
       @focus()
 
     Mercury.on 'action', (event, options) =>
-      return if @previewing || Mercury.region != @
+      return if @previewing || Mercury.region != @ || event.isDefaultPrevented()
       @execCommand(options.action, options) if options.action
 
     @element.on 'mousemove', (event) =>
@@ -76,7 +76,7 @@ class @Mercury.Region
     @pushHistory() unless action == 'redo'
 
     Mercury.log('execCommand', action, options.value)
-    Mercury.changes = true unless options.already_handled
+    Mercury.changes = true
 
 
   pushHistory: ->

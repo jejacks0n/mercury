@@ -126,7 +126,7 @@ class @Mercury.PageEditor
     Mercury.on 'action', (event, options) =>
       action = Mercury.config.globalBehaviors[options.action] || @[options.action]
       return unless typeof(action) == 'function'
-      options.already_handled = true
+      event.preventDefault()
       action.call(@, options)
 
     jQuery(window).on 'resize', =>

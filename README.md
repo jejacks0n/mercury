@@ -174,7 +174,7 @@ Mercury does, and provide the most flexibility and visual representation of what
 ### Simple Region
 
 Simple regions are designed for plain text.  Newlines and markup are not allowed.  Simple Regions are appropriate for
-titles, headlines, or any area where you want the conent to be editable but not the style.
+titles, headlines, or any area where you want the content to be editable but not the style.
 
 ### Markdown Region
 

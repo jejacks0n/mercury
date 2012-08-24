@@ -4518,7 +4518,7 @@ Showdown.converter = function() {
       }
       url = (url != null ? url : window.location.href).replace((_ref = (_base = Mercury.config).editorUrlRegEx) != null ? _ref : _base.editorUrlRegEx = /([http|https]:\/\/.[^\/]*)\/editor\/?(.*)/i, "$1/$2");
       url = url.replace(/[\?|\&]mercury_frame=true/gi, '');
-      url = url.replace(/\&_=i\d+/gi, '');
+      url = url.replace(/\&_=\d+/gi, '');
       if (params) {
         return "" + url + (url.indexOf('?') > -1 ? '&' : '?') + "mercury_frame=true&_=" + (new Date().getTime());
       } else {

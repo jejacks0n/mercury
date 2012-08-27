@@ -34,6 +34,12 @@ class @Mercury.Regions.Markdown extends Mercury.Region
     @resize()
 
 
+  dataAttributes: ->
+    data = {}
+    data[attr] = @container.attr('data-' + attr) for attr in Mercury.config.regions.dataAttributes
+    return data
+
+
   bindEvents: ->
     Mercury.on 'mode', (event, options) => @togglePreview() if options.mode == 'preview'
     Mercury.on 'focus:frame', => @focus() if !@previewing && Mercury.region == @

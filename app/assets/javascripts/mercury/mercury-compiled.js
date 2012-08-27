@@ -8946,6 +8946,17 @@ Showdown.converter = function() {
       return this.resize();
     };
 
+    Markdown.prototype.dataAttributes = function() {
+      var attr, data, _i, _len, _ref;
+      data = {};
+      _ref = Mercury.config.regions.dataAttributes;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        attr = _ref[_i];
+        data[attr] = this.container.attr('data-' + attr);
+      }
+      return data;
+    };
+
     Markdown.prototype.bindEvents = function() {
       var _this = this;
       Mercury.on('mode', function(event, options) {

@@ -332,6 +332,7 @@ Translations and contributors:
 - Portuguese ([yakko](https://github.com/yakko))
 - Swedish ([stefanm](https://github.com/stefanm))
 - Simplified Chinese ([董劭田 DONG Shaotian](https://github.com/richarddong))
+- Hungarian ([egivandor](https://github.com/egivandor))
 
 To add translations to your installation you'll first need to turn it on in the configuration and set the prefered
 locale to one of those that's listed above (eg. `fr-CA`, or `pt-BR`).  All you have to do after that is include the

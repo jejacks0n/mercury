@@ -93,7 +93,7 @@ class @Mercury.PageEditor
 
 
   finalizeInterface: ->
-    @santizerElement = jQuery('<div>', {id: 'mercury_sanitizer', contenteditable: 'true', style: 'position:fixed;width:100px;height:100px;top:0;left:-100px;opacity:0;overflow:hidden'})
+    @santizerElement = jQuery('<div>', {id: 'mercury_sanitizer', contenteditable: 'true', style: 'position:fixed;width:100px;height:100px;min-width:0;top:0;left:-100px;opacity:0;overflow:hidden'})
     @santizerElement.appendTo(@options.appendTo ? @document.find('body'))
 
     @snippetToolbar.release() if @snippetToolbar

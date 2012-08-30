@@ -94,7 +94,7 @@ class @Mercury.Region
 
   dataAttributes: ->
     data = {}
-    data[attr] = @element.attr('data-' + attr) for attr in Mercury.config.regions.dataAttributes
+    data[attr] = (@container || @element).attr('data-' + attr) for attr in Mercury.config.regions.dataAttributes
     return data
 
 

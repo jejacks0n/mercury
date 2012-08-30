@@ -268,6 +268,10 @@ describe "Mercury.Region", ->
       @region.element.attr('data-version', 2)
       expect(@region.dataAttributes()).toEqual({scope: 'scope', version: '2'})
 
+    it "looks to @container if it's set", ->
+      @region.container = $('<div>').attr('data-version', 3)
+      expect(@region.dataAttributes()).toEqual({scope: undefined, version: '3'})
+
 
   describe "#serialize", ->
 

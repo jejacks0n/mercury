@@ -22,6 +22,8 @@
 
       // preload snippets
       Event.observe(window, "mercury:ready", function() {
+        Mercury.config.regions.dataAttributes = ['information'];
+
         Mercury.saveURL = '/contents';
         Mercury.Snippet.load({
           snippet_0:  {name: 'example', options: {'options[favorite_beer]': "Bells Hopslam", 'options[first_name]': "00"}},
@@ -39,6 +41,15 @@
           snippet_12: {name: 'example', options: {'options[favorite_beer]': "Bells Hopslam", 'options[first_name]': "12"}},
           snippet_13: {name: 'example', options: {'options[favorite_beer]': "Bells Hopslam", 'options[first_name]': "13"}}
         });
+
+        Mercury.PageEditor.prototype.save = function() {
+          var data = this.serialize();
+          var lightview = Mercury.lightview(null, {title: 'Saving', closeButton: true});
+          setTimeout(function() {
+            var textarea = '<textarea style="width:100%;height:300px" wrap="off">' + top.JSON.stringify(data, null, '  ') + '</textarea>';
+            lightview.loadContent('<div style="width:500px">Saving in the demo is disabled, but you can see what would be sent to the server below.' + textarea + '</div>');
+          }, 500);
+        };
       });
 
       var newRegionIndex = 1;
@@ -109,7 +120,7 @@
 
     <!-- begin full region 1 -->
     <h1>Full region</h1>
-    <div id="full_1" data-mercury="full">
+    <div id="full_1" data-mercury="full" data-information="foo">
       If the first line of content isn't wrapped in an element you can't set justification (mozilla only bug).
 
       <h2>text with a meta tag (that will be removed)</h2>
@@ -192,7 +203,7 @@
 
     <!-- begin simple region 1 -->
     <h1>Simple region (h1 tag)</h1>
-    <h1 id="simple_1" data-mercury="simple">This is a simple region</h1>
+    <h1 id="simple_1" data-mercury="simple" data-information="foo">This is a simple region</h1>
     <!-- end simple region 1 -->
 
     <!-- begin simple region 2 -->

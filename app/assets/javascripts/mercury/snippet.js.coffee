@@ -34,10 +34,8 @@ class @Mercury.Snippet
     return instance
 
   @uniqueId: ->
-    i = 0
-    identities = []
-    identity = "snippet_#{i}"
-    identities.push snippet.identity for snippet in @all
+    [i, identity] = [0, "snippet_0"]
+    identities = (snippet.identity for snippet in @all)
 
     while identities.indexOf(identity) isnt -1
       i += 1

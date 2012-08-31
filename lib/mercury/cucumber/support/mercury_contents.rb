@@ -15,7 +15,7 @@ module MercuryContentsHelpers
   def parse_snippet_options_from(options_string)
     json = []
     options_string.scan(/(?:,\s)?([^:]*): ("[^"]*")/).each do |pair|
-      json << %Q{'options[#{pair[0]}]': #{pair[1]}}
+      json << %Q{'#{pair[0]}': #{pair[1]}}
     end
 
     "{#{json.join(', ')}}"

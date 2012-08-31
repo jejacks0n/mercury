@@ -44,7 +44,6 @@ class @Mercury.Snippet
     return identity
 
 
-
   @find: (identity) ->
     for snippet in @all
       return snippet if snippet.identity == identity
@@ -53,7 +52,7 @@ class @Mercury.Snippet
 
   @load: (snippets) ->
     for own identity, details of snippets
-      instance = new Mercury.Snippet(details.name, identity, details.options)
+      instance = new Mercury.Snippet(details.name, identity, details)
       @all.push(instance)
 
 
@@ -113,6 +112,7 @@ class @Mercury.Snippet
   setOptions: (@options) ->
     delete(@options['authenticity_token'])
     delete(@options['utf8'])
+    delete(@options['name'])
     @wrapperTag = @options.wrapperTag if @options.wrapperTag
     @version += 1
     @history.push(@options)

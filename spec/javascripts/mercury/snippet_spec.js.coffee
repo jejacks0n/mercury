@@ -270,7 +270,6 @@ describe "Mercury.Snippet class methods", ->
         ret = Mercury.Snippet.create('noobie', {noobie: 'one'})
         expect(ret.identity).toEqual('snippet_2')
 
-      # this identity list was created by a bug found in an actual app using mercury
       it "generates a unique identity with an un-ordered snippet list", ->
         Mercury.Snippet.load
           snippet_0: {name: 'foo0', options: {foo: 'bar'}}
@@ -302,10 +301,14 @@ describe "Mercury.Snippet class methods", ->
 
     beforeEach ->
       @snippets = {
-        snippet_1: {name: 'foo', options: {foo: 'bar'}}
-        snippet_2: {name: 'bar', options: {baz: 'pizza'}}
+        snippet_1: {name: 'foo', something: {foo: 'bar'}}
+        snippet_2: {name: 'bar', something: {baz: 'pizza'}}
       }
+      Mercury.Snippet.load(@snippets)
 
     it "creates a new instance for each item in the collection", ->
-      Mercury.Snippet.load(@snippets)
       expect(Mercury.Snippet.all.length).toEqual(2)
+
+    it 'sets the options', ->
+      expect(Mercury.Snippet.find('snippet_1').options.something.foo).toEqual('bar')
+

@@ -112,7 +112,6 @@ class @Mercury.Snippet
   setOptions: (@options) ->
     delete(@options['authenticity_token'])
     delete(@options['utf8'])
-    delete(@options['name'])
     @wrapperTag = @options.wrapperTag if @options.wrapperTag
     @version += 1
     @history.push(@options)
@@ -128,6 +127,6 @@ class @Mercury.Snippet
 
 
   serialize: ->
-    return $.extend(@options, {name: @name})
+    return $.extend({name: @name}, @options )
 
 

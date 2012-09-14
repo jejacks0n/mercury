@@ -5,22 +5,30 @@ rescue LoadError
   puts 'You must `gem install bundler` and `bundle install` to run rake tasks'
 end
 
+
+# Dummy App
+# -----------------------------------------------------------------------------
 APP_RAKEFILE = File.expand_path("../spec/dummy/Rakefile", __FILE__)
 load 'rails/tasks/engine.rake'
 Bundler::GemHelper.install_tasks
 
-require 'cucumber/rake/task'
+
+# Evergreen
+# -----------------------------------------------------------------------------
 require 'evergreen/tasks'
+
+
+# Cucumber
+# -----------------------------------------------------------------------------
+require 'cucumber/rake/task'
 
 Cucumber::Rake::Task.new(:cucumber) do |t|
   # t.cucumber_opts = "features --format pretty"
 end
 
-task :default => ['spec:javascripts', :cucumber]
 
-#
-# Mercury build tasks
-#
+# Mercury
+# -----------------------------------------------------------------------------
 namespace :mercury do
   require 'uglifier'
   require 'sprockets-rails'
@@ -144,4 +152,11 @@ namespace :mercury do
   end
 end
 
+
+# Default
+# -----------------------------------------------------------------------------
+Rake::Task['default'].prerequisites.clear
+Rake::Task['default'].clear
+
+task :default => ['spec:javascripts', :cucumber]
 

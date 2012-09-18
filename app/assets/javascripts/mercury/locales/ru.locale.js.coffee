@@ -102,7 +102,7 @@ Mercury.I18n['ru'] =
   "Error: Unable to upload the file": "Ошибка: невозможно загрузить файл"
   "Malformed response from server": "Неправильный ответ от сервера"
   "Too large": "Размер слишком большой"
-  "Unsupported format": "Не поддерживаемый формат"
+  "Unsupported format": "Неподдерживаемый формат"
   # Statuses
   "Processing...": "Обработка..."
   "Uploading...": "Загрузка..."

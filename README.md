@@ -124,7 +124,7 @@ you'll write in what you want.
 
 ### For Non-Rails Environments
 
-[Download the zip file](https://github.com/downloads/jejacks0n/mercury/mercury-v0.8.0.zip), and then follow the
+[Download the zip file](https://github.com/downloads/jejacks0n/mercury/mercury-v0.9.0.zip), and then follow the
 installation instructions on the [wiki article](https://github.com/jejacks0n/mercury/wiki/Using-Mercury-without-Rails).
 
 

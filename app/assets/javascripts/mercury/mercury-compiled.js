@@ -4040,7 +4040,7 @@ Showdown.converter = function() {
   this.Mercury || (this.Mercury = {});
 
   jQuery.extend(this.Mercury, {
-    version: '0.8.0',
+    version: '0.9.0',
     Regions: Mercury.Regions || {},
     modalHandlers: Mercury.modalHandlers || {},
     lightviewHandlers: Mercury.lightviewHandlers || {},
@@ -4268,11 +4268,11 @@ Showdown.converter = function() {
       this.toolbar = new Mercury.Toolbar(jQuery.extend(true, {}, this.options, this.options.toolbarOptions));
       this.statusbar = new Mercury.Statusbar(jQuery.extend(true, {}, this.options, this.options.statusbarOptions));
       this.resize();
-      this.iframe.on('load', function() {
-        return _this.initializeFrame();
-      });
       this.iframe.one('load', function() {
         return _this.bindEvents();
+      });
+      this.iframe.on('load', function() {
+        return _this.initializeFrame();
       });
       return this.loadIframeSrc(null);
     };
@@ -4371,7 +4371,7 @@ Showdown.converter = function() {
       this.santizerElement = jQuery('<div>', {
         id: 'mercury_sanitizer',
         contenteditable: 'true',
-        style: 'position:fixed;width:100px;height:100px;top:0;left:-100px;opacity:0;overflow:hidden'
+        style: 'position:fixed;width:100px;height:100px;min-width:0;top:0;left:-100px;opacity:0;overflow:hidden'
       });
       this.santizerElement.appendTo((_ref = this.options.appendTo) != null ? _ref : this.document.find('body'));
       if (this.snippetToolbar) {
@@ -4439,7 +4439,7 @@ Showdown.converter = function() {
         if (typeof action !== 'function') {
           return;
         }
-        options.already_handled = true;
+        event.preventDefault();
         return action.call(_this, options);
       });
       jQuery(window).on('resize', function() {
@@ -7082,7 +7082,8 @@ Showdown.converter = function() {
         Mercury.modal(this.optionsUrl(name), jQuery.extend({
           title: 'Snippet Options',
           handler: 'insertSnippet',
-          snippetName: name
+          snippetName: name,
+          loadType: Mercury.config.snippets.method
         }, options));
       } else {
         snippet = Mercury.Snippet.create(name);
@@ -7113,22 +7114,30 @@ Showdown.converter = function() {
     };
 
     Snippet.create = function(name, options) {
-      var i, identity, instance, snippet, _i, _len, _ref;
-      if (this.all.length > 0) {
-        identity = "snippet_0";
-        _ref = this.all;
-        for (i = _i = 0, _len = _ref.length; _i < _len; i = ++_i) {
-          snippet = _ref[i];
-          if (snippet.identity === identity) {
-            identity = "snippet_" + (i + 1);
-          }
-        }
-      } else {
-        identity = "snippet_" + this.all.length;
-      }
-      instance = new Mercury.Snippet(name, identity, options);
+      var instance;
+      instance = new Mercury.Snippet(name, this.uniqueId(), options);
       this.all.push(instance);
       return instance;
+    };
+
+    Snippet.uniqueId = function() {
+      var i, identities, identity, snippet, _ref;
+      _ref = [0, "snippet_0"], i = _ref[0], identity = _ref[1];
+      identities = (function() {
+        var _i, _len, _ref1, _results;
+        _ref1 = this.all;
+        _results = [];
+        for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+          snippet = _ref1[_i];
+          _results.push(snippet.identity);
+        }
+        return _results;
+      }).call(this);
+      while (identities.indexOf(identity) !== -1) {
+        i += 1;
+        identity = "snippet_" + i;
+      }
+      return identity;
     };
 
     Snippet.find = function(identity) {
@@ -7149,7 +7158,7 @@ Showdown.converter = function() {
       for (identity in snippets) {
         if (!__hasProp.call(snippets, identity)) continue;
         details = snippets[identity];
-        instance = new Mercury.Snippet(details.name, identity, details.options);
+        instance = new Mercury.Snippet(details.name, identity, details);
         _results.push(this.all.push(instance));
       }
       return _results;
@@ -7250,10 +7259,9 @@ Showdown.converter = function() {
     };
 
     Snippet.prototype.serialize = function() {
-      return {
-        name: this.name,
-        options: this.options
-      };
+      return $.extend({
+        name: this.name
+      }, this.options);
     };
 
     return Snippet;
@@ -7444,7 +7452,7 @@ Showdown.converter = function() {
         return _this.focus();
       });
       Mercury.on('action', function(event, options) {
-        if (_this.previewing || Mercury.region !== _this) {
+        if (_this.previewing || Mercury.region !== _this || event.isDefaultPrevented()) {
           return;
         }
         if (options.action) {
@@ -7532,9 +7540,7 @@ Showdown.converter = function() {
         this.pushHistory();
       }
       Mercury.log('execCommand', action, options.value);
-      if (!options.already_handled) {
-        return Mercury.changes = true;
-      }
+      return Mercury.changes = true;
     };
 
     Region.prototype.pushHistory = function() {
@@ -7562,7 +7568,7 @@ Showdown.converter = function() {
       _ref = Mercury.config.regions.dataAttributes;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         attr = _ref[_i];
-        data[attr] = this.element.attr('data-' + attr);
+        data[attr] = (this.container || this.element).attr('data-' + attr);
       }
       return data;
     };

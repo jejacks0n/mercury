@@ -21,5 +21,5 @@ Feature:
   # Latest selenium webdriver seems to consider the lightview hidden
   @use_hidden_elements
   Scenario: A user can expect to see the status bar
-    Then I should see "Mercury Editor v0.8.0" within the statusbar
+    Then I should see "Mercury Editor v0.9.0" within the statusbar
 

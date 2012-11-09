@@ -24,7 +24,6 @@ html, body {
   -webkit-transition: -webkit-transform 3s;
   margin: 0;
   padding: 0;
-  overflow: hidden;
 }
 
 .mercury-iframe {

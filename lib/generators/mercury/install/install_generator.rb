@@ -8,6 +8,9 @@ module Mercury
       class_option :full, :type => :boolean, :aliases => '-g',
                    :desc => 'Full installation will install the layout and css files for easier customization.'
 
+      class_option :haml, :type => :boolean,
+                   :desc => 'Use a Haml layout template (instead of ERB)'
+
       def copy_config
         copy_file 'app/assets/javascripts/mercury.js'
       end
@@ -18,7 +21,8 @@ module Mercury
 
       def copy_layout_and_css_overrides
         if options[:full] || yes?("Install the layout file and CSS? [yN]")
-          copy_file 'app/views/layouts/mercury.html.erb'
+          layout_ext = (options[:haml]) ? 'haml' : 'erb'
+          copy_file "app/views/layouts/mercury.html.#{layout_ext}"
           copy_file 'app/assets/stylesheets/mercury.css'
         end
       end

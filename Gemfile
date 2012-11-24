@@ -15,3 +15,4 @@ group :assets do
 end
 
 gemspec
+

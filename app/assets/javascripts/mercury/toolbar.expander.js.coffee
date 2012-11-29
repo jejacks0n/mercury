@@ -8,7 +8,6 @@ class @Mercury.Toolbar.Expander extends Mercury.Palette
 
   build: ->
     @container.css({whiteSpace: 'normal', visibility: 'hidden', display: 'block'})
-    @containerWidth = @container.outerWidth()
     @container.css({visibility: 'visible'})
     @trigger = jQuery('<div>', {class: 'mercury-toolbar-expander'}).appendTo(jQuery(@options.appendTo).get(0) ? 'body')
     @element = jQuery('<div>', {class: "mercury-palette mercury-expander mercury-#{@name}-expander", style: 'display:none'})
@@ -38,7 +37,7 @@ class @Mercury.Toolbar.Expander extends Mercury.Palette
 
 
   windowResize: ->
-    if @containerWidth > jQuery(window).width() then @trigger.show() else @trigger.hide()
+    if jQuery(window).width() == @container.outerWidth() then @trigger.show() else @trigger.hide()
     @hide()
 
 

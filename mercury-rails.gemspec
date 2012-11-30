@@ -30,7 +30,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'evergreen', '>= 1.0.0'
   s.add_development_dependency 'selenium-webdriver', '>= 2.20.0'
   s.add_development_dependency 'cucumber-rails', '>= 1.3.0'
-  s.add_development_dependency 'capybara', '>= 1.1.2'
+  s.add_development_dependency 'capybara', '~> 1.1.2'
   s.add_development_dependency 'capybara-firebug', '>= 1.1.0'
   s.add_development_dependency 'aruba'
   s.add_development_dependency 'database_cleaner'

@@ -10,10 +10,6 @@ When "I have created a new rails application" do
   step %{I run `bundle install --local`}
 end
 
-Then /^the file "([^"]*)" should contain:$/ do |file, partial_content|
-  check_file_content(file, partial_content, true)
-end
-
 Then /^should have the migration "([^"]*)"$/ do |migration|
   in_current_dir do
     Dir["db/migrate/*_#{migration}"].length.should == 1

@@ -17,21 +17,15 @@ Gem::Specification.new do |s|
 
   # Runtime Dependencies
   s.add_dependency 'railties', '~> 3.2'
-  s.add_dependency 'coffee-rails'
+  s.add_dependency 'coffee-rails', '~> 3.2.2'
 
   # Development Dependencies
-  s.add_development_dependency 'sprockets', '~> 2.1'
-  s.add_development_dependency 'sprockets-rails', '~> 0.0.1'
-  s.add_development_dependency 'uglifier'
-
-  # Testing dependencies
-  s.add_development_dependency 'rspec-core', '>= 2.8.0'
-  s.add_development_dependency 'evergreen', '>= 1.0.0'
-  s.add_development_dependency 'selenium-webdriver', '>= 2.20.0'
+  s.add_development_dependency 'rspec-core', '~> 2.12.0'
+  s.add_development_dependency 'evergreen', '~> 1.0.0'
+  s.add_development_dependency 'selenium-webdriver', '~> 2.26.0'
   s.add_development_dependency 'cucumber-rails', '~> 1.3.0'
-  s.add_development_dependency 'capybara', '~> 1.1.2'
-  s.add_development_dependency 'capybara-firebug', '~> 1.1.0'
-  s.add_development_dependency 'aruba'
+  s.add_development_dependency 'capybara-firebug', '~> 1.2.3'
+  s.add_development_dependency 'aruba', '~> 0.5.1'
   s.add_development_dependency 'database_cleaner'
 
   # Gem Files

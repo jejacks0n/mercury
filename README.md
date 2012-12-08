@@ -235,7 +235,7 @@ your own storage implementation.  Here's an example of loading existing snippet 
 
     jQuery(window).on('mercury:ready', function() {
       Mercury.Snippet.load({
-        snippet_1: {name: 'example', options: {'options[favorite_beer]': "Bells Hopslam", 'options[first_name]': "Jeremy"}}
+        snippet_1: {name: 'example', options: {'favorite_beer': "Bells Hopslam", 'first_name': "Jeremy"}}
       });
     });
 

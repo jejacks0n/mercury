@@ -22,7 +22,7 @@ group :development, :test do
   gem 'database_cleaner'
 
   # required for travis-ci and linux environments
-  gem "phantomjs-linux" if RUBY_PLATFORM =~ /linux/
+  gem "phantomjs-linux" if  RUBY_PLATFORM =~ /linux/
 end
 
 

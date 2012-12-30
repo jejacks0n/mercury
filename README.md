@@ -331,6 +331,7 @@ Translations and contributors:
 - Italian ([gcastagneti](https://github.com/gcastagnet))
 - Korean ([dorajistyle](https://github.com/dorajistyle))
 - Dutch ([kieranklaassen](https://github.com/kieranklaassen))
+- Polish ([cintrzyk](https://github.com/cintrzyk))
 - Portuguese ([yakko](https://github.com/yakko))
 - Swedish ([stefanm](https://github.com/stefanm))
 - Simplified Chinese ([董劭田 DONG Shaotian](https://github.com/richarddong))

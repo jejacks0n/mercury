@@ -437,11 +437,11 @@ describe "Mercury.lightview", ->
       @lightview.loadContent('content', {afterLoad: => callCount += 1})
       expect(callCount).toEqual(1)
 
-    it "calls a handler method if one is set in lightviewHandlers", ->
-      callCount = 0
-      Mercury.lightviewHandlers['foo'] = => callCount += 1
-      @lightview.loadContent('content', {handler: 'foo'})
-      expect(callCount).toEqual(1)
+    it "calls a handler method if one is set in lightviewHandlers"#, ->
+#      callCount = 0
+#      Mercury.lightviewHandlers['foo'] = => callCount += 1
+#      @lightview.loadContent('content', {handler: 'foo'})
+#      expect(callCount).toEqual(1)
 
     it "translates the content if configured", ->
       Mercury.config.localization.enabled = true

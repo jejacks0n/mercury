@@ -7923,7 +7923,7 @@ Showdown.converter = function() {
 
     __extends(Full, _super);
 
-    Full.supported = document.designMode && !jQuery.browser.konqueror && !jQuery.browser.msie;
+    Full.supported = document.designMode && !jQuery.browser.konqueror && (!jQuery.browser.msie || (jQuery.browser.msie && parseFloat(jQuery.browser.version, 10) >= 10));
 
     Full.supportedText = "Chrome 10+, Firefox 4+, Safari 5+, Opera 11.64+";
 

@@ -1,6 +1,7 @@
 describe "Mercury.Snippet", ->
 
-  template 'mercury/snippet.html'
+  beforeEach ->
+    fixture.load('mercury/snippet.html')
 
   afterEach ->
     Mercury.Snippet.all = []

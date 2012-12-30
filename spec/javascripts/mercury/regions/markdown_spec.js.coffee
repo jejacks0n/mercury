@@ -1,43 +1,42 @@
 describe "Mercury.Regions.Markdown", ->
 
-  template 'mercury/regions/markdown.html'
-
   beforeEach ->
+    fixture.load('mercury/regions/markdown.html')
     @regionElement = $('#markdown_region1')
 
   describe "constructor", ->
 
-     beforeEach ->
-       @buildSpy = spyOn(Mercury.Regions.Markdown.prototype, 'build').andCallFake(=>)
-       @bindEventsSpy = spyOn(Mercury.Regions.Markdown.prototype, 'bindEvents').andCallFake(=>)
-       spyOn(Mercury.Regions.Markdown.prototype, 'pushHistory').andCallFake(=>)
+    beforeEach ->
+      @buildSpy = spyOn(Mercury.Regions.Markdown.prototype, 'build').andCallFake(=>)
+      @bindEventsSpy = spyOn(Mercury.Regions.Markdown.prototype, 'bindEvents').andCallFake(=>)
+      spyOn(Mercury.Regions.Markdown.prototype, 'pushHistory').andCallFake(=>)
 
-     it "expects an element and window", ->
-       @region = new Mercury.Regions.Markdown(@regionElement, window)
-       expect(@region.element.get(0)).toEqual($('#markdown_region1').get(0))
-       expect(@region.window).toEqual(window)
+    it "expects an element and window", ->
+      @region = new Mercury.Regions.Markdown(@regionElement, window)
+      expect(@region.element.get(0)).toEqual($('#markdown_region1').get(0))
+      expect(@region.window).toEqual(window)
 
-     it "accepts options", ->
-       @region = new Mercury.Regions.Markdown(@regionElement, window, {foo: 'something'})
-       expect(@region.options).toEqual({foo: 'something'})
+    it "accepts options", ->
+      @region = new Mercury.Regions.Markdown(@regionElement, window, {foo: 'something'})
+      expect(@region.options).toEqual({foo: 'something'})
 
-     it "sets it's type", ->
-       @region = new Mercury.Regions.Markdown(@regionElement, window)
-       expect(@region.type()).toEqual('markdown')
+    it "sets it's type", ->
+      @region = new Mercury.Regions.Markdown(@regionElement, window)
+      expect(@region.type()).toEqual('markdown')
 
-     it "creates a markdown converter using Showdown", ->
-       spy = spyOn(Showdown, 'converter').andCallFake(=>)
-       @region = new Mercury.Regions.Markdown(@regionElement, window)
-       expect(spy.callCount).toEqual(1)
-       expect(@region.converter).toBeDefined()
+    it "creates a markdown converter using Showdown", ->
+      spy = spyOn(Showdown, 'converter').andCallFake(=>)
+      @region = new Mercury.Regions.Markdown(@regionElement, window)
+      expect(spy.callCount).toEqual(1)
+      expect(@region.converter).toBeDefined()
 
-     it "calls build", ->
-       @region = new Mercury.Regions.Markdown(@regionElement, window)
-       expect(@buildSpy.callCount).toEqual(1)
+    it "calls build", ->
+      @region = new Mercury.Regions.Markdown(@regionElement, window)
+      expect(@buildSpy.callCount).toEqual(1)
 
-     it "calls bindEvents", ->
-       @region = new Mercury.Regions.Markdown(@regionElement, window)
-       expect(@bindEventsSpy.callCount).toEqual(1)
+    it "calls bindEvents", ->
+      @region = new Mercury.Regions.Markdown(@regionElement, window)
+      expect(@bindEventsSpy.callCount).toEqual(1)
 
 
   describe "#build", ->
@@ -268,9 +267,8 @@ describe "Mercury.Regions.Markdown", ->
 
 describe "Mercury.Regions.Markdown.actions", ->
 
-  template 'mercury/regions/markdown.html'
-
   beforeEach ->
+    fixture.load('mercury/regions/markdown.html')
     #@region = new Mercury.Regions.Markdown($('#markdown_region1'), window)
     #@actions = Mercury.Regions.Markdown.actions
 

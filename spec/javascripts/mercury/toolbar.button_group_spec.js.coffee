@@ -1,8 +1,7 @@
 describe "Mercury.Toolbar.ButtonGroup", ->
 
-  template 'mercury/toolbar.button_group.html'
-
   beforeEach ->
+    fixture.load('mercury/toolbar.button_group.html')
     Mercury.Toolbar.ButtonGroup.contexts.foo = -> false
     @region = {
       element: $('<div>')
@@ -77,9 +76,8 @@ describe "Mercury.Toolbar.ButtonGroup", ->
 
 describe "Mercury.Toolbar.ButtonGroup.contexts", ->
 
-  template 'mercury/toolbar.button_group.html'
-
   beforeEach ->
+    fixture.load('mercury/toolbar.button_group.html')
     @contexts = Mercury.Toolbar.ButtonGroup.contexts
     @region = $('#context_container')
 

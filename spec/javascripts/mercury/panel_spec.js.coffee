@@ -1,8 +1,7 @@
 describe "Mercury.Panel", ->
 
-  template 'mercury/panel.html'
-
   beforeEach ->
+    fixture.load('mercury/panel.html')
     Mercury.displayRect = {top: 20, left: 20, width: 200, height: 200}
     $.fx.off = true
     Mercury.determinedLocale =
@@ -18,7 +17,7 @@ describe "Mercury.Panel", ->
   describe "#build", ->
 
     it "builds an element", ->
-      @panel = new Mercury.Panel('/evergreen/resources/panel.html', 'foo', {appendTo: '#test', title: 'foo panel'})
+      @panel = new Mercury.Panel('/evergreen/resources/panel.html', 'foo', {appendTo: fixture.el, title: 'foo panel'})
       html = $('<div>').html(@panel.element).html()
       expect(html).toContain('class="mercury-panel loading"')
       expect(html).toContain('style="display:none;"')
@@ -30,7 +29,7 @@ describe "Mercury.Panel", ->
       expect($('#panel_container .mercury-panel').length).toEqual(1)
 
     it "creates a close button if it should", ->
-      @panel = new Mercury.Panel('/evergreen/resources/panel.html', 'foo', {appendTo: '#test', title: 'foo panel', closeButton: true})
+      @panel = new Mercury.Panel('/evergreen/resources/panel.html', 'foo', {appendTo: fixture.el, title: 'foo panel', closeButton: true})
       html = $('<div>').html(@panel.element).html()
       expect(html).toContain('class="mercury-panel-close"')
       expect(@panel.element.find('.mercury-panel-close').css('opacity')).toEqual('0')
@@ -39,7 +38,7 @@ describe "Mercury.Panel", ->
   describe "observed events", ->
 
     beforeEach ->
-      @panel = new Mercury.Panel('/evergreen/resources/panel.html', 'foo', {appendTo: '#test', title: 'foo panel', for: $('#button'), closeButton: true})
+      @panel = new Mercury.Panel('/evergreen/resources/panel.html', 'foo', {appendTo: fixture.el, title: 'foo panel', for: $('#button'), closeButton: true})
 
     describe "custom event: resize", ->
 
@@ -85,7 +84,7 @@ describe "Mercury.Panel", ->
   describe "#show", ->
 
     beforeEach ->
-      @panel = new Mercury.Panel('/evergreen/resources/panel.html', 'foo', {appendTo: '#test', title: 'foo panel'})
+      @panel = new Mercury.Panel('/evergreen/resources/panel.html', 'foo', {appendTo: fixture.el, title: 'foo panel'})
 
     it "hides other panels and dialogs", ->
       spyOn(Mercury.Panel.prototype, 'position')
@@ -146,7 +145,7 @@ describe "Mercury.Panel", ->
   describe "#loadContent", ->
 
     beforeEach ->
-      @panel = new Mercury.Panel('/evergreen/resources/panel.html', 'foo', {appendTo: '#test', title: 'foo panel'})
+      @panel = new Mercury.Panel('/evergreen/resources/panel.html', 'foo', {appendTo: fixture.el, title: 'foo panel'})
 
     it "sets loaded to be true", ->
       @panel.loadContent()
@@ -175,7 +174,7 @@ describe "Mercury.Panel", ->
   describe "#makesDraggable", ->
 
     beforeEach ->
-      @panel = new Mercury.Panel('/evergreen/resources/panel.html', 'foo', {appendTo: '#test', title: 'foo panel'})
+      @panel = new Mercury.Panel('/evergreen/resources/panel.html', 'foo', {appendTo: fixture.el, title: 'foo panel'})
 
     it "makes the element draggable", ->
       spy = spyOn($.fn, 'draggable').andCallFake(=>)

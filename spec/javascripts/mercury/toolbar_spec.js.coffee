@@ -1,8 +1,7 @@
 describe "Mercury.Toolbar", ->
 
-  template 'mercury/toolbar.html'
-
   beforeEach ->
+    fixture.load('mercury/toolbar.html')
     $.fx.off = true
     spyOn($, 'ajax').andCallFake (url, options) =>
       options.success('data') if options.success
@@ -16,10 +15,10 @@ describe "Mercury.Toolbar", ->
     beforeEach ->
       @buildSpy = spyOn(Mercury.Toolbar.prototype, 'build').andCallFake(=>)
       @bindEventsSpy = spyOn(Mercury.Toolbar.prototype, 'bindEvents').andCallFake(=>)
-      @toolbar = new Mercury.Toolbar({appendTo: '#test', foo: true})
+      @toolbar = new Mercury.Toolbar({appendTo: fixture.el, foo: true})
 
     it "accepts options as an argument", ->
-      expect(@toolbar.options).toEqual({appendTo: '#test', foo: true})
+      expect(@toolbar.options).toEqual({appendTo: fixture.el, foo: true})
 
     it "calls build", ->
       expect(@buildSpy.callCount).toEqual(1)
@@ -82,7 +81,7 @@ describe "Mercury.Toolbar", ->
   describe "#buildButton", ->
 
     beforeEach ->
-      @toolbar = new Mercury.Toolbar({appendTo: '#test'})
+      @toolbar = new Mercury.Toolbar({appendTo: fixture.el})
 
     it "throws an exception when invalid options are passed", ->
       expect(=> @toolbar.buildButton('foo', false)).toThrow('Unknown button structure -- please provide an array, object, or string for "foo".')
@@ -127,7 +126,7 @@ describe "Mercury.Toolbar", ->
   describe "observed events", ->
 
     beforeEach ->
-      @toolbar = new Mercury.Toolbar({appendTo: '#test'})
+      @toolbar = new Mercury.Toolbar({appendTo: fixture.el})
 
     describe "custom event: region:focused", ->
 
@@ -167,7 +166,7 @@ describe "Mercury.Toolbar", ->
     describe "when visible", ->
 
       beforeEach ->
-        @toolbar = new Mercury.Toolbar({appendTo: '#test', visible: true})
+        @toolbar = new Mercury.Toolbar({appendTo: fixture.el, visible: true})
 
       it "returns the element outerheight", ->
         expect(@toolbar.height()).toEqual($('.mercury-toolbar-container').outerHeight())
@@ -175,7 +174,7 @@ describe "Mercury.Toolbar", ->
     describe "when not visible", ->
 
       beforeEach ->
-        @toolbar = new Mercury.Toolbar({appendTo: '#test', visible: false})
+        @toolbar = new Mercury.Toolbar({appendTo: fixture.el, visible: false})
 
       it "returns 0", ->
         expect(@toolbar.height()).toEqual(0)
@@ -183,7 +182,7 @@ describe "Mercury.Toolbar", ->
     describe "when forced", ->
 
       beforeEach ->
-        @toolbar = new Mercury.Toolbar({appendTo: '#test', visible: false})
+        @toolbar = new Mercury.Toolbar({appendTo: fixture.el, visible: false})
 
       it "returns the element outerheight", ->
         expect(@toolbar.height(true)).toEqual($('.mercury-toolbar-container').outerHeight())
@@ -197,7 +196,7 @@ describe "Mercury.Toolbar", ->
     describe "when visible", ->
 
       beforeEach ->
-        @toolbar = new Mercury.Toolbar({appendTo: '#test', visible: true})
+        @toolbar = new Mercury.Toolbar({appendTo: fixture.el, visible: true})
 
       it "returns the element offests top", ->
         expect(@toolbar.top()).toEqual($('.mercury-toolbar-container').offset().top)
@@ -205,7 +204,7 @@ describe "Mercury.Toolbar", ->
     describe "when not visible", ->
 
       beforeEach ->
-        @toolbar = new Mercury.Toolbar({appendTo: '#test', visible: false})
+        @toolbar = new Mercury.Toolbar({appendTo: fixture.el, visible: false})
 
       it "returns the element offests top", ->
         expect(@toolbar.top()).toEqual(0)
@@ -216,7 +215,7 @@ describe "Mercury.Toolbar", ->
     beforeEach ->
       spyOn(Mercury.Toolbar.prototype, 'buildButton').andCallFake(=> $('<div>'))
       spyOn(Mercury.Toolbar.prototype, 'bindEvents').andCallFake(=>)
-      @toolbar = new Mercury.Toolbar({appendTo: '#test', visible: false})
+      @toolbar = new Mercury.Toolbar({appendTo: fixture.el, visible: false})
 
     it "sets visible to true", ->
       @toolbar.visible = false
@@ -239,7 +238,7 @@ describe "Mercury.Toolbar", ->
     beforeEach ->
       spyOn(Mercury.Toolbar.prototype, 'buildButton').andCallFake(=> $('<div>'))
       spyOn(Mercury.Toolbar.prototype, 'bindEvents').andCallFake(=>)
-      @toolbar = new Mercury.Toolbar({appendTo: '#test', visible: true})
+      @toolbar = new Mercury.Toolbar({appendTo: fixture.el, visible: true})
 
     it "sets visible to false", ->
       @toolbar.visible = true

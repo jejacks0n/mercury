@@ -1,11 +1,10 @@
 describe "Mercury.modalHandlers.insertLink", ->
 
-  template 'mercury/modals/insertlink.html'
-
   beforeEach ->
+    fixture.load('mercury/modals/insertlink.html')
     Mercury.region = null
     @modal =
-      element: $('#test')
+      element: $(fixture.el)
       hide: ->
       resize: ->
     @insertLink = $.extend(@modal, Mercury.modalHandlers.insertLink)

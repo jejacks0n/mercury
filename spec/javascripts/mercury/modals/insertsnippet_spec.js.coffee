@@ -1,14 +1,13 @@
 describe "Mercury.modalHandlers.insertSnippet", ->
 
-  template 'mercury/modals/insertsnippet.html'
-
   beforeEach ->
+    fixture.load('mercury/modals/insertsnippet.html')
     Mercury.Snippet.all = []
     Mercury.Snippet.load({
       'snippet_0': {name: 'foo', options: {'first_name': "Jeremy", 'last_name': "Jackson"}},
     })
     @modal =
-      element: $('#test')
+      element: $(fixture.el)
       hide: ->
       options: {snippetName: 'test'}
     Mercury.modalHandlers.insertSnippet.call(@modal)

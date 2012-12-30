@@ -1,8 +1,7 @@
 describe "Mercury.Region", ->
 
-  template 'mercury/region.html'
-
   beforeEach ->
+    fixture.load('mercury/region.html')
     Mercury.config.regions.attribute = 'custom-region-attribute'
     Mercury.config.regions.dataAttributes = []
 

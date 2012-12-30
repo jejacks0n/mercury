@@ -1,8 +1,7 @@
 describe "Mercury.lightview", ->
 
-  template 'mercury/lightview.html'
-
   beforeEach ->
+    fixture.load('mercury/lightview.html')
     $.fx.off = true
     Mercury.displayRect = {fullHeight: 200, width: 1000}
     Mercury.determinedLocale =
@@ -101,25 +100,25 @@ describe "Mercury.lightview", ->
   describe "#build", ->
 
     beforeEach ->
-      @lightview = new Mercury.Lightview('', {appendTo: $('#test')})
+      @lightview = new Mercury.Lightview('', {appendTo: fixture.el})
 
     it "builds an element", ->
       @lightview.build()
-      expect($('#test .mercury-lightview').length).toEqual(1)
+      expect($('.mercury-lightview', fixture.el).length).toEqual(1)
 
     it "builds an overlay element", ->
       @lightview.build()
-      expect($('#test .mercury-lightview-overlay').length).toEqual(1)
+      expect($('.mercury-lightview-overlay', fixture.el).length).toEqual(1)
 
     it "creates a titleElement", ->
       @lightview.build()
-      expect($('#test .mercury-lightview-title').length).toEqual(1)
-      expect($('#test .mercury-lightview-title').html()).toEqual("<span><\/span>")
+      expect($('.mercury-lightview-title', fixture.el).length).toEqual(1)
+      expect($('.mercury-lightview-title', fixture.el).html()).toEqual("<span><\/span>")
       expect(@lightview.titleElement).toBeDefined()
 
     it "creates a contentElement", ->
       @lightview.build()
-      expect($('#test .mercury-lightview-content').length).toEqual(1)
+      expect($('.mercury-lightview-content', fixture.el).length).toEqual(1)
       expect(@lightview.contentElement).toBeDefined()
 
     it "appends to any element", ->
@@ -131,7 +130,7 @@ describe "Mercury.lightview", ->
     it "creates a close button if asked to in the options", ->
       @lightview.options.closeButton = true
       @lightview.build()
-      expect($('#test .mercury-lightview-close').length).toEqual(1)
+      expect($('.mercury-lightview-close', fixture.el).length).toEqual(1)
 
 
   describe "observed events", ->
@@ -142,7 +141,7 @@ describe "Mercury.lightview", ->
     describe "without a close button", ->
 
       beforeEach ->
-        @lightview = Mercury.lightview('/foo', {appendTo: $('#test')})
+        @lightview = Mercury.lightview('/foo', {appendTo: fixture.el})
 
       describe "custom event: refresh", ->
 
@@ -182,7 +181,7 @@ describe "Mercury.lightview", ->
     describe "with a close button", ->
 
       beforeEach ->
-        @lightview = Mercury.lightview('/foo', {appendTo: $('#test'), closeButton: true})
+        @lightview = Mercury.lightview('/foo', {appendTo: fixture.el, closeButton: true})
 
       describe "clicking on the close button", ->
 
@@ -213,7 +212,7 @@ describe "Mercury.lightview", ->
   describe "#appear", ->
 
     beforeEach ->
-      @lightview = new Mercury.Lightview('/blank.html', {appendTo: $('#test')})
+      @lightview = new Mercury.Lightview('/blank.html', {appendTo: fixture.el})
       @lightview.visible = true
       spyOn(@lightview, 'update').andCallFake(=>)
       @loadSpy = spyOn(@lightview, 'load').andCallFake(=>)
@@ -262,7 +261,7 @@ describe "Mercury.lightview", ->
   describe "#resize", ->
 
     beforeEach ->
-      @lightview = new Mercury.Lightview('/blank.html', {appendTo: $('#test')})
+      @lightview = new Mercury.Lightview('/blank.html', {appendTo: fixture.el})
       spyOn(@lightview, 'appear').andCallFake(=>)
       @lightview.show()
       @lightview.contentPane = $()
@@ -321,7 +320,7 @@ describe "Mercury.lightview", ->
     beforeEach ->
       spyOn(Mercury.Lightview.prototype, 'appear').andCallFake(=>)
       @ajaxSpy = spyOn($, 'ajax')
-      @lightview = Mercury.lightview('/blank.html', {appendTo: $('#test')})
+      @lightview = Mercury.lightview('/blank.html', {appendTo: fixture.el})
 
     it "does nothing if there's no url", ->
       @lightview.url = null
@@ -397,7 +396,7 @@ describe "Mercury.lightview", ->
     beforeEach ->
       spyOn(Mercury.Lightview.prototype, 'appear').andCallFake(=>)
       @resizeSpy = spyOn(Mercury.Lightview.prototype, 'resize').andCallFake(=>)
-      @lightview = Mercury.lightview('/blank.html', {appendTo: $('#test'), title: 'title'})
+      @lightview = Mercury.lightview('/blank.html', {appendTo: fixture.el, title: 'title'})
 
     it "accepts options and sets them to the instance options", ->
       @lightview.loadContent('content', {title: 'title'})
@@ -464,7 +463,7 @@ describe "Mercury.lightview", ->
 
     beforeEach ->
       spyOn(Mercury.Lightview.prototype, 'appear').andCallFake(=>)
-      @lightview = Mercury.lightview('/blank.html', {appendTo: $('#test'), title: 'title'})
+      @lightview = Mercury.lightview('/blank.html', {appendTo: fixture.el, title: 'title'})
 
     it "sets the the title contents to what was provided in the options", ->
       @lightview.options = {title: 'new title'}
@@ -476,7 +475,7 @@ describe "Mercury.lightview", ->
 
     beforeEach ->
       spyOn(Mercury.Lightview.prototype, 'appear').andCallFake(=>)
-      @lightview = Mercury.lightview('/blank.html', {appendTo: $('#test'), title: 'title'})
+      @lightview = Mercury.lightview('/blank.html', {appendTo: fixture.el, title: 'title'})
 
     describe "without a form", ->
 
@@ -494,7 +493,7 @@ describe "Mercury.lightview", ->
 
     beforeEach ->
       spyOn(Mercury.Lightview.prototype, 'appear').andCallFake(=>)
-      @lightview = Mercury.lightview('/blank.html', {appendTo: $('#test'), title: 'title'})
+      @lightview = Mercury.lightview('/blank.html', {appendTo: fixture.el, title: 'title'})
 
     it "clears the title and content elements", ->
       $('.mercury-lightview-content').html('content')
@@ -507,7 +506,7 @@ describe "Mercury.lightview", ->
 
     beforeEach ->
       spyOn(Mercury.Lightview.prototype, 'appear').andCallFake(=>)
-      @lightview = Mercury.lightview('/blank.html', {appendTo: $('#test')})
+      @lightview = Mercury.lightview('/blank.html', {appendTo: fixture.el})
 
     it "triggers the focus:frame event", ->
       spy = spyOn(Mercury, 'trigger').andCallFake(=>)

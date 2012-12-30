@@ -1,9 +1,8 @@
 describe "Mercury.dialogHandlers.backColor", ->
 
-  template 'mercury/dialogs/backcolor.html'
-
   beforeEach ->
-    @dialog = {element: $('#test'), button: $('#button')}
+    fixture.load('mercury/dialogs/backcolor.html')
+    @dialog = {element: $(fixture.el), button: $('#button')}
     Mercury.dialogHandlers.backColor.call(@dialog)
 
   describe "when a .picker or .last-picked element is clicked", ->

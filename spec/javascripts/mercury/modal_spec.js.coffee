@@ -1,8 +1,7 @@
 describe "Mercury.modal", ->
 
-  template 'mercury/modal.html'
-
   beforeEach ->
+    fixture.load('mercury/modal.html')
     $.fx.off = true
     Mercury.displayRect = {fullHeight: 200}
     Mercury.determinedLocale =
@@ -101,30 +100,30 @@ describe "Mercury.modal", ->
   describe "#build", ->
 
     beforeEach ->
-      @modal = new Mercury.Modal('', {appendTo: $('#test')})
+      @modal = new Mercury.Modal('', {appendTo: fixture.el})
 
     it "builds an element", ->
       @modal.build()
-      expect($('#test .mercury-modal').length).toEqual(1)
+      expect($('.mercury-modal', fixture.el).length).toEqual(1)
 
     it "builds an overlay element", ->
       @modal.build()
-      expect($('#test .mercury-modal-overlay').length).toEqual(1)
+      expect($('.mercury-modal-overlay', fixture.el).length).toEqual(1)
 
     it "creates a titleElement", ->
       @modal.build()
-      expect($('#test .mercury-modal-title').length).toEqual(1)
-      expect($('#test .mercury-modal-title').html()).toMatch(/<span><\/span><a>.+<\/a>/)
+      expect($('.mercury-modal-title', fixture.el).length).toEqual(1)
+      expect($('.mercury-modal-title', fixture.el).html()).toMatch(/<span><\/span><a>.+<\/a>/)
       expect(@modal.titleElement).toBeDefined()
 
     it "creates a contentContainerElement", ->
       @modal.build()
-      expect($('#test .mercury-modal-content-container').length).toEqual(1)
+      expect($('.mercury-modal-content-container', fixture.el).length).toEqual(1)
       expect(@modal.contentContainerElement).toBeDefined()
 
     it "creates a contentElement", ->
       @modal.build()
-      expect($('#test .mercury-modal-content-container .mercury-modal-content').length).toEqual(1)
+      expect($('.mercury-modal-content-container .mercury-modal-content', fixture.el).length).toEqual(1)
       expect(@modal.contentElement).toBeDefined()
 
     it "appends to any element", ->
@@ -138,7 +137,7 @@ describe "Mercury.modal", ->
 
     beforeEach ->
       spyOn(Mercury.Modal.prototype, 'appear').andCallFake(=>)
-      @modal = Mercury.modal('/foo', {appendTo: $('#test')})
+      @modal = Mercury.modal('/foo', {appendTo: fixture.el})
 
     describe "custom event: refresh", ->
 
@@ -202,7 +201,7 @@ describe "Mercury.modal", ->
   describe "#appear", ->
 
     beforeEach ->
-      @modal = new Mercury.Modal('/blank.html', {appendTo: $('#test')})
+      @modal = new Mercury.Modal('/blank.html', {appendTo: fixture.el})
       @modal.visible = true
       spyOn(@modal, 'update').andCallFake(=>)
       @loadSpy = spyOn(@modal, 'load').andCallFake(=>)
@@ -251,7 +250,7 @@ describe "Mercury.modal", ->
   describe "#resize", ->
 
     beforeEach ->
-      @modal = new Mercury.Modal('/blank.html', {appendTo: $('#test')})
+      @modal = new Mercury.Modal('/blank.html', {appendTo: fixture.el})
       spyOn(@modal, 'appear').andCallFake(=>)
       @modal.show()
       @modal.contentPane = $()
@@ -308,7 +307,7 @@ describe "Mercury.modal", ->
     beforeEach ->
       spyOn(Mercury.Modal.prototype, 'appear').andCallFake(=>)
       @ajaxSpy = spyOn($, 'ajax')
-      @modal = Mercury.modal('/blank.html', {appendTo: $('#test')})
+      @modal = Mercury.modal('/blank.html', {appendTo: fixture.el})
 
     it "does nothing if there's no url", ->
       @modal.url = null
@@ -384,7 +383,7 @@ describe "Mercury.modal", ->
     beforeEach ->
       spyOn(Mercury.Modal.prototype, 'appear').andCallFake(=>)
       @resizeSpy = spyOn(Mercury.Modal.prototype, 'resize').andCallFake(=>)
-      @modal = Mercury.modal('/blank.html', {appendTo: $('#test'), title: 'title'})
+      @modal = Mercury.modal('/blank.html', {appendTo: fixture.el, title: 'title'})
 
     it "accepts options and sets them to the instance options", ->
       @modal.loadContent('content', {title: 'title'})
@@ -422,8 +421,8 @@ describe "Mercury.modal", ->
 
     it "finds the content panes and control elements in case they were added with the content", ->
       @modal.loadContent('<div class="mercury-display-pane-container"></div><div class="mercury-display-controls"></div>')
-      expect(@modal.contentPane.get(0)).toEqual($('#test .mercury-display-pane-container').get(0))
-      expect(@modal.contentControl.get(0)).toEqual($('#test .mercury-display-controls').get(0))
+      expect(@modal.contentPane.get(0)).toEqual($('.mercury-display-pane-container', fixture.el).get(0))
+      expect(@modal.contentControl.get(0)).toEqual($('.mercury-display-controls', fixture.el).get(0))
 
     it "calls an afterLoad callback (if provided in options)", ->
       callCount = 0
@@ -456,7 +455,7 @@ describe "Mercury.modal", ->
 
     beforeEach ->
       spyOn(Mercury.Modal.prototype, 'appear').andCallFake(=>)
-      @modal = Mercury.modal('/blank.html', {appendTo: $('#test'), title: 'title'})
+      @modal = Mercury.modal('/blank.html', {appendTo: fixture.el, title: 'title'})
 
     it "sets the the title contents to what was provided in the options", ->
       @modal.options = {title: 'new title'}
@@ -474,7 +473,7 @@ describe "Mercury.modal", ->
 
     beforeEach ->
       spyOn(Mercury.Modal.prototype, 'appear').andCallFake(=>)
-      @modal = Mercury.modal('/blank.html', {appendTo: $('#test'), title: 'title'})
+      @modal = Mercury.modal('/blank.html', {appendTo: fixture.el, title: 'title'})
 
     describe "without a form", ->
 
@@ -492,7 +491,7 @@ describe "Mercury.modal", ->
 
     beforeEach ->
       spyOn(Mercury.Modal.prototype, 'appear').andCallFake(=>)
-      @modal = Mercury.modal('/blank.html', {appendTo: $('#test'), title: 'title'})
+      @modal = Mercury.modal('/blank.html', {appendTo: fixture.el, title: 'title'})
 
     it "clears the title and content elements", ->
       $('.mercury-modal-content').html('content')
@@ -505,7 +504,7 @@ describe "Mercury.modal", ->
 
     beforeEach ->
       spyOn(Mercury.Modal.prototype, 'appear').andCallFake(=>)
-      @modal = Mercury.modal('/blank.html', {appendTo: $('#test')})
+      @modal = Mercury.modal('/blank.html', {appendTo: fixture.el})
 
     it "triggers the focus:frame event", ->
       spy = spyOn(Mercury, 'trigger').andCallFake(=>)

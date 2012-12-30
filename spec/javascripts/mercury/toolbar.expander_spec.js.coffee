@@ -1,8 +1,7 @@
 describe "Mercury.Toolbar.Expander", ->
 
-  template 'mercury/toolbar.expander.html'
-
   beforeEach ->
+    fixture.load('mercury/toolbar.expander.html')
     @container = $('#expander_container')
 
   afterEach ->
@@ -13,20 +12,20 @@ describe "Mercury.Toolbar.Expander", ->
   describe "constructor", ->
 
     beforeEach ->
-      @expander = new Mercury.Toolbar.Expander('foo', {appendTo: '#test', for: @container})
+      @expander = new Mercury.Toolbar.Expander('foo', {appendTo: fixture.el, for: @container})
 
     it "expects a name, and options", ->
       html = $('<div>').html(@expander).html()
       expect(html).toContain('class="mercury-palette mercury-expander mercury-foo-expander"')
       expect(html).toMatch(/style="display:\s?none/)
-      expect($('#test .mercury-toolbar-expander').length).toEqual(1)
+      expect($('.mercury-toolbar-expander', fixture.el).length).toEqual(1)
 
 
   describe "#build", ->
 
     beforeEach ->
       @resizeSpy = spyOn(Mercury.Toolbar.Expander.prototype, 'windowResize').andCallFake(=>)
-      @expander = new Mercury.Toolbar.Expander('foo', {appendTo: '#test', for: @container})
+      @expander = new Mercury.Toolbar.Expander('foo', {appendTo: fixture.el, for: @container})
 
     it "sets the whitespace of the container to normal", ->
       expect(@container.css('whiteSpace')).toEqual('normal')
@@ -37,7 +36,7 @@ describe "Mercury.Toolbar.Expander", ->
       expect(html).toMatch(/style="display:\s?none/)
 
     it "builds a trigger button", ->
-      expect($('#test .mercury-toolbar-expander').length).toEqual(1)
+      expect($('.mercury-toolbar-expander', fixture.el).length).toEqual(1)
 
     it "calls windowResize", ->
       expect(@resizeSpy.callCount).toEqual(1)
@@ -47,7 +46,7 @@ describe "Mercury.Toolbar.Expander", ->
 
     beforeEach ->
       $('.mercury-button').data('expander', '<div data-button="test">expander</div>')
-      @expander = new Mercury.Toolbar.Expander('foo', {appendTo: '#test', for: @container})
+      @expander = new Mercury.Toolbar.Expander('foo', {appendTo: fixture.el, for: @container})
 
     describe "custom event: hide:dialogs", ->
 
@@ -81,29 +80,30 @@ describe "Mercury.Toolbar.Expander", ->
         button = $('#button2')
         spy = spyOn(button, 'click').andCallFake(=>)
         @container.find = -> button
-        @expander.appendTo('#test')
+        @expander.appendTo(fixture.el)
 
         jasmine.simulate.click($('.mercury-toolbar-expander').get(0))
         jasmine.simulate.click($('[data-button=test]').get(0))
         expect(spy.callCount).toEqual(1)
 
+
   describe "#windowResize", ->
 
     it "hides", ->
-      @expander = new Mercury.Toolbar.Expander('foo', {appendTo: '#test', for: @container})
+      @expander = new Mercury.Toolbar.Expander('foo', {appendTo: fixture.el, for: @container})
       @expander.css({display: 'block'})
 
       Mercury.trigger('resize')
       expect(@expander.css('display')).toEqual('none')
 
     it "shows the trigger if the container is wider than the window", ->
-      @expander = new Mercury.Toolbar.Expander('foo', {appendTo: '#test', for: @container})
+      @expander = new Mercury.Toolbar.Expander('foo', {appendTo: fixture.el, for: @container})
       Mercury.trigger('resize')
       expect($('.mercury-toolbar-expander').css('display')).toEqual('block')
 
     it "hides the trigger if the container is narrower than the window", ->
       @container.css({width: '1px'})
-      @expander = new Mercury.Toolbar.Expander('foo', {appendTo: '#test', for: @container})
+      @expander = new Mercury.Toolbar.Expander('foo', {appendTo: fixture.el, for: @container})
       Mercury.trigger('resize')
       expect($('.mercury-toolbar-expander').css('display')).toEqual('none')
 
@@ -111,7 +111,7 @@ describe "Mercury.Toolbar.Expander", ->
   describe "#position", ->
 
     it "positions the element", ->
-      @expander = new Mercury.Toolbar.Expander('foo', {appendTo: '#test', for: @container})
+      @expander = new Mercury.Toolbar.Expander('foo', {appendTo: fixture.el, for: @container})
       @expander.appendTo('#positioned_container')
       jasmine.simulate.click($('.mercury-toolbar-expander').get(0))
 

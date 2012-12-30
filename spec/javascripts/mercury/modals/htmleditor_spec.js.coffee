@@ -1,10 +1,9 @@
 describe "Mercury.modalHandlers.htmlEditor", ->
 
-  template 'mercury/modals/htmleditor.html'
-
   beforeEach ->
+    fixture.load('mercury/modals/htmleditor.html')
     @modal =
-      element: $('#test')
+      element: $(fixture.el)
       hide: ->
     Mercury.region =
       content: -> '<span>html \ncontent</span>'
@@ -13,7 +12,7 @@ describe "Mercury.modalHandlers.htmlEditor", ->
   describe "loading", ->
 
     it "sets the value of the textarea", ->
-      expect($('#test textarea').val()).toEqual('<span>html \ncontent</span>')
+      expect($('textarea', fixture.el).val()).toEqual('<span>html \ncontent</span>')
 
 
   describe "submitting", ->

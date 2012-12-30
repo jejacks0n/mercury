@@ -255,7 +255,7 @@
  .dropup .btn-large .caret { border-top: 0; border-bottom: 5px solid #000000; }
  .btn-primary .caret, .btn-warning .caret, .btn-danger .caret, .btn-info .caret, .btn-success .caret, .btn-inverse .caret { border-top-color: #ffffff; border-bottom-color: #ffffff; opacity: 0.75; filter: alpha(opacity=75); }
  html { -webkit-text-size-adjust: none; }
- html, body { -webkit-transition: -webkit-transform 3s; margin: 0; padding: 0; overflow: hidden; }
+ html, body { -webkit-transition: -webkit-transform 3s; margin: 0; padding: 0; }
  .mercury-iframe { position: absolute; top: 0; width: 100%; visibility: hidden; }
  .mercury-focusable { position: absolute; opacity: 0; }
  .filter { margin: 0; padding: 0; }

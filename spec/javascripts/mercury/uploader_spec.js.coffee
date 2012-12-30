@@ -1,8 +1,7 @@
 describe "Mercury.uploader", ->
 
-  template 'mercury/uploader.html'
-
   beforeEach ->
+    fixture.load('mercury/uploader.html')
     Mercury.config.uploading.enabled = true
     @fileReaderSupport = spyOn(Mercury.uploader, 'fileReaderSupported')
     @fileReaderSupport.andCallFake(=> true)
@@ -122,7 +121,7 @@ describe "Mercury.uploader", ->
   describe "#build", ->
 
     beforeEach ->
-      Mercury.uploader.options = {appendTo: '#test'}
+      Mercury.uploader.options = {appendTo: fixture.el}
 
     it "builds an element structure", ->
       Mercury.uploader.build()
@@ -160,7 +159,7 @@ describe "Mercury.uploader", ->
   describe "#appear", ->
 
     beforeEach ->
-      Mercury.uploader.options = {appendTo: '#test'}
+      Mercury.uploader.options = {appendTo: fixture.el}
       Mercury.uploader.build()
       @fillDisplaySpy = spyOn(Mercury.uploader, 'fillDisplay').andCallFake(=>)
       @positionSpy = spyOn(Mercury.uploader, 'position').andCallFake(=>)
@@ -176,8 +175,8 @@ describe "Mercury.uploader", ->
 
     it "displays the overlay, and the element", ->
       Mercury.uploader.appear()
-      expect($('#test .mercury-uploader').css('display')).toEqual('block')
-      expect($('#test .mercury-uploader-overlay').css('display')).toEqual('block')
+      expect($('.mercury-uploader', fixture.el).css('display')).toEqual('block')
+      expect($('.mercury-uploader-overlay', fixture.el).css('display')).toEqual('block')
 
     it "sets visible to true", ->
       Mercury.uploader.appear()
@@ -191,7 +190,7 @@ describe "Mercury.uploader", ->
   describe "#position", ->
 
     beforeEach ->
-      Mercury.uploader.options = {appendTo: '#test'}
+      Mercury.uploader.options = {appendTo: fixture.el}
       Mercury.uploader.build()
       @fillDisplaySpy = spyOn(Mercury.uploader, 'fillDisplay').andCallFake(=>)
       @positionSpy = spyOn(Mercury.uploader, 'position').andCallFake(=>)
@@ -200,25 +199,25 @@ describe "Mercury.uploader", ->
       # todo: this isn't really being tested
       Mercury.uploader.element.css({display: 'block'})
       Mercury.uploader.position()
-      @expect($('#test .mercury-uploader').offset()).toEqual({top: 0, left: 0})
+      @expect($('.mercury-uploader', fixture.el).offset()).toEqual({top: 0, left: 0})
 
 
   describe "#fillDisplay", ->
 
     beforeEach ->
-      Mercury.uploader.options = {appendTo: '#test'}
+      Mercury.uploader.options = {appendTo: fixture.el}
       Mercury.uploader.file = {name: 'image.png', size: 1024, type: 'image/png'}
       Mercury.uploader.build()
 
     it "puts the file details into the element", ->
       Mercury.uploader.fillDisplay()
-      expect($('#test .mercury-uploader-details').html()).toEqual('Name: image.png<br>Size: undefined<br>Type: image/png')
+      expect($('.mercury-uploader-details', fixture.el).html()).toEqual('Name: image.png<br>Size: undefined<br>Type: image/png')
 
 
   describe "#loadImage", ->
 
     beforeEach ->
-      Mercury.uploader.options = {appendTo: '#test'}
+      Mercury.uploader.options = {appendTo: fixture.el}
       Mercury.uploader.file = new Mercury.uploader.File(@mockFile)
       Mercury.uploader.build()
       spyOn(FileReader.prototype, 'readAsBinaryString').andCallFake(=>)
@@ -231,7 +230,7 @@ describe "Mercury.uploader", ->
 
     it "sets the preview image src to the file contents", ->
       Mercury.uploader.loadImage()
-      expect($('#test .mercury-uploader-preview img').attr('src')).toEqual('data-url')
+      expect($('.mercury-uploader-preview img', fixture.el).attr('src')).toEqual('data-url')
 
     it "calls upload", ->
       spy = spyOn(Mercury.uploader, 'upload').andCallFake(=>)
@@ -241,7 +240,7 @@ describe "Mercury.uploader", ->
   describe "#loadImage without FileReader", ->
 
     beforeEach ->
-      Mercury.uploader.options = {appendTo: '#test'}
+      Mercury.uploader.options = {appendTo: fixture.el}
       Mercury.uploader.file = new Mercury.uploader.File(@mockFile)
       Mercury.uploader.build()
       @fileReaderSupport.andCallFake(=> false)
@@ -254,34 +253,33 @@ describe "Mercury.uploader", ->
 
   describe "#upload", ->
 
-    # todo: test this
-    it "should build a multipart form and submit it", ->
+    it "should build a multipart form and submit it"
 
 
   describe "#updateStatus", ->
 
     beforeEach ->
-      Mercury.uploader.options = {appendTo: '#test'}
+      Mercury.uploader.options = {appendTo: fixture.el}
       Mercury.uploader.build()
 
     it "updated the message in the progress display", ->
       Mercury.uploader.updateStatus('status message')
-      expect($('#test .mercury-uploader-progress span').html()).toEqual('status message')
+      expect($('.mercury-uploader-progress span', fixture.el).html()).toEqual('status message')
 
     it "updates the progress indicator width", ->
       Mercury.uploader.updateStatus('message', 512)
-      expect($('#test .mercury-uploader-indicator div').css('width')).toEqual('50px')
+      expect($('.mercury-uploader-indicator div', fixture.el).css('width')).toEqual('50px')
 
     it "updates the progress indicator value", ->
       Mercury.uploader.updateStatus('message', 512)
-      expect($('#test .mercury-uploader-indicator b').html()).toEqual('50%')
+      expect($('.mercury-uploader-indicator b', fixture.el).html()).toEqual('50%')
 
 
   describe "#hide", ->
 
     beforeEach ->
       @setTimeoutSpy = spyOn(window, 'setTimeout')
-      Mercury.uploader.options = {appendTo: '#test'}
+      Mercury.uploader.options = {appendTo: fixture.el}
       Mercury.uploader.build()
 
     it "accepts a delay", ->
@@ -293,8 +291,8 @@ describe "Mercury.uploader", ->
     it "hides the overlay and element", ->
       @setTimeoutSpy.andCallFake((callback, timeout) => callback())
       Mercury.uploader.hide()
-      expect($('#test .mercury-uploader').css('opacity')).toEqual('0')
-      expect($('#test .mercury-uploader-overlay').css('opacity')).toEqual('0')
+      expect($('.mercury-uploader', fixture.el).css('opacity')).toEqual('0')
+      expect($('.mercury-uploader-overlay', fixture.el).css('opacity')).toEqual('0')
 
     it "calls reset", ->
       @setTimeoutSpy.andCallFake((callback, timeout) => callback())
@@ -318,20 +316,20 @@ describe "Mercury.uploader", ->
   describe "#reset", ->
 
     beforeEach ->
-      Mercury.uploader.options = {appendTo: '#test'}
+      Mercury.uploader.options = {appendTo: fixture.el}
       Mercury.uploader.build()
 
     it "removes the preview image", ->
-      $('#test .mercury-uploader-indicator div').html('foo')
+      $('.mercury-uploader-indicator div', fixture.el).html('foo')
       Mercury.uploader.reset()
-      expect($('#test .mercury-uploader-preview b').html()).toEqual('')
+      expect($('.mercury-uploader-preview b', fixture.el).html()).toEqual('')
 
     it "resets the progress back to 0", ->
-      $('#test .mercury-uploader-indicator div').css({width: '50%'})
-      $('#test .mercury-uploader-indicator b').html('50%')
+      $('.mercury-uploader-indicator div', fixture.el).css({width: '50%'})
+      $('.mercury-uploader-indicator b', fixture.el).html('50%')
       Mercury.uploader.reset()
-      expect($('#test .mercury-uploader-indicator div').css('width')).toEqual('0px')
-      expect($('#test .mercury-uploader-indicator b').html()).toEqual('0%')
+      expect($('.mercury-uploader-indicator div', fixture.el).css('width')).toEqual('0px')
+      expect($('.mercury-uploader-indicator b', fixture.el).html()).toEqual('0%')
 
     it "sets the status back to 'Processing...' for next time", ->
       spy = spyOn(Mercury.uploader, 'updateStatus').andCallFake(=>)

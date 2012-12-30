@@ -5,18 +5,16 @@ rescue LoadError
   puts 'You must `gem install bundler` and `bundle install` to run rake tasks'
 end
 
-
 # Dummy App
 # -----------------------------------------------------------------------------
 APP_RAKEFILE = File.expand_path("../spec/dummy/Rakefile", __FILE__)
 load 'rails/tasks/engine.rake'
 Bundler::GemHelper.install_tasks
 
-
-# Evergreen
+# Teabag
 # -----------------------------------------------------------------------------
-require 'evergreen/tasks'
-
+desc "Run javascript specs"
+task :teabag => 'app:teabag'
 
 # Cucumber
 # -----------------------------------------------------------------------------
@@ -25,7 +23,6 @@ require 'cucumber/rake/task'
 Cucumber::Rake::Task.new(:cucumber) do |t|
   # t.cucumber_opts = "features --format pretty"
 end
-
 
 # Mercury
 # -----------------------------------------------------------------------------
@@ -158,5 +155,4 @@ end
 #Rake::Task['default'].prerequisites.clear
 #Rake::Task['default'].clear
 
-task :default => ['spec:javascripts', :cucumber]
-
+task :default => [:teabag]

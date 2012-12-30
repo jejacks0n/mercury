@@ -21,10 +21,8 @@ Gem::Specification.new do |s|
 
   # Development Dependencies
   s.add_development_dependency 'rspec-core', '~> 2.12.0'
-  s.add_development_dependency 'evergreen', '~> 1.0.0'
-  s.add_development_dependency 'selenium-webdriver', '~> 2.26.0'
-  s.add_development_dependency 'cucumber-rails', '~> 1.1.0'
-  s.add_development_dependency 'capybara-firebug', '~> 1.2.3'
+  s.add_development_dependency 'cucumber-rails', '~> 1.3.0'
+  s.add_development_dependency 'capybara-firebug', '~> 1.3.0'
   s.add_development_dependency 'aruba', '~> 0.5.1'
   s.add_development_dependency 'database_cleaner'
 

@@ -1,8 +1,7 @@
 describe "Mercury.tableEditor", ->
 
-  template 'mercury/table_editor.html'
-
   beforeEach ->
+    fixture.load('mercury/table_editor.html')
     @table = $('#table1')
     @cell = @table.find('th, td').first()
 

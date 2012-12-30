@@ -1,9 +1,8 @@
 describe "Mercury.dialogHandlers.formatblock", ->
 
-  template 'mercury/dialogs/formatblock.html'
-
   beforeEach ->
-    @dialog = {element: $('#test')}
+    fixture.load('mercury/dialogs/formatblock.html')
+    @dialog = {element: $(fixture.el)}
     Mercury.dialogHandlers.formatblock.call(@dialog)
 
   describe "when an element with a data-tag attribute is clicked", ->

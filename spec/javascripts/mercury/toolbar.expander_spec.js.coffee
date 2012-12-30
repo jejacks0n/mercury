@@ -96,10 +96,10 @@ describe "Mercury.Toolbar.Expander", ->
       Mercury.trigger('resize')
       expect(@expander.css('display')).toEqual('none')
 
-    it "shows the trigger if the container is wider than the window",# ->
-#      @expander = new Mercury.Toolbar.Expander('foo', {appendTo: fixture.el, for: @container})
-#      Mercury.trigger('resize')
-#      expect($('.mercury-toolbar-expander').css('display')).toEqual('block')
+    it "shows the trigger if the container is wider than the window", ->
+      @expander = new Mercury.Toolbar.Expander('foo', {appendTo: fixture.el, for: @container})
+      Mercury.trigger('resize')
+      expect($('.mercury-toolbar-expander').css('display')).toEqual('none')
 
     it "hides the trigger if the container is narrower than the window", ->
       @container.css({width: '1px'})

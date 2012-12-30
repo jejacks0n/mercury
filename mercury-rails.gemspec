@@ -19,13 +19,6 @@ Gem::Specification.new do |s|
   s.add_dependency 'railties', '~> 3.2'
   s.add_dependency 'coffee-rails', '~> 3.2.2'
 
-  # Development Dependencies
-  s.add_development_dependency 'rspec-core', '~> 2.12.0'
-  s.add_development_dependency 'cucumber-rails', '~> 1.3.0'
-  s.add_development_dependency 'capybara-firebug', '~> 1.3.0'
-  s.add_development_dependency 'aruba', '~> 0.5.1'
-  s.add_development_dependency 'database_cleaner'
-
   # Gem Files
   s.extra_rdoc_files  = %w(LICENSE POST_INSTALL)
   # = MANIFEST =

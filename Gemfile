@@ -3,10 +3,10 @@ source 'http://rubygems.org'
 gemspec
 
 # dependencies for the dummy app
-gem 'rails', '3.2.9'
+gem 'rails', '>= 3.2.8'
 gem 'jquery-rails'
 gem 'sqlite3'
-gem 'teabag', git: "https://github.com/modeset/teabag.git"
+gem 'teabag'
 
 group :assets do
   gem 'sass-rails'

@@ -173,7 +173,7 @@ describe "Mercury.Region", ->
 
       it "does not execute JavaScript contained within the region (bug fix)", ->
         (new Mercury.Region($('#region_with_javascript_snippet'), window)).content()
-        expect($('#modifyable-element').children().length).toEqual(0)
+        expect($('#modifiable-element').children().length).toEqual(0)
 
     describe "setting html", ->
 

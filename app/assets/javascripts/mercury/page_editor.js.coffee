@@ -70,7 +70,7 @@ class @Mercury.PageEditor
 
   initializeRegions: ->
     @regions = []
-    @buildRegion(jQuery(region)) for region in jQuery("[#{Mercury.config.regions.attribute}]", @document)
+    @buildRegion(@iframe.get(0).contentWindow.jQuery(region)) for region in jQuery("[#{Mercury.config.regions.attribute}]", @document)
     return unless @visible
     for region in @regions
       if region.focus

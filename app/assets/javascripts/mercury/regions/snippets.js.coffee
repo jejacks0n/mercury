@@ -22,14 +22,14 @@ class @Mercury.Regions.Snippets extends Mercury.Region
       return if @previewing
       if Mercury.region == @
         @element.removeClass('focus')
-        @element.sortable('destroy')
+        @disableSortable()
         Mercury.trigger('region:blurred', {region: @})
 
     Mercury.on 'focus:window', (event) =>
       return if @previewing
       if Mercury.region == @
         @element.removeClass('focus')
-        @element.sortable('destroy')
+        @disableSortable()
         Mercury.trigger('region:blurred', {region: @})
 
     @element.on 'mouseup', =>
@@ -71,7 +71,7 @@ class @Mercury.Regions.Snippets extends Mercury.Region
     if @previewing
       @makeSortable()
     else
-      @element.sortable('destroy')
+      @disableSortable()
       @element.removeClass('focus')
     super
 
@@ -80,23 +80,29 @@ class @Mercury.Regions.Snippets extends Mercury.Region
     super
     handler.call(@, options) if handler = Mercury.Regions.Snippets.actions[action]
 
-
+  disableSortable: ->
+    @element.sortable('disable') if @element.hasClass('ui-sortable')
+    
   makeSortable: ->
-    @element.sortable('destroy').sortable {
-      document: @document,
-      scroll: false, #scrolling is buggy
-      containment: 'parent',
-      items: '[data-snippet]',
-      opacity: 0.4,
-      revert: 100,
-      tolerance: 'pointer',
-      beforeStop: =>
-        Mercury.trigger('hide:toolbar', {type: 'snippet', immediately: true})
-        return true
-      stop: =>
-        setTimeout((=> @pushHistory()), 100)
-        return true
-    }
+    if @element.hasClass('ui-sortable')
+      @element.sortable('enable')
+    else
+      @element.sortable {
+        document: @document,
+        scroll: false, #scrolling is buggy
+        containment: 'parent',
+        items: '[data-snippet]',
+        opacity: 0.4,
+        revert: 100,
+        tolerance: 'pointer',
+        beforeStop: =>
+          Mercury.trigger('hide:toolbar', {type: 'snippet', immediately: true})
+          return true
+        stop: =>
+          setTimeout((=> @pushHistory()), 100)
+          return true
+      }
+    
 
 
   # Actions

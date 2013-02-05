@@ -1,5 +1,5 @@
 # ## Require all the dependencies
-#= require mercury/dependencies/jquery-ui-1.8.13.custom
+#= require mercury/dependencies/jquery-ui-1.10.0.custom
 #= require mercury/dependencies/jquery.additions
 #= require mercury/dependencies/jquery.htmlClean
 #= require mercury/dependencies/liquidmetal
@@ -7,6 +7,7 @@
 #
 # ## Require all mercury files
 #= require_self
+#= require ./browser
 #= require ./native_extensions
 #= require ./page_editor
 #= require ./history_buffer

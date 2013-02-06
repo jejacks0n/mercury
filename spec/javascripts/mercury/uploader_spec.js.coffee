@@ -268,7 +268,7 @@ describe "Mercury.uploader", ->
 
     it "updates the progress indicator width", ->
       Mercury.uploader.updateStatus('message', 512)
-      expect($('.mercury-uploader-indicator div', fixture.el).css('width')).toEqual('50px')
+      expect($('.mercury-uploader-indicator div', fixture.el).css('width')).toEqual('50%')
 
     it "updates the progress indicator value", ->
       Mercury.uploader.updateStatus('message', 512)

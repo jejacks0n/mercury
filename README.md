@@ -156,6 +156,8 @@ It's important for saving that an id attribute *always* be set on regions, so yo
     <div id="primary" data-mercury="full">
       default content
     </div>
+    
+Snippets within snippets-type regions are sortable using the jQuery-ui Sortable plugin. For this to work correctly, jQuery and jQuery-ui should be included in your normal application layouts. For most Rails apps this is the norm.
 
 For more advanced ways to integrate Mercury Editor with your Rails application (such as not using the /editor routing prefix) check out this
 [wiki article](https://github.com/jejacks0n/mercury/wiki/Rails-Integration-Techniques).

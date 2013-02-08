@@ -131,6 +131,15 @@ describe "Mercury.modal", ->
       @modal.build()
       expect($('#modal_container .mercury-modal').length).toEqual(1)
       expect($('#modal_container .mercury-modal-overlay').length).toEqual(1)
+      
+    it "reuses the .mercury-modal and .mercury-modal-overlay elements", ->
+      @modal2 = new Mercury.Modal('', {appendTo: fixture.el})
+      @modal.build()
+      @modal2.build()
+      expect($('.mercury-modal').length).toEqual(1)
+      expect($('.mercury-modal-overlay').length).toEqual(1)
+      expect(@modal2.element.get(0)).toEqual($('.mercury-modal').get(0))
+      expect(@modal2.overlay.get(0)).toEqual($('.mercury-modal-overlay').get(0))
 
 
   describe "observed events", ->

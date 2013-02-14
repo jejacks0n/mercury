@@ -74,9 +74,12 @@ describe "Mercury.PageEditor", ->
       @pageEditor = new Mercury.PageEditor('', {appendTo: fixture.el})
       expect($('input.mercury-focusable[type=text]').length).toEqual(1)
 
-    it "builds an iframe", ->
+    it "builds an iframe, setting id, class and name", ->
       @pageEditor = new Mercury.PageEditor('', {appendTo: fixture.el})
-      expect($('iframe.mercury-iframe').length).toEqual(1)
+      iframe = $('iframe.mercury-iframe')
+      expect(iframe.length).toEqual(1)
+      expect(iframe.attr('name')).toEqual 'mercury_iframe'
+      expect(iframe.attr('id')).toEqual   'mercury_iframe'
 
     it "appends the elements to any node", ->
       @pageEditor = new Mercury.PageEditor('', {appendTo: $('#page_editor_container')})

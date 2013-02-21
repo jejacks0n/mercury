@@ -4114,6 +4114,7 @@ Showdown.converter = function() {
         return Mercury.determinedLocale;
       }
       if (Mercury.config.localization.enabled) {
+        debugger;
         locale = [];
         if (navigator.language && (locale = navigator.language.toString().split('-')).length) {
           topLocale = Mercury.I18n[locale[0]] || {};
@@ -4260,6 +4261,7 @@ Showdown.converter = function() {
       }).appendTo((_ref = this.options.appendTo) != null ? _ref : 'body');
       this.iframe = jQuery('<iframe>', {
         id: 'mercury_iframe',
+        name: 'mercury_iframe',
         "class": 'mercury-iframe',
         frameborder: '0',
         src: 'about:blank'
@@ -5582,19 +5584,23 @@ Showdown.converter = function() {
 
     Modal.prototype.build = function() {
       var _ref, _ref1;
-      this.element = jQuery('<div>', {
-        "class": 'mercury-modal loading'
-      });
-      this.element.html('<h1 class="mercury-modal-title"><span></span><a>&times;</a></h1>');
-      this.element.append('<div class="mercury-modal-content-container"><div class="mercury-modal-content"></div></div>');
-      this.overlay = jQuery('<div>', {
-        "class": 'mercury-modal-overlay'
-      });
+      this.element = jQuery('.mercury-modal');
+      this.overlay = jQuery('.mercury-modal-overlay');
+      if (!(this.element.get(0) && this.overlay.get(0))) {
+        this.element = jQuery('<div>', {
+          "class": 'mercury-modal loading'
+        });
+        this.element.html('<h1 class="mercury-modal-title"><span></span><a>&times;</a></h1>');
+        this.element.append('<div class="mercury-modal-content-container"><div class="mercury-modal-content"></div></div>');
+        this.overlay = jQuery('<div>', {
+          "class": 'mercury-modal-overlay'
+        });
+        this.element.appendTo((_ref = jQuery(this.options.appendTo).get(0)) != null ? _ref : 'body');
+        this.overlay.appendTo((_ref1 = jQuery(this.options.appendTo).get(0)) != null ? _ref1 : 'body');
+      }
       this.titleElement = this.element.find('.mercury-modal-title');
       this.contentContainerElement = this.element.find('.mercury-modal-content-container');
-      this.contentElement = this.element.find('.mercury-modal-content');
-      this.element.appendTo((_ref = jQuery(this.options.appendTo).get(0)) != null ? _ref : 'body');
-      return this.overlay.appendTo((_ref1 = jQuery(this.options.appendTo).get(0)) != null ? _ref1 : 'body');
+      return this.contentElement = this.element.find('.mercury-modal-content');
     };
 
     Modal.prototype.bindEvents = function() {
@@ -6873,7 +6879,6 @@ Showdown.converter = function() {
         visibility: 'hidden',
         display: 'block'
       });
-      this.containerWidth = this.container.outerWidth();
       this.container.css({
         visibility: 'visible'
       });
@@ -6922,7 +6927,7 @@ Showdown.converter = function() {
     };
 
     Expander.prototype.windowResize = function() {
-      if (this.containerWidth > jQuery(window).width()) {
+      if (jQuery(window).width() === this.container.outerWidth()) {
         this.trigger.show();
       } else {
         this.trigger.hide();
@@ -7264,6 +7269,14 @@ Showdown.converter = function() {
       }, this.options);
     };
 
+    Snippet.prototype.content = function(element) {
+      element.html("[" + (element.data("snippet")) + "/" + (element.data("version")) + "]");
+      return element.attr({
+        contenteditable: null,
+        'data-version': null
+      });
+    };
+
     return Snippet;
 
   })();
@@ -7497,8 +7510,9 @@ Showdown.converter = function() {
       if (value !== null) {
         return this.element.html(value);
       } else {
-        container = jQuery('<div>').appendTo(this.document.createDocumentFragment());
-        container.html(this.element.html().replace(/^\s+|\s+$/g, ''));
+        container = document.createElement('div');
+        container.innerHTML = this.element.html().replace(/^\s+|\s+$/g, '');
+        container = $(container);
         if (filterSnippets) {
           _ref = container.find('[data-snippet]');
           for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -8259,12 +8273,14 @@ Showdown.converter = function() {
             element = jQuery(element);
             if (snippet = Mercury.Snippet.find(element.data("snippet"))) {
               snippet.data = element.html();
+              snippet.content(element);
+            } else {
+              element.html("[" + (element.data("snippet")) + "/" + (element.data("version")) + "]");
+              element.attr({
+                contenteditable: null,
+                'data-version': null
+              });
             }
-            element.html("[" + (element.data("snippet")) + "/" + (element.data("version")) + "]");
-            element.attr({
-              contenteditable: null,
-              'data-version': null
-            });
           }
         }
         content = container.html();

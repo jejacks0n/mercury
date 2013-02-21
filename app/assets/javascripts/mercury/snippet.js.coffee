@@ -129,4 +129,8 @@ class @Mercury.Snippet
   serialize: ->
     return $.extend({name: @name}, @options )
 
+  content: (element) ->
+    element.html("[#{element.data("snippet")}/#{element.data("version")}]")
+    element.attr({contenteditable: null, 'data-version': null})
+
 

@@ -1,3 +1,9 @@
+/*!
+Mercury Editor is a Coffeescript and jQuery based WYSIWYG editor released under the MIT License.
+Documentation and other useful information can be found at https://github.com/jejacks0n/mercury
+
+Copyright (c) 2013 Jeremy Jackson
+*/
 /* line 54, ../../lib/stylesheets/mercury/core/_mixins.scss */
 .mercury-clearfix:before, .mercury-clearfix:after {
   content: " ";
@@ -206,7 +212,7 @@
   color: rgba(255, 255, 255, 0.8);
 }
 
-/* line 6, ../../lib/stylesheets/mercury.scss */
+/* line 14, ../../lib/stylesheets/mercury.scss */
 #mercury {
   -webkit-text-size-adjust: none;
 }

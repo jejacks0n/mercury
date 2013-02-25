@@ -82,6 +82,7 @@ namespace :mercury do
         minified = YUI::CssCompressor.new.compress(processed).gsub!(/\}/, "}\n")
         minified.gsub!("}\nfrom", '}from')
         minified.gsub!("}\n}", '}}')
+        minified.gsub!('*/', "*/\n")
         File.open(output_path.join(path.gsub('.css', '.bundle.css')), 'w') do |file|
           file.write(minified)
         end

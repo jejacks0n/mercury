@@ -1,3 +1,10 @@
+###!
+Mercury Editor is a Coffeescript and jQuery based WYSIWYG editor released under the MIT License.
+Documentation and other useful information can be found at https://github.com/jejacks0n/mercury
+
+Copyright (c) 2013 Jeremy Jackson
+###
+
 @Mercury ||= {}
 
 Mercury.configuration =

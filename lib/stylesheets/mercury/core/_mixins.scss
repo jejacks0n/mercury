@@ -1,0 +1,64 @@
+@mixin gradient($first, $second) {
+  background: $first;
+  background: -moz-linear-gradient(top, $first 1%, $second 100%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(1%, $first), color-stop(100%, $second));
+  background: -webkit-linear-gradient(top, $first 1%, $second 100%);
+  background: -o-linear-gradient(top, $first 1%, $second 100%);
+  background: -ms-linear-gradient(top, $first 1%, $second 100%);
+  background: linear-gradient(to bottom, $first 1%, $second 100%);
+}
+
+@mixin border-radius($radii: 2px) {
+  -webkit-border-radius: $radii;
+  -moz-border-radius: $radii;
+  border-radius: $radii;
+}
+
+@mixin no-selection {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  cursor: default;
+}
+
+@mixin border-box {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+@mixin box-shadow($prop1: 0 0 40px rgba(0, 0, 0, .9), $prop2: null) {
+  -webkit-box-shadow: $prop1, $prop2;
+  -moz-box-shadow: $prop1, $prop2;
+  box-shadow: $prop1, $prop2;
+}
+
+@mixin font($size: 10pt) {
+  font-family: Helvetica, Tahoma, Arial, sans-serif;
+  font-size: $size;
+}
+
+@mixin transition($property, $easing) {
+  -webkit-transition-property: $property;
+  -webkit-transition-duration: 0.25s;
+  -webkit-transition-timing-function: $easing;
+  -moz-transition-property: $property;
+  -moz-transition-duration: 0.25s;
+  -moz-transition-timing-function: $easing;
+  transition-property: $property;
+  transition-duration: 0.25s;
+  transition-timing-function: $easing;
+}
+
+.mercury-clearfix {
+  &:before, &:after {
+    content: " ";
+    display: table;
+  }
+  &:after {
+    clear: both;
+  }
+  & {
+    *zoom: 1;
+  }
+}

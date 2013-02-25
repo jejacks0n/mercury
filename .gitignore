@@ -1,0 +1,6 @@
+coverage
+log/*.log
+tmp
+
+uploads
+temp

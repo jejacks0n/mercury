@@ -1,0 +1,8 @@
+@import "mercury/core/config";
+@import "mercury/core/mixins";
+
+@import "mercury/uploader";
+
+#mercury {
+  -webkit-text-size-adjust: none; // Disable text sizing in webkit (ipad/iphone etc)
+}

@@ -18,16 +18,17 @@
 #= require mercury/views/editor
 #= require mercury/views/uploader
 #
-# Extend the global Mercury object with various modules.
-#
-# In general it's expected that you use the methods provided on the Mercury namespace, and don't call through to the
-# modules directly.
-#
-# A good example of this is the Mercury.I18n module. It's recommended that you use Mercury.t and not Mercury.I18n.t, or
-# similarly with Mercury.Logger -- use Mercury.log (or this.log in models and views etc.) instead of Mercury.Logger.log
-# as the context may not be the same.
 globalize = ->
 
+  # Extends the global Mercury object with various modules.
+  #
+  # In general it's expected that you use the methods provided on the Mercury namespace, and don't call through to the
+  # modules directly.
+  #
+  # A good example of this is the Mercury.I18n module. It's recommended that you use Mercury.t and not Mercury.I18n.t, or
+  # similarly with Mercury.Logger -- use Mercury.log (or this.log in models and views etc.) instead of Mercury.Logger.log
+  # as the context may not be the same.
+  #
   @version = '1.0.0'
 
   # Add global configuration methods.
@@ -37,6 +38,7 @@ globalize = ->
   #
   # Mercury.config
   # Get a configuration value by providing a path (much like the setter).
+  #
   @Module.extend.call(@, @Config)
   @configure = @Config.set
 
@@ -55,12 +57,14 @@ globalize = ->
   #
   # Mercury.off
   # Stop observing a given global event.
+  #
   @Module.extend.call(@, @Events)
 
   # Add global translation.
   #
   # Mercury.t
   # Translate a given string with simple printf-like handling.
+  #
   @Module.extend.call(@, @I18n)
 
   # Add global logger.
@@ -70,6 +74,7 @@ globalize = ->
   #
   # Mercury.notify
   # Logs a given message using console.error (and console.trace) if available, otherwise an exception is thrown.
+  #
   @Module.extend.call(@, @Logger)
 
 globalize.call(Mercury)

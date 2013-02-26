@@ -34,6 +34,7 @@ Mercury.Stack =
   # maxStackLength by setting it in your constructor.
   #
   included: ->
-    @stackPosition = 0
-    @maxStackLength = 200
-    @stack = []
+    self = @:: || @
+    self.stackPosition = 0
+    self.maxStackLength = 200
+    self.stack = []

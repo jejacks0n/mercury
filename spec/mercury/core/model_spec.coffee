@@ -280,15 +280,21 @@ describe "Mercury.Model", ->
 
   describe "#set", ->
 
-    it "sets the attributes", ->
+    beforeEach ->
       subject.attributes = {foo: 'bar'}
+
+    it "sets the attributes", ->
       subject.set('foo', 'baz')
       expect( subject.attributes.foo ).to.eq('baz')
 
     it "allows passing an object instead of key/value", ->
-      subject.attributes = {foo: 'bar'}
       subject.set(foo: 'baz')
       expect( subject.attributes.foo ).to.eq('baz')
+
+    it "pushes the current attributes onto the stack", ->
+      subject.set(foo: 'baz')
+      expect( subject.stack[0] ).to.eql({})
+      expect( subject.stack[1] ).to.eql(foo: 'bar')
 
 
   describe "#exists", ->

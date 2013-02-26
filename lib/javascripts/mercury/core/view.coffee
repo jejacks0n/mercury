@@ -7,8 +7,8 @@
 class Mercury.View extends Mercury.Module
   @include Mercury.Config
   @include Mercury.Events
-  @include Mercury.Logger
   @include Mercury.I18n
+  @include Mercury.Logger
 
   eventSplitter: /^(\S+)\s*(.*)$/
 

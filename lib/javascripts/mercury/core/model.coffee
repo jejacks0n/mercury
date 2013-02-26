@@ -1,6 +1,7 @@
 #= require mercury/core/events
 #= require mercury/core/i18n
 #= require mercury/core/logger
+#= require mercury/core/stack
 #= require mercury/core/module
 @Mercury ||= {}
 
@@ -9,8 +10,9 @@ class Mercury.Model extends Mercury.Module
   @extend  Mercury.Config
   @include Mercury.Config
   @include Mercury.Events
-  @include Mercury.Logger
   @include Mercury.I18n
+  @include Mercury.Logger
+  @include Mercury.Stack
 
   logPrefix: 'Mercury.Model'
 
@@ -183,6 +185,7 @@ class Mercury.Model extends Mercury.Module
   set: (key, value) ->
     attrs = {}
     if typeof(key) == 'object' then attrs = key else attrs[key] = value
+    @pushStack($.extend(true, {}, @attributes))
     @attributes[key] = value for key, value of attrs
 
 

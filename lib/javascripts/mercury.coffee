@@ -20,11 +20,3 @@ jQuery ->
 jQuery ->
   window.editor = new Mercury.Editor()
   editor.appendTo(document.body)
-
-  uploader = $('#uploader')
-  uploader.on 'dragenter', (e) -> e.preventDefault()
-  uploader.on 'dragover', (e) -> e.preventDefault()
-  uploader.on 'drop', (e) ->
-    if e.originalEvent.dataTransfer.files.length
-      e.preventDefault()
-      uploader = new Mercury.Uploader(e.originalEvent.dataTransfer.files)

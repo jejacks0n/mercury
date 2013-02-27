@@ -2,6 +2,7 @@
 #= require mercury/core/config
 
 @Mercury ||= {}
+@JST ||= {}
 
 # define global methods that might not exist
 Mercury.on ||= ->

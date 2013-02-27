@@ -21,6 +21,8 @@ module Mercury
     config.assets.paths << 'lib/dependencies'
     config.assets.paths << 'lib/javascripts'
     config.assets.paths << 'lib/stylesheets'
+
+    config.assets.paths << 'uploads'
   end
 
   Teabag.setup do |config|
@@ -46,17 +48,17 @@ class ApplicationController < ActionController::Base
 
   def upload
     path = Rails.root.join('uploads')
-    file = path.join(params[:image].original_filename)
+    filename = params[:file].original_filename
     FileUtils.mkdir_p(path)
-    File.rename(params[:image].tempfile.path, file)
-    render json: {url: file.to_s}
+    File.rename(params[:file].tempfile.path, path.join(filename))
+    render json: {url: "/assets/#{filename}"}
   end
 end
 
 Rails.application.initialize!
 Rails.application.routes.draw do
   get '(/:id)' => 'application#page'
-  post '/mercury/images' => 'application#upload'
+  post '/mercury/uploads' => 'application#upload'
 end
 
 run Mercury::Application rescue nil

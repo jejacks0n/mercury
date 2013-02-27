@@ -222,7 +222,7 @@ describe "Mercury.Uploader", ->
     it "triggers a global action event", ->
       spyOn(Mercury, 'trigger')
       subject.success()
-      expect( Mercury.trigger ).calledWith('action', 'uploadedFile', subject.file)
+      expect( Mercury.trigger ).calledWith('action', 'uploadFile', subject.file)
 
     it "adds the file size to what we've loaded", ->
       subject.success()

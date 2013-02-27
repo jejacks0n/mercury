@@ -117,6 +117,10 @@ describe "Mercury.View", ->
     it "returns @el for chaining", ->
       expect( subject.html('') ).to.eq(subject.el)
 
+    it "returns the content if no arguments were passed", ->
+      subject.el.append('foo')
+      expect( subject.html() ).to.eq('foo')
+
 
   describe "#append", ->
 

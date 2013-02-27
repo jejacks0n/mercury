@@ -60,10 +60,11 @@ class Mercury.View extends Mercury.Module
 
 
   # Sets the html of our element and re-finds any elements that we're actively tracking.
-  # Returns el for chaining.
+  # Returns el for chaining, or contents if no arguments.
   #
   html: (element) ->
-    @el.html(element.el || element)
+    return @el.html() unless arguments.length
+    @el.html(element?.el || element)
     @refreshElements()
     @el
 

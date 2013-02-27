@@ -36,6 +36,9 @@ describe "Mercury.Config", ->
       subject.configuration = null
       expect( subject.get('foo') ).to.be.undefined
 
+    it "returns undefined if the path doesn't exist", ->
+      expect( subject.get('foo:bar:baz') ).to.be.undefined
+
 
   describe ".set", ->
 

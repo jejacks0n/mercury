@@ -7,7 +7,6 @@ describe "Mercury.Model", ->
   subject = null
 
   beforeEach ->
-    Mercury.configure 'localization:enabled', false
     class Klass extends Mercury.Model
       @idCounter: 1
       @records:

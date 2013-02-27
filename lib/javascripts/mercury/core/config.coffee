@@ -11,7 +11,9 @@ Mercury.Config =
   #
   get: (path) ->
     config = @configuration ||= Mercury.configuration ||= {}
-    config = config[part] for part in path.split(':') if path
+    try config = config[part] for part in path.split(':') if path
+    catch e
+      return
     config
 
 

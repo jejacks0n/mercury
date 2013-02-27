@@ -10,6 +10,8 @@ class Mercury.View extends Mercury.Module
   @include Mercury.I18n
   @include Mercury.Logger
 
+  logPrefix: 'Mercury.View'
+
   eventSplitter: /^(\S+)\s*(.*)$/
 
   tag: 'div'

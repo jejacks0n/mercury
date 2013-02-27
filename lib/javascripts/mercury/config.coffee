@@ -10,9 +10,13 @@ Copyright (c) 2013 Jeremy Jackson
 Mercury.configuration =
 
   # Logging
-  # You can enable logging for debugging purposes.
+  # You can enable logging for debugging purposes. Notifications are always displayed as they represent potential
+  # problems, and console.error will be used unless it's unavailable. In those cases an alert or error will be thrown
+  # based on what notifier you choose to use. Use false if you don't care about fallbacks.
   #
-  logging: true
+  logging:
+    enabled    : true
+    notifier   : 'error'                                   # alert or throw an error - 'alert', 'error', or false.
 
 
   # Localization

@@ -9,7 +9,7 @@ Mercury.Logger =
   # log(1, 2)                                    => console.debug('Mercury:', 1, 2)
   #
   log: (args...) ->
-    return unless Mercury.configuration.logging
+    return unless Mercury.configuration.logging?.enabled
     args.unshift(@logPrefix) if @logPrefix
     console?.debug?(args...)
 
@@ -24,5 +24,8 @@ Mercury.Logger =
     if console && console.error
       console.error(msg)
       console.trace?()
-    else
-      throw new Error(msg)
+      return
+    switch Mercury.configuration?.logging?.notifier
+      when 'error' then throw new Error(msg)
+      when 'alert' then alert(msg)
+

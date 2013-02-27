@@ -7,7 +7,7 @@ describe "Mercury.Logger", ->
   subject = null
 
   beforeEach ->
-    Mercury.configure 'logging', true
+    Mercury.configure 'logging:enabled', true
     Klass.prototype = Mercury.Logger
     subject = new Klass()
     spyOn(console, 'debug')
@@ -29,7 +29,7 @@ describe "Mercury.Logger", ->
       expect( console.debug ).calledWith(1, 2, '3')
 
     it "doesn't log if logging is disabled in configuration", ->
-      Mercury.configure('logging', false)
+      Mercury.configure 'logging:enabled', false
       subject.log(1, 2, '3')
       expect( console.debug ).not.called
 
@@ -58,8 +58,27 @@ describe "Mercury.Logger", ->
       subject.notify('_message_')
       expect( console.trace ).called
 
-    it "throws an exception if there's no console.error", ->
-      original = console.error
-      console.error = undefined
-      expect(-> subject.notify('_message_') ).to.throw(Error, 'Mercury: _message_')
-      console.error = original
+    describe "with fallback strategies", ->
+
+      beforeEach ->
+        @original = console.error
+        console.error = undefined
+
+      afterEach ->
+        console.error = @original
+
+      it "throws an exception if there's no console.error", ->
+        Mercury.configure 'logging:notifier', 'error'
+        expect(-> subject.notify('_message_') ).to.throw(Error, 'Mercury: _message_')
+
+      it "alerts if there's no console.error", ->
+        Mercury.configure 'logging:notifier', 'alert'
+        spyOn(window, 'alert')
+        subject.notify('_message_')
+        expect( window.alert ).calledWith('Mercury: _message_')
+
+      it "does neither if configured", ->
+        Mercury.configure 'logging:notifier', false
+        spyOn(window, 'alert')
+        subject.notify('_message_')
+        expect( window.alert ).not.called

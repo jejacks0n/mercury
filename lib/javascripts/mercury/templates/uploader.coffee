@@ -1,5 +1,5 @@
 @JST ||= {}
-JST['mercury/uploader'] = (scope) ->
+JST['/mercury/templates/uploader'] = (scope) ->
   """
   <div class="mercury-uploader-dialog">
     <div class="mercury-uploader-preview"><b><img/></b></div>

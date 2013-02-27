@@ -40,10 +40,9 @@ describe "Mercury.View", ->
       expect( subject.el.is('foo') ).to.be.true
 
     it "loads a template if one was set", ->
-      JST['mercury/foo'] = -> '_foo_'
-      spyOn(Klass.prototype, 'html')
-      subject = new Klass(template: 'foo')
-      expect( subject.html ).calledWith('_foo_')
+      spyOn(Klass.prototype, 'renderTemplate')
+      subject = new Klass(template: '_foo_')
+      expect( subject.renderTemplate ).calledWith('_foo_')
 
     it "assigns events to constructor events unless already set", ->
       Klass.events = event1: '$'
@@ -174,6 +173,43 @@ describe "Mercury.View", ->
       subject.refreshElements()
       expect( subject.test.is('section#test') ).to.be.true
       expect( subject.test2.is('section#test2') ).to.be.true
+
+
+  describe "#renderTemplate", ->
+
+    it "renders the template", ->
+      JST['/mercury/templates/foo'] = ->
+      spyOn(JST, '/mercury/templates/foo', -> '_foo_function_template_')
+      expect( subject.renderTemplate('foo', foo: 'bar') ).to.eq('_foo_function_template_')
+      expect( JST['/mercury/templates/foo'] ).calledWith(foo: 'bar')
+
+    it "falls back to a string", ->
+      JST['/mercury/templates/foo'] = '_foo_string_template_'
+      expect( subject.renderTemplate('foo') ).to.eq('_foo_string_template_')
+
+    it "calls #fetchTemplate if a template wasn't found and we allow falling back", ->
+      Mercury.configure 'templates:enabled', true
+      spyOn(subject, 'fetchTemplate', -> '_ajax_template_')
+      expect( subject.renderTemplate('bar') ).to.eq('_ajax_template_')
+      expect( subject.fetchTemplate ).calledWith('bar')
+
+    it "doesn't calls #fetchTemplate if we don't allow falling back", ->
+      Mercury.configure 'templates:enabled', false
+      spyOn(subject, 'fetchTemplate', -> '_ajax_template_')
+      expect( subject.renderTemplate('bar') ).to.be.undefined
+      expect( subject.fetchTemplate ).not.called
+
+
+  describe "#fetchTemplate", ->
+
+    beforeEach ->
+      Mercury.configure 'templates:prefixUrl', '/foo/bar'
+      @server = sinon.fakeServer.create()
+      @server.respondWith('GET', '/foo/bar/baz', [200, {'Content-Type': 'text/html'}, '_ajax_template_'])
+
+    it "makes an ajax call for the template", ->
+      result = subject.fetchTemplate('baz')
+      expect( result ).to.eq('_ajax_template_')
 
 
   describe "#release", ->

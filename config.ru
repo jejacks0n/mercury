@@ -34,7 +34,7 @@ module Mercury
       suite.matcher      = 'spec/**/*_spec.{js,js.coffee,coffee}'
       suite.helper       = 'spec_helper'
       suite.javascripts  = ['teabag/mocha', 'support/chai', 'support/sinon', 'support/sinon-chai']
-      suite.no_coverage << %r(/dependencies)
+      suite.no_coverage << %r(/dependencies|/templates)
     end
   end
 end
@@ -53,11 +53,16 @@ class ApplicationController < ActionController::Base
     File.rename(params[:file].tempfile.path, path.join(filename))
     render json: {url: "/assets/#{filename}"}
   end
+
+  def template
+    render text: "#{params[:name]}foo"
+  end
 end
 
 Rails.application.initialize!
 Rails.application.routes.draw do
   get '(/:id)' => 'application#page'
+  get '/mercury/templates/*name' => 'application#template'
   post '/mercury/uploads' => 'application#upload'
 end
 

@@ -28,7 +28,7 @@ class Mercury.View extends Mercury.Module
     @$el = @el
     @attr(@attributes)
 
-    @html(JST["mercury/#{@template}"](@)) if @template
+    @html(@renderTemplate(@template)) if @template
 
     @events = @constructor.events unless @events
     @elements = @constructor.elements unless @elements
@@ -101,6 +101,30 @@ class Mercury.View extends Mercury.Module
   refreshElements: ->
     for key, value of @elements
       @[key] = @$(value)
+
+
+  # Renders a template as a function or string. Looks in JST for the path provided (prefixed with /mercury/templates/),
+  # and will fall back to requesting the content from the server if enabled.
+  # Returns the contents of the rendered template.
+  #
+  renderTemplate: (path, options = null) ->
+    template = JST["/mercury/templates/#{path}"]
+    template = @fetchTemplate(path) if @config('templates:enabled') && !template
+    return template(options || @) if typeof(template) == 'function'
+    template
+
+
+  # Makes an synchronous ajax request to the server for template content, which allows for fallbacks to be provided if
+  # they don't exist in JST.
+  # Returns whatever content the server responded with.
+  #
+  fetchTemplate: (path) ->
+    template = null
+    $.ajax
+      url: [@config('templates:prefixUrl'), path].join('/')
+      async: false
+      success: (content) -> template = content
+    template
 
 
   # Releases the instance and triggers a release event. Releasing a view removes the element from the DOM, and removes

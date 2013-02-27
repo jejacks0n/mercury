@@ -41,3 +41,12 @@ Mercury.configuration =
     mimeTypes  : ['image/jpeg', 'image/gif', 'image/png']  # allowed file types
     maxSize    : 5242880                                   # max size - 5.00 Mb
 
+
+  # Templates
+  # By default Mercury provides all templates as JST templates that are loaded statically, however to provide more
+  # flexibility if a template isn't found locally, an synchronous ajax request will be made to the server to fetch the
+  # content.
+  #
+  templates:
+    enabled    : true
+    prefixUrl  : '/mercury/templates'                      # ajax path prefix for fallback JST templates.

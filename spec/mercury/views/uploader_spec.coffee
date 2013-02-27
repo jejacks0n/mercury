@@ -34,7 +34,7 @@ describe "Mercury.Uploader", ->
       expect( subject.notify ).calledWith('is unsupported in this browser')
 
     it "renders the expected template", ->
-      template = spyOn(JST, 'mercury/uploader', -> '_template_')
+      template = spyOn(JST, '/mercury/templates/uploader', -> '_template_')
       subject = new Klass([], foo: 'bar')
       expect( template ).calledWith( subject )
       expect( subject.el.html() ).to.eq('_template_')

@@ -24,7 +24,9 @@ class Mercury.Module
   @extend: (object) ->
     throw new Error('extend expects an object') unless object
     module = object.Module || object
-    @[name] = method for name, method of module when name not in moduleKeywords
+    for name, method of module
+      continue if moduleKeywords.indexOf(name) > -1
+      @[name] = method
     module.extended?.apply(@)
 
 
@@ -48,7 +50,9 @@ class Mercury.Module
   @include: (object) ->
     throw new Error('include expects an object') unless object
     module = object.Module || object
-    @::[name] = method for name, method of module when name not in moduleKeywords
+    for name, method of module
+      continue if moduleKeywords.indexOf(name) > -1
+      @::[name] = method
     module.included?.apply(@)
 
 

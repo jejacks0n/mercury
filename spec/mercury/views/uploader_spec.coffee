@@ -24,7 +24,7 @@ describe "Mercury.Uploader", ->
 
     beforeEach ->
       spyOn(Klass.prototype, 'build')
-      spyOn(Klass.prototype, 'calculate')
+      spyOn(Klass.prototype, 'calculate', -> [1])
       spyOn(Klass.prototype, 'upload')
       spyOn(Klass.prototype, 'notify')
 
@@ -50,6 +50,12 @@ describe "Mercury.Uploader", ->
     it "delays calling #upload for half a second", ->
       subject = new Klass()
       expect( subject.delay ).calledWith(500, Klass.prototype.upload)
+
+    it "returns without calling show unless there are files", ->
+      Klass.prototype.calculate.restore()
+      spyOn(Klass.prototype, 'calculate', -> [])
+      subject = new Klass()
+      expect( subject.show ).not.called
 
 
   describe "#calculate", ->
@@ -79,6 +85,9 @@ describe "Mercury.Uploader", ->
       spyOn(window, 'alert')
       subject.calculate(@files)
       expect( subject.total ).to.eq(0)
+
+    it "returns @files", ->
+      expect( subject.calculate([]) ).to.eq(subject.files)
 
 
   describe "#build", ->

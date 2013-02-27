@@ -29,7 +29,8 @@ class Mercury.Uploader extends Mercury.View
     @total = 0
     @files = []
 
-    @calculate(files || [])
+    return unless @calculate(files || []).length
+
     @show()
     @delay(500, @upload)
 
@@ -42,6 +43,7 @@ class Mercury.Uploader extends Mercury.View
         continue
       @files.push(file)
       @total += file.get('size')
+    @files
 
 
   build: ->

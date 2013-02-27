@@ -1,8 +1,5 @@
 Mercury.I18n.define 'swedish_chef',
 
-  # Global
-  "is unsupported in this browser": "is unsooppurted in thees brooser" # new!
-
   # Mercury.Uploader
   "Error uploading %s: %s": "Irrur upluedeeng %s: %s" # changed!
   "Processing...": "Prucesseeng..."

@@ -50,3 +50,14 @@ Mercury.configuration =
   templates:
     enabled    : true
     prefixUrl  : '/mercury/templates'                      # ajax path prefix for fallback JST templates.
+
+
+  # Regions
+  # Mercury looks for elements that have a data-mercury="type" attribute. This attribute is used to declare what type of
+  # region a given element should be. When saving, each region is serialized with a name and data that it might want to
+  # pass back to the server, and the identifier attribute is used as a unique name.
+  #
+  regions:
+    attribute  : 'data-mercury'                            # data attribute used to declare the region type
+    identifier : 'id'                                      # attribute used for name when serializing
+

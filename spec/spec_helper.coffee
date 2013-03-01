@@ -31,6 +31,7 @@ _spies = []
 @spyOn = (thing, method, callback = null) ->
   _spies.push(thing: thing, method: method)
   sinon.stub(thing, method, callback)
+  thing[method]
 
 afterEach ->
   for spy in _spies

@@ -11,7 +11,12 @@
 #= require mercury/core/logger
 #= require mercury/core/model
 #= require mercury/core/module
+#= require mercury/core/region
 #= require mercury/core/view
+#
+# Standard regions.
+#
+#= require mercury/regions/example
 #
 # Views.
 #

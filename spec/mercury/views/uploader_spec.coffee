@@ -88,6 +88,11 @@ describe "Mercury.Uploader", ->
     it "returns @files", ->
       expect( subject.calculate([]) ).to.eq(subject.files)
 
+    it "passes @mimeTypes for validation", ->
+      subject.mimeTypes = ['bar/baz']
+      subject.calculate(@files)
+      expect( subject.files[0].options.mimeTypes ).to.eql(subject.mimeTypes)
+
 
   describe "#build", ->
 
@@ -218,10 +223,10 @@ describe "Mercury.Uploader", ->
       subject.file =
         get: (attr) -> 1024
 
-    it "triggers a global action event", ->
-      spyOn(Mercury, 'trigger')
+    it "triggers an uploaded event", ->
+      spyOn(subject, 'trigger')
       subject.success()
-      expect( Mercury.trigger ).calledWith('action', 'uploadFile', subject.file)
+      expect( subject.trigger ).calledWith('uploaded', subject.file)
 
     it "adds the file size to what we've loaded", ->
       subject.success()

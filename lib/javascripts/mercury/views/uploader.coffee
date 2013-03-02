@@ -92,7 +92,6 @@ class Mercury.Uploader extends Mercury.View
 
   success: ->
     @trigger('uploaded', @file)
-#    Mercury.trigger('action', 'uploadFile', @file)
     @loaded += @file.get('size')
     @update(@t('Successfully uploaded...'))
     @upload()

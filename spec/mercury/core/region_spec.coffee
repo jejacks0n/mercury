@@ -89,6 +89,12 @@ describe "Mercury.Region", ->
       subject = new Klass('<div data-name="_name_">')
       expect( subject.name ).to.eq('_name_')
 
+    it "sets a tabindex (so it's focusable)", ->
+      subject = new Klass('<div id="_name_">')
+      expect( subject.attr('tabindex') ).to.eq('0')
+      subject = new Klass('<div id="_name_">', tabIndex: 42)
+      expect( subject.attr('tabindex') ).to.eq('42')
+
     it "allows passing the name", ->
       subject = new Klass('<div>', name: '_name_')
       expect( subject.name ).to.eq('_name_')
@@ -116,6 +122,13 @@ describe "Mercury.Region", ->
 
   describe "#bindDefaultEvents", ->
 
+    it "calls #delegateEvents with commen events", ->
+      spyOn(subject, 'delegateEvents')
+      subject.bindDefaultEvents()
+      expect( subject.delegateEvents ).calledWith
+        focus: sinon.match.func
+        blur: sinon.match.func
+
     it "binds to the global 'action' event", ->
       spyOn(subject, 'handleAction')
       spyOn(Mercury, 'on').callsArgOnWith(1, subject, 1, 2, '3')
@@ -135,6 +148,25 @@ describe "Mercury.Region", ->
       spyOn(subject, 'delegateDropFile')
       subject.bindDefaultEvents()
       expect( subject.delegateDropFile ).called
+
+    describe "delegated events", ->
+
+      beforeEach ->
+        @events = {}
+        spyOn(subject, 'delegateEvents', => @events = arguments[0])
+        subject.bindDefaultEvents()
+
+      it "has a focus that calls #onFocus if it exists", ->
+        @events.focus()
+        subject.onFocus = spy()
+        @events.focus()
+        expect( subject.onFocus ).calledOnce
+
+      it "has a blur that calls #onBlur if it exists", ->
+        @events.blur()
+        subject.onBlur = spy()
+        @events.blur()
+        expect( subject.onBlur ).calledOnce
 
 
   describe "#handleAction", ->

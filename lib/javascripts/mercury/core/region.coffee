@@ -47,6 +47,9 @@ class Mercury.Region extends Mercury.View
 
     super(@options)
 
+    # make the element focusable
+    @attr(tabindex: @tabIndex || 0)
+
     # get the name from the element (default attribute is "id")
     @name ||= @el.attr(@config('regions:identifier'))
     unless @name
@@ -63,6 +66,10 @@ class Mercury.Region extends Mercury.View
   # defined in subclasses, and the dropFile event.
   #
   bindDefaultEvents: ->
+    @delegateEvents
+      focus: => @onFocus?()
+      blur: => @onBlur?()
+
     # handle action events using a custom event handler
     Mercury.on('action', => @handleAction(arguments...))
     @delegateActions($.extend(true, @constructor.actions, @actions ||= {}))

@@ -44,6 +44,13 @@ describe "Mercury.Stack", ->
       subject.pushStack('a')
       expect( subject.stack ).to.eql([2, 3, 4, 5, 'a'])
 
+    it "does nothing if the value is null", ->
+      subject.pushStack(null)
+      subject.pushStack(null)
+      subject.pushStack(null)
+      expect( subject.stackPosition ).to.eq(0)
+      expect( subject.stack ).to.eql([])
+
 
   describe "#undoStack", ->
 

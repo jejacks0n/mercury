@@ -10,31 +10,36 @@ class Mercury.ImageRegion extends Mercury.Region
 
   className: 'mercury-image-region'
 
+
+  build: ->
+    @pushStack(@attr('src') || null)
+
+
   dropFile: (files) ->
-    uploader = new Mercury.Uploader([files[0]], mimeTypes: ['image/jpeg'])
+    uploader = new Mercury.Uploader([files[0]], mimeTypes: @config('regions:gallery:mimeTypes'))
     uploader.on('uploaded', => @updateImage(arguments...))
 
 
   updateImage: (file) ->
-    @pushStack(file)
-    @setSrcFromFile(file)
+    @setSrc(file.get('url'))
+    @pushStack(@attr('src'))
 
 
-  setSrcFromFile: (file) ->
-    return unless file
-    @attr(src: file.get('url'))
+  setSrc: (src) ->
+    return if src == null
+    @attr(src: src)
 
 
   undo: ->
-    @setSrcFromFile(@undoStack())
+    @setSrc(@undoStack())
 
 
   redo: ->
-    @setSrcFromFile(@redoStack())
+    @setSrc(@redoStack())
 
 
   toJSON: ->
     name: @name
     type: @constructor.type
     data: @data()
-    src: @el.attr('src')
+    src: @attr('src')

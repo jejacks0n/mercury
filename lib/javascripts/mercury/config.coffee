@@ -32,7 +32,7 @@ Mercury.configuration =
   # Uploading
   # When enabled you can drag and drop images/files onto a given region and that file will be uploaded. It's expected
   # that the server respond with JSON containing a url. How the file is inserting into the region it was dropped on is
-  # determined by the region itself.
+  # determined by the region itself and some regions may not allow all file types.
   #
   uploading:
     enabled    : true
@@ -61,3 +61,16 @@ Mercury.configuration =
     attribute  : 'data-mercury'                            # data attribute used to declare the region type
     identifier : 'id'                                      # attribute used for name when serializing
 
+    # The image region is typically an image tag and what's sent back to the server on serialization is the source of
+    # that image. It allows draging/dropping images onto itself, and maintains a history so you can undo/redo your
+    # changes.
+    #
+    image:
+      mimeTypes: ['image/jpeg']                            # file types - overrides general uploading configuration.
+
+    # The gallery region is provided an an example of how you can easily (generally speaking) create your own regions.
+    # It allows drag/drop of images and provides a simple implementation of a slide show with the ability to remove
+    # items. You can use this as an example of how you could embed an entire backbone app within a region.
+    #
+    gallery:
+      mimeTypes: ['image/jpeg']                            # file types - overrides general uploading configuration.

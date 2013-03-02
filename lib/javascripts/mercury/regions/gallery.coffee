@@ -5,6 +5,8 @@ class Mercury.GalleryRegion extends Mercury.Region
   @supported: true
 
   @define 'Mercury.GalleryRegion', 'gallery'
+    undo : 'undo'
+    redo : 'redo'
 
   className: 'mercury-gallery-region'
 
@@ -24,18 +26,42 @@ class Mercury.GalleryRegion extends Mercury.Region
     @append('<ul class="mercury-gallery-region-controls"></ul>')
 
     @index = 1
-    @refresh()
-    @addLink($(slide)) for slide in @images
+    @refresh(true)
 
     @delay(@speed, => @nextSlide())
+    @pushStack(@el.html())
 
 
-  refresh: ->
+  onBlur: ->
+    @controls.hide()
+
+
+  onFocus: ->
+    @controls.show()
+
+
+  undo: ->
+    @html(html) if html = @undoStack()
+    @refresh(true)
+
+
+  redo: ->
+    @html(html) if html = @redoStack()
+    @refresh(true)
+
+
+  refresh: (controls = false) ->
     @images = @$('.slide').hide()
     @index = 1 if @index > @images.length
     @$(".slide:nth-child(#{@index})").show()
     @paginator.html(Array(@images.length + 1).join('<span>&bull;</span>'))
     @paginator.find("span:nth-child(#{@index})").addClass('active')
+    @refreshControls() if controls
+
+
+  refreshControls: ->
+    @controls.html('')
+    @addLink($(slide)) for slide in @images
 
 
   nextSlide: ->
@@ -57,7 +83,7 @@ class Mercury.GalleryRegion extends Mercury.Region
 
 
   dropFile: (files) ->
-    uploader = new Mercury.Uploader(files)
+    uploader = new Mercury.Uploader(files, mimeTypes: @config('regions:gallery:mimeTypes'))
     uploader.on('uploaded', => @appendSlide(arguments...))
 
 
@@ -67,10 +93,10 @@ class Mercury.GalleryRegion extends Mercury.Region
     @slides.append(slide)
     @addLink(slide)
     @refresh()
+    @pushStack(@el.html())
 
 
   removeSlide: (e) ->
-    return alert(@t("can't remove last slide")) if @images.length == 1
     el = $(e.target).closest('li')
     slide = el.data('slide')
     index = slide.prevAll('.slide').length + 1
@@ -85,3 +111,4 @@ class Mercury.GalleryRegion extends Mercury.Region
       @timeout = @delay(@speed, => @nextSlide())
 
     @refresh()
+    @pushStack(@el.html())

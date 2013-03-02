@@ -54,6 +54,11 @@ describe "Mercury.File", ->
       subject.validate()
       expect( subject.errors ).to.eql({})
 
+    it "allows mimeType configuration to be overridden", ->
+      subject.options.mimeTypes = ['image/jpeg']
+      subject.validate()
+      expect( subject.errors ).to.eql({})
+
 
   describe "#readAsDataUrl", ->
 

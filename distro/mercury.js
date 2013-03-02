@@ -12,17 +12,34 @@ Copyright (c) 2013 Jeremy Jackson
   this.Mercury || (this.Mercury = {});
 
   Mercury.configuration = {
-    logging: true,
+    logging: {
+      enabled: true,
+      notifier: 'error'
+    },
     localization: {
       enabled: true,
       preferred: 'en-US'
     },
     uploading: {
       enabled: true,
-      saveUrl: '/mercury/images',
-      saveName: 'image',
+      saveUrl: '/mercury/uploads',
+      saveName: 'file',
       mimeTypes: ['image/jpeg', 'image/gif', 'image/png'],
       maxSize: 5242880
+    },
+    templates: {
+      enabled: true,
+      prefixUrl: '/mercury/templates'
+    },
+    regions: {
+      attribute: 'data-mercury',
+      identifier: 'id',
+      image: {
+        mimeTypes: ['image/jpeg']
+      },
+      gallery: {
+        mimeTypes: ['image/jpeg']
+      }
     }
   };
 
@@ -152,12 +169,16 @@ Copyright (c) 2013 Jeremy Jackson
     get: function(path) {
       var config, part, _i, _len, _ref;
       config = this.configuration || (this.configuration = Mercury.configuration || (Mercury.configuration = {}));
-      if (path) {
-        _ref = path.split(':');
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          part = _ref[_i];
-          config = config[part];
+      try {
+        if (path) {
+          _ref = path.split(':');
+          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+            part = _ref[_i];
+            config = config[part];
+          }
         }
+      } catch (e) {
+        return;
       }
       return config;
     },
@@ -268,14 +289,14 @@ Copyright (c) 2013 Jeremy Jackson
       return this.__locales__[name] = mapping;
     },
     locale: function() {
-      var sub, top, _ref;
+      var sub, top, _ref, _ref1, _ref2;
       if (this.__determined__) {
         return this.__determined__;
       }
-      if (!Mercury.configuration.localization.enabled) {
+      if (!((_ref = Mercury.configuration.localization) != null ? _ref.enabled : void 0)) {
         return [{}, {}];
       }
-      _ref = (this.clientLocale() || Mercury.configuration.localization.preferred).split('-'), top = _ref[0], sub = _ref[1];
+      _ref2 = (this.clientLocale() || ((_ref1 = Mercury.configuration.localization) != null ? _ref1.preferred : void 0)).split('-'), top = _ref2[0], sub = _ref2[1];
       top = this.__locales__[top];
       if (top && sub) {
         sub = top["_" + (sub.toUpperCase()) + "_"];
@@ -311,9 +332,9 @@ Copyright (c) 2013 Jeremy Jackson
   Mercury.Logger = {
     logPrefix: 'Mercury:',
     log: function() {
-      var args;
+      var args, _ref;
       args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-      if (!Mercury.configuration.logging) {
+      if (!((_ref = Mercury.configuration.logging) != null ? _ref.enabled : void 0)) {
         return;
       }
       if (this.logPrefix) {
@@ -322,21 +343,66 @@ Copyright (c) 2013 Jeremy Jackson
       return typeof console !== "undefined" && console !== null ? typeof console.debug === "function" ? console.debug.apply(console, args) : void 0 : void 0;
     },
     notify: function(msg) {
+      var _ref;
       if (this.logPrefix) {
         msg = "" + this.logPrefix + " " + msg;
       }
-      if (console && console.error) {
+      try {
         console.error(msg);
         return typeof console.trace === "function" ? console.trace() : void 0;
-      } else {
-        throw new Error(msg);
+      } catch (e) {
+        switch ((_ref = Mercury.configuration.logging) != null ? _ref.notifier : void 0) {
+          case 'alert':
+            return alert(msg);
+          case 'error':
+            throw new Error(msg);
+        }
       }
     }
   };
 
 }).call(this);
 (function() {
-  var __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
+
+  this.Mercury || (this.Mercury = {});
+
+  Mercury.Stack = {
+    pushStack: function(value) {
+      if (value === null) {
+        return;
+      }
+      this.stack = this.stack.slice(0, this.stackPosition + 1);
+      this.stack.push(value);
+      if (this.stack.length > this.maxStackLength) {
+        this.stack.shift();
+      }
+      return this.stackPosition = this.stack.length - 1;
+    },
+    undoStack: function() {
+      if (this.stackPosition < 1) {
+        return null;
+      }
+      this.stackPosition -= 1;
+      return this.stack[this.stackPosition];
+    },
+    redoStack: function() {
+      if (this.stackPosition >= this.stack.length - 1) {
+        return null;
+      }
+      this.stackPosition += 1;
+      return this.stack[this.stackPosition];
+    },
+    included: function() {
+      var self;
+      self = this.prototype || this;
+      self.stackPosition = 0;
+      self.maxStackLength = 200;
+      return self.stack = [];
+    }
+  };
+
+}).call(this);
+(function() {
 
   this.Mercury || (this.Mercury = {});
 
@@ -353,9 +419,10 @@ Copyright (c) 2013 Jeremy Jackson
       module = object.Module || object;
       for (name in module) {
         method = module[name];
-        if (__indexOf.call(moduleKeywords, name) < 0) {
-          this[name] = method;
+        if (moduleKeywords.indexOf(name) > -1) {
+          continue;
         }
+        this[name] = method;
       }
       return (_ref = module.extended) != null ? _ref.apply(this) : void 0;
     };
@@ -368,9 +435,10 @@ Copyright (c) 2013 Jeremy Jackson
       module = object.Module || object;
       for (name in module) {
         method = module[name];
-        if (__indexOf.call(moduleKeywords, name) < 0) {
-          this.prototype[name] = method;
+        if (moduleKeywords.indexOf(name) > -1) {
+          continue;
         }
+        this.prototype[name] = method;
       }
       return (_ref = module.included) != null ? _ref.apply(this) : void 0;
     };
@@ -410,26 +478,28 @@ Copyright (c) 2013 Jeremy Jackson
 
     __extends(Model, _super);
 
-    Model.extend(Mercury.Events);
-
     Model.extend(Mercury.Config);
+
+    Model.extend(Mercury.Events);
 
     Model.include(Mercury.Config);
 
     Model.include(Mercury.Events);
 
-    Model.include(Mercury.Logger);
-
     Model.include(Mercury.I18n);
 
-    Model.prototype.logPrefix = 'Mercury.Model';
+    Model.include(Mercury.Logger);
+
+    Model.include(Mercury.Stack);
+
+    Model.prototype.logPrefix = 'Mercury.Model:';
 
     Model.idCounter = 1;
 
     Model.define = function(className, urlPrefix) {
       this.className = className;
       this.urlPrefix = urlPrefix;
-      this.prototype.logPrefix = this.logPrefix = "" + this.className + ":";
+      this.logPrefix = this.prototype.logPrefix = "" + this.className + ":";
       this.records = {};
       this.off();
       return this;
@@ -587,6 +657,7 @@ Copyright (c) 2013 Jeremy Jackson
       } else {
         attrs[key] = value;
       }
+      this.pushStack($.extend(true, {}, this.attributes));
       _results = [];
       for (key in attrs) {
         value = attrs[key];
@@ -619,9 +690,11 @@ Copyright (c) 2013 Jeremy Jackson
 
     View.include(Mercury.Events);
 
+    View.include(Mercury.I18n);
+
     View.include(Mercury.Logger);
 
-    View.include(Mercury.I18n);
+    View.prototype.logPrefix = 'Mercury.View:';
 
     View.prototype.eventSplitter = /^(\S+)\s*(.*)$/;
 
@@ -641,8 +714,9 @@ Copyright (c) 2013 Jeremy Jackson
       this.el = $(this.el);
       this.$el = this.el;
       this.attr(this.attributes);
+      this.addClass(this.className);
       if (this.template) {
-        this.html(JST["mercury/" + this.template](this));
+        this.html(this.renderTemplate(this.template));
       }
       if (!this.events) {
         this.events = this.constructor.events;
@@ -671,11 +745,17 @@ Copyright (c) 2013 Jeremy Jackson
     };
 
     View.prototype.attr = function(key, value) {
+      if (key && arguments.length === 1) {
+        return this.el.attr(key);
+      }
       return this.el.attr(key, value);
     };
 
     View.prototype.html = function(element) {
-      this.el.html(element.el || element);
+      if (!arguments.length) {
+        return this.el.html();
+      }
+      this.el.html((element != null ? element.el : void 0) || element);
       this.refreshElements();
       return this.el;
     };
@@ -718,6 +798,34 @@ Copyright (c) 2013 Jeremy Jackson
         _results.push(this[key] = this.$(value));
       }
       return _results;
+    };
+
+    View.prototype.renderTemplate = function(path, options) {
+      var template;
+      if (options == null) {
+        options = null;
+      }
+      template = JST["/mercury/templates/" + path];
+      if (this.config('templates:enabled') && !template) {
+        template = this.fetchTemplate(path);
+      }
+      if (typeof template === 'function') {
+        return template(options || this);
+      }
+      return template;
+    };
+
+    View.prototype.fetchTemplate = function(path) {
+      var template;
+      template = null;
+      $.ajax({
+        url: [this.config('templates:prefixUrl'), path].join('/'),
+        async: false,
+        success: function(content) {
+          return template = content;
+        }
+      });
+      return template;
     };
 
     View.prototype.release = function() {
@@ -775,20 +883,391 @@ Copyright (c) 2013 Jeremy Jackson
 }).call(this);
 (function() {
   var __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+    __slice = [].slice;
+
+  this.Mercury || (this.Mercury = {});
+
+  Mercury.Region = (function(_super) {
+
+    __extends(Region, _super);
+
+    Region.extend(Mercury.Config);
+
+    Region.extend(Mercury.Events);
+
+    Region.extend(Mercury.I18n);
+
+    Region.extend(Mercury.Logger);
+
+    Region.include(Mercury.Stack);
+
+    Region.supported = true;
+
+    Region.type = 'unknown';
+
+    Region.prototype.logPrefix = 'Mercury.Region:';
+
+    Region.define = function(className, type, actions) {
+      this.className = className;
+      this.type = type;
+      this.actions = actions;
+      this.logPrefix = this.prototype.logPrefix = "" + this.className + ":";
+      this.off();
+      return this;
+    };
+
+    Region.create = function(el) {
+      var type;
+      el = $(el);
+      type = el.attr(this.config('regions:attribute'));
+      if (!type) {
+        this.notify(this.t('region type not provided'));
+      }
+      type = ("" + type + "_region").toLowerCase().toCamelCase(true);
+      if (!Mercury[type]) {
+        this.notify(this.t('unknown "%s" region type, falling back to base region', type));
+      }
+      return new (Mercury[type] || Mercury.Region)(el);
+    };
+
+    function Region(el, options) {
+      this.el = el;
+      this.options = options != null ? options : {};
+      if (!this.constructor.supported) {
+        return this.notify(this.t('is unsupported in this browser'));
+      }
+      Region.__super__.constructor.call(this, this.options);
+      this.attr({
+        tabindex: this.tabIndex || 0
+      });
+      this.name || (this.name = this.el.attr(this.config('regions:identifier')));
+      if (!this.name) {
+        this.notify(this.t('no name provided for the "%s" region, falling back to random', this.constructor.type));
+        this.name = "" + this.constructor.type + (Math.floor(Math.random() * 10000));
+      }
+      this.previewing || (this.previewing = false);
+      this.bindDefaultEvents();
+    }
+
+    Region.prototype.bindDefaultEvents = function() {
+      var _this = this;
+      this.delegateEvents({
+        focus: function() {
+          return typeof _this.onFocus === "function" ? _this.onFocus() : void 0;
+        },
+        blur: function() {
+          return typeof _this.onBlur === "function" ? _this.onBlur() : void 0;
+        }
+      });
+      Mercury.on('action', function() {
+        return _this.handleAction.apply(_this, arguments);
+      });
+      this.delegateActions($.extend(true, this.constructor.actions, this.actions || (this.actions = {})));
+      if (typeof this.dropFile === 'function') {
+        return this.delegateDropFile();
+      }
+    };
+
+    Region.prototype.handleAction = function() {
+      var args, _base, _name;
+      args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+      return typeof (_base = this.actions)[_name = args.shift()] === "function" ? _base[_name].apply(_base, args) : void 0;
+    };
+
+    Region.prototype.data = function(key, value) {
+      if (value) {
+        return this.el.data(key, value);
+      } else {
+        return this.el.data(key);
+      }
+    };
+
+    Region.prototype.snippets = function() {
+      return {};
+    };
+
+    Region.prototype.toJSON = function() {
+      return {
+        name: this.name,
+        type: this.constructor.type,
+        value: this.html(),
+        data: this.data(),
+        snippets: this.snippets()
+      };
+    };
+
+    Region.prototype.release = function() {
+      this.trigger('release');
+      return this.off();
+    };
+
+    Region.prototype.delegateDropFile = function() {
+      var _this = this;
+      this.el.on('dragenter', function(e) {
+        return e.preventDefault();
+      });
+      this.el.on('dragover', function(e) {
+        return e.preventDefault();
+      });
+      return this.el.on('drop', function(e) {
+        if (!e.originalEvent.dataTransfer.files.length) {
+          return;
+        }
+        e.preventDefault();
+        return _this.dropFile(e.originalEvent.dataTransfer.files);
+      });
+    };
+
+    Region.prototype.delegateActions = function(actions) {
+      var key, method, _results,
+        _this = this;
+      _results = [];
+      for (key in actions) {
+        method = actions[key];
+        if (typeof method === 'function') {
+          method = (function(method) {
+            return function() {
+              method.apply(_this, arguments);
+              return true;
+            };
+          })(method);
+        } else {
+          if (!this[method]) {
+            throw new Error("" + method + " doesn't exist");
+          } else {
+            method = (function(method) {
+              return function() {
+                _this[method].apply(_this, arguments);
+                return true;
+              };
+            })(method);
+          }
+        }
+        _results.push(this.actions[key] = method);
+      }
+      return _results;
+    };
+
+    return Region;
+
+  })(Mercury.View);
+
+}).call(this);
+(function() {
+  var __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+  Mercury.GalleryRegion = (function(_super) {
+
+    __extends(GalleryRegion, _super);
+
+    function GalleryRegion() {
+      return GalleryRegion.__super__.constructor.apply(this, arguments);
+    }
+
+    GalleryRegion.supported = true;
+
+    GalleryRegion.define('Mercury.GalleryRegion', 'gallery', {
+      undo: 'undo',
+      redo: 'redo'
+    });
+
+    GalleryRegion.prototype.className = 'mercury-gallery-region';
+
+    GalleryRegion.prototype.elements = {
+      controls: '.mercury-gallery-region-controls',
+      slides: '.slides',
+      paginator: '.paginator'
+    };
+
+    GalleryRegion.prototype.events = {
+      'click .mercury-gallery-region-controls em': 'removeSlide',
+      'click .mercury-gallery-region-controls img': 'gotoSlide'
+    };
+
+    GalleryRegion.prototype.build = function() {
+      var _this = this;
+      this.speed || (this.speed = 3000);
+      this.append('<ul class="mercury-gallery-region-controls"></ul>');
+      this.index = 1;
+      this.refresh(true);
+      this.delay(this.speed, function() {
+        return _this.nextSlide();
+      });
+      return this.pushStack(this.el.html());
+    };
+
+    GalleryRegion.prototype.onBlur = function() {
+      return this.controls.hide();
+    };
+
+    GalleryRegion.prototype.onFocus = function() {
+      return this.controls.show();
+    };
+
+    GalleryRegion.prototype.undo = function() {
+      var html;
+      if (html = this.undoStack()) {
+        this.html(html);
+      }
+      return this.refresh(true);
+    };
+
+    GalleryRegion.prototype.redo = function() {
+      var html;
+      if (html = this.redoStack()) {
+        this.html(html);
+      }
+      return this.refresh(true);
+    };
+
+    GalleryRegion.prototype.refresh = function(controls) {
+      if (controls == null) {
+        controls = false;
+      }
+      this.images = this.$('.slide').hide();
+      if (this.index > this.images.length) {
+        this.index = 1;
+      }
+      this.$(".slide:nth-child(" + this.index + ")").show();
+      this.paginator.html(Array(this.images.length + 1).join('<span>&bull;</span>'));
+      this.paginator.find("span:nth-child(" + this.index + ")").addClass('active');
+      if (controls) {
+        return this.refreshControls();
+      }
+    };
+
+    GalleryRegion.prototype.refreshControls = function() {
+      var slide, _i, _len, _ref, _results;
+      this.controls.html('');
+      _ref = this.images;
+      _results = [];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        slide = _ref[_i];
+        _results.push(this.addLink($(slide)));
+      }
+      return _results;
+    };
+
+    GalleryRegion.prototype.nextSlide = function() {
+      var _this = this;
+      this.index += 1;
+      this.refresh();
+      return this.timeout = this.delay(this.speed, function() {
+        return _this.nextSlide();
+      });
+    };
+
+    GalleryRegion.prototype.gotoSlide = function(e) {
+      var _this = this;
+      clearTimeout(this.timeout);
+      this.index = $(e.target).closest('li').prevAll('li').length + 1;
+      this.refresh();
+      return this.timeout = this.delay(this.speed, function() {
+        return _this.nextSlide();
+      });
+    };
+
+    GalleryRegion.prototype.addLink = function(slide) {
+      var src;
+      src = slide.find('img').attr('src');
+      return this.controls.append($("<li><img src=\"" + src + "\"/><em>&times;</em></li>").data({
+        slide: slide
+      }));
+    };
+
+    GalleryRegion.prototype.dropFile = function(files) {
+      var uploader,
+        _this = this;
+      uploader = new Mercury.Uploader(files, {
+        mimeTypes: this.config('regions:gallery:mimeTypes')
+      });
+      return uploader.on('uploaded', function() {
+        return _this.appendSlide.apply(_this, arguments);
+      });
+    };
+
+    GalleryRegion.prototype.appendSlide = function(file) {
+      var slide;
+      if (!file.isImage()) {
+        return;
+      }
+      slide = $("<div class=\"slide\"><img src=\"" + (file.get('url')) + "\"/></div>");
+      this.slides.append(slide);
+      this.addLink(slide);
+      this.refresh();
+      return this.pushStack(this.el.html());
+    };
+
+    GalleryRegion.prototype.removeSlide = function(e) {
+      var el, index, slide,
+        _this = this;
+      el = $(e.target).closest('li');
+      slide = el.data('slide');
+      index = slide.prevAll('.slide').length + 1;
+      slide.remove();
+      el.remove();
+      if (index < this.index) {
+        this.index -= 1;
+      } else if (index === this.index) {
+        clearTimeout(this.timeout);
+        this.timeout = this.delay(this.speed, function() {
+          return _this.nextSlide();
+        });
+      }
+      this.refresh();
+      return this.pushStack(this.el.html());
+    };
+
+    return GalleryRegion;
+
+  })(Mercury.Region);
+
+}).call(this);
+(function() {
+  var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
   Mercury.Editor = (function(_super) {
 
     __extends(Editor, _super);
 
-    function Editor() {
-      return Editor.__super__.constructor.apply(this, arguments);
-    }
-
     Editor.prototype.logPrefix = 'Mercury.Editor:';
 
     Editor.prototype.attributes = {
       id: 'mercury'
+    };
+
+    function Editor(options) {
+      var region;
+      this.options = options != null ? options : {};
+      Editor.__super__.constructor.apply(this, arguments);
+      this.regions = (function() {
+        var _i, _len, _ref, _results;
+        _ref = this.regionElements();
+        _results = [];
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          region = _ref[_i];
+          _results.push(Mercury.Region.create(region));
+        }
+        return _results;
+      }).call(this);
+    }
+
+    Editor.prototype.regionElements = function() {
+      return $("[" + (this.config('regions:attribute')) + "]");
+    };
+
+    Editor.prototype.save = function() {
+      var data, region, _i, _len, _ref;
+      data = {};
+      _ref = this.regions;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        region = _ref[_i];
+        data[region.name] = region.toJSON();
+      }
+      return data;
     };
 
     return Editor;
@@ -810,8 +1289,9 @@ Copyright (c) 2013 Jeremy Jackson
       return this.config('uploading:saveUrl');
     };
 
-    function File(file) {
+    function File(file, options) {
       this.file = file;
+      this.options = options != null ? options : {};
       File.__super__.constructor.call(this, {
         name: this.file.name,
         type: this.file.type,
@@ -826,7 +1306,7 @@ Copyright (c) 2013 Jeremy Jackson
         this.addError('size', this.t('Too large'));
         return;
       }
-      mimeTypes = this.config('uploading:mimeTypes');
+      mimeTypes = this.options['mimeTypes'] || this.config('uploading:mimeTypes');
       if (mimeTypes && mimeTypes.indexOf(this.get('type')) <= -1) {
         return this.addError('type', this.t('Unsupported format (%s)', this.get('type')));
       }
@@ -905,7 +1385,7 @@ Copyright (c) 2013 Jeremy Jackson
 
   this.JST || (this.JST = {});
 
-  JST['mercury/uploader'] = function(scope) {
+  JST['/mercury/templates/uploader'] = function(scope) {
     return "<div class=\"mercury-uploader-dialog\">\n  <div class=\"mercury-uploader-preview\"><b><img/></b></div>\n  <div class=\"mercury-uploader-details\"></div>\n  <div class=\"mercury-uploader-progress\">\n    <span></span>\n    <div class=\"mercury-uploader-indicator\"><div><b>0%</b></div></div>\n  </div>\n</div>";
   };
 
@@ -924,8 +1404,9 @@ Copyright (c) 2013 Jeremy Jackson
 
     Uploader.prototype.template = 'uploader';
 
+    Uploader.prototype.className = 'mercury-uploader';
+
     Uploader.prototype.attributes = {
-      "class": 'mercury-uploader',
       style: 'opacity:0'
     };
 
@@ -946,25 +1427,28 @@ Copyright (c) 2013 Jeremy Jackson
       this.loaded = 0;
       this.total = 0;
       this.files = [];
-      this.calculate(files || []);
+      if (!this.calculate(files || []).length) {
+        return;
+      }
       this.show();
       this.delay(500, this.upload);
     }
 
     Uploader.prototype.calculate = function(files) {
-      var file, _i, _len, _results;
-      _results = [];
+      var file, _i, _len;
       for (_i = 0, _len = files.length; _i < _len; _i++) {
         file = files[_i];
-        file = new Mercury.File(file);
+        file = new Mercury.File(file, {
+          mimeTypes: this.mimeTypes
+        });
         if (!file.isValid()) {
           alert(this.t('Error uploading %s: %s', file.get('name'), file.errorMessages()));
           continue;
         }
         this.files.push(file);
-        _results.push(this.total += file.get('size'));
+        this.total += file.get('size');
       }
-      return _results;
+      return this.files;
     };
 
     Uploader.prototype.build = function() {
@@ -1045,7 +1529,7 @@ Copyright (c) 2013 Jeremy Jackson
     };
 
     Uploader.prototype.success = function() {
-      Mercury.trigger('action', 'uploadedFile', this.file);
+      this.trigger('uploaded', this.file);
       this.loaded += this.file.get('size');
       this.update(this.t('Successfully uploaded...'));
       return this.upload();

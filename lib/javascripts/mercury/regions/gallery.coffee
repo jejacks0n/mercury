@@ -1,5 +1,3 @@
-#= require mercury/core/region
-
 class Mercury.GalleryRegion extends Mercury.Region
 
   @supported: true

@@ -1,7 +1,6 @@
 (function() {
 
   Mercury.I18n.define('swedish_chef', {
-    "is unsupported in this browser": "is unsooppurted in thees brooser",
     "Error uploading %s: %s": "Irrur upluedeeng %s: %s",
     "Processing...": "Prucesseeng...",
     "Uploading...": "Upluedeeng...",

@@ -212,7 +212,94 @@ Copyright (c) 2013 Jeremy Jackson
   color: rgba(255, 255, 255, 0.8);
 }
 
-/* line 14, ../../lib/stylesheets/mercury.scss */
+/* GalleryRegion
+ *----------------------------------------------------------------------------*/
+/* line 3, ../../lib/stylesheets/mercury/regions/_gallery.scss */
+.mercury-gallery-region {
+  position: relative;
+  background: #333;
+  width: 100%;
+  min-height: 300px;
+  font-family: sans-serif;
+}
+/* line 9, ../../lib/stylesheets/mercury/regions/_gallery.scss */
+.mercury-gallery-region .mercury-gallery-region-controls {
+  display: none;
+  position: absolute;
+  z-index: 20;
+  top: 0;
+  left: 0;
+  width: 100px;
+  margin: 10px;
+  padding: 10px 10px 5px 10px;
+  list-style: none;
+  background: rgba(0, 0, 0, 0.75);
+  border-radius: 5px;
+  text-align: center;
+  font-size: 0;
+}
+/* line 23, ../../lib/stylesheets/mercury/regions/_gallery.scss */
+.mercury-gallery-region .mercury-gallery-region-controls li {
+  position: relative;
+  background: rgba(255, 255, 255, 0.4);
+  text-align: center;
+  margin-bottom: 5px;
+}
+/* line 29, ../../lib/stylesheets/mercury/regions/_gallery.scss */
+.mercury-gallery-region .mercury-gallery-region-controls img {
+  max-width: 100px;
+  max-height: 60px;
+}
+/* line 33, ../../lib/stylesheets/mercury/regions/_gallery.scss */
+.mercury-gallery-region .mercury-gallery-region-controls em {
+  position: absolute;
+  right: -2px;
+  top: -2px;
+  color: red;
+  font-size: 15px;
+  cursor: pointer;
+}
+/* line 43, ../../lib/stylesheets/mercury/regions/_gallery.scss */
+.mercury-gallery-region .slides {
+  position: relative;
+  width: 100%;
+  min-height: 300px;
+  max-height: 600px;
+  overflow: hidden;
+  font-size: 0;
+}
+/* line 50, ../../lib/stylesheets/mercury/regions/_gallery.scss */
+.mercury-gallery-region .slides .slide {
+  width: 100%;
+  height: 100%;
+  background: #333;
+  text-align: center;
+}
+/* line 55, ../../lib/stylesheets/mercury/regions/_gallery.scss */
+.mercury-gallery-region .slides .slide img {
+  height: 600px;
+}
+/* line 60, ../../lib/stylesheets/mercury/regions/_gallery.scss */
+.mercury-gallery-region .paginator {
+  position: absolute;
+  z-index: 19;
+  bottom: 5px;
+  width: 100%;
+  text-align: center;
+}
+/* line 66, ../../lib/stylesheets/mercury/regions/_gallery.scss */
+.mercury-gallery-region .paginator span {
+  font-size: 30px;
+  color: #fff;
+  text-shadow: 0 0 5px black;
+  margin: 0 8px;
+}
+/* line 72, ../../lib/stylesheets/mercury/regions/_gallery.scss */
+.mercury-gallery-region .paginator .active {
+  color: red;
+}
+
+/* line 16, ../../lib/stylesheets/mercury.scss */
 #mercury {
   -webkit-text-size-adjust: none;
 }

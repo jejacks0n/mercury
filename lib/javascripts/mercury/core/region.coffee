@@ -3,15 +3,17 @@
 @Mercury ||= {}
 
 class Mercury.Region extends Mercury.View
-  @extend  Mercury.Events
   @extend  Mercury.Config
+  @extend  Mercury.Events
+  @extend  Mercury.I18n
+  @extend  Mercury.Logger
   @include Mercury.Stack
 
   @supported: true
 
   @type: 'unknown'
 
-  logPrefix: 'Mercury.Region'
+  logPrefix: 'Mercury.Region:'
 
   # Define the region by setting className, type, and supported actions. This also clears any events that might already
   # exist, and sets some useful stuff like logPrefix.
@@ -32,9 +34,8 @@ class Mercury.Region extends Mercury.View
     type = el.attr(@config('regions:attribute'))
     @notify(@t('region type not provided')) unless type
 
-    type = "#{type}_region".toCamelCase(true)
-    @notify(@t('unknown "%s" region type used, falling back to base region', type)) unless Mercury[type]
-
+    type = "#{type}_region".toLowerCase().toCamelCase(true)
+    @notify(@t('unknown "%s" region type, falling back to base region', type)) unless Mercury[type]
     new (Mercury[type] || Mercury.Region)(el)
 
 
@@ -67,7 +68,7 @@ class Mercury.Region extends Mercury.View
     @delegateActions($.extend(true, @constructor.actions, @actions ||= {}))
 
     # delegate file dropping if it looks like we want to allow dropping files
-    @delegateDropFile(@actions) if typeof(@dropFile) == 'function'
+    @delegateDropFile() if typeof(@dropFile) == 'function'
 
 
   # Handles action events by taking the first argument, which should be the action, and passes through to the action
@@ -99,6 +100,14 @@ class Mercury.Region extends Mercury.View
     value: @html()
     data: @data()
     snippets: @snippets()
+
+
+  # Releases the instance and triggers a release event. Releasing a region doesn't remove the element, but does remove
+  # all event listeners including those that have been added externally.
+  #
+  release: ->
+    @trigger('release')
+    @off()
 
 
   # Adds the annoying drag events needed to capture when files have been dragged into the browser and dropped on our

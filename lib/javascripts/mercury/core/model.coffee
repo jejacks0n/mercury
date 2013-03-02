@@ -6,15 +6,15 @@
 @Mercury ||= {}
 
 class Mercury.Model extends Mercury.Module
-  @extend  Mercury.Events
   @extend  Mercury.Config
+  @extend  Mercury.Events
   @include Mercury.Config
   @include Mercury.Events
   @include Mercury.I18n
   @include Mercury.Logger
   @include Mercury.Stack
 
-  logPrefix: 'Mercury.Model'
+  logPrefix: 'Mercury.Model:'
 
   @idCounter: 1
 
@@ -23,7 +23,7 @@ class Mercury.Model extends Mercury.Module
   # Returns itself for chaining.
   #
   @define: (@className, @urlPrefix) ->
-    @.prototype.logPrefix = @logPrefix = "#{@className}:"
+    @logPrefix = @::logPrefix = "#{@className}:"
     @records = {}
     @off()
     @

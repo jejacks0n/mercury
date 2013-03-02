@@ -7,7 +7,6 @@ describe "Mercury.Uploader", ->
   subject = null
 
   beforeEach ->
-    Mercury.configure 'localization:enabled', false
     Mercury.configure 'uploading:maxSize', 2048
     Klass.supported = true
     spyOn(Klass.prototype, 'delay')

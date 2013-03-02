@@ -17,19 +17,25 @@ describe "Mercury.Model", ->
   describe "Modules", ->
 
     it "includes in the expected modules", ->
-      expect( Klass.on ).to.be.a('Function')
       expect( Klass.config ).to.be.a('Function')
-      expect( subject.config ).to.be.a('Function')
+      expect( Klass.on ).to.be.a('Function')
       expect( subject.on ).to.be.a('Function')
-      expect( subject.log ).to.be.a('Function')
+      expect( subject.config ).to.be.a('Function')
       expect( subject.t ).to.be.a('Function')
+      expect( subject.log ).to.be.a('Function')
 
 
   describe ".define", ->
 
-    it "assigns name, and @records", ->
-      Klass.define('TestModel')
+    it "assigns @className and @urlPrefix", ->
+      Klass.define('TestModel', '_prefix_')
       expect( Klass.className ).to.eq('TestModel')
+      expect( Klass.urlPrefix ).to.eq('_prefix_')
+
+    it "sets the @logPrefix", ->
+      Klass.define('TestModel')
+      expect( Klass.logPrefix ).to.eq('TestModel:')
+      expect( Klass.prototype.logPrefix ).to.eq('TestModel:')
 
     it "calls @off", ->
       spyOn(Klass, 'off')
@@ -38,6 +44,7 @@ describe "Mercury.Model", ->
 
     it "returns itself for chaining", ->
       expect( Klass.define('TestModel') ).to.eq(Klass)
+
 
   describe ".url", ->
 

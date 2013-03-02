@@ -15,8 +15,8 @@ describe "Mercury.View", ->
     it "includes in the expected modules", ->
       expect( subject.config ).to.be.a('Function')
       expect( subject.on ).to.be.a('Function')
-      expect( subject.log ).to.be.a('Function')
       expect( subject.t ).to.be.a('Function')
+      expect( subject.log ).to.be.a('Function')
 
 
   describe "#constructor", ->

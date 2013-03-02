@@ -7,7 +7,6 @@ describe "Mercury.File", ->
   subject = null
 
   beforeEach ->
-    Mercury.configure 'localization:enabled', false
     @file = name: '_name_', type: 'image/jpeg', size: 1024
     subject = new Klass(@file)
 

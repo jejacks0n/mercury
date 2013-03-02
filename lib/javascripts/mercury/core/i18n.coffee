@@ -20,9 +20,9 @@ Mercury.I18n =
   #
   locale: ->
     return @__determined__ if @__determined__
-    return [{}, {}] unless Mercury.configuration.localization.enabled
+    return [{}, {}] unless Mercury.configuration.localization?.enabled
 
-    [top, sub] = (@clientLocale() || Mercury.configuration.localization.preferred).split('-')
+    [top, sub] = (@clientLocale() || Mercury.configuration.localization?.preferred).split('-')
     top = @.__locales__[top]
     sub = top["_#{sub.toUpperCase()}_"] if top && sub
 

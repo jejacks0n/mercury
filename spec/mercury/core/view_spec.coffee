@@ -30,10 +30,10 @@ describe "Mercury.View", ->
       expect( $('<div>').append(subject.el).html() ).to.eq('<div></div>')
 
     it "creates an element with expected attributes", ->
-      subject = new Klass(tag: 'section', attributes: {id: 'test_id', class: 'test_class'})
+      subject = new Klass(tag: 'section', className: 'test_class', attributes: {id: 'test_id', class: 'extra_class'})
       expect( subject.el.is('section') ).to.be.true
       expect( subject.el.attr('id') ).to.eq('test_id')
-      expect( subject.el.attr('class') ).to.eq('test_class')
+      expect( subject.el.attr('class') ).to.eq('extra_class test_class')
 
     it "doesn't create an element if already created", ->
       subject = new Klass(el: $('<foo>'))

@@ -10,8 +10,9 @@ class Mercury.Uploader extends Mercury.View
 
   template: 'uploader'
 
+  className: 'mercury-uploader'
+
   attributes:
-    class: 'mercury-uploader'
     style: 'opacity:0'
 
   elements:

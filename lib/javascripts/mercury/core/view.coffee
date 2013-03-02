@@ -27,6 +27,7 @@ class Mercury.View extends Mercury.Module
     @el  = $(@el)
     @$el = @el
     @attr(@attributes)
+    @addClass(@className)
 
     @html(@renderTemplate(@template)) if @template
 

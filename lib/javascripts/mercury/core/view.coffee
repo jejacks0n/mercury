@@ -57,6 +57,7 @@ class Mercury.View extends Mercury.Module
   # Delegate to jQuery attr.
   #
   attr: (key, value) ->
+    return @el.attr(key) if key && arguments.length == 1
     @el.attr(key, value)
 
 

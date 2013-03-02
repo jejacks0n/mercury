@@ -96,6 +96,11 @@ describe "Mercury.View", ->
       subject.attr(title: 'test_title')
       expect( subject.el.is('[title=test_title]') ).to.be.true
 
+    it "returns the attr requested", ->
+      subject.el.attr(foo: 'bar')
+      expect( subject.attr('foo') ).to.eq('bar')
+      expect( subject.attr() ).to.eq(subject.el)
+
 
   describe "#html", ->
 

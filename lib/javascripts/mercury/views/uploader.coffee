@@ -38,7 +38,7 @@ class Mercury.Uploader extends Mercury.View
 
   calculate: (files) ->
     for file in files
-      file = new Mercury.File(file)
+      file = new Mercury.File(file, mimeTypes: @mimeTypes)
       unless file.isValid()
         alert(@t('Error uploading %s: %s', file.get('name'), file.errorMessages()))
         continue
@@ -91,7 +91,8 @@ class Mercury.Uploader extends Mercury.View
 
 
   success: ->
-    Mercury.trigger('action', 'uploadFile', @file)
+    @trigger('uploaded', @file)
+#    Mercury.trigger('action', 'uploadFile', @file)
     @loaded += @file.get('size')
     @update(@t('Successfully uploaded...'))
     @upload()

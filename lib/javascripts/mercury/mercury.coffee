@@ -16,7 +16,7 @@
 #
 # Standard regions.
 #
-#= require mercury/regions/example
+#= require mercury/regions/gallery
 #
 # Views.
 #

@@ -3,6 +3,10 @@
 #= require mercury/dependencies
 #= require mercury/mercury
 #
+# Region types.
+#
+#= require mercury/regions/gallery
+#
 # Configuration.
 #
 #= require mercury/config

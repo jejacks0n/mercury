@@ -6,6 +6,7 @@
 # Region types.
 #
 #= require mercury/regions/gallery
+#= require mercury/regions/image
 #
 # Configuration.
 #

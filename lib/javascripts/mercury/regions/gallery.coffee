@@ -2,8 +2,9 @@
 
 class Mercury.GalleryRegion extends Mercury.Region
 
-  @define 'Mercury.GalleryRegion', 'gallery',
-    uploadFile: 'appendSlide'
+  @supported: true
+
+  @define 'Mercury.GalleryRegion', 'gallery'
 
   className: 'mercury-gallery-region'
 
@@ -56,7 +57,8 @@ class Mercury.GalleryRegion extends Mercury.Region
 
 
   dropFile: (files) ->
-    new Mercury.Uploader(files)
+    uploader = new Mercury.Uploader(files)
+    uploader.on('uploaded', => @appendSlide(arguments...))
 
 
   appendSlide: (file) ->

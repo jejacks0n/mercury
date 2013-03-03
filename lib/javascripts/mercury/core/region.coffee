@@ -48,7 +48,7 @@ class Mercury.Region extends Mercury.View
     super(@options)
 
     # make the element focusable
-    @attr(tabindex: @tabIndex || 0)
+    @attr(tabindex: 0) if @focusable
 
     # get the name from the element (default attribute is "id")
     @name ||= @el.attr(@config('regions:identifier'))
@@ -58,6 +58,7 @@ class Mercury.Region extends Mercury.View
 
     # set defaults
     @previewing ||= false
+    @focused ||= false
 
     @bindDefaultEvents()
 
@@ -67,22 +68,41 @@ class Mercury.Region extends Mercury.View
   #
   bindDefaultEvents: ->
     @delegateEvents
-      focus: => @onFocus?()
-      blur: => @onBlur?()
+      focus: => @trigger('focus'); @onFocus?()
+      blur: => @trigger('blur'); @onBlur?()
 
     # handle action events using a custom event handler
     Mercury.on('action', => @handleAction(arguments...))
     @delegateActions($.extend(true, @constructor.actions, @actions ||= {}))
 
     # delegate file dropping if it looks like we want to allow dropping files
-    @delegateDropFile() if typeof(@dropFile) == 'function'
+    @delegateDropFile() if typeof(@onDropFile) == 'function'
 
 
   # Handles action events by taking the first argument, which should be the action, and passes through to the action
   # handler that's been defined within the subclass.
   #
   handleAction: (args...) ->
+    return unless @focused
     @actions[args.shift()]?(args...)
+
+
+  # Focuses the region, which will call focus on the element and an onFocus method if the subclass implements one. Used
+  # externally to manually focus a region (so regions can retain focus with various actions.)
+  #
+  focus: ->
+    @focused = true
+    @el.focus()
+    @onFocus?()
+
+
+  # Blurs the region, which will call blur on the element and an onBlur method if the subclass implements one. Used
+  # externally to manually blur a region.
+  #
+  blur: ->
+    @focused = false
+    @el.blur()
+    @onBlur?()
 
 
   # Delegate jQuery data.
@@ -128,7 +148,7 @@ class Mercury.Region extends Mercury.View
     @el.on 'drop', (e) =>
       return unless e.originalEvent.dataTransfer.files.length
       e.preventDefault()
-      @dropFile(e.originalEvent.dataTransfer.files)
+      @onDropFile(e.originalEvent.dataTransfer.files)
 
 
   # This works much like Mercury.View.delegateEvents, but instead of binding events to the element we're just resolving

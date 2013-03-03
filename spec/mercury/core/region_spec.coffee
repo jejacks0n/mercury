@@ -90,10 +90,10 @@ describe "Mercury.Region", ->
       expect( subject.name ).to.eq('_name_')
 
     it "sets a tabindex (so it's focusable)", ->
-      subject = new Klass('<div id="_name_">')
+      subject = new Klass('<div id="_name_">', focusable: true)
       expect( subject.attr('tabindex') ).to.eq('0')
-      subject = new Klass('<div id="_name_">', tabIndex: 42)
-      expect( subject.attr('tabindex') ).to.eq('42')
+      subject = new Klass('<div id="_name_">', focusable: false)
+      expect( subject.attr('tabindex') ).to.be.undefined
 
     it "allows passing the name", ->
       subject = new Klass('<div>', name: '_name_')
@@ -111,8 +111,10 @@ describe "Mercury.Region", ->
     it "sets default instance vars (and allows them to be overridden)", ->
       subject = new Klass('<div id="name">')
       expect( subject.previewing ).to.be.false
-      subject = new Klass('<div id="name">', previewing: true)
+      expect( subject.focused ).to.be.false
+      subject = new Klass('<div id="name">', previewing: true, focused: true)
       expect( subject.previewing ).to.be.true
+      expect( subject.focused ).to.be.true
 
     it "calls #bindDefaultEvents", ->
       spyOn(Klass.prototype, 'bindDefaultEvents')
@@ -144,7 +146,7 @@ describe "Mercury.Region", ->
       expect( subject.delegateActions ).calledWith(foo: 'bar', bit: 'bot')
 
     it "calls #delegateDropFile of we respond to #dropFile", ->
-      subject.dropFile = ->
+      subject.onDropFile = ->
       spyOn(subject, 'delegateDropFile')
       subject.bindDefaultEvents()
       expect( subject.delegateDropFile ).called
@@ -154,29 +156,72 @@ describe "Mercury.Region", ->
       beforeEach ->
         @events = {}
         spyOn(subject, 'delegateEvents', => @events = arguments[0])
+        spyOn(subject, 'trigger')
         subject.bindDefaultEvents()
 
-      it "has a focus that calls #onFocus if it exists", ->
+      it "has a focus that triggers an event and calls #onFocus if it exists", ->
         @events.focus()
         subject.onFocus = spy()
         @events.focus()
+        expect( subject.trigger ).calledWith('focus')
         expect( subject.onFocus ).calledOnce
 
-      it "has a blur that calls #onBlur if it exists", ->
+      it "has a blur that triggers an event and calls #onBlur if it exists", ->
         @events.blur()
         subject.onBlur = spy()
         @events.blur()
+        expect( subject.trigger ).calledWith('blur')
         expect( subject.onBlur ).calledOnce
 
 
   describe "#handleAction", ->
 
     beforeEach ->
+      subject.focused = true
       subject.actions = {foo: spy()}
 
     it "calls the action we've delegated", ->
       subject.handleAction('foo', 1, 2, '3')
       expect( subject.actions.foo ).calledWith(1, 2, '3')
+
+    it "doesn't call the action we've delegated if not focused", ->
+      subject.focused = false
+      subject.handleAction('foo', 1, 2, '3')
+      expect( subject.actions.foo ).not.called
+
+
+  describe "#focus", ->
+
+    it "sets @focused to true", ->
+      subject.focus()
+      expect( subject.focused ).to.be.true
+
+    it "calls focus on the element", ->
+      spyOn(subject.el, 'focus')
+      subject.focus()
+      expect( subject.el.focus ).called
+
+    it "calls @onFocus if it's defined", ->
+      subject.onFocus = spy()
+      subject.focus()
+      expect( subject.onFocus ).called
+
+
+  describe "#blur", ->
+
+    it "sets @focused to false", ->
+      subject.blur()
+      expect( subject.focused ).to.be.false
+
+    it "calls blur on the element", ->
+      spyOn(subject.el, 'blur')
+      subject.blur()
+      expect( subject.el.blur ).called
+
+    it "calls @onBlur if it's defined", ->
+      subject.onBlur = spy()
+      subject.blur()
+      expect( subject.onBlur ).called
 
 
   describe "#data", ->
@@ -232,7 +277,7 @@ describe "Mercury.Region", ->
   describe "#delegateDropFile", ->
 
     beforeEach ->
-      subject.dropFile = spy()
+      subject.onDropFile = spy()
       @event =
         preventDefault: spy()
         originalEvent: {dataTransfer: {files: []}}
@@ -244,11 +289,11 @@ describe "Mercury.Region", ->
       expect( subject.el.on ).calledWith('dragover', sinon.match.func)
       expect( subject.el.on ).calledWith('drop', sinon.match.func)
 
-    it "calls #dropFile with the expected array when files are dropped (and preventDefault)", ->
+    it "calls #onDropFile with the expected array when files are dropped (and preventDefault)", ->
       @event.originalEvent.dataTransfer.files = ['_file1_', '_file2_']
       subject.delegateDropFile()
       expect( @event.preventDefault ).calledThrice
-      expect( subject.dropFile ).calledWith(['_file1_', '_file2_'])
+      expect( subject.onDropFile ).calledWith(['_file1_', '_file2_'])
 
 
   describe "#delegateActions", ->

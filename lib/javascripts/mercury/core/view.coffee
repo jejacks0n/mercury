@@ -31,8 +31,8 @@ class Mercury.View extends Mercury.Module
 
     @html(@renderTemplate(@template)) if @template
 
-    @events = @constructor.events unless @events
-    @elements = @constructor.elements unless @elements
+    @elements ||= @constructor.elements
+    @events ||= @constructor.events
 
     @build?()
 

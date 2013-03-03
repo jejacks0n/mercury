@@ -1,20 +1,47 @@
 #= require mercury/core/view
+#= require mercury/templates/editor
 
 class Mercury.Editor extends Mercury.View
 
   logPrefix: 'Mercury.Editor:'
 
+  template: 'editor'
+
   attributes:
     id: 'mercury'
 
+  events:
+    'mousedown': 'keepRegionFocused'
+    'click [data-action]': 'handleAction'
+
   constructor: (@options = {}) ->
     super
-    @regions = for region in @regionElements()
-      Mercury.Region.create(region)
+    @regions ||= []
+    @addRegion(el) for el in @regionElements()
+    @regions[0]?.focus()
 
 
   regionElements: ->
     $("[#{@config('regions:attribute')}]")
+
+
+  addRegion: (el) ->
+    region = Mercury.Region.create(el)
+    region.on('focus', => @region = region)
+    @regions.push(region)
+
+
+  keepRegionFocused: (e) ->
+    e.preventDefault()
+    @region.focus()
+
+
+  handleAction: (e) ->
+    action = $(e.target).data('action')
+    switch action
+      when 'undo' then Mercury.trigger('action', 'undo')
+      when 'redo' then Mercury.trigger('action', 'redo')
+      when 'preview' then Mercury.trigger('mode', 'preview')
 
 
   save: ->

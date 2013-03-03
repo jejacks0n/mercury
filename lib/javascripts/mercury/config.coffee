@@ -65,6 +65,8 @@ Mercury.configuration =
     # that image. It allows draging/dropping images onto itself, and maintains a history so you can undo/redo your
     # changes.
     #
+    #= require mercury/regions/gallery
+    #
     image:
       mimeTypes: ['image/jpeg']                            # file types - overrides general uploading configuration.
 
@@ -72,5 +74,18 @@ Mercury.configuration =
     # It allows drag/drop of images and provides a simple implementation of a slide show with the ability to remove
     # items. You can use this as an example of how you could embed an entire backbone app within a region.
     #
+    #= require mercury/regions/gallery
+    #
     gallery:
       mimeTypes: ['image/jpeg']                            # file types - overrides general uploading configuration.
+
+    # Markdown provides an easy way to provide some markup abilities without the exposing the ability to edit complex
+    # HTML, and is useful for people who don't fully understand HTML. Use the markdown sent to the server on save to
+    # render the content when not editing, and render the markdown when editing.
+    #
+    #= require showdown-1.0
+    #= require mercury/regions/markdown
+    #
+    markdown:
+      autoResize: true                                     # the region will auto-resize to the content on typing etc.
+

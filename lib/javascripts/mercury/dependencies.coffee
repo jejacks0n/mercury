@@ -11,7 +11,7 @@
 # Markdown region dependencies.
 # showdown is the markdown library used when previewing.
 #
-# require showdown-1.0
+#= require showdown-1.0
 #
 # Misc.
 # liquidmetal is used for filtering lists.

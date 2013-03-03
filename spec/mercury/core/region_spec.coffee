@@ -27,11 +27,11 @@ describe "Mercury.Region", ->
 
   describe ".define", ->
 
-    it "assigns @className, @type and @actions", ->
+    it "assigns @className, @type and @prototype.actions", ->
       Klass.define('TestRegion', '_test_', foo: 'bar')
       expect( Klass.className ).to.eq('TestRegion')
       expect( Klass.type ).to.eq('_test_')
-      expect( Klass.actions ).to.eql(foo: 'bar')
+      expect( Klass.prototype.actions ).to.eql(foo: 'bar')
 
     it "sets the @logPrefix", ->
       Klass.define('TestRegion')
@@ -89,10 +89,10 @@ describe "Mercury.Region", ->
       subject = new Klass('<div data-name="_name_">')
       expect( subject.name ).to.eq('_name_')
 
-    it "sets a tabindex (so it's focusable)", ->
-      subject = new Klass('<div id="_name_">', focusable: true)
+    it "sets a tabindex (so it's focusable) unless we've provided our own focusable element", ->
+      subject = new Klass('<div id="_name_">')
       expect( subject.attr('tabindex') ).to.eq('0')
-      subject = new Klass('<div id="_name_">', focusable: false)
+      subject = new Klass('<div id="_name_">', focusable: $('<div>'))
       expect( subject.attr('tabindex') ).to.be.undefined
 
     it "allows passing the name", ->
@@ -101,7 +101,7 @@ describe "Mercury.Region", ->
 
     it "notifies if we have no name", ->
       subject = new Klass('<div>')
-      expect( Klass.prototype.notify ).calledWith('no name provided for the "unknown" region, falling back to random')
+      expect( subject.notify ).calledWith('no name provided for the "unknown" region, falling back to random')
 
     it "falls back to a random name if we have no name", ->
       spyOn(Math, 'random', -> 42)
@@ -112,66 +112,25 @@ describe "Mercury.Region", ->
       subject = new Klass('<div id="name">')
       expect( subject.previewing ).to.be.false
       expect( subject.focused ).to.be.false
-      subject = new Klass('<div id="name">', previewing: true, focused: true)
+      expect( subject.focusable ).to.eq(subject.el)
+      expect( subject.skipHistoryOn ).to.eql(['redo'])
+
+      focusable = $('<textarea>')
+      subject = new Klass('<div id="name">', previewing: true, focused: true, focusable: focusable, skipHistoryOn: ['foo'])
       expect( subject.previewing ).to.be.true
       expect( subject.focused ).to.be.true
+      expect( subject.focusable ).to.eq(focusable)
+      expect( subject.skipHistoryOn ).to.eql(['foo'])
+
+    it "calls #pushHistory", ->
+      spyOn(Klass.prototype, 'pushHistory')
+      subject = new Klass('<div>')
+      expect( subject.pushHistory ).called
 
     it "calls #bindDefaultEvents", ->
       spyOn(Klass.prototype, 'bindDefaultEvents')
       subject = new Klass('<div id="name">')
-      expect( Klass.prototype.bindDefaultEvents ).called
-
-
-  describe "#bindDefaultEvents", ->
-
-    it "calls #delegateEvents with commen events", ->
-      spyOn(subject, 'delegateEvents')
-      subject.bindDefaultEvents()
-      expect( subject.delegateEvents ).calledWith
-        focus: sinon.match.func
-        blur: sinon.match.func
-
-    it "binds to the global 'action' event", ->
-      spyOn(subject, 'handleAction')
-      spyOn(Mercury, 'on').callsArgOnWith(1, subject, 1, 2, '3')
-      subject.bindDefaultEvents()
-      expect( Mercury.on ).calledWith('action', sinon.match.func)
-      expect( subject.handleAction ).calledWith(1, 2, '3')
-
-    it "calls #delegateActions with what we've defined", ->
-      subject.actions = {foo: 'bar'}
-      subject.constructor.actions = {bit: 'bot'}
-      spyOn(subject, 'delegateActions')
-      subject.bindDefaultEvents()
-      expect( subject.delegateActions ).calledWith(foo: 'bar', bit: 'bot')
-
-    it "calls #delegateDropFile of we respond to #dropFile", ->
-      subject.onDropFile = ->
-      spyOn(subject, 'delegateDropFile')
-      subject.bindDefaultEvents()
-      expect( subject.delegateDropFile ).called
-
-    describe "delegated events", ->
-
-      beforeEach ->
-        @events = {}
-        spyOn(subject, 'delegateEvents', => @events = arguments[0])
-        spyOn(subject, 'trigger')
-        subject.bindDefaultEvents()
-
-      it "has a focus that triggers an event and calls #onFocus if it exists", ->
-        @events.focus()
-        subject.onFocus = spy()
-        @events.focus()
-        expect( subject.trigger ).calledWith('focus')
-        expect( subject.onFocus ).calledOnce
-
-      it "has a blur that triggers an event and calls #onBlur if it exists", ->
-        @events.blur()
-        subject.onBlur = spy()
-        @events.blur()
-        expect( subject.trigger ).calledWith('blur')
-        expect( subject.onBlur ).calledOnce
+      expect( subject.bindDefaultEvents ).called
 
 
   describe "#handleAction", ->
@@ -179,6 +138,13 @@ describe "Mercury.Region", ->
     beforeEach ->
       subject.focused = true
       subject.actions = {foo: spy()}
+      spyOn(subject, 'pushHistory')
+
+    it "calls #pushHistory if the action isn't set in @skipHistoryOn", ->
+      subject.handleAction('redo')
+      expect( subject.pushHistory ).not.called
+      subject.handleAction('undo')
+      expect( subject.pushHistory ).called
 
     it "calls the action we've delegated", ->
       subject.handleAction('foo', 1, 2, '3')
@@ -188,6 +154,15 @@ describe "Mercury.Region", ->
       subject.focused = false
       subject.handleAction('foo', 1, 2, '3')
       expect( subject.actions.foo ).not.called
+
+
+  describe "#pushHistory", ->
+
+    it "calls #pushStack with the value returned from #value", ->
+      spyOn(subject, 'pushStack')
+      spyOn(subject, 'value', -> '_value_')
+      subject.pushHistory()
+      expect( subject.pushStack ).calledWith('_value_')
 
 
   describe "#focus", ->
@@ -224,6 +199,19 @@ describe "Mercury.Region", ->
       expect( subject.onBlur ).called
 
 
+  describe "#value", ->
+
+    it "calls #html with the value", ->
+      spyOn(subject, 'html')
+      subject.value('foo')
+      expect( subject.html ).calledWith('foo')
+
+    it "calls #html without arguments if the value is null or undefined", ->
+      spyOn(subject, 'html')
+      subject.value()
+      expect( subject.html ).calledWith()
+
+
   describe "#data", ->
 
     it "sets the element data", ->
@@ -243,12 +231,30 @@ describe "Mercury.Region", ->
       expect( subject.snippets() ).to.eql({})
 
 
+  describe "#onUndo", ->
+
+    it "calls #value with the value returned from #undoStack", ->
+      spyOn(subject, 'value')
+      spyOn(subject, 'undoStack', -> '_undo_stack_')
+      subject.onUndo()
+      expect( subject.value ).calledWith('_undo_stack_')
+
+
+  describe "#onRedo", ->
+
+    it "calls #value with the value returned from #redoStack", ->
+      spyOn(subject, 'value')
+      spyOn(subject, 'redoStack', -> '_redo_stack_')
+      subject.onRedo()
+      expect( subject.value ).calledWith('_redo_stack_')
+
+
   describe "#toJSON", ->
 
     beforeEach ->
       subject.name = '_name_'
       subject.constructor.type = '_type_'
-      spyOn(subject, 'html', -> '_html_')
+      spyOn(subject, 'value', -> '_value_')
       spyOn(subject, 'data', -> '_data_')
       spyOn(subject, 'snippets', -> '_snippets_')
 
@@ -256,7 +262,7 @@ describe "Mercury.Region", ->
       expect( subject.toJSON() ).to.eql
         name: '_name_'
         type: '_type_'
-        value: '_html_'
+        value: '_value_'
         data: '_data_'
         snippets: '_snippets_'
 
@@ -268,32 +274,178 @@ describe "Mercury.Region", ->
       subject.release()
       expect( subject.trigger ).calledWith('release')
 
+    it "calls #off on @focusable and @el", ->
+      subject.focusable = off: spy()
+      spyOn(subject.el, 'off')
+      subject.release()
+      expect( subject.el.off ).called
+      expect( subject.focusable.off ).called
+
     it "calls #off", ->
       spyOn(subject, 'off')
       subject.release()
       expect( subject.off ).called
 
 
-  describe "#delegateDropFile", ->
+  describe "#bindDefaultEvents", ->
 
     beforeEach ->
-      subject.onDropFile = spy()
-      @event =
-        preventDefault: spy()
-        originalEvent: {dataTransfer: {files: []}}
-      spyOn(subject.el, 'on').callsArgOnWith(1, subject, @event)
+      spyOn(subject, 'bindFocusEvents')
+      spyOn(subject, 'bindKeyEvents')
+      spyOn(subject, 'bindDropEvents')
 
-    it "binds to various drop events so we can drop files", ->
-      subject.delegateDropFile()
-      expect( subject.el.on ).calledWith('dragenter', sinon.match.func)
-      expect( subject.el.on ).calledWith('dragover', sinon.match.func)
-      expect( subject.el.on ).calledWith('drop', sinon.match.func)
+    it "binds to the global 'action' event", ->
+      spyOn(subject, 'handleAction')
+      spyOn(Mercury, 'on').callsArgOnWith(1, subject, 1, 2, '3')
+      subject.bindDefaultEvents()
+      expect( Mercury.on ).calledWith('action', sinon.match.func)
+      expect( subject.handleAction ).calledWith(1, 2, '3')
 
-    it "calls #onDropFile with the expected array when files are dropped (and preventDefault)", ->
-      @event.originalEvent.dataTransfer.files = ['_file1_', '_file2_']
-      subject.delegateDropFile()
-      expect( @event.preventDefault ).calledThrice
-      expect( subject.onDropFile ).calledWith(['_file1_', '_file2_'])
+    it "calls #delegateActions with what we've defined", ->
+      subject.actions = {foo: 'bar'}
+      subject.constructor.actions = {bit: 'bot'}
+      spyOn(subject, 'delegateActions')
+      subject.bindDefaultEvents()
+      expect( subject.delegateActions ).calledWith(foo: 'bar', bit: 'bot', undo: 'onUndo', redo: 'onRedo')
+
+    it "calls #bindFocusEvents", ->
+      subject.bindDefaultEvents()
+      expect( subject.bindFocusEvents ).called
+
+    it "calls #bindKeyEvents", ->
+      subject.bindDefaultEvents()
+      expect( subject.bindKeyEvents ).called
+
+    it "calls #bindDropEvents if there's an #onDropFile method defined", ->
+      subject.bindDefaultEvents()
+      expect( subject.bindDropEvents ).not.called
+      subject.onDropFile = ->
+      subject.bindDefaultEvents()
+      expect( subject.bindDropEvents ).called
+
+
+  describe "#bindFocusEvents", ->
+
+    it "calls #delegateEvents with the expected events on @focusable", ->
+      spyOn(subject, 'delegateEvents')
+      subject.bindFocusEvents()
+      expect( subject.delegateEvents ).calledWith subject.focusable,
+        focus: sinon.match.func
+        blur: sinon.match.func
+
+    describe "focus", ->
+
+      beforeEach ->
+        @events = {}
+        spyOn(subject, 'delegateEvents', => @events = arguments[1])
+        spyOn(subject, 'trigger')
+        subject.bindFocusEvents()
+
+      it "triggers an event", ->
+        @events.focus()
+        expect( subject.trigger ).calledWith('focus')
+
+      it "sets @focused to true", ->
+        @events.focus()
+        expect( subject.focused ).to.be.true
+
+      it "calls #onFocus if it exists", ->
+        subject.onFocus = spy()
+        @events.focus()
+        expect( subject.onFocus ).calledOnce
+
+    describe "blur", ->
+
+      beforeEach ->
+        @events = {}
+        spyOn(subject, 'delegateEvents', => @events = arguments[1])
+        spyOn(subject, 'trigger')
+        subject.bindFocusEvents()
+
+      it "triggers a blur event", ->
+        @events.blur()
+        expect( subject.trigger ).calledWith('blur')
+
+      it "sets @focused to false", ->
+        @events.blur()
+        expect( subject.focused ).to.be.false
+
+      it "calls #onBlur if it exists", ->
+        subject.onBlur = spy()
+        @events.blur()
+        expect( subject.onBlur ).calledOnce
+
+
+  describe "#bindKeyEvents", ->
+
+    it "calls #delegateEvents with the expected events on @focusable", ->
+      spyOn(subject, 'delegateEvents')
+      subject.bindKeyEvents()
+      expect( subject.delegateEvents ).calledWith subject.focusable,
+        keydown: sinon.match.func
+
+    describe "keydown", ->
+
+      beforeEach ->
+        @events = {}
+        spyOn(subject, 'delegateEvents', => @events = arguments[1])
+        spyOn(subject, 'handleAction')
+        subject.bindKeyEvents()
+        @e = metaKey: true, keyCode: 90, shiftKey: false, preventDefault: spy()
+
+      it "handles undo on metaKey+z", ->
+        @events.keydown(@e)
+        expect( @e.preventDefault ).called
+        expect( subject.handleAction ).calledWith('undo')
+
+      it "handles redo on metaKey+Z (shiftKey)", ->
+        @e.shiftKey = true
+        @events.keydown(@e)
+        expect( @e.preventDefault ).called
+        expect( subject.handleAction ).calledWith('redo')
+
+      it "does nothing if not the right key combination", ->
+        @e.metaKey = false
+        @e.keyCode = 13 # enter
+        @events.keydown(@e)
+        expect( @e.preventDefault ).not.called
+        expect( subject.handleAction ).not.called
+
+
+  describe "#bindDropEvents", ->
+
+    it "calls #delegateEvents with the expected events on @focusable", ->
+      spyOn(subject, 'delegateEvents')
+      subject.bindDropEvents()
+      expect( subject.delegateEvents ).calledWith subject.focusable,
+        dragenter: sinon.match.func
+        dragover: sinon.match.func
+        drop: sinon.match.func
+
+    describe "drop", ->
+
+      beforeEach ->
+        @events = {}
+        spyOn(subject, 'delegateEvents', => @events = arguments[1])
+        subject.bindDropEvents()
+        subject.onDropFile = spy()
+        @e = originalEvent: {dataTransfer: {files: []}}, preventDefault: spy()
+
+      it "calls preventDefault for all preemptive events", ->
+        @events.dragenter(@e)
+        @events.dragover(@e)
+        expect( @e.preventDefault ).calledTwice
+
+      it "calls #onDropFile with the expected array when files are dropped", ->
+        @e.originalEvent.dataTransfer.files = ['_file1_', '_file2_']
+        @events.drop(@e)
+        expect( @e.preventDefault ).calledOnce
+        expect( subject.onDropFile ).calledWith(['_file1_', '_file2_'])
+
+      it "does nothing if there's no files", ->
+        @events.drop(@e)
+        expect( @e.preventDefault ).not.called
+        expect( subject.onDropFile ).not.called
 
 
   describe "#delegateActions", ->

@@ -148,7 +148,11 @@ class Mercury.View extends Mercury.Module
   # 'mercury:action': 'handleAction'             // call this.handleAction on the global 'action' event.
   # 'click': 'mercury:hide'                      // triggers a global 'hide' event with this.el is clicked.
   #
-  delegateEvents: (events) ->
+  delegateEvents: (el, events) ->
+    if arguments.length == 1
+      events = el
+      el = @el
+
     for key, method of events
 
       if typeof(method) == 'function'
@@ -172,4 +176,4 @@ class Mercury.View extends Mercury.Module
         continue
 
       [match, event, selector] = key.match(@eventSplitter)
-      @el.on(event, selector || null, method)
+      el.on(event, selector || null, method)

@@ -6,7 +6,7 @@ Mercury.Stack =
   # Returns the position of the new item in the stack.
   #
   pushStack: (value) ->
-    return if value == null
+    return if value == null || JSON.stringify(@stack[@stackPosition]) == JSON.stringify(value)
     @stack = @stack[0...@stackPosition + 1]
     @stack.push(value)
     @stack.shift() if @stack.length > @maxStackLength

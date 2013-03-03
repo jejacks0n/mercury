@@ -1,14 +1,15 @@
 // global
-$primary_color:                 #00bce5;
-$overlay_bg:                    rgba(0, 0, 0, .75);
-$dialog_bg:                     #efefef;
-$dialog_color:                  #333;
+$primary_color:                 #00bce5 !default;
+$overlay_bg:                    rgba(0, 0, 0, .75) !default;
+$dialog_bg:                     #efefef !default;
+$dialog_color:                  #333 !default;
+$focus_color:                   $primary_color !default;
 
 // _uploader
-$uploader_overlay_bg:           $overlay_bg;
-$uploader_dialog_bg:            $dialog_bg;
-$uploader_dialog_color:         $dialog_color;
-$uploader_preview_border_color: #ccc;
-$uploader_preview_bg:           #fff;
-$uploader_progress_bg:          $primary_color;
-$uploader_progress_color:       rgba(255, 255, 255, .8)
+$uploader_overlay_bg:           $overlay_bg !default;
+$uploader_dialog_bg:            $dialog_bg !default;
+$uploader_dialog_color:         $dialog_color !default;
+$uploader_preview_border_color: #ccc !default;
+$uploader_preview_bg:           #fff !default;
+$uploader_progress_bg:          $primary_color !default;
+$uploader_progress_color:       rgba(255, 255, 255, .8) !default;

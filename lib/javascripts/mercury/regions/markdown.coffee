@@ -4,28 +4,29 @@ class Mercury.MarkdownRegion extends Mercury.Region
 
   @define 'Mercury.MarkdownRegion', 'markdown',
     bold: 'onBold'
+    insertImage: 'onInsertImage'
+    insertLink: 'onInsertLink'
+
+  editableDragOver: true
 
   className: 'mercury-markdown-region'
 
-  focusable: true
-
   elements:
-    textarea: 'textarea.mercury-markdown-region-textarea'
     preview: '.mercury-markdown-region-preview'
 
   events:
     'keydown textarea': 'onKeydown'
-    'keyup textarea': 'onKeyup'
 
   constructor: (@el, @options = {}) ->
     return @notify(@t('requires Showdown')) unless window.Showdown
     super
+
     @converter ||= new Showdown.converter()
 
 
   build: ->
-    textarea = @buildTextarea()
-    @html(textarea, '<div class="mercury-markdown-region-preview">')
+    @focusable = @buildTextarea()
+    @html(@focusable, '<div class="mercury-markdown-region-preview">')
     @resize()
 
 
@@ -43,60 +44,73 @@ class Mercury.MarkdownRegion extends Mercury.Region
   resize: ->
     return unless @config('regions:markdown:autoResize')
     current = $('body').scrollTop()
-    height = Math.max(@textarea.get(0).scrollHeight - 10000, 0)
-    @textarea.css(height: height).css(height: @textarea.get(0).scrollHeight)
+    height = Math.max(@focusable.get(0).scrollHeight - 10000, 0)
+    @focusable.css(height: height).css(height: @focusable.get(0).scrollHeight)
     $('body').scrollTop(current)
 
 
-  onBold: ->
-    console.debug('bolding')
+  value: (value = null) ->
+    if value == null || typeof(value) == 'undefined'
+      @focusable.val()
+    else
+      @focusable.val(value)
+
+
+  pushHistory: (keyCode = null) ->
+    # When the keycode is not set, or is return, delete or backspace push now, otherwise wait for a few seconds.
+    knownKeyCode = [13, 46, 8].indexOf(keyCode) if keyCode
+    pushNow = true if keyCode == null || (knownKeyCode >= 0 && knownKeyCode != @lastKeyCode)
+    @lastKeyCode = knownKeyCode
+
+    clearTimeout(@historyTimeout)
+    if pushNow then super else @historyTimeout = @delay(2500, => super)
 
 
   onKeydown: (e) ->
     @delay(1, @resize)
-    switch e.keyCode
-      when 90 # undo / redo
-        return unless event.metaKey
-        e.preventDefault()
-        if e.shiftKey then @handleAction('redo') else @handleAction('undo')
-        return
-      when 9 # tab
-        e.preventDefault()
-        @handleAction('insertHTML', '  ')
+    return if e.metaKey && e.keyCode == 90 # undo / redo
 
-    if event.metaKey then switch event.keyCode
+    if e.metaKey then switch e.keyCode
       when 66 # b
         e.preventDefault()
-        @handleAction('bold')
+        return @handleAction('bold')
       when 73 # i
         e.preventDefault()
-        @handleAction('italic')
+        return @handleAction('italic')
       when 85 # u
         e.preventDefault()
-        @handleAction('underline')
+        return @handleAction('underline')
+
     @resize()
+    @pushHistory(e.keyCode)
 
 
+  onDropFile: (files) ->
+    uploader = new Mercury.Uploader([files[0]], mimeTypes: @config('regions:markdown:mimeTypes'))
+    uploader.on('uploaded', => @onUploadFile(arguments...))
 
-  onKeyup: (e) ->
-    @resize()
+
+  onUploadFile: (file) ->
+    action = if file.isImage() then 'insertImage' else 'insertLink'
+    @focus()
+    @handleAction(action, file.get('url'))
 
 
-#      when 13 # enter or return
-#        selection = @selection()
-#        text = @element.val()
-#        start = text.lastIndexOf('\n', selection.start)
-#        end = text.indexOf('\n', selection.end)
-#        end = text.length if end < start
-#        start = text.lastIndexOf('\n', selection.start - 1) if text[start] == '\n'
-#        if text[start + 1] == '-'
-#          selection.replace('\n- ', false, true)
-#          event.preventDefault()
-#        if /\d/.test(text[start + 1])
-#          lineText = text.substring(start, end)
-#          if /(\d+)\./.test(lineText)
-#            number = parseInt(RegExp.$1)
-#            selection.replace("\n#{number += 1}. ", false, true)
-#            event.preventDefault()
-#
-#    @pushHistory(event.keyCode)
+  onInsertImage: ->
+    console.debug('onInsertImage')
+
+
+  onInsertLink: ->
+    console.debug('onInsertLink')
+
+
+  onBold: ->
+    console.debug('onBold')
+
+
+  onItalic: ->
+    console.debug('onItalic')
+
+
+  onUnderline: ->
+    console.debug('onUnderline')

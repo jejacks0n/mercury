@@ -11,16 +11,30 @@ class Mercury.Region extends Mercury.View
 
   @supported: true
 
+  @logPrefix: 'Mercury.Region:'
+
   @type: 'unknown'
 
-  logPrefix: 'Mercury.Region:'
+  @defaultActions:
+    undo: 'onUndo'
+    redo: 'onRedo'
 
   # Define the region by setting className, type, and supported actions. This also clears any events that might already
   # exist, and sets some useful stuff like logPrefix.
   # Returns itself for chaining.
   #
-  @define: (@className, @type, @actions) ->
+  # If you want to add actions to a given region you have to provide them at the constructor level. By adding actions
+  # this way you can create new buttons and have them only enabled on regions that support that action. Action handlers
+  # are called within the scope of the region.
+  #
+  # Mercury.SimpleRegion.actions = {
+  #   newAction: function() { }
+  # }
+  #
+  #
+  @define: (@className, @type, actions = {}) ->
     @logPrefix = @::logPrefix = "#{@className}:"
+    @::actions = actions
     @off()
     @
 
@@ -47,8 +61,8 @@ class Mercury.Region extends Mercury.View
 
     super(@options)
 
-    # make the element focusable
-    @attr(tabindex: 0) if @focusable
+    # make the element focusable (unless we've set one ourselves)
+    @attr(tabindex: 0) unless @focusable
 
     # get the name from the element (default attribute is "id")
     @name ||= @el.attr(@config('regions:identifier'))
@@ -59,32 +73,30 @@ class Mercury.Region extends Mercury.View
     # set defaults
     @previewing ||= false
     @focused ||= false
+    @focusable ||= @el
+    @skipHistoryOn ||= ['redo']
 
+    @pushHistory()
     @bindDefaultEvents()
-
-
-  # Binds to various events, which includes the global action event which will be proxied through to the handlers
-  # defined in subclasses, and the dropFile event.
-  #
-  bindDefaultEvents: ->
-    @delegateEvents
-      focus: => @trigger('focus'); @onFocus?()
-      blur: => @trigger('blur'); @onBlur?()
-
-    # handle action events using a custom event handler
-    Mercury.on('action', => @handleAction(arguments...))
-    @delegateActions($.extend(true, @constructor.actions, @actions ||= {}))
-
-    # delegate file dropping if it looks like we want to allow dropping files
-    @delegateDropFile() if typeof(@onDropFile) == 'function'
 
 
   # Handles action events by taking the first argument, which should be the action, and passes through to the action
   # handler that's been defined within the subclass.
+  # Returns false if we shouldn't handle anything, otherwise true.
   #
   handleAction: (args...) ->
     return unless @focused
-    @actions[args.shift()]?(args...)
+    action = args.shift()
+    @pushHistory() unless @skipHistoryOn.indexOf(action) > -1
+    @actions[action]?(args...)
+    return true
+
+
+  # This is the standard way to push onto the undo stack. The stack is used in regions for custom undo history, but you
+  # can bypass this by using #pushStack if you need.
+  #
+  pushHistory: ->
+    @pushStack(@value())
 
 
   # Focuses the region, which will call focus on the element and an onFocus method if the subclass implements one. Used
@@ -92,7 +104,7 @@ class Mercury.Region extends Mercury.View
   #
   focus: ->
     @focused = true
-    @el.focus()
+    @focusable.focus()
     @onFocus?()
 
 
@@ -101,8 +113,19 @@ class Mercury.Region extends Mercury.View
   #
   blur: ->
     @focused = false
-    @el.blur()
+    @focusable.blur()
     @onBlur?()
+
+
+  # Gets or sets the value, with some handling for when the argument is null or undefined. If you pass a value it will
+  # be set (by default this proxies to #html), but can be useful to override.
+  # Returns the value if no arguments are passed (or null / undefined)
+  #
+  value: (value = null) ->
+    if value == null || typeof(value) == 'undefined'
+      @html()
+    else
+      @html(value)
 
 
   # Delegate jQuery data.
@@ -118,13 +141,25 @@ class Mercury.Region extends Mercury.View
     {}
 
 
+  # Default undo behavior. Calls #value with whatever's previous in the stack.
+  #
+  onUndo: ->
+    @value(@undoStack())
+
+
+  # Default redo behavior. Calls #value with whatever's next in the stack.
+  #
+  onRedo: ->
+    @value(@redoStack())
+
+
   # Serializes our content, type, any data, and snippets into an object.
   # Returns an object.
   #
   toJSON: ->
     name: @name
     type: @constructor.type
-    value: @html()
+    value: @value()
     data: @data()
     snippets: @snippets()
 
@@ -134,21 +169,64 @@ class Mercury.Region extends Mercury.View
   #
   release: ->
     @trigger('release')
+    @focusable.off()
+    @el.off()
     @off()
 
 
-  # Adds the annoying drag events needed to capture when files have been dragged into the browser and dropped on our
-  # element. Will call a dropFile method with the files that were dropped -- and is called for you if your subclass
-  # implements a dropClass method.
-  # Note: This causes conflicts with contentEditable drag/dropping for image movement etc (and I totally blame chrome).
+  # Binds to various events, which includes the global action event which will be proxied through to the handlers
+  # defined in subclasses, and the dropFile event.
   #
-  delegateDropFile: ->
-    @el.on('dragenter', (e) -> e.preventDefault())
-    @el.on('dragover', (e) -> e.preventDefault())
-    @el.on 'drop', (e) =>
-      return unless e.originalEvent.dataTransfer.files.length
-      e.preventDefault()
-      @onDropFile(e.originalEvent.dataTransfer.files)
+  bindDefaultEvents: ->
+    # handle action events using a custom event handler
+    Mercury.on('action', => @handleAction(arguments...))
+
+    # delegate all the actions defined in various places
+    @delegateActions($.extend(true, @constructor.actions, @constructor.defaultActions, @actions ||= {}))
+
+    # bind various events to the focusable element (which defaults to @el)
+    @bindFocusEvents()                                          # binds focus/blur events
+    @bindKeyEvents()                                            # binds undo/redo events
+    @bindDropEvents() if typeof(@onDropFile) == 'function'      # binds drag/drop events for file dropping
+
+
+  # Binds to focus/blur events on focusable so we can track the focused state.
+  #
+  bindFocusEvents: ->
+    @delegateEvents @focusable,
+      focus: =>
+        @focused = true
+        @trigger('focus')
+        @onFocus?()
+      blur: =>
+        @focused = false
+        @trigger('blur')
+        @onBlur?()
+
+
+  # Binds to key events on the focusable element so we can handle more complex interactions.
+  #
+  bindKeyEvents: ->
+    @delegateEvents @focusable,
+      keydown: (e) =>
+        return unless e.metaKey && e.keyCode == 90
+        e.preventDefault()
+        if e.shiftKey then @handleAction('redo') else @handleAction('undo')
+
+
+  # Binds the drag/drop events to handle files that have been dragged into the browser and dropped on our focusable
+  # element. Will call an onDropFile method with the files that were dropped if your subclass implements that method.
+  #
+  bindDropEvents: ->
+    preventDefault = (e) -> e.preventDefault()
+    @delegateEvents @focusable,
+      dragenter: preventDefault
+      # workaround: Webkit and Firefox do drag and drop differently.
+      dragover: if @editableDragOver && Mercury.support.webkit then (->) else preventDefault
+      drop: (e) =>
+        return unless e.originalEvent.dataTransfer.files.length
+        e.preventDefault()
+        @onDropFile(e.originalEvent.dataTransfer.files)
 
 
   # This works much like Mercury.View.delegateEvents, but instead of binding events to the element we're just resolving

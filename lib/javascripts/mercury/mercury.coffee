@@ -82,4 +82,13 @@ globalize = ->
   #
   @Module.extend.call(@, @Logger)
 
+  # Do some detection.
+  #
+  # We need to detect various support, and as nice as it would be to feature detection some of the more complex aspects
+  # aren't something that you can detect for (eg. drag and drop event propagation.
+  #
+  @support =
+    webkit: navigator.userAgent.indexOf('WebKit') > 0
+    firefox: navigator.userAgent.indexOf('Firefox') > 0
+
 globalize.call(Mercury)

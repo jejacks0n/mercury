@@ -51,6 +51,13 @@ describe "Mercury.Stack", ->
       expect( subject.stackPosition ).to.eq(0)
       expect( subject.stack ).to.eql([])
 
+    it "doesn't push if the current value is being pushed more than once", ->
+      subject.pushStack(1)
+      subject.pushStack(1)
+      subject.pushStack(1)
+      expect( subject.stackPosition ).to.eq(0)
+      expect( subject.stack ).to.eql([1])
+
 
   describe "#undoStack", ->
 

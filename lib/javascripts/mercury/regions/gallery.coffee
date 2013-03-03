@@ -2,13 +2,11 @@ class Mercury.GalleryRegion extends Mercury.Region
 
   @supported: true
 
-  @define 'Mercury.GalleryRegion', 'gallery',
-    undo: 'onUndo'
-    redo: 'onRedo'
+  @define 'Mercury.GalleryRegion', 'gallery'
 
   className: 'mercury-gallery-region'
 
-  focusable: true
+  skipHistoryOn: ['undo', 'redo']
 
   elements:
     controls: '.mercury-gallery-region-controls'
@@ -26,13 +24,10 @@ class Mercury.GalleryRegion extends Mercury.Region
   build: ->
     @speed ||= 3000
     @index = 1
-
     @append('<ul class="mercury-gallery-region-controls"></ul><div class="mercury-gallery-region-indicator"></div>')
 
     @refresh(true)
     @delay(@speed, => @nextSlide())
-
-    @pushStack(@el.html())
 
 
   refresh: (controls = false) ->
@@ -46,8 +41,13 @@ class Mercury.GalleryRegion extends Mercury.Region
 
   refreshControls: ->
     @controls.html('')
-    @addLink($(slide)) for slide in @images
+    @addControlLink($(slide)) for slide in @images
     @controls.show() if @focused
+
+
+  addControlLink: (slide) ->
+    src = slide.find('img').attr('src')
+    @controls.append($("""<li><img src="#{src}"/><em>&times;</em></li>""").data(slide: slide))
 
 
   nextSlide: ->
@@ -63,14 +63,12 @@ class Mercury.GalleryRegion extends Mercury.Region
     @timeout = @delay(@speed, => @nextSlide())
 
 
-  appendSlide: (file) ->
-    return unless file.isImage()
-    slide = $("""<div class="slide"><img src="#{file.get('url')}"/></div>""")
+  appendSlide: (slide) ->
     @slides.append(slide)
-    @addLink(slide)
+    @addControlLink(slide)
     @refresh()
-    @pushStack(@el.html())
-    @trigger('focus')
+    @pushHistory()
+    @trigger('focused')
     @focus()
 
 
@@ -89,17 +87,17 @@ class Mercury.GalleryRegion extends Mercury.Region
       @timeout = @delay(@speed, => @nextSlide())
 
     @refresh()
-    @pushStack(@el.html())
-
-
-  addLink: (slide) ->
-    src = slide.find('img').attr('src')
-    @controls.append($("""<li><img src="#{src}"/><em>&times;</em></li>""").data(slide: slide))
+    @pushHistory()
 
 
   onDropFile: (files) ->
     uploader = new Mercury.Uploader(files, mimeTypes: @config('regions:gallery:mimeTypes'))
-    uploader.on('uploaded', => @appendSlide(arguments...))
+    uploader.on('uploaded', => @onUploadFile(arguments...))
+
+
+  onUploadFile: (file) ->
+    return unless file.isImage()
+    @appendSlide($("""<div class="slide"><img src="#{file.get('url')}"/></div>"""))
 
 
   onFocus: ->
@@ -111,13 +109,12 @@ class Mercury.GalleryRegion extends Mercury.Region
 
 
   onUndo: ->
-    @html(html) if html = @undoStack()
+    super
     @refresh(true)
 
 
-
   onRedo: ->
-    @html(html) if html = @redoStack()
+    super
     @refresh(true)
 
 

@@ -3,5 +3,9 @@
 .mercury-markdown-region {
   textarea.mercury-markdown-region-textarea {
     resize: none;
+    outline: 0;
+    &:focus {
+      @include focus-outline();
+    }
   }
 }

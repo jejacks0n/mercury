@@ -241,6 +241,12 @@ describe "Mercury.View", ->
       subject.el = on: ->
       spyOn(subject.el, 'on')
 
+    it "accepts an element and events, or just events", ->
+      otherEl = on: spy()
+      subject.delegateEvents(otherEl, foo: ->)
+      expect( otherEl.on ).calledWith('foo', null, sinon.match.func)
+
+
     describe "binding to a callback directly", ->
 
       it "adds the event", ->

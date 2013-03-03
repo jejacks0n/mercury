@@ -1,3 +1,24 @@
+@mixin no-selection {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  cursor: default;
+}
+
+@mixin border-box {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+@mixin focus-outline {
+  outline: none;
+  //$primary_color 00bce5
+  -webkit-box-shadow: 0 0 7px $focus_color, 0 0 1px $focus_color / 2;
+  -moz-box-shadow: 0 0 7px $focus_color, 0 0 1px $focus_color / 2;
+  box-shadow: 0 0 7px $focus_color, 0 0 1px $focus_color / 2;
+}
+
 @mixin gradient($first, $second) {
   background: $first;
   background: -moz-linear-gradient(top, $first 1%, $second 100%);
@@ -12,19 +33,6 @@
   -webkit-border-radius: $radii;
   -moz-border-radius: $radii;
   border-radius: $radii;
-}
-
-@mixin no-selection {
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  user-select: none;
-  cursor: default;
-}
-
-@mixin border-box {
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
 }
 
 @mixin box-shadow($prop1: 0 0 40px rgba(0, 0, 0, .9), $prop2: null) {

@@ -2,50 +2,37 @@ class Mercury.GalleryRegion extends Mercury.Region
 
   @supported: true
 
-  @define 'Mercury.GalleryRegion', 'gallery'
-    undo : 'undo'
-    redo : 'redo'
+  @define 'Mercury.GalleryRegion', 'gallery',
+    undo: 'onUndo'
+    redo: 'onRedo'
 
   className: 'mercury-gallery-region'
 
+  focusable: true
+
   elements:
-    controls  : '.mercury-gallery-region-controls'
-    slides    : '.slides'
-    paginator : '.paginator'
+    controls: '.mercury-gallery-region-controls'
+    indicator: '.mercury-gallery-region-indicator'
+    slides: '.slides'
+    paginator: '.paginator'
 
   events:
     'click .mercury-gallery-region-controls em': 'removeSlide'
     'click .mercury-gallery-region-controls img': 'gotoSlide'
-
+    'dragenter': 'onDragEnter'
+    'dragleave': 'onDragLeave'
+    'drop': 'onDragLeave'
 
   build: ->
     @speed ||= 3000
-
-    @append('<ul class="mercury-gallery-region-controls"></ul>')
-
     @index = 1
-    @refresh(true)
 
+    @append('<ul class="mercury-gallery-region-controls"></ul><div class="mercury-gallery-region-indicator"></div>')
+
+    @refresh(true)
     @delay(@speed, => @nextSlide())
+
     @pushStack(@el.html())
-
-
-  onBlur: ->
-    @controls.hide()
-
-
-  onFocus: ->
-    @controls.show()
-
-
-  undo: ->
-    @html(html) if html = @undoStack()
-    @refresh(true)
-
-
-  redo: ->
-    @html(html) if html = @redoStack()
-    @refresh(true)
 
 
   refresh: (controls = false) ->
@@ -60,6 +47,7 @@ class Mercury.GalleryRegion extends Mercury.Region
   refreshControls: ->
     @controls.html('')
     @addLink($(slide)) for slide in @images
+    @controls.show() if @focused
 
 
   nextSlide: ->
@@ -75,16 +63,6 @@ class Mercury.GalleryRegion extends Mercury.Region
     @timeout = @delay(@speed, => @nextSlide())
 
 
-  addLink: (slide) ->
-    src = slide.find('img').attr('src')
-    @controls.append($("""<li><img src="#{src}"/><em>&times;</em></li>""").data(slide: slide))
-
-
-  dropFile: (files) ->
-    uploader = new Mercury.Uploader(files, mimeTypes: @config('regions:gallery:mimeTypes'))
-    uploader.on('uploaded', => @appendSlide(arguments...))
-
-
   appendSlide: (file) ->
     return unless file.isImage()
     slide = $("""<div class="slide"><img src="#{file.get('url')}"/></div>""")
@@ -92,6 +70,8 @@ class Mercury.GalleryRegion extends Mercury.Region
     @addLink(slide)
     @refresh()
     @pushStack(@el.html())
+    @trigger('focus')
+    @focus()
 
 
   removeSlide: (e) ->
@@ -110,3 +90,43 @@ class Mercury.GalleryRegion extends Mercury.Region
 
     @refresh()
     @pushStack(@el.html())
+
+
+  addLink: (slide) ->
+    src = slide.find('img').attr('src')
+    @controls.append($("""<li><img src="#{src}"/><em>&times;</em></li>""").data(slide: slide))
+
+
+  onDropFile: (files) ->
+    uploader = new Mercury.Uploader(files, mimeTypes: @config('regions:gallery:mimeTypes'))
+    uploader.on('uploaded', => @appendSlide(arguments...))
+
+
+  onFocus: ->
+    @controls.show()
+
+
+  onBlur: ->
+    @controls.hide()
+
+
+  onUndo: ->
+    @html(html) if html = @undoStack()
+    @refresh(true)
+
+
+
+  onRedo: ->
+    @html(html) if html = @redoStack()
+    @refresh(true)
+
+
+  onDragEnter: ->
+    clearTimeout(@indicatorTimer)
+    @indicator.css(top: @el.outerHeight() / 2, left: @el.outerWidth() / 2, display: 'block')
+    @delay(1, => @indicator.css(opacity: 1))
+
+
+  onDragLeave: ->
+    @indicator.css(opacity: 0)
+    @indicatorTimer = @delay(500, => @indicator.hide())

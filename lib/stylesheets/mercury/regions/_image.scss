@@ -1,0 +1,19 @@
+/* ImageRegion
+ *----------------------------------------------------------------------------*/
+.mercury-image-region {
+  min-width: 20px;
+  min-height: 20px;
+}
+.mercury-image-region-indicator {
+  @include transition(opacity, ease-in-out);
+  @include border-radius(10px);
+  display: none;
+  position: absolute;
+  z-index: 20;
+  width: 60px;
+  height: 60px;
+  margin: -30px;
+  opacity: 0;
+  background: rgba(0, 0, 0, .75) asset-url('mercury/regions/upload-indicator.png', image) no-repeat center;
+  pointer-events: none;
+}

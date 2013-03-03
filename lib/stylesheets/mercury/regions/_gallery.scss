@@ -14,6 +14,8 @@
     left: 0;
     width: 100px;
     margin: 10px;
+    max-height: 560px;
+    overflow-y: scroll;
     padding: 10px 10px 5px 10px;
     list-style: none;
     background: rgba(0, 0, 0, .75);
@@ -22,24 +24,48 @@
     font-size: 0;
     li {
       position: relative;
-      background: rgba(255, 255, 255, 0.4);
-      text-align: center;
+      height: 60px;
       margin-bottom: 5px;
+      background: rgba(255, 255, 255, .4);
+      text-align: center;
     }
     img {
       max-width: 100px;
       max-height: 60px;
+      cursor: pointer;
     }
     em {
       position: absolute;
-      right: -2px;
-      top: -2px;
-      color: red;
-      font-size: 15px;
+      display: block;
+      left: -4px;
+      top: -4px;
+      width: 15px;
+      height: 15px;
+      line-height: 15px;
+      background: #000;
+      border: 1px solid #ddd;
+      border-radius: 20px;
+      font-style: normal;
+      color: #ddd;
+      font-size: 12px;
       cursor: pointer;
     }
   }
-
+  .mercury-gallery-region-indicator {
+    @include transition(opacity, ease-in-out);
+    @include border-radius(10px);
+    display: none;
+    position: absolute;
+    z-index: 20;
+    top: 30px;
+    left: 30px;
+    width: 60px;
+    height: 60px;
+    margin: -30px;
+    opacity: 0;
+    background: rgba(0, 0, 0, .75) asset-url('mercury/regions/upload-indicator.png', image) no-repeat center;
+    pointer-events: none;
+  }
   .slides {
     position: relative;
     width: 100%;
@@ -65,12 +91,12 @@
     text-align: center;
     span {
       font-size: 30px;
-      color: #fff;
-      text-shadow: 0 0 5px rgba(0, 0, 0, 1);
+      color: #666;
+      text-shadow: 0 0 3px rgba(0, 0, 0, 1);
       margin: 0 8px;
     }
     .active {
-      color: red;
+      color: #fff;
     }
   }
 }

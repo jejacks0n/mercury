@@ -1,9 +1,18 @@
 /* MarkdownRegion
  *----------------------------------------------------------------------------*/
 .mercury-markdown-region {
+  &+ .mercury-region-drop-indicator {
+    @include drop-indicator-defaults();
+  }
+
   textarea.mercury-markdown-region-textarea {
-    resize: none;
+    @include border-box();
     outline: 0;
+    border: none;
+    margin: 0;
+    //background: 'transparent';
+    //font-family: "Courier New", Courier, monospace;
+    resize: none;
     &:focus {
       @include focus-outline();
     }

@@ -13,10 +13,9 @@
 
 @mixin focus-outline {
   outline: none;
-  //$primary_color 00bce5
-  -webkit-box-shadow: 0 0 7px $focus_color, 0 0 1px $focus_color / 2;
-  -moz-box-shadow: 0 0 7px $focus_color, 0 0 1px $focus_color / 2;
-  box-shadow: 0 0 7px $focus_color, 0 0 1px $focus_color / 2;
+  -webkit-box-shadow: 0 0 7px $focus_color, 0 0 2px $focus_color / 3;
+  -moz-box-shadow: 0 0 7px $focus_color, 0 0 2px $focus_color / 3;
+  box-shadow: 0 0 7px $focus_color, 0 0 2px $focus_color / 3;
 }
 
 @mixin gradient($first, $second) {
@@ -56,6 +55,22 @@
   transition-property: $property;
   transition-duration: 0.25s;
   transition-timing-function: $easing;
+}
+
+@mixin drop-indicator-defaults {
+  @include transition(opacity, ease-in-out);
+  @include border-radius(10px);
+  display: none;
+  position: absolute;
+  z-index: 20;
+  top: 30px;
+  left: 30px;
+  width: 60px;
+  height: 60px;
+  margin: -30px;
+  opacity: 0;
+  background: rgba(0, 0, 0, .75) asset-url('mercury/regions/upload-indicator.png', image) no-repeat center;
+  pointer-events: none;
 }
 
 .mercury-clearfix {

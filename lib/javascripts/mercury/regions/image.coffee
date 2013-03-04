@@ -1,4 +1,12 @@
+###!
+
+The Image region allows you to have a replaceable image region on your page. It provided the ability to drag/drop images
+from the desktop -- which will get uploaded (and probably processed by your server) and will then replace the existing
+image with the one that was uploaded.
+
+###
 class Mercury.ImageRegion extends Mercury.Region
+  @include Mercury.Region.Modules.DropIndicator
 
   @supported: true
 
@@ -6,17 +14,8 @@ class Mercury.ImageRegion extends Mercury.Region
 
   tag: 'img'
 
-  className: 'mercury-image-region'
-
   events:
-    'dragenter': 'onDragEnter'
-    'dragleave': 'onDragLeave'
-    'drop': 'onDragLeave'
-    'mousedown': 'simulateFocus'
-
-  build: ->
-    @el.after(@indicator = $('<div class="mercury-image-region-indicator">'))
-
+    'mousedown': 'onMousedown'
 
   value: (value) ->
     if value == null || typeof(value) == 'undefined'
@@ -25,7 +24,7 @@ class Mercury.ImageRegion extends Mercury.Region
       @attr('src', value)
 
 
-  simulateFocus: (e) ->
+  onMousedown: (e) ->
     # workaround: Firefox doesn't properly focus an img tag when clicked.
     e.preventDefault()
     @el.trigger('focus')
@@ -33,31 +32,7 @@ class Mercury.ImageRegion extends Mercury.Region
 
   onDropFile: (files) ->
     uploader = new Mercury.Uploader([files[0]], mimeTypes: @config('regions:gallery:mimeTypes'))
-    uploader.on('uploaded', => @onUploadImage(arguments...))
-
-
-  onUploadImage: (file) ->
-    @value(file.get('url'))
-    @pushHistory()
-    @focus()
-
-
-  onDragEnter: ->
-    clearTimeout(@indicatorTimer)
-    pos = @el.position()
-    @indicator.css
-      top: pos.top + @el.outerHeight() / 2
-      left: pos.left + @el.outerWidth() / 2
-      display: 'block'
-    @delay(1, => @indicator.css(opacity: 1))
-
-
-  onDragLeave: ->
-    @indicator.css(opacity: 0)
-    @indicatorTimer = @delay(500, => @indicator.hide())
-
-
-  release: ->
-    @indicator.remove()
-    super
-
+    uploader.on 'uploaded', (file) =>
+      @focus()
+      @value(file.get('url'))
+      @pushHistory()

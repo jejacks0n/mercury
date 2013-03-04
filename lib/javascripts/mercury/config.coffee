@@ -24,6 +24,8 @@ Mercury.configuration =
   # must first require the locale(s) you want to have support for, enable, and set a preferred locale (to an included
   # locale.)
   #
+  #= require mercury/locales/swedish_chef
+  #
   localization:
     enabled    : true
     preferred  : 'en-US'                                   # preferred locale - if the user locale isn't supported
@@ -38,7 +40,7 @@ Mercury.configuration =
     enabled    : true
     saveUrl    : '/mercury/uploads'                        # save url
     saveName   : 'file'                                    # param that will be set for the image data
-    mimeTypes  : ['image/jpeg', 'image/gif', 'image/png']  # allowed file types
+    mimeTypes  : ['image/jpeg', 'image/gif', 'image/png']  # allowed file types (false allows everything)
     maxSize    : 5242880                                   # max size - 5.00 Mb
 
 
@@ -68,7 +70,7 @@ Mercury.configuration =
     #= require mercury/regions/gallery
     #
     image:
-      mimeTypes: ['image/jpeg']                            # file types - overrides general uploading configuration.
+      mimeTypes : ['image/jpeg']                           # file types - overrides general uploading configuration.
 
     # The gallery region is provided an an example of how you can easily (generally speaking) create your own regions.
     # It allows drag/drop of images and provides a simple implementation of a slide show with the ability to remove
@@ -77,15 +79,17 @@ Mercury.configuration =
     #= require mercury/regions/gallery
     #
     gallery:
-      mimeTypes: ['image/jpeg']                            # file types - overrides general uploading configuration.
+      mimeTypes : ['image/jpeg']                           # file types - overrides general uploading configuration.
 
     # Markdown provides an easy way to provide some markup abilities without the exposing the ability to edit complex
     # HTML, and is useful for people who don't fully understand HTML. Use the markdown sent to the server on save to
     # render the content when not editing, and render the markdown when editing.
     #
-    #= require showdown-1.0
+    #= require dependencies/showdown-1.0
+    #= require dependencies/textinputs_jquery-0.1.205.js
     #= require mercury/regions/markdown
     #
     markdown:
-      autoResize: true                                     # the region will auto-resize to the content on typing etc.
+      autoSize  : true                                     # the region will auto-resize to the content on typing etc.
+      mimeTypes : false                                    # file types - overrides general uploading to allow anything.
 

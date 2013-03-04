@@ -1,11 +1,9 @@
 class Mercury.MarkdownRegion extends Mercury.Region
+  @include Mercury.Region.Modules.DropIndicator
 
   @supported: true
 
-  @define 'Mercury.MarkdownRegion', 'markdown',
-    bold: 'onBold'
-    insertImage: 'onInsertImage'
-    insertLink: 'onInsertLink'
+  @define 'Mercury.MarkdownRegion', 'markdown'
 
   editableDragOver: true
 
@@ -32,13 +30,7 @@ class Mercury.MarkdownRegion extends Mercury.Region
 
   buildTextarea: ->
     value = @html().replace(/^\s+|\s+$/g, '').replace('&gt;', '>')
-    $('<textarea class="mercury-markdown-region-textarea">').val(value).css
-      border: 0
-      background: 'transparent'
-      display: 'block'
-      width: '100%'
-      height: @el.outerHeight()
-      fontFamily: '"Courier New", Courier, monospace'
+    $('<textarea class="mercury-markdown-region-textarea">').val(value).css(width: '100%', height: @el.height())
 
 
   resize: ->
@@ -56,6 +48,11 @@ class Mercury.MarkdownRegion extends Mercury.Region
       @focusable.val(value)
 
 
+  handleAction: ->
+    super
+    @resize()
+
+
   pushHistory: (keyCode = null) ->
     # When the keycode is not set, or is return, delete or backspace push now, otherwise wait for a few seconds.
     knownKeyCode = [13, 46, 8].indexOf(keyCode) if keyCode
@@ -70,6 +67,7 @@ class Mercury.MarkdownRegion extends Mercury.Region
     @delay(1, @resize)
     return if e.metaKey && e.keyCode == 90 # undo / redo
 
+    console.debug(e.keyCode)
     if e.metaKey then switch e.keyCode
       when 66 # b
         e.preventDefault()
@@ -85,32 +83,77 @@ class Mercury.MarkdownRegion extends Mercury.Region
     @pushHistory(e.keyCode)
 
 
+  wrapSelection: (before, after = null) ->
+    @focusable.surroundSelectedText(before, after || before)
+
+
   onDropFile: (files) ->
-    uploader = new Mercury.Uploader([files[0]], mimeTypes: @config('regions:markdown:mimeTypes'))
-    uploader.on('uploaded', => @onUploadFile(arguments...))
+    uploader = new Mercury.Uploader(files, mimeTypes: @config('regions:markdown:mimeTypes'))
+    uploader.on 'uploaded', (file) =>
+      @focus()
+      @handleAction('insertFile', file)
 
 
-  onUploadFile: (file) ->
-    action = if file.isImage() then 'insertImage' else 'insertLink'
-    @focus()
-    @handleAction(action, file.get('url'))
+  actions:
+
+    insertFile: (file) ->
+      # todo: it would be nicer if we could drop the images where they were actually dropped
+      #       in webkit the cursor moves around with where you're going to drop -- so if the selection is in a collapsed
+      #       state moving the cursor to where you dropped and placing them there would make sense.
+      action = if file.isImage() then 'insertImage' else 'insertLink'
+      @handleAction(action, url: file.get('url'), text: file.get('name'))
 
 
-  onInsertImage: ->
-    console.debug('onInsertImage')
+    insertLink: (link) ->
+      selection = @focusable.getSelection()
+      @focusable.replaceSelectedText("[#{selection.text || link.text}](#{link.url})")
 
 
-  onInsertLink: ->
-    console.debug('onInsertLink')
+    insertImage: (image) ->
+      selection = @focusable.getSelection()
+      @focusable.replaceSelectedText("![#{selection.text || image.text}](#{image.url})")
 
 
-  onBold: ->
-    console.debug('onBold')
+    bold: ->
+      @wrapSelection('**')
 
 
-  onItalic: ->
-    console.debug('onItalic')
+    italic: ->
+      @wrapSelection('_')
 
 
-  onUnderline: ->
-    console.debug('onUnderline')
+    underline: ->
+      @wrapSelection('<u>', '</u>')
+
+
+    # needs to be checked
+
+    subscript: ->
+      @wrapSelection('<sub>', '</sub>')
+
+
+    superscript: ->
+      @wrapSelection('<sup>', '</sup>')
+
+
+    insertHTML: (html) ->
+      unless typeof(html) == 'string'
+        html = if html.get then html.get(0).outerHTML else html.outerHTML
+      @focusable.replaceSelectedText(html)
+
+
+    horizontalRule: ->
+      @focusable.replaceSelectedText('\n- - -\n')
+
+
+
+
+#      indent: (selection) ->
+#        selection.wrapLine('> ', '', false, true)
+#
+#      outdent: (selection) ->
+#        selection.unWrapLine('> ', '', false, true)
+#
+
+
+

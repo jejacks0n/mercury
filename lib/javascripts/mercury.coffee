@@ -1,22 +1,22 @@
-# Mercury / dependencies.
+# Mercury dependencies and core libary.
 #
 #= require mercury/dependencies
 #= require mercury/mercury
 #
-# Region types.
+# All locales.
+#
+#= require mercury/locales
+#
+# All region types.
 #
 #= require mercury/regions
 #
 # Configuration.
 #
 #= require mercury/config
-#
-# Locales.
-#
-#= require mercury/locales/swedish_chef.locale
-#
+
 jQuery ->
-  # When using rails we need to setup the csrf token.
+  # when using rails we need to setup the csrf token
   $.ajaxSetup headers: {'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')}
 
 
@@ -24,3 +24,10 @@ jQuery ->
 jQuery ->
   window.editor = new Mercury.Editor()
   editor.appendTo(document.body)
+
+# example of extending regions and adding buttons -- there should be an api that makes this sort of thing easier.
+Mercury.configure 'toolbar:primary:buttons:swapDirection', ['Swap Direction']
+Mercury.MarkdownRegion.actions =
+  swapDirection: ->
+    @direction = if @direction == 'rtl' then 'ltr' else 'rtl'
+    @el.css(direction: @direction)

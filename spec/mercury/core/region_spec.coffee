@@ -14,6 +14,9 @@ describe "Mercury.Region", ->
 
   describe "Modules", ->
 
+    it "defines the right namespace", ->
+      expect( Klass.Modules ).to.be.a('Object')
+
     it "includes in the expected modules", ->
       expect( Klass.config ).to.be.a('Function')
       expect( Klass.on ).to.be.a('Function')
@@ -27,11 +30,15 @@ describe "Mercury.Region", ->
 
   describe ".define", ->
 
-    it "assigns @className, @type and @prototype.actions", ->
-      Klass.define('TestRegion', '_test_', foo: 'bar')
+    it "assigns @className and @type", ->
+      Klass.define('TestRegion', '_test_')
       expect( Klass.className ).to.eq('TestRegion')
       expect( Klass.type ).to.eq('_test_')
-      expect( Klass.prototype.actions ).to.eql(foo: 'bar')
+
+    it "merges actions with prototype.actions", ->
+      Klass.prototype.actions = foo: 'bar'
+      Klass.define('TestRegion', '_test_', bar: 'baz')
+      expect( Klass.prototype.actions ).to.eql(foo: 'bar', bar: 'baz')
 
     it "sets the @logPrefix", ->
       Klass.define('TestRegion')
@@ -82,18 +89,23 @@ describe "Mercury.Region", ->
       subject = new Klass()
       expect( subject.notify ).calledWith('is unsupported in this browser')
 
-    it "sets the name from the configurable attribute", ->
-      subject = new Klass('<div id="_name_">')
-      expect( subject.name ).to.eq('_name_')
-      Mercury.configure 'regions:identifier', 'data-name'
-      subject = new Klass('<div data-name="_name_">')
-      expect( subject.name ).to.eq('_name_')
+    it "calls #beforeBuild if it's defined", ->
+      Klass.prototype.beforeBuild = spy()
+      subject = new Klass('<div>')
+      expect( subject.beforeBuild ).called
 
     it "sets a tabindex (so it's focusable) unless we've provided our own focusable element", ->
       subject = new Klass('<div id="_name_">')
       expect( subject.attr('tabindex') ).to.eq('0')
       subject = new Klass('<div id="_name_">', focusable: $('<div>'))
       expect( subject.attr('tabindex') ).to.be.undefined
+
+    it "sets the name from the configurable attribute", ->
+      subject = new Klass('<div id="_name_">')
+      expect( subject.name ).to.eq('_name_')
+      Mercury.configure 'regions:identifier', 'data-name'
+      subject = new Klass('<div data-name="_name_">')
+      expect( subject.name ).to.eq('_name_')
 
     it "allows passing the name", ->
       subject = new Klass('<div>', name: '_name_')
@@ -121,6 +133,15 @@ describe "Mercury.Region", ->
       expect( subject.focused ).to.be.true
       expect( subject.focusable ).to.eq(focusable)
       expect( subject.skipHistoryOn ).to.eql(['foo'])
+
+    it "adds a class to the element", ->
+      subject = new Klass('<div id="name">')
+      expect( subject.el.attr('class') ).to.eq('mercury-unknown-region')
+
+    it "calls #afterBuild if it's defined", ->
+      Klass.prototype.afterBuild = spy()
+      subject = new Klass('<div>')
+      expect( subject.afterBuild ).called
 
     it "calls #pushHistory", ->
       spyOn(Klass.prototype, 'pushHistory')

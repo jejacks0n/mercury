@@ -1,9 +1,7 @@
-# Native extensions.
+# Core library / utility.
 #
 #= require mercury/extensions/number
 #= require mercury/extensions/string
-#
-# Core classes and utility.
 #
 #= require mercury/core/config
 #= require mercury/core/events
@@ -14,15 +12,14 @@
 #= require mercury/core/region
 #= require mercury/core/view
 #
-# Standard regions.
-#
-#= require mercury/regions/gallery
-#
 # Views.
 #
 #= require mercury/views/editor
 #= require mercury/views/uploader
 #
+# Region modules.
+#
+#= require mercury/regions/modules/drop_indicator
 globalize = ->
 
   # Extends the global Mercury object with various modules.

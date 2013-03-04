@@ -15,9 +15,10 @@ namespace :mercury do
     stylesheets  = ['mercury.css']
     javascripts  = {
       dependencies: 'mercury/dependencies.js',
+      locales:      'mercury/locales.js',
       regions:      'mercury/regions.js',
-      config:       'mercury/config.js',
       base:         'mercury/mercury.js',
+      config:       'mercury/config.js',
       other:        []
     }
 
@@ -28,19 +29,33 @@ namespace :mercury do
       path = javascripts[:base]
       config = env.find_asset(javascripts[:config])
       base = env.find_asset(javascripts[:base])
-      dependencies = env.find_asset(javascripts[:dependencies])
 
       # write dependencies
-      dependencies.send(:required_assets).each do |asset|
+      env.find_asset(javascripts[:dependencies]).send(:required_assets).each do |asset|
         filename = File.basename(asset.logical_path)
         next if filename == 'dependencies.js'
+
         asset.write_to(output_path.join('dependencies', filename))
       end
 
-      # compile locale files
-      Dir.glob(Rails.root.join('lib/javascripts/mercury/locales/*.locale.coffee')) do |file|
-        asset = env.find_asset(file)
-        asset.write_to(output_path.join('locales', File.basename(file).gsub(/\.coffee$/, '.js')))
+      # write locales
+      env.find_asset(javascripts[:locales]).send(:required_assets).each do |asset|
+        filename = File.basename(asset.logical_path)
+        next if filename == 'locales.js'
+
+        asset.write_to(output_path.join('locales', filename))
+      end
+
+      # write regions
+      env.find_asset(javascripts[:regions]).send(:required_assets).each do |asset|
+        filename = File.basename(asset.logical_path)
+        next if filename == 'regions.js'
+
+        asset.write_to(output_path.join('regions', filename))
+
+        File.open(output_path.join('regions', filename.gsub(/\.js$/, '.min.js')), 'w') do |file|
+          file.write(Uglifier.compile(asset.source, squeeze: true))
+        end
       end
 
       # base javascripts and configuration
@@ -53,16 +68,6 @@ namespace :mercury do
       File.open(output_path.join('mercury.min.js'), 'w') do |file|
         file.write(config.source)
         file.write(Uglifier.compile(base.source, squeeze: true))
-      end
-
-      # write region types
-      env.find_asset(javascripts[:regions]).send(:required_assets).each do |asset|
-        filename = File.basename(asset.logical_path)
-        next if filename == 'regions.js'
-        asset.write_to(output_path.join('regions', filename))
-        File.open(output_path.join('regions', filename.gsub(/\.js$/, '.min.js')), 'w') do |file|
-          file.write(Uglifier.compile(asset.source, squeeze: true))
-        end
       end
 
       # compile other javascripts

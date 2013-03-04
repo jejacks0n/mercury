@@ -19,7 +19,7 @@ class Mercury.File extends Mercury.Model
     if @get('size') >= @config('uploading:maxSize')
       @addError('size', @t('Too large'))
       return
-    mimeTypes = @options['mimeTypes'] || @config('uploading:mimeTypes')
+    mimeTypes = @options['mimeTypes'] ? @config('uploading:mimeTypes')
     if mimeTypes && mimeTypes.indexOf(@get('type')) <= -1
       @addError('type', @t('Unsupported format (%s)', @get('type')))
 

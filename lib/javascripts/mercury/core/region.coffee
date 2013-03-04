@@ -9,6 +9,8 @@ class Mercury.Region extends Mercury.View
   @extend  Mercury.Logger
   @include Mercury.Stack
 
+  @Modules: {}
+
   @supported: true
 
   @logPrefix: 'Mercury.Region:'
@@ -34,7 +36,7 @@ class Mercury.Region extends Mercury.View
   #
   @define: (@className, @type, actions = {}) ->
     @logPrefix = @::logPrefix = "#{@className}:"
-    @::actions = actions
+    @::actions = $.extend(@::actions, actions)
     @off()
     @
 
@@ -59,6 +61,10 @@ class Mercury.Region extends Mercury.View
   constructor: (@el, @options = {}) ->
     return @notify(@t('is unsupported in this browser')) unless @constructor.supported
 
+    # call the beforeBuild method if it's defined
+    @beforeBuild?()
+
+    # let the view do it's thing
     super(@options)
 
     # make the element focusable (unless we've set one ourselves)
@@ -75,6 +81,12 @@ class Mercury.Region extends Mercury.View
     @focused ||= false
     @focusable ||= @el
     @skipHistoryOn ||= ['redo']
+
+    # add the classname by default
+    @addClass("mercury-#{@constructor.type}-region")
+
+    # call the afterBuild method if it's defined
+    @afterBuild?()
 
     @pushHistory()
     @bindDefaultEvents()

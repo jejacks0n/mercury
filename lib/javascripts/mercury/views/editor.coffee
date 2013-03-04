@@ -39,9 +39,8 @@ class Mercury.Editor extends Mercury.View
   handleAction: (e) ->
     action = $(e.target).data('action')
     switch action
-      when 'undo' then Mercury.trigger('action', 'undo')
-      when 'redo' then Mercury.trigger('action', 'redo')
       when 'preview' then Mercury.trigger('mode', 'preview')
+      else Mercury.trigger('action', action)
 
 
   save: ->

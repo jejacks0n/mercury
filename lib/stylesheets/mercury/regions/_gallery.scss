@@ -12,7 +12,12 @@ $gallery_region_paginator_active_color: #fff !default;
   &:focus {
     @include focus-outline();
   }
+  &+ .mercury-region-drop-indicator {
+    @include drop-indicator-defaults();
+  }
+
   .mercury-gallery-region-controls {
+    @include no-selection();
     display: none;
     position: absolute;
     z-index: 20;
@@ -57,21 +62,7 @@ $gallery_region_paginator_active_color: #fff !default;
       cursor: pointer;
     }
   }
-  .mercury-gallery-region-indicator {
-    @include transition(opacity, ease-in-out);
-    @include border-radius(10px);
-    display: none;
-    position: absolute;
-    z-index: 20;
-    top: 30px;
-    left: 30px;
-    width: 60px;
-    height: 60px;
-    margin: -30px;
-    opacity: 0;
-    background: rgba(0, 0, 0, .75) asset-url('mercury/regions/upload-indicator.png', image) no-repeat center;
-    pointer-events: none;
-  }
+
   .slides {
     position: relative;
     width: 100%;

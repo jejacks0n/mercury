@@ -1,4 +1,4 @@
-# Mercury dependencies.
+# All Mercury dependencies.
 #
 #= require jquery/jquery-1.9.1.min
 #
@@ -9,9 +9,12 @@
 # require htmlclean-1.3.0
 #
 # Markdown region dependencies.
+#
 # showdown is the markdown library used when previewing.
+# textinputs_jquery is the library used for selections.
 #
 #= require showdown-1.0
+#= require textinputs_jquery-0.1.205.js
 #
 # Misc.
 # liquidmetal is used for filtering lists.

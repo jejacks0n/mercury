@@ -5,20 +5,25 @@ Documentation and other useful information can be found at https://github.com/je
 Copyright (c) 2013 Jeremy Jackson
 */
 
+// Core css and utility.
 @import "mercury/core/config";
 @import "mercury/core/mixins";
 
-@import "mercury/uploader";
+// Views.
+@import "mercury/views/uploader";
 
-@import "mercury/regions/gallery";
-@import "mercury/regions/image";
-@import "mercury/regions/markdown";
+// Regions.
+@import "mercury/regions";
+
 
 #mercury {
   -webkit-text-size-adjust: none; // Disable text sizing in webkit (ipad/iphone etc)
 }
 
 // Scratch pad / regression testing
+[data-mercury] {
+  //border: 1px solid red;
+}
 #mercury_controls {
   position: fixed;
   right: 20px;

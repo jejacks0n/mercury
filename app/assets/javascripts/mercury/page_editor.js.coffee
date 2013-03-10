@@ -177,8 +177,7 @@ class @Mercury.PageEditor
   iframeSrc: (url = null, params = false) ->
     # remove the /editor segment of the url if it gets passed through
     url = (url ? window.location.href).replace(Mercury.config.editorUrlRegEx ?= /([http|https]:\/\/.[^\/]*)\/editor\/?(.*)/i,  "$1/$2")
-    url = url.replace(/[\?|\&]mercury_frame=true/gi, '')
-    url = url.replace(/\&_=\d+/gi, '')
+    url = url.replace(/[\?|\&]mercury_frame=true/gi, '').replace(/\&_=\d+/gi, '').replace(/#$/, '')
     if params
       # add a param allowing the server to know that the request is coming from mercury
       # and add a cache busting param so we don't get stale content

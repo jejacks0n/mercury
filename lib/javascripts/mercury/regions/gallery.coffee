@@ -1,20 +1,18 @@
 ###!
-
 The Gallery region is really just an example of how you can build your own more complex regions.
 
 By default it provides the ability to have a simplistic slide show, and allows dropping images from the desktop -- which
 will get uploaded (and probably processed by your server) and will then insert the returned images as slides in the
 slideshow.
 
-You can use the control panel (that shows thumbnails of each slide) to jump to that slide, or to remove them.
-
+You can use the control panel to see thumbnails of each slide, to jump to a given slide, or to remove them. This example
+also takes into account undo/redo support using the keyboard or buttons.
 ###
 class Mercury.GalleryRegion extends Mercury.Region
+  @define 'Mercury.GalleryRegion', 'gallery'
   @include Mercury.Region.Modules.DropIndicator
 
   @supported: true
-
-  @define 'Mercury.GalleryRegion', 'gallery'
 
   skipHistoryOn: ['undo', 'redo']
 

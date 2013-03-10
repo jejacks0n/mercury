@@ -10,7 +10,7 @@ Mercury.Config =
   # get('something:odd')                         => undefined
   #
   get: (path) ->
-    config = @configuration ||= Mercury.configuration ||= {}
+    config = Mercury.configuration ||= {}
     try config = config[part] for part in path.split(':') if path
     catch e
       return
@@ -33,9 +33,9 @@ Mercury.Config =
     value = args.pop()
     path = args.shift()
 
-    return @configuration = value unless path
+    return Mercury.configuration = value unless path
 
-    config = @configuration ||= Mercury.configuration ||= {}
+    config = Mercury.configuration ||= {}
     parts = path.split(':')
     part = parts.shift()
     while part

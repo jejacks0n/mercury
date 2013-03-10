@@ -1,16 +1,13 @@
 ###!
-
 The Image region allows you to have a replaceable image region on your page. It provided the ability to drag/drop images
 from the desktop -- which will get uploaded (and probably processed by your server) and will then replace the existing
 image with the one that was uploaded.
-
 ###
 class Mercury.ImageRegion extends Mercury.Region
+  @define 'Mercury.ImageRegion', 'image'
   @include Mercury.Region.Modules.DropIndicator
 
   @supported: true
-
-  @define 'Mercury.ImageRegion', 'image'
 
   tag: 'img'
 
@@ -30,9 +27,13 @@ class Mercury.ImageRegion extends Mercury.Region
     @el.trigger('focus')
 
 
-  onDropFile: (files) ->
-    uploader = new Mercury.Uploader([files[0]], mimeTypes: @config('regions:gallery:mimeTypes'))
+  onDropFile: (files, options) ->
+    uploader = new Mercury.Uploader(files, mimeTypes: @config('regions:image:mimeTypes'))
     uploader.on 'uploaded', (file) =>
       @focus()
-      @value(file.get('url'))
-      @pushHistory()
+      @handleAction('file', file)
+
+
+  actions:
+
+    file: (file) -> @value(file.get('url'))

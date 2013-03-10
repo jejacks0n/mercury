@@ -27,6 +27,27 @@ This version of Mercury is being built with jQuery 1.9.1 and 2.0 in mind, howeve
 Rangy will be used for selections, but I have yet to dive fully into figuring out how best to utilize the library.
 
 
+## Actions
+
+- bold
+- italic
+- underline
+- subscript
+- superscript
+- rule
+- indent
+- outdent
+- orderedList
+- unorderedList
+- style (value)
+- html (html)
+- block (format)
+- snippet (snippet)
+- file (file)
+- link (url, text)
+- image (url, text)
+
+
 ## Development
 
 Clone using git

@@ -6,15 +6,26 @@
     = stylesheet_link_tag "mercury"
   %body
 
+    #markdown_region(data-mercury="markdown")
+      :preserve
+        1
+        **something here**
+        2
+
+        paragraph1
+        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy
+
+        paragraph2
+
+        paragraph3
+
+
     %h1 <a href="/teabag">Specs</a>
     %p
       Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy
       = link_to('Google Link', 'http://google.com')
 
     %img#image_region(data-mercury="image" src="/assets/1.jpg" width="200" height="200")
-
-    #markdown_region(data-mercury="markdown")
-      1
 
     #gallery_region(data-mercury="gallery")
       .slides

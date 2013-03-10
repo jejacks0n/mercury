@@ -7,6 +7,7 @@ describe "Mercury.Uploader", ->
   subject = null
 
   beforeEach ->
+    fixture.set('<foo></foo>')
     Mercury.configure 'uploading:maxSize', 2048
     Klass.supported = true
     spyOn(Klass.prototype, 'delay')

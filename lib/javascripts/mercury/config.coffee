@@ -92,4 +92,3 @@ Mercury.configuration =
     markdown:
       autoSize  : true                                     # the region will auto-resize to the content on typing etc.
       mimeTypes : false                                    # file types - overrides general uploading to allow anything.
-

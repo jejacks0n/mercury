@@ -1,56 +1,75 @@
+###!
+The Markdown region utilizes the Markdown syntax (http://en.wikipedia.org/wiki/Markdown) to generate an html preview.
+When saved this region will return the markdown content (unprocessed). This content can be used by your server to render
+html content to a user, or to serve the markdown when editing.
+
+Dependencies:
+  showdown-1.0 - https://github.com/coreyti/showdown
+
+This is still experimental and could be changed later to provide a way to fetch the markdown content for a given region
+via Ajax.
+###
 class Mercury.MarkdownRegion extends Mercury.Region
+  @define 'Mercury.MarkdownRegion', 'markdown'
   @include Mercury.Region.Modules.DropIndicator
+  @include Mercury.Region.Modules.TextSelection
+  @include Mercury.Region.Modules.FocusableTextarea
 
   @supported: true
 
-  @define 'Mercury.MarkdownRegion', 'markdown'
-
   editableDragOver: true
 
-  className: 'mercury-markdown-region'
+  wrappers:
+    h1           : ['# ', ' #']
+    h2           : ['## ', ' ##']
+    h3           : ['### ', ' ###']
+    h4           : ['#### ', ' ####']
+    h5           : ['##### ', ' #####']
+    h6           : ['###### ', ' ######']
+    pre          : ['```\n', '\n```']
+    paragraph    : ['\n', '\n']
+    blockquote   : ['> ', '']
+    bold         : ['**']
+    italic       : ['_']
+    underline    : ['<u>', '</u>']
+    sup          : ['<sup>', '</sup>']
+    sub          : ['<sub>', '</sub>']
+    unorderedList: ['- ', '']
+    orderedList  : ['1. ', '', /^\d+. |$/gi]
+    link         : ['[', '](%s)', /^\[|\]\([^)]\)/gi]
+    image        : ['![', '](%s)', /^!\[|\]\([^)]\)/gi]
+    style        : ['<span style="%s">', '</span>', /^(<span style="[^"]*">)|(<\/span>)$/gi]
+    class        : ['<span class="%s">', '</span>', /^(<span class="[^"]*">)|(<\/span>)$/gi]
 
-  elements:
-    preview: '.mercury-markdown-region-preview'
-
-  events:
-    'keydown textarea': 'onKeydown'
+  blocks: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'blockquote', 'unorderedList', 'orderedList']
 
   constructor: (@el, @options = {}) ->
-    return @notify(@t('requires Showdown')) unless window.Showdown
+    try @converter = @options.converter || new Showdown.converter().makeHtml
+    catch e
+      return @notify(@t('requires Showdown'))
+
     super
 
-    @converter ||= new Showdown.converter()
 
-
-  build: ->
-    @focusable = @buildTextarea()
-    @html(@focusable, '<div class="mercury-markdown-region-preview">')
-    @resize()
-
-
-  buildTextarea: ->
-    value = @html().replace(/^\s+|\s+$/g, '').replace('&gt;', '>')
-    $('<textarea class="mercury-markdown-region-textarea">').val(value).css(width: '100%', height: @el.height())
-
-
-  resize: ->
-    return unless @config('regions:markdown:autoResize')
-    current = $('body').scrollTop()
-    height = Math.max(@focusable.get(0).scrollHeight - 10000, 0)
-    @focusable.css(height: height).css(height: @focusable.get(0).scrollHeight)
-    $('body').scrollTop(current)
-
-
-  value: (value = null) ->
+  value: (value = null, converted = false) ->
     if value == null || typeof(value) == 'undefined'
-      @focusable.val()
+      return @focusable.val() unless converted
+      @converter(@focusable.val())
     else
-      @focusable.val(value)
+      @focusable.val(value.val ? value)
+      @setSelection(value.sel) if value.sel
 
 
-  handleAction: ->
-    super
-    @resize()
+  valueForStack: ->
+    sel: @getSelection()
+    val: @value()
+
+
+  onDropFile: (files, options) ->
+    uploader = new Mercury.Uploader(files, mimeTypes: @config('regions:markdown:mimeTypes'))
+    uploader.on 'uploaded', (file) =>
+      @focus()
+      @handleAction('file', file)
 
 
   pushHistory: (keyCode = null) ->
@@ -63,97 +82,84 @@ class Mercury.MarkdownRegion extends Mercury.Region
     if pushNow then super else @historyTimeout = @delay(2500, => super)
 
 
-  onKeydown: (e) ->
-    @delay(1, @resize)
-    return if e.metaKey && e.keyCode == 90 # undo / redo
+  onReturnKey: (e) ->
+    exp = @expandSelectionToLines(@getSelection())
+    val = exp.text
 
-    console.debug(e.keyCode)
-    if e.metaKey then switch e.keyCode
-      when 66 # b
-        e.preventDefault()
-        return @handleAction('bold')
-      when 73 # i
-        e.preventDefault()
-        return @handleAction('italic')
-      when 85 # u
-        e.preventDefault()
-        return @handleAction('underline')
+    # unordered lists
+    if val.match(/^- /)
+      e.preventDefault()
+      if val.match(/^- ./) then @replaceSelection('\n- ') else @replaceSelectedLine(exp)
 
-    @resize()
-    @pushHistory(e.keyCode)
+    # ordered lists
+    else if match = val.match(/^(\d+)\. /)
+      e.preventDefault()
+      next = parseInt(match[1], 10) + 1
+      if val.match(/^\d+\. ./) then @replaceSelection("\n#{next}. ") else @replaceSelectedLine(exp)
 
-
-  wrapSelection: (before, after = null) ->
-    @focusable.surroundSelectedText(before, after || before)
-
-
-  onDropFile: (files) ->
-    uploader = new Mercury.Uploader(files, mimeTypes: @config('regions:markdown:mimeTypes'))
-    uploader.on 'uploaded', (file) =>
-      @focus()
-      @handleAction('insertFile', file)
+    # indentation
+    else if match = val.match(/^(> )+/g)
+      e.preventDefault()
+      if val.match(/^(> )+./g) then @replaceSelection("\n#{match[0]}") else @replaceSelectedLine(exp)
 
 
   actions:
 
-    insertFile: (file) ->
-      # todo: it would be nicer if we could drop the images where they were actually dropped
-      #       in webkit the cursor moves around with where you're going to drop -- so if the selection is in a collapsed
-      #       state moving the cursor to where you dropped and placing them there would make sense.
-      action = if file.isImage() then 'insertImage' else 'insertLink'
-      @handleAction(action, url: file.get('url'), text: file.get('name'))
+    bold:        -> @toggleWrapSelectedWords('bold')
+    italic:      -> @toggleWrapSelectedWords('italic')
+    underline:   -> @toggleWrapSelectedWords('underline')
+    subscript:   -> @toggleWrapSelectedWords('sub')
+    superscript: -> @toggleWrapSelectedWords('sup')
+    rule:        -> @replaceSelectionWithParagraph('- - -')
+    indent:      -> @wrapSelectedParagraphs('blockquote')
+    outdent:     -> @unwrapSelectedParagraphs('blockquote')
 
+    style: (value) ->
+      wrapper = if value.indexOf(':') > -1 then 'style' else 'class'
+      if wrapper == 'style' then @unwrapSelectedWords('class') else @unwrapSelectedWords('style')
+      @toggleWrapSelectedWords(@processWrapper(wrapper, [value]))
 
-    insertLink: (link) ->
-      selection = @focusable.getSelection()
-      @focusable.replaceSelectedText("[#{selection.text || link.text}](#{link.url})")
+    html: (html) ->
+      @replaceSelection(html = (html.get && html.get(0) || html).outerHTML || html)
 
+    block: (format) ->
+      if format == 'blockquote'
+        @unwrapSelectedParagraphs('orderedList')
+        @unwrapSelectedParagraphs('unorderedList')
+        @handleAction('indent') unless @unwrapSelectedParagraphs('blockquote')
+        return
+      if format == 'pre' || format == 'paragraph'
+        @unwrapSelectedParagraphs('pre', all: true)
+        return @wrapSelectedParagraphs(format, all: true) if @wrappers[format]
+      @unwrapSelectedLines(wrapper) for wrapper in @blocks
+      @wrapSelectedLines(format) if @wrappers[format]
 
-    insertImage: (image) ->
-      selection = @focusable.getSelection()
-      @focusable.replaceSelectedText("![#{selection.text || image.text}](#{image.url})")
+    orderedList: ->
+      @unwrapSelectedParagraphs('blockquote')
+      @unwrapSelectedParagraphs('unorderedList')
+      @wrapSelectedParagraphs('orderedList') unless @unwrapSelectedParagraphs('orderedList')
 
+    unorderedList: ->
+      @unwrapSelectedParagraphs('blockquote')
+      @unwrapSelectedParagraphs('orderedList')
+      @wrapSelectedParagraphs('unorderedList') unless @unwrapSelectedParagraphs('unorderedList')
 
-    bold: ->
-      @wrapSelection('**')
+    # todo: this isn't hashed out yet, but needs to be added.
+    snippet: (snippet) ->
+      console.error('not implemented')
 
+    # todo: it would be nicer if we could drop the images where they were actually dropped
+    #       in webkit the cursor moves around with where you're going to drop -- so if the selection is in a collapsed
+    #       state moving the cursor to where you dropped and placing them there would make sense.
+    file: (file) ->
+      action = if file.isImage() then 'image' else 'link'
+      @handleAction(action, file.get('url'), file.get('name'))
 
-    italic: ->
-      @wrapSelection('_')
+    # todo: handle options better -- maybe a command options pattern? eg.
+    #       class Link extends ActionOptions
+    #       url: '', title: '', target: ''
+    link: (url, text) ->
+      @wrapSelected(@processWrapper('link', [url, text]), text: text)
 
-
-    underline: ->
-      @wrapSelection('<u>', '</u>')
-
-
-    # needs to be checked
-
-    subscript: ->
-      @wrapSelection('<sub>', '</sub>')
-
-
-    superscript: ->
-      @wrapSelection('<sup>', '</sup>')
-
-
-    insertHTML: (html) ->
-      unless typeof(html) == 'string'
-        html = if html.get then html.get(0).outerHTML else html.outerHTML
-      @focusable.replaceSelectedText(html)
-
-
-    horizontalRule: ->
-      @focusable.replaceSelectedText('\n- - -\n')
-
-
-
-
-#      indent: (selection) ->
-#        selection.wrapLine('> ', '', false, true)
-#
-#      outdent: (selection) ->
-#        selection.unWrapLine('> ', '', false, true)
-#
-
-
-
+    image: (url, text) ->
+      @wrapSelected(@processWrapper('image', [url, text]), text: text)

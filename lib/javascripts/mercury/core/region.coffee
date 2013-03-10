@@ -86,6 +86,7 @@ class Mercury.Region extends Mercury.View
     @addClass("mercury-#{@constructor.type}-region")
 
     # call the afterBuild method if it's defined
+    @trigger('build')
     @afterBuild?()
 
     @pushHistory()
@@ -97,18 +98,40 @@ class Mercury.Region extends Mercury.View
   # Returns false if we shouldn't handle anything, otherwise true.
   #
   handleAction: (args...) ->
-    return unless @focused
+    return if !@focused || @previewing
     action = args.shift()
     @pushHistory() unless @skipHistoryOn.indexOf(action) > -1
     @actions[action]?(args...)
+    @trigger('action', action)
     return true
+
+
+  # Handles mode switching -- will look for a togglePreview method for instance if the mode is preview.
+  #
+  handleMode: (args...) ->
+    mode = args.shift()
+    @["toggle_#{mode}".toCamelCase()]?(args...)
+
+
+  # Toggles preview mode, which will trigger a preview event with our current previewing state, will remove or add
+  # focusable tabindex and blurs.  Will call an #onTogglePreview method if it exists.
+  #
+  togglePreview: ->
+    @previewing = !@previewing
+    @trigger('preview', @previewing)
+    if @previewing
+      @blur()
+      @focusable.removeAttr('tabindex')
+    else
+      @focusable.attr(tabindex: 0)
+    @onTogglePreview?()
 
 
   # This is the standard way to push onto the undo stack. The stack is used in regions for custom undo history, but you
   # can bypass this by using #pushStack if you need.
   #
   pushHistory: ->
-    @pushStack(@value())
+    @pushStack(@valueForStack?() ? @value())
 
 
   # Focuses the region, which will call focus on the element and an onFocus method if the subclass implements one. Used
@@ -180,10 +203,13 @@ class Mercury.Region extends Mercury.View
   # all event listeners including those that have been added externally.
   #
   release: ->
+    @el.removeClass("mercury-#{@constructor.type}-region")
+    @focusable.removeAttr('tabindex')
     @trigger('release')
-    @focusable.off()
     @el.off()
+    @focusable.off()
     @off()
+    @blur()
 
 
   # Binds to various events, which includes the global action event which will be proxied through to the handlers
@@ -192,6 +218,9 @@ class Mercury.Region extends Mercury.View
   bindDefaultEvents: ->
     # handle action events using a custom event handler
     Mercury.on('action', => @handleAction(arguments...))
+
+    # handle mode events using a custom mode handler
+    Mercury.on('mode', => @handleMode(arguments...))
 
     # delegate all the actions defined in various places
     @delegateActions($.extend(true, @constructor.actions, @constructor.defaultActions, @actions ||= {}))

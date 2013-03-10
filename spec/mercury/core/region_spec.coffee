@@ -138,6 +138,11 @@ describe "Mercury.Region", ->
       subject = new Klass('<div id="name">')
       expect( subject.el.attr('class') ).to.eq('mercury-unknown-region')
 
+    it "triggers a build event", ->
+      Klass.prototype.trigger = spy()
+      subject = new Klass('<div>')
+      expect( subject.trigger ).calledWith('build')
+
     it "calls #afterBuild if it's defined", ->
       Klass.prototype.afterBuild = spy()
       subject = new Klass('<div>')
@@ -171,10 +176,76 @@ describe "Mercury.Region", ->
       subject.handleAction('foo', 1, 2, '3')
       expect( subject.actions.foo ).calledWith(1, 2, '3')
 
+    it "triggers an action event", ->
+      spyOn(subject, 'trigger')
+      subject.handleAction('foo', 1, 2, '3')
+      expect( subject.trigger ).calledWith('action', 'foo')
+
     it "doesn't call the action we've delegated if not focused", ->
       subject.focused = false
+      subject.previewing = false
       subject.handleAction('foo', 1, 2, '3')
       expect( subject.actions.foo ).not.called
+
+    it "doesn't call the action we've delegated if previewing", ->
+      subject.previewing = true
+      subject.handleAction('foo', 1, 2, '3')
+      expect( subject.actions.foo ).not.called
+
+
+  describe "#handleMode", ->
+
+    it "calls a #toggleMode method with arguments passed", ->
+      subject.toggleFoo = spy()
+      subject.togglePreview = spy()
+      subject.handleMode('preview', 1, 2, '3')
+      expect( subject.togglePreview ).calledWith(1, 2, '3')
+      subject.handleMode('foo')
+      expect( subject.toggleFoo ).called
+
+
+  describe "#togglePreview", ->
+
+    beforeEach ->
+      subject.previewing = false
+
+    it "toggles @previewing", ->
+      subject.togglePreview()
+      expect( subject.previewing ).to.be.true
+      subject.togglePreview()
+      expect( subject.previewing ).to.be.false
+
+    it "triggers a preview event", ->
+      spyOn(subject, 'trigger')
+      subject.togglePreview()
+      expect( subject.trigger ).calledWith('preview', true)
+
+    it "calls #onTogglePreview if it's defined", ->
+      subject.onTogglePreview = spy()
+      subject.togglePreview()
+      expect( subject.onTogglePreview ).called
+
+    describe "when previewing", ->
+
+      it "calls #blur", ->
+        spyOn(subject, 'blur')
+        subject.togglePreview()
+        expect( subject.blur ).called
+
+      it "removes the tabindex attribute (so it's no longer focusable)", ->
+        subject.focusable.attr(tabindex: 42)
+        subject.togglePreview()
+        expect( subject.focusable.attr('tabindex') ).to.be.undefined
+
+    describe "when not previewing", ->
+
+      beforeEach ->
+        subject.previewing = true
+
+      it "adds a tabindex attribute", ->
+        subject.focusable.removeAttr('tabindex')
+        subject.togglePreview()
+        expect( subject.focusable.attr('tabindex') ).to.eq('0')
 
 
   describe "#pushHistory", ->
@@ -184,6 +255,11 @@ describe "Mercury.Region", ->
       spyOn(subject, 'value', -> '_value_')
       subject.pushHistory()
       expect( subject.pushStack ).calledWith('_value_')
+
+    it "calls #valueForStack if it's defined (for overriding)", ->
+      subject.valueForStack = spy()
+      subject.pushHistory()
+      expect( subject.valueForStack ).called
 
 
   describe "#focus", ->
@@ -290,13 +366,23 @@ describe "Mercury.Region", ->
 
   describe "#release", ->
 
+    it "removes the region class from @el", ->
+      expect( subject.el.hasClass('mercury-unknown-region') ).to.be.true
+      subject.release()
+      expect( subject.el.hasClass('mercury-unknown-region') ).to.be.false
+
+    it "removes the tabindex attribute from @focusable", ->
+      expect( subject.focusable.attr('tabindex') ).to.eq('0')
+      subject.release()
+      expect( subject.focusable.attr('tabindex') ).to.be.undefined
+
     it "triggers a release event", ->
       spyOn(subject, 'trigger')
       subject.release()
       expect( subject.trigger ).calledWith('release')
 
-    it "calls #off on @focusable and @el", ->
-      subject.focusable = off: spy()
+    it "calls @el.off and @focusable.off", ->
+      subject.focusable = off: spy(), removeAttr: spy(), blur: spy()
       spyOn(subject.el, 'off')
       subject.release()
       expect( subject.el.off ).called
@@ -306,6 +392,11 @@ describe "Mercury.Region", ->
       spyOn(subject, 'off')
       subject.release()
       expect( subject.off ).called
+
+    it "calls #blur", ->
+      spyOn(subject, 'blur')
+      subject.release()
+      expect( subject.blur ).called
 
 
   describe "#bindDefaultEvents", ->
@@ -321,6 +412,13 @@ describe "Mercury.Region", ->
       subject.bindDefaultEvents()
       expect( Mercury.on ).calledWith('action', sinon.match.func)
       expect( subject.handleAction ).calledWith(1, 2, '3')
+
+    it "binds to the global 'mode' event", ->
+      spyOn(subject, 'handleMode')
+      spyOn(Mercury, 'on').callsArgOnWith(1, subject, 1, 2, '3')
+      subject.bindDefaultEvents()
+      expect( Mercury.on ).calledWith('mode', sinon.match.func)
+      expect( subject.handleMode ).calledWith(1, 2, '3')
 
     it "calls #delegateActions with what we've defined", ->
       subject.actions = {foo: 'bar'}

@@ -10,9 +10,13 @@
     outline: 0;
     border: none;
     margin: 0;
-    //background: 'transparent';
-    //font-family: "Courier New", Courier, monospace;
-    resize: none;
+    white-space: pre;
+    background: 'transparent';
+    font-family: Monaco, "Bitstream Vera Sans Mono", "Lucida Console", monospace;
+    font-size: 12px;
+    //font-weight: bold;
+    line-height: 13px;
+    resize: vertical;
     &:focus {
       @include focus-outline();
     }

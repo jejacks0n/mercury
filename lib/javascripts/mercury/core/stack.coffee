@@ -2,6 +2,15 @@
 
 Mercury.Stack =
 
+  # When included as a module this method is called and will setup the required instance variables. You can override the
+  # maxStackLength by setting it in your constructor.
+  #
+  included: ->
+    @stackPosition = 0
+    @maxStackLength = 200
+    @stack = []
+
+
   # Pushes a given value to the stack.
   # Returns the position of the new item in the stack.
   #
@@ -29,13 +38,3 @@ Mercury.Stack =
     return null if @stackPosition >= @stack.length - 1
     @stackPosition += 1
     return @stack[@stackPosition]
-
-
-  # When included as a module this method is called and will setup the required instance variables. You can override the
-  # maxStackLength by setting it in your constructor.
-  #
-  included: ->
-    self = @:: || @
-    self.stackPosition = 0
-    self.maxStackLength = 200
-    self.stack = []

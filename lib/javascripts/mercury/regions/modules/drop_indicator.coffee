@@ -1,12 +1,23 @@
 Mercury.Region.Modules.DropIndicator =
 
-  afterBuild: ->
-    @dropIndicator ||= $('<div class="mercury-region-drop-indicator"></div>')
+  included: ->
+    @dropIndicator = $('<div class="mercury-region-drop-indicator"></div>')
+
+    @on('build', @buildDropIndicator)
+    @on('release', @releaseDropIndicator)
+
+
+  buildDropIndicator: ->
     @el.after(@dropIndicator)
-    @delegateEvents
-      dragenter: 'onDragEnter'
-      dragleave: 'onDragLeave'
-      drop: 'onDragLeave'
+
+    @delegateEvents @focusable,
+      dragenter: 'showDropIndicator'
+      dragleave: 'hideDropIndicator'
+      drop: 'hideDropIndicator'
+
+
+  releaseDropIndicator: ->
+    @dropIndicator.remove()
 
 
   dropIndicatorPosition: ->
@@ -16,17 +27,12 @@ Mercury.Region.Modules.DropIndicator =
     display: 'block'
 
 
-  onDragEnter: ->
+  showDropIndicator: ->
     clearTimeout(@dropIndicatorTimer)
     @dropIndicator.css(@dropIndicatorPosition())
     @delay(1, => @dropIndicator.css(opacity: 1))
 
 
-  onDragLeave: ->
+  hideDropIndicator: ->
     @dropIndicator.css(opacity: 0)
     @dropIndicatorTimer = @delay(500, => @dropIndicator.hide())
-
-
-  release: ->
-    @dropIndicator.remove()
-    super

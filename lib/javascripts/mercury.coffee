@@ -25,9 +25,8 @@ jQuery ->
   window.editor = new Mercury.Editor()
   editor.appendTo(document.body)
 
-# example of extending regions and adding buttons -- there should be an api that makes this sort of thing easier.
-Mercury.configure 'toolbar:primary:buttons:swapDirection', ['Swap Direction']
+# example of extending regions to add actions for buttons or other functionality.
 Mercury.MarkdownRegion.actions =
-  swapDirection: ->
+  direction: ->
     @direction = if @direction == 'rtl' then 'ltr' else 'rtl'
     @el.css(direction: @direction)

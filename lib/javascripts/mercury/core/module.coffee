@@ -53,7 +53,7 @@ class Mercury.Module
     for name, method of module
       continue if moduleKeywords.indexOf(name) > -1
       @::[name] = method
-    module.included?.apply(@)
+    module.included?.apply(@::)
 
 
   # Provides a way to call a method within the scope of an object.

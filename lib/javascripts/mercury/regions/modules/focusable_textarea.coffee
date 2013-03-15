@@ -15,7 +15,7 @@ Mercury.Region.Modules.FocusableTextarea =
   buildFocusable: ->
     @autoSize = @config("regions:#{@constructor.type}:autoSize")
 
-    value = @html().replace(/^\s+|\s+$/g, '').replace('&gt;', '>')
+    value = @html().replace('&gt;', '>').replace('&lt;', '<')
     resize = if @autoSize then 'none' else 'vertical'
 
     @el.empty()
@@ -27,37 +27,33 @@ Mercury.Region.Modules.FocusableTextarea =
 
 
   releaseFocusable: ->
-    @html(@value(null, true))
-
-
-  toggleFocusablePreview: ->
-    if @previewing
-      @focusable.hide()
-      @preview.html(@value(null, true)).show()
-    else
-      @preview.hide()
-      @focusable.show()
+    @html(@convertedValue?() ? @value())
 
 
   resizeFocusable: ->
     return unless @autoSize
     focusable = @focusable.get(0)
-    current = $('body').scrollTop()
+    body = $('body')
+    current = body.scrollTop()
     @focusable.css(height: 1).css(height: focusable.scrollHeight)
     $('body').scrollTop(current)
 
 
-  handleKeyEvent: (e) ->
-    # arrows
-    return if e.keyCode >= 37 && e.keyCode <= 40
+  toggleFocusablePreview: ->
+    if @previewing
+      @focusable.hide()
+      @preview.html(@convertedValue?() || @value()).show()
+    else
+      @preview.hide()
+      @focusable.show()
 
+
+  handleKeyEvent: (e) ->
+    return if e.keyCode >= 37 && e.keyCode <= 40 # arrows
     @delay(1, @resizeFocusable)
 
-    # undo / redo
-    return if e.metaKey && e.keyCode == 90
-
-    # enter / return
-    @onReturnKey?(e) if e.keyCode == 13
+    return if e.metaKey && e.keyCode == 90 # undo / redo
+    @onReturnKey?(e) if e.keyCode == 13 # enter / return
 
     # common actions
     if e.metaKey then switch e.keyCode

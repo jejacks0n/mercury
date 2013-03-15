@@ -51,25 +51,19 @@ class Mercury.MarkdownRegion extends Mercury.Region
     super
 
 
-  value: (value = null, converted = false) ->
-    if value == null || typeof(value) == 'undefined'
-      return @focusable.val() unless converted
-      @converter(@focusable.val())
-    else
-      @focusable.val(value.val ? value)
-      @setSelection(value.sel) if value.sel
+  value: (value = null) ->
+    return @focusable.val() if value == null || typeof(value) == 'undefined'
+    @focusable.val(value.val ? value)
+    @setSelection(value.sel) if value.sel
+
+
+  convertedValue: ->
+    @converter(@value())
 
 
   valueForStack: ->
     sel: @getSelection()
     val: @value()
-
-
-  onDropFile: (files, options) ->
-    uploader = new Mercury.Uploader(files, mimeTypes: @config('regions:markdown:mimeTypes'))
-    uploader.on 'uploaded', (file) =>
-      @focus()
-      @handleAction('file', file)
 
 
   pushHistory: (keyCode = null) ->
@@ -80,6 +74,13 @@ class Mercury.MarkdownRegion extends Mercury.Region
 
     clearTimeout(@historyTimeout)
     if pushNow then super else @historyTimeout = @delay(2500, => super)
+
+
+  onDropFile: (files, options) ->
+    uploader = new Mercury.Uploader(files, mimeTypes: @config('regions:markdown:mimeTypes'))
+    uploader.on 'uploaded', (file) =>
+      @focus()
+      @handleAction('file', file)
 
 
   onReturnKey: (e) ->

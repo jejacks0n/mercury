@@ -7,6 +7,7 @@
 # define global methods that might not exist
 Mercury.on ||= ->
 Mercury.trigger ||= ->
+Mercury.support = webkit: true
 
 # allow configuration to be adjusted and restored after each test
 $.extend(Mercury, Mercury.Config.Module)

@@ -27,7 +27,7 @@ class Mercury.ImageRegion extends Mercury.Region
     @el.trigger('focus')
 
 
-  onDropFile: (files, options) ->
+  onDropFile: (files) ->
     uploader = new Mercury.Uploader(files, mimeTypes: @config('regions:image:mimeTypes'))
     uploader.on 'uploaded', (file) =>
       @focus()

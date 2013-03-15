@@ -21,11 +21,10 @@ Mercury.Logger =
   #
   notify: (msg) ->
     msg = "#{@logPrefix} #{msg}" if @logPrefix
-    try
-      console.error(msg)
-      console.trace?()
-    catch e
-      switch Mercury.configuration.logging?.notifier
-        when 'alert' then alert(msg)
-        when 'error' then throw new Error(msg)
 
+    if Mercury.configuration.logging?.notifier == 'console'
+      try return console.error(msg) catch e # intentionally do nothing
+    else if Mercury.configuration.logging?.notifier == 'alert'
+      return alert(msg)
+
+    throw new Error(msg)

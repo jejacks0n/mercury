@@ -16,7 +16,7 @@ Mercury.configuration =
   #
   logging:
     enabled    : true
-    notifier   : 'error'                                   # alert or throw an error - 'alert', 'error', or false.
+    notifier   : 'console'                                 # console, alert, or error (default is error)
 
 
   # Localization

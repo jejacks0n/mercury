@@ -12,7 +12,6 @@ describe "Mercury.Logger", ->
     subject = new Klass()
     spyOn(console, 'debug')
     spyOn(console, 'error')
-    spyOn(console, 'trace')
 
   describe "#log", ->
 
@@ -42,43 +41,22 @@ describe "Mercury.Logger", ->
 
   describe "#notify", ->
 
-    it "calls console.error with the expected message", ->
-      subject.notify('_message_')
-      expect( console.error ).calledWith('Mercury: _message_')
+    it "throws an exception by default", ->
+      expect(-> subject.notify('_message_') ).to.throw(Error, 'Mercury: _message_')
 
     it "uses the prefix", ->
       subject.logPrefix = 'Foo:'
-      subject.notify('_message_')
-      expect( console.error ).calledWith('Foo: _message_')
+      expect(-> subject.notify('_message_') ).to.throw(Error, 'Foo: _message_')
       subject.logPrefix = null
+      expect(-> subject.notify('_message_') ).to.throw(Error, '_message_')
+
+    it "calls console.error with the expected message", ->
+      Mercury.configure 'logging:notifier', 'console'
       subject.notify('_message_')
-      expect( console.error ).calledWith('_message_')
+      expect( console.error ).calledWith('Mercury: _message_')
 
-    it "calls console.trace if it's available", ->
+    it "calls console.error with the expected message", ->
+      Mercury.configure 'logging:notifier', 'alert'
+      spyOn(window, 'alert')
       subject.notify('_message_')
-      expect( console.trace ).called
-
-    describe "with fallback strategies", ->
-
-      beforeEach ->
-        @original = console.error
-        console.error = undefined
-
-      afterEach ->
-        console.error = @original
-
-      it "throws an exception if there's no console.error", ->
-        Mercury.configure 'logging:notifier', 'error'
-        expect(-> subject.notify('_message_') ).to.throw(Error, 'Mercury: _message_')
-
-      it "alerts if there's no console.error", ->
-        Mercury.configure 'logging:notifier', 'alert'
-        spyOn(window, 'alert')
-        subject.notify('_message_')
-        expect( window.alert ).calledWith('Mercury: _message_')
-
-      it "does neither if configured", ->
-        Mercury.configure 'logging:notifier', false
-        spyOn(window, 'alert')
-        subject.notify('_message_')
-        expect( window.alert ).not.called
+      expect( alert ).calledWith('Mercury: _message_')

@@ -14,7 +14,7 @@ Copyright (c) 2013 Jeremy Jackson
   Mercury.configuration = {
     logging: {
       enabled: true,
-      notifier: 'error'
+      notifier: 'console'
     },
     localization: {
       enabled: true,
@@ -347,21 +347,20 @@ Copyright (c) 2013 Jeremy Jackson
       return typeof console !== "undefined" && console !== null ? typeof console.debug === "function" ? console.debug.apply(console, args) : void 0 : void 0;
     },
     notify: function(msg) {
-      var _ref;
+      var _ref, _ref1;
       if (this.logPrefix) {
         msg = "" + this.logPrefix + " " + msg;
       }
-      try {
-        console.error(msg);
-        return typeof console.trace === "function" ? console.trace() : void 0;
-      } catch (e) {
-        switch ((_ref = Mercury.configuration.logging) != null ? _ref.notifier : void 0) {
-          case 'alert':
-            return alert(msg);
-          case 'error':
-            throw new Error(msg);
+      if (((_ref = Mercury.configuration.logging) != null ? _ref.notifier : void 0) === 'console') {
+        try {
+          return console.error(msg);
+        } catch (e) {
+
         }
+      } else if (((_ref1 = Mercury.configuration.logging) != null ? _ref1.notifier : void 0) === 'alert') {
+        return alert(msg);
       }
+      throw new Error(msg);
     }
   };
 
@@ -977,7 +976,7 @@ Copyright (c) 2013 Jeremy Jackson
     }
 
     Region.prototype.handleAction = function() {
-      var action, args, _base;
+      var action, args;
       args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
       if (!this.focused || this.previewing) {
         return;
@@ -986,8 +985,8 @@ Copyright (c) 2013 Jeremy Jackson
       if (!(this.skipHistoryOn.indexOf(action) > -1)) {
         this.pushHistory();
       }
-      if (typeof (_base = this.actions)[action] === "function") {
-        _base[action].apply(_base, args);
+      if (this.actions[action]) {
+        this.actions[action].apply(this, args);
       }
       this.trigger('action', action);
       return true;
@@ -1151,29 +1150,15 @@ Copyright (c) 2013 Jeremy Jackson
     };
 
     Region.prototype.delegateActions = function(actions) {
-      var key, method, _results,
-        _this = this;
+      var key, method, _results;
       _results = [];
       for (key in actions) {
         method = actions[key];
-        if (typeof method === 'function') {
-          method = (function(method) {
-            return function() {
-              method.apply(_this, arguments);
-              return true;
-            };
-          })(method);
-        } else {
+        if (typeof method !== 'function') {
           if (!this[method]) {
             throw new Error("" + method + " doesn't exist");
-          } else {
-            method = (function(method) {
-              return function() {
-                _this[method].apply(_this, arguments);
-                return true;
-              };
-            })(method);
           }
+          method = this[method];
         }
         _results.push(this.actions[key] = method);
       }
@@ -2153,7 +2138,7 @@ Copyright (c) 2013 Jeremy Jackson
     buildFocusable: function() {
       var resize, value;
       this.autoSize = this.config("regions:" + this.constructor.type + ":autoSize");
-      value = this.html().replace(/^\s+|\s+$/g, '').replace('&gt;', '>');
+      value = this.html().replace('&gt;', '>').replace('&lt;', '<');
       resize = this.autoSize ? 'none' : 'vertical';
       this.el.empty();
       this.append(this.preview, this.focusable.val(value).css({
@@ -2167,30 +2152,32 @@ Copyright (c) 2013 Jeremy Jackson
       });
     },
     releaseFocusable: function() {
-      return this.html(this.value(null, true));
-    },
-    toggleFocusablePreview: function() {
-      if (this.previewing) {
-        this.focusable.hide();
-        return this.preview.html(this.value(null, true)).show();
-      } else {
-        this.preview.hide();
-        return this.focusable.show();
-      }
+      var _ref;
+      return this.html((_ref = typeof this.convertedValue === "function" ? this.convertedValue() : void 0) != null ? _ref : this.value());
     },
     resizeFocusable: function() {
-      var current, focusable;
+      var body, current, focusable;
       if (!this.autoSize) {
         return;
       }
       focusable = this.focusable.get(0);
-      current = $('body').scrollTop();
+      body = $('body');
+      current = body.scrollTop();
       this.focusable.css({
         height: 1
       }).css({
         height: focusable.scrollHeight
       });
       return $('body').scrollTop(current);
+    },
+    toggleFocusablePreview: function() {
+      if (this.previewing) {
+        this.focusable.hide();
+        return this.preview.html((typeof this.convertedValue === "function" ? this.convertedValue() : void 0) || this.value()).show();
+      } else {
+        this.preview.hide();
+        return this.focusable.show();
+      }
     },
     handleKeyEvent: function(e) {
       if (e.keyCode >= 37 && e.keyCode <= 40) {

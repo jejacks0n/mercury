@@ -43,7 +43,7 @@ image with the one that was uploaded.
       return this.el.trigger('focus');
     };
 
-    ImageRegion.prototype.onDropFile = function(files, options) {
+    ImageRegion.prototype.onDropFile = function(files) {
       var uploader,
         _this = this;
       uploader = new Mercury.Uploader(files, {

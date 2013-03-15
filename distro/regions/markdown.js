@@ -68,25 +68,22 @@ via Ajax.
       MarkdownRegion.__super__.constructor.apply(this, arguments);
     }
 
-    MarkdownRegion.prototype.value = function(value, converted) {
+    MarkdownRegion.prototype.value = function(value) {
       var _ref;
       if (value == null) {
         value = null;
       }
-      if (converted == null) {
-        converted = false;
-      }
       if (value === null || typeof value === 'undefined') {
-        if (!converted) {
-          return this.focusable.val();
-        }
-        return this.converter(this.focusable.val());
-      } else {
-        this.focusable.val((_ref = value.val) != null ? _ref : value);
-        if (value.sel) {
-          return this.setSelection(value.sel);
-        }
+        return this.focusable.val();
       }
+      this.focusable.val((_ref = value.val) != null ? _ref : value);
+      if (value.sel) {
+        return this.setSelection(value.sel);
+      }
+    };
+
+    MarkdownRegion.prototype.convertedValue = function() {
+      return this.converter(this.value());
     };
 
     MarkdownRegion.prototype.valueForStack = function() {
@@ -94,18 +91,6 @@ via Ajax.
         sel: this.getSelection(),
         val: this.value()
       };
-    };
-
-    MarkdownRegion.prototype.onDropFile = function(files, options) {
-      var uploader,
-        _this = this;
-      uploader = new Mercury.Uploader(files, {
-        mimeTypes: this.config('regions:markdown:mimeTypes')
-      });
-      return uploader.on('uploaded', function(file) {
-        _this.focus();
-        return _this.handleAction('file', file);
-      });
     };
 
     MarkdownRegion.prototype.pushHistory = function(keyCode) {
@@ -129,6 +114,18 @@ via Ajax.
           return MarkdownRegion.__super__.pushHistory.apply(_this, arguments);
         });
       }
+    };
+
+    MarkdownRegion.prototype.onDropFile = function(files, options) {
+      var uploader,
+        _this = this;
+      uploader = new Mercury.Uploader(files, {
+        mimeTypes: this.config('regions:markdown:mimeTypes')
+      });
+      return uploader.on('uploaded', function(file) {
+        _this.focus();
+        return _this.handleAction('file', file);
+      });
     };
 
     MarkdownRegion.prototype.onReturnKey = function(e) {

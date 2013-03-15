@@ -101,7 +101,7 @@ class Mercury.Region extends Mercury.View
     return if !@focused || @previewing
     action = args.shift()
     @pushHistory() unless @skipHistoryOn.indexOf(action) > -1
-    @actions[action]?(args...)
+    @actions[action].apply(@, args) if @actions[action]
     @trigger('action', action)
     return true
 
@@ -280,16 +280,8 @@ class Mercury.Region extends Mercury.View
   delegateActions: (actions) ->
     for key, method of actions
 
-      if typeof(method) == 'function'
-        method = do (method) => =>
-          method.apply(@, arguments)
-          true
-      else
-        unless @[method]
-          throw new Error("#{method} doesn't exist")
-        else
-          method = do (method) => =>
-            @[method].apply(@, arguments)
-            true
+      if typeof(method) != 'function'
+        throw new Error("#{method} doesn't exist") unless @[method]
+        method = @[method]
 
       @actions[key] = method

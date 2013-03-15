@@ -1,17 +1,16 @@
 source 'https://rubygems.org'
 
 gem 'rails', '>= 3.2.9'
-
 gem 'haml-rails'
 gem 'coffee-rails'
 gem 'sass-rails'
 
-# used by the build process
-gem 'uglifier'
-gem 'yui-compressor'
+# Build process dependencies
+gem 'uglifier'                  # javascript compression
+gem 'yui-compressor'            # css compression
 
-# test dependencies
+# Test dependencies
 gem 'teabag'
 gem 'guard-teabag'
-gem 'rb-fsevent'
-gem 'terminal-notifier-guard'
+gem 'rb-fsevent'                # filesystem events for guard
+gem 'terminal-notifier-guard'   # osx notifications for guard

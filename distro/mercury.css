@@ -4,16 +4,16 @@ Documentation and other useful information can be found at https://github.com/je
 
 Copyright (c) 2013 Jeremy Jackson
 */
-/* line 54, ../../lib/stylesheets/mercury/core/_mixins.scss */
+/* line 77, ../../lib/stylesheets/mercury/core/_mixins.scss */
 .mercury-clearfix:before, .mercury-clearfix:after {
   content: " ";
   display: table;
 }
-/* line 58, ../../lib/stylesheets/mercury/core/_mixins.scss */
+/* line 81, ../../lib/stylesheets/mercury/core/_mixins.scss */
 .mercury-clearfix:after {
   clear: both;
 }
-/* line 61, ../../lib/stylesheets/mercury/core/_mixins.scss */
+/* line 84, ../../lib/stylesheets/mercury/core/_mixins.scss */
 .mercury-clearfix {
   *zoom: 1;
 }
@@ -21,30 +21,30 @@ Copyright (c) 2013 Jeremy Jackson
 /* Uploader
  *----------------------------------------------------------------------------*/
 @-webkit-keyframes mercury-uploader-indicator {
-  /* line 3, ../../lib/stylesheets/mercury/_uploader.scss */
+  /* line 3, ../../lib/stylesheets/mercury/views/_uploader.scss */
   to {
     background-position: 0 0;
   }
 
-  /* line 3, ../../lib/stylesheets/mercury/_uploader.scss */
+  /* line 3, ../../lib/stylesheets/mercury/views/_uploader.scss */
   from {
     background-position: -45px 0;
   }
 }
 
 @-moz-keyframes mercury-uploader-indicator {
-  /* line 4, ../../lib/stylesheets/mercury/_uploader.scss */
+  /* line 4, ../../lib/stylesheets/mercury/views/_uploader.scss */
   to {
     background-position: 0 0;
   }
 
-  /* line 4, ../../lib/stylesheets/mercury/_uploader.scss */
+  /* line 4, ../../lib/stylesheets/mercury/views/_uploader.scss */
   from {
     background-position: -45px 0;
   }
 }
 
-/* line 7, ../../lib/stylesheets/mercury/_uploader.scss */
+/* line 7, ../../lib/stylesheets/mercury/views/_uploader.scss */
 #mercury .mercury-uploader {
   -webkit-transition-property: opacity;
   -webkit-transition-duration: 0.25s;
@@ -64,7 +64,7 @@ Copyright (c) 2013 Jeremy Jackson
   background: rgba(0, 0, 0, 0.75);
   opacity: 0;
 }
-/* line 18, ../../lib/stylesheets/mercury/_uploader.scss */
+/* line 18, ../../lib/stylesheets/mercury/views/_uploader.scss */
 #mercury .mercury-uploader .mercury-uploader-dialog {
   -webkit-border-radius: 10px;
   -moz-border-radius: 10px;
@@ -87,7 +87,7 @@ Copyright (c) 2013 Jeremy Jackson
   background: #efefef;
   color: #333333;
 }
-/* line 34, ../../lib/stylesheets/mercury/_uploader.scss */
+/* line 34, ../../lib/stylesheets/mercury/views/_uploader.scss */
 #mercury .mercury-uploader .mercury-uploader-preview {
   -webkit-user-select: none;
   -moz-user-select: none;
@@ -105,7 +105,7 @@ Copyright (c) 2013 Jeremy Jackson
   border: 1px solid #cccccc;
   background: white;
 }
-/* line 43, ../../lib/stylesheets/mercury/_uploader.scss */
+/* line 43, ../../lib/stylesheets/mercury/views/_uploader.scss */
 #mercury .mercury-uploader .mercury-uploader-preview b {
   display: table-cell;
   width: 150px;
@@ -113,13 +113,13 @@ Copyright (c) 2013 Jeremy Jackson
   text-align: center;
   vertical-align: middle;
 }
-/* line 49, ../../lib/stylesheets/mercury/_uploader.scss */
+/* line 49, ../../lib/stylesheets/mercury/views/_uploader.scss */
 #mercury .mercury-uploader .mercury-uploader-preview b img {
   margin: 5px;
   max-width: 138px;
   max-height: 138px;
 }
-/* line 57, ../../lib/stylesheets/mercury/_uploader.scss */
+/* line 57, ../../lib/stylesheets/mercury/views/_uploader.scss */
 #mercury .mercury-uploader .mercury-uploader-details {
   float: left;
   width: 305px;
@@ -129,7 +129,7 @@ Copyright (c) 2013 Jeremy Jackson
   text-overflow: ellipsis;
   line-height: 20px;
 }
-/* line 67, ../../lib/stylesheets/mercury/_uploader.scss */
+/* line 67, ../../lib/stylesheets/mercury/views/_uploader.scss */
 #mercury .mercury-uploader .mercury-uploader-progress {
   -webkit-user-select: none;
   -moz-user-select: none;
@@ -140,7 +140,7 @@ Copyright (c) 2013 Jeremy Jackson
   right: 15px;
   width: 305px;
 }
-/* line 73, ../../lib/stylesheets/mercury/_uploader.scss */
+/* line 73, ../../lib/stylesheets/mercury/views/_uploader.scss */
 #mercury .mercury-uploader .mercury-uploader-progress .mercury-uploader-indicator {
   -webkit-border-radius: 35px;
   -moz-border-radius: 35px;
@@ -160,7 +160,7 @@ Copyright (c) 2013 Jeremy Jackson
   height: 25px;
   margin: 5px 0 0;
 }
-/* line 81, ../../lib/stylesheets/mercury/_uploader.scss */
+/* line 81, ../../lib/stylesheets/mercury/views/_uploader.scss */
 #mercury .mercury-uploader .mercury-uploader-progress .mercury-uploader-indicator div {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -199,7 +199,7 @@ Copyright (c) 2013 Jeremy Jackson
   background-color: #00bce5;
   border: 1px solid #007d98;
 }
-/* line 104, ../../lib/stylesheets/mercury/_uploader.scss */
+/* line 104, ../../lib/stylesheets/mercury/views/_uploader.scss */
 #mercury .mercury-uploader .mercury-uploader-progress .mercury-uploader-indicator div b {
   display: none;
   position: absolute;
@@ -214,16 +214,52 @@ Copyright (c) 2013 Jeremy Jackson
 
 /* GalleryRegion
  *----------------------------------------------------------------------------*/
-/* line 3, ../../lib/stylesheets/mercury/regions/_gallery.scss */
+/* line 7, ../../lib/stylesheets/mercury/regions/_gallery.scss */
 .mercury-gallery-region {
   position: relative;
-  background: #333;
   width: 100%;
   min-height: 300px;
-  font-family: sans-serif;
+  background: #333333;
 }
-/* line 9, ../../lib/stylesheets/mercury/regions/_gallery.scss */
+/* line 12, ../../lib/stylesheets/mercury/regions/_gallery.scss */
+.mercury-gallery-region:focus {
+  outline: none;
+  -webkit-box-shadow: 0 0 7px #00bce5, 0 0 2px #003e4c;
+  -moz-box-shadow: 0 0 7px #00bce5, 0 0 2px #003e4c;
+  box-shadow: 0 0 7px #00bce5, 0 0 2px #003e4c;
+}
+/* line 15, ../../lib/stylesheets/mercury/regions/_gallery.scss */
+.mercury-gallery-region + .mercury-region-drop-indicator {
+  -webkit-transition-property: opacity;
+  -webkit-transition-duration: 0.25s;
+  -webkit-transition-timing-function: ease-in-out;
+  -moz-transition-property: opacity;
+  -moz-transition-duration: 0.25s;
+  -moz-transition-timing-function: ease-in-out;
+  transition-property: opacity;
+  transition-duration: 0.25s;
+  transition-timing-function: ease-in-out;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+  display: none;
+  position: absolute;
+  z-index: 20;
+  top: 30px;
+  left: 30px;
+  width: 60px;
+  height: 60px;
+  margin: -30px;
+  opacity: 0;
+  background: rgba(0, 0, 0, 0.75) url(/assets/mercury/regions/upload-indicator.png) no-repeat center;
+  pointer-events: none;
+}
+/* line 19, ../../lib/stylesheets/mercury/regions/_gallery.scss */
 .mercury-gallery-region .mercury-gallery-region-controls {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  cursor: default;
   display: none;
   position: absolute;
   z-index: 20;
@@ -231,6 +267,8 @@ Copyright (c) 2013 Jeremy Jackson
   left: 0;
   width: 100px;
   margin: 10px;
+  max-height: 560px;
+  overflow-y: auto;
   padding: 10px 10px 5px 10px;
   list-style: none;
   background: rgba(0, 0, 0, 0.75);
@@ -238,28 +276,38 @@ Copyright (c) 2013 Jeremy Jackson
   text-align: center;
   font-size: 0;
 }
-/* line 23, ../../lib/stylesheets/mercury/regions/_gallery.scss */
+/* line 36, ../../lib/stylesheets/mercury/regions/_gallery.scss */
 .mercury-gallery-region .mercury-gallery-region-controls li {
   position: relative;
+  height: 60px;
+  margin-bottom: 5px;
   background: rgba(255, 255, 255, 0.4);
   text-align: center;
-  margin-bottom: 5px;
 }
-/* line 29, ../../lib/stylesheets/mercury/regions/_gallery.scss */
+/* line 43, ../../lib/stylesheets/mercury/regions/_gallery.scss */
 .mercury-gallery-region .mercury-gallery-region-controls img {
   max-width: 100px;
   max-height: 60px;
-}
-/* line 33, ../../lib/stylesheets/mercury/regions/_gallery.scss */
-.mercury-gallery-region .mercury-gallery-region-controls em {
-  position: absolute;
-  right: -2px;
-  top: -2px;
-  color: red;
-  font-size: 15px;
   cursor: pointer;
 }
-/* line 43, ../../lib/stylesheets/mercury/regions/_gallery.scss */
+/* line 48, ../../lib/stylesheets/mercury/regions/_gallery.scss */
+.mercury-gallery-region .mercury-gallery-region-controls em {
+  position: absolute;
+  display: block;
+  left: -4px;
+  top: -4px;
+  width: 15px;
+  height: 15px;
+  line-height: 15px;
+  background: #000;
+  border: 1px solid #dddddd;
+  border-radius: 20px;
+  font-style: normal;
+  font-size: 12px;
+  color: #ddd;
+  cursor: pointer;
+}
+/* line 66, ../../lib/stylesheets/mercury/regions/_gallery.scss */
 .mercury-gallery-region .slides {
   position: relative;
   width: 100%;
@@ -268,18 +316,18 @@ Copyright (c) 2013 Jeremy Jackson
   overflow: hidden;
   font-size: 0;
 }
-/* line 50, ../../lib/stylesheets/mercury/regions/_gallery.scss */
+/* line 73, ../../lib/stylesheets/mercury/regions/_gallery.scss */
 .mercury-gallery-region .slides .slide {
   width: 100%;
   height: 100%;
-  background: #333;
+  background: #333333;
   text-align: center;
 }
-/* line 55, ../../lib/stylesheets/mercury/regions/_gallery.scss */
+/* line 78, ../../lib/stylesheets/mercury/regions/_gallery.scss */
 .mercury-gallery-region .slides .slide img {
   height: 600px;
 }
-/* line 60, ../../lib/stylesheets/mercury/regions/_gallery.scss */
+/* line 83, ../../lib/stylesheets/mercury/regions/_gallery.scss */
 .mercury-gallery-region .paginator {
   position: absolute;
   z-index: 19;
@@ -287,19 +335,133 @@ Copyright (c) 2013 Jeremy Jackson
   width: 100%;
   text-align: center;
 }
-/* line 66, ../../lib/stylesheets/mercury/regions/_gallery.scss */
+/* line 89, ../../lib/stylesheets/mercury/regions/_gallery.scss */
 .mercury-gallery-region .paginator span {
-  font-size: 30px;
-  color: #fff;
-  text-shadow: 0 0 5px black;
   margin: 0 8px;
+  text-shadow: 0 0 3px black;
+  font-size: 30px;
+  color: #666666;
 }
-/* line 72, ../../lib/stylesheets/mercury/regions/_gallery.scss */
+/* line 95, ../../lib/stylesheets/mercury/regions/_gallery.scss */
 .mercury-gallery-region .paginator .active {
-  color: red;
+  color: white;
 }
 
-/* line 16, ../../lib/stylesheets/mercury.scss */
+/* ImageRegion
+ *----------------------------------------------------------------------------*/
+/* line 3, ../../lib/stylesheets/mercury/regions/_image.scss */
+.mercury-image-region {
+  min-width: 20px;
+  min-height: 20px;
+}
+/* line 6, ../../lib/stylesheets/mercury/regions/_image.scss */
+.mercury-image-region:focus {
+  outline: none;
+  -webkit-box-shadow: 0 0 7px #00bce5, 0 0 2px #003e4c;
+  -moz-box-shadow: 0 0 7px #00bce5, 0 0 2px #003e4c;
+  box-shadow: 0 0 7px #00bce5, 0 0 2px #003e4c;
+}
+/* line 9, ../../lib/stylesheets/mercury/regions/_image.scss */
+.mercury-image-region + .mercury-region-drop-indicator {
+  -webkit-transition-property: opacity;
+  -webkit-transition-duration: 0.25s;
+  -webkit-transition-timing-function: ease-in-out;
+  -moz-transition-property: opacity;
+  -moz-transition-duration: 0.25s;
+  -moz-transition-timing-function: ease-in-out;
+  transition-property: opacity;
+  transition-duration: 0.25s;
+  transition-timing-function: ease-in-out;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+  display: none;
+  position: absolute;
+  z-index: 20;
+  top: 30px;
+  left: 30px;
+  width: 60px;
+  height: 60px;
+  margin: -30px;
+  opacity: 0;
+  background: rgba(0, 0, 0, 0.75) url(/assets/mercury/regions/upload-indicator.png) no-repeat center;
+  pointer-events: none;
+}
+
+/* MarkdownRegion
+ *----------------------------------------------------------------------------*/
+/* line 4, ../../lib/stylesheets/mercury/regions/_markdown.scss */
+.mercury-markdown-region + .mercury-region-drop-indicator {
+  -webkit-transition-property: opacity;
+  -webkit-transition-duration: 0.25s;
+  -webkit-transition-timing-function: ease-in-out;
+  -moz-transition-property: opacity;
+  -moz-transition-duration: 0.25s;
+  -moz-transition-timing-function: ease-in-out;
+  transition-property: opacity;
+  transition-duration: 0.25s;
+  transition-timing-function: ease-in-out;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+  display: none;
+  position: absolute;
+  z-index: 20;
+  top: 30px;
+  left: 30px;
+  width: 60px;
+  height: 60px;
+  margin: -30px;
+  opacity: 0;
+  background: rgba(0, 0, 0, 0.75) url(/assets/mercury/regions/upload-indicator.png) no-repeat center;
+  pointer-events: none;
+}
+/* line 8, ../../lib/stylesheets/mercury/regions/_markdown.scss */
+.mercury-markdown-region textarea.mercury-markdown-region-textarea {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  outline: 0;
+  border: none;
+  margin: 0;
+  white-space: pre;
+  background: 'transparent';
+  font-family: Monaco, "Bitstream Vera Sans Mono", "Lucida Console", monospace;
+  font-size: 12px;
+  line-height: 13px;
+  resize: vertical;
+}
+/* line 20, ../../lib/stylesheets/mercury/regions/_markdown.scss */
+.mercury-markdown-region textarea.mercury-markdown-region-textarea:focus {
+  outline: none;
+  -webkit-box-shadow: 0 0 7px #00bce5, 0 0 2px #003e4c;
+  -moz-box-shadow: 0 0 7px #00bce5, 0 0 2px #003e4c;
+  box-shadow: 0 0 7px #00bce5, 0 0 2px #003e4c;
+}
+
+/* line 19, ../../lib/stylesheets/mercury.scss */
 #mercury {
   -webkit-text-size-adjust: none;
+}
+
+/* line 27, ../../lib/stylesheets/mercury.scss */
+#mercury_controls {
+  position: fixed;
+  right: 20px;
+  top: 20px;
+  border: 1px solid white;
+  border-radius: 5px;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.7);
+  padding: 10px;
+  margin: 0;
+  list-style: none;
+}
+/* line 38, ../../lib/stylesheets/mercury.scss */
+#mercury_controls li {
+  cursor: pointer;
+}
+/* line 40, ../../lib/stylesheets/mercury.scss */
+#mercury_controls li:hover {
+  color: red;
 }

@@ -1,3 +1,16 @@
+
+/*!
+The Gallery region is really just an example of how you can build your own more complex regions.
+
+By default it provides the ability to have a simplistic slide show, and allows dropping images from the desktop -- which
+will get uploaded (and probably processed by your server) and will then insert the returned images as slides in the
+slideshow.
+
+You can use the control panel to see thumbnails of each slide, to jump to a given slide, or to remove them. This example
+also takes into account undo/redo support using the keyboard or buttons.
+*/
+
+
 (function() {
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -10,14 +23,13 @@
       return GalleryRegion.__super__.constructor.apply(this, arguments);
     }
 
+    GalleryRegion.define('Mercury.GalleryRegion', 'gallery');
+
+    GalleryRegion.include(Mercury.Region.Modules.DropIndicator);
+
     GalleryRegion.supported = true;
 
-    GalleryRegion.define('Mercury.GalleryRegion', 'gallery', {
-      undo: 'undo',
-      redo: 'redo'
-    });
-
-    GalleryRegion.prototype.className = 'mercury-gallery-region';
+    GalleryRegion.prototype.skipHistoryOn = ['undo', 'redo'];
 
     GalleryRegion.prototype.elements = {
       controls: '.mercury-gallery-region-controls',
@@ -33,37 +45,12 @@
     GalleryRegion.prototype.build = function() {
       var _this = this;
       this.speed || (this.speed = 3000);
-      this.append('<ul class="mercury-gallery-region-controls"></ul>');
       this.index = 1;
+      this.append('<ul class="mercury-gallery-region-controls"></ul>');
       this.refresh(true);
-      this.delay(this.speed, function() {
+      return this.delay(this.speed, function() {
         return _this.nextSlide();
       });
-      return this.pushStack(this.el.html());
-    };
-
-    GalleryRegion.prototype.onBlur = function() {
-      return this.controls.hide();
-    };
-
-    GalleryRegion.prototype.onFocus = function() {
-      return this.controls.show();
-    };
-
-    GalleryRegion.prototype.undo = function() {
-      var html;
-      if (html = this.undoStack()) {
-        this.html(html);
-      }
-      return this.refresh(true);
-    };
-
-    GalleryRegion.prototype.redo = function() {
-      var html;
-      if (html = this.redoStack()) {
-        this.html(html);
-      }
-      return this.refresh(true);
     };
 
     GalleryRegion.prototype.refresh = function(controls) {
@@ -83,15 +70,24 @@
     };
 
     GalleryRegion.prototype.refreshControls = function() {
-      var slide, _i, _len, _ref, _results;
+      var slide, _i, _len, _ref;
       this.controls.html('');
       _ref = this.images;
-      _results = [];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         slide = _ref[_i];
-        _results.push(this.addLink($(slide)));
+        this.addControlLink($(slide));
       }
-      return _results;
+      if (this.focused) {
+        return this.controls.show();
+      }
+    };
+
+    GalleryRegion.prototype.addControlLink = function(slide) {
+      var src;
+      src = slide.find('img').attr('src');
+      return this.controls.append($("<li><img src=\"" + src + "\"/><em>&times;</em></li>").data({
+        slide: slide
+      }));
     };
 
     GalleryRegion.prototype.nextSlide = function() {
@@ -113,35 +109,12 @@
       });
     };
 
-    GalleryRegion.prototype.addLink = function(slide) {
-      var src;
-      src = slide.find('img').attr('src');
-      return this.controls.append($("<li><img src=\"" + src + "\"/><em>&times;</em></li>").data({
-        slide: slide
-      }));
-    };
-
-    GalleryRegion.prototype.dropFile = function(files) {
-      var uploader,
-        _this = this;
-      uploader = new Mercury.Uploader(files, {
-        mimeTypes: this.config('regions:gallery:mimeTypes')
-      });
-      return uploader.on('uploaded', function() {
-        return _this.appendSlide.apply(_this, arguments);
-      });
-    };
-
-    GalleryRegion.prototype.appendSlide = function(file) {
-      var slide;
-      if (!file.isImage()) {
-        return;
-      }
-      slide = $("<div class=\"slide\"><img src=\"" + (file.get('url')) + "\"/></div>");
+    GalleryRegion.prototype.appendSlide = function(slide) {
       this.slides.append(slide);
-      this.addLink(slide);
+      this.addControlLink(slide);
       this.refresh();
-      return this.pushStack(this.el.html());
+      this.pushHistory();
+      return this.trigger('focused');
     };
 
     GalleryRegion.prototype.removeSlide = function(e) {
@@ -161,7 +134,40 @@
         });
       }
       this.refresh();
-      return this.pushStack(this.el.html());
+      return this.pushHistory();
+    };
+
+    GalleryRegion.prototype.onDropFile = function(files) {
+      var uploader,
+        _this = this;
+      uploader = new Mercury.Uploader(files, {
+        mimeTypes: this.config('regions:gallery:mimeTypes')
+      });
+      return uploader.on('uploaded', function(file) {
+        if (!file.isImage()) {
+          return;
+        }
+        _this.focus();
+        return _this.appendSlide($("<div class=\"slide\"><img src=\"" + (file.get('url')) + "\"/></div>"));
+      });
+    };
+
+    GalleryRegion.prototype.onFocus = function() {
+      return this.controls.show();
+    };
+
+    GalleryRegion.prototype.onBlur = function() {
+      return this.controls.hide();
+    };
+
+    GalleryRegion.prototype.onUndo = function() {
+      GalleryRegion.__super__.onUndo.apply(this, arguments);
+      return this.refresh(true);
+    };
+
+    GalleryRegion.prototype.onRedo = function() {
+      GalleryRegion.__super__.onRedo.apply(this, arguments);
+      return this.refresh(true);
     };
 
     return GalleryRegion;

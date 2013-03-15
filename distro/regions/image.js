@@ -1,3 +1,11 @@
+
+/*!
+The Image region allows you to have a replaceable image region on your page. It provided the ability to drag/drop images
+from the desktop -- which will get uploaded (and probably processed by your server) and will then replace the existing
+image with the one that was uploaded.
+*/
+
+
 (function() {
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -10,61 +18,47 @@
       return ImageRegion.__super__.constructor.apply(this, arguments);
     }
 
-    ImageRegion.supported = true;
+    ImageRegion.define('Mercury.ImageRegion', 'image');
 
-    ImageRegion.define('Mercury.ImageRegion', 'image', {
-      undo: 'undo',
-      redo: 'redo'
-    });
+    ImageRegion.include(Mercury.Region.Modules.DropIndicator);
+
+    ImageRegion.supported = true;
 
     ImageRegion.prototype.tag = 'img';
 
-    ImageRegion.prototype.className = 'mercury-image-region';
-
-    ImageRegion.prototype.build = function() {
-      return this.pushStack(this.attr('src') || null);
+    ImageRegion.prototype.events = {
+      'mousedown': 'onMousedown'
     };
 
-    ImageRegion.prototype.dropFile = function(files) {
+    ImageRegion.prototype.value = function(value) {
+      if (value === null || typeof value === 'undefined') {
+        return this.attr('src');
+      } else {
+        return this.attr('src', value);
+      }
+    };
+
+    ImageRegion.prototype.onMousedown = function(e) {
+      e.preventDefault();
+      return this.el.trigger('focus');
+    };
+
+    ImageRegion.prototype.onDropFile = function(files, options) {
       var uploader,
         _this = this;
-      uploader = new Mercury.Uploader([files[0]], {
-        mimeTypes: this.config('regions:gallery:mimeTypes')
+      uploader = new Mercury.Uploader(files, {
+        mimeTypes: this.config('regions:image:mimeTypes')
       });
-      return uploader.on('uploaded', function() {
-        return _this.updateImage.apply(_this, arguments);
+      return uploader.on('uploaded', function(file) {
+        _this.focus();
+        return _this.handleAction('file', file);
       });
     };
 
-    ImageRegion.prototype.updateImage = function(file) {
-      this.setSrc(file.get('url'));
-      return this.pushStack(this.attr('src'));
-    };
-
-    ImageRegion.prototype.setSrc = function(src) {
-      if (src === null) {
-        return;
+    ImageRegion.prototype.actions = {
+      file: function(file) {
+        return this.value(file.get('url'));
       }
-      return this.attr({
-        src: src
-      });
-    };
-
-    ImageRegion.prototype.undo = function() {
-      return this.setSrc(this.undoStack());
-    };
-
-    ImageRegion.prototype.redo = function() {
-      return this.setSrc(this.redoStack());
-    };
-
-    ImageRegion.prototype.toJSON = function() {
-      return {
-        name: this.name,
-        type: this.constructor.type,
-        data: this.data(),
-        src: this.attr('src')
-      };
     };
 
     return ImageRegion;

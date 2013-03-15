@@ -2138,7 +2138,7 @@ Copyright (c) 2013 Jeremy Jackson
     buildFocusable: function() {
       var resize, value;
       this.autoSize = this.config("regions:" + this.constructor.type + ":autoSize");
-      value = this.html().replace('&gt;', '>').replace('&lt;', '<');
+      value = this.html().replace('&gt;', '>').replace('&lt;', '<').trim();
       resize = this.autoSize ? 'none' : 'vertical';
       this.el.empty();
       this.append(this.preview, this.focusable.val(value).css({

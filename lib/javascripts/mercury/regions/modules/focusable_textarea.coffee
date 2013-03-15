@@ -15,7 +15,7 @@ Mercury.Region.Modules.FocusableTextarea =
   buildFocusable: ->
     @autoSize = @config("regions:#{@constructor.type}:autoSize")
 
-    value = @html().replace('&gt;', '>').replace('&lt;', '<')
+    value = @html().replace('&gt;', '>').replace('&lt;', '<').trim()
     resize = if @autoSize then 'none' else 'vertical'
 
     @el.empty()

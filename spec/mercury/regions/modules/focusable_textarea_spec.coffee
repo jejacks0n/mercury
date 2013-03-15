@@ -38,7 +38,7 @@ describe "Mercury.Regions.Modules.FocusableTextarea", ->
     it "sets the value and css for the focusable element", ->
       spyOn(subject, 'html', -> ' _&lt;html&gt;_ ')
       subject.buildFocusable()
-      expect( subject.focusable.val() ).to.eq(' _<html>_ ')
+      expect( subject.focusable.val() ).to.eq('_<html>_')
       expect( subject.focusable.css('width') ).to.eq('100%')
       expect( subject.focusable.css('height') ).to.eq('0px')
       expect( subject.focusable.css('resize') ).to.eq('vertical')

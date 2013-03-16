@@ -48,6 +48,19 @@ Rangy will be used for selections, but I have yet to dive fully into figuring ou
 - image (url, text)
 
 
+## Known issues
+
+### Webkit
+
+- Dropping files at the cursor position in textarea doesn't work.
+
+### Gecko
+
+- Dropping files doesn't display cursor position, and thus dropping at that place isn't applicable.
+- The drop indicator doesn't like to stay visible (we could fix this by using dragover).
+
+
+
 ## Development
 
 Clone using git

@@ -44,7 +44,7 @@ class ApplicationController < ActionController::Base
   prepend_view_path Rails.application.root
 
   def page
-    render template: params[:id] || 'index'
+    render template: params[:page] || 'index'
   end
 
   def upload
@@ -62,7 +62,8 @@ end
 
 Rails.application.initialize!
 Rails.application.routes.draw do
-  get '(/:id)' => 'application#page'
+  get '/(:page)' => 'application#page'
+
   get '/mercury/templates/*name' => 'application#template'
   post '/mercury/uploads' => 'application#upload'
 end

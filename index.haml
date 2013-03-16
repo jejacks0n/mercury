@@ -5,6 +5,11 @@
     = javascript_include_tag "mercury/dependencies", "mercury"
     = stylesheet_link_tag "mercury"
   %body
+    %h1 Mercury2 <a href="/teabag">Specs</a>
+
+    %p
+      Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy
+      = link_to('Google Link', 'http://google.com')
 
     #markdown_region(data-mercury="markdown")
       :preserve
@@ -18,12 +23,6 @@
         paragraph2
 
         paragraph3
-
-
-    %h1 <a href="/teabag">Specs</a>
-    %p
-      Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy
-      = link_to('Google Link', 'http://google.com')
 
     %img#image_region(data-mercury="image" src="/assets/1.jpg" width="200" height="200")
 

@@ -55,40 +55,29 @@ class Mercury.Region extends Mercury.View
     new (Mercury[type] || Mercury.Region)(el)
 
 
-  # The constructor sets up defaults, attempts to get the name from the element. It will notify if the region isn't
+  # The constructor sets up defaults and attempts to get the name from the element. It will notify if the region isn't
   # supported in the given browser or if there's no name to use for serializing.
   #
   constructor: (@el, @options = {}) ->
     return @notify(@t('is unsupported in this browser')) unless @constructor.supported
 
-    # call the beforeBuild method if it's defined
-    @beforeBuild?()
+    @beforeBuild?()                                        # call the beforeBuild method if it's defined
+    super(@options)                                        # let the view do it's thing
+    @attr(tabindex: 0) unless @focusable                   # make the element focusable (unless we've set one ourselves)
+    @name ||= @el.attr(@config('regions:identifier'))      # get the name from the element
+    @previewing ||= false                                  # assume previewing is false
+    @focused ||= false                                     # assume focused is false
+    @focusable ||= @el                                     # define @focusable unless it's already defined
+    @skipHistoryOn ||= ['redo']                            # we skip pushing to the history on redo by default
 
-    # let the view do it's thing
-    super(@options)
-
-    # make the element focusable (unless we've set one ourselves)
-    @attr(tabindex: 0) unless @focusable
-
-    # get the name from the element (default attribute is "id")
-    @name ||= @el.attr(@config('regions:identifier'))
     unless @name
       @notify(@t('no name provided for the "%s" region, falling back to random', @constructor.type))
       @name = "#{@constructor.type}#{Math.floor(Math.random() * 10000)}"
 
-    # set defaults
-    @previewing ||= false
-    @focused ||= false
-    @focusable ||= @el
-    @skipHistoryOn ||= ['redo']
+    @trigger('build')                                      # trigger the build event
+    @afterBuild?()                                         # call the afterBuild method if it's defined
 
-    # add the classname by default
-    @addClass("mercury-#{@constructor.type}-region")
-
-    # call the afterBuild method if it's defined
-    @trigger('build')
-    @afterBuild?()
-
+    @addRegionClassname()
     @pushHistory()
     @bindDefaultEvents()
 
@@ -199,6 +188,12 @@ class Mercury.Region extends Mercury.View
     snippets: @snippets()
 
 
+  # Adds the classname based on the constructor type to the element.
+  #
+  addRegionClassname: ->
+    @addClass("mercury-#{@constructor.type}-region")
+
+
   # Releases the instance and triggers a release event. Releasing a region doesn't remove the element, but does remove
   # all event listeners including those that have been added externally.
   #
@@ -260,12 +255,12 @@ class Mercury.Region extends Mercury.View
   #
   bindDropEvents: ->
     preventDefault = (e) -> e.preventDefault()
-    @delegateEvents @focusable,
+    @delegateEvents @el,
       dragenter: preventDefault
-      # workaround: Webkit and Firefox do drag and drop differently.
-      dragover: if @editableDragOver && Mercury.support.webkit then (->) else preventDefault
+      dragover: preventDefault
       drop: (e) =>
         return unless e.originalEvent.dataTransfer.files.length
+        return if @previewing
         e.preventDefault()
         @onDropFile(e.originalEvent.dataTransfer.files)
 
@@ -274,8 +269,8 @@ class Mercury.Region extends Mercury.View
   # the method we want to call on a given action event.
   #
   # Action Events.
-  # 'uploadFile': function() { }                 // call callback when an action event was triggered with uploadedFile.
-  # 'uploadFile': 'insertFile'                   // call this.insertFile when an uploadedFile action event is triggered.
+  # 'file': function() { }                       // call callback when an action event was triggered with "file".
+  # 'file': 'insertFile'                         // call this.insertFile when a "file" action event is triggered.
   #
   delegateActions: (actions) ->
     for key, method of actions

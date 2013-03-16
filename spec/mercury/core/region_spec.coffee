@@ -134,10 +134,6 @@ describe "Mercury.Region", ->
       expect( subject.focusable ).to.eq(focusable)
       expect( subject.skipHistoryOn ).to.eql(['foo'])
 
-    it "adds a class to the element", ->
-      subject = new Klass('<div id="name">')
-      expect( subject.el.attr('class') ).to.eq('mercury-unknown-region')
-
     it "triggers a build event", ->
       Klass.prototype.trigger = spy()
       subject = new Klass('<div>')
@@ -147,6 +143,11 @@ describe "Mercury.Region", ->
       Klass.prototype.afterBuild = spy()
       subject = new Klass('<div>')
       expect( subject.afterBuild ).called
+
+    it "calls #addRegionClassname", ->
+      spyOn(Klass.prototype, 'addRegionClassname')
+      subject = new Klass('<div>')
+      expect( subject.addRegionClassname ).called
 
     it "calls #pushHistory", ->
       spyOn(Klass.prototype, 'pushHistory')
@@ -364,6 +365,14 @@ describe "Mercury.Region", ->
         snippets: '_snippets_'
 
 
+  describe "#addRegionClassname", ->
+
+    it "adds a class to the element", ->
+      subject.el.removeAttr('class')
+      subject.addRegionClassname()
+      expect( subject.el.attr('class') ).to.eq('mercury-unknown-region')
+
+
   describe "#release", ->
 
     it "removes the region class from @el", ->
@@ -548,7 +557,7 @@ describe "Mercury.Region", ->
         spyOn(subject, 'delegateEvents', => @events = arguments[1])
         subject.bindDropEvents()
         subject.onDropFile = spy()
-        @e = originalEvent: {dataTransfer: {files: []}}, preventDefault: spy()
+        @e = originalEvent: {dataTransfer: {files: ['_file1_', '_file2_']}}, preventDefault: spy()
 
       it "calls preventDefault for all preemptive events", ->
         @events.dragenter(@e)
@@ -556,12 +565,18 @@ describe "Mercury.Region", ->
         expect( @e.preventDefault ).calledTwice
 
       it "calls #onDropFile with the expected array when files are dropped", ->
-        @e.originalEvent.dataTransfer.files = ['_file1_', '_file2_']
         @events.drop(@e)
         expect( @e.preventDefault ).calledOnce
         expect( subject.onDropFile ).calledWith(['_file1_', '_file2_'])
 
       it "does nothing if there's no files", ->
+        @e.originalEvent.dataTransfer.files = []
+        @events.drop(@e)
+        expect( @e.preventDefault ).not.called
+        expect( subject.onDropFile ).not.called
+
+      it "does nothing if we're previewing", ->
+        subject.previewing = true
         @events.drop(@e)
         expect( @e.preventDefault ).not.called
         expect( subject.onDropFile ).not.called

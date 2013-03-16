@@ -18,6 +18,15 @@ Copyright (c) 2013 Jeremy Jackson
   *zoom: 1;
 }
 
+/* line 1, ../../lib/stylesheets/mercury/views/_editor.scss */
+.mercury-editor-frame {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
 /* Uploader
  *----------------------------------------------------------------------------*/
 @-webkit-keyframes mercury-uploader-indicator {
@@ -439,12 +448,12 @@ Copyright (c) 2013 Jeremy Jackson
   box-shadow: 0 0 7px #00bce5, 0 0 2px #003e4c;
 }
 
-/* line 19, ../../lib/stylesheets/mercury.scss */
+/* line 20, ../../lib/stylesheets/mercury.scss */
 #mercury {
   -webkit-text-size-adjust: none;
 }
 
-/* line 27, ../../lib/stylesheets/mercury.scss */
+/* line 28, ../../lib/stylesheets/mercury.scss */
 #mercury_controls {
   position: fixed;
   right: 20px;
@@ -457,11 +466,11 @@ Copyright (c) 2013 Jeremy Jackson
   margin: 0;
   list-style: none;
 }
-/* line 38, ../../lib/stylesheets/mercury.scss */
+/* line 39, ../../lib/stylesheets/mercury.scss */
 #mercury_controls li {
   cursor: pointer;
 }
-/* line 40, ../../lib/stylesheets/mercury.scss */
+/* line 41, ../../lib/stylesheets/mercury.scss */
 #mercury_controls li:hover {
   color: red;
 }

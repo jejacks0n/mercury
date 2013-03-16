@@ -7,6 +7,7 @@ Copyright (c) 2013 Jeremy Jackson
 .mercury-clearfix:before,.mercury-clearfix:after{content:" ";display:table}
 .mercury-clearfix:after{clear:both}
 .mercury-clearfix{*zoom:1}
+.mercury-editor-frame{position:fixed;top:0;left:0;width:100%;height:100%}
 @-webkit-keyframes mercury-uploader-indicator{to{background-position:0 0}from{background-position:-45px 0}}
 @-moz-keyframes mercury-uploader-indicator{to{background-position:0 0}from{background-position:-45px 0}}
 #mercury .mercury-uploader{-webkit-transition-property:opacity;-webkit-transition-duration:.25s;-webkit-transition-timing-function:ease-in-out;-moz-transition-property:opacity;-moz-transition-duration:.25s;-moz-transition-timing-function:ease-in-out;transition-property:opacity;transition-duration:.25s;transition-timing-function:ease-in-out;position:fixed;z-index:10100;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.75);opacity:0}

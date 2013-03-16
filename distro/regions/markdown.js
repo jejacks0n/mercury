@@ -49,8 +49,8 @@ via Ajax.
       sub: ['<sub>', '</sub>'],
       unorderedList: ['- ', ''],
       orderedList: ['1. ', '', /^\d+. |$/gi],
-      link: ['[', '](%s)', /^\[|\]\([^)]\)/gi],
-      image: ['![', '](%s)', /^!\[|\]\([^)]\)/gi],
+      link: ['[', '](%s)\n', /^\[|\]\([^)]\)/gi],
+      image: ['![', '](%s)\n', /^!\[|\]\([^)]\)/gi],
       style: ['<span style="%s">', '</span>', /^(<span style="[^"]*">)|(<\/span>)$/gi],
       "class": ['<span class="%s">', '</span>', /^(<span class="[^"]*">)|(<\/span>)$/gi]
     };
@@ -248,12 +248,14 @@ via Ajax.
       },
       link: function(url, text) {
         return this.wrapSelected(this.processWrapper('link', [url, text]), {
-          text: text
+          text: text,
+          select: 'end'
         });
       },
       image: function(url, text) {
         return this.wrapSelected(this.processWrapper('image', [url, text]), {
-          text: text
+          text: text,
+          select: 'end'
         });
       }
     };

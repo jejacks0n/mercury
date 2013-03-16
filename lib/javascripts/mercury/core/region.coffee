@@ -63,19 +63,18 @@ class Mercury.Region extends Mercury.View
 
     @beforeBuild?()                                        # call the beforeBuild method if it's defined
     super(@options)                                        # let the view do it's thing
+    @trigger('build')                                      # trigger the build event
     @attr(tabindex: 0) unless @focusable                   # make the element focusable (unless we've set one ourselves)
     @name ||= @el.attr(@config('regions:identifier'))      # get the name from the element
     @previewing ||= false                                  # assume previewing is false
     @focused ||= false                                     # assume focused is false
     @focusable ||= @el                                     # define @focusable unless it's already defined
     @skipHistoryOn ||= ['redo']                            # we skip pushing to the history on redo by default
+    @afterBuild?()                                         # call the afterBuild method if it's defined
 
     unless @name
       @notify(@t('no name provided for the "%s" region, falling back to random', @constructor.type))
       @name = "#{@constructor.type}#{Math.floor(Math.random() * 10000)}"
-
-    @trigger('build')                                      # trigger the build event
-    @afterBuild?()                                         # call the afterBuild method if it's defined
 
     @addRegionClassname()
     @pushHistory()

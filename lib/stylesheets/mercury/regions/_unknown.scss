@@ -1,0 +1,10 @@
+/* Region (unknown region)
+ *----------------------------------------------------------------------------*/
+.mercury-unknown-region {
+  &:focus {
+    outline: none;
+    -webkit-box-shadow: 0 0 7px red, 0 0 2px red / 3;
+    -moz-box-shadow: 0 0 7px red, 0 0 2px red / 3;
+    box-shadow: 0 0 7px red, 0 0 2px red / 3;
+  }
+}

@@ -7,7 +7,7 @@ describe "Mercury.Stack", ->
   subject = null
 
   beforeEach ->
-    Klass.prototype = Mercury.Stack
+    Klass:: = Mercury.Stack
     subject = new Klass()
     subject.included()
 

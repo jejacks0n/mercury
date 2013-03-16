@@ -17,8 +17,6 @@ class Mercury.MarkdownRegion extends Mercury.Region
 
   @supported: true
 
-  editableDragOver: true
-
   wrappers:
     h1           : ['# ', ' #']
     h2           : ['## ', ' ##']

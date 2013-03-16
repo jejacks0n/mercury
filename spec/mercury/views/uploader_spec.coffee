@@ -10,8 +10,8 @@ describe "Mercury.Uploader", ->
     fixture.set('<foo></foo>')
     Mercury.configure 'uploading:maxSize', 2048
     Klass.supported = true
-    spyOn(Klass.prototype, 'delay')
-    spyOn(Klass.prototype, 'show')
+    spyOn(Klass::, 'delay')
+    spyOn(Klass::, 'show')
     subject = new Klass()
     subject.delay.reset()
     subject.delay.yieldsOn(subject)
@@ -23,10 +23,10 @@ describe "Mercury.Uploader", ->
   describe "#constructor", ->
 
     beforeEach ->
-      spyOn(Klass.prototype, 'build')
-      spyOn(Klass.prototype, 'calculate', -> [1])
-      spyOn(Klass.prototype, 'upload')
-      spyOn(Klass.prototype, 'notify')
+      spyOn(Klass::, 'build')
+      spyOn(Klass::, 'calculate', -> [1])
+      spyOn(Klass::, 'upload')
+      spyOn(Klass::, 'notify')
 
     it "notifies if it's not supported", ->
       Klass.supported = false
@@ -49,11 +49,11 @@ describe "Mercury.Uploader", ->
 
     it "delays calling #upload for half a second", ->
       subject = new Klass()
-      expect( subject.delay ).calledWith(500, Klass.prototype.upload)
+      expect( subject.delay ).calledWith(500, Klass::upload)
 
     it "returns without calling show unless there are files", ->
-      Klass.prototype.calculate.restore()
-      spyOn(Klass.prototype, 'calculate', -> [])
+      Klass::calculate.restore()
+      spyOn(Klass::, 'calculate', -> [])
       subject = new Klass()
       expect( subject.show ).not.called
 
@@ -63,7 +63,7 @@ describe "Mercury.Uploader", ->
     beforeEach ->
       spyOn(subject, 'upload')
       @valid = true
-      spyOn(Mercury.File.prototype, 'isValid', => @valid)
+      spyOn(Mercury.File::, 'isValid', => @valid)
 
     it "creates an array of @files", ->
       subject.calculate(@files)

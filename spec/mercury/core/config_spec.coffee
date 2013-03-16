@@ -7,7 +7,7 @@ describe "Mercury.Config", ->
   subject = null
 
   beforeEach ->
-    Klass.prototype = Mercury.Config.Module
+    Klass:: = Mercury.Config.Module
     subject = Mercury.Config
 
   describe ".get", ->

@@ -7,7 +7,7 @@ describe "Mercury.Events", ->
   subject = null
 
   beforeEach ->
-    Klass.prototype = Mercury.Events
+    Klass:: = Mercury.Events
     @handler1 = stub()
     @handler2 = stub()
     @handler3 = stub().returns(false)

@@ -18,7 +18,6 @@ describe "Mercury.MarkdownRegion", ->
   it "is defined correctly", ->
     expect( Klass.className ).to.eq('Mercury.MarkdownRegion')
     expect( Klass.type ).to.eq('markdown')
-    expect( subject.editableDragOver ).to.be.true
 
 
   describe "#constructor", ->
@@ -27,7 +26,7 @@ describe "Mercury.MarkdownRegion", ->
       spyOn(Showdown, 'converter').throws()
 
     it "notifies if showdown is unavailable", ->
-      spyOn(Klass.prototype, 'notify')
+      spyOn(Klass::, 'notify')
       subject = new Klass()
       expect( subject.notify ).calledWith('requires Showdown')
 

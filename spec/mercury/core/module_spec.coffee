@@ -43,7 +43,7 @@ describe "Mercury.Module", ->
 
     it "adds properties to its prototype from the object", ->
       subject.include(foo: 'foo')
-      expect( subject.prototype.foo ).to.eq('foo')
+      expect( subject::foo ).to.eq('foo')
 
     it "excludes properties that are module keywords", ->
       subject.include
@@ -51,10 +51,10 @@ describe "Mercury.Module", ->
           included: ->
           extended: ->
           'private': ->
-      expect( subject.prototype.foo ).to.eq('foo')
-      expect( subject.prototype.included ).to.be.undefined
-      expect( subject.prototype.extended ).to.be.undefined
-      expect( subject.prototype['private'] ).to.be.undefined
+      expect( subject::foo ).to.eq('foo')
+      expect( subject::included ).to.be.undefined
+      expect( subject::extended ).to.be.undefined
+      expect( subject::['private'] ).to.be.undefined
 
     it "calls included if it exists", ->
       obj = included: spy()
@@ -73,12 +73,18 @@ describe "Mercury.Module", ->
   describe "#constructor", ->
 
     it "calls init if it's set", ->
-      subject.prototype.init = spy()
+      subject::init = spy()
       new subject(1, 2, 3)
-      expect( subject.prototype.init ).calledWith(1, 2, 3)
+      expect( subject::init ).calledWith(1, 2, 3)
+
+    it "duplicates the event handlers", ->
+      subject::__handlers__ = foo: 'bar'
+      spyOn($, 'extend')
+      new subject()
+      expect( $.extend ).calledWith({}, subject::__handlers__)
 
     it "doesn't call init if it's not a function", ->
-      subject.prototype.init = 'foo'
+      subject::init = 'foo'
       new subject(1, 2, 3)
 
 

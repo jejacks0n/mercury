@@ -65,6 +65,7 @@ class Mercury.Module
   # Default constructor for subclasses. Calls #init if it's defined.
   #
   constructor: ->
+    @__handlers__ = $.extend({}, @__handlers__)
     @init?(arguments...)
 
 

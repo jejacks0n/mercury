@@ -63,7 +63,7 @@ describe "Mercury.File", ->
   describe "#readAsDataUrl", ->
 
     beforeEach ->
-      spyOn(FileReader.prototype, 'readAsDataURL', -> @onload())
+      spyOn(FileReader::, 'readAsDataURL', -> @onload())
 
     it "reads the file and calls the callback provided", ->
       callback = spy()
@@ -133,7 +133,7 @@ describe "Mercury.File", ->
 
     beforeEach ->
       Mercury.configure 'uploading:saveName', '_input_'
-      spyOn(FormData.prototype, 'append')
+      spyOn(FormData::, 'append')
 
     it "returns undefined if there's no FormData", ->
       original = window.FormData
@@ -143,7 +143,7 @@ describe "Mercury.File", ->
 
     it "creates a new FormData object and appends the file", ->
       subject.toFormData()
-      expect( FormData.prototype.append ).calledWith('_input_', @file, '_name_')
+      expect( FormData::append ).calledWith('_input_', @file, '_name_')
 
 
   describe "#saveSuccess", ->

@@ -8,7 +8,7 @@ describe "Mercury.Logger", ->
 
   beforeEach ->
     Mercury.configure 'logging:enabled', true
-    Klass.prototype = Mercury.Logger
+    Klass:: = Mercury.Logger
     subject = new Klass()
     spyOn(console, 'debug')
     spyOn(console, 'error')

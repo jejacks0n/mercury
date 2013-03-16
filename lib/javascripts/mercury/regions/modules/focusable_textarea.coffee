@@ -3,9 +3,6 @@ Mercury.Region.Modules.FocusableTextarea =
   included: ->
     @autoSize = false
 
-    @preview = $("""<div class="mercury-#{@constructor.type}-region-preview">""")
-    @focusable = $("""<textarea class="mercury-#{@constructor.type}-region-textarea">""")
-
     @on('build', @buildFocusable)
     @on('action', @resizeFocusable)
     @on('preview', @toggleFocusablePreview)
@@ -17,6 +14,9 @@ Mercury.Region.Modules.FocusableTextarea =
 
     value = @html().replace('&gt;', '>').replace('&lt;', '<').trim()
     resize = if @autoSize then 'none' else 'vertical'
+
+    @preview = $("""<div class="mercury-#{@constructor.type}-region-preview">""")
+    @focusable = $("""<textarea class="mercury-#{@constructor.type}-region-textarea">""")
 
     @el.empty()
     @append(@preview, @focusable.val(value).css(width: '100%', height: @el.height(), resize: resize))

@@ -18,7 +18,7 @@ describe "Mercury.I18n", ->
 
   beforeEach ->
     Mercury.configure 'localization', enabled: true, preferred: 'swedish_chef-BORK'
-    Klass.prototype = Mercury.I18n.Module
+    Klass:: = Mercury.I18n.Module
     subject = $.extend(Mercury.I18n, __determined__: null, __locales__: locales)
 
   describe ".define", ->

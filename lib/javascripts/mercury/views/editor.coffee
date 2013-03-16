@@ -57,7 +57,7 @@ class Mercury.Editor extends Mercury.View
 
 
   keepRegionFocused: (e) ->
-    e.preventDefault()
+    e?.preventDefault()
     @region.focus()
 
 
@@ -73,7 +73,9 @@ class Mercury.Editor extends Mercury.View
     action = target.data('action')
     value = target.data('value')
     switch action
-      when 'preview' then Mercury.trigger('mode', 'preview')
+      when 'preview'
+        Mercury.trigger('mode', 'preview')
+        @keepRegionFocused()
       when 'html'
         value = switch value
           when 'html' then '<table>\n  <tr>\n    <td>1</td>\n    <td>2</td>\n  </tr>\n</table>'

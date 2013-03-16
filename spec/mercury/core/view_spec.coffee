@@ -40,7 +40,7 @@ describe "Mercury.View", ->
       expect( subject.el.is('foo') ).to.be.true
 
     it "loads a template if one was set", ->
-      spyOn(Klass.prototype, 'renderTemplate')
+      spyOn(Klass::, 'renderTemplate')
       subject = new Klass(template: '_foo_')
       expect( subject.renderTemplate ).calledWith('_foo_')
 
@@ -59,17 +59,17 @@ describe "Mercury.View", ->
       expect( subject.elements ).to.eql(foo: 'bar')
 
     it "calls #build", ->
-      Klass.prototype.build = spy()
+      Klass::build = spy()
       subject = new Klass()
       expect( subject.build ).called
 
     it "calls #delegateEvents if there's events", ->
-      spyOn(Klass.prototype, 'delegateEvents')
+      spyOn(Klass::, 'delegateEvents')
       subject = new Klass(events: {foo: 'bar'})
       expect( subject.delegateEvents ).calledWith(foo: 'bar')
 
     it "calls #refreshElements", ->
-      spyOn(Klass.prototype, 'refreshElements')
+      spyOn(Klass::, 'refreshElements')
       subject = new Klass(elements: {foo: 'bar'})
       expect( subject.refreshElements ).called
 

@@ -36,14 +36,14 @@ describe "Mercury.Region", ->
       expect( Klass.type ).to.eq('_test_')
 
     it "merges actions with prototype.actions", ->
-      Klass.prototype.actions = foo: 'bar'
+      Klass::actions = foo: 'bar'
       Klass.define('TestRegion', '_test_', bar: 'baz')
-      expect( Klass.prototype.actions ).to.eql(foo: 'bar', bar: 'baz')
+      expect( Klass::actions ).to.eql(foo: 'bar', bar: 'baz')
 
     it "sets the @logPrefix", ->
       Klass.define('TestRegion')
       expect( Klass.logPrefix ).to.eq('TestRegion:')
-      expect( Klass.prototype.logPrefix ).to.eq('TestRegion:')
+      expect( Klass::logPrefix ).to.eq('TestRegion:')
 
     it "calls .off", ->
       spyOn(Klass, 'off')
@@ -59,7 +59,7 @@ describe "Mercury.Region", ->
     beforeEach ->
       Mercury.FooRegion = spy()
       spyOn(Klass, 'notify')
-      spyOn(Klass.prototype, 'notify')
+      spyOn(Klass::, 'notify')
 
     it "instantiates the expected region class with the element", ->
       Klass.create('<div data-mercury="foo">')
@@ -82,7 +82,7 @@ describe "Mercury.Region", ->
   describe "#constructor", ->
 
     beforeEach ->
-      spyOn(Klass.prototype, 'notify')
+      spyOn(Klass::, 'notify')
 
     it "notifies if not supported", ->
       Klass.supported = false
@@ -90,7 +90,7 @@ describe "Mercury.Region", ->
       expect( subject.notify ).calledWith('is unsupported in this browser')
 
     it "calls #beforeBuild if it's defined", ->
-      Klass.prototype.beforeBuild = spy()
+      Klass::beforeBuild = spy()
       subject = new Klass('<div>')
       expect( subject.beforeBuild ).called
 
@@ -135,27 +135,27 @@ describe "Mercury.Region", ->
       expect( subject.skipHistoryOn ).to.eql(['foo'])
 
     it "triggers a build event", ->
-      Klass.prototype.trigger = spy()
+      Klass::trigger = spy()
       subject = new Klass('<div>')
       expect( subject.trigger ).calledWith('build')
 
     it "calls #afterBuild if it's defined", ->
-      Klass.prototype.afterBuild = spy()
+      Klass::afterBuild = spy()
       subject = new Klass('<div>')
       expect( subject.afterBuild ).called
 
     it "calls #addRegionClassname", ->
-      spyOn(Klass.prototype, 'addRegionClassname')
+      spyOn(Klass::, 'addRegionClassname')
       subject = new Klass('<div>')
       expect( subject.addRegionClassname ).called
 
     it "calls #pushHistory", ->
-      spyOn(Klass.prototype, 'pushHistory')
+      spyOn(Klass::, 'pushHistory')
       subject = new Klass('<div>')
       expect( subject.pushHistory ).called
 
     it "calls #bindDefaultEvents", ->
-      spyOn(Klass.prototype, 'bindDefaultEvents')
+      spyOn(Klass::, 'bindDefaultEvents')
       subject = new Klass('<div id="name">')
       expect( subject.bindDefaultEvents ).called
 

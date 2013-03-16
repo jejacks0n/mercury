@@ -35,7 +35,7 @@ describe "Mercury.Model", ->
     it "sets the @logPrefix", ->
       Klass.define('TestModel')
       expect( Klass.logPrefix ).to.eq('TestModel:')
-      expect( Klass.prototype.logPrefix ).to.eq('TestModel:')
+      expect( Klass::logPrefix ).to.eq('TestModel:')
 
     it "calls @off", ->
       spyOn(Klass, 'off')
@@ -120,7 +120,7 @@ describe "Mercury.Model", ->
   describe "#constructor", ->
 
     it "calls #set", ->
-      spyOn(Klass.prototype, 'set')
+      spyOn(Klass::, 'set')
       attrs = {foo: 'bar'}
       subject = new Klass(attrs)
       expect( subject.set ).calledWith(attrs)

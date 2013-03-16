@@ -36,8 +36,8 @@ class Mercury.MarkdownRegion extends Mercury.Region
     sub          : ['<sub>', '</sub>']
     unorderedList: ['- ', '']
     orderedList  : ['1. ', '', /^\d+. |$/gi]
-    link         : ['[', '](%s)', /^\[|\]\([^)]\)/gi]
-    image        : ['![', '](%s)', /^!\[|\]\([^)]\)/gi]
+    link         : ['[', '](%s)\n', /^\[|\]\([^)]\)/gi]
+    image        : ['![', '](%s)\n', /^!\[|\]\([^)]\)/gi]
     style        : ['<span style="%s">', '</span>', /^(<span style="[^"]*">)|(<\/span>)$/gi]
     class        : ['<span class="%s">', '</span>', /^(<span class="[^"]*">)|(<\/span>)$/gi]
 
@@ -160,7 +160,7 @@ class Mercury.MarkdownRegion extends Mercury.Region
     #       class Link extends ActionOptions
     #       url: '', title: '', target: ''
     link: (url, text) ->
-      @wrapSelected(@processWrapper('link', [url, text]), text: text)
+      @wrapSelected(@processWrapper('link', [url, text]), text: text, select: 'end')
 
     image: (url, text) ->
-      @wrapSelected(@processWrapper('image', [url, text]), text: text)
+      @wrapSelected(@processWrapper('image', [url, text]), text: text, select: 'end')

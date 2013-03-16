@@ -78,7 +78,12 @@ Mercury.Region.Modules.TextSelection =
     [fix, sel] = @getTokenAndSelection(wrapper)
     val = [fix.pre, sel.text || options.text || '', fix.suf].join('')
 
-    @setAndReplaceSelection(sel, val, sel, 0, val.length - sel.length)
+    if options.select == 'end'
+      [pre, suf] = [val.length - sel.length, null]
+    else
+      [pre, suf] = [0, val.length - sel.length]
+
+    @setAndReplaceSelection(sel, val, sel, pre, suf)
 
 
   unwrapSelected: (wrapper) ->

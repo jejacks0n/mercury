@@ -14,15 +14,40 @@ class Mercury.Editor extends Mercury.View
     'mousedown': 'keepRegionFocused'
     'click [data-action]': 'processAction'
 
-  constructor: (@options = {}) ->
+  constructor: ->
+    if parent != window && parent.Mercury
+      @log(@t('is already defined in outer frame'))
+      return
+
     super
+
     @regions ||= []
+    @document ||= $('body')
+
+    @appendTo(document.body)
+    @setupFrame() if @frame = $(@frame).get(0)
+    @initialize()
+
+
+  setupFrame: ->
+    @frame = $(@frame).addClass('mercury-editor-frame').attr(seamless: 'seamless')
+    Mercury.on 'initialize', => @initialize()
+    @frame.on 'load', =>
+      @document = $(@frame.get(0).contentWindow.document)
+      @initialize()
+
+
+  initialize: ->
+    @addAllRegions()
+
+
+  addAllRegions: ->
     @addRegion(el) for el in @regionElements()
     @regions[0]?.focus()
 
 
   regionElements: ->
-    $("[#{@config('regions:attribute')}]")
+    $("[#{@config('regions:attribute')}]", @document)
 
 
   addRegion: (el) ->

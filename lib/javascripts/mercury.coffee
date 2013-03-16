@@ -22,8 +22,7 @@ jQuery ->
 
 # Scratch pad / regression testing
 jQuery ->
-  window.editor = new Mercury.Editor()
-  editor.appendTo(document.body)
+  window.editor = new Mercury.Editor(frame: '#mercury_frame')
 
 # example of extending regions to add actions for buttons or other functionality.
 Mercury.MarkdownRegion.actions =

@@ -70,6 +70,12 @@ describe "Mercury.Regions.Modules.DropIndicator", ->
       expect( subject.delay ).calledWith(1, sinon.match.func)
       expect( subject.dropIndicator.css('opacity') ).to.eq('1')
 
+    it "does nothing if we're previewing", ->
+      subject.previewing = true
+      spyOn(window, 'clearTimeout')
+      subject.el.trigger('dragenter')
+      expect( clearTimeout ).not.called
+
 
   describe "#hideDropIndicator (via dragleave/drop)", ->
 

@@ -28,6 +28,7 @@ Mercury.Region.Modules.DropIndicator =
 
 
   showDropIndicator: ->
+    return if @previewing
     clearTimeout(@dropIndicatorTimer)
     @dropIndicator.css(@dropIndicatorPosition())
     @delay(1, => @dropIndicator.css(opacity: 1))

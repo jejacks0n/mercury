@@ -59,7 +59,9 @@ class Mercury.Region extends Mercury.View
   # supported in the given browser or if there's no name to use for serializing.
   #
   constructor: (@el, @options = {}) ->
-    return @notify(@t('is unsupported in this browser')) unless @constructor.supported
+    unless @constructor.supported
+      @notify(@t('is unsupported in this browser'))
+      return false
 
     @beforeBuild?()                                        # call the beforeBuild method if it's defined
     super(@options)                                        # let the view do it's thing

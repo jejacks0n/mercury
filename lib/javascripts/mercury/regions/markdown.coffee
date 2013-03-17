@@ -45,7 +45,8 @@ class Mercury.MarkdownRegion extends Mercury.Region
   constructor: (@el, @options = {}) ->
     try @converter = @options.converter || new Showdown.converter().makeHtml
     catch e
-      return @notify(@t('requires Showdown'))
+      @notify(@t('requires Showdown'))
+      return false
 
     super
 

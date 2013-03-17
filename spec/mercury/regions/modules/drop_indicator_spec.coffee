@@ -2,7 +2,7 @@
 #= require mercury/core/region
 #= require mercury/regions/modules/drop_indicator
 
-describe "Mercury.Regions.Modules.DropIndicator", ->
+describe "Mercury.Region.Modules.DropIndicator", ->
 
   Klass = null
   Module = Mercury.Region.Modules.DropIndicator

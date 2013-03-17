@@ -1,11 +1,11 @@
 #= require spec_helper
 #= require mercury/core/region
-#= require mercury/regions/modules/text_selection
+#= require mercury/regions/modules/html_selection
 
-describe "Mercury.Region.Modules.TextSelection", ->
+describe "Mercury.Region.Modules.HtmlSelection", ->
 
   Klass = null
-  Module = Mercury.Region.Modules.TextSelection
+  Module = Mercury.Region.Modules.HtmlSelection
   subject = null
 
   beforeEach ->

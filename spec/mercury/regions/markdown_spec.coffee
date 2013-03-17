@@ -4,6 +4,7 @@
 #= require mercury/regions/modules/drop_indicator
 #= require mercury/regions/modules/text_selection
 #= require mercury/regions/modules/focusable_textarea
+#= require mercury/regions/modules/selection_value
 #= require mercury/regions/markdown
 
 describe "Mercury.MarkdownRegion", ->
@@ -34,63 +35,11 @@ describe "Mercury.MarkdownRegion", ->
       subject = new Klass('<div id="foo">', converter: ->)
 
 
-  describe "#value", ->
-
-    it "returns the value if no value was passed", ->
-      subject.focusable.val('_value_')
-      expect( subject.value() ).to.eq('_value_')
-
-    describe "setting the value", ->
-
-      it "sets the @focusable value", ->
-        subject.value('_value_')
-        expect( subject.focusable.val() ).to.eq('_value_')
-
-      it "can use an object to set the value and selection", ->
-        spyOn(subject, 'setSelection')
-        subject.value(val: '_value_', sel: {start: 1, end: 2})
-        expect( subject.setSelection ).calledWith(start: 1, end: 2)
-        expect( subject.focusable.val() ).to.eq('_value_')
-
-
   describe "#convertedValue", ->
 
     it "converts the value", ->
       subject.focusable.val('_value_')
       expect( subject.convertedValue() ).to.eq('<p><em>value</em></p>')
-
-
-  describe "#valueForStack", ->
-
-    it "returns the selection and value", ->
-      spyOn(subject, 'value', -> '_value_')
-      spyOn(subject, 'getSelection', -> {start: 1, end: 2})
-      expect( subject.valueForStack() ).to.eql(sel: {start: 1, end: 2}, val: '_value_')
-
-
-  describe "#pushHistory", ->
-
-    beforeEach ->
-      spyOn(subject, 'valueForStack')
-
-    it "pushes to the stack", ->
-      subject.pushHistory()
-      expect( subject.valueForStack ).called
-
-    describe "with a keycode", ->
-
-      it "pushes to the stack on return, delete, or backspace", ->
-        subject.pushHistory(13)
-        expect( subject.valueForStack ).calledOnce
-        subject.pushHistory(46)
-        expect( subject.valueForStack ).calledTwice
-        subject.pushHistory(8)
-        expect( subject.valueForStack ).calledThrice
-
-      it "delays pushing to the stack", ->
-        spyOn(subject, 'delay').yields()
-        subject.pushHistory(42)
-        expect( subject.delay ).calledWith(2500, sinon.match.func)
 
 
   describe "#onDropFile", ->

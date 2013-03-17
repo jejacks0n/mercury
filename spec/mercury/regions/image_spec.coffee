@@ -76,3 +76,10 @@ describe "Mercury.ImageRegion", ->
         spyOn(subject, 'value')
         subject.handleAction('file', get: -> '_url_')
         expect( subject.value ).calledWith('_url_')
+
+    describe "#image", ->
+
+      it "sets the value to the url", ->
+        spyOn(subject, 'value')
+        subject.handleAction('image', '_url_')
+        expect( subject.value ).calledWith('_url_')

@@ -2,7 +2,7 @@
 #= require mercury/core/region
 #= require mercury/regions/modules/focusable_textarea
 
-describe "Mercury.Regions.Modules.FocusableTextarea", ->
+describe "Mercury.Region.Modules.FocusableTextarea", ->
 
   Klass = null
   Module = Mercury.Region.Modules.FocusableTextarea
@@ -71,6 +71,25 @@ describe "Mercury.Regions.Modules.FocusableTextarea", ->
       spyOn(subject, 'html')
       subject.trigger('release')
       expect( subject.html ).calledWith('_value_')
+
+
+  describe "#value", ->
+
+    it "returns the value if no value was passed", ->
+      subject.focusable.val('_value_')
+      expect( subject.value() ).to.eq('_value_')
+
+    describe "setting the value", ->
+
+      it "sets the @focusable value", ->
+        subject.value('_value_')
+        expect( subject.focusable.val() ).to.eq('_value_')
+
+      it "can use an object to set the value and selection", ->
+        subject.setSerializedSelection = spy()
+        subject.value(val: '_value_', sel: {start: 1, end: 2})
+        expect( subject.setSerializedSelection ).calledWith(start: 1, end: 2)
+        expect( subject.focusable.val() ).to.eq('_value_')
 
 
   describe "#resizeFocusable (via the action event)", ->

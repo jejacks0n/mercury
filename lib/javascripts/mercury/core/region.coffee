@@ -77,7 +77,7 @@ class Mercury.Region extends Mercury.View
       @name = "#{@constructor.type}#{Math.floor(Math.random() * 10000)}"
 
     @addRegionClassname()
-    @pushHistory()
+    @pushHistory() unless @skipHistoryOnInitialize
     @bindDefaultEvents()
 
 
@@ -116,10 +116,21 @@ class Mercury.Region extends Mercury.View
 
 
   # This is the standard way to push onto the undo stack. The stack is used in regions for custom undo history, but you
-  # can bypass this by using #pushStack if you need.
+  # can bypass this by using #pushStack if you need. You can optionally pass a keyCode, which if it's known (return,
+  # delete, backspace) will cause an immediate push, otherwise it will set a timer that will push after a 2.5 seconds,
+  # which can be used to not push to the stack for every keypress.
   #
-  pushHistory: ->
-    @pushStack(@valueForStack?() ? @value())
+  pushHistory: (keyCode = null) ->
+    # When the keycode is not set, or is return, delete or backspace push now, otherwise wait for a few seconds.
+    knownKeyCode = [13, 46, 8].indexOf(keyCode) if keyCode
+    pushNow = true if keyCode == null || (knownKeyCode >= 0 && knownKeyCode != @lastKeyCode)
+    @lastKeyCode = knownKeyCode
+
+    clearTimeout(@historyTimeout)
+    if pushNow
+      @pushStack(@valueForStack?() ? @value())
+    else
+      @historyTimeout = @delay(2500, => @pushStack(@valueForStack?() ? @value()))
 
 
   # Focuses the region, which will call focus on the element and an onFocus method if the subclass implements one. Used

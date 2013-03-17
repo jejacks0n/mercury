@@ -154,6 +154,12 @@ describe "Mercury.Region", ->
       subject = new Klass('<div>')
       expect( subject.pushHistory ).called
 
+    it "doesn't call #pushHistory if @skipHistoryOnInitialize", ->
+      Klass::skipHistoryOnInitialize = true
+      spyOn(Klass::, 'pushHistory')
+      subject = new Klass('<div>')
+      expect( subject.pushHistory ).not.called
+
     it "calls #bindDefaultEvents", ->
       spyOn(Klass::, 'bindDefaultEvents')
       subject = new Klass('<div id="name">')
@@ -251,16 +257,42 @@ describe "Mercury.Region", ->
 
   describe "#pushHistory", ->
 
-    it "calls #pushStack with the value returned from #value", ->
+    beforeEach ->
       spyOn(subject, 'pushStack')
       spyOn(subject, 'value', -> '_value_')
+
+    it "pushes to the stack", ->
       subject.pushHistory()
+      expect( subject.value ).called
       expect( subject.pushStack ).calledWith('_value_')
 
-    it "calls #valueForStack if it's defined (for overriding)", ->
-      subject.valueForStack = spy()
+    it "pushes to the stack with valueForStack if it's defined", ->
+      subject.valueForStack = stub()
+      subject.valueForStack.returns('_value for stack_')
       subject.pushHistory()
       expect( subject.valueForStack ).called
+      expect( subject.pushStack ).calledWith('_value for stack_')
+
+
+    describe "with a keycode", ->
+
+      it "pushes to the stack on return, delete, or backspace", ->
+        subject.pushHistory(13)
+        expect( subject.value ).calledOnce
+        expect( subject.pushStack ).calledOnce
+        subject.pushHistory(46)
+        expect( subject.value ).calledTwice
+        expect( subject.pushStack ).calledTwice
+        subject.pushHistory(8)
+        expect( subject.value ).calledThrice
+        expect( subject.pushStack ).calledThrice
+
+      it "delays pushing to the stack", ->
+        spyOn(subject, 'delay').yields()
+        subject.pushHistory(42)
+        expect( subject.delay ).calledWith(2500, sinon.match.func)
+        expect( subject.pushStack ).calledWith('_value_')
+        expect( subject.value ).called
 
 
   describe "#focus", ->

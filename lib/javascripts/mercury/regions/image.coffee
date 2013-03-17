@@ -37,3 +37,4 @@ class Mercury.ImageRegion extends Mercury.Region
   actions:
 
     file: (file) -> @value(file.get('url'))
+    image: (url) -> @value(url)

@@ -30,6 +30,12 @@ Mercury.Region.Modules.FocusableTextarea =
     @html(@convertedValue?() ? @value())
 
 
+  value: (value = null) ->
+    return @focusable.val() if value == null || typeof(value) == 'undefined'
+    @focusable.val(value.val ? value)
+    @setSerializedSelection(value.sel) if value.sel
+
+
   resizeFocusable: ->
     return unless @autoSize
     focusable = @focusable.get(0)

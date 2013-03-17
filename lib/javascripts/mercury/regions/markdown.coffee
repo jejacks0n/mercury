@@ -12,8 +12,9 @@ via Ajax.
 class Mercury.MarkdownRegion extends Mercury.Region
   @define 'Mercury.MarkdownRegion', 'markdown'
   @include Mercury.Region.Modules.DropIndicator
-  @include Mercury.Region.Modules.TextSelection
+  @include Mercury.Region.Modules.SelectionValue
   @include Mercury.Region.Modules.FocusableTextarea
+  @include Mercury.Region.Modules.TextSelection
 
   @supported: true
 
@@ -49,29 +50,8 @@ class Mercury.MarkdownRegion extends Mercury.Region
     super
 
 
-  value: (value = null) ->
-    return @focusable.val() if value == null || typeof(value) == 'undefined'
-    @focusable.val(value.val ? value)
-    @setSelection(value.sel) if value.sel
-
-
   convertedValue: ->
     @converter(@value())
-
-
-  valueForStack: ->
-    sel: @getSelection()
-    val: @value()
-
-
-  pushHistory: (keyCode = null) ->
-    # When the keycode is not set, or is return, delete or backspace push now, otherwise wait for a few seconds.
-    knownKeyCode = [13, 46, 8].indexOf(keyCode) if keyCode
-    pushNow = true if keyCode == null || (knownKeyCode >= 0 && knownKeyCode != @lastKeyCode)
-    @lastKeyCode = knownKeyCode
-
-    clearTimeout(@historyTimeout)
-    if pushNow then super else @historyTimeout = @delay(2500, => super)
 
 
   onDropFile: (files, options) ->

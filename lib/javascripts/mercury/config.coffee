@@ -4,7 +4,6 @@ Documentation and other useful information can be found at https://github.com/je
 
 Copyright (c) 2013 Jeremy Jackson
 ###
-
 @Mercury ||= {}
 
 Mercury.configuration =
@@ -86,9 +85,20 @@ Mercury.configuration =
     # render the content when not editing, and render the markdown when editing.
     #
     #= require dependencies/showdown-1.0
-    #= require dependencies/textinputs_jquery-0.1.205.js
     #= require mercury/regions/markdown
     #
     markdown:
-      autoSize  : true                                     # the region will auto-resize to the content on typing etc.
+      autoSize  : true                                     # the region will auto-resize to the content within it.
+      mimeTypes : false                                    # file types - overrides general uploading to allow anything.
+
+    # The HTML region is a full HTML5 Content Editable region -- a true WYSIWYG experience. Effort has been made to
+    # normalize, and keep things consistent, but the nature of it is complex and should be treated as such. There's an
+    # expectation that users who are exposed to this region understand HTML.
+    #
+    #= require dependencies/rangy/rangy-core
+    #= require dependencies/rangy/rangy-serializer
+    #= require dependencies/rangy/rangy-cssclassapplier
+    #= require mercury/regions/html
+    #
+    html:
       mimeTypes : false                                    # file types - overrides general uploading to allow anything.

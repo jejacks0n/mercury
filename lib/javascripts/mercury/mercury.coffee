@@ -20,8 +20,10 @@
 # Region modules.
 #
 #= require mercury/regions/modules/drop_indicator
-#= require mercury/regions/modules/text_selection
 #= require mercury/regions/modules/focusable_textarea
+#= require mercury/regions/modules/html_selection
+#= require mercury/regions/modules/selection_value
+#= require mercury/regions/modules/text_selection
 globalize = ->
 
   # Extends the global Mercury object with various modules.

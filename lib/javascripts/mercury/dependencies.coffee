@@ -4,6 +4,10 @@
 #
 # Full region depdendencies.
 #
+#= require rangy/rangy-core
+#= require rangy/rangy-serializer
+#= require rangy/rangy-cssclassapplier
+#
 # require htmlbeautify-1.0
 # require htmlclean-1.3.0
 #

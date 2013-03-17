@@ -58,6 +58,9 @@ image with the one that was uploaded.
     ImageRegion.prototype.actions = {
       file: function(file) {
         return this.value(file.get('url'));
+      },
+      image: function(url) {
+        return this.value(url);
       }
     };
 

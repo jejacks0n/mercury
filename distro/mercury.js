@@ -43,6 +43,9 @@ Copyright (c) 2013 Jeremy Jackson
       markdown: {
         autoSize: true,
         mimeTypes: false
+      },
+      html: {
+        mimeTypes: false
       }
     }
   };
@@ -376,7 +379,7 @@ Copyright (c) 2013 Jeremy Jackson
       return this.stack = [];
     },
     pushStack: function(value) {
-      if (value === null || JSON.stringify(this.stack[this.stackPosition]) === JSON.stringify(value)) {
+      if (value === null || this.stackEquality(value)) {
         return;
       }
       this.stack = this.stack.slice(0, this.stackPosition + 1);
@@ -385,6 +388,9 @@ Copyright (c) 2013 Jeremy Jackson
         this.stack.shift();
       }
       return this.stackPosition = this.stack.length - 1;
+    },
+    stackEquality: function(value) {
+      return JSON.stringify(this.stack[this.stackPosition]) === JSON.stringify(value);
     },
     undoStack: function() {
       if (this.stackPosition < 1) {
@@ -452,6 +458,7 @@ Copyright (c) 2013 Jeremy Jackson
     };
 
     function Module() {
+      this.__handlers__ = $.extend({}, this.__handlers__);
       if (typeof this.init === "function") {
         this.init.apply(this, arguments);
       }
@@ -952,6 +959,7 @@ Copyright (c) 2013 Jeremy Jackson
         this.beforeBuild();
       }
       Region.__super__.constructor.call(this, this.options);
+      this.trigger('build');
       if (!this.focusable) {
         this.attr({
           tabindex: 0
@@ -962,16 +970,17 @@ Copyright (c) 2013 Jeremy Jackson
       this.focused || (this.focused = false);
       this.focusable || (this.focusable = this.el);
       this.skipHistoryOn || (this.skipHistoryOn = ['redo']);
+      if (typeof this.afterBuild === "function") {
+        this.afterBuild();
+      }
       if (!this.name) {
         this.notify(this.t('no name provided for the "%s" region, falling back to random', this.constructor.type));
         this.name = "" + this.constructor.type + (Math.floor(Math.random() * 10000));
       }
-      this.trigger('build');
-      if (typeof this.afterBuild === "function") {
-        this.afterBuild();
-      }
       this.addRegionClassname();
-      this.pushHistory();
+      if (!this.skipHistoryOnInitialize) {
+        this.pushHistory();
+      }
       this.bindDefaultEvents();
     }
 
@@ -1013,9 +1022,28 @@ Copyright (c) 2013 Jeremy Jackson
       return typeof this.onTogglePreview === "function" ? this.onTogglePreview() : void 0;
     };
 
-    Region.prototype.pushHistory = function() {
-      var _ref;
-      return this.pushStack((_ref = typeof this.valueForStack === "function" ? this.valueForStack() : void 0) != null ? _ref : this.value());
+    Region.prototype.pushHistory = function(keyCode) {
+      var knownKeyCode, pushNow, _ref,
+        _this = this;
+      if (keyCode == null) {
+        keyCode = null;
+      }
+      if (keyCode) {
+        knownKeyCode = [13, 46, 8].indexOf(keyCode);
+      }
+      if (keyCode === null || (knownKeyCode >= 0 && knownKeyCode !== this.lastKeyCode)) {
+        pushNow = true;
+      }
+      this.lastKeyCode = knownKeyCode;
+      clearTimeout(this.historyTimeout);
+      if (pushNow) {
+        return this.pushStack((_ref = typeof this.valueForStack === "function" ? this.valueForStack() : void 0) != null ? _ref : this.value());
+      } else {
+        return this.historyTimeout = this.delay(2500, function() {
+          var _ref1;
+          return _this.pushStack((_ref1 = typeof _this.valueForStack === "function" ? _this.valueForStack() : void 0) != null ? _ref1 : _this.value());
+        });
+      }
     };
 
     Region.prototype.focus = function() {
@@ -1265,7 +1293,9 @@ Copyright (c) 2013 Jeremy Jackson
     };
 
     Editor.prototype.keepRegionFocused = function(e) {
-      e.preventDefault();
+      if (e != null) {
+        e.preventDefault();
+      }
       return this.region.focus();
     };
 
@@ -1287,7 +1317,8 @@ Copyright (c) 2013 Jeremy Jackson
       value = target.data('value');
       switch (action) {
         case 'preview':
-          return Mercury.trigger('mode', 'preview');
+          Mercury.trigger('mode', 'preview');
+          return this.keepRegionFocused();
         case 'html':
           value = (function() {
             switch (value) {
@@ -1594,13 +1625,12 @@ Copyright (c) 2013 Jeremy Jackson
 
   Mercury.Region.Modules.DropIndicator = {
     included: function() {
-      this.dropIndicator = $('<div class="mercury-region-drop-indicator"></div>');
       this.on('build', this.buildDropIndicator);
       return this.on('release', this.releaseDropIndicator);
     },
     buildDropIndicator: function() {
-      this.el.after(this.dropIndicator);
-      return this.delegateEvents(this.focusable, {
+      this.el.after(this.dropIndicator = $('<div class="mercury-region-drop-indicator"></div>'));
+      return this.delegateEvents(this.el, {
         dragenter: 'showDropIndicator',
         dragleave: 'hideDropIndicator',
         drop: 'hideDropIndicator'
@@ -1639,6 +1669,159 @@ Copyright (c) 2013 Jeremy Jackson
       return this.dropIndicatorTimer = this.delay(500, function() {
         return _this.dropIndicator.hide();
       });
+    }
+  };
+
+}).call(this);
+(function() {
+
+  Mercury.Region.Modules.FocusableTextarea = {
+    included: function() {
+      this.autoSize = false;
+      this.on('build', this.buildFocusable);
+      this.on('action', this.resizeFocusable);
+      this.on('preview', this.toggleFocusablePreview);
+      return this.on('release', this.releaseFocusable);
+    },
+    buildFocusable: function() {
+      var resize, value;
+      this.autoSize = this.config("regions:" + this.constructor.type + ":autoSize");
+      value = this.html().replace('&gt;', '>').replace('&lt;', '<').trim();
+      resize = this.autoSize ? 'none' : 'vertical';
+      this.preview = $("<div class=\"mercury-" + this.constructor.type + "-region-preview\">");
+      this.focusable = $("<textarea class=\"mercury-" + this.constructor.type + "-region-textarea\">");
+      this.el.empty();
+      this.append(this.preview, this.focusable.val(value).css({
+        width: '100%',
+        height: this.el.height(),
+        resize: resize
+      }));
+      this.resizeFocusable();
+      return this.delegateEvents({
+        'keydown textarea': 'handleKeyEvent'
+      });
+    },
+    releaseFocusable: function() {
+      var _ref;
+      return this.html((_ref = typeof this.convertedValue === "function" ? this.convertedValue() : void 0) != null ? _ref : this.value());
+    },
+    value: function(value) {
+      var _ref;
+      if (value == null) {
+        value = null;
+      }
+      if (value === null || typeof value === 'undefined') {
+        return this.focusable.val();
+      }
+      this.focusable.val((_ref = value.val) != null ? _ref : value);
+      if (value.sel) {
+        return this.setSerializedSelection(value.sel);
+      }
+    },
+    resizeFocusable: function() {
+      var body, current, focusable;
+      if (!this.autoSize) {
+        return;
+      }
+      focusable = this.focusable.get(0);
+      body = $('body');
+      current = body.scrollTop();
+      this.focusable.css({
+        height: 1
+      }).css({
+        height: focusable.scrollHeight
+      });
+      return $('body').scrollTop(current);
+    },
+    toggleFocusablePreview: function() {
+      if (this.previewing) {
+        this.focusable.hide();
+        return this.preview.html((typeof this.convertedValue === "function" ? this.convertedValue() : void 0) || this.value()).show();
+      } else {
+        this.preview.hide();
+        return this.focusable.show();
+      }
+    },
+    handleKeyEvent: function(e) {
+      if (e.keyCode >= 37 && e.keyCode <= 40) {
+        return;
+      }
+      this.delay(1, this.resizeFocusable);
+      if (e.metaKey && e.keyCode === 90) {
+        return;
+      }
+      if (e.keyCode === 13) {
+        if (typeof this.onReturnKey === "function") {
+          this.onReturnKey(e);
+        }
+      }
+      if (e.metaKey) {
+        switch (e.keyCode) {
+          case 66:
+            e.preventDefault();
+            return this.handleAction('bold');
+          case 73:
+            e.preventDefault();
+            return this.handleAction('italic');
+          case 85:
+            e.preventDefault();
+            return this.handleAction('underline');
+        }
+      }
+      this.resizeFocusable();
+      return this.pushHistory(e.keyCode);
+    }
+  };
+
+}).call(this);
+(function() {
+
+  Mercury.Region.Modules.HtmlSelection = {
+    getSerializedSelection: function() {
+      return rangy.serializeSelection();
+    },
+    setSerializedSelection: function(sel) {
+      return rangy.deserializeSelection(sel);
+    },
+    toggleWrapSelectedWordsInClass: function(className, options) {
+      var classApplier;
+      if (options == null) {
+        options = {};
+      }
+      options = $.extend({}, {
+        normalize: true
+      }, options, {
+        applyToEditableOnly: true
+      });
+      classApplier = rangy.createCssClassApplier(className, options);
+      return classApplier.toggleSelection();
+    }
+  };
+
+}).call(this);
+(function() {
+
+  Mercury.Region.Modules.SelectionValue = {
+    getSerializedSelection: function() {},
+    setSerializedSelection: function() {},
+    value: function(value) {
+      var _ref;
+      if (value == null) {
+        value = null;
+      }
+      if (value === null || typeof value === 'undefined') {
+        return this.html();
+      }
+      this.html((_ref = value.val) != null ? _ref : value);
+      if (value.sel) {
+        return this.setSerializedSelection(value.sel);
+      }
+    },
+    valueForStack: function() {
+      return {
+        val: this.value(),
+        sel: this.getSerializedSelection()
+      };
     }
   };
 
@@ -1683,6 +1866,19 @@ Copyright (c) 2013 Jeremy Jackson
       }
       el.selectionStart = start;
       return el.selectionEnd = end;
+    },
+    getSerializedSelection: function() {
+      var sel;
+      sel = JSON.stringify(this.getSelection());
+      return [sel.start, sel.end].join(':');
+    },
+    setSerializedSelection: function(sel) {
+      var end, start, _ref;
+      _ref = sel.split(':'), start = _ref[0], end = _ref[1];
+      return this.setSelection({
+        start: start,
+        end: end
+      });
     },
     replaceSelection: function(text) {
       var caretIndex, el, sel, value;
@@ -2167,97 +2363,10 @@ Copyright (c) 2013 Jeremy Jackson
 
 }).call(this);
 (function() {
-
-  Mercury.Region.Modules.FocusableTextarea = {
-    included: function() {
-      this.autoSize = false;
-      this.preview = $("<div class=\"mercury-" + this.constructor.type + "-region-preview\">");
-      this.focusable = $("<textarea class=\"mercury-" + this.constructor.type + "-region-textarea\">");
-      this.on('build', this.buildFocusable);
-      this.on('action', this.resizeFocusable);
-      this.on('preview', this.toggleFocusablePreview);
-      return this.on('release', this.releaseFocusable);
-    },
-    buildFocusable: function() {
-      var resize, value;
-      this.autoSize = this.config("regions:" + this.constructor.type + ":autoSize");
-      value = this.html().replace('&gt;', '>').replace('&lt;', '<').trim();
-      resize = this.autoSize ? 'none' : 'vertical';
-      this.el.empty();
-      this.append(this.preview, this.focusable.val(value).css({
-        width: '100%',
-        height: this.el.height(),
-        resize: resize
-      }));
-      this.resizeFocusable();
-      return this.delegateEvents({
-        'keydown textarea': 'handleKeyEvent'
-      });
-    },
-    releaseFocusable: function() {
-      var _ref;
-      return this.html((_ref = typeof this.convertedValue === "function" ? this.convertedValue() : void 0) != null ? _ref : this.value());
-    },
-    resizeFocusable: function() {
-      var body, current, focusable;
-      if (!this.autoSize) {
-        return;
-      }
-      focusable = this.focusable.get(0);
-      body = $('body');
-      current = body.scrollTop();
-      this.focusable.css({
-        height: 1
-      }).css({
-        height: focusable.scrollHeight
-      });
-      return $('body').scrollTop(current);
-    },
-    toggleFocusablePreview: function() {
-      if (this.previewing) {
-        this.focusable.hide();
-        return this.preview.html((typeof this.convertedValue === "function" ? this.convertedValue() : void 0) || this.value()).show();
-      } else {
-        this.preview.hide();
-        return this.focusable.show();
-      }
-    },
-    handleKeyEvent: function(e) {
-      if (e.keyCode >= 37 && e.keyCode <= 40) {
-        return;
-      }
-      this.delay(1, this.resizeFocusable);
-      if (e.metaKey && e.keyCode === 90) {
-        return;
-      }
-      if (e.keyCode === 13) {
-        if (typeof this.onReturnKey === "function") {
-          this.onReturnKey(e);
-        }
-      }
-      if (e.metaKey) {
-        switch (e.keyCode) {
-          case 66:
-            e.preventDefault();
-            return this.handleAction('bold');
-          case 73:
-            e.preventDefault();
-            return this.handleAction('italic');
-          case 85:
-            e.preventDefault();
-            return this.handleAction('underline');
-        }
-      }
-      this.resizeFocusable();
-      return this.pushHistory(e.keyCode);
-    }
-  };
-
-}).call(this);
-(function() {
   var globalize;
 
   globalize = function() {
+    var isIE;
     this.version = '1.0.0';
     this.Module.extend.call(this, this.Config);
     this.configure = this.Config.set;
@@ -2266,7 +2375,8 @@ Copyright (c) 2013 Jeremy Jackson
     this.Module.extend.call(this, this.Logger);
     return this.support = {
       webkit: navigator.userAgent.indexOf('WebKit') > 0,
-      firefox: navigator.userAgent.indexOf('Firefox') > 0
+      gecko: navigator.userAgent.indexOf('Firefox') > 0,
+      ie: (isIE = navigator.userAgent.match(/MSIE\s([\d|\.]+)/)) ? parseFloat(isIE[1], 10) : false
     };
   };
 

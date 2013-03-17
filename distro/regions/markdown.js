@@ -24,13 +24,13 @@ via Ajax.
 
     MarkdownRegion.include(Mercury.Region.Modules.DropIndicator);
 
-    MarkdownRegion.include(Mercury.Region.Modules.TextSelection);
+    MarkdownRegion.include(Mercury.Region.Modules.SelectionValue);
 
     MarkdownRegion.include(Mercury.Region.Modules.FocusableTextarea);
 
-    MarkdownRegion.supported = true;
+    MarkdownRegion.include(Mercury.Region.Modules.TextSelection);
 
-    MarkdownRegion.prototype.editableDragOver = true;
+    MarkdownRegion.supported = true;
 
     MarkdownRegion.prototype.wrappers = {
       h1: ['# ', ' #'],
@@ -68,52 +68,8 @@ via Ajax.
       MarkdownRegion.__super__.constructor.apply(this, arguments);
     }
 
-    MarkdownRegion.prototype.value = function(value) {
-      var _ref;
-      if (value == null) {
-        value = null;
-      }
-      if (value === null || typeof value === 'undefined') {
-        return this.focusable.val();
-      }
-      this.focusable.val((_ref = value.val) != null ? _ref : value);
-      if (value.sel) {
-        return this.setSelection(value.sel);
-      }
-    };
-
     MarkdownRegion.prototype.convertedValue = function() {
       return this.converter(this.value());
-    };
-
-    MarkdownRegion.prototype.valueForStack = function() {
-      return {
-        sel: this.getSelection(),
-        val: this.value()
-      };
-    };
-
-    MarkdownRegion.prototype.pushHistory = function(keyCode) {
-      var knownKeyCode, pushNow,
-        _this = this;
-      if (keyCode == null) {
-        keyCode = null;
-      }
-      if (keyCode) {
-        knownKeyCode = [13, 46, 8].indexOf(keyCode);
-      }
-      if (keyCode === null || (knownKeyCode >= 0 && knownKeyCode !== this.lastKeyCode)) {
-        pushNow = true;
-      }
-      this.lastKeyCode = knownKeyCode;
-      clearTimeout(this.historyTimeout);
-      if (pushNow) {
-        return MarkdownRegion.__super__.pushHistory.apply(this, arguments);
-      } else {
-        return this.historyTimeout = this.delay(2500, function() {
-          return MarkdownRegion.__super__.pushHistory.apply(_this, arguments);
-        });
-      }
     };
 
     MarkdownRegion.prototype.onDropFile = function(files, options) {

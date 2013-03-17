@@ -356,6 +356,46 @@ Copyright (c) 2013 Jeremy Jackson
   color: white;
 }
 
+/* HtmlRegion
+ *----------------------------------------------------------------------------*/
+/* line 3, ../../lib/stylesheets/mercury/regions/_html.scss */
+.mercury-html-region {
+  min-height: 20px;
+}
+/* line 5, ../../lib/stylesheets/mercury/regions/_html.scss */
+.mercury-html-region:focus {
+  outline: none;
+  -webkit-box-shadow: 0 0 7px #00bce5, 0 0 2px #003e4c;
+  -moz-box-shadow: 0 0 7px #00bce5, 0 0 2px #003e4c;
+  box-shadow: 0 0 7px #00bce5, 0 0 2px #003e4c;
+}
+/* line 8, ../../lib/stylesheets/mercury/regions/_html.scss */
+.mercury-html-region + .mercury-region-drop-indicator {
+  -webkit-transition-property: opacity;
+  -webkit-transition-duration: 0.25s;
+  -webkit-transition-timing-function: ease-in-out;
+  -moz-transition-property: opacity;
+  -moz-transition-duration: 0.25s;
+  -moz-transition-timing-function: ease-in-out;
+  transition-property: opacity;
+  transition-duration: 0.25s;
+  transition-timing-function: ease-in-out;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+  display: none;
+  position: absolute;
+  z-index: 20;
+  top: 30px;
+  left: 30px;
+  width: 60px;
+  height: 60px;
+  margin: -30px;
+  opacity: 0;
+  background: rgba(0, 0, 0, 0.75) url(/assets/mercury/regions/upload-indicator.png) no-repeat center;
+  pointer-events: none;
+}
+
 /* ImageRegion
  *----------------------------------------------------------------------------*/
 /* line 3, ../../lib/stylesheets/mercury/regions/_image.scss */
@@ -434,7 +474,7 @@ Copyright (c) 2013 Jeremy Jackson
   border: none;
   margin: 0;
   white-space: pre;
-  background: 'transparent';
+  background: transparent;
   font-family: Monaco, "Bitstream Vera Sans Mono", "Lucida Console", monospace;
   font-size: 12px;
   line-height: 13px;
@@ -446,6 +486,16 @@ Copyright (c) 2013 Jeremy Jackson
   -webkit-box-shadow: 0 0 7px #00bce5, 0 0 2px #003e4c;
   -moz-box-shadow: 0 0 7px #00bce5, 0 0 2px #003e4c;
   box-shadow: 0 0 7px #00bce5, 0 0 2px #003e4c;
+}
+
+/* Region (unknown region)
+ *----------------------------------------------------------------------------*/
+/* line 4, ../../lib/stylesheets/mercury/regions/_unknown.scss */
+.mercury-unknown-region:focus {
+  outline: none;
+  -webkit-box-shadow: 0 0 7px red, 0 0 2px #550000;
+  -moz-box-shadow: 0 0 7px red, 0 0 2px #550000;
+  box-shadow: 0 0 7px red, 0 0 2px #550000;
 }
 
 /* line 20, ../../lib/stylesheets/mercury.scss */

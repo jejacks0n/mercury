@@ -1,64 +1,26 @@
-Mercury Editor
-==============
+Mercury Editor2
+===============
 
-This branch represents the future version of Mercury Editor. It outlines the framework that will be used (and built
-upon), and at the moment provides an example of using the more structured core library for the uploading process (eg. an
-uploader view, and a file model).
+## Developer Notice
 
-This approach is more in line with the MVC frameworks that exist and is comprised of a hybrid of Spine and Backbone
-(neither library is used however to maintain ambiguity). Spine Controller was taken and adjusted into Mercury.View, and
-a modified Spine.Model became Mercury.Model. The naming was adopted to be more like Backbone, as was the get/set methods
-for model attributes. At the moment the structure is pretty minimal and will likely be added to over time as different
-feature additions require (specifically Mercury.Model).
+This branch represents the future version of Mercury Editor. It outlines the framework that will be used and is more in
+line with the MVC/MVVM frameworks that exist.
 
+This iteration of Mercury Editor (Mercury2) will separate the Rails portions from the Javascript portions of the
+project. Rails is still used for development (for a server, coffeescript, sass, build process etc.) but the Rails Engine
+will be broken off into a different project so that more functionality can be added, and to serve as an example of how
+to implement functionality like snippets and image uploading.
 
-## Restructuring
-
-This iteration of Mercury Editor will separate the Rails portions from the Javascript portions of the project.  Rails is
-still used for development (for a server, coffeescript, sass, build process etc), but development will not mimic the
-current version of Mercury in that the engine will be broken off into a different library so that more functionality can
-be added to that, and to serve as a more useful example of how to implement functionality like snippets and image
-uploading.
+Mercury2 allows sandboxing content within an iframe or can load directly on the page your editing. This has been a point
+of contention and complication in the past, so this version attempts to simplify while also keeping the ability to
+sandbox to mimimize conflicting with javascript libraries.
 
 
 ## Dependencies
 
-This version of Mercury is being built with jQuery 1.9.1 and 2.0 in mind, however zepto is also being tested against.
-Rangy will be used for selections, but I have yet to dive fully into figuring out how best to utilize the library.
-
-
-## Actions
-
-- bold
-- italic
-- underline
-- subscript
-- superscript
-- rule
-- indent
-- outdent
-- orderedList
-- unorderedList
-- style (value)
-- html (html)
-- block (format)
-- snippet (snippet)
-- file (file)
-- link (url, text)
-- image (url, text)
-
-
-## Known issues
-
-### Webkit
-
-- Dropping files at the cursor position in textarea doesn't work.
-
-### Gecko
-
-- Dropping files doesn't display cursor position, and thus dropping at that place isn't applicable.
-- The drop indicator doesn't like to stay visible (we could fix this by using dragover).
-
+This version of Mercury is being built using jQuery 2.0, but attempts to minimize reliance on jQuery as much as is
+feasible, and near the end there may be a pass to remove things like $.extend. Selections in HTML regions are handled
+using Rangy.
 
 
 ## Development
@@ -83,6 +45,41 @@ rake
 ## Contributing
 
 Fork the project, follow the above steps (modifying the repo to reflect your own). Write code+specs, make sure tests pass, and submit a pull request.
+
+
+## Notes
+
+### Actions
+
+- bold
+- italic
+- underline
+- subscript
+- superscript
+- rule
+- indent
+- outdent
+- orderedList
+- unorderedList
+- style (value)
+- html (html)
+- block (format)
+- snippet (snippet)
+- file (file)
+- link (url, text)
+- image (url, text)
+
+
+### Known issues
+
+#### Webkit
+
+- Dropping files at the cursor position in textarea doesn't work.
+
+#### Gecko
+
+- Dropping files doesn't display cursor position, and thus dropping at that place isn't applicable.
+- The drop indicator doesn't like to stay visible (we could fix this by using dragover).
 
 
 ## License

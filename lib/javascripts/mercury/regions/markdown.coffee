@@ -69,18 +69,18 @@ class Mercury.MarkdownRegion extends Mercury.Region
     # unordered lists
     if val.match(/^- /)
       e.preventDefault()
-      if val.match(/^- ./) then @replaceSelection('\n- ') else @replaceSelectedLine(exp)
+      if val.match(/^- ./) then @replaceSelection('\n- ') else @replaceSelectedLine(exp, '\n')
 
     # ordered lists
     else if match = val.match(/^(\d+)\. /)
       e.preventDefault()
       next = parseInt(match[1], 10) + 1
-      if val.match(/^\d+\. ./) then @replaceSelection("\n#{next}. ") else @replaceSelectedLine(exp)
+      if val.match(/^\d+\. ./) then @replaceSelection("\n#{next}. ") else @replaceSelectedLine(exp, '\n')
 
     # indentation
     else if match = val.match(/^(> )+/g)
       e.preventDefault()
-      if val.match(/^(> )+./g) then @replaceSelection("\n#{match[0]}") else @replaceSelectedLine(exp)
+      if val.match(/^(> )+./g) then @replaceSelection("\n#{match[0]}") else @replaceSelectedLine(exp, '\n')
 
 
   actions:

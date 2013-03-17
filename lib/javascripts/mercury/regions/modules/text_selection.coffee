@@ -56,9 +56,9 @@ Mercury.Region.Modules.TextSelection =
     @setSelection(start: caretIndex, end: caretIndex)
 
 
-  replaceSelectedLine: (line, val = '') ->
+  replaceSelectedLine: (line, text = '') ->
     @setSelection(line)
-    @replaceSelection('')
+    @replaceSelection(text)
 
 
   setAndReplaceSelection: (beforeSel, text = '', afterSel, preAdjust, sufAdjust) ->

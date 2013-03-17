@@ -40,7 +40,7 @@ bundle exec teabag --coverage
 
 ### Contributing
 
-Fork the project, follow the steps below (modifying the repo to reflect your own). Write code+specs, make sure tests pass, and submit a pull request.
+Fork the project, follow the steps above (modifying the repo to reflect your own). Write code+specs, make sure tests pass, push, and submit a pull request.
 
 
 ## Notes Area (will be moved to wiki later)

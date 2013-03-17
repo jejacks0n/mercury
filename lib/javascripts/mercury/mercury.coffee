@@ -88,6 +88,7 @@ globalize = ->
   #
   @support =
     webkit: navigator.userAgent.indexOf('WebKit') > 0
-    firefox: navigator.userAgent.indexOf('Firefox') > 0
+    gecko: navigator.userAgent.indexOf('Firefox') > 0
+    ie: if isIE = navigator.userAgent.match(/MSIE\s([\d|\.]+)/) then parseFloat(isIE[1], 10) else false
 
 globalize.call(Mercury)

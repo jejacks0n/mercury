@@ -15,11 +15,18 @@ Mercury.Stack =
   # Returns the position of the new item in the stack.
   #
   pushStack: (value) ->
-    return if value == null || JSON.stringify(@stack[@stackPosition]) == JSON.stringify(value)
+    return if value == null || @stackEquality(value)
     @stack = @stack[0...@stackPosition + 1]
     @stack.push(value)
     @stack.shift() if @stack.length > @maxStackLength
     @stackPosition = @stack.length - 1
+
+
+  # Provides a way to override how values are compared before being pushed onto the stack.
+  # Returns true if the values are the same.
+  #
+  stackEquality: (value) ->
+    JSON.stringify(@stack[@stackPosition]) == JSON.stringify(value)
 
 
   # Rolls back to the previous stack item.

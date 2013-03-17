@@ -59,6 +59,16 @@ describe "Mercury.Stack", ->
       expect( subject.stack ).to.eql([1])
 
 
+  describe "#stackEquality", ->
+
+    beforeEach ->
+      subject.stack[1] = {foo: 'bar'}
+      subject.stackPosition = 1
+
+    it "returns true of the value at the current position matches the value being pushed", ->
+      expect( subject.stackEquality(foo: 'bar') ).to.be.true
+
+
   describe "#undoStack", ->
 
     it "returns null if we're at the beginning of the stack", ->

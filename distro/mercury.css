@@ -481,8 +481,32 @@ Copyright (c) 2013 Jeremy Jackson
   line-height: 13px;
   resize: vertical;
 }
-/* line 20, ../../lib/stylesheets/mercury/regions/_markdown.scss */
+/* line 19, ../../lib/stylesheets/mercury/regions/_markdown.scss */
 .mercury-markdown-region textarea.mercury-markdown-region-textarea:focus {
+  outline: none;
+  -webkit-box-shadow: 0 0 7px #00bce5, 0 0 2px #003e4c;
+  -moz-box-shadow: 0 0 7px #00bce5, 0 0 2px #003e4c;
+  box-shadow: 0 0 7px #00bce5, 0 0 2px #003e4c;
+}
+
+/* TextRegion
+ *----------------------------------------------------------------------------*/
+/* line 4, ../../lib/stylesheets/mercury/regions/_text.scss */
+.mercury-text-region textarea.mercury-text-region-textarea {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  outline: 0;
+  border: none;
+  margin: 0;
+  white-space: pre;
+  background: transparent;
+  font-size: 12px;
+  line-height: 13px;
+  resize: vertical;
+}
+/* line 14, ../../lib/stylesheets/mercury/regions/_text.scss */
+.mercury-text-region textarea.mercury-text-region-textarea:focus {
   outline: none;
   -webkit-box-shadow: 0 0 7px #00bce5, 0 0 2px #003e4c;
   -moz-box-shadow: 0 0 7px #00bce5, 0 0 2px #003e4c;

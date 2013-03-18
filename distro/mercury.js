@@ -40,18 +40,22 @@ Copyright (c) 2013 Jeremy Jackson
       attribute: 'data-mercury',
       options: 'data-region-options',
       identifier: 'id',
-      image: {
+      gallery: {
         mimeTypes: ['image/jpeg']
       },
-      gallery: {
+      html: {
+        mimeTypes: false
+      },
+      image: {
         mimeTypes: ['image/jpeg']
       },
       markdown: {
         autoSize: true,
         mimeTypes: false
       },
-      html: {
-        mimeTypes: false
+      text: {
+        autoSize: true,
+        stripTags: true
       }
     }
   };
@@ -1702,25 +1706,27 @@ Copyright (c) 2013 Jeremy Jackson
 
   Mercury.Region.Modules.FocusableTextarea = {
     included: function() {
-      this.autoSize = false;
       this.on('build', this.buildFocusable);
       this.on('action', this.resizeFocusable);
       this.on('preview', this.toggleFocusablePreview);
       return this.on('release', this.releaseFocusable);
     },
     buildFocusable: function() {
-      var resize, value;
-      this.autoSize = this.config("regions:" + this.constructor.type + ":autoSize");
+      var resize, value, _ref;
+      if ((_ref = this.autoSize) == null) {
+        this.autoSize = this.config("regions:" + this.constructor.type + ":autoSize");
+      }
       value = this.html().replace('&gt;', '>').replace('&lt;', '<').trim();
       resize = this.autoSize ? 'none' : 'vertical';
       this.preview = $("<div class=\"mercury-" + this.constructor.type + "-region-preview\">");
       this.focusable = $("<textarea class=\"mercury-" + this.constructor.type + "-region-textarea\">");
       this.el.empty();
-      this.append(this.preview, this.focusable.val(value).css({
+      this.append(this.preview, this.focusable.css({
         width: '100%',
-        height: this.el.height(),
+        height: this.el.height() || this.height || 20,
         resize: resize
       }));
+      this.value(value);
       this.resizeFocusable();
       return this.delegateEvents({
         'keydown textarea': 'handleKeyEvent'

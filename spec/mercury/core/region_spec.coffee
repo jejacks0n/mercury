@@ -79,6 +79,14 @@ describe "Mercury.Region", ->
       expect( Klass.notify ).calledWith('unknown "BarRegion" region type, falling back to base region')
 
 
+  describe ".addAction", ->
+
+    it "adds the action with a handler", ->
+      handler = spy()
+      Klass.addAction('foo', handler)
+      expect( Klass.actions.foo ).to.eq(handler)
+
+
   describe "#constructor", ->
 
     beforeEach ->

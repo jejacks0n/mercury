@@ -55,6 +55,15 @@ class Mercury.Region extends Mercury.View
     new (Mercury[type] || Mercury.Region)(el)
 
 
+  # Exposes the ability to add actions to the region type. This allows you to provide your own custom actions that may
+  # be tied to a button, or something else.
+  #
+  @addAction: (action, handler) ->
+    obj = {}
+    obj[action] = handler
+    @actions = $.extend(@actions || {}, obj)
+
+
   # The constructor sets up defaults and attempts to get the name from the element. It will notify if the region isn't
   # supported in the given browser or if there's no name to use for serializing.
   #

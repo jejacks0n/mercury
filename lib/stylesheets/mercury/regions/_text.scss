@@ -1,18 +1,13 @@
-/* MarkdownRegion
+/* TextRegion
  *----------------------------------------------------------------------------*/
-.mercury-markdown-region {
-  &+ .mercury-region-drop-indicator {
-    @include drop-indicator-defaults();
-  }
-
-  textarea.mercury-markdown-region-textarea {
+.mercury-text-region {
+  textarea.mercury-text-region-textarea {
     @include border-box();
     outline: 0;
     border: none;
     margin: 0;
     white-space: pre;
     background: transparent;
-    font-family: Monaco, "Bitstream Vera Sans Mono", "Lucida Console", monospace;
     font-size: 12px;
     line-height: 13px;
     resize: vertical;

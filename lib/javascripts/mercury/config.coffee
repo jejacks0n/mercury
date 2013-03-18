@@ -55,8 +55,8 @@ Mercury.configuration =
 
   # Editor
   # The editor is instantiated when you call Mercury.init(). This configration allows you to specify which editor to use
-  # as well as the various UI classes to instantiate from within the editor. This allows for more a modular method to
-  # override Mercury and it's interface elements.
+  # as well as the various UI classes to instantiate from within the editor which allows for a more modular way to add
+  # to / override Mercury functionality and it's interface elements.
   #
   editor:
     editor     : 'Editor'
@@ -74,15 +74,6 @@ Mercury.configuration =
     options    : 'data-region-options'                     # data attribute used for options for the region (JSON)
     identifier : 'id'                                      # attribute used for name when serializing
 
-    # The image region is typically an image tag and what's sent back to the server on serialization is the source of
-    # that image. It allows draging/dropping images onto itself, and maintains a history so you can undo/redo your
-    # changes.
-    #
-    #= require mercury/regions/gallery
-    #
-    image:
-      mimeTypes : ['image/jpeg']                           # file types - overrides general uploading configuration.
-
     # The gallery region is provided an an example of how you can easily (generally speaking) create your own regions.
     # It allows drag/drop of images and provides a simple implementation of a slide show with the ability to remove
     # items. You can use this as an example of how you could embed an entire backbone app within a region.
@@ -90,6 +81,27 @@ Mercury.configuration =
     #= require mercury/regions/gallery
     #
     gallery:
+      mimeTypes : ['image/jpeg']                           # file types - overrides general uploading configuration.
+
+    # The HTML region is a full HTML5 Content Editable region -- a true WYSIWYG experience. Effort has been made to
+    # normalize, and keep things consistent, but the nature of it is complex and should be treated as such. There's an
+    # expectation that users who are exposed to this region understand HTML.
+    #
+    #= require dependencies/rangy/rangy-core
+    #= require dependencies/rangy/rangy-serializer
+    #= require dependencies/rangy/rangy-cssclassapplier
+    #= require mercury/regions/html
+    #
+    html:
+      mimeTypes : false                                    # file types - overrides general uploading to allow anything.
+
+    # The image region is typically an image tag and what's sent back to the server on serialization is the source of
+    # that image. It allows draging/dropping images onto itself, and maintains a history so you can undo/redo your
+    # changes.
+    #
+    #= require mercury/regions/gallery
+    #
+    image:
       mimeTypes : ['image/jpeg']                           # file types - overrides general uploading configuration.
 
     # Markdown provides an easy way to provide some markup abilities without the exposing the ability to edit complex
@@ -103,14 +115,12 @@ Mercury.configuration =
       autoSize  : true                                     # the region will auto-resize to the content within it.
       mimeTypes : false                                    # file types - overrides general uploading to allow anything.
 
-    # The HTML region is a full HTML5 Content Editable region -- a true WYSIWYG experience. Effort has been made to
-    # normalize, and keep things consistent, but the nature of it is complex and should be treated as such. There's an
-    # expectation that users who are exposed to this region understand HTML.
+    # The Text region is a multiline plain text input. This region can be used to collect only text in cases when you
+    # don't want to allow more complex HTML. It's up to you to render <br> tags when displaying the content within the
+    # page.
     #
-    #= require dependencies/rangy/rangy-core
-    #= require dependencies/rangy/rangy-serializer
-    #= require dependencies/rangy/rangy-cssclassapplier
-    #= require mercury/regions/html
+    #= require mercury/regions/text
     #
-    html:
-      mimeTypes : false                                    # file types - overrides general uploading to allow anything.
+    text:
+      autoSize  : true                                     # the region will auto-resize to the content within it.
+      stripTags : true                                     # strip html when saving/previewing (keeps it only text).

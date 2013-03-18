@@ -40,7 +40,7 @@ describe "Mercury.Region.Modules.FocusableTextarea", ->
       subject.buildFocusable()
       expect( subject.focusable.val() ).to.eq('_<html>_')
       expect( subject.focusable.css('width') ).to.eq('100%')
-      expect( subject.focusable.css('height') ).to.eq('0px')
+      expect( subject.focusable.css('height') ).to.eq('20px')
       expect( subject.focusable.css('resize') ).to.eq('vertical')
 
     it "appends the preview and focusable elements", ->

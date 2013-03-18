@@ -53,6 +53,17 @@ Mercury.configuration =
     prefixUrl  : '/mercury/templates'                      # ajax path prefix for fallback JST templates.
 
 
+  # Editor
+  # The editor is instantiated when you call Mercury.init(). This configration allows you to specify which editor to use
+  # as well as the various UI classes to instantiate from within the editor. This allows for more a modular method to
+  # override Mercury and it's interface elements.
+  #
+  editor:
+    editor     : 'Editor'
+    toolbar    : 'Toolbar'
+    statusBar  : 'StatusBar'
+
+
   # Regions
   # Mercury looks for elements that have a data-mercury="type" attribute. This attribute is used to declare what type of
   # region a given element should be. When saving, each region is serialized with a name and data that it might want to

@@ -93,4 +93,14 @@ globalize = ->
     gecko: navigator.userAgent.indexOf('Firefox') > 0
     ie: if isIE = navigator.userAgent.match(/MSIE\s([\d|\.]+)/) then parseFloat(isIE[1], 10) else false
 
+  # Provide global method to initialize.
+  #
+  # This is the standard means to instantiate Mercury Editor. If you need more custom behavior check the configuration,
+  # and if that doesn't suit your needs, feel free to instantiate the desired editor yourself.
+  #
+  @init = (options = {}) =>
+    return if @initialized
+    @initialized = true
+    new @[@config('editor:editor')](options)
+
 globalize.call(Mercury)

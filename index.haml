@@ -9,13 +9,34 @@
 
     %p
       Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy
+      <br/>
+      %img(src="http://goo.gl/ZoJd4")
+      <br/>
       = link_to('Google Link', 'http://google.com')
 
-    #html1(data-mercury="html")
-      Lorem
+    %hr
+    -# -----------------------------------------------------------------------------------------------------------------
+    %h2 HTML Regions
 
-    #html2(data-mercury="html")
+    #html1(data-mercury="html")
       Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy
+
+    %section#html2(data-mercury="html") section
+    %p#html3(data-mercury="html") paragraph
+    %span#html4(data-mercury="html") span
+
+    %ul
+      %li#html5(data-mercury="html") list item
+
+    %table
+      %tr
+        %td#html6(data-mercury="html") table cell
+        %td another table cell
+
+
+    %hr
+    -# -----------------------------------------------------------------------------------------------------------------
+    %h2 Markdown Regions
 
     #markdown1(data-mercury="markdown")
       :preserve
@@ -32,8 +53,16 @@
 
     #markdown2(data-mercury="markdown") Lorem Ipsum is simply dummy text of the printing and typesetting industry.
 
+    %hr
+    -# -----------------------------------------------------------------------------------------------------------------
+    %h2 Image Regions
+
     %img#image1(data-mercury="image" src="http://goo.gl/CgyJj" width="200")
     %img#image2(data-mercury="image" src="http://goo.gl/CgyJj" width="200")
+
+    %hr
+    -# -----------------------------------------------------------------------------------------------------------------
+    %h2 Gallery Region
 
     #gallery1(data-mercury="gallery")
       .slides

@@ -2,6 +2,7 @@
  *----------------------------------------------------------------------------*/
 .mercury-html-region {
   min-height: 20px;
+  min-width: 5px;
   &:focus {
     @include focus-outline();
   }

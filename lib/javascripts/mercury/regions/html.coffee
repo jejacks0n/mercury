@@ -11,13 +11,15 @@ class Mercury.HtmlRegion extends Mercury.Region
   @include Mercury.Region.Modules.SelectionValue
 
   @supported: document.designMode &&                                      # we have designMode
-              (!Mercury.support.msie || Mercury.support.msie >= 10) &&    # we're in IE10 or greater
-              (window.rangy && window.rangy.supported)                    # rangy has been included and is supported
+              (!Mercury.support.msie || Mercury.support.msie >= 10) &&    # we're in IE10+
+              (window.rangy && window.rangy.supported)                    # rangy is supported
 
   skipHistoryOnInitialize: true
+  editableDropBehavior: true
 
   events:
-    'keydown': 'handleKeyEvent'
+    'keydown': 'onKeyEvent'
+    'paste': 'onPaste'
 
   constructor: ->
     try window.rangy.init()
@@ -30,8 +32,13 @@ class Mercury.HtmlRegion extends Mercury.Region
 
   build: ->
     @document = @el.get(0).ownerDocument
+    @forceDisplay()
     @makeEditable()
     @setEditPreferences()
+
+
+  forceDisplay: ->
+    @el.css(display: 'inline-block') if @el.css('display') == 'inline'
 
 
   makeEditable: ->
@@ -45,10 +52,24 @@ class Mercury.HtmlRegion extends Mercury.Region
     @document.execCommand('enableObjectResizing', false, false)
 
 
-  handleKeyEvent: (e) ->
+  onDropFile: (files, options) ->
+    uploader = new Mercury.Uploader(files, mimeTypes: @config('regions:html:mimeTypes'))
+    uploader.on 'uploaded', (file) =>
+      @focus()
+      @handleAction('file', file)
+
+
+  onDropItem: ->
+    @pushHistory()
+
+
+  onPaste: (e) ->
+    console.debug('pasted', e)
+
+
+  onKeyEvent: (e) ->
     return if e.keyCode >= 37 && e.keyCode <= 40 # arrows
     return if e.metaKey && e.keyCode == 90 # undo / redo
-    @onReturnKey?(e) if e.keyCode == 13 # enter / return
 
     # common actions
     if e.metaKey then switch e.keyCode
@@ -71,11 +92,16 @@ class Mercury.HtmlRegion extends Mercury.Region
     italic:      -> @toggleWrapSelectedWordsInClass('highlight')
     underline:   -> @toggleWrapSelectedWordsInClass('blue')
 
-#    bold:        -> @toggleWrapSelectedWords('bold')
-#    italic:      -> @toggleWrapSelectedWords('italic')
-#    underline:   -> @toggleWrapSelectedWords('underline')
-#    subscript:   -> @toggleWrapSelectedWords('sub')
-#    superscript: -> @toggleWrapSelectedWords('sup')
-#    rule:        -> @replaceSelectionWithParagraph('- - -')
-#    indent:      -> @wrapSelectedParagraphs('blockquote')
-#    outdent:     -> @unwrapSelectedParagraphs('blockquote')
+    rule:        -> @replaceSelection('<hr/>')
+
+    file: (file) ->
+      action = if file.isImage() then 'image' else 'link'
+      @handleAction(action, file.get('url'), file.get('name'))
+
+#    link: (url, text, attrs = {}) ->
+#      tag = $('<a>', $.extend({href: url, title: text}, attrs))
+#      @wrapSelected(tag, text: text, select: 'end')
+
+    image: (url, text, attrs = {}) ->
+      tag = $('<img>', $.extend({src: url, alt: text}, attrs))
+      @replaceSelection(tag, text: text)

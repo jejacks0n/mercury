@@ -152,6 +152,15 @@ also takes into account undo/redo support using the keyboard or buttons.
       });
     };
 
+    GalleryRegion.prototype.onDropItem = function(e, data) {
+      var url;
+      if (url = $('<div>').html(data.getData('text/html')).find('img').attr('src')) {
+        e.preventDefault();
+        this.focus();
+        return this.appendSlide($("<div class=\"slide\"><img src=\"" + url + "\"/></div>"));
+      }
+    };
+
     GalleryRegion.prototype.onFocus = function() {
       return this.controls.show();
     };

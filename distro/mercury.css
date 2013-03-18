@@ -361,15 +361,16 @@ Copyright (c) 2013 Jeremy Jackson
 /* line 3, ../../lib/stylesheets/mercury/regions/_html.scss */
 .mercury-html-region {
   min-height: 20px;
+  min-width: 5px;
 }
-/* line 5, ../../lib/stylesheets/mercury/regions/_html.scss */
+/* line 6, ../../lib/stylesheets/mercury/regions/_html.scss */
 .mercury-html-region:focus {
   outline: none;
   -webkit-box-shadow: 0 0 7px #00bce5, 0 0 2px #003e4c;
   -moz-box-shadow: 0 0 7px #00bce5, 0 0 2px #003e4c;
   box-shadow: 0 0 7px #00bce5, 0 0 2px #003e4c;
 }
-/* line 8, ../../lib/stylesheets/mercury/regions/_html.scss */
+/* line 9, ../../lib/stylesheets/mercury/regions/_html.scss */
 .mercury-html-region + .mercury-region-drop-indicator {
   -webkit-transition-property: opacity;
   -webkit-transition-duration: 0.25s;

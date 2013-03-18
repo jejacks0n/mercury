@@ -31,8 +31,14 @@ Copyright (c) 2013 Jeremy Jackson
       enabled: true,
       prefixUrl: '/mercury/templates'
     },
+    editor: {
+      editor: 'Editor',
+      toolbar: 'Toolbar',
+      statusBar: 'StatusBar'
+    },
     regions: {
       attribute: 'data-mercury',
+      options: 'data-region-options',
       identifier: 'id',
       image: {
         mimeTypes: ['image/jpeg']
@@ -949,11 +955,22 @@ Copyright (c) 2013 Jeremy Jackson
       return new (Mercury[type] || Mercury.Region)(el);
     };
 
+    Region.addAction = function(action, handler) {
+      var obj;
+      obj = {};
+      obj[action] = handler;
+      return this.actions = $.extend(this.actions || {}, obj);
+    };
+
     function Region(el, options) {
       this.el = el;
       this.options = options != null ? options : {};
       if (!this.constructor.supported) {
-        return this.notify(this.t('is unsupported in this browser'));
+        this.notify(this.t('is unsupported in this browser'));
+        return false;
+      }
+      if (this.el.data) {
+        this.options = $.extend({}, JSON.parse(this.el.attr(this.config('regions:options')) || '{}'), options);
       }
       if (typeof this.beforeBuild === "function") {
         this.beforeBuild();
@@ -1124,7 +1141,7 @@ Copyright (c) 2013 Jeremy Jackson
       this.delegateActions($.extend(true, this.constructor.actions, this.constructor.defaultActions, this.actions || (this.actions = {})));
       this.bindFocusEvents();
       this.bindKeyEvents();
-      if (typeof this.onDropFile === 'function') {
+      if (this.onDropFile || this.onDropItem) {
         return this.bindDropEvents();
       }
     };
@@ -1163,23 +1180,28 @@ Copyright (c) 2013 Jeremy Jackson
     };
 
     Region.prototype.bindDropEvents = function() {
-      var preventDefault,
-        _this = this;
-      preventDefault = function(e) {
-        return e.preventDefault();
-      };
+      var _this = this;
       return this.delegateEvents(this.el, {
-        dragenter: preventDefault,
-        dragover: preventDefault,
-        drop: function(e) {
-          if (!e.originalEvent.dataTransfer.files.length) {
-            return;
+        dragenter: function(e) {
+          return e.preventDefault();
+        },
+        dragover: function(e) {
+          if (!(_this.editableDropBehavior && Mercury.support.webkit)) {
+            return e.preventDefault();
           }
+        },
+        drop: function(e) {
+          var data;
           if (_this.previewing) {
             return;
           }
-          e.preventDefault();
-          return _this.onDropFile(e.originalEvent.dataTransfer.files);
+          data = e.originalEvent.dataTransfer;
+          if (data.files.length && _this.onDropFile) {
+            e.preventDefault();
+            return _this.onDropFile(data.files);
+          } else if (_this.onDropItem) {
+            return _this.onDropItem(e, data);
+          }
         }
       });
     };
@@ -1632,6 +1654,7 @@ Copyright (c) 2013 Jeremy Jackson
       this.el.after(this.dropIndicator = $('<div class="mercury-region-drop-indicator"></div>'));
       return this.delegateEvents(this.el, {
         dragenter: 'showDropIndicator',
+        dragover: 'showDropIndicator',
         dragleave: 'hideDropIndicator',
         drop: 'hideDropIndicator'
       });
@@ -1650,9 +1673,10 @@ Copyright (c) 2013 Jeremy Jackson
     },
     showDropIndicator: function() {
       var _this = this;
-      if (this.previewing) {
+      if (this.previewing || this.dropIndicatorVisible) {
         return;
       }
+      this.dropIndicatorVisible = true;
       clearTimeout(this.dropIndicatorTimer);
       this.dropIndicator.css(this.dropIndicatorPosition());
       return this.delay(1, function() {
@@ -1663,6 +1687,7 @@ Copyright (c) 2013 Jeremy Jackson
     },
     hideDropIndicator: function() {
       var _this = this;
+      this.dropIndicatorVisible = false;
       this.dropIndicator.css({
         opacity: 0
       });
@@ -1777,6 +1802,9 @@ Copyright (c) 2013 Jeremy Jackson
 (function() {
 
   Mercury.Region.Modules.HtmlSelection = {
+    getSelection: function() {
+      return rangy.getSelection();
+    },
     getSerializedSelection: function() {
       return rangy.serializeSelection();
     },
@@ -1795,6 +1823,27 @@ Copyright (c) 2013 Jeremy Jackson
       });
       classApplier = rangy.createCssClassApplier(className, options);
       return classApplier.toggleSelection();
+    },
+    replaceSelection: function(val) {
+      var range, _i, _len, _ref, _results;
+      if (typeof val === 'string' || val.is) {
+        val = this.elementFromValue(val);
+      }
+      _ref = this.getSelection().getAllRanges();
+      _results = [];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        range = _ref[_i];
+        range.deleteContents();
+        _results.push(range.insertNode(val));
+      }
+      return _results;
+    },
+    elementFromValue: function(val) {
+      if (val.is) {
+        return val.get(0);
+      } else {
+        return $(val).get(0);
+      }
     }
   };
 
@@ -1895,12 +1944,12 @@ Copyright (c) 2013 Jeremy Jackson
         end: caretIndex
       });
     },
-    replaceSelectedLine: function(line, val) {
-      if (val == null) {
-        val = '';
+    replaceSelectedLine: function(line, text) {
+      if (text == null) {
+        text = '';
       }
       this.setSelection(line);
-      return this.replaceSelection('');
+      return this.replaceSelection(text);
     },
     setAndReplaceSelection: function(beforeSel, text, afterSel, preAdjust, sufAdjust) {
       if (text == null) {
@@ -2366,17 +2415,28 @@ Copyright (c) 2013 Jeremy Jackson
   var globalize;
 
   globalize = function() {
-    var isIE;
+    var isIE,
+      _this = this;
     this.version = '1.0.0';
     this.Module.extend.call(this, this.Config);
     this.configure = this.Config.set;
     this.Module.extend.call(this, this.Events);
     this.Module.extend.call(this, this.I18n);
     this.Module.extend.call(this, this.Logger);
-    return this.support = {
+    this.support = {
       webkit: navigator.userAgent.indexOf('WebKit') > 0,
       gecko: navigator.userAgent.indexOf('Firefox') > 0,
       ie: (isIE = navigator.userAgent.match(/MSIE\s([\d|\.]+)/)) ? parseFloat(isIE[1], 10) : false
+    };
+    return this.init = function(options) {
+      if (options == null) {
+        options = {};
+      }
+      if (_this.initialized) {
+        return;
+      }
+      _this.initialized = true;
+      return new _this[_this.config('editor:editor')](options);
     };
   };
 

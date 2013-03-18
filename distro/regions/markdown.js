@@ -32,6 +32,8 @@ via Ajax.
 
     MarkdownRegion.supported = true;
 
+    MarkdownRegion.prototype.editableDropBehavior = true;
+
     MarkdownRegion.prototype.wrappers = {
       h1: ['# ', ' #'],
       h2: ['## ', ' ##'],
@@ -63,7 +65,8 @@ via Ajax.
       try {
         this.converter = this.options.converter || new Showdown.converter().makeHtml;
       } catch (e) {
-        return this.notify(this.t('requires Showdown'));
+        this.notify(this.t('requires Showdown'));
+        return false;
       }
       MarkdownRegion.__super__.constructor.apply(this, arguments);
     }
@@ -72,7 +75,7 @@ via Ajax.
       return this.converter(this.value());
     };
 
-    MarkdownRegion.prototype.onDropFile = function(files, options) {
+    MarkdownRegion.prototype.onDropFile = function(files) {
       var uploader,
         _this = this;
       uploader = new Mercury.Uploader(files, {
@@ -84,6 +87,15 @@ via Ajax.
       });
     };
 
+    MarkdownRegion.prototype.onDropItem = function(e, data) {
+      var url;
+      if (url = $('<div>').html(data.getData('text/html')).find('img').attr('src')) {
+        e.preventDefault();
+        this.focus();
+        return this.handleAction('image', url);
+      }
+    };
+
     MarkdownRegion.prototype.onReturnKey = function(e) {
       var exp, match, next, val;
       exp = this.expandSelectionToLines(this.getSelection());
@@ -93,7 +105,7 @@ via Ajax.
         if (val.match(/^- ./)) {
           return this.replaceSelection('\n- ');
         } else {
-          return this.replaceSelectedLine(exp);
+          return this.replaceSelectedLine(exp, '\n');
         }
       } else if (match = val.match(/^(\d+)\. /)) {
         e.preventDefault();
@@ -101,14 +113,14 @@ via Ajax.
         if (val.match(/^\d+\. ./)) {
           return this.replaceSelection("\n" + next + ". ");
         } else {
-          return this.replaceSelectedLine(exp);
+          return this.replaceSelectedLine(exp, '\n');
         }
       } else if (match = val.match(/^(> )+/g)) {
         e.preventDefault();
         if (val.match(/^(> )+./g)) {
           return this.replaceSelection("\n" + match[0]);
         } else {
-          return this.replaceSelectedLine(exp);
+          return this.replaceSelectedLine(exp, '\n');
         }
       }
     };

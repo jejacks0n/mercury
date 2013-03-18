@@ -55,6 +55,15 @@ image with the one that was uploaded.
       });
     };
 
+    ImageRegion.prototype.onDropItem = function(e, data) {
+      var url;
+      if (url = $('<div>').html(data.getData('text/html')).find('img').attr('src')) {
+        e.preventDefault();
+        this.focus();
+        return this.handleAction('image', url);
+      }
+    };
+
     ImageRegion.prototype.actions = {
       file: function(file) {
         return this.value(file.get('url'));

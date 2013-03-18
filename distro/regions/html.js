@@ -27,8 +27,11 @@ Dependencies:
 
     HtmlRegion.prototype.skipHistoryOnInitialize = true;
 
+    HtmlRegion.prototype.editableDropBehavior = true;
+
     HtmlRegion.prototype.events = {
-      'keydown': 'handleKeyEvent'
+      'keydown': 'onKeyEvent',
+      'paste': 'onPaste'
     };
 
     function HtmlRegion() {
@@ -43,8 +46,17 @@ Dependencies:
 
     HtmlRegion.prototype.build = function() {
       this.document = this.el.get(0).ownerDocument;
+      this.forceDisplay();
       this.makeEditable();
       return this.setEditPreferences();
+    };
+
+    HtmlRegion.prototype.forceDisplay = function() {
+      if (this.el.css('display') === 'inline') {
+        return this.el.css({
+          display: 'inline-block'
+        });
+      }
     };
 
     HtmlRegion.prototype.makeEditable = function() {
@@ -60,17 +72,32 @@ Dependencies:
       } catch (_error) {}
     };
 
-    HtmlRegion.prototype.handleKeyEvent = function(e) {
+    HtmlRegion.prototype.onDropFile = function(files, options) {
+      var uploader,
+        _this = this;
+      uploader = new Mercury.Uploader(files, {
+        mimeTypes: this.config('regions:html:mimeTypes')
+      });
+      return uploader.on('uploaded', function(file) {
+        _this.focus();
+        return _this.handleAction('file', file);
+      });
+    };
+
+    HtmlRegion.prototype.onDropItem = function() {
+      return this.pushHistory();
+    };
+
+    HtmlRegion.prototype.onPaste = function(e) {
+      return console.debug('pasted', e);
+    };
+
+    HtmlRegion.prototype.onKeyEvent = function(e) {
       if (e.keyCode >= 37 && e.keyCode <= 40) {
         return;
       }
       if (e.metaKey && e.keyCode === 90) {
         return;
-      }
-      if (e.keyCode === 13) {
-        if (typeof this.onReturnKey === "function") {
-          this.onReturnKey(e);
-        }
       }
       if (e.metaKey) {
         switch (e.keyCode) {
@@ -97,6 +124,27 @@ Dependencies:
       },
       underline: function() {
         return this.toggleWrapSelectedWordsInClass('blue');
+      },
+      rule: function() {
+        return this.replaceSelection('<hr/>');
+      },
+      file: function(file) {
+        var action;
+        action = file.isImage() ? 'image' : 'link';
+        return this.handleAction(action, file.get('url'), file.get('name'));
+      },
+      image: function(url, text, attrs) {
+        var tag;
+        if (attrs == null) {
+          attrs = {};
+        }
+        tag = $('<img>', $.extend({
+          src: url,
+          alt: text
+        }, attrs));
+        return this.replaceSelection(tag, {
+          text: text
+        });
       }
     };
 

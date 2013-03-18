@@ -45,7 +45,29 @@ Fork the project, follow the steps above (modifying the repo to reflect your own
 
 ## Notes Area (will be moved to wiki later)
 
-### Actions
+### Custom Actions
+
+If I wanted to add the ability to change the direction of text in a markdown region I could do something like this:
+
+```html
+<div id="markdown1" data-mercury="markdown" data-region-options='{"allowDirection": true}'>
+```
+
+```coffeescript
+# example of extending regions to add actions for buttons or other functionality.
+Mercury.MarkdownRegion.addAction 'direction', ->
+  return alert("This region doesn't allow switching text direction") unless @allowDirection
+  @direction = if @direction == 'rtl' then 'ltr' else 'rtl'
+  @el.css(direction: @direction)
+```
+
+Now if that region has focus we can trigger the action like this:
+
+```coffeescript
+Mercury.trigger('action', 'direction')
+```
+
+### Default Actions
 
 - bold
 - italic

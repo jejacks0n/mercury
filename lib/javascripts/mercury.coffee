@@ -14,18 +14,14 @@
 # Configuration.
 #
 #= require mercury/config
-
 jQuery ->
   # when using rails we need to setup the csrf token
   $.ajaxSetup headers: {'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')}
+  window.mercury = Mercury.init(frame: '#mercury_frame')
 
-
-# Scratch pad / regression testing
-jQuery ->
-  window.editor = new Mercury.Editor(frame: '#mercury_frame')
 
 # example of extending regions to add actions for buttons or other functionality.
-Mercury.MarkdownRegion.actions =
-  direction: ->
-    @direction = if @direction == 'rtl' then 'ltr' else 'rtl'
-    @el.css(direction: @direction)
+Mercury.MarkdownRegion.addAction 'direction', ->
+  return alert("This region doesn't allow switching text direction") unless @allowDirection
+  @direction = if @direction == 'rtl' then 'ltr' else 'rtl'
+  @el.css(direction: @direction)

@@ -65,6 +65,32 @@ describe "Mercury.ImageRegion", ->
       expect( subject.handleAction ).calledWith('file', '_file_')
 
 
+  describe "#onDropItem", ->
+
+    beforeEach ->
+      @e = preventDefault: spy()
+      @data = getData: -> '<img src="/teabag/fixtures/image.gif"><meta>'
+
+    it "prevents the default event", ->
+      subject.onDropItem(@e, @data)
+      expect( @e.preventDefault ).called
+
+    it "calls #focus", ->
+      spyOn(subject, 'focus')
+      subject.onDropItem(@e, @data)
+      expect( subject.focus ).called
+
+    it "calls #handleAction", ->
+      spyOn(subject, 'handleAction')
+      subject.onDropItem(@e, @data)
+      expect( subject.handleAction ).calledWith('image', '/teabag/fixtures/image.gif')
+
+    it "does nothing if there's no url", ->
+      @data.getData = -> null
+      subject.onDropItem(@e, @data)
+      expect( @e.preventDefault ).not.called
+
+
   describe "actions", ->
 
     beforeEach ->

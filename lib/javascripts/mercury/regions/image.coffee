@@ -22,7 +22,7 @@ class Mercury.ImageRegion extends Mercury.Region
 
 
   onMousedown: (e) ->
-    # workaround: Firefox doesn't properly focus an img tag when clicked.
+    # workaround: Firefox doesn't focus an img tag when clicked.
     e.preventDefault()
     @el.trigger('focus')
 
@@ -32,6 +32,13 @@ class Mercury.ImageRegion extends Mercury.Region
     uploader.on 'uploaded', (file) =>
       @focus()
       @handleAction('file', file)
+
+
+  onDropItem: (e, data) ->
+    if url = $('<div>').html(data.getData('text/html')).find('img').attr('src')
+      e.preventDefault()
+      @focus()
+      @handleAction('image', url)
 
 
   actions:

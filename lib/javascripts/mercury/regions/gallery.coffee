@@ -101,6 +101,13 @@ class Mercury.GalleryRegion extends Mercury.Region
       @appendSlide($("""<div class="slide"><img src="#{file.get('url')}"/></div>"""))
 
 
+  onDropItem: (e, data) ->
+    if url = $('<div>').html(data.getData('text/html')).find('img').attr('src')
+      e.preventDefault()
+      @focus()
+      @appendSlide($("""<div class="slide"><img src="#{url}"/></div>"""))
+
+
   onFocus: ->
     @controls.show()
 

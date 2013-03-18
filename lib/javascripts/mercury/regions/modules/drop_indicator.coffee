@@ -10,6 +10,7 @@ Mercury.Region.Modules.DropIndicator =
 
     @delegateEvents @el,
       dragenter: 'showDropIndicator'
+      dragover: 'showDropIndicator'
       dragleave: 'hideDropIndicator'
       drop: 'hideDropIndicator'
 
@@ -26,12 +27,14 @@ Mercury.Region.Modules.DropIndicator =
 
 
   showDropIndicator: ->
-    return if @previewing
+    return if @previewing || @dropIndicatorVisible
+    @dropIndicatorVisible = true
     clearTimeout(@dropIndicatorTimer)
     @dropIndicator.css(@dropIndicatorPosition())
     @delay(1, => @dropIndicator.css(opacity: 1))
 
 
   hideDropIndicator: ->
+    @dropIndicatorVisible = false
     @dropIndicator.css(opacity: 0)
     @dropIndicatorTimer = @delay(500, => @dropIndicator.hide())

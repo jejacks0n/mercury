@@ -18,6 +18,8 @@ class Mercury.MarkdownRegion extends Mercury.Region
 
   @supported: true
 
+  editableDropBehavior: true
+
   wrappers:
     h1           : ['# ', ' #']
     h2           : ['## ', ' ##']
@@ -55,11 +57,18 @@ class Mercury.MarkdownRegion extends Mercury.Region
     @converter(@value())
 
 
-  onDropFile: (files, options) ->
+  onDropFile: (files) ->
     uploader = new Mercury.Uploader(files, mimeTypes: @config('regions:markdown:mimeTypes'))
     uploader.on 'uploaded', (file) =>
       @focus()
       @handleAction('file', file)
+
+
+  onDropItem: (e, data) ->
+    if url = $('<div>').html(data.getData('text/html')).find('img').attr('src')
+      e.preventDefault()
+      @focus()
+      @handleAction('image', url)
 
 
   onReturnKey: (e) ->

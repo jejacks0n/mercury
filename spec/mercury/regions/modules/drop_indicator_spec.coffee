@@ -50,7 +50,7 @@ describe "Mercury.Region.Modules.DropIndicator", ->
       expect( subject.dropIndicatorPosition() ).to.eql(top: 60, left: 70, display: 'block')
 
 
-  describe "#showDropIndicator (via dragenter)", ->
+  describe "#showDropIndicator (via dragenter/dragover)", ->
 
     it "clears the timeout", ->
       subject.dropIndicatorTimer = '_timer_'
@@ -58,10 +58,15 @@ describe "Mercury.Region.Modules.DropIndicator", ->
       subject.el.trigger('dragenter')
       expect( clearTimeout ).calledWith('_timer_')
 
+    it "tracks that it's visible", ->
+      subject.dropIndicatorVisible = false
+      subject.el.trigger('dragover')
+      expect( subject.dropIndicatorVisible ).to.be.true
+
     it "positions the indicator", ->
       spyOn(subject, 'dropIndicatorPosition', -> '_css_')
       spyOn(subject.dropIndicator, 'css')
-      subject.el.trigger('dragenter')
+      subject.el.trigger('dragover')
       expect( subject.dropIndicator.css ).calledWith('_css_')
 
     it "delays setting the opacity", ->
@@ -76,6 +81,13 @@ describe "Mercury.Region.Modules.DropIndicator", ->
       subject.el.trigger('dragenter')
       expect( clearTimeout ).not.called
 
+    it "does nothing if it's already visible", ->
+      subject.dropIndicatorVisible = true
+      spyOn(window, 'clearTimeout')
+      subject.el.trigger('dragover')
+      expect( clearTimeout ).not.called
+
+
 
   describe "#hideDropIndicator (via dragleave/drop)", ->
 
@@ -83,6 +95,11 @@ describe "Mercury.Region.Modules.DropIndicator", ->
       subject.dropIndicator.css(opacity: 1)
       subject.el.trigger('dragleave')
       expect( subject.dropIndicator.css('opacity') ).to.eq('0')
+
+    it "tracks that it's not visible", ->
+      subject.dropIndicatorVisible = true
+      subject.el.trigger('dragleave')
+      expect( subject.dropIndicatorVisible ).to.be.false
 
     it "sets a timer to fully hide the indicator", ->
       spyOn(subject, 'delay').yieldsOn(subject)

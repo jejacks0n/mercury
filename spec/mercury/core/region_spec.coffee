@@ -476,10 +476,14 @@ describe "Mercury.Region", ->
       subject.bindDefaultEvents()
       expect( subject.bindKeyEvents ).called
 
-    it "calls #bindDropEvents if there's an #onDropFile method defined", ->
+    it "calls #bindDropEvents if there's an #onDropFile/#opDropItem method defined", ->
       subject.bindDefaultEvents()
       expect( subject.bindDropEvents ).not.called
       subject.onDropFile = ->
+      subject.bindDefaultEvents()
+      expect( subject.bindDropEvents ).called
+      subject.onDropFile = null
+      subject.onDropItem = ->
       subject.bindDefaultEvents()
       expect( subject.bindDropEvents ).called
 
@@ -596,6 +600,13 @@ describe "Mercury.Region", ->
         @events.dragover(@e)
         expect( @e.preventDefault ).calledTwice
 
+      it "doesn't call preventDefault for all preemptive event if @editableDropBehavior", ->
+        subject.editableDropBehavior = true
+        subject.bindDropEvents()
+        @events.dragenter(@e)
+        @events.dragover(@e)
+        expect( @e.preventDefault ).calledOnce
+
       it "calls #onDropFile with the expected array when files are dropped", ->
         @events.drop(@e)
         expect( @e.preventDefault ).calledOnce
@@ -606,6 +617,12 @@ describe "Mercury.Region", ->
         @events.drop(@e)
         expect( @e.preventDefault ).not.called
         expect( subject.onDropFile ).not.called
+
+      it "calls #onDropItem if there are no files, and we have the method defined", ->
+        subject.onDropItem = spy()
+        @e.originalEvent.dataTransfer.files = []
+        @events.drop(@e)
+        expect( subject.onDropItem ).calledWith(@e, @e.originalEvent.dataTransfer)
 
       it "does nothing if we're previewing", ->
         subject.previewing = true

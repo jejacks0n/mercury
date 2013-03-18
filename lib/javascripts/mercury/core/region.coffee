@@ -235,7 +235,7 @@ class Mercury.Region extends Mercury.View
     # bind various events to the focusable element (which defaults to @el)
     @bindFocusEvents()                                          # binds focus/blur events
     @bindKeyEvents()                                            # binds undo/redo events
-    @bindDropEvents() if typeof(@onDropFile) == 'function'      # binds drag/drop events for file dropping
+    @bindDropEvents() if @onDropFile || @onDropItem             # binds drag/drop events for file/item dropping
 
 
   # Binds to focus/blur events on focusable so we can track the focused state.
@@ -266,15 +266,17 @@ class Mercury.Region extends Mercury.View
   # element. Will call an onDropFile method with the files that were dropped if your subclass implements that method.
   #
   bindDropEvents: ->
-    preventDefault = (e) -> e.preventDefault()
     @delegateEvents @el,
-      dragenter: preventDefault
-      dragover: preventDefault
+      dragenter: (e) -> e.preventDefault()
+      dragover: (e) => e.preventDefault() unless @editableDropBehavior && Mercury.support.webkit
       drop: (e) =>
-        return unless e.originalEvent.dataTransfer.files.length
         return if @previewing
-        e.preventDefault()
-        @onDropFile(e.originalEvent.dataTransfer.files)
+        data = e.originalEvent.dataTransfer
+        if data.files.length && @onDropFile
+          e.preventDefault()
+          @onDropFile(data.files)
+        else if @onDropItem
+          @onDropItem(e, data)
 
 
   # This works much like Mercury.View.delegateEvents, but instead of binding events to the element we're just resolving

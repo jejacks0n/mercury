@@ -60,6 +60,7 @@ Mercury.configuration =
   #
   regions:
     attribute  : 'data-mercury'                            # data attribute used to declare the region type
+    options    : 'data-region-options'                     # data attribute used for options for the region (JSON)
     identifier : 'id'                                      # attribute used for name when serializing
 
     # The image region is typically an image tag and what's sent back to the server on serialization is the source of

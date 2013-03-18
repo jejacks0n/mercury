@@ -63,6 +63,8 @@ class Mercury.Region extends Mercury.View
       @notify(@t('is unsupported in this browser'))
       return false
 
+    @options = $.extend({}, JSON.parse(@el.attr(@config('regions:options')) || '{}'), options) if @el.data
+
     @beforeBuild?()                                        # call the beforeBuild method if it's defined
     super(@options)                                        # let the view do it's thing
     @trigger('build')                                      # trigger the build event

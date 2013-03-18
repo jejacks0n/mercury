@@ -7,7 +7,7 @@ describe "Mercury.Region", ->
   subject = null
 
   beforeEach ->
-    Mercury.configure 'regions', identifier: 'id', attribute: 'data-mercury'
+    Mercury.configure 'regions', identifier: 'id', attribute: 'data-mercury', options: 'data-mercury-options'
     class Klass extends Mercury.Region
       supported: true
     subject = new Klass('<div data-mercury="foo" id="test">')
@@ -88,6 +88,12 @@ describe "Mercury.Region", ->
       Klass.supported = false
       subject = new Klass()
       expect( subject.notify ).calledWith('is unsupported in this browser')
+
+    it "merges options with the options data from the element", ->
+      subject = new Klass($("""<div data-mercury-options='{"previewing": true}'">"""), foo: 'bar')
+      expect( subject.options.previewing ).to.be.true
+      expect( subject.options.foo ).to.eq('bar')
+      expect( subject.foo ).to.eq('bar')
 
     it "calls #beforeBuild if it's defined", ->
       Klass::beforeBuild = spy()

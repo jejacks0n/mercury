@@ -34,3 +34,8 @@ Mercury.Region.Modules.ContentEditable =
     @document.execCommand('insertBROnReturn', false, true)
     @document.execCommand('enableInlineTableEditing', false, false)
     @document.execCommand('enableObjectResizing', false, false)
+
+
+  stackEquality: (value) ->
+    return @stack[@stackPosition].val == value.val if @stackPosition == 0 && @stack[@stackPosition]
+    JSON.stringify(@stack[@stackPosition]) == JSON.stringify(value)

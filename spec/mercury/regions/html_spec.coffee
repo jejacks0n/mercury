@@ -20,6 +20,5 @@ describe "Mercury.HtmlRegion", ->
     expect( Klass.className ).to.eq('Mercury.HtmlRegion')
     expect( Klass.type ).to.eq('html')
     expect( Klass.supported ).to.be.true
-    expect( subject.skipHistoryOnInitialize ).to.be.true
 
   it "needs to be tested eventually"

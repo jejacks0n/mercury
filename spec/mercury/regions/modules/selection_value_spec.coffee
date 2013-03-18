@@ -37,5 +37,6 @@ describe "Mercury.Region.Modules.SelectionValue", ->
 
     it "returns the selection and value", ->
       spyOn(subject, 'value', -> '_value_')
+      subject.getSerializedSelection = ->
       spyOn(subject, 'getSerializedSelection', -> '1:2')
       expect( subject.valueForStack() ).to.eql(sel: '1:2', val: '_value_')

@@ -89,3 +89,23 @@ describe "Mercury.Region.Modules.ContentEditable", ->
     it "doesn't throw if there's a problem", ->
       subject.document = execCommand: -> throw new Error('foo')
       expect(-> subject.setContentEditablePreferences() ).not.to.throw(Error, 'foo')
+
+
+  describe "#stackEquality", ->
+
+    it "returns true if the val matches when the stackPosition is 0", ->
+      subject.stackPosition = 0
+      subject.stack[0] = {sel: 'foo', val: '_val_'}
+      expect( subject.stackEquality(sel: 'bar', val: '_val_') ).to.be.true
+      expect( subject.stackEquality(sel: 'bar', val: '_value_') ).to.be.false
+
+    it "returns true if the value matches using JSON comparison", ->
+      subject.stackPosition = 1
+      subject.stack = [{}, {sel: 'foo', val: '_val_'}]
+      expect( subject.stackEquality(sel: 'foo', val: '_val_') ).to.be.true
+
+
+    it "returns false if the value doesn't match using JSON comparison", ->
+      subject.stackPosition = 1
+      subject.stack = [{}, {sel: 'bar', val: '_val_'}]
+      expect( subject.stackEquality(sel: 'foo', val: '_val_') ).to.be.false

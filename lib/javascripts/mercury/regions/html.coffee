@@ -18,8 +18,6 @@ class Mercury.HtmlRegion extends Mercury.Region
               (!Mercury.support.msie || Mercury.support.msie >= 10) &&    # we're in IE10+
               (window.rangy && window.rangy.supported)                    # rangy is supported
 
-  skipHistoryOnInitialize: true
-
   events:
     'keydown': 'onKeyEvent'
     'paste': 'onPaste'

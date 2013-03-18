@@ -8,6 +8,7 @@ Mercury.Region.Modules.FocusableTextarea =
 
 
   buildFocusable: ->
+    @editableDropBehavior ?= true
     @autoSize ?= @config("regions:#{@constructor.type}:autoSize")
 
     value = @html().replace('&gt;', '>').replace('&lt;', '<').trim()

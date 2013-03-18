@@ -30,6 +30,13 @@ describe "Mercury.Region.Modules.FocusableTextarea", ->
       subject.buildFocusable()
       expect( subject.autoSize ).to.be.true
 
+    it "sets @editableDropBehavior", ->
+      subject.trigger('build')
+      expect( subject.editableDropBehavior ).to.be.true
+      subject.editableDropBehavior = false
+      subject.trigger('build')
+      expect( subject.editableDropBehavior ).to.be.false
+
     it "empties the element", ->
       spyOn(subject.el, 'empty')
       subject.buildFocusable()

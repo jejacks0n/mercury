@@ -19,6 +19,7 @@
 #
 # Region modules.
 #
+#= require mercury/regions/modules/content_editable
 #= require mercury/regions/modules/drop_indicator
 #= require mercury/regions/modules/focusable_textarea
 #= require mercury/regions/modules/html_selection

@@ -115,6 +115,18 @@ Mercury.configuration =
       autoSize  : true                                     # the region will auto-resize to the content within it.
       mimeTypes : false                                    # file types - overrides general uploading to allow anything.
 
+    # The Plain region is a simplified single line HTML5 Content Editable region. It restricts paste, drag/drop, and
+    # only provides the ability to do some common actions like bold, italics, and underline. This is a useful region for
+    # headings and other single line areas.
+    #
+    #= require dependencies/rangy/rangy-core
+    #= require dependencies/rangy/rangy-serializer
+    #= require dependencies/rangy/rangy-cssclassapplier
+    #= require mercury/regions/html
+    #
+    plain:
+      actions   : true                                     # allow the common actions (bold/italics/underline)
+
     # The Text region is a multiline plain text input. This region can be used to collect only text in cases when you
     # don't want to allow more complex HTML. It's up to you to render <br> tags when displaying the content within the
     # page.

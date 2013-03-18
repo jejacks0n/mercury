@@ -1,0 +1,67 @@
+###!
+The Plain region is a simplified single line HTML5 Content Editable region. It restricts paste, drag/drop, and only
+provides the ability to do some common actions like bold, italics, and underline. This is a useful region for headings
+ and other single line areas.
+
+Dependencies:
+  rangy/rangy-core - https://code.google.com/p/rangy/
+  rangy/rangy-serializer
+  rangy-cssclassapplier
+###
+class Mercury.PlainRegion extends Mercury.Region
+  @define 'Mercury.PlainRegion', 'plain'
+  @include Mercury.Region.Modules.HtmlSelection
+  @include Mercury.Region.Modules.SelectionValue
+  @include Mercury.Region.Modules.ContentEditable
+
+  @supported: document.designMode &&                                      # we have designMode
+              (!Mercury.support.msie || Mercury.support.msie >= 10) &&    # we're in IE10+
+              (window.rangy && window.rangy.supported)                    # rangy is supported
+
+  events:
+    'keydown': 'onKeyEvent'
+    'paste': 'onPaste'
+
+  constructor: ->
+    try window.rangy.init()
+    catch e
+      @notify(@t('requires Rangy'))
+      return false
+
+    super
+    @actions = null unless @config('regions:plain:actions')
+
+
+  onDropItem: (e) ->
+    e.preventDefault()
+
+
+  onPaste: (e) ->
+    e.preventDefault()
+
+
+  onKeyEvent: (e) ->
+    return if e.keyCode >= 37 && e.keyCode <= 40 # arrows
+    return if e.metaKey && e.keyCode == 90 # undo / redo
+    return e.preventDefault() if e.keyCode == 13 # return
+
+    # common actions
+    if e.metaKey then switch e.keyCode
+      when 66 # b
+        e.preventDefault()
+        return @handleAction('bold')
+      when 73 # i
+        e.preventDefault()
+        return @handleAction('italic')
+      when 85 # u
+        e.preventDefault()
+        return @handleAction('underline')
+
+    @pushHistory(e.keyCode)
+
+
+  actions:
+
+    bold:        -> @toggleWrapSelectedWordsInClass('red')
+    italic:      -> @toggleWrapSelectedWordsInClass('highlight')
+    underline:   -> @toggleWrapSelectedWordsInClass('blue')

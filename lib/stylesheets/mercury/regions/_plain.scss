@@ -1,0 +1,9 @@
+/* PlainRegion
+ *----------------------------------------------------------------------------*/
+.mercury-plain-region {
+  min-height: 20px;
+  min-width: 5px;
+  &:focus {
+    @include focus-outline();
+  }
+}

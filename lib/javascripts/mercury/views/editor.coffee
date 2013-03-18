@@ -31,14 +31,19 @@ class Mercury.Editor extends Mercury.View
 
   setupFrame: ->
     @frame = $(@frame).addClass('mercury-editor-frame').attr(seamless: 'seamless')
-    Mercury.on 'initialize', => @initialize()
-    @frame.on 'load', =>
-      @document = $(@frame.get(0).contentWindow.document)
-      @initialize()
+    Mercury.on 'initialize', => @initialize(true)
+    @frame.on 'load', => @initialize(true)
 
 
-  initialize: ->
+  initialize: (frame = false) ->
+    if frame
+      return if @initialized
+      @initialized = true
+      contentWindow = @frame.get(0).contentWindow
+      contentWindow.Mercury = Mercury
+      @document = $(contentWindow.document)
     @addAllRegions()
+    Mercury.trigger('initialized')
 
 
   addAllRegions: ->

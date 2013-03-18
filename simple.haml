@@ -2,9 +2,8 @@
 %html
   %head
     = csrf_meta_tag
-    = javascript_include_tag "mercury/dependencies", "mercury"
+    = javascript_include_tag "jquery/jquery-1.9.1"
     = stylesheet_link_tag "mercury"
-    %script if (parent.Mercury) parent.Mercury.trigger('initialize')
   %body
     %h1 Mercury2 <a href="/teabag">Specs</a>
 
@@ -77,6 +76,9 @@
     #gallery1(data-mercury="gallery")
       .slides
       .paginator
+
+:javascript
+  if (parent.Mercury) parent.Mercury.trigger('initialize')
 
 :scss
   .red {

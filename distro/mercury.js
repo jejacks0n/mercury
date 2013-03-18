@@ -53,6 +53,9 @@ Copyright (c) 2013 Jeremy Jackson
         autoSize: true,
         mimeTypes: false
       },
+      plain: {
+        actions: true
+      },
       text: {
         autoSize: true,
         stripTags: true
@@ -1649,6 +1652,53 @@ Copyright (c) 2013 Jeremy Jackson
 }).call(this);
 (function() {
 
+  Mercury.Region.Modules.ContentEditable = {
+    included: function() {
+      this.on('build', this.buildContentEditable);
+      return this.on('release', this.releaseContentEditable);
+    },
+    buildContentEditable: function() {
+      var _ref;
+      if ((_ref = this.editableDropBehavior) == null) {
+        this.editableDropBehavior = true;
+      }
+      this.document || (this.document = this.el.get(0).ownerDocument);
+      this.makeContentEditable();
+      this.forceContentEditableDisplay();
+      return this.setContentEditablePreferences();
+    },
+    releaseContentEditable: function() {
+      this.el.get(0).contentEditable = false;
+      if (this.originalDisplay) {
+        return this.el.css({
+          display: this.originalDisplay
+        });
+      }
+    },
+    makeContentEditable: function() {
+      return this.el.get(0).contentEditable = true;
+    },
+    forceContentEditableDisplay: function() {
+      if (this.el.css('display') === 'inline') {
+        this.originalDisplay = 'inline';
+        return this.el.css({
+          display: 'inline-block'
+        });
+      }
+    },
+    setContentEditablePreferences: function() {
+      try {
+        this.document.execCommand('styleWithCSS', false, false);
+        this.document.execCommand('insertBROnReturn', false, true);
+        this.document.execCommand('enableInlineTableEditing', false, false);
+        return this.document.execCommand('enableObjectResizing', false, false);
+      } catch (_error) {}
+    }
+  };
+
+}).call(this);
+(function() {
+
   Mercury.Region.Modules.DropIndicator = {
     included: function() {
       this.on('build', this.buildDropIndicator);
@@ -1712,8 +1762,11 @@ Copyright (c) 2013 Jeremy Jackson
       return this.on('release', this.releaseFocusable);
     },
     buildFocusable: function() {
-      var resize, value, _ref;
-      if ((_ref = this.autoSize) == null) {
+      var resize, value, _ref, _ref1;
+      if ((_ref = this.editableDropBehavior) == null) {
+        this.editableDropBehavior = true;
+      }
+      if ((_ref1 = this.autoSize) == null) {
         this.autoSize = this.config("regions:" + this.constructor.type + ":autoSize");
       }
       value = this.html().replace('&gt;', '>').replace('&lt;', '<').trim();

@@ -32,8 +32,6 @@ via Ajax.
 
     MarkdownRegion.supported = true;
 
-    MarkdownRegion.prototype.editableDropBehavior = true;
-
     MarkdownRegion.prototype.wrappers = {
       h1: ['# ', ' #'],
       h2: ['## ', ' ##'],

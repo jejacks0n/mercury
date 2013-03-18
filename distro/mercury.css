@@ -489,6 +489,21 @@ Copyright (c) 2013 Jeremy Jackson
   box-shadow: 0 0 7px #00bce5, 0 0 2px #003e4c;
 }
 
+/* PlainRegion
+ *----------------------------------------------------------------------------*/
+/* line 3, ../../lib/stylesheets/mercury/regions/_plain.scss */
+.mercury-plain-region {
+  min-height: 20px;
+  min-width: 5px;
+}
+/* line 6, ../../lib/stylesheets/mercury/regions/_plain.scss */
+.mercury-plain-region:focus {
+  outline: none;
+  -webkit-box-shadow: 0 0 7px #00bce5, 0 0 2px #003e4c;
+  -moz-box-shadow: 0 0 7px #00bce5, 0 0 2px #003e4c;
+  box-shadow: 0 0 7px #00bce5, 0 0 2px #003e4c;
+}
+
 /* TextRegion
  *----------------------------------------------------------------------------*/
 /* line 4, ../../lib/stylesheets/mercury/regions/_text.scss */

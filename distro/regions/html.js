@@ -4,6 +4,9 @@ The HTML region utilizes the full HTML5 ContentEditable featureset and adds some
 between browsers and to make it nicer to use.
 
 Dependencies:
+  rangy/rangy-core - https://code.google.com/p/rangy/
+  rangy/rangy-serializer
+  rangy-cssclassapplier
 */
 
 
@@ -23,11 +26,11 @@ Dependencies:
 
     HtmlRegion.include(Mercury.Region.Modules.SelectionValue);
 
+    HtmlRegion.include(Mercury.Region.Modules.ContentEditable);
+
     HtmlRegion.supported = document.designMode && (!Mercury.support.msie || Mercury.support.msie >= 10) && (window.rangy && window.rangy.supported);
 
     HtmlRegion.prototype.skipHistoryOnInitialize = true;
-
-    HtmlRegion.prototype.editableDropBehavior = true;
 
     HtmlRegion.prototype.events = {
       'keydown': 'onKeyEvent',
@@ -43,34 +46,6 @@ Dependencies:
       }
       HtmlRegion.__super__.constructor.apply(this, arguments);
     }
-
-    HtmlRegion.prototype.build = function() {
-      this.document = this.el.get(0).ownerDocument;
-      this.forceDisplay();
-      this.makeEditable();
-      return this.setEditPreferences();
-    };
-
-    HtmlRegion.prototype.forceDisplay = function() {
-      if (this.el.css('display') === 'inline') {
-        return this.el.css({
-          display: 'inline-block'
-        });
-      }
-    };
-
-    HtmlRegion.prototype.makeEditable = function() {
-      return this.el.get(0).contentEditable = true;
-    };
-
-    HtmlRegion.prototype.setEditPreferences = function() {
-      try {
-        this.document.execCommand('styleWithCSS', false, false);
-        this.document.execCommand('insertBROnReturn', false, true);
-        this.document.execCommand('enableInlineTableEditing', false, false);
-        return this.document.execCommand('enableObjectResizing', false, false);
-      } catch (_error) {}
-    };
 
     HtmlRegion.prototype.onDropFile = function(files, options) {
       var uploader,

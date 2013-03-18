@@ -3,19 +3,22 @@ The HTML region utilizes the full HTML5 ContentEditable featureset and adds some
 between browsers and to make it nicer to use.
 
 Dependencies:
+  rangy/rangy-core - https://code.google.com/p/rangy/
+  rangy/rangy-serializer
+  rangy-cssclassapplier
 ###
 class Mercury.HtmlRegion extends Mercury.Region
   @define 'Mercury.HtmlRegion', 'html'
   @include Mercury.Region.Modules.DropIndicator
   @include Mercury.Region.Modules.HtmlSelection
   @include Mercury.Region.Modules.SelectionValue
+  @include Mercury.Region.Modules.ContentEditable
 
   @supported: document.designMode &&                                      # we have designMode
               (!Mercury.support.msie || Mercury.support.msie >= 10) &&    # we're in IE10+
               (window.rangy && window.rangy.supported)                    # rangy is supported
 
   skipHistoryOnInitialize: true
-  editableDropBehavior: true
 
   events:
     'keydown': 'onKeyEvent'
@@ -28,29 +31,6 @@ class Mercury.HtmlRegion extends Mercury.Region
       return false
 
     super
-
-
-  build: ->
-    @document = @el.get(0).ownerDocument
-    @forceDisplay()
-    @makeEditable()
-    @setEditPreferences()
-
-
-  forceDisplay: ->
-    @el.css(display: 'inline-block') if @el.css('display') == 'inline'
-
-
-  makeEditable: ->
-    @el.get(0).contentEditable = true
-
-
-  setEditPreferences: -> try
-    @document.execCommand('styleWithCSS', false, false)
-    @document.execCommand('insertBROnReturn', false, true)
-    @document.execCommand('enableInlineTableEditing', false, false)
-    @document.execCommand('enableObjectResizing', false, false)
-
 
   onDropFile: (files, options) ->
     uploader = new Mercury.Uploader(files, mimeTypes: @config('regions:html:mimeTypes'))

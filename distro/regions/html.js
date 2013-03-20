@@ -4,8 +4,8 @@ The HTML region utilizes the full HTML5 ContentEditable featureset and adds some
 between browsers and to make it nicer to use.
 
 Dependencies:
-  rangy/rangy-core - https://code.google.com/p/rangy/
-  rangy/rangy-serializer
+  rangy-core - https://code.google.com/p/rangy/
+  rangy-serializer
   rangy-cssclassapplier
 */
 
@@ -29,8 +29,6 @@ Dependencies:
     HtmlRegion.include(Mercury.Region.Modules.ContentEditable);
 
     HtmlRegion.supported = document.designMode && (!Mercury.support.msie || Mercury.support.msie >= 10) && (window.rangy && window.rangy.supported);
-
-    HtmlRegion.prototype.skipHistoryOnInitialize = true;
 
     HtmlRegion.prototype.events = {
       'keydown': 'onKeyEvent',

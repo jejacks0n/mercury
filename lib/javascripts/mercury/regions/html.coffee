@@ -3,8 +3,8 @@ The HTML region utilizes the full HTML5 ContentEditable featureset and adds some
 between browsers and to make it nicer to use.
 
 Dependencies:
-  rangy/rangy-core - https://code.google.com/p/rangy/
-  rangy/rangy-serializer
+  rangy-core - https://code.google.com/p/rangy/
+  rangy-serializer
   rangy-cssclassapplier
 ###
 class Mercury.HtmlRegion extends Mercury.Region

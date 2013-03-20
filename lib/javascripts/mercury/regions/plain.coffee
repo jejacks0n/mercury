@@ -4,8 +4,8 @@ provides the ability to do some common actions like bold, italics, and underline
  and other single line areas.
 
 Dependencies:
-  rangy/rangy-core - https://code.google.com/p/rangy/
-  rangy/rangy-serializer
+  rangy-core - https://code.google.com/p/rangy/
+  rangy-serializer
   rangy-cssclassapplier
 ###
 class Mercury.PlainRegion extends Mercury.Region

@@ -31,10 +31,12 @@ Copyright (c) 2013 Jeremy Jackson
       enabled: true,
       prefixUrl: '/mercury/templates'
     },
-    editor: {
-      editor: 'Editor',
+    "interface": {
+      hidden: false,
+      silent: false,
+      editor: 'FrameEditor',
       toolbar: 'Toolbar',
-      statusBar: 'StatusBar'
+      statusbar: 'Statusbar'
     },
     regions: {
       attribute: 'data-mercury',
@@ -870,6 +872,7 @@ Copyright (c) 2013 Jeremy Jackson
           })(method);
         } else {
           if (method.indexOf(':') > -1) {
+            method = method.replace(/^mercury:/, '');
             method = (function(method) {
               return function() {
                 Mercury.trigger(method, _this);
@@ -888,7 +891,7 @@ Copyright (c) 2013 Jeremy Jackson
           }
         }
         if (key.indexOf(':') > -1) {
-          Mercury.on(key, method);
+          Mercury.on(key.replace(/^mercury:/, ''), method);
           continue;
         }
         _ref = key.match(this.eventSplitter), match = _ref[0], event = _ref[1], selector = _ref[2];
@@ -994,9 +997,13 @@ Copyright (c) 2013 Jeremy Jackson
       this.focused || (this.focused = false);
       this.focusable || (this.focusable = this.el);
       this.skipHistoryOn || (this.skipHistoryOn = ['redo']);
+      this.changed || (this.changed = false);
       if (typeof this.afterBuild === "function") {
         this.afterBuild();
       }
+      this.el.data({
+        region: this
+      });
       if (!this.name) {
         this.notify(this.t('no name provided for the "%s" region, falling back to random', this.constructor.type));
         this.name = "" + this.constructor.type + (Math.floor(Math.random() * 10000));
@@ -1006,7 +1013,12 @@ Copyright (c) 2013 Jeremy Jackson
         this.pushHistory();
       }
       this.bindDefaultEvents();
+      this.initialValue = JSON.stringify(this.toJSON());
     }
+
+    Region.prototype.addRegionClassname = function() {
+      return this.addClass("mercury-" + this.constructor.type + "-region");
+    };
 
     Region.prototype.handleAction = function() {
       var action, args;
@@ -1094,7 +1106,7 @@ Copyright (c) 2013 Jeremy Jackson
     };
 
     Region.prototype.data = function(key, value) {
-      if (value) {
+      if (typeof value !== 'undefined' && value !== null) {
         return this.el.data(key, value);
       } else {
         return this.el.data(key);
@@ -1103,6 +1115,15 @@ Copyright (c) 2013 Jeremy Jackson
 
     Region.prototype.snippets = function() {
       return {};
+    };
+
+    Region.prototype.hasChanges = function() {
+      return this.changed || this.initialValue !== JSON.stringify(this.toJSON());
+    };
+
+    Region.prototype.onSave = function() {
+      this.initialValue = JSON.stringify(this.toJSON());
+      return this.changed = false;
     };
 
     Region.prototype.onUndo = function() {
@@ -1114,20 +1135,22 @@ Copyright (c) 2013 Jeremy Jackson
     };
 
     Region.prototype.toJSON = function() {
+      var data;
+      data = $.extend({}, this.data());
+      delete data.region;
       return {
         name: this.name,
         type: this.constructor.type,
         value: this.value(),
-        data: this.data(),
+        data: data,
         snippets: this.snippets()
       };
     };
 
-    Region.prototype.addRegionClassname = function() {
-      return this.addClass("mercury-" + this.constructor.type + "-region");
-    };
-
     Region.prototype.release = function() {
+      this.el.data({
+        region: null
+      });
       this.el.removeClass("mercury-" + this.constructor.type + "-region");
       this.focusable.removeAttr('tabindex');
       this.trigger('release');
@@ -1144,6 +1167,9 @@ Copyright (c) 2013 Jeremy Jackson
       });
       Mercury.on('mode', function() {
         return _this.handleMode.apply(_this, arguments);
+      });
+      Mercury.on('save', function() {
+        return _this.onSave();
       });
       this.delegateActions($.extend(true, this.constructor.actions, this.constructor.defaultActions, this.actions || (this.actions = {})));
       this.bindFocusEvents();
@@ -1235,15 +1261,6 @@ Copyright (c) 2013 Jeremy Jackson
 
 }).call(this);
 (function() {
-
-  this.JST || (this.JST = {});
-
-  JST['/mercury/templates/editor'] = function(scope) {
-    return "<ul id=\"mercury_controls\">\n  <li data-action=\"preview\">Toggle Preview</li>\n  <li data-action=\"undo\">Undo</li>\n  <li data-action=\"redo\">Redo</li>\n  <hr/>\n  <li data-action=\"direction\">custom action (toggle rtl/ltr)</li>\n  <hr/>\n  <li data-action=\"block\" data-value=\"none\">none</li>\n  <li data-action=\"block\" data-value=\"h1\">h1</li>\n  <li data-action=\"block\" data-value=\"h2\">h2</li>\n  <li data-action=\"block\" data-value=\"h3\">h3</li>\n  <li data-action=\"block\" data-value=\"h4\">h4</li>\n  <li data-action=\"block\" data-value=\"h5\">h5</li>\n  <li data-action=\"block\" data-value=\"h6\">h6</li>\n  <li data-action=\"block\" data-value=\"pre\">pre</li>\n  <li data-action=\"block\" data-value=\"paragraph\">paragraph</li>\n  <li data-action=\"block\" data-value=\"blockquote\">blockquote</li>\n  <hr/>\n  <li data-action=\"bold\">bold</li>\n  <li data-action=\"italic\">italic</li>\n  <li data-action=\"underline\">underline</li>\n  <li data-action=\"subscript\">subscript</li>\n  <li data-action=\"superscript\">superscript</li>\n  <hr/>\n  <li data-action=\"orderedList\">orderedList</li>\n  <li data-action=\"unorderedList\">unorderedList</li>\n  <hr/>\n  <li data-action=\"indent\">indent</li>\n  <li data-action=\"outdent\">outdent</li>\n  <hr/>\n  <li data-action=\"style\" data-value=\"border:1px solid red\">style</li>\n  <li data-action=\"style\" data-value=\"foo\">class</li>\n  <hr/>\n  <li data-action=\"html\" data-value=\"html\">html (with html)</li>\n  <li data-action=\"html\" data-value=\"el\">html (with element)</li>\n  <li data-action=\"html\" data-value=\"jquery\">html (with jQuery)</li>\n  <hr/>\n  <li data-action=\"link\" data-value=\"https://github.com/jejacks0n/mercury\">link</li>\n  <li data-action=\"image\" data-value=\"http://goo.gl/UWYSd\">image</li>\n  <hr/>\n  <li data-action=\"rule\">rule</li>\n  <hr/>\n  <li><input type=\"text\"/></li>\n</ul>";
-  };
-
-}).call(this);
-(function() {
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -1253,48 +1270,76 @@ Copyright (c) 2013 Jeremy Jackson
 
     Editor.prototype.logPrefix = 'Mercury.Editor:';
 
-    Editor.prototype.template = 'editor';
+    Editor.prototype.className = 'mercury-editor';
 
     Editor.prototype.attributes = {
       id: 'mercury'
     };
 
     Editor.prototype.events = {
-      'mousedown': 'keepRegionFocused',
-      'click [data-action]': 'processAction'
+      'mousedown': 'focusActiveRegion',
+      'focusout': 'focusActiveRegion'
     };
 
     function Editor() {
+      var _this = this;
       if (parent !== window && parent.Mercury) {
-        this.log(this.t('is already defined in outer frame'));
+        this.log(this.t('is already defined in parent frame'));
         return;
       }
       Editor.__super__.constructor.apply(this, arguments);
       this.regions || (this.regions = []);
-      this.document || (this.document = $('body'));
-      this.appendTo(document.body);
-      if (this.frame = $(this.frame).get(0)) {
-        this.setupFrame();
-      }
+      $(window).on('beforeunload', function() {
+        return _this.beforeUnload();
+      });
+      this.addClass('loading');
+      this.appendTo(this.document || (this.document = $('body')));
       this.initialize();
+      this.buildInterface();
+      this.bindDefaultEvents();
+      this.el.removeClass('loading');
     }
 
-    Editor.prototype.setupFrame = function() {
-      var _this = this;
-      this.frame = $(this.frame).addClass('mercury-editor-frame').attr({
-        seamless: 'seamless'
-      });
-      Mercury.on('initialize', function() {
-        return _this.initialize();
-      });
-      return this.frame.on('load', function() {
-        _this.document = $(_this.frame.get(0).contentWindow.document);
-        return _this.initialize();
-      });
+    Editor.prototype.initialize = function() {
+      this.addAllRegions();
+      return Mercury.trigger('initialized');
     };
 
-    Editor.prototype.initialize = function() {
-      return this.addAllRegions();
+    Editor.prototype.buildInterface = function() {
+      this.buildToolbar();
+      return this.buildStatusbar();
+    };
+
+    Editor.prototype.buildToolbar = function() {
+      var klass;
+      if (!(klass = this.config('interface:toolbar'))) {
+        return;
+      }
+      this.append(this.toolbar = new Mercury[klass]());
+      if (this.config('interface:hidden')) {
+        return this.toolbar.hide();
+      }
+    };
+
+    Editor.prototype.buildStatusbar = function() {
+      var klass;
+      if (!(klass = this.config('interface:statusbar'))) {
+        return;
+      }
+      this.append(this.statusbar = new Mercury[klass]());
+      if (this.config('interface:hidden')) {
+        return this.statusbar.hide();
+      }
+    };
+
+    Editor.prototype.bindDefaultEvents = function() {
+      var _this = this;
+      Mercury.on('mode', function() {
+        return _this.focusActiveRegion();
+      });
+      return Mercury.on('action', function() {
+        return _this.focusActiveRegion();
+      });
     };
 
     Editor.prototype.addAllRegions = function() {
@@ -1304,7 +1349,12 @@ Copyright (c) 2013 Jeremy Jackson
         el = _ref[_i];
         this.addRegion(el);
       }
-      return (_ref1 = this.regions[0]) != null ? _ref1.focus() : void 0;
+      if ((_ref1 = this.regions[0]) != null) {
+        _ref1.focus();
+      }
+      if (this.config('interface:hidden')) {
+        return Mercury.trigger('mode', 'preview');
+      }
     };
 
     Editor.prototype.regionElements = function() {
@@ -1321,11 +1371,32 @@ Copyright (c) 2013 Jeremy Jackson
       return this.regions.push(region);
     };
 
-    Editor.prototype.keepRegionFocused = function(e) {
+    Editor.prototype.focusActiveRegion = function(e) {
       if (e != null) {
-        e.preventDefault();
+        if (typeof e.preventDefault === "function") {
+          e.preventDefault();
+        }
       }
       return this.region.focus();
+    };
+
+    Editor.prototype.beforeUnload = function() {
+      if (this.config('interface:silent') || !this.hasChanges()) {
+        return null;
+      }
+      return this.t('You have unsaved changes.  Are you sure you want to leave without saving them first?');
+    };
+
+    Editor.prototype.hasChanges = function() {
+      var region, _i, _len, _ref;
+      _ref = this.regions;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        region = _ref[_i];
+        if (region.hasChanges()) {
+          return true;
+        }
+      }
+      return false;
     };
 
     Editor.prototype.save = function() {
@@ -1339,18 +1410,196 @@ Copyright (c) 2013 Jeremy Jackson
       return data;
     };
 
-    Editor.prototype.processAction = function(e) {
-      var action, target, value;
+    return Editor;
+
+  })(Mercury.View);
+
+}).call(this);
+(function() {
+  var __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+  Mercury.FrameEditor = (function(_super) {
+
+    __extends(FrameEditor, _super);
+
+    function FrameEditor() {
+      return FrameEditor.__super__.constructor.apply(this, arguments);
+    }
+
+    FrameEditor.prototype.logPrefix = 'Mercury.FrameEditor:';
+
+    FrameEditor.prototype.className = 'mercury-frame-editor';
+
+    FrameEditor.prototype.initialize = function() {
+      var _this = this;
+      this.frame = $(this.frame).addClass('mercury-frame-editor-frame');
+      if (!this.frame.length) {
+        return FrameEditor.__super__.initialize.apply(this, arguments);
+      }
+      Mercury.on('initialize', function() {
+        return _this.initializeFrame();
+      });
+      return this.frame.on('load', function() {
+        return _this.initializeFrame();
+      });
+    };
+
+    FrameEditor.prototype.initializeFrame = function() {
+      if (this.initialized) {
+        return;
+      }
+      this.initialized = true;
+      this.setupDocument();
+      this.addAllRegions();
+      return Mercury.trigger('initialized');
+    };
+
+    FrameEditor.prototype.setupDocument = function() {
+      var contentWindow;
+      contentWindow = this.frame.get(0).contentWindow;
+      contentWindow.Mercury = Mercury;
+      return this.document = $(contentWindow.document);
+    };
+
+    return FrameEditor;
+
+  })(Mercury.Editor);
+
+}).call(this);
+(function() {
+
+  this.JST || (this.JST = {});
+
+  JST['/mercury/templates/statusbar'] = function(scope) {
+    return "<div class=\"mercury-statusbar-about\">\n  <a href=\"https://github.com/jejacks0n/mercury\" target=\"_blank\">Mercury Editor v" + Mercury.version + "</a>\n</div>\n<div class=\"mercury-statusbar-path\"></div>";
+  };
+
+}).call(this);
+(function() {
+  var __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+  Mercury.Statusbar = (function(_super) {
+
+    __extends(Statusbar, _super);
+
+    function Statusbar() {
+      return Statusbar.__super__.constructor.apply(this, arguments);
+    }
+
+    Statusbar.prototype.logPrefix = 'Mercury.Statusbar:';
+
+    Statusbar.prototype.className = 'mercury-statusbar';
+
+    Statusbar.prototype.template = 'statusbar';
+
+    Statusbar.prototype.events = {
+      'region:update': 'onRegionUpdate',
+      'interface:hide': 'hide',
+      'interface:show': 'show'
+    };
+
+    Statusbar.prototype.elements = {
+      path: '.mercury-statusbar-path'
+    };
+
+    Statusbar.prototype.build = function() {
+      return this.setPath();
+    };
+
+    Statusbar.prototype.setPath = function(path) {
+      var el, _i, _len, _results;
+      if (path == null) {
+        path = [];
+      }
+      this.path.html("<b>" + (this.t('Path:')) + " </b>");
+      _results = [];
+      for (_i = 0, _len = path.length; _i < _len; _i++) {
+        el = path[_i];
+        this.path.append(el);
+        _results.push(this.path.append(' &raquo; '));
+      }
+      return _results;
+    };
+
+    Statusbar.prototype.onRegionUpdate = function(region) {
+      if (region != null ? region.path : void 0) {
+        return this.setPath(region.path());
+      }
+    };
+
+    Statusbar.prototype.hide = function() {
+      return this.el.css({
+        bottom: -this.el.height()
+      });
+    };
+
+    Statusbar.prototype.show = function() {
+      return this.el.css({
+        bottom: 0
+      });
+    };
+
+    return Statusbar;
+
+  })(Mercury.View);
+
+}).call(this);
+(function() {
+
+  this.JST || (this.JST = {});
+
+  JST['/mercury/templates/toolbar'] = function(scope) {
+    return "<ul>\n  <li data-action=\"interface\">Toggle Interface</li>\n  <li data-action=\"preview\">Toggle Preview</li>\n  <li data-action=\"undo\">Undo</li>\n  <li data-action=\"redo\">Redo</li>\n  <hr/>\n  <li data-action=\"direction\">custom action (toggle rtl/ltr)</li>\n  <hr/>\n  <li data-action=\"block\" data-value=\"none\">none</li>\n  <li data-action=\"block\" data-value=\"h1\">h1</li>\n  <li data-action=\"block\" data-value=\"h2\">h2</li>\n  <li data-action=\"block\" data-value=\"h3\">h3</li>\n  <li data-action=\"block\" data-value=\"h4\">h4</li>\n  <li data-action=\"block\" data-value=\"h5\">h5</li>\n  <li data-action=\"block\" data-value=\"h6\">h6</li>\n  <li data-action=\"block\" data-value=\"pre\">pre</li>\n  <li data-action=\"block\" data-value=\"paragraph\">paragraph</li>\n  <li data-action=\"block\" data-value=\"blockquote\">blockquote</li>\n  <hr/>\n  <li data-action=\"bold\">bold</li>\n  <li data-action=\"italic\">italic</li>\n  <li data-action=\"underline\">underline</li>\n  <li data-action=\"subscript\">subscript</li>\n  <li data-action=\"superscript\">superscript</li>\n  <hr/>\n  <li data-action=\"orderedList\">orderedList</li>\n  <li data-action=\"unorderedList\">unorderedList</li>\n  <hr/>\n  <li data-action=\"indent\">indent</li>\n  <li data-action=\"outdent\">outdent</li>\n  <hr/>\n  <li data-action=\"style\" data-value=\"border:1px solid red\">style</li>\n  <li data-action=\"style\" data-value=\"foo\">class</li>\n  <hr/>\n  <li data-action=\"html\" data-value=\"html\">html (with html)</li>\n  <li data-action=\"html\" data-value=\"el\">html (with element)</li>\n  <li data-action=\"html\" data-value=\"jquery\">html (with jQuery)</li>\n  <hr/>\n  <li data-action=\"link\" data-value=\"https://github.com/jejacks0n/mercury\">link</li>\n  <li data-action=\"image\" data-value=\"http://goo.gl/UWYSd\">image</li>\n  <hr/>\n  <li data-action=\"rule\">rule</li>\n  <hr/>\n  <li><input type=\"text\"/></li>\n</ul>";
+  };
+
+}).call(this);
+(function() {
+  var __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+  Mercury.Toolbar = (function(_super) {
+
+    __extends(Toolbar, _super);
+
+    Toolbar.prototype.logPrefix = 'Mercury.Toolbar:';
+
+    Toolbar.prototype.className = 'mercury-toolbar';
+
+    Toolbar.prototype.template = 'toolbar';
+
+    Toolbar.prototype.events = {
+      'region:update': 'onRegionUpdate',
+      'interface:hide': 'hide',
+      'interface:show': 'show',
+      'click [data-action]': 'processAction'
+    };
+
+    function Toolbar() {
+      Toolbar.__super__.constructor.apply(this, arguments);
+      this["interface"] = this.config('interface:hidden');
+    }
+
+    Toolbar.prototype.processAction = function(e) {
+      var act, target, val;
       target = $(e.target);
-      action = target.data('action');
-      value = target.data('value');
-      switch (action) {
+      act = target.data('action');
+      val = target.data('value');
+      switch (act) {
+        case 'interface':
+          this["interface"] = !this["interface"];
+          if (this["interface"]) {
+            Mercury.trigger('interface:hide');
+          } else {
+            Mercury.trigger('interface:show');
+          }
+          return Mercury.trigger('mode', 'preview');
         case 'preview':
-          Mercury.trigger('mode', 'preview');
-          return this.keepRegionFocused();
+          return Mercury.trigger('mode', 'preview');
         case 'html':
-          value = (function() {
-            switch (value) {
+          val = (function() {
+            switch (val) {
               case 'html':
                 return '<table>\n  <tr>\n    <td>1</td>\n    <td>2</td>\n  </tr>\n</table>';
               case 'el':
@@ -1359,13 +1608,27 @@ Copyright (c) 2013 Jeremy Jackson
                 return $('<section class="foo"><h1>testing</h1></section>');
             }
           })();
-          return Mercury.trigger('action', action, value);
+          return Mercury.trigger('action', act, val);
         default:
-          return Mercury.trigger('action', action, value);
+          return Mercury.trigger('action', act, val);
       }
     };
 
-    return Editor;
+    Toolbar.prototype.onRegionUpdate = function(region) {};
+
+    Toolbar.prototype.hide = function() {
+      return this.el.css({
+        top: -this.el.height()
+      });
+    };
+
+    Toolbar.prototype.show = function() {
+      return this.el.css({
+        top: 0
+      });
+    };
+
+    return Toolbar;
 
   })(Mercury.View);
 
@@ -1497,9 +1760,9 @@ Copyright (c) 2013 Jeremy Jackson
 
     Uploader.prototype.logPrefix = 'Mercury.Uploader:';
 
-    Uploader.prototype.template = 'uploader';
-
     Uploader.prototype.className = 'mercury-uploader';
+
+    Uploader.prototype.template = 'uploader';
 
     Uploader.prototype.attributes = {
       style: 'opacity:0'
@@ -1655,6 +1918,7 @@ Copyright (c) 2013 Jeremy Jackson
   Mercury.Region.Modules.ContentEditable = {
     included: function() {
       this.on('build', this.buildContentEditable);
+      this.on('preview', this.toggleContentEditable);
       return this.on('release', this.releaseContentEditable);
     },
     buildContentEditable: function() {
@@ -1667,8 +1931,15 @@ Copyright (c) 2013 Jeremy Jackson
       this.forceContentEditableDisplay();
       return this.setContentEditablePreferences();
     },
+    toggleContentEditable: function() {
+      if (this.previewing) {
+        return this.makeNotContentEditable();
+      } else {
+        return this.makeContentEditable();
+      }
+    },
     releaseContentEditable: function() {
-      this.el.get(0).contentEditable = false;
+      this.makeNotContentEditable();
       if (this.originalDisplay) {
         return this.el.css({
           display: this.originalDisplay
@@ -1677,6 +1948,9 @@ Copyright (c) 2013 Jeremy Jackson
     },
     makeContentEditable: function() {
       return this.el.get(0).contentEditable = true;
+    },
+    makeNotContentEditable: function() {
+      return this.el.get(0).contentEditable = false;
     },
     forceContentEditableDisplay: function() {
       if (this.el.css('display') === 'inline') {
@@ -1693,6 +1967,12 @@ Copyright (c) 2013 Jeremy Jackson
         this.document.execCommand('enableInlineTableEditing', false, false);
         return this.document.execCommand('enableObjectResizing', false, false);
       } catch (_error) {}
+    },
+    stackEquality: function(value) {
+      if (this.stackPosition === 0 && this.stack[this.stackPosition]) {
+        return this.stack[this.stackPosition].val === value.val;
+      }
+      return JSON.stringify(this.stack[this.stackPosition]) === JSON.stringify(value);
     }
   };
 
@@ -1910,8 +2190,6 @@ Copyright (c) 2013 Jeremy Jackson
 (function() {
 
   Mercury.Region.Modules.SelectionValue = {
-    getSerializedSelection: function() {},
-    setSerializedSelection: function() {},
     value: function(value) {
       var _ref;
       if (value == null) {
@@ -1922,13 +2200,13 @@ Copyright (c) 2013 Jeremy Jackson
       }
       this.html((_ref = value.val) != null ? _ref : value);
       if (value.sel) {
-        return this.setSerializedSelection(value.sel);
+        return typeof this.setSerializedSelection === "function" ? this.setSerializedSelection(value.sel) : void 0;
       }
     },
     valueForStack: function() {
       return {
         val: this.value(),
-        sel: this.getSerializedSelection()
+        sel: typeof this.getSerializedSelection === "function" ? this.getSerializedSelection() : void 0
       };
     }
   };
@@ -1976,17 +2254,10 @@ Copyright (c) 2013 Jeremy Jackson
       return el.selectionEnd = end;
     },
     getSerializedSelection: function() {
-      var sel;
-      sel = JSON.stringify(this.getSelection());
-      return [sel.start, sel.end].join(':');
+      return this.getSelection();
     },
     setSerializedSelection: function(sel) {
-      var end, start, _ref;
-      _ref = sel.split(':'), start = _ref[0], end = _ref[1];
-      return this.setSelection({
-        start: start,
-        end: end
-      });
+      return this.setSelection(sel);
     },
     replaceSelection: function(text) {
       var caretIndex, el, sel, value;

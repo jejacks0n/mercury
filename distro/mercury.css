@@ -18,13 +18,129 @@ Copyright (c) 2013 Jeremy Jackson
   *zoom: 1;
 }
 
-/* line 1, ../../lib/stylesheets/mercury/views/_editor.scss */
-.mercury-editor-frame {
+/* Editor
+ *----------------------------------------------------------------------------*/
+/* FrameEditor
+ *----------------------------------------------------------------------------*/
+/* line 5, ../../lib/stylesheets/mercury/views/_frame_editor.scss */
+.mercury-frame-editor-frame {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
+}
+
+/* Statusbar
+ *----------------------------------------------------------------------------*/
+/* line 4, ../../lib/stylesheets/mercury/views/_statusbar.scss */
+#mercury .mercury-statusbar {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  cursor: default;
+  -webkit-transition-property: bottom;
+  -webkit-transition-duration: 0.25s;
+  -webkit-transition-timing-function: ease-in-out;
+  -moz-transition-property: bottom;
+  -moz-transition-duration: 0.25s;
+  -moz-transition-timing-function: ease-in-out;
+  transition-property: bottom;
+  transition-duration: 0.25s;
+  transition-timing-function: ease-in-out;
+  position: fixed;
+  z-index: 10020;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  white-space: nowrap;
+  background: rgba(0, 0, 0, 0.8);
+}
+/* line 14, ../../lib/stylesheets/mercury/views/_statusbar.scss */
+#mercury .mercury-statusbar .mercury-statusbar-path {
+  font-family: Helvetica, Tahoma, Arial, sans-serif;
+  font-size: 9pt;
+  overflow: hidden;
+  margin: 4px 160px 3px 7px;
+  text-overflow: ellipsis;
+  color: #aaa;
+}
+/* line 20, ../../lib/stylesheets/mercury/views/_statusbar.scss */
+#mercury .mercury-statusbar .mercury-statusbar-path a, #mercury .mercury-statusbar .mercury-statusbar-path b {
+  font-family: Helvetica, Tahoma, Arial, sans-serif;
+  font-size: 9pt;
+  font-weight: normal;
+}
+/* line 24, ../../lib/stylesheets/mercury/views/_statusbar.scss */
+#mercury .mercury-statusbar .mercury-statusbar-path a {
+  color: #ddd;
+}
+/* line 28, ../../lib/stylesheets/mercury/views/_statusbar.scss */
+#mercury .mercury-statusbar .mercury-statusbar-about {
+  font-family: Helvetica, Tahoma, Arial, sans-serif;
+  font-size: 9pt;
+  position: absolute;
+  right: 0;
+  margin: 4px 10px;
+  cursor: pointer;
+  font-style: normal;
+  text-shadow: black 0 1px 0;
+}
+/* line 36, ../../lib/stylesheets/mercury/views/_statusbar.scss */
+#mercury .mercury-statusbar .mercury-statusbar-about a {
+  color: #aaa;
+  text-decoration: none;
+  outline: none;
+}
+/* line 40, ../../lib/stylesheets/mercury/views/_statusbar.scss */
+#mercury .mercury-statusbar .mercury-statusbar-about a:hover, #mercury .mercury-statusbar .mercury-statusbar-about a:focus {
+  color: #00bce5;
+}
+
+/* Toolbar
+ *----------------------------------------------------------------------------*/
+/* line 4, ../../lib/stylesheets/mercury/views/_toolbar.scss */
+#mercury .mercury-toolbar {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  cursor: default;
+  -webkit-transition-property: top;
+  -webkit-transition-duration: 0.25s;
+  -webkit-transition-timing-function: ease-in-out;
+  -moz-transition-property: top;
+  -moz-transition-duration: 0.25s;
+  -moz-transition-timing-function: ease-in-out;
+  transition-property: top;
+  transition-duration: 0.25s;
+  transition-timing-function: ease-in-out;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 30px;
+  background: magenta;
+}
+/* line 13, ../../lib/stylesheets/mercury/views/_toolbar.scss */
+#mercury .mercury-toolbar ul {
+  position: fixed;
+  right: 20px;
+  top: 20px;
+  border: 1px solid white;
+  border-radius: 5px;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.7);
+  padding: 10px;
+  margin: 0;
+  list-style: none;
+}
+/* line 24, ../../lib/stylesheets/mercury/views/_toolbar.scss */
+#mercury .mercury-toolbar ul li {
+  cursor: pointer;
+}
+/* line 26, ../../lib/stylesheets/mercury/views/_toolbar.scss */
+#mercury .mercury-toolbar ul li:hover {
+  color: red;
 }
 
 /* Uploader
@@ -538,29 +654,14 @@ Copyright (c) 2013 Jeremy Jackson
   box-shadow: 0 0 7px red, 0 0 2px #550000;
 }
 
-/* line 20, ../../lib/stylesheets/mercury.scss */
+/* line 22, ../../lib/stylesheets/mercury.scss */
 #mercury {
   -webkit-text-size-adjust: none;
 }
-
-/* line 28, ../../lib/stylesheets/mercury.scss */
-#mercury_controls {
-  position: fixed;
-  right: 20px;
-  top: 20px;
-  border: 1px solid white;
-  border-radius: 5px;
-  color: #fff;
-  background: rgba(0, 0, 0, 0.7);
-  padding: 10px;
-  margin: 0;
-  list-style: none;
-}
-/* line 39, ../../lib/stylesheets/mercury.scss */
-#mercury_controls li {
-  cursor: pointer;
-}
-/* line 41, ../../lib/stylesheets/mercury.scss */
-#mercury_controls li:hover {
-  color: red;
+/* line 27, ../../lib/stylesheets/mercury.scss */
+#mercury.loading * {
+  -moz-transition: none !important;
+  -webkit-transition: none !important;
+  -o-transition: color 0 ease-in !important;
+  transition: none !important;
 }

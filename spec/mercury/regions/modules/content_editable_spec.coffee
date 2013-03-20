@@ -43,6 +43,23 @@ describe "Mercury.Region.Modules.ContentEditable", ->
       expect( subject.setContentEditablePreferences ).called
 
 
+  describe "#toggleContentEditable (via the preview event)", ->
+
+    beforeEach ->
+      spyOn(subject, 'makeContentEditable')
+      spyOn(subject, 'makeNotContentEditable')
+
+    it "calls #makeNotContentEditable when previewing", ->
+      subject.previewing = true
+      subject.trigger('preview')
+      expect( subject.makeNotContentEditable ).called
+
+    it "calls #makeContentEditable when not previewing", ->
+      subject.previewing = false
+      subject.trigger('preview')
+      expect( subject.makeContentEditable ).called
+
+
   describe "#releaseContentEditable (via the release event)", ->
 
     it "sets content editable to false on the element", ->
@@ -60,6 +77,13 @@ describe "Mercury.Region.Modules.ContentEditable", ->
 
     it "sets content editable on the element", ->
       expect( subject.el.get(0).contentEditable ).to.eq('true')
+
+
+  describe "#makeNotContentEditable", ->
+
+    it "sets content editable on the element", ->
+      subject.makeNotContentEditable()
+      expect( subject.el.get(0).contentEditable ).to.eq('false')
 
 
   describe "#forceContentEditableDisplay", ->

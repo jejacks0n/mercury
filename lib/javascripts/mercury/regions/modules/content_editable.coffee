@@ -2,6 +2,7 @@ Mercury.Region.Modules.ContentEditable =
 
   included: ->
     @on('build', @buildContentEditable)
+    @on('preview', @toggleContentEditable)
     @on('release', @releaseContentEditable)
 
 
@@ -14,13 +15,24 @@ Mercury.Region.Modules.ContentEditable =
     @setContentEditablePreferences()
 
 
+  toggleContentEditable: ->
+    if @previewing
+      @makeNotContentEditable()
+    else
+      @makeContentEditable()
+
+
   releaseContentEditable: ->
-    @el.get(0).contentEditable = false
+    @makeNotContentEditable()
     @el.css(display: @originalDisplay) if @originalDisplay
 
 
   makeContentEditable: ->
     @el.get(0).contentEditable = true
+
+
+  makeNotContentEditable: ->
+    @el.get(0).contentEditable = false
 
 
   forceContentEditableDisplay: ->

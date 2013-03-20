@@ -276,7 +276,7 @@ describe "Mercury.View", ->
 
       it "calls the global Mercury.on", ->
         callback = spy()
-        subject.delegateEvents('global:event': callback)
+        subject.delegateEvents('mercury:global:event': callback)
         expect( Mercury.on ).calledWith('global:event')
         Mercury.on.callArg(1, 'foo')
         expect( callback ).calledWith('foo')
@@ -286,7 +286,7 @@ describe "Mercury.View", ->
 
       it "triggers a global event", ->
         spyOn(Mercury, 'trigger')
-        subject.delegateEvents(event: 'global:event')
+        subject.delegateEvents(event: 'mercury:global:event')
         expect( subject.el.on ).calledWith('event')
         subject.el.on.callArg(2)
         expect( Mercury.trigger ).calledWith('global:event', subject)

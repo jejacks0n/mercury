@@ -161,6 +161,7 @@ class Mercury.View extends Mercury.Module
           true # always return true from event handlers
       else
         if method.indexOf(':') > -1 # trigger global event
+          method = method.replace(/^mercury:/, '')
           method = do (method) => =>
             Mercury.trigger(method, @)
             true
@@ -172,7 +173,7 @@ class Mercury.View extends Mercury.Module
             true
 
       if key.indexOf(':') > -1 # bind to global event
-        Mercury.on(key, method)
+        Mercury.on(key.replace(/^mercury:/, ''), method)
         continue
 
       [match, event, selector] = key.match(@eventSplitter)

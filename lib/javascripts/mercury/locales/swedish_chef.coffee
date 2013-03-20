@@ -1,6 +1,11 @@
 Mercury.I18n.define 'swedish_chef',
 
+  # Mercury.Editor
+  # ---------------------------------------------------------------------------
+  "You have unsaved changes.  Are you sure you want to leave without saving them first?": "Yuoo hefe-a unsefed chunges.  Ere-a yuoo soore-a yuoo vunt tu leefe-a veethuoot sefeeng zeem furst?"
+
   # Mercury.Uploader
+  # ---------------------------------------------------------------------------
   "Error uploading %s: %s": "Irrur upluedeeng %s: %s" # changed!
   "Processing...": "Prucesseeng..."
   "Uploading...": "Upluedeeng..."
@@ -11,5 +16,10 @@ Mercury.I18n.define 'swedish_chef',
   "Successfully uploaded...": "Sooccessffoolly uplueded..."
 
   # Mercury.File
+  # ---------------------------------------------------------------------------
   "Too large": "Tuu lerge-a"
   "Unsupported format (%s)": "Unsooppurted furmet (%s)"
+
+  # Mercury.Statusbar
+  # ---------------------------------------------------------------------------
+  "Path:": "Pet:"

@@ -10,6 +10,29 @@ This iteration of Mercury Editor (Mercury2) will separate the Rails portions fro
 Mercury2 allows sandboxing content within an iframe or can load directly on the page you're editing. This has been a point of contention and complication in the past, so this version attempts to simplify while also keeping the ability to sandbox itself to mimimize conflicts with javascript libraries and css.
 
 
+## Internationalization / Translations
+
+Mercury has support for the following locales.  If you'd like to contribute one, the easiest way is to fork the project,
+create a locale file with your translation, and submit a pull request -- that way you get full credit for your
+contributions.
+
+Translations and contributors:
+- Arabic ([mohamagdy](https://github.com/mohamagdy))
+- Danish ([martinjlowm](https://github.com/martinjlowm))
+- German ([poke](https://github.com/poke))
+- Spanish ([javiercr](https://github.com/javiercr))
+- French ([adamantx](https://github.com/adamantx))
+- Italian ([gcastagneti](https://github.com/gcastagnet))
+- Korean ([dorajistyle](https://github.com/dorajistyle))
+- Dutch ([kieranklaassen](https://github.com/kieranklaassen))
+- Polish ([cintrzyk](https://github.com/cintrzyk))
+- Portuguese ([yakko](https://github.com/yakko))
+- Swedish ([stefanm](https://github.com/stefanm))
+- Simplified Chinese ([董劭田 DONG Shaotian](https://github.com/richarddong))
+- Hungarian ([egivandor](https://github.com/egivandor))
+- Russian ([ilyacherevkov](https://github.com/ilyacherevkov))
+
+
 ## Dependencies
 
 This version of Mercury is being built using jQuery 2.0, but attempts to minimize reliance on jQuery as much as is feasible, and near the end there may be a pass to remove things like $.extend. Selections in HTML regions are handled using Rangy. Check `lib/javascripts/mercury/dependencies.coffee` for a full list of dependencies.

@@ -153,7 +153,6 @@ describe "Mercury.MarkdownRegion", ->
         expect( subject.replaceSelectedLine ).calledWith(text: '> ')
 
 
-  # todo: these remain untested until this is hashed out more
   describe "actions", ->
 
     it "should be tested eventually"

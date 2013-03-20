@@ -24,11 +24,11 @@ class Mercury.Statusbar extends Mercury.View
     @path.html("<b>#{@t('Path:')} </b>")
     for el in path
       @path.append(el)
-      @path.append(' &raquo; ')
+      @path.append(' &raquo; ') unless el == path[path.length - 1]
 
 
   onRegionUpdate: (region) ->
-    @setPath(region.path()) if region?.path
+    @setPath(path) if path = region.path?()
 
 
   hide: ->

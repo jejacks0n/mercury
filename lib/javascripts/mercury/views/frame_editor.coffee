@@ -9,9 +9,6 @@ class Mercury.FrameEditor extends Mercury.Editor
     @frame = $(@frame).addClass('mercury-frame-editor-frame')        # get the iframe and set the class
     return super unless @frame.length                                # fall back gracefully
 
-    Mercury.on 'initialize', => @initializeFrame()
-    @frame.on 'load', => @initializeFrame()
-
 
   initializeFrame: ->
     return if @initialized
@@ -20,6 +17,12 @@ class Mercury.FrameEditor extends Mercury.Editor
     @setupDocument()
     @addAllRegions()
     Mercury.trigger('initialized')
+
+
+  bindDefaultEvents: ->
+    @frame.on('load', => @initializeFrame())
+    Mercury.on('initialize', => @initializeFrame())
+    super
 
 
   setupDocument: ->

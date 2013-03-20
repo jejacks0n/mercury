@@ -34,13 +34,11 @@ Mercury.Region.Modules.TextSelection =
 
 
   getSerializedSelection: ->
-    sel = JSON.stringify(@getSelection())
-    [sel.start, sel.end].join(':')
+    @getSelection()
 
 
   setSerializedSelection: (sel) ->
-    [start, end] = sel.split(':')
-    @setSelection(start: start, end: end)
+    @setSelection(sel)
 
 
   # ---------------------------------------------------------------------------

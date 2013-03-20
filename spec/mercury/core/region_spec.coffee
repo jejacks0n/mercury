@@ -108,6 +108,11 @@ describe "Mercury.Region", ->
       subject = new Klass('<div>')
       expect( subject.beforeBuild ).called
 
+    it "triggers a build event", ->
+      Klass::trigger = spy()
+      subject = new Klass('<div>')
+      expect( subject.trigger ).calledWith('build')
+
     it "sets a tabindex (so it's focusable) unless we've provided our own focusable element", ->
       subject = new Klass('<div id="_name_">')
       expect( subject.attr('tabindex') ).to.eq('0')
@@ -125,15 +130,6 @@ describe "Mercury.Region", ->
       subject = new Klass('<div>', name: '_name_')
       expect( subject.name ).to.eq('_name_')
 
-    it "notifies if we have no name", ->
-      subject = new Klass('<div>')
-      expect( subject.notify ).calledWith('no name provided for the "unknown" region, falling back to random')
-
-    it "falls back to a random name if we have no name", ->
-      spyOn(Math, 'random', -> 42)
-      subject = new Klass('<div>')
-      expect( subject.name ).to.eq('unknown420000')
-
     it "sets default instance vars (and allows them to be overridden)", ->
       subject = new Klass('<div id="name">')
       expect( subject.previewing ).to.be.false
@@ -148,15 +144,23 @@ describe "Mercury.Region", ->
       expect( subject.focusable ).to.eq(focusable)
       expect( subject.skipHistoryOn ).to.eql(['foo'])
 
-    it "triggers a build event", ->
-      Klass::trigger = spy()
-      subject = new Klass('<div>')
-      expect( subject.trigger ).calledWith('build')
-
     it "calls #afterBuild if it's defined", ->
       Klass::afterBuild = spy()
       subject = new Klass('<div>')
       expect( subject.afterBuild ).called
+
+    it "sets data-region to the instance", ->
+      subject = new Klass('<div>')
+      expect( subject.el.data('region') ).to.eq(subject)
+
+    it "notifies if we have no name", ->
+      subject = new Klass('<div>')
+      expect( subject.notify ).calledWith('no name provided for the "unknown" region, falling back to random')
+
+    it "falls back to a random name if we have no name", ->
+      spyOn(Math, 'random', -> 42)
+      subject = new Klass('<div>')
+      expect( subject.name ).to.eq('unknown420000')
 
     it "calls #addRegionClassname", ->
       spyOn(Klass::, 'addRegionClassname')
@@ -178,6 +182,14 @@ describe "Mercury.Region", ->
       spyOn(Klass::, 'bindDefaultEvents')
       subject = new Klass('<div id="name">')
       expect( subject.bindDefaultEvents ).called
+
+
+  describe "#addRegionClassname", ->
+
+    it "adds a class to the element", ->
+      subject.el.removeAttr('class')
+      subject.addRegionClassname()
+      expect( subject.el.attr('class') ).to.eq('mercury-unknown-region')
 
 
   describe "#handleAction", ->
@@ -360,19 +372,43 @@ describe "Mercury.Region", ->
 
     it "sets the element data", ->
       subject.data(foo: 'bar')
-      expect( subject.el.data() ).to.eql(foo: 'bar', mercury: 'foo')
+      expect( subject.el.data() ).to.eql(foo: 'bar', mercury: 'foo', region: subject)
       subject.data('bar', 'baz')
-      expect( subject.el.data() ).to.eql(foo: 'bar', mercury: 'foo', bar: 'baz')
+      expect( subject.el.data() ).to.eql(foo: 'bar', mercury: 'foo', bar: 'baz', region: subject)
 
-    it "returns the element data if don't pass it arguments", ->
+    it "returns the element data if no arguments", ->
       subject.el.data(foo: 'bar')
-      expect( subject.data() ).to.eql(foo: 'bar', mercury: 'foo')
+      expect( subject.data() ).to.eql(foo: 'bar', mercury: 'foo', region: subject)
 
 
   describe "#snippets", ->
 
     it "returns an object", ->
       expect( subject.snippets() ).to.eql({})
+
+
+  describe "#hasChanges", ->
+
+    it "returns false if there's no changes", ->
+      expect( subject.hasChanges() ).to.be.false
+
+    it "returns true if @changed", ->
+      subject.changed = true
+      expect( subject.hasChanges() ).to.be.true
+
+    it "returns true if @initialValue has changed", ->
+      spyOn(subject, 'toJSON', -> '_foo_')
+      expect( subject.hasChanges() ).to.be.true
+
+
+  describe "#onSave", ->
+
+    it "resets @initialValue and @changed", ->
+      spyOn(subject, 'toJSON', -> '_bar_')
+      subject.changed = true
+      subject.onSave()
+      expect( subject.changed ).to.be.false
+      expect( subject.initialValue ).to.eq('"_bar_"')
 
 
   describe "#onUndo", ->
@@ -399,7 +435,7 @@ describe "Mercury.Region", ->
       subject.name = '_name_'
       subject.constructor.type = '_type_'
       spyOn(subject, 'value', -> '_value_')
-      spyOn(subject, 'data', -> '_data_')
+      spyOn(subject, 'data', -> {region: 'foo', foo: 'bar'})
       spyOn(subject, 'snippets', -> '_snippets_')
 
     it "returns the expected object", ->
@@ -407,19 +443,16 @@ describe "Mercury.Region", ->
         name: '_name_'
         type: '_type_'
         value: '_value_'
-        data: '_data_'
+        data: {foo: 'bar'}
         snippets: '_snippets_'
 
 
-  describe "#addRegionClassname", ->
-
-    it "adds a class to the element", ->
-      subject.el.removeAttr('class')
-      subject.addRegionClassname()
-      expect( subject.el.attr('class') ).to.eq('mercury-unknown-region')
-
-
   describe "#release", ->
+
+    it "removes the reference for data-region", ->
+      expect( subject.el.data('region') ).to.be.defined
+      subject.release()
+      expect( subject.el.data('region') ).to.be.null
 
     it "removes the region class from @el", ->
       expect( subject.el.hasClass('mercury-unknown-region') ).to.be.true
@@ -474,6 +507,13 @@ describe "Mercury.Region", ->
       subject.bindDefaultEvents()
       expect( Mercury.on ).calledWith('mode', sinon.match.func)
       expect( subject.handleMode ).calledWith(1, 2, '3')
+
+    it "binds to the global 'save' event", ->
+      spyOn(subject, 'onSave')
+      spyOn(Mercury, 'on').callsArgOnWith(1, subject)
+      subject.bindDefaultEvents()
+      expect( Mercury.on ).calledWith('save', sinon.match.func)
+      expect( subject.onSave ).called
 
     it "calls #delegateActions with what we've defined", ->
       subject.actions = {foo: 'bar'}

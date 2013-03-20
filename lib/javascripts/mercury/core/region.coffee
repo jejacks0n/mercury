@@ -83,7 +83,9 @@ class Mercury.Region extends Mercury.View
     @focused ||= false                                     # assume focused is false
     @focusable ||= @el                                     # define @focusable unless it's already defined
     @skipHistoryOn ||= ['redo']                            # we skip pushing to the history on redo by default
+    @changed ||= false                                     # you can track changes in subclasses
     @afterBuild?()                                         # call the afterBuild method if it's defined
+    @el.data(region: @)                                    # add instance reference to the element data
 
     unless @name
       @notify(@t('no name provided for the "%s" region, falling back to random', @constructor.type))
@@ -92,6 +94,13 @@ class Mercury.Region extends Mercury.View
     @addRegionClassname()
     @pushHistory() unless @skipHistoryOnInitialize
     @bindDefaultEvents()
+    @initialValue = JSON.stringify(@toJSON())
+
+
+  # Adds the classname based on the constructor type to the element.
+  #
+  addRegionClassname: ->
+    @addClass("mercury-#{@constructor.type}-region")
 
 
   # Handles action events by taking the first argument, which should be the action, and passes through to the action
@@ -178,7 +187,10 @@ class Mercury.Region extends Mercury.View
   # Delegate jQuery data.
   #
   data: (key, value) ->
-    if value then @el.data(key, value) else @el.data(key)
+    if typeof(value) != 'undefined' && value != null
+      @el.data(key, value)
+    else
+      @el.data(key)
 
 
   # Finds and collect the snippets out of the content.
@@ -186,6 +198,21 @@ class Mercury.Region extends Mercury.View
   #
   snippets: ->
     {}
+
+
+  # Track if changes have been made since the last save. This method can be overridden to specify change conditions that
+  # base doesn't account for. Be default this checks @changed and does a JSON string comparison of what #toJSON is
+  # returning.
+  #
+  hasChanges: ->
+    @changed || @initialValue != JSON.stringify(@toJSON())
+
+
+  # Resets @lastSavePosition and @changed, which should make the region consider itself not changed since the last save.
+  #
+  onSave: ->
+    @initialValue = JSON.stringify(@toJSON())
+    @changed = false
 
 
   # Default undo behavior. Calls #value with whatever's previous in the stack.
@@ -204,23 +231,20 @@ class Mercury.Region extends Mercury.View
   # Returns an object.
   #
   toJSON: ->
+    data = $.extend({}, @data())
+    delete data.region
     name: @name
     type: @constructor.type
     value: @value()
-    data: @data()
+    data: data
     snippets: @snippets()
-
-
-  # Adds the classname based on the constructor type to the element.
-  #
-  addRegionClassname: ->
-    @addClass("mercury-#{@constructor.type}-region")
 
 
   # Releases the instance and triggers a release event. Releasing a region doesn't remove the element, but does remove
   # all event listeners including those that have been added externally.
   #
   release: ->
+    @el.data(region: null)
     @el.removeClass("mercury-#{@constructor.type}-region")
     @focusable.removeAttr('tabindex')
     @trigger('release')
@@ -239,6 +263,9 @@ class Mercury.Region extends Mercury.View
 
     # handle mode events using a custom mode handler
     Mercury.on('mode', => @handleMode(arguments...))
+
+    # handle resetting changed/stack position when save is triggered
+    Mercury.on('save', => @onSave())
 
     # delegate all the actions defined in various places
     @delegateActions($.extend(true, @constructor.actions, @constructor.defaultActions, @actions ||= {}))

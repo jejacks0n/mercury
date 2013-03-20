@@ -15,6 +15,9 @@
 # Views.
 #
 #= require mercury/views/editor
+#= require mercury/views/frame_editor
+#= require mercury/views/statusbar
+#= require mercury/views/toolbar
 #= require mercury/views/uploader
 #
 # Region modules.
@@ -102,6 +105,6 @@ globalize = ->
   @init = (options = {}) =>
     return if @initialized
     @initialized = true
-    new @[@config('editor:editor')](options)
+    new @[@config('interface:editor')](options)
 
 globalize.call(Mercury)

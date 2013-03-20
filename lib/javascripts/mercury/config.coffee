@@ -53,15 +53,16 @@ Mercury.configuration =
     prefixUrl  : '/mercury/templates'                      # ajax path prefix for fallback JST templates.
 
 
-  # Editor
-  # The editor is instantiated when you call Mercury.init(). This configration allows you to specify which editor to use
-  # as well as the various UI classes to instantiate from within the editor which allows for a more modular way to add
-  # to / override Mercury functionality and it's interface elements.
+  # Interface
+  # Mercury will instantiate an editor on Mercury.init(). This configration allows you to specify which editor to use
+  # as well as the various user interface classes to instantiate from within the editor which provides a modular way to
+  # add to, or override Mercury functionality and it's interface elements.
   #
-  editor:
-    editor     : 'Editor'
-    toolbar    : 'Toolbar'
-    statusBar  : 'StatusBar'
+  interface:
+    hidden     : true                                     # initial visible state -- trigger 'interface:show' to show
+    editor     : 'FrameEditor'                             # editor to use on Mercury.init() - 'Editor', 'FrameEditor'
+    toolbar    : 'Toolbar'                                 # toolbar class to use within the editor
+    statusbar  : 'Statusbar'                               # statusbar class to use within the editor
 
 
   # Regions

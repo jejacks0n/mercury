@@ -11,35 +11,23 @@ Copyright (c) 2013 Jeremy Jackson
 
 // Views.
 @import "mercury/views/editor";
+@import "mercury/views/frame_editor";
+@import "mercury/views/statusbar";
+@import "mercury/views/toolbar";
 @import "mercury/views/uploader";
 
 // Regions.
 @import "mercury/regions";
 
-
 #mercury {
-  -webkit-text-size-adjust: none; // Disable text sizing in webkit (ipad/iphone etc)
-}
+  // disable text sizing in webkit (ipad/iphone etc)
+  -webkit-text-size-adjust: none;
 
-// Scratch pad / regression testing
-[data-mercury] {
-  //border: 1px solid red;
-}
-#mercury_controls {
-  position: fixed;
-  right: 20px;
-  top: 20px;
-  border: 1px solid #fff;
-  border-radius: 5px;
-  color: #fff;
-  background: rgba(0, 0, 0, .7);
-  padding: 10px;
-  margin: 0;
-  list-style: none;
-  li {
-    cursor: pointer;
-    &:hover {
-      color: red;
-    }
+  // disable animations while initializing
+  &.loading * {
+    -moz-transition: none !important;
+    -webkit-transition: none !important;
+    -o-transition: color 0 ease-in !important;
+    transition: none !important;
   }
 }

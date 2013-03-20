@@ -1,18 +1,15 @@
 #= require mercury/core/view
-#= require mercury/templates/editor
 
 class Mercury.Editor extends Mercury.View
 
   logPrefix: 'Mercury.Editor:'
-
-  template: 'editor'
+  className: 'mercury-editor'
 
   attributes:
     id: 'mercury'
 
   events:
-    'mousedown': 'keepRegionFocused'
-    'click [data-action]': 'processAction'
+    'mousedown': 'focusActiveRegion'
 
   constructor: ->
     if parent != window && parent.Mercury
@@ -22,33 +19,46 @@ class Mercury.Editor extends Mercury.View
     super
 
     @regions ||= []
-    @document ||= $('body')
 
-    @appendTo(document.body)
-    @setupFrame() if @frame = $(@frame).get(0)
+    @addClass('loading')
+    @appendTo(@document ||= $('body'))
     @initialize()
+    @buildInterface()
+    @bindDefaultEvents()
+    @el.removeClass('loading')
 
 
-  setupFrame: ->
-    @frame = $(@frame).addClass('mercury-editor-frame').attr(seamless: 'seamless')
-    Mercury.on 'initialize', => @initialize(true)
-    @frame.on 'load', => @initialize(true)
-
-
-  initialize: (frame = false) ->
-    if frame
-      return if @initialized
-      @initialized = true
-      contentWindow = @frame.get(0).contentWindow
-      contentWindow.Mercury = Mercury
-      @document = $(contentWindow.document)
+  initialize: ->
     @addAllRegions()
     Mercury.trigger('initialized')
+
+
+  buildInterface: ->
+    @buildToolbar()
+    @buildStatusbar()
+
+
+  buildToolbar: ->
+    return unless klass = @config('interface:toolbar')
+    @append(@toolbar = new Mercury[klass]())
+    @toolbar.hide() if @config('interface:hidden')
+
+
+  buildStatusbar: ->
+    return unless klass = @config('interface:statusbar')
+    @append(@statusbar = new Mercury[klass]())
+    @statusbar.hide() if @config('interface:hidden')
+
+
+  bindDefaultEvents: ->
+    Mercury.on 'mode', => @focusActiveRegion()
+    Mercury.on 'action', => @focusActiveRegion()
 
 
   addAllRegions: ->
     @addRegion(el) for el in @regionElements()
     @regions[0]?.focus()
+    Mercury.trigger('mode', 'preview') if @config('interface:hidden')
 
 
   regionElements: ->
@@ -61,8 +71,8 @@ class Mercury.Editor extends Mercury.View
     @regions.push(region)
 
 
-  keepRegionFocused: (e) ->
-    e?.preventDefault()
+  focusActiveRegion: (e) ->
+    e?.preventDefault?()
     @region.focus()
 
 
@@ -71,21 +81,3 @@ class Mercury.Editor extends Mercury.View
     for region in @regions
       data[region.name] = region.toJSON()
     data
-
-
-  processAction: (e) ->
-    target = $(e.target)
-    action = target.data('action')
-    value = target.data('value')
-    switch action
-      when 'preview'
-        Mercury.trigger('mode', 'preview')
-        @keepRegionFocused()
-      when 'html'
-        value = switch value
-          when 'html' then '<table>\n  <tr>\n    <td>1</td>\n    <td>2</td>\n  </tr>\n</table>'
-          when 'el' then $('<section class="foo"><h1>testing</h1></section>').get(0)
-          when 'jquery' then $('<section class="foo"><h1>testing</h1></section>')
-        Mercury.trigger('action', action, value)
-      else Mercury.trigger('action', action, value)
-

@@ -2495,7 +2495,7 @@ Copyright (c) 2013 Jeremy Jackson
         return;
       }
       _this.initialized = true;
-      return new _this[_this.config('editor:editor')](options);
+      return new _this[_this.config('interface:editor')](options);
     };
   };
 

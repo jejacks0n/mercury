@@ -1,0 +1,46 @@
+/* Statusbar
+ *----------------------------------------------------------------------------*/
+#mercury {
+  .mercury-statusbar {
+    @include no-selection;
+    @include transition(bottom, ease-in-out);
+    position: fixed;
+    z-index: 10020;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    white-space: nowrap;
+    background: rgba(0, 0, 0, 0.8);
+    .mercury-statusbar-path {
+      @include font(9pt);
+      overflow: hidden;
+      margin: 4px 160px 3px 7px;
+      text-overflow: ellipsis;
+      color: #aaa;
+      a, b {
+        @include font(9pt);
+        font-weight: normal;
+      }
+      a {
+        color: #ddd;
+      }
+    }
+    .mercury-statusbar-about {
+      @include font(9pt);
+      position: absolute;
+      right: 0;
+      margin: 4px 10px;
+      cursor: pointer;
+      font-style: normal;
+      text-shadow: #000 0 1px 0;
+      a {
+        color: #aaa;
+        text-decoration: none;
+        outline: none;
+        &:hover, &:focus {
+          color: $primary_color;
+        }
+      }
+    }
+  }
+}

@@ -7,10 +7,8 @@ class Mercury.Uploader extends Mercury.View
   @supported: !!(window.FormData && new XMLHttpRequest().upload)
 
   logPrefix: 'Mercury.Uploader:'
-
-  template: 'uploader'
-
   className: 'mercury-uploader'
+  template: 'uploader'
 
   attributes:
     style: 'opacity:0'

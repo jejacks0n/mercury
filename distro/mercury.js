@@ -1432,17 +1432,10 @@ Copyright (c) 2013 Jeremy Jackson
     FrameEditor.prototype.className = 'mercury-frame-editor';
 
     FrameEditor.prototype.initialize = function() {
-      var _this = this;
       this.frame = $(this.frame).addClass('mercury-frame-editor-frame');
       if (!this.frame.length) {
         return FrameEditor.__super__.initialize.apply(this, arguments);
       }
-      Mercury.on('initialize', function() {
-        return _this.initializeFrame();
-      });
-      return this.frame.on('load', function() {
-        return _this.initializeFrame();
-      });
     };
 
     FrameEditor.prototype.initializeFrame = function() {
@@ -1453,6 +1446,17 @@ Copyright (c) 2013 Jeremy Jackson
       this.setupDocument();
       this.addAllRegions();
       return Mercury.trigger('initialized');
+    };
+
+    FrameEditor.prototype.bindDefaultEvents = function() {
+      var _this = this;
+      this.frame.on('load', function() {
+        return _this.initializeFrame();
+      });
+      Mercury.on('initialize', function() {
+        return _this.initializeFrame();
+      });
+      return FrameEditor.__super__.bindDefaultEvents.apply(this, arguments);
     };
 
     FrameEditor.prototype.setupDocument = function() {
@@ -1518,14 +1522,19 @@ Copyright (c) 2013 Jeremy Jackson
       for (_i = 0, _len = path.length; _i < _len; _i++) {
         el = path[_i];
         this.path.append(el);
-        _results.push(this.path.append(' &raquo; '));
+        if (el !== path[path.length - 1]) {
+          _results.push(this.path.append(' &raquo; '));
+        } else {
+          _results.push(void 0);
+        }
       }
       return _results;
     };
 
     Statusbar.prototype.onRegionUpdate = function(region) {
-      if (region != null ? region.path : void 0) {
-        return this.setPath(region.path());
+      var path;
+      if (path = typeof region.path === "function" ? region.path() : void 0) {
+        return this.setPath(path);
       }
     };
 

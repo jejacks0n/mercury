@@ -59,7 +59,8 @@ Mercury.configuration =
   # add to, or override Mercury functionality and it's interface elements.
   #
   interface:
-    hidden     : true                                     # initial visible state -- trigger 'interface:show' to show
+    hidden     : false                                     # initial visible state -- trigger 'interface:show' to show
+    silent     : false                                     # set to true to disable asking about changes when leaving
     editor     : 'FrameEditor'                             # editor to use on Mercury.init() - 'Editor', 'FrameEditor'
     toolbar    : 'Toolbar'                                 # toolbar class to use within the editor
     statusbar  : 'Statusbar'                               # statusbar class to use within the editor

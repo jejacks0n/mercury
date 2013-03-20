@@ -10,15 +10,18 @@ class Mercury.Editor extends Mercury.View
 
   events:
     'mousedown': 'focusActiveRegion'
+    'focusout': 'focusActiveRegion'
 
   constructor: ->
     if parent != window && parent.Mercury
-      @log(@t('is already defined in outer frame'))
+      @log(@t('is already defined in parent frame'))
       return
 
     super
 
     @regions ||= []
+
+    $(window).on('beforeunload', => @beforeUnload())
 
     @addClass('loading')
     @appendTo(@document ||= $('body'))
@@ -74,6 +77,17 @@ class Mercury.Editor extends Mercury.View
   focusActiveRegion: (e) ->
     e?.preventDefault?()
     @region.focus()
+
+
+  beforeUnload: ->
+    return null if @config('interface:silent') || !@hasChanges()
+    return @t('You have unsaved changes.  Are you sure you want to leave without saving them first?')
+
+
+  hasChanges: ->
+    for region in @regions
+      return true if region.hasChanges()
+    false
 
 
   save: ->

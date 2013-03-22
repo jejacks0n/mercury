@@ -69,17 +69,8 @@ class Mercury.Region.Html extends Mercury.Region
     bold:        -> @toggleWrapSelectedWordsInClass('red')
     italic:      -> @toggleWrapSelectedWordsInClass('highlight')
     underline:   -> @toggleWrapSelectedWordsInClass('blue')
-
     rule:        -> @replaceSelection('<hr/>')
 
     file: (file) ->
       action = if file.isImage() then 'image' else 'link'
-      @handleAction(action, file.get('url'), file.get('name'))
-
-#    link: (url, text, attrs = {}) ->
-#      tag = $('<a>', $.extend({href: url, title: text}, attrs))
-#      @wrapSelected(tag, text: text, select: 'end')
-
-    image: (url, text, attrs = {}) ->
-      tag = $('<img>', $.extend({src: url, alt: text}, attrs))
-      @replaceSelection(tag, text: text)
+      @handleAction(action, url: file.get('url'), text: file.get('name'))

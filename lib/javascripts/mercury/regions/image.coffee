@@ -38,10 +38,10 @@ class Mercury.Region.Image extends Mercury.Region
     if url = $('<div>').html(data.getData('text/html')).find('img').attr('src')
       e.preventDefault()
       @focus()
-      @handleAction('image', url)
+      @handleAction('image', url: url)
 
 
   actions:
 
     file: (file) -> @value(file.get('url'))
-    image: (url) -> @value(url)
+    image: (image) -> @value(image.get('url'))

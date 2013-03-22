@@ -83,7 +83,7 @@ describe "Mercury.Region.Image", ->
     it "calls #handleAction", ->
       spyOn(subject, 'handleAction')
       subject.onDropItem(@e, @data)
-      expect( subject.handleAction ).calledWith('image', '/teabag/fixtures/image.gif')
+      expect( subject.handleAction ).calledWith('image', url: '/teabag/fixtures/image.gif')
 
     it "does nothing if there's no url", ->
       @data.getData = -> null
@@ -100,12 +100,12 @@ describe "Mercury.Region.Image", ->
 
       it "sets the value to the file url", ->
         spyOn(subject, 'value')
-        subject.handleAction('file', get: -> '_url_')
+        subject.handleAction('file', url: '_url_')
         expect( subject.value ).calledWith('_url_')
 
     describe "#image", ->
 
       it "sets the value to the url", ->
         spyOn(subject, 'value')
-        subject.handleAction('image', '_url_')
+        subject.handleAction('image', url: '_url_')
         expect( subject.value ).calledWith('_url_')

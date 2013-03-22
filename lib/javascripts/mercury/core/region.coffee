@@ -1,5 +1,6 @@
 #= require mercury/core/view
 #= require mercury/core/stack
+#= require mercury/core/action
 @Mercury ||= {}
 
 class Mercury.Region extends Mercury.View
@@ -107,11 +108,11 @@ class Mercury.Region extends Mercury.View
   # handler that's been defined within the subclass.
   # Returns false if we shouldn't handle anything, otherwise true.
   #
-  handleAction: (args...) ->
+  handleAction: (name, options = {}) ->
     return if !@focused || @previewing
-    action = args.shift()
-    @pushHistory() unless @skipHistoryOn.indexOf(action) > -1
-    @actions[action].apply(@, args) if @actions[action]
+    @pushHistory() unless @skipHistoryOn.indexOf(name) > -1
+    action = Mercury.Action.create(name, options)
+    @actions[name]?.call(@, action)
     @trigger('action', action)
     return true
 

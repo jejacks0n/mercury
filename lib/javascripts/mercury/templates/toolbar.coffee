@@ -39,8 +39,8 @@ JST['/mercury/templates/toolbar'] = (scope) ->
     <li data-action="html" data-value="el">html (with element)</li>
     <li data-action="html" data-value="jquery">html (with jQuery)</li>
     <hr/>
-    <li data-action="link" data-value="https://github.com/jejacks0n/mercury">link</li>
-    <li data-action="image" data-value="http://goo.gl/UWYSd">image</li>
+    <li data-action="link" data-value='{"url": "https://github.com/jejacks0n/mercury", "text": "Project Home"}'>link</li>
+    <li data-action="image" data-value='{"url": "http://goo.gl/UWYSd", "text": "Test Image"}'>image</li>
     <hr/>
     <li data-action="rule">rule</li>
     <hr/>

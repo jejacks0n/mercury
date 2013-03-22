@@ -31,12 +31,13 @@ class Mercury.Region.Markdown extends Mercury.Region
     bold         : ['**']
     italic       : ['_']
     underline    : ['<u>', '</u>']
+    strike       : ['<del>', '</del>']
     sup          : ['<sup>', '</sup>']
     sub          : ['<sub>', '</sub>']
     unorderedList: ['- ', '']
     orderedList  : ['1. ', '', /^\d+. |$/gi]
-    link         : ['[', '](%s)\n', /^\[|\]\([^)]\)/gi]
-    image        : ['![', '](%s)\n', /^!\[|\]\([^)]\)/gi]
+    link         : ['[', '](%s)', /^\[|\]\([^)]\)/gi]
+    image        : ['![', '](%s)', /^!\[|\]\([^)]\)/gi]
     style        : ['<span style="%s">', '</span>', /^(<span style="[^"]*">)|(<\/span>)$/gi]
     class        : ['<span class="%s">', '</span>', /^(<span class="[^"]*">)|(<\/span>)$/gi]
 
@@ -66,7 +67,7 @@ class Mercury.Region.Markdown extends Mercury.Region
     if url = $('<div>').html(data.getData('text/html')).find('img').attr('src')
       e.preventDefault()
       @focus()
-      @handleAction('image', url)
+      @handleAction('image', url: url)
 
 
   onReturnKey: (e) ->
@@ -92,9 +93,12 @@ class Mercury.Region.Markdown extends Mercury.Region
 
   actions:
 
+    # todo: add support for video and snippet
+
     bold:        -> @toggleWrapSelectedWords('bold')
     italic:      -> @toggleWrapSelectedWords('italic')
     underline:   -> @toggleWrapSelectedWords('underline')
+    strike:      -> @toggleWrapSelectedWords('strike')
     subscript:   -> @toggleWrapSelectedWords('sub')
     superscript: -> @toggleWrapSelectedWords('sup')
     rule:        -> @replaceSelectionWithParagraph('- - -')
@@ -103,7 +107,7 @@ class Mercury.Region.Markdown extends Mercury.Region
 
     style: (value) ->
       wrapper = if value.indexOf(':') > -1 then 'style' else 'class'
-      if wrapper == 'style' then @unwrapSelectedWords('class') else @unwrapSelectedWords('style')
+      @unwrapSelectedWords(if wrapper == 'style' then 'class' else 'style')
       @toggleWrapSelectedWords(@processWrapper(wrapper, [value]))
 
     html: (html) ->
@@ -111,8 +115,7 @@ class Mercury.Region.Markdown extends Mercury.Region
 
     block: (format) ->
       if format == 'blockquote'
-        @unwrapSelectedParagraphs('orderedList')
-        @unwrapSelectedParagraphs('unorderedList')
+        @unwrapSelectedParagraphs(wrapper) for wrapper in ['orderedList', 'unorderedList']
         @handleAction('indent') unless @unwrapSelectedParagraphs('blockquote')
         return
       if format == 'pre' || format == 'paragraph'
@@ -122,31 +125,21 @@ class Mercury.Region.Markdown extends Mercury.Region
       @wrapSelectedLines(format) if @wrappers[format]
 
     orderedList: ->
-      @unwrapSelectedParagraphs('blockquote')
-      @unwrapSelectedParagraphs('unorderedList')
+      @unwrapSelectedParagraphs(wrapper) for wrapper in ['blockquote', 'unorderedList']
       @wrapSelectedParagraphs('orderedList') unless @unwrapSelectedParagraphs('orderedList')
 
     unorderedList: ->
-      @unwrapSelectedParagraphs('blockquote')
-      @unwrapSelectedParagraphs('orderedList')
+      @unwrapSelectedParagraphs(wrapper) for wrapper in ['blockquote', 'orderedList']
       @wrapSelectedParagraphs('unorderedList') unless @unwrapSelectedParagraphs('unorderedList')
 
-    # todo: this isn't hashed out yet, but needs to be added.
-    snippet: (snippet) ->
-      console.error('not implemented')
-
-    # todo: it would be nicer if we could drop the images where they were actually dropped
-    #       in webkit the cursor moves around with where you're going to drop -- so if the selection is in a collapsed
-    #       state moving the cursor to where you dropped and placing them there would make sense.
     file: (file) ->
       action = if file.isImage() then 'image' else 'link'
-      @handleAction(action, file.get('url'), file.get('name'))
+      @handleAction(action, url: file.get('url'), text: file.get('name'))
 
-    # todo: handle options better -- maybe a command options pattern? eg.
-    #       class Link extends ActionOptions
-    #       url: '', title: '', target: ''
-    link: (url, text) ->
-      @wrapSelected(@processWrapper('link', [url, text]), text: text, select: 'end')
+    link: (link) ->
+      text = link.get('text')
+      @wrapSelected(@processWrapper('link', [link.get('url'), text]), text: text, select: 'end')
 
-    image: (url, text) ->
-      @wrapSelected(@processWrapper('image', [url, text]), text: text, select: 'end')
+    image: (image) ->
+      text = image.get('text')
+      @wrapSelected(@processWrapper('image', [image.get('url'), text]), text: text, select: 'end')

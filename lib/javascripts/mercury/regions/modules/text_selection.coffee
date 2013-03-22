@@ -21,10 +21,10 @@ Mercury.Region.Modules.TextSelection =
     start: start, end: end, length: end - start, text: value.slice(start, end)
 
 
-  setSelection: (sel, preAdjust = 0, sufAdjust = null) ->
+  setSelection: (sel, preAdjust = 0, sufAdjust = null, collapse = false) ->
     start = sel.start + preAdjust
     end = sel.end + (sufAdjust ? preAdjust)
-    end = start if end < start || typeof(end) == 'undefined'
+    end = start if end < start || typeof(end) == 'undefined' || collapse
     el = @focusable.get(0)
     value = el.value
     start += value.length if start < 0
@@ -59,10 +59,10 @@ Mercury.Region.Modules.TextSelection =
     @replaceSelection(text)
 
 
-  setAndReplaceSelection: (beforeSel, text = '', afterSel, preAdjust, sufAdjust) ->
+  setAndReplaceSelection: (beforeSel, text = '', afterSel, preAdjust, sufAdjust, collapse) ->
     @setSelection(beforeSel)
     @replaceSelection(text)
-    @setSelection(afterSel, preAdjust, sufAdjust)
+    @setSelection(afterSel, preAdjust, sufAdjust, collapse)
 
 
   replaceSelectionWithParagraph: (text = '') ->
@@ -87,11 +87,11 @@ Mercury.Region.Modules.TextSelection =
     val = [fix.pre, sel.text || options.text || '', fix.suf].join('')
 
     if options.select == 'end'
-      [pre, suf] = [val.length - sel.length, null]
+      [pre, suf] = [val.length, null]
     else
       [pre, suf] = [0, val.length - sel.length]
 
-    @setAndReplaceSelection(sel, val, sel, pre, suf)
+    @setAndReplaceSelection(sel, val, sel, pre, suf, options.select == 'end')
 
 
   unwrapSelected: (wrapper) ->

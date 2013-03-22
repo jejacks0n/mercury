@@ -81,7 +81,7 @@ describe "Mercury.Region.Markdown", ->
     it "calls #handleAction", ->
       spyOn(subject, 'handleAction')
       subject.onDropItem(@e, @data)
-      expect( subject.handleAction ).calledWith('image', '/teabag/fixtures/image.gif')
+      expect( subject.handleAction ).calledWith('image', url: '/teabag/fixtures/image.gif')
 
     it "does nothing if there's no url", ->
       @data.getData = -> null

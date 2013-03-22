@@ -197,6 +197,7 @@ describe "Mercury.Region", ->
     beforeEach ->
       subject.focused = true
       subject.actions = {foo: spy()}
+      spyOn(Mercury.Action, 'create', -> '_action_')
       spyOn(subject, 'pushHistory')
 
     it "calls #pushHistory if the action isn't set in @skipHistoryOn", ->
@@ -205,24 +206,28 @@ describe "Mercury.Region", ->
       subject.handleAction('undo')
       expect( subject.pushHistory ).called
 
+    it "creates an action instance from the options", ->
+      subject.handleAction('foo', bar: 'baz')
+      expect( Mercury.Action.create ).calledWith('foo', bar: 'baz')
+
     it "calls the action we've delegated", ->
-      subject.handleAction('foo', 1, 2, '3')
-      expect( subject.actions.foo ).calledWith(1, 2, '3')
+      subject.handleAction('foo')
+      expect( subject.actions.foo ).calledWith('_action_')
 
     it "triggers an action event", ->
       spyOn(subject, 'trigger')
-      subject.handleAction('foo', 1, 2, '3')
-      expect( subject.trigger ).calledWith('action', 'foo')
+      subject.handleAction('foo')
+      expect( subject.trigger ).calledWith('action', '_action_')
 
     it "doesn't call the action we've delegated if not focused", ->
       subject.focused = false
       subject.previewing = false
-      subject.handleAction('foo', 1, 2, '3')
+      subject.handleAction('foo')
       expect( subject.actions.foo ).not.called
 
     it "doesn't call the action we've delegated if previewing", ->
       subject.previewing = true
-      subject.handleAction('foo', 1, 2, '3')
+      subject.handleAction('foo')
       expect( subject.actions.foo ).not.called
 
 

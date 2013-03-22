@@ -3,6 +3,7 @@
 #= require mercury/extensions/number
 #= require mercury/extensions/string
 #
+#= require mercury/core/action
 #= require mercury/core/config
 #= require mercury/core/events
 #= require mercury/core/i18n
@@ -19,6 +20,14 @@
 #= require mercury/views/statusbar
 #= require mercury/views/toolbar
 #= require mercury/views/uploader
+#
+# Models.
+#
+#= require mercury/models/file
+#
+# Actions.
+#
+#= require mercury/actions/image
 #
 # Region modules.
 #

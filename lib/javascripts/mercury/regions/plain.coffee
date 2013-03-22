@@ -62,6 +62,6 @@ class Mercury.Region.Plain extends Mercury.Region
 
   actions:
 
-    bold:        -> @toggleWrapSelectedWordsInClass('red')
-    italic:      -> @toggleWrapSelectedWordsInClass('highlight')
-    underline:   -> @toggleWrapSelectedWordsInClass('blue')
+    bold:      -> @toggleWrapSelectedWordsInClass('red')
+    italic:    -> @toggleWrapSelectedWordsInClass('highlight')
+    underline: -> @toggleWrapSelectedWordsInClass('blue')

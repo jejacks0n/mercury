@@ -3,13 +3,13 @@
 #= require mercury/dependencies
 #= require mercury/mercury
 #
-# All locales.
-#
-#= require mercury/locales
-#
 # All region types.
 #
 #= require mercury/regions
+#
+# All locales.
+#
+#= require mercury/locales
 #
 # Configuration.
 #

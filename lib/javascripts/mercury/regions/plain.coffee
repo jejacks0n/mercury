@@ -8,8 +8,8 @@ Dependencies:
   rangy-serializer
   rangy-cssclassapplier
 ###
-class Mercury.PlainRegion extends Mercury.Region
-  @define 'Mercury.PlainRegion', 'plain'
+class Mercury.Region.Plain extends Mercury.Region
+  @define 'Mercury.Region.Plain', 'plain'
   @include Mercury.Region.Modules.HtmlSelection
   @include Mercury.Region.Modules.SelectionValue
   @include Mercury.Region.Modules.ContentEditable

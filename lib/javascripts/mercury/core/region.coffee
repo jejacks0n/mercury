@@ -50,9 +50,9 @@ class Mercury.Region extends Mercury.View
     type = el.attr(@config('regions:attribute'))
     @notify(@t('region type not provided')) unless type
 
-    type = "#{type}_region".toLowerCase().toCamelCase(true)
-    @notify(@t('unknown "%s" region type, falling back to base region', type)) unless Mercury[type]
-    new (Mercury[type] || Mercury.Region)(el)
+    type = "#{type}".toLowerCase().toCamelCase(true)
+    @notify(@t('unknown "%s" region type, falling back to base region', type)) unless Mercury.Region[type]
+    new (Mercury.Region[type] || Mercury.Region)(el)
 
 
   # Exposes the ability to add actions to the region type. This allows you to provide your own custom actions that may

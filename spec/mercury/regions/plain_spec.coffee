@@ -5,9 +5,9 @@
 #= require mercury/regions/modules/selection_value
 #= require mercury/regions/plain
 
-describe "Mercury.PlainRegion", ->
+describe "Mercury.Region.Plain", ->
 
-  Klass = Mercury.PlainRegion
+  Klass = Mercury.Region.Plain
   subject = null
 
   beforeEach ->
@@ -15,7 +15,7 @@ describe "Mercury.PlainRegion", ->
     subject = new Klass('<div id="foo">')
 
   it "is defined correctly", ->
-    expect( Klass.className ).to.eq('Mercury.PlainRegion')
+    expect( Klass.className ).to.eq('Mercury.Region.Plain')
     expect( Klass.type ).to.eq('plain')
     expect( Klass.supported ).to.be.true
 

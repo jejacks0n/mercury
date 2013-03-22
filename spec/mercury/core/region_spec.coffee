@@ -57,18 +57,18 @@ describe "Mercury.Region", ->
   describe ".create", ->
 
     beforeEach ->
-      Mercury.FooRegion = spy()
+      Mercury.Region.Foo = spy()
       spyOn(Klass, 'notify')
       spyOn(Klass::, 'notify')
 
     it "instantiates the expected region class with the element", ->
       Klass.create('<div data-mercury="foo">')
-      expect( Mercury.FooRegion ).called
+      expect( Mercury.Region.Foo ).called
 
     it "detects the type using the configurable attribute", ->
       Mercury.configure 'regions:attribute', 'data-type'
       Klass.create('<div data-type="fOo">')
-      expect( Mercury.FooRegion ).called
+      expect( Mercury.Region.Foo ).called
 
     it "notifies if there was no type detected", ->
       Klass.create('<div id="test">')
@@ -76,7 +76,7 @@ describe "Mercury.Region", ->
 
     it "notifies if we're falling back to the base region", ->
       Klass.create('<div data-mercury="bar" id="test">')
-      expect( Klass.notify ).calledWith('unknown "BarRegion" region type, falling back to base region')
+      expect( Klass.notify ).calledWith('unknown "Bar" region type, falling back to base region')
 
 
   describe ".addAction", ->

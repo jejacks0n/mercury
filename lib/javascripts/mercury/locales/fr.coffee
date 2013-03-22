@@ -15,11 +15,11 @@ Mercury.I18n.define 'fr',
   "Error: Unable to upload the file": "Erreur : l'envoi du fichier à échoué"
   "Successfully uploaded...": "Envoi réussi"
 
-  # Mercury.File
-  # ---------------------------------------------------------------------------
-  "Too large": "Trop grand"
-  "Unsupported format (%s)": "Format non supporté"
-
   # Mercury.Statusbar
   # ---------------------------------------------------------------------------
   "Path:": "Chemin :"
+
+  # Mercury.Model.File
+  # ---------------------------------------------------------------------------
+  "Too large": "Trop grand"
+  "Unsupported format (%s)": "Format non supporté"

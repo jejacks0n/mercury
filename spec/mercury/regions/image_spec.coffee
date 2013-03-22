@@ -4,9 +4,9 @@
 #= require mercury/regions/modules/drop_indicator
 #= require mercury/regions/image
 
-describe "Mercury.ImageRegion", ->
+describe "Mercury.Region.Image", ->
 
-  Klass = Mercury.ImageRegion
+  Klass = Mercury.Region.Image
   subject = null
 
   beforeEach ->
@@ -14,7 +14,7 @@ describe "Mercury.ImageRegion", ->
     subject = new Klass('<img id="foo">')
 
   it "is defined correctly", ->
-    expect( Klass.className ).to.eq('Mercury.ImageRegion')
+    expect( Klass.className ).to.eq('Mercury.Region.Image')
     expect( Klass.type ).to.eq('image')
     expect( subject.tag ).to.eq('img')
     expect( subject.events ).to.have.keys(['mousedown'])

@@ -15,11 +15,11 @@ Mercury.I18n.define 'pt',
   "Error: Unable to upload the file": ""
   "Successfully uploaded...": ""
 
-  # Mercury.File
-  # ---------------------------------------------------------------------------
-  "Too large": ""
-  "Unsupported format (%s)": ""
-
   # Mercury.Statusbar
   # ---------------------------------------------------------------------------
   "Path:": ""
+
+  # Mercury.Model.File
+  # ---------------------------------------------------------------------------
+  "Too large": ""
+  "Unsupported format (%s)": ""

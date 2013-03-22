@@ -9,8 +9,8 @@ Dependencies:
 This is still experimental and could be changed later to provide a way to fetch the markdown content for a given region
 via Ajax.
 ###
-class Mercury.MarkdownRegion extends Mercury.Region
-  @define 'Mercury.MarkdownRegion', 'markdown'
+class Mercury.Region.Markdown extends Mercury.Region
+  @define 'Mercury.Region.Markdown', 'markdown'
   @include Mercury.Region.Modules.DropIndicator
   @include Mercury.Region.Modules.SelectionValue
   @include Mercury.Region.Modules.FocusableTextarea

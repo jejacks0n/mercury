@@ -15,11 +15,11 @@ Mercury.I18n.define 'swedish_chef',
   "Error: Unable to upload the file": "Irrur: Uneble-a tu uplued zee feele-a"
   "Successfully uploaded...": "Sooccessffoolly uplueded..."
 
-  # Mercury.File
-  # ---------------------------------------------------------------------------
-  "Too large": "Tuu lerge-a"
-  "Unsupported format (%s)": "Unsooppurted furmet (%s)"
-
   # Mercury.Statusbar
   # ---------------------------------------------------------------------------
   "Path:": "Pet:"
+
+  # Mercury.Model.File
+  # ---------------------------------------------------------------------------
+  "Too large": "Tuu lerge-a"
+  "Unsupported format (%s)": "Unsooppurted furmet (%s)"

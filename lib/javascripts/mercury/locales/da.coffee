@@ -15,11 +15,11 @@ Mercury.I18n.define 'da',
   "Error: Unable to upload the file": "Fejl: Kunne ikke uploade filen"
   "Successfully uploaded...": "Upload færdig..."
 
-  # Mercury.File
-  # ---------------------------------------------------------------------------
-  "Too large": "For stor"
-  "Unsupported format (%s)": "Formatet er ikke understøttet (%s)"
-
   # Mercury.Statusbar
   # ---------------------------------------------------------------------------
   "Path:": "Sti:"
+
+  # Mercury.Model.File
+  # ---------------------------------------------------------------------------
+  "Too large": "For stor"
+  "Unsupported format (%s)": "Formatet er ikke understøttet (%s)"

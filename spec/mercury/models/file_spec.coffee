@@ -1,9 +1,9 @@
 #= require spec_helper
 #= require mercury/models/file
 
-describe "Mercury.File", ->
+describe "Mercury.Model.File", ->
 
-  Klass = Mercury.File
+  Klass = Mercury.Model.File
   subject = null
 
   beforeEach ->
@@ -11,7 +11,7 @@ describe "Mercury.File", ->
     subject = new Klass(@file)
 
   it "is defined correctly", ->
-    expect( Klass.className ).to.eq('Mercury.File')
+    expect( Klass.className ).to.eq('Mercury.Model.File')
 
   describe ".url", ->
 

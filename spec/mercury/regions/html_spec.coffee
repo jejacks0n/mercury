@@ -7,9 +7,9 @@
 #= require mercury/regions/modules/selection_value
 #= require mercury/regions/html
 
-describe "Mercury.HtmlRegion", ->
+describe "Mercury.Region.Html", ->
 
-  Klass = Mercury.HtmlRegion
+  Klass = Mercury.Region.Html
   subject = null
 
   beforeEach ->
@@ -17,7 +17,7 @@ describe "Mercury.HtmlRegion", ->
     subject = new Klass('<div id="foo">')
 
   it "is defined correctly", ->
-    expect( Klass.className ).to.eq('Mercury.HtmlRegion')
+    expect( Klass.className ).to.eq('Mercury.Region.Html')
     expect( Klass.type ).to.eq('html')
     expect( Klass.supported ).to.be.true
 

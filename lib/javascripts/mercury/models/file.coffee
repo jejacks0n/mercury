@@ -1,9 +1,9 @@
 #= require mercury/extensions/number
 #= require mercury/core/model
 
-class Mercury.File extends Mercury.Model
+class Mercury.Model.File extends Mercury.Model
 
-  @define 'Mercury.File'
+  @define 'Mercury.Model.File'
 
   @url: -> @config('uploading:saveUrl')
 

@@ -3,9 +3,9 @@
 #= require mercury/regions/modules/focusable_textarea
 #= require mercury/regions/text
 
-describe "Mercury.TextRegion", ->
+describe "Mercury.Region.Text", ->
 
-  Klass = Mercury.TextRegion
+  Klass = Mercury.Region.Text
   subject = null
 
   beforeEach ->
@@ -13,7 +13,7 @@ describe "Mercury.TextRegion", ->
     subject = new Klass('<div id="foo">')
 
   it "is defined correctly", ->
-    expect( Klass.className ).to.eq('Mercury.TextRegion')
+    expect( Klass.className ).to.eq('Mercury.Region.Text')
     expect( Klass.type ).to.eq('text')
     expect( Klass.supported ).to.be.true
 
@@ -22,6 +22,12 @@ describe "Mercury.TextRegion", ->
     it "sets the value", ->
       subject.value('_value_')
       expect( subject.focusable.val() ).to.eq('_value_')
+
+    it "sets the value and selection if we pass an object", ->
+      subject.setSerializedSelection = spy()
+      subject.value(val: '_value_', sel: '_sel_')
+      expect( subject.focusable.val() ).to.eq('_value_')
+      expect( subject.setSerializedSelection ).calledWith('_sel_')
 
     it "returns the value when getting", ->
       subject.focusable.val('_foo_')

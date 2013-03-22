@@ -62,7 +62,7 @@ describe "Mercury.Uploader", ->
     beforeEach ->
       spyOn(subject, 'upload')
       @valid = true
-      spyOn(Mercury.File::, 'isValid', => @valid)
+      spyOn(Mercury.Model.File::, 'isValid', => @valid)
 
     it "creates an array of @files", ->
       subject.calculate(@files)

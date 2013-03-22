@@ -15,11 +15,11 @@ Mercury.I18n.define 'de',
   "Error: Unable to upload the file": "Fehler: Nicht in der Lage, die Datei hochzuladen"
   "Successfully uploaded...": "Erfolgreich hochgeladen…"
 
-  # Mercury.File
-  # ---------------------------------------------------------------------------
-  "Too large": "Zu groß"
-  "Unsupported format (%s)": "Nicht unterstütztes Format (%s)"
-
   # Mercury.Statusbar
   # ---------------------------------------------------------------------------
   "Path:": "Pfad:"
+
+  # Mercury.Model.File
+  # ---------------------------------------------------------------------------
+  "Too large": "Zu groß"
+  "Unsupported format (%s)": "Nicht unterstütztes Format (%s)"

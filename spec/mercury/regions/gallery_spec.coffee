@@ -4,9 +4,9 @@
 #= require mercury/regions/modules/drop_indicator
 #= require mercury/regions/gallery
 
-describe "Mercury.GalleryRegion", ->
+describe "Mercury.Region.Gallery", ->
 
-  Klass = Mercury.GalleryRegion
+  Klass = Mercury.Region.Gallery
   subject = null
 
   beforeEach ->
@@ -14,7 +14,7 @@ describe "Mercury.GalleryRegion", ->
     subject = new Klass('<div id="foo">')
 
   it "is defined correctly", ->
-    expect( Klass.className ).to.eq('Mercury.GalleryRegion')
+    expect( Klass.className ).to.eq('Mercury.Region.Gallery')
     expect( Klass.type ).to.eq('gallery')
     expect( subject.skipHistoryOn ).to.eql(['undo', 'redo'])
     expect( subject.elements ).to.have.keys [

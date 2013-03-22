@@ -21,7 +21,7 @@ jQuery ->
 
 
 # example of extending regions to add actions for buttons or other functionality.
-Mercury.MarkdownRegion.addAction 'direction', ->
+Mercury.Region.Markdown.addAction 'direction', ->
   return alert("This region doesn't allow switching text direction") unless @allowDirection
   @direction = if @direction == 'rtl' then 'ltr' else 'rtl'
   @el.css(direction: @direction)

@@ -7,9 +7,9 @@
 #= require mercury/regions/modules/selection_value
 #= require mercury/regions/markdown
 
-describe "Mercury.MarkdownRegion", ->
+describe "Mercury.Region.Markdown", ->
 
-  Klass = Mercury.MarkdownRegion
+  Klass = Mercury.Region.Markdown
   subject = null
 
   beforeEach ->
@@ -17,7 +17,7 @@ describe "Mercury.MarkdownRegion", ->
     subject = new Klass('<div id="foo">')
 
   it "is defined correctly", ->
-    expect( Klass.className ).to.eq('Mercury.MarkdownRegion')
+    expect( Klass.className ).to.eq('Mercury.Region.Markdown')
     expect( Klass.type ).to.eq('markdown')
     expect( subject.editableDropBehavior ).to.be.true
     expect( subject.wrappers ).to.be.defined

@@ -7,8 +7,8 @@ Dependencies:
   rangy-serializer
   rangy-cssclassapplier
 ###
-class Mercury.HtmlRegion extends Mercury.Region
-  @define 'Mercury.HtmlRegion', 'html'
+class Mercury.Region.Html extends Mercury.Region
+  @define 'Mercury.Region.Html', 'html'
   @include Mercury.Region.Modules.DropIndicator
   @include Mercury.Region.Modules.HtmlSelection
   @include Mercury.Region.Modules.SelectionValue

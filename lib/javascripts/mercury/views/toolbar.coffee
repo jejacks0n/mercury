@@ -16,7 +16,7 @@ class Mercury.Toolbar extends Mercury.View
 
   constructor: ->
     super
-    @interface = @config('interface:hidden')
+    @hidden = @config('interface:enabled')
 
 
   processAction: (e) ->
@@ -25,8 +25,8 @@ class Mercury.Toolbar extends Mercury.View
     val = target.data('value')
     switch act
       when 'interface'
-        @interface = !@interface
-        if @interface then Mercury.trigger('interface:hide') else Mercury.trigger('interface:show')
+        @hidden = !@hidden
+        if @hidden then Mercury.trigger('interface:show') else Mercury.trigger('interface:hide')
         Mercury.trigger('mode', 'preview')
       when 'preview'
         Mercury.trigger('mode', 'preview')

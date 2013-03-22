@@ -44,13 +44,13 @@ class Mercury.Editor extends Mercury.View
   buildToolbar: ->
     return unless klass = @config('interface:toolbar')
     @append(@toolbar = new Mercury[klass]())
-    @toolbar.hide() if @config('interface:hidden')
+    @toolbar.hide() unless @config('interface:enabled')
 
 
   buildStatusbar: ->
     return unless klass = @config('interface:statusbar')
     @append(@statusbar = new Mercury[klass]())
-    @statusbar.hide() if @config('interface:hidden')
+    @statusbar.hide() unless @config('interface:enabled')
 
 
   bindDefaultEvents: ->
@@ -61,7 +61,7 @@ class Mercury.Editor extends Mercury.View
   addAllRegions: ->
     @addRegion(el) for el in @regionElements()
     @regions[0]?.focus()
-    Mercury.trigger('mode', 'preview') if @config('interface:hidden')
+    Mercury.trigger('mode', 'preview') unless @config('interface:enabled')
 
 
   regionElements: ->

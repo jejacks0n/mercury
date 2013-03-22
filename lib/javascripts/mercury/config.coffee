@@ -59,7 +59,7 @@ Mercury.configuration =
   # add to, or override Mercury functionality and it's interface elements.
   #
   interface:
-    hidden     : false                                     # initial visible state -- trigger 'interface:show' to show
+    enabled    : true                                      # initial visible state -- trigger 'interface:show' to show
     silent     : false                                     # set to true to disable asking about changes when leaving
     editor     : 'FrameEditor'                             # editor to use on Mercury.init() - 'Editor', 'FrameEditor'
     toolbar    : 'Toolbar'                                 # toolbar class to use within the editor
@@ -83,7 +83,7 @@ Mercury.configuration =
     #= require mercury/regions/gallery
     #
     gallery:
-      mimeTypes : ['image/jpeg']                           # file types - overrides general uploading configuration.
+      mimeTypes: ['image/jpeg']                            # file types - overrides general uploading configuration.
 
     # The HTML region is a full HTML5 Content Editable region -- a true WYSIWYG experience. Effort has been made to
     # normalize, and keep things consistent, but the nature of it is complex and should be treated as such. There's an
@@ -95,7 +95,7 @@ Mercury.configuration =
     #= require mercury/regions/html
     #
     html:
-      mimeTypes : false                                    # file types - overrides general uploading to allow anything.
+      mimeTypes: false                                     # file types - overrides general uploading to allow anything.
 
     # The image region is typically an image tag and what's sent back to the server on serialization is the source of
     # that image. It allows draging/dropping images onto itself, and maintains a history so you can undo/redo your
@@ -104,7 +104,7 @@ Mercury.configuration =
     #= require mercury/regions/gallery
     #
     image:
-      mimeTypes : ['image/jpeg']                           # file types - overrides general uploading configuration.
+      mimeTypes: ['image/jpeg']                            # file types - overrides general uploading configuration.
 
     # Markdown provides an easy way to provide some markup abilities without the exposing the ability to edit complex
     # HTML, and is useful for people who don't fully understand HTML. Use the markdown sent to the server on save to
@@ -114,8 +114,8 @@ Mercury.configuration =
     #= require mercury/regions/markdown
     #
     markdown:
-      autoSize  : true                                     # the region will auto-resize to the content within it.
-      mimeTypes : false                                    # file types - overrides general uploading to allow anything.
+      autoSize : true                                      # the region will auto-resize to the content within it.
+      mimeTypes: false                                     # file types - overrides general uploading to allow anything.
 
     # The Plain region is a simplified single line HTML5 Content Editable region. It restricts paste, drag/drop, and
     # only provides the ability to do some common actions like bold, italics, and underline. This is a useful region for
@@ -127,7 +127,7 @@ Mercury.configuration =
     #= require mercury/regions/html
     #
     plain:
-      actions   : true                                     # allow the common actions (bold/italics/underline)
+      actions  : true                                      # allow the common actions (bold/italic/underline)
 
     # The Text region is a multiline plain text input. This region can be used to collect only text in cases when you
     # don't want to allow more complex HTML. It's up to you to render <br> tags when displaying the content within the
@@ -136,5 +136,5 @@ Mercury.configuration =
     #= require mercury/regions/text
     #
     text:
-      autoSize  : true                                     # the region will auto-resize to the content within it.
-      stripTags : true                                     # strip html when saving/previewing (keeps it only text).
+      autoSize : true                                      # the region will auto-resize to the content within it.
+      stripTags: true                                      # strip html when saving/previewing (keeps it only text).

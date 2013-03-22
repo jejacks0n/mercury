@@ -9,6 +9,7 @@ class Mercury.Region.Image extends Mercury.Region
 
   @supported: true
 
+  toolbars: ['image']
   tag: 'img'
 
   events:

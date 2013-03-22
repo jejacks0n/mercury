@@ -20,5 +20,6 @@ describe "Mercury.Region.Html", ->
     expect( Klass.className ).to.eq('Mercury.Region.Html')
     expect( Klass.type ).to.eq('html')
     expect( Klass.supported ).to.be.true
+    expect( subject.toolbars ).to.eql(['markup'])
 
   it "needs to be tested eventually"

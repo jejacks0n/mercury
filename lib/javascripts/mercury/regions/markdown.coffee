@@ -18,6 +18,8 @@ class Mercury.Region.Markdown extends Mercury.Region
 
   @supported: true
 
+  toolbars: ['markup']
+
   wrappers:
     h1           : ['# ', ' #']
     h2           : ['## ', ' ##']

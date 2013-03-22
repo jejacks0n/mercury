@@ -17,6 +17,7 @@ describe "Mercury.Region.Gallery", ->
     expect( Klass.className ).to.eq('Mercury.Region.Gallery')
     expect( Klass.type ).to.eq('gallery')
     expect( subject.skipHistoryOn ).to.eql(['undo', 'redo'])
+    expect( subject.toolbars ).to.eql(['gallery'])
     expect( subject.elements ).to.have.keys [
       'controls',
       'slides',

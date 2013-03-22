@@ -17,6 +17,7 @@ describe "Mercury.Region.Image", ->
     expect( Klass.className ).to.eq('Mercury.Region.Image')
     expect( Klass.type ).to.eq('image')
     expect( subject.tag ).to.eq('img')
+    expect( subject.toolbars ).to.eql(['image'])
     expect( subject.events ).to.have.keys(['mousedown'])
 
 

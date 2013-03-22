@@ -8,6 +8,8 @@ class Mercury.Region.Text extends Mercury.Region
 
   @supported: true
 
+  toolbars: false
+
   value: (value = null) ->
     if value == null || typeof(value) == 'undefined'
       return @focusable.val() unless @config('regions:text:stripTags')

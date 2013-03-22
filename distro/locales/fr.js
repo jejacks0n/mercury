@@ -10,9 +10,9 @@
     "Size: %s": "Type : %s",
     "Error: Unable to upload the file": "Erreur : l'envoi du fichier à échoué",
     "Successfully uploaded...": "Envoi réussi",
+    "Path:": "Chemin :",
     "Too large": "Trop grand",
-    "Unsupported format (%s)": "Format non supporté",
-    "Path:": "Chemin :"
+    "Unsupported format (%s)": "Format non supporté"
   });
 
 }).call(this);

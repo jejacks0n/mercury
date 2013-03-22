@@ -10,9 +10,9 @@
     "Size: %s": "نوع: %s",
     "Error: Unable to upload the file": "خطأ: غير قادر على رفع الملف",
     "Successfully uploaded...": "تم الرفع بنجاح...",
+    "Path:": "مسار:",
     "Too large": "كبير جدا",
-    "Unsupported format (%s)": "تنسيق غير مدعوم (%s)",
-    "Path:": "مسار:"
+    "Unsupported format (%s)": "تنسيق غير مدعوم (%s)"
   });
 
 }).call(this);

@@ -5,16 +5,16 @@ Documentation and other useful information can be found at https://github.com/je
 Copyright (c) 2013 Jeremy Jackson
 */
 /* line 77, ../../lib/stylesheets/mercury/core/_mixins.scss */
-.mercury-clearfix:before, .mercury-clearfix:after {
+.mercury-clearfix:before, #mercury .mercury-toolbar:before, .mercury-clearfix:after, #mercury .mercury-toolbar:after {
   content: " ";
   display: table;
 }
 /* line 81, ../../lib/stylesheets/mercury/core/_mixins.scss */
-.mercury-clearfix:after {
+.mercury-clearfix:after, #mercury .mercury-toolbar:after {
   clear: both;
 }
 /* line 84, ../../lib/stylesheets/mercury/core/_mixins.scss */
-.mercury-clearfix {
+.mercury-clearfix, #mercury .mercury-toolbar {
   *zoom: 1;
 }
 
@@ -105,6 +105,13 @@ Copyright (c) 2013 Jeremy Jackson
   -moz-user-select: none;
   user-select: none;
   cursor: default;
+  background: #e2e2e2;
+  background: -moz-linear-gradient(top, #e2e2e2 1%, #c6c6c6 100%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(1%, #e2e2e2), color-stop(100%, #c6c6c6));
+  background: -webkit-linear-gradient(top, #e2e2e2 1%, #c6c6c6 100%);
+  background: -o-linear-gradient(top, #e2e2e2 1%, #c6c6c6 100%);
+  background: -ms-linear-gradient(top, #e2e2e2 1%, #c6c6c6 100%);
+  background: linear-gradient(to bottom, #e2e2e2 1%, #c6c6c6 100%);
   -webkit-transition-property: top;
   -webkit-transition-duration: 0.25s;
   -webkit-transition-timing-function: ease-in-out;
@@ -119,9 +126,11 @@ Copyright (c) 2013 Jeremy Jackson
   left: 0;
   width: 100%;
   height: 30px;
-  background: magenta;
+  border-bottom: 1px solid #727272;
+  cursor: default;
 }
-/* line 13, ../../lib/stylesheets/mercury/views/_toolbar.scss */
+
+/* line 21, ../../lib/stylesheets/mercury/views/_toolbar.scss */
 #mercury .mercury-toolbar ul {
   position: fixed;
   right: 20px;
@@ -134,13 +143,13 @@ Copyright (c) 2013 Jeremy Jackson
   margin: 0;
   list-style: none;
 }
-/* line 24, ../../lib/stylesheets/mercury/views/_toolbar.scss */
+/* line 32, ../../lib/stylesheets/mercury/views/_toolbar.scss */
 #mercury .mercury-toolbar ul li {
   cursor: pointer;
 }
-/* line 26, ../../lib/stylesheets/mercury/views/_toolbar.scss */
+/* line 34, ../../lib/stylesheets/mercury/views/_toolbar.scss */
 #mercury .mercury-toolbar ul li:hover {
-  color: red;
+  color: #00bce5;
 }
 
 /* Uploader

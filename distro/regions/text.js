@@ -9,21 +9,21 @@ them when you render the content.
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  Mercury.TextRegion = (function(_super) {
+  Mercury.Region.Text = (function(_super) {
 
-    __extends(TextRegion, _super);
+    __extends(Text, _super);
 
-    function TextRegion() {
-      return TextRegion.__super__.constructor.apply(this, arguments);
+    function Text() {
+      return Text.__super__.constructor.apply(this, arguments);
     }
 
-    TextRegion.define('Mercury.TextRegion', 'text');
+    Text.define('Mercury.Region.Text', 'text');
 
-    TextRegion.include(Mercury.Region.Modules.FocusableTextarea);
+    Text.include(Mercury.Region.Modules.FocusableTextarea);
 
-    TextRegion.supported = true;
+    Text.supported = true;
 
-    TextRegion.prototype.value = function(value) {
+    Text.prototype.value = function(value) {
       var _ref, _ref1;
       if (value == null) {
         value = null;
@@ -44,13 +44,13 @@ them when you render the content.
       }
     };
 
-    TextRegion.prototype.sanitizedValue = function() {
+    Text.prototype.sanitizedValue = function() {
       var div;
       div = $('<div>').html(this.focusable.val().trim().replace(/\n/g, '<span>[!!!br!!!]</span>'));
       return div.text().replace(/\[!!!br!!!\]/g, '<br>');
     };
 
-    return TextRegion;
+    return Text;
 
   })(Mercury.Region);
 

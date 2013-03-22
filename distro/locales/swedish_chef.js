@@ -10,9 +10,9 @@
     "Size: %s": "Type-a: %s",
     "Error: Unable to upload the file": "Irrur: Uneble-a tu uplued zee feele-a",
     "Successfully uploaded...": "Sooccessffoolly uplueded...",
+    "Path:": "Pet:",
     "Too large": "Tuu lerge-a",
-    "Unsupported format (%s)": "Unsooppurted furmet (%s)",
-    "Path:": "Pet:"
+    "Unsupported format (%s)": "Unsooppurted furmet (%s)"
   });
 
 }).call(this);

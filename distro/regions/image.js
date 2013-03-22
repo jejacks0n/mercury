@@ -10,27 +10,27 @@ image with the one that was uploaded.
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  Mercury.ImageRegion = (function(_super) {
+  Mercury.Region.Image = (function(_super) {
 
-    __extends(ImageRegion, _super);
+    __extends(Image, _super);
 
-    function ImageRegion() {
-      return ImageRegion.__super__.constructor.apply(this, arguments);
+    function Image() {
+      return Image.__super__.constructor.apply(this, arguments);
     }
 
-    ImageRegion.define('Mercury.ImageRegion', 'image');
+    Image.define('Mercury.Region.Image', 'image');
 
-    ImageRegion.include(Mercury.Region.Modules.DropIndicator);
+    Image.include(Mercury.Region.Modules.DropIndicator);
 
-    ImageRegion.supported = true;
+    Image.supported = true;
 
-    ImageRegion.prototype.tag = 'img';
+    Image.prototype.tag = 'img';
 
-    ImageRegion.prototype.events = {
+    Image.prototype.events = {
       'mousedown': 'onMousedown'
     };
 
-    ImageRegion.prototype.value = function(value) {
+    Image.prototype.value = function(value) {
       if (value === null || typeof value === 'undefined') {
         return this.attr('src');
       } else {
@@ -38,12 +38,12 @@ image with the one that was uploaded.
       }
     };
 
-    ImageRegion.prototype.onMousedown = function(e) {
+    Image.prototype.onMousedown = function(e) {
       e.preventDefault();
       return this.el.trigger('focus');
     };
 
-    ImageRegion.prototype.onDropFile = function(files) {
+    Image.prototype.onDropFile = function(files) {
       var uploader,
         _this = this;
       uploader = new Mercury.Uploader(files, {
@@ -55,25 +55,27 @@ image with the one that was uploaded.
       });
     };
 
-    ImageRegion.prototype.onDropItem = function(e, data) {
+    Image.prototype.onDropItem = function(e, data) {
       var url;
       if (url = $('<div>').html(data.getData('text/html')).find('img').attr('src')) {
         e.preventDefault();
         this.focus();
-        return this.handleAction('image', url);
+        return this.handleAction('image', {
+          url: url
+        });
       }
     };
 
-    ImageRegion.prototype.actions = {
+    Image.prototype.actions = {
       file: function(file) {
         return this.value(file.get('url'));
       },
-      image: function(url) {
-        return this.value(url);
+      image: function(image) {
+        return this.value(image.get('url'));
       }
     };
 
-    return ImageRegion;
+    return Image;
 
   })(Mercury.Region);
 

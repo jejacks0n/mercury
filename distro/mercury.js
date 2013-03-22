@@ -187,6 +187,204 @@ Copyright (c) 2013 Jeremy Jackson
 
   this.Mercury || (this.Mercury = {});
 
+  Mercury.I18n = {
+    __locales__: {},
+    define: function(name, mapping) {
+      return this.__locales__[name] = mapping;
+    },
+    locale: function() {
+      var sub, top, _ref, _ref1, _ref2;
+      if (this.__determined__) {
+        return this.__determined__;
+      }
+      if (!((_ref = Mercury.configuration.localization) != null ? _ref.enabled : void 0)) {
+        return [{}, {}];
+      }
+      _ref2 = (this.clientLocale() || ((_ref1 = Mercury.configuration.localization) != null ? _ref1.preferred : void 0)).split('-'), top = _ref2[0], sub = _ref2[1];
+      top = this.__locales__[top];
+      if (top && sub) {
+        sub = top["_" + (sub.toUpperCase()) + "_"];
+      }
+      return this.__determined__ = [top || {}, sub || {}];
+    },
+    t: function() {
+      var args, source, sub, top, translated, _ref;
+      source = arguments[0], args = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
+      _ref = Mercury.I18n.locale(), top = _ref[0], sub = _ref[1];
+      translated = (sub[source] || top[source] || source || '').toString();
+      if (args.length) {
+        return translated.printf.apply(translated, args);
+      }
+      return translated;
+    },
+    clientLocale: function() {
+      var _ref;
+      return (_ref = navigator.language) != null ? _ref.toString() : void 0;
+    }
+  };
+
+  Mercury.I18n.Module = {
+    t: Mercury.I18n.t
+  };
+
+}).call(this);
+(function() {
+  var __slice = [].slice;
+
+  this.Mercury || (this.Mercury = {});
+
+  Mercury.Logger = {
+    logPrefix: 'Mercury:',
+    log: function() {
+      var args, _ref;
+      args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+      if (!((_ref = Mercury.configuration.logging) != null ? _ref.enabled : void 0)) {
+        return;
+      }
+      if (this.logPrefix) {
+        args.unshift(this.logPrefix);
+      }
+      return typeof console !== "undefined" && console !== null ? typeof console.debug === "function" ? console.debug.apply(console, args) : void 0 : void 0;
+    },
+    notify: function(msg) {
+      var _ref, _ref1;
+      if (this.logPrefix) {
+        msg = "" + this.logPrefix + " " + msg;
+      }
+      if (((_ref = Mercury.configuration.logging) != null ? _ref.notifier : void 0) === 'console') {
+        try {
+          return console.error(msg);
+        } catch (e) {
+
+        }
+      } else if (((_ref1 = Mercury.configuration.logging) != null ? _ref1.notifier : void 0) === 'alert') {
+        return alert(msg);
+      }
+      throw new Error(msg);
+    }
+  };
+
+}).call(this);
+(function() {
+
+  this.Mercury || (this.Mercury = {});
+
+  Mercury.Module = (function() {
+    var moduleKeywords;
+
+    moduleKeywords = ['included', 'extended', 'private'];
+
+    Module.extend = function(object) {
+      var method, module, name, _ref;
+      if (!object) {
+        throw new Error('extend expects an object');
+      }
+      module = object.Module || object;
+      for (name in module) {
+        method = module[name];
+        if (moduleKeywords.indexOf(name) > -1) {
+          continue;
+        }
+        this[name] = method;
+      }
+      return (_ref = module.extended) != null ? _ref.apply(this) : void 0;
+    };
+
+    Module.include = function(object) {
+      var method, module, name, _ref;
+      if (!object) {
+        throw new Error('include expects an object');
+      }
+      module = object.Module || object;
+      for (name in module) {
+        method = module[name];
+        if (moduleKeywords.indexOf(name) > -1) {
+          continue;
+        }
+        this.prototype[name] = method;
+      }
+      return (_ref = module.included) != null ? _ref.apply(this.prototype) : void 0;
+    };
+
+    Module.proxy = function(callback) {
+      var _this = this;
+      return function() {
+        return callback.apply(_this, arguments);
+      };
+    };
+
+    function Module() {
+      this.__handlers__ = $.extend({}, this.__handlers__);
+      if (typeof this.init === "function") {
+        this.init.apply(this, arguments);
+      }
+    }
+
+    Module.prototype.proxy = function(callback) {
+      var _this = this;
+      return function() {
+        return callback.apply(_this, arguments);
+      };
+    };
+
+    return Module;
+
+  })();
+
+}).call(this);
+(function() {
+  var __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+    __slice = [].slice;
+
+  this.Mercury || (this.Mercury = {});
+
+  Mercury.Action = (function(_super) {
+
+    __extends(Action, _super);
+
+    Action.include(Mercury.I18n);
+
+    Action.include(Mercury.Logger);
+
+    Action.create = function(name, attrsOrOther) {
+      var klass;
+      if (attrsOrOther == null) {
+        attrsOrOther = {};
+      }
+      if ($.isPlainObject(attrsOrOther)) {
+        klass = name.toCamelCase(true);
+        if (Mercury.Action[klass]) {
+          return new Mercury.Action[klass](attrsOrOther);
+        }
+        return new Mercury.Action(name, attrsOrOther);
+      } else {
+        return attrsOrOther;
+      }
+    };
+
+    function Action() {
+      var args;
+      args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+      this.name || (this.name = args.shift());
+      this.attributes = args.pop() || {};
+      Action.__super__.constructor.apply(this, arguments);
+    }
+
+    Action.prototype.get = function(key) {
+      return this.attributes[key];
+    };
+
+    return Action;
+
+  })(Mercury.Module);
+
+}).call(this);
+(function() {
+  var __slice = [].slice;
+
+  this.Mercury || (this.Mercury = {});
+
   Mercury.Config = {
     get: function(path) {
       var config, part, _i, _len, _ref;
@@ -301,89 +499,6 @@ Copyright (c) 2013 Jeremy Jackson
 
 }).call(this);
 (function() {
-  var __slice = [].slice;
-
-  this.Mercury || (this.Mercury = {});
-
-  Mercury.I18n = {
-    __locales__: {},
-    define: function(name, mapping) {
-      return this.__locales__[name] = mapping;
-    },
-    locale: function() {
-      var sub, top, _ref, _ref1, _ref2;
-      if (this.__determined__) {
-        return this.__determined__;
-      }
-      if (!((_ref = Mercury.configuration.localization) != null ? _ref.enabled : void 0)) {
-        return [{}, {}];
-      }
-      _ref2 = (this.clientLocale() || ((_ref1 = Mercury.configuration.localization) != null ? _ref1.preferred : void 0)).split('-'), top = _ref2[0], sub = _ref2[1];
-      top = this.__locales__[top];
-      if (top && sub) {
-        sub = top["_" + (sub.toUpperCase()) + "_"];
-      }
-      return this.__determined__ = [top || {}, sub || {}];
-    },
-    t: function() {
-      var args, source, sub, top, translated, _ref;
-      source = arguments[0], args = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
-      _ref = Mercury.I18n.locale(), top = _ref[0], sub = _ref[1];
-      translated = (sub[source] || top[source] || source || '').toString();
-      if (args.length) {
-        return translated.printf.apply(translated, args);
-      }
-      return translated;
-    },
-    clientLocale: function() {
-      var _ref;
-      return (_ref = navigator.language) != null ? _ref.toString() : void 0;
-    }
-  };
-
-  Mercury.I18n.Module = {
-    t: Mercury.I18n.t
-  };
-
-}).call(this);
-(function() {
-  var __slice = [].slice;
-
-  this.Mercury || (this.Mercury = {});
-
-  Mercury.Logger = {
-    logPrefix: 'Mercury:',
-    log: function() {
-      var args, _ref;
-      args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-      if (!((_ref = Mercury.configuration.logging) != null ? _ref.enabled : void 0)) {
-        return;
-      }
-      if (this.logPrefix) {
-        args.unshift(this.logPrefix);
-      }
-      return typeof console !== "undefined" && console !== null ? typeof console.debug === "function" ? console.debug.apply(console, args) : void 0 : void 0;
-    },
-    notify: function(msg) {
-      var _ref, _ref1;
-      if (this.logPrefix) {
-        msg = "" + this.logPrefix + " " + msg;
-      }
-      if (((_ref = Mercury.configuration.logging) != null ? _ref.notifier : void 0) === 'console') {
-        try {
-          return console.error(msg);
-        } catch (e) {
-
-        }
-      } else if (((_ref1 = Mercury.configuration.logging) != null ? _ref1.notifier : void 0) === 'alert') {
-        return alert(msg);
-      }
-      throw new Error(msg);
-    }
-  };
-
-}).call(this);
-(function() {
 
   this.Mercury || (this.Mercury = {});
 
@@ -422,73 +537,6 @@ Copyright (c) 2013 Jeremy Jackson
       return this.stack[this.stackPosition];
     }
   };
-
-}).call(this);
-(function() {
-
-  this.Mercury || (this.Mercury = {});
-
-  Mercury.Module = (function() {
-    var moduleKeywords;
-
-    moduleKeywords = ['included', 'extended', 'private'];
-
-    Module.extend = function(object) {
-      var method, module, name, _ref;
-      if (!object) {
-        throw new Error('extend expects an object');
-      }
-      module = object.Module || object;
-      for (name in module) {
-        method = module[name];
-        if (moduleKeywords.indexOf(name) > -1) {
-          continue;
-        }
-        this[name] = method;
-      }
-      return (_ref = module.extended) != null ? _ref.apply(this) : void 0;
-    };
-
-    Module.include = function(object) {
-      var method, module, name, _ref;
-      if (!object) {
-        throw new Error('include expects an object');
-      }
-      module = object.Module || object;
-      for (name in module) {
-        method = module[name];
-        if (moduleKeywords.indexOf(name) > -1) {
-          continue;
-        }
-        this.prototype[name] = method;
-      }
-      return (_ref = module.included) != null ? _ref.apply(this.prototype) : void 0;
-    };
-
-    Module.proxy = function(callback) {
-      var _this = this;
-      return function() {
-        return callback.apply(_this, arguments);
-      };
-    };
-
-    function Module() {
-      this.__handlers__ = $.extend({}, this.__handlers__);
-      if (typeof this.init === "function") {
-        this.init.apply(this, arguments);
-      }
-    }
-
-    Module.prototype.proxy = function(callback) {
-      var _this = this;
-      return function() {
-        return callback.apply(_this, arguments);
-      };
-    };
-
-    return Module;
-
-  })();
 
 }).call(this);
 (function() {
@@ -958,11 +1006,11 @@ Copyright (c) 2013 Jeremy Jackson
       if (!type) {
         this.notify(this.t('region type not provided'));
       }
-      type = ("" + type + "_region").toLowerCase().toCamelCase(true);
-      if (!Mercury[type]) {
+      type = ("" + type).toLowerCase().toCamelCase(true);
+      if (!Mercury.Region[type]) {
         this.notify(this.t('unknown "%s" region type, falling back to base region', type));
       }
-      return new (Mercury[type] || Mercury.Region)(el);
+      return new (Mercury.Region[type] || Mercury.Region)(el);
     };
 
     Region.addAction = function(action, handler) {
@@ -1020,18 +1068,20 @@ Copyright (c) 2013 Jeremy Jackson
       return this.addClass("mercury-" + this.constructor.type + "-region");
     };
 
-    Region.prototype.handleAction = function() {
-      var action, args;
-      args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+    Region.prototype.handleAction = function(name, options) {
+      var action, _ref;
+      if (options == null) {
+        options = {};
+      }
       if (!this.focused || this.previewing) {
         return;
       }
-      action = args.shift();
-      if (!(this.skipHistoryOn.indexOf(action) > -1)) {
+      if (!(this.skipHistoryOn.indexOf(name) > -1)) {
         this.pushHistory();
       }
-      if (this.actions[action]) {
-        this.actions[action].apply(this, args);
+      action = Mercury.Action.create(name, options);
+      if ((_ref = this.actions[name]) != null) {
+        _ref.call(this, action);
       }
       this.trigger('action', action);
       return true;
@@ -1560,7 +1610,7 @@ Copyright (c) 2013 Jeremy Jackson
   this.JST || (this.JST = {});
 
   JST['/mercury/templates/toolbar'] = function(scope) {
-    return "<ul>\n  <li data-action=\"interface\">Toggle Interface</li>\n  <li data-action=\"preview\">Toggle Preview</li>\n  <li data-action=\"undo\">Undo</li>\n  <li data-action=\"redo\">Redo</li>\n  <hr/>\n  <li data-action=\"direction\">custom action (toggle rtl/ltr)</li>\n  <hr/>\n  <li data-action=\"block\" data-value=\"none\">none</li>\n  <li data-action=\"block\" data-value=\"h1\">h1</li>\n  <li data-action=\"block\" data-value=\"h2\">h2</li>\n  <li data-action=\"block\" data-value=\"h3\">h3</li>\n  <li data-action=\"block\" data-value=\"h4\">h4</li>\n  <li data-action=\"block\" data-value=\"h5\">h5</li>\n  <li data-action=\"block\" data-value=\"h6\">h6</li>\n  <li data-action=\"block\" data-value=\"pre\">pre</li>\n  <li data-action=\"block\" data-value=\"paragraph\">paragraph</li>\n  <li data-action=\"block\" data-value=\"blockquote\">blockquote</li>\n  <hr/>\n  <li data-action=\"bold\">bold</li>\n  <li data-action=\"italic\">italic</li>\n  <li data-action=\"underline\">underline</li>\n  <li data-action=\"subscript\">subscript</li>\n  <li data-action=\"superscript\">superscript</li>\n  <hr/>\n  <li data-action=\"orderedList\">orderedList</li>\n  <li data-action=\"unorderedList\">unorderedList</li>\n  <hr/>\n  <li data-action=\"indent\">indent</li>\n  <li data-action=\"outdent\">outdent</li>\n  <hr/>\n  <li data-action=\"style\" data-value=\"border:1px solid red\">style</li>\n  <li data-action=\"style\" data-value=\"foo\">class</li>\n  <hr/>\n  <li data-action=\"html\" data-value=\"html\">html (with html)</li>\n  <li data-action=\"html\" data-value=\"el\">html (with element)</li>\n  <li data-action=\"html\" data-value=\"jquery\">html (with jQuery)</li>\n  <hr/>\n  <li data-action=\"link\" data-value=\"https://github.com/jejacks0n/mercury\">link</li>\n  <li data-action=\"image\" data-value=\"http://goo.gl/UWYSd\">image</li>\n  <hr/>\n  <li data-action=\"rule\">rule</li>\n  <hr/>\n  <li><input type=\"text\"/></li>\n</ul>";
+    return "<ul>\n  <li data-action=\"interface\">Toggle Interface</li>\n  <li data-action=\"preview\">Toggle Preview</li>\n  <li data-action=\"undo\">Undo</li>\n  <li data-action=\"redo\">Redo</li>\n  <hr/>\n  <li data-action=\"direction\">custom action (toggle rtl/ltr)</li>\n  <hr/>\n  <li data-action=\"block\" data-value=\"none\">none</li>\n  <li data-action=\"block\" data-value=\"h1\">h1</li>\n  <li data-action=\"block\" data-value=\"h2\">h2</li>\n  <li data-action=\"block\" data-value=\"h3\">h3</li>\n  <li data-action=\"block\" data-value=\"h4\">h4</li>\n  <li data-action=\"block\" data-value=\"h5\">h5</li>\n  <li data-action=\"block\" data-value=\"h6\">h6</li>\n  <li data-action=\"block\" data-value=\"pre\">pre</li>\n  <li data-action=\"block\" data-value=\"paragraph\">paragraph</li>\n  <li data-action=\"block\" data-value=\"blockquote\">blockquote</li>\n  <hr/>\n  <li data-action=\"bold\">bold</li>\n  <li data-action=\"italic\">italic</li>\n  <li data-action=\"underline\">underline</li>\n  <li data-action=\"subscript\">subscript</li>\n  <li data-action=\"superscript\">superscript</li>\n  <hr/>\n  <li data-action=\"orderedList\">orderedList</li>\n  <li data-action=\"unorderedList\">unorderedList</li>\n  <hr/>\n  <li data-action=\"indent\">indent</li>\n  <li data-action=\"outdent\">outdent</li>\n  <hr/>\n  <li data-action=\"style\" data-value=\"border:1px solid red\">style</li>\n  <li data-action=\"style\" data-value=\"foo\">class</li>\n  <hr/>\n  <li data-action=\"html\" data-value=\"html\">html (with html)</li>\n  <li data-action=\"html\" data-value=\"el\">html (with element)</li>\n  <li data-action=\"html\" data-value=\"jquery\">html (with jQuery)</li>\n  <hr/>\n  <li data-action=\"link\" data-value='{\"url\": \"https://github.com/jejacks0n/mercury\", \"text\": \"Project Home\"}'>link</li>\n  <li data-action=\"image\" data-value='{\"url\": \"http://goo.gl/UWYSd\", \"text\": \"Test Image\"}'>image</li>\n  <hr/>\n  <li data-action=\"rule\">rule</li>\n  <hr/>\n  <li><input type=\"text\"/></li>\n</ul>";
   };
 
 }).call(this);
@@ -1646,11 +1696,11 @@ Copyright (c) 2013 Jeremy Jackson
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  Mercury.File = (function(_super) {
+  Mercury.Model.File = (function(_super) {
 
     __extends(File, _super);
 
-    File.define('Mercury.File');
+    File.define('Mercury.Model.File');
 
     File.url = function() {
       return this.config('uploading:saveUrl');
@@ -1805,7 +1855,7 @@ Copyright (c) 2013 Jeremy Jackson
       var file, _i, _len;
       for (_i = 0, _len = files.length; _i < _len; _i++) {
         file = files[_i];
-        file = new Mercury.File(file, {
+        file = new Mercury.Model.File(file, {
           mimeTypes: this.mimeTypes
         });
         if (!file.isValid()) {
@@ -1920,6 +1970,29 @@ Copyright (c) 2013 Jeremy Jackson
     return Uploader;
 
   })(Mercury.View);
+
+}).call(this);
+(function() {
+  var __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+  Mercury.Action.Image = (function(_super) {
+
+    __extends(Image, _super);
+
+    function Image() {
+      return Image.__super__.constructor.apply(this, arguments);
+    }
+
+    Image.prototype.name = 'image';
+
+    Image.prototype.asHtml = function() {
+      return "<img src=\"" + (this.get('url')) + "\">";
+    };
+
+    return Image;
+
+  })(Mercury.Action);
 
 }).call(this);
 (function() {
@@ -2238,7 +2311,7 @@ Copyright (c) 2013 Jeremy Jackson
         text: value.slice(start, end)
       };
     },
-    setSelection: function(sel, preAdjust, sufAdjust) {
+    setSelection: function(sel, preAdjust, sufAdjust, collapse) {
       var el, end, start, value;
       if (preAdjust == null) {
         preAdjust = 0;
@@ -2246,9 +2319,12 @@ Copyright (c) 2013 Jeremy Jackson
       if (sufAdjust == null) {
         sufAdjust = null;
       }
+      if (collapse == null) {
+        collapse = false;
+      }
       start = sel.start + preAdjust;
       end = sel.end + (sufAdjust != null ? sufAdjust : preAdjust);
-      if (end < start || typeof end === 'undefined') {
+      if (end < start || typeof end === 'undefined' || collapse) {
         end = start;
       }
       el = this.focusable.get(0);
@@ -2290,13 +2366,13 @@ Copyright (c) 2013 Jeremy Jackson
       this.setSelection(line);
       return this.replaceSelection(text);
     },
-    setAndReplaceSelection: function(beforeSel, text, afterSel, preAdjust, sufAdjust) {
+    setAndReplaceSelection: function(beforeSel, text, afterSel, preAdjust, sufAdjust, collapse) {
       if (text == null) {
         text = '';
       }
       this.setSelection(beforeSel);
       this.replaceSelection(text);
-      return this.setSelection(afterSel, preAdjust, sufAdjust);
+      return this.setSelection(afterSel, preAdjust, sufAdjust, collapse);
     },
     replaceSelectionWithParagraph: function(text) {
       var pre, sel, suf, val;
@@ -2329,11 +2405,11 @@ Copyright (c) 2013 Jeremy Jackson
       _ref = this.getTokenAndSelection(wrapper), fix = _ref[0], sel = _ref[1];
       val = [fix.pre, sel.text || options.text || '', fix.suf].join('');
       if (options.select === 'end') {
-        _ref1 = [val.length - sel.length, null], pre = _ref1[0], suf = _ref1[1];
+        _ref1 = [val.length, null], pre = _ref1[0], suf = _ref1[1];
       } else {
         _ref2 = [0, val.length - sel.length], pre = _ref2[0], suf = _ref2[1];
       }
-      return this.setAndReplaceSelection(sel, val, sel, pre, suf);
+      return this.setAndReplaceSelection(sel, val, sel, pre, suf, options.select === 'end');
     },
     unwrapSelected: function(wrapper) {
       var fix, sel, set, _ref;

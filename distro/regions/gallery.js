@@ -15,34 +15,34 @@ also takes into account undo/redo support using the keyboard or buttons.
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  Mercury.GalleryRegion = (function(_super) {
+  Mercury.Region.Gallery = (function(_super) {
 
-    __extends(GalleryRegion, _super);
+    __extends(Gallery, _super);
 
-    function GalleryRegion() {
-      return GalleryRegion.__super__.constructor.apply(this, arguments);
+    function Gallery() {
+      return Gallery.__super__.constructor.apply(this, arguments);
     }
 
-    GalleryRegion.define('Mercury.GalleryRegion', 'gallery');
+    Gallery.define('Mercury.Region.Gallery', 'gallery');
 
-    GalleryRegion.include(Mercury.Region.Modules.DropIndicator);
+    Gallery.include(Mercury.Region.Modules.DropIndicator);
 
-    GalleryRegion.supported = true;
+    Gallery.supported = true;
 
-    GalleryRegion.prototype.skipHistoryOn = ['undo', 'redo'];
+    Gallery.prototype.skipHistoryOn = ['undo', 'redo'];
 
-    GalleryRegion.prototype.elements = {
+    Gallery.prototype.elements = {
       controls: '.mercury-gallery-region-controls',
       slides: '.slides',
       paginator: '.paginator'
     };
 
-    GalleryRegion.prototype.events = {
+    Gallery.prototype.events = {
       'click .mercury-gallery-region-controls em': 'removeSlide',
       'click .mercury-gallery-region-controls img': 'gotoSlide'
     };
 
-    GalleryRegion.prototype.build = function() {
+    Gallery.prototype.build = function() {
       var _this = this;
       this.speed || (this.speed = 3000);
       this.index = 1;
@@ -53,7 +53,7 @@ also takes into account undo/redo support using the keyboard or buttons.
       });
     };
 
-    GalleryRegion.prototype.refresh = function(controls) {
+    Gallery.prototype.refresh = function(controls) {
       if (controls == null) {
         controls = false;
       }
@@ -69,7 +69,7 @@ also takes into account undo/redo support using the keyboard or buttons.
       }
     };
 
-    GalleryRegion.prototype.refreshControls = function() {
+    Gallery.prototype.refreshControls = function() {
       var slide, _i, _len, _ref;
       this.controls.html('');
       _ref = this.images;
@@ -82,7 +82,7 @@ also takes into account undo/redo support using the keyboard or buttons.
       }
     };
 
-    GalleryRegion.prototype.addControlLink = function(slide) {
+    Gallery.prototype.addControlLink = function(slide) {
       var src;
       src = slide.find('img').attr('src');
       return this.controls.append($("<li><img src=\"" + src + "\"/><em>&times;</em></li>").data({
@@ -90,7 +90,7 @@ also takes into account undo/redo support using the keyboard or buttons.
       }));
     };
 
-    GalleryRegion.prototype.nextSlide = function() {
+    Gallery.prototype.nextSlide = function() {
       var _this = this;
       this.index += 1;
       this.refresh();
@@ -99,7 +99,7 @@ also takes into account undo/redo support using the keyboard or buttons.
       });
     };
 
-    GalleryRegion.prototype.gotoSlide = function(e) {
+    Gallery.prototype.gotoSlide = function(e) {
       var _this = this;
       clearTimeout(this.timeout);
       this.index = $(e.target).closest('li').prevAll('li').length + 1;
@@ -109,7 +109,7 @@ also takes into account undo/redo support using the keyboard or buttons.
       });
     };
 
-    GalleryRegion.prototype.appendSlide = function(slide) {
+    Gallery.prototype.appendSlide = function(slide) {
       this.slides.append(slide);
       this.addControlLink(slide);
       this.refresh();
@@ -117,7 +117,7 @@ also takes into account undo/redo support using the keyboard or buttons.
       return this.trigger('focused');
     };
 
-    GalleryRegion.prototype.removeSlide = function(e) {
+    Gallery.prototype.removeSlide = function(e) {
       var el, index, slide,
         _this = this;
       el = $(e.target).closest('li');
@@ -137,7 +137,7 @@ also takes into account undo/redo support using the keyboard or buttons.
       return this.pushHistory();
     };
 
-    GalleryRegion.prototype.onDropFile = function(files) {
+    Gallery.prototype.onDropFile = function(files) {
       var uploader,
         _this = this;
       uploader = new Mercury.Uploader(files, {
@@ -152,7 +152,7 @@ also takes into account undo/redo support using the keyboard or buttons.
       });
     };
 
-    GalleryRegion.prototype.onDropItem = function(e, data) {
+    Gallery.prototype.onDropItem = function(e, data) {
       var url;
       if (url = $('<div>').html(data.getData('text/html')).find('img').attr('src')) {
         e.preventDefault();
@@ -161,25 +161,25 @@ also takes into account undo/redo support using the keyboard or buttons.
       }
     };
 
-    GalleryRegion.prototype.onFocus = function() {
+    Gallery.prototype.onFocus = function() {
       return this.controls.show();
     };
 
-    GalleryRegion.prototype.onBlur = function() {
+    Gallery.prototype.onBlur = function() {
       return this.controls.hide();
     };
 
-    GalleryRegion.prototype.onUndo = function() {
-      GalleryRegion.__super__.onUndo.apply(this, arguments);
+    Gallery.prototype.onUndo = function() {
+      Gallery.__super__.onUndo.apply(this, arguments);
       return this.refresh(true);
     };
 
-    GalleryRegion.prototype.onRedo = function() {
-      GalleryRegion.__super__.onRedo.apply(this, arguments);
+    Gallery.prototype.onRedo = function() {
+      Gallery.__super__.onRedo.apply(this, arguments);
       return this.refresh(true);
     };
 
-    return GalleryRegion;
+    return Gallery;
 
   })(Mercury.Region);
 

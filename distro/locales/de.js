@@ -10,9 +10,9 @@
     "Size: %s": "Typ: %s",
     "Error: Unable to upload the file": "Fehler: Nicht in der Lage, die Datei hochzuladen",
     "Successfully uploaded...": "Erfolgreich hochgeladen…",
+    "Path:": "Pfad:",
     "Too large": "Zu groß",
-    "Unsupported format (%s)": "Nicht unterstütztes Format (%s)",
-    "Path:": "Pfad:"
+    "Unsupported format (%s)": "Nicht unterstütztes Format (%s)"
   });
 
 }).call(this);

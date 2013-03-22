@@ -10,9 +10,9 @@
     "Size: %s": "",
     "Error: Unable to upload the file": "",
     "Successfully uploaded...": "",
+    "Path:": "",
     "Too large": "",
-    "Unsupported format (%s)": "",
-    "Path:": ""
+    "Unsupported format (%s)": ""
   });
 
 }).call(this);

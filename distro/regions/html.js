@@ -14,38 +14,38 @@ Dependencies:
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  Mercury.HtmlRegion = (function(_super) {
+  Mercury.Region.Html = (function(_super) {
 
-    __extends(HtmlRegion, _super);
+    __extends(Html, _super);
 
-    HtmlRegion.define('Mercury.HtmlRegion', 'html');
+    Html.define('Mercury.Region.Html', 'html');
 
-    HtmlRegion.include(Mercury.Region.Modules.DropIndicator);
+    Html.include(Mercury.Region.Modules.DropIndicator);
 
-    HtmlRegion.include(Mercury.Region.Modules.HtmlSelection);
+    Html.include(Mercury.Region.Modules.HtmlSelection);
 
-    HtmlRegion.include(Mercury.Region.Modules.SelectionValue);
+    Html.include(Mercury.Region.Modules.SelectionValue);
 
-    HtmlRegion.include(Mercury.Region.Modules.ContentEditable);
+    Html.include(Mercury.Region.Modules.ContentEditable);
 
-    HtmlRegion.supported = document.designMode && (!Mercury.support.msie || Mercury.support.msie >= 10) && (window.rangy && window.rangy.supported);
+    Html.supported = document.designMode && (!Mercury.support.msie || Mercury.support.msie >= 10) && (window.rangy && window.rangy.supported);
 
-    HtmlRegion.prototype.events = {
+    Html.prototype.events = {
       'keydown': 'onKeyEvent',
       'paste': 'onPaste'
     };
 
-    function HtmlRegion() {
+    function Html() {
       try {
         window.rangy.init();
       } catch (e) {
         this.notify(this.t('requires Rangy'));
         return false;
       }
-      HtmlRegion.__super__.constructor.apply(this, arguments);
+      Html.__super__.constructor.apply(this, arguments);
     }
 
-    HtmlRegion.prototype.onDropFile = function(files, options) {
+    Html.prototype.onDropFile = function(files, options) {
       var uploader,
         _this = this;
       uploader = new Mercury.Uploader(files, {
@@ -57,15 +57,15 @@ Dependencies:
       });
     };
 
-    HtmlRegion.prototype.onDropItem = function() {
+    Html.prototype.onDropItem = function() {
       return this.pushHistory();
     };
 
-    HtmlRegion.prototype.onPaste = function(e) {
+    Html.prototype.onPaste = function(e) {
       return console.debug('pasted', e);
     };
 
-    HtmlRegion.prototype.onKeyEvent = function(e) {
+    Html.prototype.onKeyEvent = function(e) {
       if (e.keyCode >= 37 && e.keyCode <= 40) {
         return;
       }
@@ -88,7 +88,7 @@ Dependencies:
       return this.pushHistory(e.keyCode);
     };
 
-    HtmlRegion.prototype.actions = {
+    Html.prototype.actions = {
       bold: function() {
         return this.toggleWrapSelectedWordsInClass('red');
       },
@@ -104,24 +104,14 @@ Dependencies:
       file: function(file) {
         var action;
         action = file.isImage() ? 'image' : 'link';
-        return this.handleAction(action, file.get('url'), file.get('name'));
-      },
-      image: function(url, text, attrs) {
-        var tag;
-        if (attrs == null) {
-          attrs = {};
-        }
-        tag = $('<img>', $.extend({
-          src: url,
-          alt: text
-        }, attrs));
-        return this.replaceSelection(tag, {
-          text: text
+        return this.handleAction(action, {
+          url: file.get('url'),
+          text: file.get('name')
         });
       }
     };
 
-    return HtmlRegion;
+    return Html;
 
   })(Mercury.Region);
 

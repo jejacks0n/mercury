@@ -10,9 +10,9 @@
     "Size: %s": "Type: %s",
     "Error: Unable to upload the file": "Fejl: Kunne ikke uploade filen",
     "Successfully uploaded...": "Upload færdig...",
+    "Path:": "Sti:",
     "Too large": "For stor",
-    "Unsupported format (%s)": "Formatet er ikke understøttet (%s)",
-    "Path:": "Sti:"
+    "Unsupported format (%s)": "Formatet er ikke understøttet (%s)"
   });
 
 }).call(this);

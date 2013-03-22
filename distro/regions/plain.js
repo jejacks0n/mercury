@@ -15,47 +15,47 @@ Dependencies:
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  Mercury.PlainRegion = (function(_super) {
+  Mercury.Region.Plain = (function(_super) {
 
-    __extends(PlainRegion, _super);
+    __extends(Plain, _super);
 
-    PlainRegion.define('Mercury.PlainRegion', 'plain');
+    Plain.define('Mercury.Region.Plain', 'plain');
 
-    PlainRegion.include(Mercury.Region.Modules.HtmlSelection);
+    Plain.include(Mercury.Region.Modules.HtmlSelection);
 
-    PlainRegion.include(Mercury.Region.Modules.SelectionValue);
+    Plain.include(Mercury.Region.Modules.SelectionValue);
 
-    PlainRegion.include(Mercury.Region.Modules.ContentEditable);
+    Plain.include(Mercury.Region.Modules.ContentEditable);
 
-    PlainRegion.supported = document.designMode && (!Mercury.support.msie || Mercury.support.msie >= 10) && (window.rangy && window.rangy.supported);
+    Plain.supported = document.designMode && (!Mercury.support.msie || Mercury.support.msie >= 10) && (window.rangy && window.rangy.supported);
 
-    PlainRegion.prototype.events = {
+    Plain.prototype.events = {
       'keydown': 'onKeyEvent',
       'paste': 'onPaste'
     };
 
-    function PlainRegion() {
+    function Plain() {
       try {
         window.rangy.init();
       } catch (e) {
         this.notify(this.t('requires Rangy'));
         return false;
       }
-      PlainRegion.__super__.constructor.apply(this, arguments);
+      Plain.__super__.constructor.apply(this, arguments);
       if (!this.config('regions:plain:actions')) {
         this.actions = null;
       }
     }
 
-    PlainRegion.prototype.onDropItem = function(e) {
+    Plain.prototype.onDropItem = function(e) {
       return e.preventDefault();
     };
 
-    PlainRegion.prototype.onPaste = function(e) {
+    Plain.prototype.onPaste = function(e) {
       return e.preventDefault();
     };
 
-    PlainRegion.prototype.onKeyEvent = function(e) {
+    Plain.prototype.onKeyEvent = function(e) {
       if (e.keyCode >= 37 && e.keyCode <= 40) {
         return;
       }
@@ -81,7 +81,7 @@ Dependencies:
       return this.pushHistory(e.keyCode);
     };
 
-    PlainRegion.prototype.actions = {
+    Plain.prototype.actions = {
       bold: function() {
         return this.toggleWrapSelectedWordsInClass('red');
       },
@@ -93,7 +93,7 @@ Dependencies:
       }
     };
 
-    return PlainRegion;
+    return Plain;
 
   })(Mercury.Region);
 

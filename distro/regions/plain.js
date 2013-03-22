@@ -29,6 +29,8 @@ Dependencies:
 
     Plain.supported = document.designMode && (!Mercury.support.msie || Mercury.support.msie >= 10) && (window.rangy && window.rangy.supported);
 
+    Plain.prototype.toolbars = ['markup'];
+
     Plain.prototype.events = {
       'keydown': 'onKeyEvent',
       'paste': 'onPaste'

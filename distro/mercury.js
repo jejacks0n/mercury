@@ -32,11 +32,137 @@ Copyright (c) 2013 Jeremy Jackson
       prefixUrl: '/mercury/templates'
     },
     "interface": {
-      hidden: false,
+      enabled: true,
       silent: false,
       editor: 'FrameEditor',
       toolbar: 'Toolbar',
       statusbar: 'Statusbar'
+    },
+    toolbars: {
+      enabled: true,
+      floating: false,
+      defaults: ['primary'],
+      primary: {
+        buttons: {
+          save: [
+            'Save', 'Save this page', {
+              event: 'save'
+            }
+          ],
+          preview: [
+            'Preview', 'Preview this page', {
+              mode: 'preview'
+            }
+          ],
+          sep1: ' ',
+          undo: ['Undo', 'Undo your last action'],
+          redo: ['Redo', 'Redo your last action'],
+          sep2: ' ',
+          link: ['Link', 'Insert Link'],
+          media: ['Media', 'Insert Media (images and videos)'],
+          table: ['Table', 'Insert Table'],
+          character: ['Character', 'Special Characters'],
+          snippet: ['Snippet', 'Snippet Panel'],
+          history: ['History', 'Page Version History'],
+          note: ['Notes', 'Page Notes']
+        }
+      },
+      markup: {
+        buttons: {
+          defined: {
+            style: [
+              'Style', {
+                select: '/mercury/templates/style'
+              }
+            ],
+            sep1: ' ',
+            block: [
+              'Block Format', {
+                select: '/mercury/templates/block'
+              }
+            ],
+            sep2: '-'
+          },
+          color: {
+            bgcolor: [
+              'Background Color', {
+                palette: '/mercury/templates/bgcolor'
+              }
+            ],
+            sep1: ' ',
+            color: [
+              'Text Color', {
+                palette: '/mercury/templates/color'
+              }
+            ],
+            sep2: '-'
+          },
+          decoration: {
+            bold: ['Bold'],
+            italic: ['Italicize'],
+            strike: ['Strikethrough'],
+            underline: ['Underline'],
+            sep1: '-'
+          },
+          script: {
+            subscript: ['Subscript'],
+            superscript: ['Superscript'],
+            sep1: '-'
+          },
+          justify: {
+            left: ['Align Left'],
+            center: ['Center'],
+            right: ['Align Right'],
+            full: ['Justify Full'],
+            sep1: '-'
+          },
+          list: {
+            unorderedList: ['Unordered List'],
+            orderedList: ['Numbered List'],
+            sep1: '-'
+          },
+          indent: {
+            outdent: ['Decrease Indentation'],
+            indent: ['Increase Indentation'],
+            sep1: '-'
+          },
+          table: {
+            rowBefore: ['Insert Table Row', 'Insert a table row before the cursor'],
+            rowAfter: ['Insert Table Row', 'Insert a table row after the cursor'],
+            rowDelete: ['Delete Table Row', 'Delete this table row'],
+            colBefore: ['Insert Table Column', 'Insert a table column before the cursor'],
+            colAfter: ['Insert Table Column', 'Insert a table column after the cursor'],
+            colDelete: ['Delete Table Column', 'Delete this table column'],
+            sep1: ' ',
+            colAdd: ['Increase Cell Columns', 'Increase the cells colspan'],
+            colSub: ['Decrease Cell Columns', 'Decrease the cells colspan and add a new cell'],
+            rowAdd: ['Increase Cell Rows', 'Increase the cells rowspan'],
+            rowSub: ['Decrease Cell Rows', 'Decrease the cells rowspan and add a new cell'],
+            sep2: '-'
+          },
+          rules: {
+            rule: ['Horizontal Rule', 'Insert a horizontal rule'],
+            sep1: '-'
+          },
+          extra: {
+            clean: ['Remove Formatting', 'Remove formatting for the selection'],
+            edit: ['Edit HTML', 'Edit the HTML content']
+          }
+        }
+      },
+      image: {
+        buttons: {
+          crop: ['Crop Image'],
+          resize: ['Resize Image'],
+          alignment: {
+            left: ['Align Left'],
+            middle: ['Align Center'],
+            right: ['Align Right'],
+            top: ['Align Top'],
+            buttom: ['Align Bottom']
+          }
+        }
+      }
     },
     regions: {
       attribute: 'data-mercury',
@@ -1366,7 +1492,7 @@ Copyright (c) 2013 Jeremy Jackson
         return;
       }
       this.append(this.toolbar = new Mercury[klass]());
-      if (this.config('interface:hidden')) {
+      if (!this.config('interface:enabled')) {
         return this.toolbar.hide();
       }
     };
@@ -1377,7 +1503,7 @@ Copyright (c) 2013 Jeremy Jackson
         return;
       }
       this.append(this.statusbar = new Mercury[klass]());
-      if (this.config('interface:hidden')) {
+      if (!this.config('interface:enabled')) {
         return this.statusbar.hide();
       }
     };
@@ -1402,7 +1528,7 @@ Copyright (c) 2013 Jeremy Jackson
       if ((_ref1 = this.regions[0]) != null) {
         _ref1.focus();
       }
-      if (this.config('interface:hidden')) {
+      if (!this.config('interface:enabled')) {
         return Mercury.trigger('mode', 'preview');
       }
     };
@@ -1637,7 +1763,7 @@ Copyright (c) 2013 Jeremy Jackson
 
     function Toolbar() {
       Toolbar.__super__.constructor.apply(this, arguments);
-      this["interface"] = this.config('interface:hidden');
+      this.hidden = this.config('interface:enabled');
     }
 
     Toolbar.prototype.processAction = function(e) {
@@ -1647,11 +1773,11 @@ Copyright (c) 2013 Jeremy Jackson
       val = target.data('value');
       switch (act) {
         case 'interface':
-          this["interface"] = !this["interface"];
-          if (this["interface"]) {
-            Mercury.trigger('interface:hide');
-          } else {
+          this.hidden = !this.hidden;
+          if (this.hidden) {
             Mercury.trigger('interface:show');
+          } else {
+            Mercury.trigger('interface:hide');
           }
           return Mercury.trigger('mode', 'preview');
         case 'preview':

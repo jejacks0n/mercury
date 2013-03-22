@@ -30,6 +30,8 @@ Dependencies:
 
     Html.supported = document.designMode && (!Mercury.support.msie || Mercury.support.msie >= 10) && (window.rangy && window.rangy.supported);
 
+    Html.prototype.toolbars = ['markup'];
+
     Html.prototype.events = {
       'keydown': 'onKeyEvent',
       'paste': 'onPaste'

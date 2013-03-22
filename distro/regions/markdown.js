@@ -32,6 +32,8 @@ via Ajax.
 
     Markdown.supported = true;
 
+    Markdown.prototype.toolbars = ['markup'];
+
     Markdown.prototype.wrappers = {
       h1: ['# ', ' #'],
       h2: ['## ', ' ##'],

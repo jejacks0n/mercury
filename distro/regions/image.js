@@ -24,6 +24,8 @@ image with the one that was uploaded.
 
     Image.supported = true;
 
+    Image.prototype.toolbars = ['image'];
+
     Image.prototype.tag = 'img';
 
     Image.prototype.events = {

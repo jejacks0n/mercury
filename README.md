@@ -3,11 +3,13 @@ Mercury Editor2
 
 ## Developer Notice
 
-This branch represents the future version of Mercury Editor. It outlines the framework that will be used and is more in line with the MVC/MVVM frameworks that exist.
+This branch represents the future version of Mercury Editor. This iteration of Mercury Editor (Mercury2) will separate the Rails portions from the Javascript portions of the project. Rails is still used for development (for a server, coffeescript, sass, build process etc.) but the Rails Engine will be broken off into a different project so that more functionality can be added, and to serve as an example of how to implement functionality like snippets and image uploading.
 
-This iteration of Mercury Editor (Mercury2) will separate the Rails portions from the Javascript portions of the project. Rails is still used for development (for a server, coffeescript, sass, build process etc.) but the Rails Engine will be broken off into a different project so that more functionality can be added, and to serve as an example of how to implement functionality like snippets and image uploading.
+Mercury2 takes a considerably different approach in terms of it's architecture and featureset. It was a great html editor before that had some additional functionality, but it's become more. Mercury2 has the same features as it's predecessor, but is more structured, and provides a framework in which you can more easily create complex regions that are anything you want.
 
-Mercury2 allows sandboxing content within an iframe or can load directly on the page you're editing. This has been a point of contention and complication in the past, so this version attempts to simplify while also keeping the ability to sandbox itself to mimimize conflicts with javascript libraries and css.
+Regions dictate toolbars, buttons, and what actions they support. This simplifies the configuration for toolbars, but also provides more flexibility in terms of defining your own custom functionality that doesn't fit into Mercury directly. Check out the gallery region for an example of this.
+
+Mercury2 also allows sandboxing content within an iframe or it can load directly on the page you're editing. This has been a point of contention and complication in the past, so this version simplifies that while also retaining the ability to sandbox itself to mimimize conflicts with javascript libraries and css.
 
 
 ## Internationalization / Translations
@@ -31,6 +33,17 @@ Translations and contributors:
 - Simplified Chinese ([董劭田 DONG Shaotian](https://github.com/richarddong))
 - Hungarian ([egivandor](https://github.com/egivandor))
 - Russian ([ilyacherevkov](https://github.com/ilyacherevkov))
+
+
+## Todo
+
+- add a canvas region.
+- figure out how to better integrate snippets.
+- can we make editing content within snippets work better?
+- provide a custom toolbar and functionality for the image and gallery regions.
+- when using the iframe, rangy isn't behaving the same (doesn't work because it doesn't understand the context).
+- selections are a little wonky on undo/redo still, and sometimes in firefox they're not applying because the checksum doesn't validate.
+- finish html region.
 
 
 ## Dependencies

@@ -1,23 +1,17 @@
-/* GalleryRegion
+/* Mercury.Region.Gallery
  *----------------------------------------------------------------------------*/
-$gallery_region_bg: #333 !default;
-$gallery_region_paginator_color: #666 !default;
-$gallery_region_paginator_active_color: #fff !default;
-
 .mercury-gallery-region {
+  @include mercury-region-outline;
   position: relative;
   width: 100%;
   min-height: 300px;
   background: $gallery_region_bg;
-  &:focus {
-    @include focus-outline();
-  }
   &+ .mercury-region-drop-indicator {
-    @include drop-indicator-defaults();
+    @include mercury-region-drop-indicator;
   }
 
   .mercury-gallery-region-controls {
-    @include no-selection();
+    @include mercury-no-selection;
     display: none;
     position: absolute;
     z-index: 20;

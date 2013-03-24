@@ -1,40 +1,218 @@
-/* Toolbar
+/* Mercury.Toolbar
  *----------------------------------------------------------------------------*/
-#mercury {
-  .mercury-toolbar {
-    @extend .mercury-clearfix;
-    @include no-selection;
-    @include gradient(#e2e2e2, #c6c6c6);
-    @include transition(top, ease-in-out);
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 30px;
-    border-bottom: 1px solid #727272;
-    cursor: default;
-  }
-}
-
-
 #mercury .mercury-toolbar {
-  ul {
-    position: fixed;
-    right: 20px;
-    top: 20px;
-    border: 1px solid #fff;
-    border-radius: 5px;
-    color: #fff;
-    background: rgba(0, 0, 0, .7);
-    padding: 10px;
-    margin: 0;
-    list-style: none;
-    li {
-      cursor: pointer;
-      &:hover {
-        color: $primary_color;
+  @extend .mercury-clearfix;
+  @include mercury-no-selection;
+  @include mercury-transition(top, ease-in-out);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  cursor: default;
+  .mercury-toolbar-collection {
+    @include mercury-gradient(#d2d2d2, #c6c6c6);
+    padding: 3px 3px 0px 10px;
+    overflow: hidden;
+    border-top: 1px solid #e5e5e5;
+    border-bottom: 1px solid #727272;
+  }
+  .mercury-toolbar-group,
+  .mercury-toolbar-separator,
+  .mercury-toolbar-line-separator,
+  .mercury-toolbar-button {
+    display: inline-block;
+  }
+  .mercury-toolbar-group {
+    height: 18px;
+  }
+  .mercury-toolbar-separator,
+  .mercury-toolbar-line-separator {
+    height: 15px;
+    width: 6px;
+  }
+  .mercury-toolbar-line-separator {
+    position: relative;
+    top: -1px;
+    width: 0;
+    height: 17px;
+    margin: -1px 3px;
+    border-left: 1px solid #9b9b9b;
+  }
+  .mercury-toolbar-button {
+    @include mercury-toolbar-button-base;
+    @include mercury-border-radius(2px);
+    @include mercury-gradient(#e8e8e8, #cbcbcb);
+    border: 1px solid #9b9b9b;
+    &+ .mercury-toolbar-button{
+      @include mercury-border-radius(0 2px 2px 0);
+      margin-left: -1px;
+    }
+    &:before, em {
+      color: #3a3a3a;
+      text-shadow: #eee 0 1px 0;
+    }
+    &[data-type="select"] {
+      @include mercury-toolbar-button(dropdown);
+      width: auto;
+      &:before {
+        float: right;
+        width: 18px;
+      }
+      em {
+        @include mercury-font(8pt);
+        display: block;
+        float: left;
+        padding: 0 0 0 6px;
+        line-height: 15px;
+        font-style: normal;
+        position: relative;
+        text-transform: lowercase;
       }
     }
+    &[data-type="palette"] {
+      @include mercury-toolbar-button(palette);
+      @include mercury-border-radius(0);
+      &:before {
+        color: #eee;
+        text-shadow: none;
+      }
+    }
+    em {
+      display: none;
+    }
   }
-
 }
+
+/*
+ * Mercury.Toolbar: Primary Toolbar
+ *----------------------------------------------------------------------------*/
+#mercury .mercury-toolbar .mercury-toolbar-primary-collection {
+  @include mercury-gradient(#e2e2e2, #c6c6c6);
+  height: 58px;
+  padding: 0;
+  .mercury-toolbar-separator,
+  .mercury-toolbar-line-separator {
+    width: 40px;
+    height: 52px;
+  }
+  .mercury-toolbar-line-separator {
+    width: 0;
+    height: 45px;
+    margin: 0 20px;
+    border-left: 1px solid #ececec;
+    border-right: 1px solid #9b9b9b;
+  }
+  .mercury-toolbar-button {
+    @include mercury-icon-base(24px, 50px, 46px);
+    height: 58px;
+    min-width: 55px;
+    margin-bottom: 20px;
+    border: 0;
+    background: transparent;
+    text-align: center;
+    white-space: nowrap;
+    color: #555;
+    em {
+      @include mercury-font(8.5pt);
+      display: block;
+      margin: -5px;
+      height: 15px;
+      line-height: 15px;
+      font-style: normal;
+      color: #222;
+    }
+  }
+  [data-action="save"]      { @include mercury-icon(save,      24px); }
+  [data-action="preview"]   { @include mercury-icon(preview,   32px); }
+  [data-action="undo"]      { @include mercury-icon(undo,      32px); }
+  [data-action="redo"]      { @include mercury-icon(redo,      32px); }
+  [data-action="link"]      { @include mercury-icon(link,      28px); }
+  [data-action="media"]     { @include mercury-icon(media,     24px); }
+  [data-action="table"]     { @include mercury-icon(table,     24px); }
+  [data-action="character"] { @include mercury-icon(character, 24px); }
+  [data-action="snippets"]  { @include mercury-icon(snippets,  24px); }
+  [data-action="history"]   { @include mercury-icon(history,   24px); }
+  [data-action="notes"]     { @include mercury-icon(notes,     24px); }
+}
+
+
+/*
+ * Mercury.Toolbar: Default Toolbars
+ *----------------------------------------------------------------------------*/
+#mercury .mercury-toolbar {
+  [data-action="bold"]           { @include mercury-toolbar-button(bold); }
+  [data-action="italic"]         { @include mercury-toolbar-button(italic); }
+  [data-action="strike"]         { @include mercury-toolbar-button(strike); }
+  [data-action="underline"]      { @include mercury-toolbar-button(underline); }
+  [data-action="subscript"]      { @include mercury-toolbar-button(subscript); }
+  [data-action="superscript"]    { @include mercury-toolbar-button(superscript); }
+  [data-action="justify-left"]   { @include mercury-toolbar-button(justify-left); }
+  [data-action="justify-center"] { @include mercury-toolbar-button(justify-center); }
+  [data-action="justify-right"]  { @include mercury-toolbar-button(justify-right); }
+  [data-action="justify-full"]   { @include mercury-toolbar-button(justify-full); }
+  [data-action="unordered-list"] { @include mercury-toolbar-button(unordered-list); }
+  [data-action="ordered-list"]   { @include mercury-toolbar-button(ordered-list); }
+  [data-action="indent"]         { @include mercury-toolbar-button(indent); }
+  [data-action="outdent"]        { @include mercury-toolbar-button(outdent); }
+  [data-action="rule"]           { @include mercury-toolbar-button(rule); }
+  [data-action="clean"]          { @include mercury-toolbar-button(clean); }
+  [data-action="edit"]           { @include mercury-toolbar-button(edit); }
+  [data-action="row-before"]     { @include mercury-toolbar-button(row-before); }
+  [data-action="row-after"]      { @include mercury-toolbar-button(row-after); }
+  [data-action="row-delete"]     { @include mercury-toolbar-button(row-delete); }
+  [data-action="col-before"]     { @include mercury-toolbar-button(col-before); }
+  [data-action="col-after"]      { @include mercury-toolbar-button(col-after); }
+  [data-action="col-delete"]     { @include mercury-toolbar-button(col-delete); }
+  [data-action="col-increase"]   { @include mercury-toolbar-button(col-increase); }
+  [data-action="col-decrease"]   { @include mercury-toolbar-button(col-decrease); }
+  [data-action="row-increase"]   { @include mercury-toolbar-button(row-increase); }
+  [data-action="row-decrease"]   { @include mercury-toolbar-button(row-decrease); }
+}
+
+
+/*
+ * Mercury.Toolbar: Developer Toolbar
+ *----------------------------------------------------------------------------*/
+#mercury .mercury-toolbar-development-collection {
+  position: fixed;
+  z-index: 10000;
+  right: 10px;
+  bottom: 30px;
+  border: 1px solid #fff;
+  border-radius: 5px;
+  color: #fff;
+  background: rgba(0, 0, 0, .7);
+  padding: 10px;
+  margin: 0;
+  list-style: none;
+  li {
+    cursor: pointer;
+    &:hover {
+      color: $primary_color;
+    }
+  }
+}
+
+////.mercury-primary-toolbar .mercury-button
+////.mercury-primary-toolbar .mercury-button.active em {
+////  background-position: 51% 8px;
+////}
+////
+////.mercury-primary-toolbar .mercury-separator,
+////.mercury-primary-toolbar .mercury-line-separator {
+////  display: inline-block;
+////  width: 1px;
+////  height: 50px;
+////  margin: 5px 20px 28px;
+////}
+////.mercury-primary-toolbar .mercury-toolbar-button-container {
+////  white-space: nowrap;
+////  padding-right: 10px;
+////}
+////.mercury-primary-toolbar .mercury-toolbar-expander {
+////  width: 12px;
+////  height: 58px;
+////  background-color: rgba(0, 0, 0, .2);
+////  background-repeat: no-repeat;
+////}
+

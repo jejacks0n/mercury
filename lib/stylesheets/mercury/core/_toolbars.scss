@@ -1,0 +1,58 @@
+@mixin mercury-toolbar-button-base {
+  &:before {
+    position: relative;
+    display: block;
+    font-size: 16px;
+    left: -1px;
+    width: 22px;
+    height: 15px;
+    line-height: 15px;
+    font-family: 'mercury-toolbars';
+    speak: none;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    -webkit-font-smoothing: antialiased;
+    content: "\00a0";
+  }
+}
+
+@mixin mercury-toolbar-button($icon: '') {
+  &:before {
+    // markup
+    @if      $icon == bold           { content: "C"; }
+    @else if $icon == italic         { content: "D"; }
+    @else if $icon == strike         { content: "E"; }
+    @else if $icon == underline      { content: "F"; }
+    @else if $icon == subscript      { content: "G"; }
+    @else if $icon == superscript    { content: "H"; }
+    @else if $icon == justify-left   { content: "I"; }
+    @else if $icon == justify-center { content: "J"; }
+    @else if $icon == justify-right  { content: "K"; }
+    @else if $icon == justify-full   { content: "L"; }
+    @else if $icon == unordered-list { content: "M"; }
+    @else if $icon == ordered-list   { content: "N"; }
+    @else if $icon == indent         { content: "O"; }
+    @else if $icon == outdent        { content: "P"; }
+    @else if $icon == rule           { content: "Q"; }
+    @else if $icon == clean          { content: "R"; }
+    @else if $icon == edit           { content: "S"; }
+    // table
+    @else if $icon == row-before     { content: "T"; }
+    @else if $icon == row-after      { content: "U"; }
+    @else if $icon == row-delete     { content: "V"; }
+    @else if $icon == col-before     { content: "W"; }
+    @else if $icon == col-after      { content: "X"; }
+    @else if $icon == col-delete     { content: "Y"; }
+    @else if $icon == col-increase   { content: "Z"; }
+    @else if $icon == col-decrease   { content: "a"; }
+    @else if $icon == row-increase   { content: "b"; }
+    @else if $icon == row-decrease   { content: "c"; }
+    // other
+    @else if $icon == palette        { content: "d"; }
+    @else if $icon == dropdown       { content: "B"; }
+    // image
+    // gallery
+    @else                            { content: "\00a0"; }
+  }
+}

@@ -1,0 +1,26 @@
+@mixin mercury-region-outline {
+  &:focus {
+    outline: none;
+    -webkit-box-shadow: 0 0 7px $focus_color, 0 0 2px $focus_color / 3;
+    -moz-box-shadow: 0 0 7px $focus_color, 0 0 2px $focus_color / 3;
+    box-shadow: 0 0 7px $focus_color, 0 0 2px $focus_color / 3;
+  }
+}
+
+@mixin mercury-region-drop-indicator {
+  @include mercury-transition(opacity, ease-in-out);
+  @include mercury-border-radius(10px);
+  @include mercury-icon-base(30px, 60px, 60px, 'upload');
+  display: none;
+  opacity: 0;
+  position: absolute;
+  z-index: 20;
+  top: 30px;
+  left: 30px;
+  width: 60px;
+  height: 60px;
+  margin: -30px;
+  background: rgba(0, 0, 0, .75);
+  color: rgba(255, 255, 255, .85);
+  pointer-events: none;
+}

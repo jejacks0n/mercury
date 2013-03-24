@@ -13,3 +13,8 @@ $uploader_preview_border_color: #ccc !default;
 $uploader_preview_bg:           #fff !default;
 $uploader_progress_bg:          $primary_color !default;
 $uploader_progress_color:       rgba(255, 255, 255, .8) !default;
+
+// _gallery
+$gallery_region_bg: #333 !default;
+$gallery_region_paginator_color: #666 !default;
+$gallery_region_paginator_active_color: #fff !default;

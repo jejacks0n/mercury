@@ -8,15 +8,21 @@ class Mercury.Toolbar extends Mercury.View
   template: 'toolbar'
 
   events:
-    'region:update': 'onRegionUpdate'
+    'click [data-action]': 'processAction'
     'interface:hide': 'hide'
     'interface:show': 'show'
 
-    'click [data-action]': 'processAction'
+  build: ->
+    for name in ['primary', 'markup'] #@config('toolbars:defaults') || []
+      @append(new Mercury.ToolbarItem(name, 'collection', @config("toolbars:#{name}")))
 
-  constructor: ->
-    super
-    @hidden = @config('interface:enabled')
+
+  hide: ->
+    @el.css(top: -@el.height())
+
+
+  show: ->
+    @el.css(top: 0)
 
 
   processAction: (e) ->
@@ -25,6 +31,7 @@ class Mercury.Toolbar extends Mercury.View
     val = target.data('value')
     switch act
       when 'interface'
+        @hidden ?= @config('interface:enabled')
         @hidden = !@hidden
         if @hidden then Mercury.trigger('interface:show') else Mercury.trigger('interface:hide')
         Mercury.trigger('mode', 'preview')
@@ -37,15 +44,3 @@ class Mercury.Toolbar extends Mercury.View
           when 'jquery' then $('<section class="foo"><h1>testing</h1></section>')
         Mercury.trigger('action', act, val)
       else Mercury.trigger('action', act, val)
-
-
-  onRegionUpdate: (region) ->
-    # do nothing for now
-
-
-  hide: ->
-    @el.css(top: -@el.height())
-
-
-  show: ->
-    @el.css(top: 0)

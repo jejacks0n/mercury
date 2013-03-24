@@ -73,102 +73,103 @@ Mercury.configuration =
   # For information about adding your own functionality check todo: wiki url here
   #
   toolbars:
-    enabled    : true
     floating   : false                                     # make the toolbar float to the region being edited
-    defaults   : ['primary']                               # default toolbars to build on load
+    defaults   : ['primary']                               # default toolbars to build on init, others on demand
+    style      : 'standard'                                # toolbar style - 'standard', 'small'
 
     # The primary toolbar is special in that it will always be visible. Buttons may become disabled when a region that
     # doesn't support a given action is focused. Some buttons like save, preview, snippet, etc. will always be active
     # because they apply to the entire page and are not specific to the focused region.
     #
     primary:
-      buttons:
-        save:            ['Save', 'Save this page', event: 'save']
-        preview:         ['Preview', 'Preview this page', mode: 'preview']
-        sep1:            ' '
-        undo:            ['Undo', 'Undo your last action']
-        redo:            ['Redo', 'Redo your last action']
-        sep2:            ' '
-        link:            ['Link', 'Insert Link']
-        media:           ['Media', 'Insert Media (images and videos)']
-        table:           ['Table', 'Insert Table']
-        character:       ['Character', 'Special Characters']
-        snippet:         ['Snippet', 'Snippet Panel']
-        history:         ['History', 'Page Version History']
-        note:            ['Notes', 'Page Notes']
+      save:            ['Save', 'Save this page', event: 'save']
+      preview:         ['Preview', 'Preview this page', mode: 'preview']
+      sep1:            ' '
+      undo:            ['Undo', 'Undo your last action']
+      redo:            ['Redo', 'Redo your last action']
+      sep2:            '-'
+      link:            ['Link', 'Insert Link']
+      media:           ['Media', 'Insert Media (images and videos)']
+      table:           ['Table', 'Insert Table']
+      character:       ['Character', 'Special Characters']
+      snippets:        ['Snippet', 'Snippet Panel']
+      sep3:            ' '
+      history:         ['History', 'Page Version History']
+      notes:           ['Notes', 'Page Notes']
 
     # The markup toolbar is used by most of the default markup type of regions, which included the html, markdown, text,
     # and plain regions. Not all regions support all of the buttons defined in this toolbar however, and so some may be
     # disabled when different regions are focused.
     #
     markup:
-      buttons:
-        defined:
-          style:         ['Style', select: '/mercury/templates/style']
-          sep1:          ' '
-          block:         ['Block Format', select: '/mercury/templates/block']
-          sep2:          '-'
-        color:
-          bgcolor:       ['Background Color', palette: '/mercury/templates/bgcolor']
-          sep1:          ' '
-          color:         ['Text Color', palette: '/mercury/templates/color']
-          sep2:          '-'
-        decoration:
-          bold:          ['Bold']
-          italic:        ['Italicize']
-          strike:        ['Strikethrough']
-          underline:     ['Underline']
-          sep1:          '-'
-        script:
-          subscript:     ['Subscript']
-          superscript:   ['Superscript']
-          sep1:          '-'
-        justify:
-          left:          ['Align Left']
-          center:        ['Center']
-          right:         ['Align Right']
-          full:          ['Justify Full']
-          sep1:          '-'
-        list:
-          unorderedList: ['Unordered List']
-          orderedList:   ['Numbered List']
-          sep1:          '-'
-        indent:
-          outdent:       ['Decrease Indentation']
-          indent:        ['Increase Indentation']
-          sep1:          '-'
-        table:
-          rowBefore:     ['Insert Table Row', 'Insert a table row before the cursor']
-          rowAfter:      ['Insert Table Row', 'Insert a table row after the cursor']
-          rowDelete:     ['Delete Table Row', 'Delete this table row']
-          colBefore:     ['Insert Table Column', 'Insert a table column before the cursor']
-          colAfter:      ['Insert Table Column', 'Insert a table column after the cursor']
-          colDelete:     ['Delete Table Column', 'Delete this table column']
-          sep1:          ' '
-          colAdd:        ['Increase Cell Columns', 'Increase the cells colspan']
-          colSub:        ['Decrease Cell Columns', 'Decrease the cells colspan and add a new cell']
-          rowAdd:        ['Increase Cell Rows', 'Increase the cells rowspan']
-          rowSub:        ['Decrease Cell Rows', 'Decrease the cells rowspan and add a new cell']
-          sep2:          '-'
-        rules:
-          rule:          ['Horizontal Rule', 'Insert a horizontal rule']
-          sep1:          '-'
-        extra:
-          clean:         ['Remove Formatting', 'Remove formatting for the selection']
-          edit:          ['Edit HTML', 'Edit the HTML content']
+      defined:
+        style:         ['Style', select: '/mercury/templates/style']
+        sep1:          ' '
+        block:         ['Block Format', select: '/mercury/templates/block']
+        sep2:          '-'
+      color:
+        bgcolor:       ['Background Color', palette: '/mercury/templates/bgcolor']
+        sep1:          ' '
+        color:         ['Text Color', palette: '/mercury/templates/color']
+        sep2:          '-'
+      decoration:
+        bold:          ['Bold']
+        italic:        ['Italicize']
+        strike:        ['Strikethrough']
+        underline:     ['Underline']
+        sep1:          '-'
+      script:
+        subscript:     ['Subscript']
+        superscript:   ['Superscript']
+        sep1:          '-'
+      justify:
+        justifyLeft:   ['Align Left']
+        justifyCenter: ['Center']
+        justifyRight:  ['Align Right']
+        justifyFull:   ['Justify Full']
+        sep1:          '-'
+      list:
+        unorderedList: ['Unordered List']
+        orderedList:   ['Numbered List']
+        sep1:          '-'
+      indent:
+        outdent:       ['Decrease Indentation']
+        indent:        ['Increase Indentation']
+        sep1:          '-'
+      rules:
+        rule:          ['Horizontal Rule', 'Insert a horizontal rule']
+        sep1:          '-'
+      extra:
+        clean:         ['Remove Formatting', 'Remove formatting for the selection']
+        sep1:          ' '
+        edit:          ['Edit HTML', 'Edit the HTML content']
+        sep2:          '-'
+      table:
+        rowBefore:     ['Insert Table Row', 'Insert a table row before the cursor']
+        rowAfter:      ['Insert Table Row', 'Insert a table row after the cursor']
+        rowDelete:     ['Delete Table Row', 'Delete this table row']
+        colBefore:     ['Insert Table Column', 'Insert a table column before the cursor']
+        colAfter:      ['Insert Table Column', 'Insert a table column after the cursor']
+        colDelete:     ['Delete Table Column', 'Delete this table column']
+        sep1:          ' '
+        colIncrease:   ['Increase Cell Columns', 'Increase the cells colspan']
+        colDecrease:   ['Decrease Cell Columns', 'Decrease the cells colspan and add a new cell']
+        rowIncrease:   ['Increase Cell Rows', 'Increase the cells rowspan']
+        rowDecrease:   ['Decrease Cell Rows', 'Decrease the cells rowspan and add a new cell']
+        sep2:          '-'
+
 
     # The image toolbar is used by the image region, and may get more advanced features
     #
     image:
-      buttons:
-        crop:            ['Crop Image']
-        resize:          ['Resize Image']
-        alignment:
-          left:          ['Align Left']
-          middle:        ['Align Center']
-          right:         ['Align Right']
-          top:           ['Align Top']
-          buttom:        ['Align Bottom']
+      crop:            ['Crop Image']
+      resize:          ['Resize Image']
+      alignment:
+        left:          ['Align Left']
+        middle:        ['Align Center']
+        right:         ['Align Right']
+        top:           ['Align Top']
+        buttom:        ['Align Bottom']
 
 
 

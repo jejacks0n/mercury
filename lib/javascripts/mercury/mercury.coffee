@@ -19,6 +19,8 @@
 #= require mercury/views/frame_editor
 #= require mercury/views/statusbar
 #= require mercury/views/toolbar
+#= require mercury/views/toolbar_item
+#= require mercury/views/toolbar_button
 #= require mercury/views/uploader
 #
 # Models.

@@ -7,7 +7,10 @@ Copyright (c) 2013 Jeremy Jackson
 
 // Core css and utility.
 @import "mercury/core/config";
-@import "mercury/core/mixins";
+@import "mercury/core/general";
+@import "mercury/core/icons";
+@import "mercury/core/regions";
+@import "mercury/core/toolbars";
 
 // Views.
 @import "mercury/views/editor";
@@ -19,9 +22,25 @@ Copyright (c) 2013 Jeremy Jackson
 // Regions.
 @import "mercury/regions";
 
+// Fonts.
+@font-face {
+  font-family: 'mercury';
+  src: font-url('mercury.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'mercury-toolbars';
+  src: font-url('mercury-toolbars.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
 #mercury {
   // disable text sizing in webkit (ipad/iphone etc)
   -webkit-text-size-adjust: none;
+  position: absolute;
+  z-index: 20000;
 
   // disable animations while initializing
   &.loading * {

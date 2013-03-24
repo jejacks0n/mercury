@@ -21,7 +21,7 @@ module Mercury
     config.assets.paths << 'lib/dependencies'
     config.assets.paths << 'lib/javascripts'
     config.assets.paths << 'lib/stylesheets'
-    config.assets.paths << 'lib/images'
+    config.assets.paths << 'lib/fonts'
 
     config.assets.paths << 'uploads'
   end

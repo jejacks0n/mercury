@@ -1,12 +1,10 @@
-/* HtmlRegion
+/* Mercury.Region.Html
  *----------------------------------------------------------------------------*/
 .mercury-html-region {
+  @include mercury-region-outline;
   min-height: 20px;
   min-width: 5px;
-  &:focus {
-    @include focus-outline();
-  }
   &+ .mercury-region-drop-indicator {
-    @include drop-indicator-defaults();
+    @include mercury-region-drop-indicator;
   }
 }

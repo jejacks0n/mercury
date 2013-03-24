@@ -1,12 +1,12 @@
-/* MarkdownRegion
+/* Mercury.Region.Markdown
  *----------------------------------------------------------------------------*/
 .mercury-markdown-region {
   &+ .mercury-region-drop-indicator {
-    @include drop-indicator-defaults();
+    @include mercury-region-drop-indicator;
   }
-
   textarea.mercury-markdown-region-textarea {
-    @include border-box();
+    @include mercury-border-box;
+    @include mercury-region-outline;
     outline: 0;
     border: none;
     margin: 0;
@@ -16,8 +16,5 @@
     font-size: 12px;
     line-height: 13px;
     resize: vertical;
-    &:focus {
-      @include focus-outline();
-    }
   }
 }

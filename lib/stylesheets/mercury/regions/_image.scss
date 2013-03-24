@@ -1,12 +1,10 @@
-/* ImageRegion
+/* Mercury.Region.Image
  *----------------------------------------------------------------------------*/
 .mercury-image-region {
+  @include mercury-region-outline;
   min-width: 20px;
   min-height: 20px;
-  &:focus {
-    @include focus-outline();
-  }
   &+ .mercury-region-drop-indicator {
-    @include drop-indicator-defaults();
+    @include mercury-region-drop-indicator;
   }
 }

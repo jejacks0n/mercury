@@ -1,7 +1,7 @@
 @JST ||= {}
 JST['/mercury/templates/toolbar'] = (scope) ->
   """
-  <ul>
+  <ul class="mercury-toolbar-development-collection">
     <li data-action="interface">Toggle Interface</li>
     <li data-action="preview">Toggle Preview</li>
     <li data-action="undo">Undo</li>

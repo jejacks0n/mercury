@@ -1,8 +1,9 @@
-/* TextRegion
+/* Mercury.Region.Text
  *----------------------------------------------------------------------------*/
 .mercury-text-region {
   textarea.mercury-text-region-textarea {
-    @include border-box();
+    @include mercury-border-box;
+    @include mercury-region-outline;
     outline: 0;
     border: none;
     margin: 0;
@@ -11,8 +12,5 @@
     font-size: 12px;
     line-height: 13px;
     resize: vertical;
-    &:focus {
-      @include focus-outline();
-    }
   }
 }

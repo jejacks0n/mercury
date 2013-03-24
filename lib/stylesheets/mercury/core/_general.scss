@@ -1,78 +1,3 @@
-@mixin no-selection {
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  user-select: none;
-  cursor: default;
-}
-
-@mixin border-box {
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-}
-
-@mixin focus-outline {
-  outline: none;
-  -webkit-box-shadow: 0 0 7px $focus_color, 0 0 2px $focus_color / 3;
-  -moz-box-shadow: 0 0 7px $focus_color, 0 0 2px $focus_color / 3;
-  box-shadow: 0 0 7px $focus_color, 0 0 2px $focus_color / 3;
-}
-
-@mixin gradient($first, $second) {
-  background: $first;
-  background: -moz-linear-gradient(top, $first 1%, $second 100%);
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(1%, $first), color-stop(100%, $second));
-  background: -webkit-linear-gradient(top, $first 1%, $second 100%);
-  background: -o-linear-gradient(top, $first 1%, $second 100%);
-  background: -ms-linear-gradient(top, $first 1%, $second 100%);
-  background: linear-gradient(to bottom, $first 1%, $second 100%);
-}
-
-@mixin border-radius($radii: 2px) {
-  -webkit-border-radius: $radii;
-  -moz-border-radius: $radii;
-  border-radius: $radii;
-}
-
-@mixin box-shadow($prop1: 0 0 40px rgba(0, 0, 0, .9), $prop2: null) {
-  -webkit-box-shadow: $prop1, $prop2;
-  -moz-box-shadow: $prop1, $prop2;
-  box-shadow: $prop1, $prop2;
-}
-
-@mixin font($size: 10pt) {
-  font-family: Helvetica, Tahoma, Arial, sans-serif;
-  font-size: $size;
-}
-
-@mixin transition($property, $easing) {
-  -webkit-transition-property: $property;
-  -webkit-transition-duration: 0.25s;
-  -webkit-transition-timing-function: $easing;
-  -moz-transition-property: $property;
-  -moz-transition-duration: 0.25s;
-  -moz-transition-timing-function: $easing;
-  transition-property: $property;
-  transition-duration: 0.25s;
-  transition-timing-function: $easing;
-}
-
-@mixin drop-indicator-defaults {
-  @include transition(opacity, ease-in-out);
-  @include border-radius(10px);
-  display: none;
-  position: absolute;
-  z-index: 20;
-  top: 30px;
-  left: 30px;
-  width: 60px;
-  height: 60px;
-  margin: -30px;
-  opacity: 0;
-  background: rgba(0, 0, 0, .75) asset-url('mercury/regions/upload-indicator.png', image) no-repeat center;
-  pointer-events: none;
-}
-
 .mercury-clearfix {
   &:before, &:after {
     content: " ";
@@ -84,4 +9,56 @@
   & {
     *zoom: 1;
   }
+}
+
+@mixin mercury-no-selection {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  cursor: default;
+}
+
+@mixin mercury-border-box {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+@mixin mercury-gradient($first, $second) {
+  background: $first;
+  background: -moz-linear-gradient(top, $first 1%, $second 100%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(1%, $first), color-stop(100%, $second));
+  background: -webkit-linear-gradient(top, $first 1%, $second 100%);
+  background: -o-linear-gradient(top, $first 1%, $second 100%);
+  background: -ms-linear-gradient(top, $first 1%, $second 100%);
+  background: linear-gradient(to bottom, $first 1%, $second 100%);
+}
+
+@mixin mercury-border-radius($radii: 2px) {
+  -webkit-border-radius: $radii;
+  -moz-border-radius: $radii;
+  border-radius: $radii;
+}
+
+@mixin mercury-box-shadow($prop1: 0 0 40px rgba(0, 0, 0, .9), $prop2: null) {
+  -webkit-box-shadow: $prop1, $prop2;
+  -moz-box-shadow: $prop1, $prop2;
+  box-shadow: $prop1, $prop2;
+}
+
+@mixin mercury-font($size: 10pt) {
+  font-family: Helvetica, Tahoma, Arial, sans-serif;
+  font-size: $size;
+}
+
+@mixin mercury-transition($property, $easing) {
+  -webkit-transition-property: $property;
+  -webkit-transition-duration: 0.25s;
+  -webkit-transition-timing-function: $easing;
+  -moz-transition-property: $property;
+  -moz-transition-duration: 0.25s;
+  -moz-transition-timing-function: $easing;
+  transition-property: $property;
+  transition-duration: 0.25s;
+  transition-timing-function: $easing;
 }

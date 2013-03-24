@@ -13,6 +13,7 @@ namespace :mercury do
     env          = Rails.application.assets
     output_path  = Rails.root.join('distro')
     stylesheets  = ['mercury.css']
+    asset_paths  = ['fonts/mercury']
     javascripts  = {
       dependencies: 'mercury/dependencies.js',
       locales:      'mercury/locales.js',
@@ -88,10 +89,16 @@ namespace :mercury do
         asset = env.find_asset(path)
         asset.write_to(output_path.join(path))
 
-        # add base64 encoded image urls
+        # add base64 encoded image/font urls
         processed = asset.source.gsub(/url\(\/assets\/mercury\/(.*?)\)/ix) do |m|
-          encoded = Base64.encode64(File.read(Rails.root.join('lib/images/mercury', $1))).gsub("\n", '')
-          "url(data:image/png;base64,#{encoded})"
+          format = 'image/png'
+          file = Rails.root.join('lib/images/mercury', $1)
+          unless File.exists?(file)
+            format = 'font/ttf'
+            file = Rails.root.join('lib/fonts/mercury', $1)
+          end
+          encoded = Base64.encode64(File.read(file)).gsub("\n", '')
+          "url(data:#{format};base64,#{encoded})"
         end
 
         # minimized css with a few line breaks added in
@@ -102,6 +109,15 @@ namespace :mercury do
         File.open(output_path.join(path.gsub('.css', '.bundle.css')), 'w') do |file|
           file.write(minified)
         end
+      end
+    end
+
+    desc "Copy asset files into distro"
+    task :assets => :environment do
+      puts 'Copying assets...'
+      FileUtils.mkdir_p(output_path.join('assets'))
+      for path in asset_paths
+        FileUtils.cp_r Rails.root.join('lib', path), output_path.join('assets')
       end
     end
   end

@@ -8,14 +8,14 @@ Copyright (c) 2013 Jeremy Jackson
  *----------------------------------------------------------------------------*/
 @font-face {
   font-family: 'mercury';
-  src: url(/assets/mercury.ttf) format("truetype");
+  src: url(/assets/mercury/mercury.ttf) format("truetype");
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'mercury-toolbars';
-  src: url(/assets/mercury-toolbars.ttf) format("truetype");
+  src: url(/assets/mercury/toolbars.ttf) format("truetype");
   font-weight: normal;
   font-style: normal;
 }

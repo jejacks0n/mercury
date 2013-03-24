@@ -18,6 +18,7 @@ module Mercury
     config.assets.debug = true
 
     config.assets.paths = []
+    #config.assets.paths << 'distro'
     config.assets.paths << 'lib/dependencies'
     config.assets.paths << 'lib/javascripts'
     config.assets.paths << 'lib/stylesheets'

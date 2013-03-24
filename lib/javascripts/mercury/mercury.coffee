@@ -50,7 +50,7 @@ globalize = ->
   # similarly with Mercury.Logger -- use Mercury.log (or this.log in models and views etc.) instead of Mercury.Logger.log
   # as the context may not be the same.
   #
-  @version = '1.0.0'
+  @version = '0.0.1aplha'
 
   # Add global configuration methods.
   #

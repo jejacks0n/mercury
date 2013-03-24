@@ -36,13 +36,17 @@
     width: 0;
     height: 17px;
     margin: -1px 3px;
-    border-left: 1px solid #9b9b9b;
+    border-left: 1px solid #707070;
   }
   .mercury-toolbar-button {
     @include mercury-toolbar-button-base;
     @include mercury-border-radius(2px);
     @include mercury-gradient(#e8e8e8, #cbcbcb);
-    border: 1px solid #9b9b9b;
+    width: 22px;
+    height: 15px;
+    overflow: hidden;
+    border: 1px solid #707070;
+    cursor: pointer;
     &+ .mercury-toolbar-button{
       @include mercury-border-radius(0 2px 2px 0);
       margin-left: -1px;
@@ -77,6 +81,16 @@
         text-shadow: none;
       }
     }
+    &.disabled {
+      opacity: .5;
+    }
+    &.active {
+      @include mercury-gradient(#bebebe, #9c9c9c);
+      &:before {
+        color: #333;
+        text-shadow: none;
+      }
+    }
     em {
       display: none;
     }
@@ -103,7 +117,7 @@
     border-right: 1px solid #9b9b9b;
   }
   .mercury-toolbar-button {
-    @include mercury-icon-base(24px, 50px, 46px);
+    @include mercury-icon-base(32px, 50px, 46px);
     height: 58px;
     min-width: 55px;
     margin-bottom: 20px;
@@ -121,18 +135,23 @@
       font-style: normal;
       color: #222;
     }
+    &.active {
+      &:before {
+        line-height: 48px;
+      }
+    }
   }
-  [data-action="save"]      { @include mercury-icon(save,      24px); }
-  [data-action="preview"]   { @include mercury-icon(preview,   32px); }
-  [data-action="undo"]      { @include mercury-icon(undo,      32px); }
-  [data-action="redo"]      { @include mercury-icon(redo,      32px); }
-  [data-action="link"]      { @include mercury-icon(link,      28px); }
-  [data-action="media"]     { @include mercury-icon(media,     24px); }
-  [data-action="table"]     { @include mercury-icon(table,     24px); }
-  [data-action="character"] { @include mercury-icon(character, 24px); }
-  [data-action="snippets"]  { @include mercury-icon(snippets,  24px); }
-  [data-action="history"]   { @include mercury-icon(history,   24px); }
-  [data-action="notes"]     { @include mercury-icon(notes,     24px); }
+  [data-action="save"]      { @include mercury-icon(save); }
+  [data-action="preview"]   { @include mercury-icon(preview); }
+  [data-action="undo"]      { @include mercury-icon(undo); }
+  [data-action="redo"]      { @include mercury-icon(redo); }
+  [data-action="link"]      { @include mercury-icon(link); }
+  [data-action="media"]     { @include mercury-icon(media); }
+  [data-action="table"]     { @include mercury-icon(table); }
+  [data-action="character"] { @include mercury-icon(character); }
+  [data-action="snippets"]  { @include mercury-icon(snippets); }
+  [data-action="history"]   { @include mercury-icon(history); }
+  [data-action="notes"]     { @include mercury-icon(notes); }
 }
 
 

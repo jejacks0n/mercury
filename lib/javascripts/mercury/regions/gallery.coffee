@@ -42,6 +42,14 @@ class Mercury.Region.Gallery extends Mercury.Region
     @delay(@speed, => @nextSlide())
 
 
+  value: (value) ->
+    if value == null || typeof(value) == 'undefined'
+      el = $('<div>').html(@html())
+      el.find('.mercury-gallery-region-controls').remove()
+      return el.html()
+    super
+
+
   refresh: (controls = false) ->
     @images = @$('.slide').hide()
     @index = 1 if @index > @images.length
@@ -117,7 +125,7 @@ class Mercury.Region.Gallery extends Mercury.Region
 
 
   onFocus: ->
-    @controls.show()
+    @controls.show() unless @previewing
 
 
   onBlur: ->

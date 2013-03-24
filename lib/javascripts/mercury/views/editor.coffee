@@ -24,7 +24,7 @@ class Mercury.Editor extends Mercury.View
     $(window).on('beforeunload', => @beforeUnload())
 
     @addClass('loading')
-    @appendTo(@document ||= $('body'))
+    $('body').before(@el)
     @initialize()
     @buildInterface()
     @bindDefaultEvents()

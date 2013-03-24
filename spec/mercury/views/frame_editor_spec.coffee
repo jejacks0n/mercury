@@ -7,7 +7,7 @@ describe "Mercury.FrameEditor", ->
   subject = null
 
   beforeEach ->
-    spyOn(Klass::, 'appendTo')
+    spyOn($.fn, 'before')
     subject = new Klass(frame: '<iframe>')
 
   describe "#initialze", ->
@@ -79,5 +79,3 @@ describe "Mercury.FrameEditor", ->
     it "exposes Mercury to the frame window", ->
       subject.setupDocument()
       expect( @contentWindow.Mercury ).to.eq(Mercury)
-
-

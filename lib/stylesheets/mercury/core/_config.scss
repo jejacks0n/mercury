@@ -1,10 +1,33 @@
-// global
+/* Fonts
+ *----------------------------------------------------------------------------*/
+@font-face {
+  font-family: 'mercury';
+  src: font-url('mercury.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'mercury-toolbars';
+  src: font-url('mercury-toolbars.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* Keyframes
+ *----------------------------------------------------------------------------*/
+@-webkit-keyframes mercury-uploader-indicator { to { background-position: 0 0 } from { background-position: -45px 0 } }
+@-moz-keyframes mercury-uploader-indicator { to { background-position: 0 0 } from { background-position: -45px 0 } }
+
+/* Global
+ *----------------------------------------------------------------------------*/
 $primary_color:                 #00bce5 !default;
 $overlay_bg:                    rgba(0, 0, 0, .75) !default;
 $dialog_bg:                     #efefef !default;
 $dialog_color:                  #333 !default;
 $focus_color:                   $primary_color !default;
 
+/* View Specific
+ *----------------------------------------------------------------------------*/
 // _uploader
 $uploader_overlay_bg:           $overlay_bg !default;
 $uploader_dialog_bg:            $dialog_bg !default;

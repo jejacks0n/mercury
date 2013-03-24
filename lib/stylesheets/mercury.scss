@@ -22,20 +22,6 @@ Copyright (c) 2013 Jeremy Jackson
 // Regions.
 @import "mercury/regions";
 
-// Fonts.
-@font-face {
-  font-family: 'mercury';
-  src: font-url('mercury.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
-}
-@font-face {
-  font-family: 'mercury-toolbars';
-  src: font-url('mercury-toolbars.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
-}
-
 #mercury {
   // disable text sizing in webkit (ipad/iphone etc)
   -webkit-text-size-adjust: none;

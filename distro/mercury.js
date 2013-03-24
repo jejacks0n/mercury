@@ -39,128 +39,125 @@ Copyright (c) 2013 Jeremy Jackson
       statusbar: 'Statusbar'
     },
     toolbars: {
-      enabled: true,
       floating: false,
       defaults: ['primary'],
+      style: 'standard',
       primary: {
-        buttons: {
-          save: [
-            'Save', 'Save this page', {
-              event: 'save'
-            }
-          ],
-          preview: [
-            'Preview', 'Preview this page', {
-              mode: 'preview'
+        save: [
+          'Save', 'Save this page', {
+            event: 'save'
+          }
+        ],
+        preview: [
+          'Preview', 'Preview this page', {
+            mode: 'preview'
+          }
+        ],
+        sep1: ' ',
+        undo: ['Undo', 'Undo your last action'],
+        redo: ['Redo', 'Redo your last action'],
+        sep2: '-',
+        link: ['Link', 'Insert Link'],
+        media: ['Media', 'Insert Media (images and videos)'],
+        table: ['Table', 'Insert Table'],
+        character: ['Character', 'Special Characters'],
+        snippets: ['Snippet', 'Snippet Panel'],
+        sep3: ' ',
+        history: ['History', 'Page Version History'],
+        notes: ['Notes', 'Page Notes']
+      },
+      markup: {
+        defined: {
+          style: [
+            'Style', {
+              select: '/mercury/templates/style'
             }
           ],
           sep1: ' ',
-          undo: ['Undo', 'Undo your last action'],
-          redo: ['Redo', 'Redo your last action'],
-          sep2: ' ',
-          link: ['Link', 'Insert Link'],
-          media: ['Media', 'Insert Media (images and videos)'],
-          table: ['Table', 'Insert Table'],
-          character: ['Character', 'Special Characters'],
-          snippet: ['Snippet', 'Snippet Panel'],
-          history: ['History', 'Page Version History'],
-          note: ['Notes', 'Page Notes']
-        }
-      },
-      markup: {
-        buttons: {
-          defined: {
-            style: [
-              'Style', {
-                select: '/mercury/templates/style'
-              }
-            ],
-            sep1: ' ',
-            block: [
-              'Block Format', {
-                select: '/mercury/templates/block'
-              }
-            ],
-            sep2: '-'
-          },
-          color: {
-            bgcolor: [
-              'Background Color', {
-                palette: '/mercury/templates/bgcolor'
-              }
-            ],
-            sep1: ' ',
-            color: [
-              'Text Color', {
-                palette: '/mercury/templates/color'
-              }
-            ],
-            sep2: '-'
-          },
-          decoration: {
-            bold: ['Bold'],
-            italic: ['Italicize'],
-            strike: ['Strikethrough'],
-            underline: ['Underline'],
-            sep1: '-'
-          },
-          script: {
-            subscript: ['Subscript'],
-            superscript: ['Superscript'],
-            sep1: '-'
-          },
-          justify: {
-            left: ['Align Left'],
-            center: ['Center'],
-            right: ['Align Right'],
-            full: ['Justify Full'],
-            sep1: '-'
-          },
-          list: {
-            unorderedList: ['Unordered List'],
-            orderedList: ['Numbered List'],
-            sep1: '-'
-          },
-          indent: {
-            outdent: ['Decrease Indentation'],
-            indent: ['Increase Indentation'],
-            sep1: '-'
-          },
-          table: {
-            rowBefore: ['Insert Table Row', 'Insert a table row before the cursor'],
-            rowAfter: ['Insert Table Row', 'Insert a table row after the cursor'],
-            rowDelete: ['Delete Table Row', 'Delete this table row'],
-            colBefore: ['Insert Table Column', 'Insert a table column before the cursor'],
-            colAfter: ['Insert Table Column', 'Insert a table column after the cursor'],
-            colDelete: ['Delete Table Column', 'Delete this table column'],
-            sep1: ' ',
-            colAdd: ['Increase Cell Columns', 'Increase the cells colspan'],
-            colSub: ['Decrease Cell Columns', 'Decrease the cells colspan and add a new cell'],
-            rowAdd: ['Increase Cell Rows', 'Increase the cells rowspan'],
-            rowSub: ['Decrease Cell Rows', 'Decrease the cells rowspan and add a new cell'],
-            sep2: '-'
-          },
-          rules: {
-            rule: ['Horizontal Rule', 'Insert a horizontal rule'],
-            sep1: '-'
-          },
-          extra: {
-            clean: ['Remove Formatting', 'Remove formatting for the selection'],
-            edit: ['Edit HTML', 'Edit the HTML content']
-          }
+          block: [
+            'Block Format', {
+              select: '/mercury/templates/block'
+            }
+          ],
+          sep2: '-'
+        },
+        color: {
+          bgcolor: [
+            'Background Color', {
+              palette: '/mercury/templates/bgcolor'
+            }
+          ],
+          sep1: ' ',
+          color: [
+            'Text Color', {
+              palette: '/mercury/templates/color'
+            }
+          ],
+          sep2: '-'
+        },
+        decoration: {
+          bold: ['Bold'],
+          italic: ['Italicize'],
+          strike: ['Strikethrough'],
+          underline: ['Underline'],
+          sep1: '-'
+        },
+        script: {
+          subscript: ['Subscript'],
+          superscript: ['Superscript'],
+          sep1: '-'
+        },
+        justify: {
+          justifyLeft: ['Align Left'],
+          justifyCenter: ['Center'],
+          justifyRight: ['Align Right'],
+          justifyFull: ['Justify Full'],
+          sep1: '-'
+        },
+        list: {
+          unorderedList: ['Unordered List'],
+          orderedList: ['Numbered List'],
+          sep1: '-'
+        },
+        indent: {
+          outdent: ['Decrease Indentation'],
+          indent: ['Increase Indentation'],
+          sep1: '-'
+        },
+        rules: {
+          rule: ['Horizontal Rule', 'Insert a horizontal rule'],
+          sep1: '-'
+        },
+        extra: {
+          clean: ['Remove Formatting', 'Remove formatting for the selection'],
+          sep1: ' ',
+          edit: ['Edit HTML', 'Edit the HTML content'],
+          sep2: '-'
+        },
+        table: {
+          rowBefore: ['Insert Table Row', 'Insert a table row before the cursor'],
+          rowAfter: ['Insert Table Row', 'Insert a table row after the cursor'],
+          rowDelete: ['Delete Table Row', 'Delete this table row'],
+          colBefore: ['Insert Table Column', 'Insert a table column before the cursor'],
+          colAfter: ['Insert Table Column', 'Insert a table column after the cursor'],
+          colDelete: ['Delete Table Column', 'Delete this table column'],
+          sep1: ' ',
+          colIncrease: ['Increase Cell Columns', 'Increase the cells colspan'],
+          colDecrease: ['Decrease Cell Columns', 'Decrease the cells colspan and add a new cell'],
+          rowIncrease: ['Increase Cell Rows', 'Increase the cells rowspan'],
+          rowDecrease: ['Decrease Cell Rows', 'Decrease the cells rowspan and add a new cell'],
+          sep2: '-'
         }
       },
       image: {
-        buttons: {
-          crop: ['Crop Image'],
-          resize: ['Resize Image'],
-          alignment: {
-            left: ['Align Left'],
-            middle: ['Align Center'],
-            right: ['Align Right'],
-            top: ['Align Top'],
-            buttom: ['Align Bottom']
-          }
+        crop: ['Crop Image'],
+        resize: ['Resize Image'],
+        alignment: {
+          left: ['Align Left'],
+          middle: ['Align Center'],
+          right: ['Align Right'],
+          top: ['Align Top'],
+          buttom: ['Align Bottom']
         }
       }
     },
@@ -1469,7 +1466,7 @@ Copyright (c) 2013 Jeremy Jackson
         return _this.beforeUnload();
       });
       this.addClass('loading');
-      this.appendTo(this.document || (this.document = $('body')));
+      $('body').before(this.el);
       this.initialize();
       this.buildInterface();
       this.bindDefaultEvents();
@@ -1736,7 +1733,7 @@ Copyright (c) 2013 Jeremy Jackson
   this.JST || (this.JST = {});
 
   JST['/mercury/templates/toolbar'] = function(scope) {
-    return "<ul>\n  <li data-action=\"interface\">Toggle Interface</li>\n  <li data-action=\"preview\">Toggle Preview</li>\n  <li data-action=\"undo\">Undo</li>\n  <li data-action=\"redo\">Redo</li>\n  <hr/>\n  <li data-action=\"direction\">custom action (toggle rtl/ltr)</li>\n  <hr/>\n  <li data-action=\"block\" data-value=\"none\">none</li>\n  <li data-action=\"block\" data-value=\"h1\">h1</li>\n  <li data-action=\"block\" data-value=\"h2\">h2</li>\n  <li data-action=\"block\" data-value=\"h3\">h3</li>\n  <li data-action=\"block\" data-value=\"h4\">h4</li>\n  <li data-action=\"block\" data-value=\"h5\">h5</li>\n  <li data-action=\"block\" data-value=\"h6\">h6</li>\n  <li data-action=\"block\" data-value=\"pre\">pre</li>\n  <li data-action=\"block\" data-value=\"paragraph\">paragraph</li>\n  <li data-action=\"block\" data-value=\"blockquote\">blockquote</li>\n  <hr/>\n  <li data-action=\"bold\">bold</li>\n  <li data-action=\"italic\">italic</li>\n  <li data-action=\"underline\">underline</li>\n  <li data-action=\"subscript\">subscript</li>\n  <li data-action=\"superscript\">superscript</li>\n  <hr/>\n  <li data-action=\"orderedList\">orderedList</li>\n  <li data-action=\"unorderedList\">unorderedList</li>\n  <hr/>\n  <li data-action=\"indent\">indent</li>\n  <li data-action=\"outdent\">outdent</li>\n  <hr/>\n  <li data-action=\"style\" data-value=\"border:1px solid red\">style</li>\n  <li data-action=\"style\" data-value=\"foo\">class</li>\n  <hr/>\n  <li data-action=\"html\" data-value=\"html\">html (with html)</li>\n  <li data-action=\"html\" data-value=\"el\">html (with element)</li>\n  <li data-action=\"html\" data-value=\"jquery\">html (with jQuery)</li>\n  <hr/>\n  <li data-action=\"link\" data-value='{\"url\": \"https://github.com/jejacks0n/mercury\", \"text\": \"Project Home\"}'>link</li>\n  <li data-action=\"image\" data-value='{\"url\": \"http://goo.gl/UWYSd\", \"text\": \"Test Image\"}'>image</li>\n  <hr/>\n  <li data-action=\"rule\">rule</li>\n  <hr/>\n  <li><input type=\"text\"/></li>\n</ul>";
+    return "<ul class=\"mercury-toolbar-development-collection\">\n  <li data-action=\"interface\">Toggle Interface</li>\n  <li data-action=\"preview\">Toggle Preview</li>\n  <li data-action=\"undo\">Undo</li>\n  <li data-action=\"redo\">Redo</li>\n  <hr/>\n  <li data-action=\"direction\">custom action (toggle rtl/ltr)</li>\n  <hr/>\n  <li data-action=\"block\" data-value=\"none\">none</li>\n  <li data-action=\"block\" data-value=\"h1\">h1</li>\n  <li data-action=\"block\" data-value=\"h2\">h2</li>\n  <li data-action=\"block\" data-value=\"h3\">h3</li>\n  <li data-action=\"block\" data-value=\"h4\">h4</li>\n  <li data-action=\"block\" data-value=\"h5\">h5</li>\n  <li data-action=\"block\" data-value=\"h6\">h6</li>\n  <li data-action=\"block\" data-value=\"pre\">pre</li>\n  <li data-action=\"block\" data-value=\"paragraph\">paragraph</li>\n  <li data-action=\"block\" data-value=\"blockquote\">blockquote</li>\n  <hr/>\n  <li data-action=\"bold\">bold</li>\n  <li data-action=\"italic\">italic</li>\n  <li data-action=\"underline\">underline</li>\n  <li data-action=\"subscript\">subscript</li>\n  <li data-action=\"superscript\">superscript</li>\n  <hr/>\n  <li data-action=\"orderedList\">orderedList</li>\n  <li data-action=\"unorderedList\">unorderedList</li>\n  <hr/>\n  <li data-action=\"indent\">indent</li>\n  <li data-action=\"outdent\">outdent</li>\n  <hr/>\n  <li data-action=\"style\" data-value=\"border:1px solid red\">style</li>\n  <li data-action=\"style\" data-value=\"foo\">class</li>\n  <hr/>\n  <li data-action=\"html\" data-value=\"html\">html (with html)</li>\n  <li data-action=\"html\" data-value=\"el\">html (with element)</li>\n  <li data-action=\"html\" data-value=\"jquery\">html (with jQuery)</li>\n  <hr/>\n  <li data-action=\"link\" data-value='{\"url\": \"https://github.com/jejacks0n/mercury\", \"text\": \"Project Home\"}'>link</li>\n  <li data-action=\"image\" data-value='{\"url\": \"http://goo.gl/UWYSd\", \"text\": \"Test Image\"}'>image</li>\n  <hr/>\n  <li data-action=\"rule\">rule</li>\n  <hr/>\n  <li><input type=\"text\"/></li>\n</ul>";
   };
 
 }).call(this);
@@ -1748,6 +1745,10 @@ Copyright (c) 2013 Jeremy Jackson
 
     __extends(Toolbar, _super);
 
+    function Toolbar() {
+      return Toolbar.__super__.constructor.apply(this, arguments);
+    }
+
     Toolbar.prototype.logPrefix = 'Mercury.Toolbar:';
 
     Toolbar.prototype.className = 'mercury-toolbar';
@@ -1755,24 +1756,44 @@ Copyright (c) 2013 Jeremy Jackson
     Toolbar.prototype.template = 'toolbar';
 
     Toolbar.prototype.events = {
-      'region:update': 'onRegionUpdate',
+      'click [data-action]': 'processAction',
       'interface:hide': 'hide',
-      'interface:show': 'show',
-      'click [data-action]': 'processAction'
+      'interface:show': 'show'
     };
 
-    function Toolbar() {
-      Toolbar.__super__.constructor.apply(this, arguments);
-      this.hidden = this.config('interface:enabled');
-    }
+    Toolbar.prototype.build = function() {
+      var name, _i, _len, _ref, _results;
+      _ref = ['primary', 'markup'];
+      _results = [];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        name = _ref[_i];
+        _results.push(this.append(new Mercury.ToolbarItem(name, 'collection', this.config("toolbars:" + name))));
+      }
+      return _results;
+    };
+
+    Toolbar.prototype.hide = function() {
+      return this.el.css({
+        top: -this.el.height()
+      });
+    };
+
+    Toolbar.prototype.show = function() {
+      return this.el.css({
+        top: 0
+      });
+    };
 
     Toolbar.prototype.processAction = function(e) {
-      var act, target, val;
+      var act, target, val, _ref;
       target = $(e.target);
       act = target.data('action');
       val = target.data('value');
       switch (act) {
         case 'interface':
+          if ((_ref = this.hidden) == null) {
+            this.hidden = this.config('interface:enabled');
+          }
           this.hidden = !this.hidden;
           if (this.hidden) {
             Mercury.trigger('interface:show');
@@ -1799,21 +1820,105 @@ Copyright (c) 2013 Jeremy Jackson
       }
     };
 
-    Toolbar.prototype.onRegionUpdate = function(region) {};
-
-    Toolbar.prototype.hide = function() {
-      return this.el.css({
-        top: -this.el.height()
-      });
-    };
-
-    Toolbar.prototype.show = function() {
-      return this.el.css({
-        top: 0
-      });
-    };
-
     return Toolbar;
+
+  })(Mercury.View);
+
+}).call(this);
+(function() {
+  var __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+  Mercury.ToolbarItem = (function(_super) {
+
+    __extends(ToolbarItem, _super);
+
+    ToolbarItem.prototype.logPrefix = 'Mercury.ToolbarItem:';
+
+    function ToolbarItem(name, type, value) {
+      this.name = name;
+      this.type = type;
+      this.value = value;
+      ToolbarItem.__super__.constructor.apply(this, arguments);
+    }
+
+    ToolbarItem.prototype.build = function() {
+      var item, name, value, _ref, _results;
+      this.addClasses();
+      if (typeof this.value !== 'object') {
+        return;
+      }
+      _ref = this.value;
+      _results = [];
+      for (name in _ref) {
+        value = _ref[name];
+        item = (function() {
+          switch (($.isArray(value) ? 'array' : typeof value)) {
+            case 'object':
+              return new Mercury.ToolbarItem(name, 'group', value);
+            case 'string':
+              return new Mercury.ToolbarItem(name, 'separator', value);
+            case 'array':
+              return new Mercury.ToolbarButton(name, value);
+          }
+        })();
+        if (item) {
+          _results.push(this.append(item));
+        } else {
+          _results.push(void 0);
+        }
+      }
+      return _results;
+    };
+
+    ToolbarItem.prototype.addClasses = function() {
+      if (this.value === '-') {
+        this.addClass("mercury-toolbar-line-" + (this.type.toDash()));
+      } else {
+        this.addClass("mercury-toolbar-" + (this.type.toDash()));
+      }
+      return this.addClass("mercury-toolbar-" + (this.name.toDash()) + "-" + (this.type.toDash()));
+    };
+
+    return ToolbarItem;
+
+  })(Mercury.View);
+
+}).call(this);
+(function() {
+  var __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+  Mercury.ToolbarButton = (function(_super) {
+
+    __extends(ToolbarButton, _super);
+
+    ToolbarButton.prototype.logPrefix = 'Mercury.ToolbarButton:';
+
+    ToolbarButton.prototype.className = 'mercury-toolbar-button';
+
+    function ToolbarButton(name, optionsArray) {
+      this.name = name;
+      this.optionsArray = optionsArray;
+      if (this.name === 'style' || this.name === 'block') {
+        this.type = 'select';
+      }
+      if (this.name === 'color' || this.name === 'bgcolor') {
+        this.type = 'palette';
+      }
+      ToolbarButton.__super__.constructor.apply(this, arguments);
+    }
+
+    ToolbarButton.prototype.build = function() {
+      if (this.type) {
+        this.attr('data-type', this.type);
+      }
+      this.attr('data-action', this.name.toDash());
+      this.addClass("mercury-toolbar-" + (this.name.toDash()) + "-button");
+      return this.html("<em>" + this.optionsArray[0] + "</em>");
+    };
+
+    return ToolbarButton;
 
   })(Mercury.View);
 

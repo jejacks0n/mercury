@@ -62,6 +62,16 @@ also takes into account undo/redo support using the keyboard or buttons.
       });
     };
 
+    Gallery.prototype.value = function(value) {
+      var el;
+      if (value === null || typeof value === 'undefined') {
+        el = $('<div>').html(this.html());
+        el.find('.mercury-gallery-region-controls').remove();
+        return el.html();
+      }
+      return Gallery.__super__.value.apply(this, arguments);
+    };
+
     Gallery.prototype.refresh = function(controls) {
       if (controls == null) {
         controls = false;
@@ -171,7 +181,9 @@ also takes into account undo/redo support using the keyboard or buttons.
     };
 
     Gallery.prototype.onFocus = function() {
-      return this.controls.show();
+      if (!this.previewing) {
+        return this.controls.show();
+      }
     };
 
     Gallery.prototype.onBlur = function() {

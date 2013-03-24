@@ -1,8 +1,5 @@
 /* Mercury.Uploader
  *----------------------------------------------------------------------------*/
-@-webkit-keyframes mercury-uploader-indicator { to { background-position: 0 0 } from { background-position: -45px 0 } }
-@-moz-keyframes mercury-uploader-indicator { to { background-position: 0 0 } from { background-position: -45px 0 } }
-
 #mercury .mercury-uploader {
   @include mercury-transition(opacity, ease-in-out);
   position: fixed;

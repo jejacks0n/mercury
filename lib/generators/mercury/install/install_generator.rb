@@ -1,3 +1,5 @@
+require "mercury/engine"
+
 module Mercury
   module Generators
     class InstallGenerator < Rails::Generators::Base

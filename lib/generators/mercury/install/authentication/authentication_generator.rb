@@ -1,3 +1,5 @@
+require "mercury/engine"
+
 module Mercury
   module Generators
     module Install

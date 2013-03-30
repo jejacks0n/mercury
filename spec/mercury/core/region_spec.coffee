@@ -87,6 +87,15 @@ describe "Mercury.Region", ->
       expect( Klass.actions.foo ).to.eq(handler)
 
 
+  describe ".addToolbar", ->
+
+    it "adds toolbars", ->
+      Klass.addToolbar('foo')
+      expect( Klass::toolbars ).to.eql(['foo'])
+      Klass.addToolbar('bar')
+      expect( Klass::toolbars ).to.eql(['foo', 'bar'])
+
+
   describe "#constructor", ->
 
     beforeEach ->
@@ -190,6 +199,19 @@ describe "Mercury.Region", ->
       subject.el.removeAttr('class')
       subject.addRegionClassname()
       expect( subject.el.attr('class') ).to.eq('mercury-unknown-region')
+
+
+  describe "#trigger", ->
+
+    it "calls super", ->
+      spyOn(Klass.__super__, 'trigger')
+      subject.trigger('foo')
+      expect( Klass.__super__.trigger ).called
+
+    it "triggers a global event", ->
+      spyOn(Mercury, 'trigger')
+      subject.trigger('foo')
+      expect( Mercury.trigger ).calledWith('region:foo', subject)
 
 
   describe "#handleAction", ->

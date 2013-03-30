@@ -65,6 +65,14 @@ class Mercury.Region extends Mercury.View
     @actions = $.extend(@actions || {}, obj)
 
 
+  # Exposes the ability to add actions to the region type. This allows you to provide your own custom actions that may
+  # be tied to a button, or something else.
+  #
+  @addToolbar: (toolbar) ->
+    @::toolbars ||= []
+    @::toolbars.push(toolbar)
+
+
   # The constructor sets up defaults and attempts to get the name from the element. It will notify if the region isn't
   # supported in the given browser or if there's no name to use for serializing.
   #
@@ -102,6 +110,13 @@ class Mercury.Region extends Mercury.View
   #
   addRegionClassname: ->
     @addClass("mercury-#{@constructor.type}-region")
+
+
+  # Override trigger to trigger the event at a global level.
+  #
+  trigger: (event) ->
+    super
+    Mercury.trigger("region:#{event}", @)
 
 
   # Handles action events by taking the first argument, which should be the action, and passes through to the action

@@ -15,6 +15,14 @@ Dependencies:
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
+  Mercury.configure('toolbars:plain', {
+    decoration: {
+      bold: ['Bold'],
+      italic: ['Italicize'],
+      underline: ['Underline']
+    }
+  });
+
   Mercury.Region.Plain = (function(_super) {
 
     __extends(Plain, _super);
@@ -29,7 +37,7 @@ Dependencies:
 
     Plain.supported = document.designMode && (!Mercury.support.msie || Mercury.support.msie >= 10) && (window.rangy && window.rangy.supported);
 
-    Plain.prototype.toolbars = ['markup'];
+    Plain.prototype.toolbars = ['plain'];
 
     Plain.prototype.events = {
       'keydown': 'onKeyEvent',
@@ -92,7 +100,9 @@ Dependencies:
       },
       underline: function() {
         return this.toggleWrapSelectedWordsInClass('blue');
-      }
+      },
+      link: function() {},
+      character: function() {}
     };
 
     return Plain;

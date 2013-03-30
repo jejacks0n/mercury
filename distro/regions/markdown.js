@@ -16,6 +16,52 @@ via Ajax.
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
+  Mercury.configure('toolbars:markdown', {
+    defined: {
+      style: [
+        'Style', {
+          select: '/mercury/templates/style'
+        }
+      ],
+      sep1: ' ',
+      block: [
+        'Block Format', {
+          select: '/mercury/templates/block'
+        }
+      ],
+      sep2: '-'
+    },
+    decoration: {
+      bold: ['Bold'],
+      italic: ['Italicize'],
+      strike: ['Strikethrough'],
+      underline: ['Underline'],
+      sep1: '-'
+    },
+    script: {
+      subscript: ['Subscript'],
+      superscript: ['Superscript'],
+      sep1: '-'
+    },
+    list: {
+      unorderedList: ['Unordered List'],
+      orderedList: ['Numbered List'],
+      sep1: '-'
+    },
+    indent: {
+      indent: ['Increase Indentation'],
+      outdent: ['Decrease Indentation'],
+      sep1: '-'
+    },
+    rules: {
+      rule: [
+        'Horizontal Rule', {
+          title: 'Insert a horizontal rule'
+        }
+      ]
+    }
+  });
+
   Mercury.Region.Markdown = (function(_super) {
 
     __extends(Markdown, _super);
@@ -32,7 +78,7 @@ via Ajax.
 
     Markdown.supported = true;
 
-    Markdown.prototype.toolbars = ['markup'];
+    Markdown.prototype.toolbars = ['markdown'];
 
     Markdown.prototype.wrappers = {
       h1: ['# ', ' #'],
@@ -156,6 +202,28 @@ via Ajax.
       outdent: function() {
         return this.unwrapSelectedParagraphs('blockquote');
       },
+      orderedList: function() {
+        var wrapper, _i, _len, _ref;
+        _ref = ['blockquote', 'unorderedList'];
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          wrapper = _ref[_i];
+          this.unwrapSelectedParagraphs(wrapper);
+        }
+        if (!this.unwrapSelectedParagraphs('orderedList')) {
+          return this.wrapSelectedParagraphs('orderedList');
+        }
+      },
+      unorderedList: function() {
+        var wrapper, _i, _len, _ref;
+        _ref = ['blockquote', 'orderedList'];
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          wrapper = _ref[_i];
+          this.unwrapSelectedParagraphs(wrapper);
+        }
+        if (!this.unwrapSelectedParagraphs('unorderedList')) {
+          return this.wrapSelectedParagraphs('unorderedList');
+        }
+      },
       style: function(value) {
         var wrapper;
         wrapper = value.indexOf(':') > -1 ? 'style' : 'class';
@@ -197,27 +265,11 @@ via Ajax.
           return this.wrapSelectedLines(format);
         }
       },
-      orderedList: function() {
-        var wrapper, _i, _len, _ref;
-        _ref = ['blockquote', 'unorderedList'];
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          wrapper = _ref[_i];
-          this.unwrapSelectedParagraphs(wrapper);
-        }
-        if (!this.unwrapSelectedParagraphs('orderedList')) {
-          return this.wrapSelectedParagraphs('orderedList');
-        }
+      character: function(html) {
+        return this.handleAction('html', html);
       },
-      unorderedList: function() {
-        var wrapper, _i, _len, _ref;
-        _ref = ['blockquote', 'orderedList'];
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          wrapper = _ref[_i];
-          this.unwrapSelectedParagraphs(wrapper);
-        }
-        if (!this.unwrapSelectedParagraphs('unorderedList')) {
-          return this.wrapSelectedParagraphs('unorderedList');
-        }
+      table: function(table) {
+        return this.handleAction('html', table.get('html'));
       },
       file: function(file) {
         var action;

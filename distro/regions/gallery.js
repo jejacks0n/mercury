@@ -15,11 +15,13 @@ also takes into account undo/redo support using the keyboard or buttons.
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  Mercury.configure('toolbars:gallery:buttons', {
-    next: ['Next Slide'],
-    prev: ['Previous Slide'],
-    "delete": ['Delete Slide'],
-    toggle: ['Play/Pause']
+  Mercury.configure('toolbars:gallery', {
+    general: {
+      prev: ['Previous Slide'],
+      next: ['Next Slide'],
+      "delete": ['Delete Slide'],
+      togglePlay: ['Play/Pause']
+    }
   });
 
   Mercury.Region.Gallery = (function(_super) {

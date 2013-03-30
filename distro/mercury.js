@@ -40,125 +40,68 @@ Copyright (c) 2013 Jeremy Jackson
     },
     toolbars: {
       floating: false,
-      defaults: ['primary'],
       style: 'standard',
       primary: {
         save: [
-          'Save', 'Save this page', {
+          'Save', {
+            title: 'Save this page',
             event: 'save'
           }
         ],
         preview: [
-          'Preview', 'Preview this page', {
+          'Preview', {
+            title: 'Preview this page',
             mode: 'preview'
           }
         ],
         sep1: ' ',
-        undo: ['Undo', 'Undo your last action'],
-        redo: ['Redo', 'Redo your last action'],
+        undo: [
+          'Undo', {
+            title: 'Undo your last action'
+          }
+        ],
+        redo: [
+          'Redo', {
+            title: 'Redo your last action'
+          }
+        ],
         sep2: '-',
-        link: ['Link', 'Insert Link'],
-        media: ['Media', 'Insert Media (images and videos)'],
-        table: ['Table', 'Insert Table'],
-        character: ['Character', 'Special Characters'],
-        snippets: ['Snippet', 'Snippet Panel'],
+        link: [
+          'Link', {
+            title: 'Insert Link'
+          }
+        ],
+        file: [
+          'Media', {
+            title: 'Insert Media and Files (images, videos, etc.)'
+          }
+        ],
+        table: [
+          'Table', {
+            title: 'Insert Table'
+          }
+        ],
+        character: [
+          'Character', {
+            title: 'Special Characters'
+          }
+        ],
+        snippets: [
+          'Snippet', {
+            title: 'Snippet Panel'
+          }
+        ],
         sep3: ' ',
-        history: ['History', 'Page Version History'],
-        notes: ['Notes', 'Page Notes']
-      },
-      markup: {
-        defined: {
-          style: [
-            'Style', {
-              select: '/mercury/templates/style'
-            }
-          ],
-          sep1: ' ',
-          block: [
-            'Block Format', {
-              select: '/mercury/templates/block'
-            }
-          ],
-          sep2: '-'
-        },
-        color: {
-          bgcolor: [
-            'Background Color', {
-              palette: '/mercury/templates/bgcolor'
-            }
-          ],
-          sep1: ' ',
-          color: [
-            'Text Color', {
-              palette: '/mercury/templates/color'
-            }
-          ],
-          sep2: '-'
-        },
-        decoration: {
-          bold: ['Bold'],
-          italic: ['Italicize'],
-          strike: ['Strikethrough'],
-          underline: ['Underline'],
-          sep1: '-'
-        },
-        script: {
-          subscript: ['Subscript'],
-          superscript: ['Superscript'],
-          sep1: '-'
-        },
-        justify: {
-          justifyLeft: ['Align Left'],
-          justifyCenter: ['Center'],
-          justifyRight: ['Align Right'],
-          justifyFull: ['Justify Full'],
-          sep1: '-'
-        },
-        list: {
-          unorderedList: ['Unordered List'],
-          orderedList: ['Numbered List'],
-          sep1: '-'
-        },
-        indent: {
-          outdent: ['Decrease Indentation'],
-          indent: ['Increase Indentation'],
-          sep1: '-'
-        },
-        rules: {
-          rule: ['Horizontal Rule', 'Insert a horizontal rule'],
-          sep1: '-'
-        },
-        extra: {
-          clean: ['Remove Formatting', 'Remove formatting for the selection'],
-          sep1: ' ',
-          edit: ['Edit HTML', 'Edit the HTML content'],
-          sep2: '-'
-        },
-        table: {
-          rowBefore: ['Insert Table Row', 'Insert a table row before the cursor'],
-          rowAfter: ['Insert Table Row', 'Insert a table row after the cursor'],
-          rowDelete: ['Delete Table Row', 'Delete this table row'],
-          colBefore: ['Insert Table Column', 'Insert a table column before the cursor'],
-          colAfter: ['Insert Table Column', 'Insert a table column after the cursor'],
-          colDelete: ['Delete Table Column', 'Delete this table column'],
-          sep1: ' ',
-          colIncrease: ['Increase Cell Columns', 'Increase the cells colspan'],
-          colDecrease: ['Decrease Cell Columns', 'Decrease the cells colspan and add a new cell'],
-          rowIncrease: ['Increase Cell Rows', 'Increase the cells rowspan'],
-          rowDecrease: ['Decrease Cell Rows', 'Decrease the cells rowspan and add a new cell'],
-          sep2: '-'
-        }
-      },
-      image: {
-        crop: ['Crop Image'],
-        resize: ['Resize Image'],
-        alignment: {
-          left: ['Align Left'],
-          middle: ['Align Center'],
-          right: ['Align Right'],
-          top: ['Align Top'],
-          buttom: ['Align Bottom']
-        }
+        history: [
+          'History', {
+            title: 'Page Version History'
+          }
+        ],
+        notes: [
+          'Notes', {
+            title: 'Page Notes'
+          }
+        ]
       }
     },
     regions: {
@@ -186,6 +129,33 @@ Copyright (c) 2013 Jeremy Jackson
         stripTags: true
       }
     }
+  };
+
+}).call(this);
+(function() {
+
+  this.JST || (this.JST = {});
+
+  JST['/mercury/templates/statusbar'] = function(scope) {
+    return "<div class=\"mercury-statusbar-about\">\n  <a href=\"https://github.com/jejacks0n/mercury\" target=\"_blank\">Mercury Editor v" + Mercury.version + "</a>\n</div>\n<div class=\"mercury-statusbar-path\"></div>";
+  };
+
+}).call(this);
+(function() {
+
+  this.JST || (this.JST = {});
+
+  JST['/mercury/templates/toolbar'] = function(scope) {
+    return "<ul class=\"mercury-toolbar-development-collection\">\n  <li data-action=\"interface\">toggle interface</li>\n  <li data-action=\"direction\">custom action (toggle rtl/ltr)</li>\n  <hr/>\n  <li data-action=\"block\" data-value=\"none\">none</li>\n  <li data-action=\"block\" data-value=\"h1\">h1</li>\n  <li data-action=\"block\" data-value=\"h2\">h2</li>\n  <li data-action=\"block\" data-value=\"h3\">h3</li>\n  <li data-action=\"block\" data-value=\"h4\">h4</li>\n  <li data-action=\"block\" data-value=\"h5\">h5</li>\n  <li data-action=\"block\" data-value=\"h6\">h6</li>\n  <li data-action=\"block\" data-value=\"pre\">pre</li>\n  <li data-action=\"block\" data-value=\"paragraph\">paragraph</li>\n  <li data-action=\"block\" data-value=\"blockquote\">blockquote</li>\n  <hr/>\n  <li data-action=\"style\" data-value=\"border:1px solid red\">style</li>\n  <li data-action=\"style\" data-value=\"foo\">class</li>\n  <hr/>\n  <li data-action=\"html\" data-value=\"html\">html (with html)</li>\n  <li data-action=\"html\" data-value=\"el\">html (with element)</li>\n  <li data-action=\"html\" data-value=\"jquery\">html (with jQuery)</li>\n  <hr/>\n  <li data-action=\"link\" data-value='{\"url\": \"https://github.com/jejacks0n/mercury\", \"text\": \"Project Home\"}'>link</li>\n  <li data-action=\"image\" data-value='{\"url\": \"http://goo.gl/UWYSd\", \"text\": \"Test Image\"}'>image</li>\n  <hr/>\n  <li><input type=\"text\"/></li>\n</ul>";
+  };
+
+}).call(this);
+(function() {
+
+  this.JST || (this.JST = {});
+
+  JST['/mercury/templates/uploader'] = function(scope) {
+    return "<div class=\"mercury-uploader-dialog\">\n  <div class=\"mercury-uploader-preview\"><b><img/></b></div>\n  <div class=\"mercury-uploader-details\"></div>\n  <div class=\"mercury-uploader-progress\">\n    <span></span>\n    <div class=\"mercury-uploader-indicator\"><div><b>0%</b></div></div>\n  </div>\n</div>";
   };
 
 }).call(this);
@@ -526,19 +496,24 @@ Copyright (c) 2013 Jeremy Jackson
       return config;
     },
     set: function() {
-      var args, config, part, parts, path, value;
+      var args, config, merge, part, parts, path, value;
       args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-      value = args.pop();
       path = args.shift();
-      if (!path) {
-        return Mercury.configuration = value;
+      value = args.pop();
+      merge = args.pop();
+      if (!value && typeof path === 'object') {
+        return Mercury.configuration = path;
       }
       config = Mercury.configuration || (Mercury.configuration = {});
       parts = path.split(':');
       part = parts.shift();
       while (part) {
         if (parts.length === 0) {
-          config[part] = value;
+          if (merge && typeof config[part] === 'object') {
+            config[part] = $.extend(true, config[part], value);
+          } else {
+            config[part] = value;
+          }
           return config[part];
         }
         config = config[part] ? config[part] : config[part] = {};
@@ -1143,6 +1118,12 @@ Copyright (c) 2013 Jeremy Jackson
       return this.actions = $.extend(this.actions || {}, obj);
     };
 
+    Region.addToolbar = function(toolbar) {
+      var _base;
+      (_base = this.prototype).toolbars || (_base.toolbars = []);
+      return this.prototype.toolbars.push(toolbar);
+    };
+
     function Region(el, options) {
       this.el = el;
       this.options = options != null ? options : {};
@@ -1189,6 +1170,11 @@ Copyright (c) 2013 Jeremy Jackson
 
     Region.prototype.addRegionClassname = function() {
       return this.addClass("mercury-" + this.constructor.type + "-region");
+    };
+
+    Region.prototype.trigger = function(event) {
+      Region.__super__.trigger.apply(this, arguments);
+      return Mercury.trigger("region:" + event, this);
     };
 
     Region.prototype.handleAction = function(name, options) {
@@ -1451,7 +1437,8 @@ Copyright (c) 2013 Jeremy Jackson
 
     Editor.prototype.events = {
       'mousedown': 'focusActiveRegion',
-      'focusout': 'focusActiveRegion'
+      'focusout': 'focusActiveRegion',
+      'region:focus': 'onRegionFocus'
     };
 
     function Editor() {
@@ -1463,7 +1450,7 @@ Copyright (c) 2013 Jeremy Jackson
       Editor.__super__.constructor.apply(this, arguments);
       this.regions || (this.regions = []);
       $(window).on('beforeunload', function() {
-        return _this.beforeUnload();
+        return _this.onUnload();
       });
       this.addClass('loading');
       $('body').before(this.el);
@@ -1480,7 +1467,8 @@ Copyright (c) 2013 Jeremy Jackson
 
     Editor.prototype.buildInterface = function() {
       this.buildToolbar();
-      return this.buildStatusbar();
+      this.buildStatusbar();
+      return this.focusDefaultRegion();
     };
 
     Editor.prototype.buildToolbar = function() {
@@ -1515,15 +1503,19 @@ Copyright (c) 2013 Jeremy Jackson
       });
     };
 
+    Editor.prototype.focusDefaultRegion = function() {
+      return this.delay(100, function() {
+        var _ref;
+        return (_ref = this.regions[0]) != null ? _ref.focus() : void 0;
+      });
+    };
+
     Editor.prototype.addAllRegions = function() {
-      var el, _i, _len, _ref, _ref1;
+      var el, _i, _len, _ref;
       _ref = this.regionElements();
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         el = _ref[_i];
         this.addRegion(el);
-      }
-      if ((_ref1 = this.regions[0]) != null) {
-        _ref1.focus();
       }
       if (!this.config('interface:enabled')) {
         return Mercury.trigger('mode', 'preview');
@@ -1535,12 +1527,8 @@ Copyright (c) 2013 Jeremy Jackson
     };
 
     Editor.prototype.addRegion = function(el) {
-      var region,
-        _this = this;
+      var region;
       region = Mercury.Region.create(el);
-      region.on('focus', function() {
-        return _this.region = region;
-      });
       return this.regions.push(region);
     };
 
@@ -1553,7 +1541,11 @@ Copyright (c) 2013 Jeremy Jackson
       return this.region.focus();
     };
 
-    Editor.prototype.beforeUnload = function() {
+    Editor.prototype.onRegionFocus = function(region) {
+      return this.region = region;
+    };
+
+    Editor.prototype.onUnload = function() {
       if (this.config('interface:silent') || !this.hasChanges()) {
         return null;
       }
@@ -1645,15 +1637,6 @@ Copyright (c) 2013 Jeremy Jackson
 
 }).call(this);
 (function() {
-
-  this.JST || (this.JST = {});
-
-  JST['/mercury/templates/statusbar'] = function(scope) {
-    return "<div class=\"mercury-statusbar-about\">\n  <a href=\"https://github.com/jejacks0n/mercury\" target=\"_blank\">Mercury Editor v" + Mercury.version + "</a>\n</div>\n<div class=\"mercury-statusbar-path\"></div>";
-  };
-
-}).call(this);
-(function() {
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -1729,15 +1712,6 @@ Copyright (c) 2013 Jeremy Jackson
 
 }).call(this);
 (function() {
-
-  this.JST || (this.JST = {});
-
-  JST['/mercury/templates/toolbar'] = function(scope) {
-    return "<ul class=\"mercury-toolbar-development-collection\">\n  <li data-action=\"interface\">Toggle Interface</li>\n  <li data-action=\"preview\">Toggle Preview</li>\n  <li data-action=\"undo\">Undo</li>\n  <li data-action=\"redo\">Redo</li>\n  <hr/>\n  <li data-action=\"direction\">custom action (toggle rtl/ltr)</li>\n  <hr/>\n  <li data-action=\"block\" data-value=\"none\">none</li>\n  <li data-action=\"block\" data-value=\"h1\">h1</li>\n  <li data-action=\"block\" data-value=\"h2\">h2</li>\n  <li data-action=\"block\" data-value=\"h3\">h3</li>\n  <li data-action=\"block\" data-value=\"h4\">h4</li>\n  <li data-action=\"block\" data-value=\"h5\">h5</li>\n  <li data-action=\"block\" data-value=\"h6\">h6</li>\n  <li data-action=\"block\" data-value=\"pre\">pre</li>\n  <li data-action=\"block\" data-value=\"paragraph\">paragraph</li>\n  <li data-action=\"block\" data-value=\"blockquote\">blockquote</li>\n  <hr/>\n  <li data-action=\"bold\">bold</li>\n  <li data-action=\"italic\">italic</li>\n  <li data-action=\"underline\">underline</li>\n  <li data-action=\"subscript\">subscript</li>\n  <li data-action=\"superscript\">superscript</li>\n  <hr/>\n  <li data-action=\"orderedList\">orderedList</li>\n  <li data-action=\"unorderedList\">unorderedList</li>\n  <hr/>\n  <li data-action=\"indent\">indent</li>\n  <li data-action=\"outdent\">outdent</li>\n  <hr/>\n  <li data-action=\"style\" data-value=\"border:1px solid red\">style</li>\n  <li data-action=\"style\" data-value=\"foo\">class</li>\n  <hr/>\n  <li data-action=\"html\" data-value=\"html\">html (with html)</li>\n  <li data-action=\"html\" data-value=\"el\">html (with element)</li>\n  <li data-action=\"html\" data-value=\"jquery\">html (with jQuery)</li>\n  <hr/>\n  <li data-action=\"link\" data-value='{\"url\": \"https://github.com/jejacks0n/mercury\", \"text\": \"Project Home\"}'>link</li>\n  <li data-action=\"image\" data-value='{\"url\": \"http://goo.gl/UWYSd\", \"text\": \"Test Image\"}'>image</li>\n  <hr/>\n  <li data-action=\"rule\">rule</li>\n  <hr/>\n  <li><input type=\"text\"/></li>\n</ul>";
-  };
-
-}).call(this);
-(function() {
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -1756,20 +1730,19 @@ Copyright (c) 2013 Jeremy Jackson
     Toolbar.prototype.template = 'toolbar';
 
     Toolbar.prototype.events = {
-      'click [data-action]': 'processAction',
       'interface:hide': 'hide',
-      'interface:show': 'show'
+      'interface:show': 'show',
+      'region:focus': 'onRegionFocus',
+      'click .mercury-toolbar-development-collection [data-action]': 'processAction'
+    };
+
+    Toolbar.prototype.elements = {
+      toolbar: '.mercury-toolbar-secondary-container'
     };
 
     Toolbar.prototype.build = function() {
-      var name, _i, _len, _ref, _results;
-      _ref = ['primary', 'markup'];
-      _results = [];
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        name = _ref[_i];
-        _results.push(this.append(new Mercury.ToolbarItem(name, 'collection', this.config("toolbars:" + name))));
-      }
-      return _results;
+      this.append(new Mercury.ToolbarItem('primary', 'container', this.config("toolbars:primary")));
+      return this.append(new Mercury.ToolbarItem('secondary', 'container', {}));
     };
 
     Toolbar.prototype.hide = function() {
@@ -1782,6 +1755,29 @@ Copyright (c) 2013 Jeremy Jackson
       return this.el.css({
         top: 0
       });
+    };
+
+    Toolbar.prototype.onRegionFocus = function(region) {
+      var name, _i, _len, _ref, _results;
+      if (this.region === region) {
+        return;
+      }
+      this.region = region;
+      this.$('.mercury-toolbar-collection').remove();
+      _ref = region.toolbars || [];
+      _results = [];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        name = _ref[_i];
+        _results.push(this.buildToolbar(name).updateForRegion(region));
+      }
+      return _results;
+    };
+
+    Toolbar.prototype.buildToolbar = function(name) {
+      var toolbar;
+      toolbar = new Mercury.ToolbarItem(name, 'collection', this.config("toolbars:" + name));
+      toolbar.appendTo(this.toolbar);
+      return toolbar;
     };
 
     Toolbar.prototype.processAction = function(e) {
@@ -1827,7 +1823,8 @@ Copyright (c) 2013 Jeremy Jackson
 }).call(this);
 (function() {
   var __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+    __slice = [].slice;
 
   Mercury.ToolbarItem = (function(_super) {
 
@@ -1839,7 +1836,8 @@ Copyright (c) 2013 Jeremy Jackson
       this.name = name;
       this.type = type;
       this.value = value;
-      ToolbarItem.__super__.constructor.apply(this, arguments);
+      this.items = [];
+      ToolbarItem.__super__.constructor.call(this);
     }
 
     ToolbarItem.prototype.build = function() {
@@ -1859,9 +1857,14 @@ Copyright (c) 2013 Jeremy Jackson
             case 'string':
               return new Mercury.ToolbarItem(name, 'separator', value);
             case 'array':
-              return new Mercury.ToolbarButton(name, value);
+              return (function(func, args, ctor) {
+                ctor.prototype = func.prototype;
+                var child = new ctor, result = func.apply(child, args);
+                return Object(result) === result ? result : child;
+              })(Mercury.ToolbarButton, [name].concat(__slice.call(value)), function(){});
           }
         })();
+        this.items.push(item);
         if (item) {
           _results.push(this.append(item));
         } else {
@@ -1872,12 +1875,23 @@ Copyright (c) 2013 Jeremy Jackson
     };
 
     ToolbarItem.prototype.addClasses = function() {
+      var extraClass;
+      extraClass = "mercury-toolbar-" + (this.type.toDash());
       if (this.value === '-') {
-        this.addClass("mercury-toolbar-line-" + (this.type.toDash()));
-      } else {
-        this.addClass("mercury-toolbar-" + (this.type.toDash()));
+        extraClass = "mercury-toolbar-line-" + (this.type.toDash());
       }
-      return this.addClass("mercury-toolbar-" + (this.name.toDash()) + "-" + (this.type.toDash()));
+      return this.addClass(["mercury-toolbar-" + (this.name.toDash()) + "-" + (this.type.toDash()), extraClass].join(' '));
+    };
+
+    ToolbarItem.prototype.updateForRegion = function(region) {
+      var item, _i, _len, _ref, _results;
+      _ref = this.items;
+      _results = [];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        item = _ref[_i];
+        _results.push(item.updateForRegion(region));
+      }
+      return _results;
     };
 
     return ToolbarItem;
@@ -1887,7 +1901,8 @@ Copyright (c) 2013 Jeremy Jackson
 }).call(this);
 (function() {
   var __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+    __slice = [].slice;
 
   Mercury.ToolbarButton = (function(_super) {
 
@@ -1897,25 +1912,134 @@ Copyright (c) 2013 Jeremy Jackson
 
     ToolbarButton.prototype.className = 'mercury-toolbar-button';
 
-    function ToolbarButton(name, optionsArray) {
+    ToolbarButton.prototype.events = {
+      'mousedown': function() {
+        return this.addClass('active');
+      },
+      'mouseup': function() {
+        return this.el.removeClass('active');
+      },
+      'mouseout': function() {
+        return this.el.removeClass('active');
+      },
+      'click': 'triggerAction',
+      'region:focus': 'onRegionFocus'
+    };
+
+    function ToolbarButton(name, label, options) {
       this.name = name;
-      this.optionsArray = optionsArray;
-      if (this.name === 'style' || this.name === 'block') {
-        this.type = 'select';
-      }
-      if (this.name === 'color' || this.name === 'bgcolor') {
-        this.type = 'palette';
-      }
-      ToolbarButton.__super__.constructor.apply(this, arguments);
+      this.label = label;
+      this.options = options != null ? options : {};
+      ToolbarButton.__super__.constructor.call(this, this.options);
     }
 
     ToolbarButton.prototype.build = function() {
-      if (this.type) {
-        this.attr('data-type', this.type);
+      this.action = this.determineAction();
+      this.actionName = this.determineActionName();
+      this.type = this.determineType();
+      if (this.action) {
+        this.attr('data-action', this.action);
       }
-      this.attr('data-action', this.name.toDash());
+      this.attr('data-type', this.type);
+      this.attr('data-icon', this.constructor.icons[this.icon || this.name] || this.icon);
       this.addClass("mercury-toolbar-" + (this.name.toDash()) + "-button");
-      return this.html("<em>" + this.optionsArray[0] + "</em>");
+      return this.html("<em>" + this.label + "</em>");
+    };
+
+    ToolbarButton.prototype.determineActionName = function() {
+      var _ref;
+      return (_ref = this.determineAction()) != null ? _ref[0] : void 0;
+    };
+
+    ToolbarButton.prototype.determineAction = function() {
+      var action;
+      action = this.options.action || this.name;
+      if (typeof action === 'string') {
+        return [action];
+      }
+      return action;
+    };
+
+    ToolbarButton.prototype.determineType = function() {
+      if (this.options.select) {
+        return 'select';
+      }
+      if (this.options.palette) {
+        return 'palette';
+      }
+      if (this.options.mode) {
+        return 'mode';
+      }
+    };
+
+    ToolbarButton.prototype.triggerAction = function() {
+      return Mercury.trigger.apply(Mercury, ['action'].concat(__slice.call(this.action)));
+    };
+
+    ToolbarButton.prototype.onRegionFocus = function(region) {
+      return this.updateForRegion(region);
+    };
+
+    ToolbarButton.prototype.updateForRegion = function(region) {
+      if (region.actions[this.actionName]) {
+        return this.el.removeClass('disabled');
+      } else {
+        return this.el.addClass('disabled');
+      }
+    };
+
+    ToolbarButton.icons = {
+      save: '!',
+      preview: '"',
+      undo: '#',
+      redo: '$',
+      link: '%',
+      file: '&',
+      table: "'",
+      character: '(',
+      snippets: ')',
+      history: '*',
+      notes: '+',
+      upload: ',',
+      search: '-',
+      bold: 'C',
+      italic: 'D',
+      strike: 'E',
+      underline: 'F',
+      subscript: 'G',
+      superscript: 'H',
+      justifyLeft: 'I',
+      justifyCenter: 'J',
+      justifyRight: 'K',
+      justifyFull: 'L',
+      unorderedList: 'M',
+      orderedList: 'N',
+      indent: 'P',
+      outdent: 'O',
+      rule: 'Q',
+      clean: 'R',
+      edit: 'S',
+      rowBefore: 'T',
+      rowAfter: 'U',
+      rowDelete: 'V',
+      colBefore: 'W',
+      colAfter: 'X',
+      colDelete: 'Y',
+      colIncrease: 'Z',
+      colDecrease: 'a',
+      rowIncrease: 'b',
+      rowDecrease: 'c',
+      crop: 'e',
+      resize: 'f',
+      alignLeft: 'g',
+      alignRight: 'h',
+      alignTop: 'i',
+      alignMiddle: 'j',
+      alignBottom: 'k',
+      prev: 'n',
+      next: 'o',
+      "delete": 'R',
+      togglePlay: 'p'
     };
 
     return ToolbarButton;
@@ -2027,15 +2151,6 @@ Copyright (c) 2013 Jeremy Jackson
     return File;
 
   })(Mercury.Model);
-
-}).call(this);
-(function() {
-
-  this.JST || (this.JST = {});
-
-  JST['/mercury/templates/uploader'] = function(scope) {
-    return "<div class=\"mercury-uploader-dialog\">\n  <div class=\"mercury-uploader-preview\"><b><img/></b></div>\n  <div class=\"mercury-uploader-details\"></div>\n  <div class=\"mercury-uploader-progress\">\n    <span></span>\n    <div class=\"mercury-uploader-indicator\"><div><b>0%</b></div></div>\n  </div>\n</div>";
-  };
 
 }).call(this);
 (function() {
@@ -3058,14 +3173,25 @@ Copyright (c) 2013 Jeremy Jackson
 
 }).call(this);
 (function() {
-  var globalize;
+  var globalize,
+    __slice = [].slice;
 
   globalize = function() {
     var isIE,
       _this = this;
-    this.version = '1.0.0';
+    this.version = '0.0.1aplha';
     this.Module.extend.call(this, this.Config);
-    this.configure = this.Config.set;
+    this.configure = function() {
+      var args, _ref;
+      args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+      if (this.configuration) {
+        this.trigger('configure');
+        (_ref = this.Config).set.apply(_ref, args);
+      }
+      return this.one('configure', function() {
+        return this.Config.set(args[0], true, args[1]);
+      });
+    };
     this.Module.extend.call(this, this.Events);
     this.Module.extend.call(this, this.I18n);
     this.Module.extend.call(this, this.Logger);

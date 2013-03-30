@@ -10,6 +10,21 @@ image with the one that was uploaded.
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
+  Mercury.configure('toolbars:image', {
+    general: {
+      crop: ['Crop Image'],
+      resize: ['Resize Image'],
+      sep1: '-'
+    },
+    alignment: {
+      alignLeft: ['Align Left'],
+      alignRight: ['Align Right'],
+      alignTop: ['Align Top'],
+      alignMiddle: ['Align Middle'],
+      alignBottom: ['Align Bottom']
+    }
+  });
+
   Mercury.Region.Image = (function(_super) {
 
     __extends(Image, _super);

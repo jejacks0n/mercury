@@ -61,10 +61,7 @@ class Mercury.Editor extends Mercury.View
 
 
   focusDefaultRegion: ->
-    @delay(100, ->
-      console.debug(@regions[0])
-      @regions[0]?.focus()
-    )
+    @delay(100, -> @regions[0]?.focus())
 
 
   addAllRegions: ->

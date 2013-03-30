@@ -1,0 +1,26 @@
+@mixin mercury-icon-base($size: 16px, $width: 1px, $height: 1px, $font: 'mercury') {
+  &:before {
+    display: inline-block;
+    font-family: $font;
+    width: $width;
+    height: $height;
+    font-size: $size;
+    line-height: $height;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    text-align: center;
+    speak: none;
+    -webkit-font-smoothing: antialiased;
+  }
+}
+
+@mixin mercury-toolbar-button-base {
+  @include mercury-icon-base(16px, 22px, 16px, mercury-toolbars);
+  &:before {
+    position: relative;
+    left: -1px;
+    text-align: left;
+    line-height: 15px;
+  }
+}

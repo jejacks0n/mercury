@@ -1,15 +1,25 @@
 Mercury Editor2
 ===============
 
+Mercury2 is a WYSIWYG editor, and takes a different approach than any editor out there. It was a great html editor that had additional functionality, but it's become more. Mercury2 has the same features as it's predecessor, but is more structured, and provides a full framework in which you can more easily create complex regions that are anything you want.
+
+Regions dictate toolbars, buttons, and what actions they support. This simplifies the configuration for toolbars, but also provides more flexibility in terms of defining your own custom functionality that doesn't fit into the standard Mercury features. Check out the gallery region for an example of this.
+
+Mercury2 allows sandboxing content within an iframe or it can load directly on the page you're editing. This has been a complication in the past, so this version simplifies that while also retaining the ability to sandbox itself to mimimize conflicts with javascript libraries and css.
+
+
 ## Developer Notice
 
 This branch represents the future version of Mercury Editor. This iteration of Mercury Editor (Mercury2) will separate the Rails portions from the Javascript portions of the project. Rails is still used for development (for a server, coffeescript, sass, build process etc.) but the Rails Engine will be broken off into a different project so that more functionality can be added, and to serve as an example of how to implement functionality like snippets and image uploading.
 
-Mercury2 takes a considerably different approach in terms of it's architecture and featureset. It was a great html editor before that had some additional functionality, but it's become more. Mercury2 has the same features as it's predecessor, but is more structured, and provides a framework in which you can more easily create complex regions that are anything you want.
 
-Regions dictate toolbars, buttons, and what actions they support. This simplifies the configuration for toolbars, but also provides more flexibility in terms of defining your own custom functionality that doesn't fit into Mercury directly. Check out the gallery region for an example of this.
+## Fonts & Graphics
 
-Mercury2 also allows sandboxing content within an iframe or it can load directly on the page you're editing. This has been a point of contention and complication in the past, so this version simplifies that while also retaining the ability to sandbox itself to mimimize conflicts with javascript libraries and css.
+Mercury uses two custom fonts for all graphic elements in the interface. This allows for retina support, makes it easier to package, and allows you to modify it for your own needs.
+
+The primary toolbar icons and general interface elements are in mercury.ttf, which is generated using the awesome [IcoMoon project](http://icomoon.io/app/) (by [Keyamoon](https://twitter.com/keyamoon)). You can upload/import the mercury.dev.svg file that can be found in the project and add new icons for your custom buttons. If you're making a plugin you probably want to bundle these separately.
+
+The toolbar icons (bold, italics, etc.) are in toolbars.ttf, and was built using [fontstruct.com](http://fontstruct.com/). [The original font](http://fontstruct.com/fontstructions/show/797530) can be cloned and edited as needed. Fontstruct is used here because it allows for small pixel fonts but also allows for more advanced shapes.
 
 
 ## Internationalization / Translations
@@ -33,17 +43,6 @@ Translations and contributors:
 - Simplified Chinese ([董劭田 DONG Shaotian](https://github.com/richarddong))
 - Hungarian ([egivandor](https://github.com/egivandor))
 - Russian ([ilyacherevkov](https://github.com/ilyacherevkov))
-
-
-## Todo
-
-- add a canvas region.
-- figure out how to better integrate snippets.
-- can we make editing content within snippets work better?
-- provide a custom toolbar and functionality for the image and gallery regions.
-- when using the iframe, rangy isn't behaving the same (doesn't work because it doesn't understand the context).
-- selections are a little wonky on undo/redo still, and sometimes in firefox they're not applying because the checksum doesn't validate.
-- finish html region.
 
 
 ## Dependencies
@@ -90,7 +89,6 @@ If I wanted to add the ability to change the direction of text in a markdown reg
 ```
 
 ```coffeescript
-# example of extending regions to add actions for buttons or other functionality.
 Mercury.MarkdownRegion.addAction 'direction', ->
   return alert("This region doesn't allow switching text direction") unless @allowDirection
   @direction = if @direction == 'rtl' then 'ltr' else 'rtl'
@@ -102,27 +100,6 @@ Now if that region has focus we can trigger the action like this:
 ```coffeescript
 Mercury.trigger('action', 'direction')
 ```
-
-### Default Actions
-
-- bold
-- italic
-- underline
-- subscript
-- superscript
-- rule
-- indent
-- outdent
-- orderedList
-- unorderedList
-- style (value)
-- html (html)
-- block (format)
-- snippet (snippet)
-- file (file)
-- link (url, text)
-- image (url, text)
-
 
 ### Known issues
 

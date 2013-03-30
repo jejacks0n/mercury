@@ -9,12 +9,16 @@
   left: 0;
   width: 100%;
   cursor: default;
-  .mercury-toolbar-collection {
+  .mercury-toolbar-container {
     @include mercury-gradient(#d2d2d2, #c6c6c6);
+    min-height: 21px;
     padding: 3px 3px 0px 10px;
     overflow: hidden;
     border-top: 1px solid #e5e5e5;
     border-bottom: 1px solid #727272;
+  }
+  .mercury-toolbar-collection {
+    display: inline;
   }
   .mercury-toolbar-group,
   .mercury-toolbar-separator,
@@ -55,10 +59,13 @@
       color: #3a3a3a;
       text-shadow: #eee 0 1px 0;
     }
+    &[data-icon]:before {
+      content: attr(data-icon);
+    }
     &[data-type="select"] {
-      @include mercury-toolbar-button(dropdown);
       width: auto;
       &:before {
+        content: 'B';
         float: right;
         width: 18px;
       }
@@ -74,9 +81,9 @@
       }
     }
     &[data-type="palette"] {
-      @include mercury-toolbar-button(palette);
       @include mercury-border-radius(0);
       &:before {
+        content: 'd';
         color: #eee;
         text-shadow: none;
       }
@@ -100,10 +107,13 @@
 /*
  * Mercury.Toolbar: Primary Toolbar
  *----------------------------------------------------------------------------*/
-#mercury .mercury-toolbar .mercury-toolbar-primary-collection {
+#mercury .mercury-toolbar .mercury-toolbar-primary-container {
   @include mercury-gradient(#e2e2e2, #c6c6c6);
+  display: block;
   height: 58px;
   padding: 0;
+  border-top: 1px solid #e5e5e5;
+  border-bottom: 1px solid #727272;
   .mercury-toolbar-separator,
   .mercury-toolbar-line-separator {
     width: 40px;
@@ -135,64 +145,24 @@
       font-style: normal;
       color: #222;
     }
+    &:before {
+      left: 0;
+    }
     &.active {
       &:before {
         line-height: 48px;
       }
     }
+    &[data-icon]:before {
+      content: attr(data-icon);
+    }
   }
-  [data-action="save"]      { @include mercury-icon(save); }
-  [data-action="preview"]   { @include mercury-icon(preview); }
-  [data-action="undo"]      { @include mercury-icon(undo); }
-  [data-action="redo"]      { @include mercury-icon(redo); }
-  [data-action="link"]      { @include mercury-icon(link); }
-  [data-action="media"]     { @include mercury-icon(media); }
-  [data-action="table"]     { @include mercury-icon(table); }
-  [data-action="character"] { @include mercury-icon(character); }
-  [data-action="snippets"]  { @include mercury-icon(snippets); }
-  [data-action="history"]   { @include mercury-icon(history); }
-  [data-action="notes"]     { @include mercury-icon(notes); }
 }
-
-
-/*
- * Mercury.Toolbar: Default Toolbars
- *----------------------------------------------------------------------------*/
-#mercury .mercury-toolbar {
-  [data-action="bold"]           { @include mercury-toolbar-button(bold); }
-  [data-action="italic"]         { @include mercury-toolbar-button(italic); }
-  [data-action="strike"]         { @include mercury-toolbar-button(strike); }
-  [data-action="underline"]      { @include mercury-toolbar-button(underline); }
-  [data-action="subscript"]      { @include mercury-toolbar-button(subscript); }
-  [data-action="superscript"]    { @include mercury-toolbar-button(superscript); }
-  [data-action="justify-left"]   { @include mercury-toolbar-button(justify-left); }
-  [data-action="justify-center"] { @include mercury-toolbar-button(justify-center); }
-  [data-action="justify-right"]  { @include mercury-toolbar-button(justify-right); }
-  [data-action="justify-full"]   { @include mercury-toolbar-button(justify-full); }
-  [data-action="unordered-list"] { @include mercury-toolbar-button(unordered-list); }
-  [data-action="ordered-list"]   { @include mercury-toolbar-button(ordered-list); }
-  [data-action="indent"]         { @include mercury-toolbar-button(indent); }
-  [data-action="outdent"]        { @include mercury-toolbar-button(outdent); }
-  [data-action="rule"]           { @include mercury-toolbar-button(rule); }
-  [data-action="clean"]          { @include mercury-toolbar-button(clean); }
-  [data-action="edit"]           { @include mercury-toolbar-button(edit); }
-  [data-action="row-before"]     { @include mercury-toolbar-button(row-before); }
-  [data-action="row-after"]      { @include mercury-toolbar-button(row-after); }
-  [data-action="row-delete"]     { @include mercury-toolbar-button(row-delete); }
-  [data-action="col-before"]     { @include mercury-toolbar-button(col-before); }
-  [data-action="col-after"]      { @include mercury-toolbar-button(col-after); }
-  [data-action="col-delete"]     { @include mercury-toolbar-button(col-delete); }
-  [data-action="col-increase"]   { @include mercury-toolbar-button(col-increase); }
-  [data-action="col-decrease"]   { @include mercury-toolbar-button(col-decrease); }
-  [data-action="row-increase"]   { @include mercury-toolbar-button(row-increase); }
-  [data-action="row-decrease"]   { @include mercury-toolbar-button(row-decrease); }
-}
-
 
 /*
  * Mercury.Toolbar: Developer Toolbar
  *----------------------------------------------------------------------------*/
-#mercury .mercury-toolbar-development-collection {
+#mercury .mercury-toolbar .mercury-toolbar-development-collection {
   position: fixed;
   z-index: 10000;
   right: 10px;
@@ -211,27 +181,3 @@
     }
   }
 }
-
-////.mercury-primary-toolbar .mercury-button
-////.mercury-primary-toolbar .mercury-button.active em {
-////  background-position: 51% 8px;
-////}
-////
-////.mercury-primary-toolbar .mercury-separator,
-////.mercury-primary-toolbar .mercury-line-separator {
-////  display: inline-block;
-////  width: 1px;
-////  height: 50px;
-////  margin: 5px 20px 28px;
-////}
-////.mercury-primary-toolbar .mercury-toolbar-button-container {
-////  white-space: nowrap;
-////  padding-right: 10px;
-////}
-////.mercury-primary-toolbar .mercury-toolbar-expander {
-////  width: 12px;
-////  height: 58px;
-////  background-color: rgba(0, 0, 0, .2);
-////  background-repeat: no-repeat;
-////}
-

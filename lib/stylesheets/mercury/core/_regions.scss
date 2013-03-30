@@ -10,7 +10,7 @@
 @mixin mercury-region-drop-indicator {
   @include mercury-transition(opacity, ease-in-out);
   @include mercury-border-radius(10px);
-  @include mercury-icon-base(30px, 60px, 60px, 'upload');
+  @include mercury-icon-base(32px, 60px, 60px);
   display: none;
   opacity: 0;
   position: absolute;
@@ -23,4 +23,7 @@
   background: rgba(0, 0, 0, .75);
   color: rgba(255, 255, 255, .85);
   pointer-events: none;
+  &:before {
+    content: ','
+  }
 }

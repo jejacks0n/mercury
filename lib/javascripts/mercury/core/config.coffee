@@ -30,17 +30,21 @@ Mercury.Config =
   # set({foo: 'bar'})                            => {foo: 'bar'}
   #
   set: (args...) ->
-    value = args.pop()
     path = args.shift()
+    value = args.pop()
+    merge = args.pop()
 
-    return Mercury.configuration = value unless path
+    return Mercury.configuration = path if !value && typeof(path) == 'object'
 
     config = Mercury.configuration ||= {}
     parts = path.split(':')
     part = parts.shift()
     while part
       if parts.length == 0
-        config[part] = value
+        if merge && typeof(config[part]) == 'object'
+          config[part] = $.extend(true, config[part], value)
+        else
+          config[part] = value
         return config[part]
       config = if config[part] then config[part] else config[part] = {}
       part = parts.shift()

@@ -53,6 +53,11 @@ describe "Mercury.Config", ->
       expect( subject.set('foo:bar', '_new_value_') ).to.eq('_new_value_')
       expect( Mercury.configuration.foo.bar ).to.eq('_new_value_')
 
+    it "merges the value of the provided path", ->
+      Mercury.configuration = foo: {bar: 'bar'}
+      subject.set('foo', true, baz: 'baz')
+      expect( Mercury.configuration ).to.eql(foo: {bar: 'bar', baz: 'baz'})
+
 
   describe "Module", ->
 

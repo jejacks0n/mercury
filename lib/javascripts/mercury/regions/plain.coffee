@@ -8,6 +8,12 @@ Dependencies:
   rangy-serializer
   rangy-cssclassapplier
 ###
+Mercury.configure 'toolbars:plain'
+  decoration:
+    bold:          ['Bold']
+    italic:        ['Italicize']
+    underline:     ['Underline']
+
 class Mercury.Region.Plain extends Mercury.Region
   @define 'Mercury.Region.Plain', 'plain'
   @include Mercury.Region.Modules.HtmlSelection
@@ -18,7 +24,7 @@ class Mercury.Region.Plain extends Mercury.Region
               (!Mercury.support.msie || Mercury.support.msie >= 10) &&    # we're in IE10+
               (window.rangy && window.rangy.supported)                    # rangy is supported
 
-  toolbars: ['markup']
+  toolbars: ['plain']
 
   events:
     'keydown': 'onKeyEvent'
@@ -67,3 +73,5 @@ class Mercury.Region.Plain extends Mercury.Region
     bold:      -> @toggleWrapSelectedWordsInClass('red')
     italic:    -> @toggleWrapSelectedWordsInClass('highlight')
     underline: -> @toggleWrapSelectedWordsInClass('blue')
+    link:      ->
+    character: ->

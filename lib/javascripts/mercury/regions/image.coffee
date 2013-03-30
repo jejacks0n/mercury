@@ -3,6 +3,18 @@ The Image region allows you to have a replaceable image region on your page. It 
 from the desktop -- which will get uploaded (and probably processed by your server) and will then replace the existing
 image with the one that was uploaded.
 ###
+Mercury.configure 'toolbars:image',
+  general:
+    crop:        ['Crop Image']
+    resize:      ['Resize Image']
+    sep1:        '-'
+  alignment:
+    alignLeft:   ['Align Left']
+    alignRight:  ['Align Right']
+    alignTop:    ['Align Top']
+    alignMiddle: ['Align Middle']
+    alignBottom: ['Align Bottom']
+
 class Mercury.Region.Image extends Mercury.Region
   @define 'Mercury.Region.Image', 'image'
   @include Mercury.Region.Modules.DropIndicator

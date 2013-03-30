@@ -9,6 +9,33 @@ Dependencies:
 This is still experimental and could be changed later to provide a way to fetch the markdown content for a given region
 via Ajax.
 ###
+Mercury.configure 'toolbars:markdown'
+  defined:
+    style:         ['Style', select: '/mercury/templates/style']
+    sep1:          ' '
+    block:         ['Block Format', select: '/mercury/templates/block']
+    sep2:          '-'
+  decoration:
+    bold:          ['Bold']
+    italic:        ['Italicize']
+    strike:        ['Strikethrough']
+    underline:     ['Underline']
+    sep1:          '-'
+  script:
+    subscript:     ['Subscript']
+    superscript:   ['Superscript']
+    sep1:          '-'
+  list:
+    unorderedList: ['Unordered List']
+    orderedList:   ['Numbered List']
+    sep1:          '-'
+  indent:
+    indent:        ['Increase Indentation']
+    outdent:       ['Decrease Indentation']
+    sep1:          '-'
+  rules:
+    rule:          ['Horizontal Rule', title: 'Insert a horizontal rule']
+
 class Mercury.Region.Markdown extends Mercury.Region
   @define 'Mercury.Region.Markdown', 'markdown'
   @include Mercury.Region.Modules.DropIndicator
@@ -18,7 +45,7 @@ class Mercury.Region.Markdown extends Mercury.Region
 
   @supported: true
 
-  toolbars: ['markup']
+  toolbars: ['markdown']
 
   wrappers:
     h1           : ['# ', ' #']
@@ -107,6 +134,14 @@ class Mercury.Region.Markdown extends Mercury.Region
     indent:      -> @wrapSelectedParagraphs('blockquote')
     outdent:     -> @unwrapSelectedParagraphs('blockquote')
 
+    orderedList: ->
+      @unwrapSelectedParagraphs(wrapper) for wrapper in ['blockquote', 'unorderedList']
+      @wrapSelectedParagraphs('orderedList') unless @unwrapSelectedParagraphs('orderedList')
+
+    unorderedList: ->
+      @unwrapSelectedParagraphs(wrapper) for wrapper in ['blockquote', 'orderedList']
+      @wrapSelectedParagraphs('unorderedList') unless @unwrapSelectedParagraphs('unorderedList')
+
     style: (value) ->
       wrapper = if value.indexOf(':') > -1 then 'style' else 'class'
       @unwrapSelectedWords(if wrapper == 'style' then 'class' else 'style')
@@ -126,13 +161,11 @@ class Mercury.Region.Markdown extends Mercury.Region
       @unwrapSelectedLines(wrapper) for wrapper in @blocks
       @wrapSelectedLines(format) if @wrappers[format]
 
-    orderedList: ->
-      @unwrapSelectedParagraphs(wrapper) for wrapper in ['blockquote', 'unorderedList']
-      @wrapSelectedParagraphs('orderedList') unless @unwrapSelectedParagraphs('orderedList')
+    character: (html) ->
+      @handleAction('html', html)
 
-    unorderedList: ->
-      @unwrapSelectedParagraphs(wrapper) for wrapper in ['blockquote', 'orderedList']
-      @wrapSelectedParagraphs('unorderedList') unless @unwrapSelectedParagraphs('unorderedList')
+    table: (table) ->
+      @handleAction('html', table.get('html'))
 
     file: (file) ->
       action = if file.isImage() then 'image' else 'link'

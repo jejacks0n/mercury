@@ -9,11 +9,12 @@ You can use the control panel to see thumbnails of each slide, to jump to a give
 also takes into account undo/redo support using the keyboard or buttons.
 ###
 
-Mercury.configure 'toolbars:gallery:buttons',
-  next:   ['Next Slide']
-  prev:   ['Previous Slide']
-  delete: ['Delete Slide']
-  toggle: ['Play/Pause']
+Mercury.configure 'toolbars:gallery',
+  general:
+    prev:       ['Previous Slide']
+    next:       ['Next Slide']
+    delete:     ['Delete Slide']
+    togglePlay: ['Play/Pause']
 
 class Mercury.Region.Gallery extends Mercury.Region
   @define 'Mercury.Region.Gallery', 'gallery'

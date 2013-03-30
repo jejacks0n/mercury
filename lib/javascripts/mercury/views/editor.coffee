@@ -11,6 +11,7 @@ class Mercury.Editor extends Mercury.View
   events:
     'mousedown': 'focusActiveRegion'
     'focusout': 'focusActiveRegion'
+    'region:focus': 'onRegionFocus'
 
   constructor: ->
     if parent != window && parent.Mercury
@@ -21,7 +22,7 @@ class Mercury.Editor extends Mercury.View
 
     @regions ||= []
 
-    $(window).on('beforeunload', => @beforeUnload())
+    $(window).on('beforeunload', => @onUnload())
 
     @addClass('loading')
     $('body').before(@el)
@@ -39,6 +40,7 @@ class Mercury.Editor extends Mercury.View
   buildInterface: ->
     @buildToolbar()
     @buildStatusbar()
+    @focusDefaultRegion()
 
 
   buildToolbar: ->
@@ -58,9 +60,15 @@ class Mercury.Editor extends Mercury.View
     Mercury.on 'action', => @focusActiveRegion()
 
 
+  focusDefaultRegion: ->
+    @delay(100, ->
+      console.debug(@regions[0])
+      @regions[0]?.focus()
+    )
+
+
   addAllRegions: ->
     @addRegion(el) for el in @regionElements()
-    @regions[0]?.focus()
     Mercury.trigger('mode', 'preview') unless @config('interface:enabled')
 
 
@@ -70,7 +78,6 @@ class Mercury.Editor extends Mercury.View
 
   addRegion: (el) ->
     region = Mercury.Region.create(el)
-    region.on('focus', => @region = region)
     @regions.push(region)
 
 
@@ -79,14 +86,17 @@ class Mercury.Editor extends Mercury.View
     @region.focus()
 
 
-  beforeUnload: ->
+  onRegionFocus: (region) ->
+    @region = region
+
+
+  onUnload: ->
     return null if @config('interface:silent') || !@hasChanges()
     return @t('You have unsaved changes.  Are you sure you want to leave without saving them first?')
 
 
   hasChanges: ->
-    for region in @regions
-      return true if region.hasChanges()
+    (return true if region.hasChanges()) for region in @regions
     false
 
 

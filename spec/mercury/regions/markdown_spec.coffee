@@ -20,7 +20,7 @@ describe "Mercury.Region.Markdown", ->
     expect( Klass.className ).to.eq('Mercury.Region.Markdown')
     expect( Klass.type ).to.eq('markdown')
     expect( subject.editableDropBehavior ).to.be.true
-    expect( subject.toolbars ).to.eql(['markup'])
+    expect( subject.toolbars ).to.eql(['markdown'])
     expect( subject.wrappers ).to.be.defined
     expect( subject.blocks ).to.be.defined
 

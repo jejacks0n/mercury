@@ -7,6 +7,62 @@ Dependencies:
   rangy-serializer
   rangy-cssclassapplier
 ###
+Mercury.configure 'toolbars:html'
+  defined:
+    style:         ['Style', select: '/mercury/templates/style']
+    sep1:          ' '
+    block:         ['Block Format', select: '/mercury/templates/block']
+    sep2:          '-'
+  color:
+    bgcolor:       ['Background Color', palette: '/mercury/templates/bgcolor']
+    sep1:          ' '
+    color:         ['Text Color', palette: '/mercury/templates/color']
+    sep2:          '-'
+  decoration:
+    bold:          ['Bold']
+    italic:        ['Italicize']
+    strike:        ['Strikethrough']
+    underline:     ['Underline']
+    sep1:          '-'
+  script:
+    subscript:     ['Subscript']
+    superscript:   ['Superscript']
+    sep1:          '-'
+  justify:
+    justifyLeft:   ['Align Left']
+    justifyCenter: ['Center']
+    justifyRight:  ['Align Right']
+    justifyFull:   ['Justify Full']
+    sep1:          '-'
+  list:
+    unorderedList: ['Unordered List']
+    orderedList:   ['Numbered List']
+    sep1:          '-'
+  indent:
+    indent:        ['Increase Indentation']
+    outdent:       ['Decrease Indentation']
+    sep1:          '-'
+  rules:
+    rule:          ['Horizontal Rule', title: 'Insert a horizontal rule']
+    sep1:          '-'
+  extra:
+    clean:         ['Remove Formatting', title: 'Remove formatting for the selection']
+    sep1:          ' '
+    edit:          ['Edit HTML', title: 'Edit the HTML content']
+    sep2:          '-'
+  table:
+    rowBefore:     ['Insert Table Row', title: 'Insert a table row before the cursor']
+    rowAfter:      ['Insert Table Row', title: 'Insert a table row after the cursor']
+    rowDelete:     ['Delete Table Row', title: 'Delete this table row']
+    colBefore:     ['Insert Table Column', title: 'Insert a table column before the cursor']
+    colAfter:      ['Insert Table Column', title: 'Insert a table column after the cursor']
+    colDelete:     ['Delete Table Column', title: 'Delete this table column']
+    sep1:          ' '
+    colIncrease:   ['Increase Cell Columns', title: 'Increase the cells colspan']
+    colDecrease:   ['Decrease Cell Columns', title: 'Decrease the cells colspan and add a new cell']
+    rowIncrease:   ['Increase Cell Rows', title: 'Increase the cells rowspan']
+    rowDecrease:   ['Decrease Cell Rows', title: 'Decrease the cells rowspan and add a new cell']
+
 class Mercury.Region.Html extends Mercury.Region
   @define 'Mercury.Region.Html', 'html'
   @include Mercury.Region.Modules.DropIndicator
@@ -18,7 +74,7 @@ class Mercury.Region.Html extends Mercury.Region
               (!Mercury.support.msie || Mercury.support.msie >= 10) &&    # we're in IE10+
               (window.rangy && window.rangy.supported)                    # rangy is supported
 
-  toolbars: ['markup']
+  toolbars: ['html']
 
   events:
     'keydown': 'onKeyEvent'
@@ -68,11 +124,51 @@ class Mercury.Region.Html extends Mercury.Region
 
   actions:
 
-    bold:        -> @toggleWrapSelectedWordsInClass('red')
-    italic:      -> @toggleWrapSelectedWordsInClass('highlight')
-    underline:   -> @toggleWrapSelectedWordsInClass('blue')
-    rule:        -> @replaceSelection('<hr/>')
+    bold:          -> @toggleWrapSelectedWordsInClass('red')
+    italic:        -> @toggleWrapSelectedWordsInClass('highlight')
+    underline:     -> @toggleWrapSelectedWordsInClass('blue')
+    rule:          -> @replaceSelection('<hr/>')
+    link:          ->
+    table:         ->
+#    character:     ->
+#    notes:         ->
+#    style:         ->
+#    block:         ->
+#    color:         ->
+#    bgcolor:       ->
+#    strike:        ->
+#    subscript:     ->
+#    superscript:   ->
+#    justifyLeft:   ->
+#    justifyCenter: ->
+    justifyRight:  ->
+    justifyFull:   ->
+    unorderedList: ->
+    orderedList:   ->
+    indent:        ->
+    outdent:       ->
+    clean:         ->
+    edit:          ->
+    rowBefore:     ->
+    rowAfter:      ->
+    rowDelete:     ->
+    colBefore:     ->
+    colAfter:      ->
+    colDelete:     ->
+    sep1:          ->
+    colIncrease:   ->
+    colDecrease:   ->
+    rowIncrease:   ->
+    rowDecrease:   ->
 
     file: (file) ->
       action = if file.isImage() then 'image' else 'link'
       @handleAction(action, url: file.get('url'), text: file.get('name'))
+
+
+
+
+    snippets: ->
+    save: ->
+    preview: ->
+    history: ->

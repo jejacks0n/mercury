@@ -8,13 +8,17 @@ class Mercury.Toolbar extends Mercury.View
   template: 'toolbar'
 
   events:
-    'click [data-action]': 'processAction'
     'interface:hide': 'hide'
     'interface:show': 'show'
+    'region:focus': 'onRegionFocus'
+    'click .mercury-toolbar-development-collection [data-action]': 'processAction'
+
+  elements:
+    toolbar: '.mercury-toolbar-secondary-container'
 
   build: ->
-    for name in ['primary', 'markup'] #@config('toolbars:defaults') || []
-      @append(new Mercury.ToolbarItem(name, 'collection', @config("toolbars:#{name}")))
+    @append(new Mercury.ToolbarItem('primary', 'container', @config("toolbars:primary")))
+    @append(new Mercury.ToolbarItem('secondary', 'container', {}))
 
 
   hide: ->
@@ -23,6 +27,19 @@ class Mercury.Toolbar extends Mercury.View
 
   show: ->
     @el.css(top: 0)
+
+
+  onRegionFocus: (region) ->
+    return if @region == region
+    @region = region
+    @$('.mercury-toolbar-collection').remove()
+    @buildToolbar(name).updateForRegion(region) for name in region.toolbars || []
+
+
+  buildToolbar: (name) ->
+    toolbar = new Mercury.ToolbarItem(name, 'collection', @config("toolbars:#{name}"))
+    toolbar.appendTo(@toolbar)
+    toolbar
 
 
   processAction: (e) ->

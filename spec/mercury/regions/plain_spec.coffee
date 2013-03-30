@@ -18,6 +18,6 @@ describe "Mercury.Region.Plain", ->
     expect( Klass.className ).to.eq('Mercury.Region.Plain')
     expect( Klass.type ).to.eq('plain')
     expect( Klass.supported ).to.be.true
-    expect( subject.toolbars ).to.eql(['markup'])
+    expect( subject.toolbars ).to.eql(['plain'])
 
   it "needs to be tested eventually"

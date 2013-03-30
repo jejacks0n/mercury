@@ -61,7 +61,12 @@ globalize = ->
   # Get a configuration value by providing a path (much like the setter).
   #
   @Module.extend.call(@, @Config)
-  @configure = @Config.set
+  @configure = (args...) ->
+    if @configuration
+      @trigger('configure')
+      @Config.set(args...)
+    @one 'configure', -> @Config.set(args[0], true, args[1])
+
 
   # Add global event handling/triggering.
   #

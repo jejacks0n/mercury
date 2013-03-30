@@ -18,7 +18,8 @@ Mercury.Config =
 
 
   # Creates(sets) or updates a configuration value or object by using a nested object structure and sets the final
-  # property of that object to the value passed.
+  # property of that object to the value passed. If a second argument is present and is true, the configuration will be
+  # merged.
   # Returns the value passed.
   #
   # Set or update a configuration property to the value provided.

@@ -16,7 +16,7 @@ describe "Mercury.Region.Text", ->
     expect( Klass.className ).to.eq('Mercury.Region.Text')
     expect( Klass.type ).to.eq('text')
     expect( Klass.supported ).to.be.true
-    expect( subject.toolbars ).to.be.false
+    expect( subject.toolbars ).to.be.undefined
 
   describe "#value", ->
 

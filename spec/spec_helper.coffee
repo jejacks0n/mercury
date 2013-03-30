@@ -39,3 +39,13 @@ afterEach ->
     try spy['thing'][spy['method']].restore()
     catch e
   _spies = []
+
+# create a mock that can be used
+@MockMercury =
+  Module:
+    extend: stub()
+  Events: {}
+  Config: {}
+  I18n: {}
+  Logger: {}
+  Editor: ->

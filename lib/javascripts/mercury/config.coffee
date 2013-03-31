@@ -14,7 +14,7 @@ Mercury.configuration =
   # based on what notifier you choose to use. Use false if you don't care about fallbacks.
   #
   logging:
-    enabled    : true
+    enabled    : false
     notifier   : 'console'                                 # console, alert, or error (default is error)
 
 
@@ -91,8 +91,8 @@ Mercury.configuration =
     # etc. will always be active because they apply to the entire page and are not specific to the focused region.
     #
     primary:
-      save:            ['Save', title: 'Save this page', event: 'save']
-      preview:         ['Preview', title: 'Preview this page', mode: 'preview']
+      save:            ['Save', title: 'Save this page', event: 'save', global: true]
+      preview:         ['Preview', title: 'Preview this page', mode: 'preview', global: true]
       sep1:            ' '
       undo:            ['Undo', title: 'Undo your last action']
       redo:            ['Redo', title: 'Redo your last action']
@@ -103,8 +103,8 @@ Mercury.configuration =
       character:       ['Character', title: 'Special Characters']
       snippets:        ['Snippet', title: 'Snippet Panel']
       sep3:            ' '
-      history:         ['History', title: 'Page Version History']
-      notes:           ['Notes', title: 'Page Notes']
+      history:         ['History', title: 'Page Version History', global: true]
+      notes:           ['Notes', title: 'Page Notes', global: true]
 
 
   # Regions

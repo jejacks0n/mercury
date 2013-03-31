@@ -88,14 +88,20 @@
         text-shadow: none;
       }
     }
-    &.disabled {
+    &.mercury-button-disabled {
       opacity: .5;
     }
-    &.active {
+    &.mercury-button-active,
+    &.mercury-button-pressed {
       @include mercury-gradient(#bebebe, #9c9c9c);
       &:before {
         color: #333;
         text-shadow: none;
+      }
+    }
+    &.mercury-button-pressed {
+      &:before {
+        top: 1px;
       }
     }
     em {

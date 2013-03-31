@@ -46,6 +46,6 @@
 #= require mercury/regions/modules/selection_value
 #= require mercury/regions/modules/text_selection
 #
-# Initialize / Boot script
+# Initialize script.
 #
 #= require mercury/initializer

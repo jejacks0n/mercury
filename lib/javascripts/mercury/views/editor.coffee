@@ -61,11 +61,12 @@ class Mercury.Editor extends Mercury.View
 
 
   focusDefaultRegion: ->
-    @delay(100, -> @regions[0]?.focus())
+    @delay(100, @focusActiveRegion)
 
 
   addAllRegions: ->
     @addRegion(el) for el in @regionElements()
+    @region = @regions[0]
     Mercury.trigger('mode', 'preview') unless @config('interface:enabled')
 
 

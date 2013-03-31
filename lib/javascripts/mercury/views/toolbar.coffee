@@ -52,8 +52,6 @@ class Mercury.Toolbar extends Mercury.View
         @hidden = !@hidden
         if @hidden then Mercury.trigger('interface:show') else Mercury.trigger('interface:hide')
         Mercury.trigger('mode', 'preview')
-      when 'preview'
-        Mercury.trigger('mode', 'preview')
       when 'html'
         val = switch val
           when 'html' then '<table>\n  <tr>\n    <td>1</td>\n    <td>2</td>\n  </tr>\n</table>'
@@ -61,3 +59,65 @@ class Mercury.Toolbar extends Mercury.View
           when 'jquery' then $('<section class="foo"><h1>testing</h1></section>')
         Mercury.trigger('action', act, val)
       else Mercury.trigger('action', act, val)
+
+
+  @icons:
+    # mercury.ttf
+    # primary
+    save:          '!'
+    preview:       '"'
+    undo:          '#'
+    redo:          '$'
+    link:          '%'
+    file:          '&'
+    table:         "'"
+    character:     '('
+    snippets:      ')'
+    history:       '*'
+    notes:         '+'
+    upload:        ','
+    search:        '-'
+
+    # toolbars.ttf
+    # markup (html/markdown)
+    bold:          'C'
+    italic:        'D'
+    strike:        'E'
+    underline:     'F'
+    subscript:     'G'
+    superscript:   'H'
+    justifyLeft:   'I'
+    justifyCenter: 'J'
+    justifyRight:  'K'
+    justifyFull:   'L'
+    unorderedList: 'M'
+    orderedList:   'N'
+    indent:        'P'
+    outdent:       'O'
+    rule:          'Q'
+    clean:         'R'
+    edit:          'S'
+    rowBefore:     'T'
+    rowAfter:      'U'
+    rowDelete:     'V'
+    colBefore:     'W'
+    colAfter:      'X'
+    colDelete:     'Y'
+    colIncrease:   'Z'
+    colDecrease:   'a'
+    rowIncrease:   'b'
+    rowDecrease:   'c'
+    # image
+    crop:          'e'
+    resize:        'f'
+    alignLeft:     'g'
+    alignRight:    'h'
+    alignTop:      'i'
+    alignMiddle:   'j'
+    alignBottom:   'k'
+    alignNone:     'l'
+    # gallery
+    prev:          'n'
+    next:          'o'
+    remove:        'R'
+    togglePlay:    'p'

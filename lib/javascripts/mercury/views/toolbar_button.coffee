@@ -6,11 +6,13 @@ class Mercury.ToolbarButton extends Mercury.View
   className: 'mercury-toolbar-button'
 
   events:
-    'mousedown': -> @addClass('active')
-    'mouseup': -> @el.removeClass('active')
-    'mouseout': -> @el.removeClass('active')
+    'mousedown': -> @addClass('mercury-button-pressed')
+    'mouseup': -> @el.removeClass('mercury-button-pressed')
+    'mouseout': -> @el.removeClass('mercury-button-pressed')
     'click': 'triggerAction'
     'region:focus': 'onRegionFocus'
+    'region:action': 'updateForRegion'
+    'region:update': 'updateForRegion'
 
   constructor: (@name, @label, @options = {}) ->
     super(@options)
@@ -23,7 +25,7 @@ class Mercury.ToolbarButton extends Mercury.View
 
     @attr('data-action', @action) if @action
     @attr('data-type', @type)
-    @attr('data-icon', @constructor.icons[@icon || @name] || @icon)
+    @attr('data-icon', Mercury.Toolbar.icons[@icon || @name] || @icon)
     @addClass("mercury-toolbar-#{@name.toDash()}-button")
     @html("<em>#{@label}</em>")
 
@@ -45,6 +47,8 @@ class Mercury.ToolbarButton extends Mercury.View
 
 
   triggerAction: ->
+    Mercury.trigger(@event) if @event
+    Mercury.trigger('mode', @mode) if @mode
     Mercury.trigger('action', @action...)
 
 
@@ -53,68 +57,9 @@ class Mercury.ToolbarButton extends Mercury.View
 
 
   updateForRegion: (region) ->
-    if region.actions[@actionName]
-      @el.removeClass('disabled')
+    @el.removeClass('mercury-button-active')
+    if region.hasAction(@actionName) || @global
+      @el.removeClass('mercury-button-disabled')
+      @el.addClass('mercury-button-active') if region.hasContext(@name)
     else
-      @el.addClass('disabled')
-
-
-  @icons:
-    # mercury.ttf
-    # primary
-    save:          '!'
-    preview:       '"'
-    undo:          '#'
-    redo:          '$'
-    link:          '%'
-    file:          '&'
-    table:         "'"
-    character:     '('
-    snippets:      ')'
-    history:       '*'
-    notes:         '+'
-    upload:        ','
-    search:        '-'
-
-    # toolbars.ttf
-    # markup (html/markdown)
-    bold:          'C'
-    italic:        'D'
-    strike:        'E'
-    underline:     'F'
-    subscript:     'G'
-    superscript:   'H'
-    justifyLeft:   'I'
-    justifyCenter: 'J'
-    justifyRight:  'K'
-    justifyFull:   'L'
-    unorderedList: 'M'
-    orderedList:   'N'
-    indent:        'P'
-    outdent:       'O'
-    rule:          'Q'
-    clean:         'R'
-    edit:          'S'
-    rowBefore:     'T'
-    rowAfter:      'U'
-    rowDelete:     'V'
-    colBefore:     'W'
-    colAfter:      'X'
-    colDelete:     'Y'
-    colIncrease:   'Z'
-    colDecrease:   'a'
-    rowIncrease:   'b'
-    rowDecrease:   'c'
-    # image
-    crop:          'e'
-    resize:        'f'
-    alignLeft:     'g'
-    alignRight:    'h'
-    alignTop:      'i'
-    alignMiddle:   'j'
-    alignBottom:   'k'
-    # gallery
-    prev:          'n'
-    next:          'o'
-    delete:        'R'
-    togglePlay:    'p'
+      @el.addClass('mercury-button-disabled')

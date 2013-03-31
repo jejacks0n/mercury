@@ -2,6 +2,7 @@
 #= require mercury/views/uploader
 #= require mercury/core/region
 #= require mercury/regions/modules/drop_indicator
+#= require mercury/regions/modules/drop_item
 #= require mercury/regions/modules/text_selection
 #= require mercury/regions/modules/focusable_textarea
 #= require mercury/regions/modules/selection_value
@@ -20,7 +21,6 @@ describe "Mercury.Region.Markdown", ->
     expect( Klass.className ).to.eq('Mercury.Region.Markdown')
     expect( Klass.type ).to.eq('markdown')
     expect( subject.editableDropBehavior ).to.be.true
-    expect( subject.toolbars ).to.eql(['markdown'])
     expect( subject.wrappers ).to.be.defined
     expect( subject.blocks ).to.be.defined
 

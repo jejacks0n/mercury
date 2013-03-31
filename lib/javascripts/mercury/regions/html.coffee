@@ -97,7 +97,6 @@ class Mercury.Region.Html extends Mercury.Region
 
 
   onPaste: (e) ->
-    e.preventDefault()
     console.debug('pasted', e)
 
 

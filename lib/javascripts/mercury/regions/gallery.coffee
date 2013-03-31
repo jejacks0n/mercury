@@ -18,6 +18,7 @@ Mercury.configure 'toolbars:gallery',
 class Mercury.Region.Gallery extends Mercury.Region
   @define 'Mercury.Region.Gallery', 'gallery'
   @include Mercury.Region.Modules.DropIndicator
+  @include Mercury.Region.Modules.DropItem
 
   @supported: true
 
@@ -37,6 +38,11 @@ class Mercury.Region.Gallery extends Mercury.Region
     @index = 0
     @playing ?= true
     @refresh(true)
+
+
+  build: ->
+    @append('<div class="slides">') unless @$('.slides').length
+    @append('<div class="paginator">') unless @$('.paginator').length
 
 
   value: (value) ->
@@ -105,16 +111,8 @@ class Mercury.Region.Gallery extends Mercury.Region
   onDropFile: (files) ->
     uploader = new Mercury.Uploader(files, mimeTypes: @config('regions:gallery:mimeTypes'))
     uploader.on 'uploaded', (file) =>
-      return unless file.isImage()
       @focus()
-      @appendSlide($("""<div class="slide"><img src="#{file.get('url')}"/></div>"""))
-
-
-  onDropItem: (e, data) ->
-    if url = $('<div>').html(data.getData('text/html')).find('img').attr('src')
-      e.preventDefault()
-      @focus()
-      @appendSlide($("""<div class="slide"><img src="#{url}"/></div>"""))
+      @handleAction('file', file)
 
 
   onFocus: ->
@@ -137,13 +135,19 @@ class Mercury.Region.Gallery extends Mercury.Region
 
 Mercury.Region.Gallery.addAction
 
-  prev:       -> @prevSlide()
-  next:       -> @nextSlide()
-  remove:     -> @removeSlide()
-  togglePlay: -> @playing = !@playing; @refresh()
+  prev:   -> @prevSlide()
+  next:   -> @nextSlide()
+  remove: -> @removeSlide()
 
-  # todo: needs to be implemented
-  # file: (file) ->
+  togglePlay: ->
+    @playing = !@playing
+    @refresh()
+
+  file: (file) ->
+    @handleAction('image', url: file.get('url')) if file.isImage()
+
+  image: (image) ->
+    @appendSlide("""<div class="slide"><img src="#{image.get('url')}"/></div>""")
 
 
 Mercury.Region.Gallery.addContext

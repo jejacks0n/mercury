@@ -13,6 +13,7 @@ describe "Mercury.Region.Html", ->
   subject = null
 
   beforeEach ->
+    Klass.supported = true
     Mercury.configure 'regions:identifier', 'id'
     subject = new Klass('<div id="foo">')
 
@@ -20,6 +21,5 @@ describe "Mercury.Region.Html", ->
     expect( Klass.className ).to.eq('Mercury.Region.Html')
     expect( Klass.type ).to.eq('html')
     expect( Klass.supported ).to.be.true
-    expect( subject.toolbars ).to.eql(['html'])
 
   it "needs to be tested eventually"

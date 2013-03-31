@@ -32,7 +32,10 @@ mocha.setup(ignoreLeaks: true)
 _spies = []
 @spyOn = (thing, method, callback = null) ->
   _spies.push(thing: thing, method: method)
-  sinon.stub(thing, method, callback)
+  if callback == false
+    sinon.spy(thing, method)
+  else
+    sinon.stub(thing, method, callback)
   thing[method]
 
 afterEach ->

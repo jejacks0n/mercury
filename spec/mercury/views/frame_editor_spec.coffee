@@ -8,6 +8,7 @@ describe "Mercury.FrameEditor", ->
 
   beforeEach ->
     spyOn($.fn, 'before')
+    spyOn(Klass::, 'focusActiveRegion')
     subject = new Klass(frame: '<iframe>')
 
   describe "#initialze", ->

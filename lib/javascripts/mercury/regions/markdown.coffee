@@ -40,6 +40,7 @@ Mercury.configure 'toolbars:markdown'
 class Mercury.Region.Markdown extends Mercury.Region
   @define 'Mercury.Region.Markdown', 'markdown'
   @include Mercury.Region.Modules.DropIndicator
+  @include Mercury.Region.Modules.DropItem
   @include Mercury.Region.Modules.SelectionValue
   @include Mercury.Region.Modules.FocusableTextarea
   @include Mercury.Region.Modules.TextSelection
@@ -89,13 +90,6 @@ class Mercury.Region.Markdown extends Mercury.Region
     uploader.on 'uploaded', (file) =>
       @focus()
       @handleAction('file', file)
-
-
-  onDropItem: (e, data) ->
-    if url = $('<div>').html(data.getData('text/html')).find('img').attr('src')
-      e.preventDefault()
-      @focus()
-      @handleAction('image', url: url)
 
 
   onReturnKey: (e) ->

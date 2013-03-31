@@ -34,7 +34,7 @@ class Mercury.Region.Plain extends Mercury.Region
       return false
 
     super
-    @actions = null unless @config('regions:plain:actions')
+    @actions = {} unless @config('regions:plain:actions')
 
 
   onDropItem: (e) ->

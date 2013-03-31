@@ -88,6 +88,10 @@ describe "Mercury.Region.Modules.ContentEditable", ->
 
   describe "#forceContentEditableDisplay", ->
 
+    beforeEach ->
+      fixture.set('<div>')
+      subject.appendTo(fixture)
+
     it "sets display to inline block if the display is inline", ->
       subject.el.css(display: 'inline')
       subject.forceContentEditableDisplay()

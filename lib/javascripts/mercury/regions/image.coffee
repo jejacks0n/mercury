@@ -20,6 +20,7 @@ Mercury.configure 'toolbars:image',
 class Mercury.Region.Image extends Mercury.Region
   @define 'Mercury.Region.Image', 'image'
   @include Mercury.Region.Modules.DropIndicator
+  @include Mercury.Region.Modules.DropItem
 
   @supported: true
 
@@ -52,13 +53,6 @@ class Mercury.Region.Image extends Mercury.Region
       @handleAction('file', file)
 
 
-  onDropItem: (e, data) ->
-    if url = $('<div>').html(data.getData('text/html')).find('img').attr('src')
-      e.preventDefault()
-      @focus()
-      @handleAction('image', url: url)
-
-
 Mercury.Region.Image.addAction
 
   alignLeft:   -> @setAlignment('left')
@@ -68,12 +62,11 @@ Mercury.Region.Image.addAction
   alignBottom: -> @setAlignment('bottom')
   alignNone:   -> @setAlignment(null)
 
-  file: (file) -> @value(file.get('url'))
-  image: (image) -> @value(image.get('url'))
+  file: (file) ->
+    @handleAction('image', url: file.get('url')) if file.isImage()
 
-  # todo: needs to be implemented
-  #crop: ->
-  #resize: ->
+  image: (image) ->
+    @value(image.get('url'))
 
 
 Mercury.Region.Image.addContext

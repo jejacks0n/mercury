@@ -8,6 +8,7 @@
 Mercury.on ||= ->
 Mercury.trigger ||= ->
 Mercury.support = webkit: true
+beforeEach -> Mercury.__handlers__ = {}
 
 # allow configuration to be adjusted and restored after each test
 $.extend(Mercury, Mercury.Config.Module)

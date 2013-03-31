@@ -39,10 +39,10 @@ Mercury.Region.Modules.FocusableTextarea =
   resizeFocusable: ->
     return unless @autoSize
     focusable = @focusable.get(0)
-    body = $('body')
+    body = $('body', @el.get(0).ownerDocument)
     current = body.scrollTop()
     @focusable.css(height: 1).css(height: focusable.scrollHeight)
-    $('body').scrollTop(current)
+    body.scrollTop(current)
 
 
   toggleFocusablePreview: ->

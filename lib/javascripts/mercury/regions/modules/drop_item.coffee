@@ -10,6 +10,6 @@ Mercury.Region.Modules.DropItem =
 
   getActionAndUrlFromData: (data) ->
     action = 'image'
-    action = 'link' if data.getData('text/html') || (Mercury.support.safari && data.types.indexOf('image/tiff') == -1)
+    action = 'link' if data.getData('text/html') || (Mercury.support.safari && (data.types || []).indexOf('image/tiff') == -1)
     action = 'image' if url = $('<div>').html(data.getData('text/html')).find('img').attr('src')
     [action, url || data.getData('text/uri-list')]

@@ -12,6 +12,16 @@ initialize = ->
 
   @version = '0.0.1alpha'
 
+  # Provide global method to initialize.
+  #
+  # This is the standard means to instantiate Mercury Editor. If you need more custom behavior check the configuration,
+  # and if that doesn't suit your needs, feel free to instantiate the desired editor yourself.
+  #
+  @init = (options = {}) =>
+    return if @initialized
+    @initialized = true
+    new @[@config('interface:editor')](options)
+
   # Add global configuration methods.
   #
   # Mercury.configure
@@ -64,22 +74,16 @@ initialize = ->
 
   # Do some detection.
   #
-  # We need to detect various support, and as nice as it would be to feature detection some of the more complex aspects
-  # aren't something that you can detect for (eg. drag and drop event propagation.
+  # We need to detect various support, and as nice as it would be to feature detection for all of this, some of the more
+  # complex aspects aren't something that you can detect for (eg. drag and drop event propagation).
   #
   @support =
     webkit: navigator.userAgent.indexOf('WebKit') > 0
     gecko: navigator.userAgent.indexOf('Firefox') > 0
-    ie: if isIE = navigator.userAgent.match(/MSIE\s([\d|\.]+)/) then parseFloat(isIE[1], 10) else false
-
-  # Provide global method to initialize.
-  #
-  # This is the standard means to instantiate Mercury Editor. If you need more custom behavior check the configuration,
-  # and if that doesn't suit your needs, feel free to instantiate the desired editor yourself.
-  #
-  @init = (options = {}) =>
-    return if @initialized
-    @initialized = true
-    new @[@config('interface:editor')](options)
+    trident: navigator.userAgent.indexOf('MSIE') > 0
+    ie10: if isIE = navigator.userAgent.match(/MSIE\s([\d|\.]+)/) then parseFloat(isIE[1], 10) else false
+  @support.wysiwyg = (document.designMode) &&                                    # we have designMode
+                     (!@support.trident || @support.ie10) &&                     # we're in IE10+
+                     (window.rangy && window.rangy.supported)                    # rangy is loaded and supported
 
 initialize.call(@MockMercury || @Mercury)

@@ -22,10 +22,31 @@ describe "Mercury", ->
     expect( Klass.Module.extend ).calledWith(Klass.Logger)
 
   it "detects various browser for support purposes", ->
-    expect( Klass.support ).to.have.keys(['webkit', 'gecko', 'ie'])
+    expect( Klass.support ).to.have.keys(['webkit', 'gecko', 'trident', 'ie10', 'wysiwyg'])
 
   it "defines the .init method", ->
     expect( Klass.init ).to.be.a('function')
+
+  describe ".init", ->
+
+    beforeEach ->
+      Klass.initialized = false
+      spyOn(Klass, 'Editor')
+      Klass.config = stub().returns('Editor')
+
+    it "sets @initialized", ->
+      Klass.init(foo: 'bar')
+      expect( Klass.initialized ).to.be.true
+
+    it "instantiated the editor that's configured", ->
+      Klass.init(foo: 'bar')
+      expect( Klass.Editor ).calledWith(foo: 'bar')
+
+    it "does nothing if already initialized", ->
+      Klass.initialized = true
+      Klass.init()
+      expect( Klass.Editor ).not.called
+
 
   describe ".configure", ->
 
@@ -58,24 +79,3 @@ describe "Mercury", ->
         Klass.one.yieldsOn(Klass)
         Klass.configure('foo:bar', foo: 'bar')
         expect( Klass.Config.set ).calledWith('foo:bar', true, foo: 'bar')
-
-
-  describe ".init", ->
-
-    beforeEach ->
-      Klass.initialized = false
-      spyOn(Klass, 'Editor')
-      Klass.config = stub().returns('Editor')
-
-    it "sets @initialized", ->
-      Klass.init(foo: 'bar')
-      expect( Klass.initialized ).to.be.true
-
-    it "instantiated the editor that's configured", ->
-      Klass.init(foo: 'bar')
-      expect( Klass.Editor ).calledWith(foo: 'bar')
-
-    it "does nothing if already initialized", ->
-      Klass.initialized = true
-      Klass.init()
-      expect( Klass.Editor ).not.called

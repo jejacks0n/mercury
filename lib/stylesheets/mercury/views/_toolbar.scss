@@ -164,26 +164,3 @@
     }
   }
 }
-
-/*
- * Mercury.Toolbar: Developer Toolbar
- *----------------------------------------------------------------------------*/
-#mercury .mercury-toolbar .mercury-toolbar-development-collection {
-  position: fixed;
-  z-index: 10000;
-  right: 10px;
-  bottom: 30px;
-  border: 1px solid #fff;
-  border-radius: 5px;
-  color: #fff;
-  background: rgba(0, 0, 0, .7);
-  padding: 10px;
-  margin: 0;
-  list-style: none;
-  li {
-    cursor: pointer;
-    &:hover {
-      color: $primary_color;
-    }
-  }
-}

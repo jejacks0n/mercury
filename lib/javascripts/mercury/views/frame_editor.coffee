@@ -7,7 +7,9 @@ class Mercury.FrameEditor extends Mercury.Editor
 
   initialize: ->
     @frame = $(@frame).addClass('mercury-frame-editor-frame')        # get the iframe and set the class
-    return super unless @frame.length                                # fall back gracefully
+    unless @frame.length                                             # fall back gracefully
+      @initialized = true
+      return super
 
 
   initializeFrame: ->

@@ -1,9 +1,8 @@
 @JST ||= {}
-JST['/mercury/templates/toolbar'] = (scope) ->
+JST['/mercury/templates/developer-toolbar'] = (scope) ->
   """
-  <ul class="mercury-toolbar-development-collection">
+  <ul class="mercury-developer-toolbar">
     <li data-action="interface">toggle interface</li>
-    <li data-action="direction">custom action (toggle rtl/ltr)</li>
     <hr/>
     <li data-action="block" data-value="none">none</li>
     <li data-action="block" data-value="h1">h1</li>
@@ -24,7 +23,7 @@ JST['/mercury/templates/toolbar'] = (scope) ->
     <li data-action="html" data-value="jquery">html (with jQuery)</li>
     <hr/>
     <li data-action="link" data-value='{"url": "https://github.com/jejacks0n/mercury", "text": "Project Home"}'>link</li>
-    <li data-action="image" data-value='{"url": "http://goo.gl/UWYSd", "text": "Test Image"}'>image</li>
+    <li data-action="image" data-value='{"url": "http://goo.gl/sZb1K", "text": "Test Image"}'>image</li>
     <hr/>
     <li><input type="text"/></li>
   </ul>

@@ -1,7 +1,6 @@
 # Templates (at the top so the can be removed/changed).
 #
 #= require mercury/templates/statusbar
-#= require mercury/templates/toolbar
 #= require mercury/templates/uploader
 #
 # Core library / utility.

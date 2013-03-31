@@ -79,6 +79,8 @@ initialize = ->
   #
   @support =
     webkit: navigator.userAgent.indexOf('WebKit') > 0
+    safari: navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1
+    chrome: navigator.userAgent.indexOf('Chrome') > 0
     gecko: navigator.userAgent.indexOf('Firefox') > 0
     trident: navigator.userAgent.indexOf('MSIE') > 0
     ie10: if isIE = navigator.userAgent.match(/MSIE\s([\d|\.]+)/) then parseFloat(isIE[1], 10) else false

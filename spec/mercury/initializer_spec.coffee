@@ -22,7 +22,7 @@ describe "Mercury", ->
     expect( Klass.Module.extend ).calledWith(Klass.Logger)
 
   it "detects various browser for support purposes", ->
-    expect( Klass.support ).to.have.keys(['webkit', 'gecko', 'trident', 'ie10', 'wysiwyg'])
+    expect( Klass.support ).to.have.keys(['webkit', 'gecko', 'trident', 'chrome', 'safari', 'ie10', 'wysiwyg'])
 
   it "defines the .init method", ->
     expect( Klass.init ).to.be.a('function')

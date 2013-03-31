@@ -20,10 +20,12 @@ class Mercury.Toolbar extends Mercury.View
 
   hide: ->
     @el.css(top: -@el.height())
+    @delay(250, => @el.hide())
 
 
   show: ->
-    @el.css(top: 0)
+    @el.show()
+    @delay(1, => @el.css(top: 0))
 
 
   onRegionFocus: (region) ->

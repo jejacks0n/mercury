@@ -18,13 +18,13 @@ module Mercury
     config.assets.debug = true
 
     config.assets.paths = []
-    #config.assets.paths << 'distro'
     config.assets.paths << 'lib/dependencies'
     config.assets.paths << 'lib/javascripts'
     config.assets.paths << 'lib/stylesheets'
     config.assets.paths << 'lib/fonts'
 
     config.assets.paths << 'uploads'
+    config.assets.paths << 'distro'
   end
 
   Teabag.setup do |config|

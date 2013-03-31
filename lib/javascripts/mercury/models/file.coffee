@@ -12,7 +12,7 @@ class Mercury.Model.File extends Mercury.Model
       name : @file.name
       type : @file.type
       size : @file.size
-      url  : null
+      url  : @file.url || null
 
 
   validate: ->

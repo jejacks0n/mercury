@@ -28,6 +28,8 @@ describe "Mercury.Model.File", ->
       expect( subject.get('type') ).to.eq('image/jpeg')
       expect( subject.get('size') ).to.eq(1024)
       expect( subject.get('url') ).to.be.null
+      subject = new Klass(url: '_url_')
+      expect( subject.get('url') ).to.eq('_url_')
 
 
   describe "#validate", ->

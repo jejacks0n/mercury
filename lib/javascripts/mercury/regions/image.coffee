@@ -14,6 +14,8 @@ Mercury.configure 'toolbars:image',
     alignTop:    ['Align Top']
     alignMiddle: ['Align Middle']
     alignBottom: ['Align Bottom']
+    alignNone:   ['Align None']
+
 
 class Mercury.Region.Image extends Mercury.Region
   @define 'Mercury.Region.Image', 'image'
@@ -21,7 +23,6 @@ class Mercury.Region.Image extends Mercury.Region
 
   @supported: true
 
-  toolbars: ['image']
   tag: 'img'
 
   events:
@@ -32,6 +33,10 @@ class Mercury.Region.Image extends Mercury.Region
       @attr('src')
     else
       @attr('src', value)
+
+
+  setAlignment: (alignment) ->
+    @el.data(align: alignment).attr(align: alignment)
 
 
   onMousedown: (e) ->
@@ -54,7 +59,28 @@ class Mercury.Region.Image extends Mercury.Region
       @handleAction('image', url: url)
 
 
-  actions:
+Mercury.Region.Image.addAction
 
-    file: (file) -> @value(file.get('url'))
-    image: (image) -> @value(image.get('url'))
+  alignLeft:   -> @setAlignment('left')
+  alignRight:  -> @setAlignment('right')
+  alignTop:    -> @setAlignment('top')
+  alignMiddle: -> @setAlignment('middle')
+  alignBottom: -> @setAlignment('bottom')
+  alignNone:   -> @setAlignment(null)
+
+  file: (file) -> @value(file.get('url'))
+  image: (image) -> @value(image.get('url'))
+
+  # todo: needs to be implemented
+  #crop: ->
+  #resize: ->
+
+
+Mercury.Region.Image.addContext
+
+  alignLeft:   -> @el.attr('align') == 'left'
+  alignRight:  -> @el.attr('align') == 'right'
+  alignTop:    -> @el.attr('align') == 'top'
+  alignMiddle: -> @el.attr('align') == 'middle'
+  alignBottom: -> @el.attr('align') == 'bottom'
+  alignNone:   -> !@el.attr('align')

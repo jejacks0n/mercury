@@ -8,12 +8,11 @@ slideshow.
 You can use the control panel to see thumbnails of each slide, to jump to a given slide, or to remove them. This example
 also takes into account undo/redo support using the keyboard or buttons.
 ###
-
 Mercury.configure 'toolbars:gallery',
   general:
     prev:       ['Previous Slide']
     next:       ['Next Slide']
-    delete:     ['Delete Slide']
+    remove:     ['Delete Slide']
     togglePlay: ['Play/Pause']
 
 class Mercury.Region.Gallery extends Mercury.Region
@@ -22,8 +21,7 @@ class Mercury.Region.Gallery extends Mercury.Region
 
   @supported: true
 
-  toolbars: ['gallery']
-  skipHistoryOn: ['undo', 'redo']
+  skipHistoryOn: ['undo', 'redo', 'next', 'prev', 'togglePlay']
 
   elements:
     controls: '.mercury-gallery-region-controls'
@@ -31,82 +29,76 @@ class Mercury.Region.Gallery extends Mercury.Region
     paginator: '.paginator'
 
   events:
-    'click .mercury-gallery-region-controls em': 'removeSlide'
-    'click .mercury-gallery-region-controls img': 'gotoSlide'
+    'click .mercury-gallery-region-controls li': 'gotoSlide'
 
-  build: ->
+  constructor: ->
+    super
     @speed ||= 3000
-    @index = 1
-    @append('<ul class="mercury-gallery-region-controls"></ul>')
-
+    @index = 0
+    @playing ?= true
     @refresh(true)
-    @delay(@speed, => @nextSlide())
 
 
   value: (value) ->
     if value == null || typeof(value) == 'undefined'
       el = $('<div>').html(@html())
       el.find('.mercury-gallery-region-controls').remove()
+      el.find('.slide').show()
+      el.find('.paginator').empty()
       return el.html()
     super
 
 
   refresh: (controls = false) ->
+    clearTimeout(@timeout)
     @images = @$('.slide').hide()
     @index = 1 if @index > @images.length
+    @index = @images.length if @index < 1
     @$(".slide:nth-child(#{@index})").show()
+    @refreshPaginator()
+    @refreshControls() if controls
+    @timeout = @delay(@speed, => @nextSlide()) if @playing
+
+
+  refreshPaginator: ->
     @paginator.html(Array(@images.length + 1).join('<span>&bull;</span>'))
     @paginator.find("span:nth-child(#{@index})").addClass('active')
-    @refreshControls() if controls
 
 
   refreshControls: ->
-    @controls.html('')
-    @addControlLink($(slide)) for slide in @images
+    @controls.remove()
+    @append('<ul class="mercury-gallery-region-controls"></ul>')
+    for slide in @images
+      src = $(slide).find('img').attr('src')
+      @controls.append($("""<li><img src="#{src}"/></li>"""))
     @controls.show() if @focused
 
 
-  addControlLink: (slide) ->
-    src = slide.find('img').attr('src')
-    @controls.append($("""<li><img src="#{src}"/><em>&times;</em></li>""").data(slide: slide))
+  prevSlide: ->
+    @index -= 1
+    @refresh()
 
 
   nextSlide: ->
     @index += 1
     @refresh()
-    @timeout = @delay(@speed, => @nextSlide())
 
 
   gotoSlide: (e) ->
-    clearTimeout(@timeout)
     @index = $(e.target).closest('li').prevAll('li').length + 1
     @refresh()
-    @timeout = @delay(@speed, => @nextSlide())
 
 
   appendSlide: (slide) ->
     @slides.append(slide)
-    @addControlLink(slide)
-    @refresh()
+    @refresh(true)
     @pushHistory()
     @trigger('focused')
 
 
-  removeSlide: (e) ->
-    el = $(e.target).closest('li')
-    slide = el.data('slide')
-    index = slide.prevAll('.slide').length + 1
-
-    slide.remove()
-    el.remove()
-
-    if index < @index
-      @index -= 1
-    else if index == @index
-      clearTimeout(@timeout)
-      @timeout = @delay(@speed, => @nextSlide())
-
-    @refresh()
+  removeSlide: ->
+    @$(".slide:nth-child(#{@index})").remove()
+    @refresh(true)
     @pushHistory()
 
 
@@ -141,3 +133,19 @@ class Mercury.Region.Gallery extends Mercury.Region
   onRedo: ->
     super
     @refresh(true)
+
+
+Mercury.Region.Gallery.addAction
+
+  prev:       -> @prevSlide()
+  next:       -> @nextSlide()
+  remove:     -> @removeSlide()
+  togglePlay: -> @playing = !@playing; @refresh()
+
+  # todo: needs to be implemented
+  # file: (file) ->
+
+
+Mercury.Region.Gallery.addContext
+
+  togglePlay: -> @playing

@@ -14,17 +14,14 @@ Mercury.configure 'toolbars:plain'
     italic:        ['Italicize']
     underline:     ['Underline']
 
+
 class Mercury.Region.Plain extends Mercury.Region
   @define 'Mercury.Region.Plain', 'plain'
   @include Mercury.Region.Modules.HtmlSelection
   @include Mercury.Region.Modules.SelectionValue
   @include Mercury.Region.Modules.ContentEditable
 
-  @supported: document.designMode &&                                      # we have designMode
-              (!Mercury.support.msie || Mercury.support.msie >= 10) &&    # we're in IE10+
-              (window.rangy && window.rangy.supported)                    # rangy is supported
-
-  toolbars: ['plain']
+  @supported: Mercury.support.wysiwyg
 
   events:
     'keydown': 'onKeyEvent'
@@ -68,10 +65,8 @@ class Mercury.Region.Plain extends Mercury.Region
     @pushHistory(e.keyCode)
 
 
-  actions:
+Mercury.Region.Plain.addAction
 
-    bold:      -> @toggleWrapSelectedWordsInClass('red')
-    italic:    -> @toggleWrapSelectedWordsInClass('highlight')
-    underline: -> @toggleWrapSelectedWordsInClass('blue')
-    link:      ->
-    character: ->
+  bold:      -> @toggleWrapSelectedWordsInClass('red')
+  italic:    -> @toggleWrapSelectedWordsInClass('highlight')
+  underline: -> @toggleWrapSelectedWordsInClass('blue')

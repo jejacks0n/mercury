@@ -63,6 +63,7 @@ Mercury.configure 'toolbars:html'
     rowIncrease:   ['Increase Cell Rows', title: 'Increase the cells rowspan']
     rowDecrease:   ['Decrease Cell Rows', title: 'Decrease the cells rowspan and add a new cell']
 
+
 class Mercury.Region.Html extends Mercury.Region
   @define 'Mercury.Region.Html', 'html'
   @include Mercury.Region.Modules.DropIndicator
@@ -70,11 +71,7 @@ class Mercury.Region.Html extends Mercury.Region
   @include Mercury.Region.Modules.SelectionValue
   @include Mercury.Region.Modules.ContentEditable
 
-  @supported: document.designMode &&                                      # we have designMode
-              (!Mercury.support.msie || Mercury.support.msie >= 10) &&    # we're in IE10+
-              (window.rangy && window.rangy.supported)                    # rangy is supported
-
-  toolbars: ['html']
+  @supported: Mercury.support.wysiwyg
 
   events:
     'keydown': 'onKeyEvent'
@@ -100,6 +97,7 @@ class Mercury.Region.Html extends Mercury.Region
 
 
   onPaste: (e) ->
+    e.preventDefault()
     console.debug('pasted', e)
 
 
@@ -122,53 +120,9 @@ class Mercury.Region.Html extends Mercury.Region
     @pushHistory(e.keyCode)
 
 
-  actions:
+Mercury.Region.Html.addAction
 
-    bold:          -> @toggleWrapSelectedWordsInClass('red')
-    italic:        -> @toggleWrapSelectedWordsInClass('highlight')
-    underline:     -> @toggleWrapSelectedWordsInClass('blue')
-    rule:          -> @replaceSelection('<hr/>')
-    link:          ->
-    table:         ->
-#    character:     ->
-#    notes:         ->
-#    style:         ->
-#    block:         ->
-#    color:         ->
-#    bgcolor:       ->
-#    strike:        ->
-#    subscript:     ->
-#    superscript:   ->
-#    justifyLeft:   ->
-#    justifyCenter: ->
-    justifyRight:  ->
-    justifyFull:   ->
-    unorderedList: ->
-    orderedList:   ->
-    indent:        ->
-    outdent:       ->
-    clean:         ->
-    edit:          ->
-    rowBefore:     ->
-    rowAfter:      ->
-    rowDelete:     ->
-    colBefore:     ->
-    colAfter:      ->
-    colDelete:     ->
-    sep1:          ->
-    colIncrease:   ->
-    colDecrease:   ->
-    rowIncrease:   ->
-    rowDecrease:   ->
-
-    file: (file) ->
-      action = if file.isImage() then 'image' else 'link'
-      @handleAction(action, url: file.get('url'), text: file.get('name'))
-
-
-
-
-    snippets: ->
-    save: ->
-    preview: ->
-    history: ->
+  bold:          -> @toggleWrapSelectedWordsInClass('red')
+  italic:        -> @toggleWrapSelectedWordsInClass('highlight')
+  underline:     -> @toggleWrapSelectedWordsInClass('blue')
+  rule:          -> @replaceSelection('<hr/>')

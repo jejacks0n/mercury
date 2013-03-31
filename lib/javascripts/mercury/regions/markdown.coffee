@@ -36,6 +36,7 @@ Mercury.configure 'toolbars:markdown'
   rules:
     rule:          ['Horizontal Rule', title: 'Insert a horizontal rule']
 
+
 class Mercury.Region.Markdown extends Mercury.Region
   @define 'Mercury.Region.Markdown', 'markdown'
   @include Mercury.Region.Modules.DropIndicator
@@ -44,8 +45,6 @@ class Mercury.Region.Markdown extends Mercury.Region
   @include Mercury.Region.Modules.TextSelection
 
   @supported: true
-
-  toolbars: ['markdown']
 
   wrappers:
     h1           : ['# ', ' #']
@@ -120,61 +119,71 @@ class Mercury.Region.Markdown extends Mercury.Region
       if val.match(/^(> )+./g) then @replaceSelection("\n#{match[0]}") else @replaceSelectedLine(exp, '\n')
 
 
-  actions:
+Mercury.Region.Markdown.addAction
 
-    # todo: add support for video and snippet
+  bold:        -> @toggleWrapSelectedWords('bold')
+  italic:      -> @toggleWrapSelectedWords('italic')
+  underline:   -> @toggleWrapSelectedWords('underline')
+  strike:      -> @toggleWrapSelectedWords('strike')
+  subscript:   -> @toggleWrapSelectedWords('sub')
+  superscript: -> @toggleWrapSelectedWords('sup')
+  rule:        -> @replaceSelectionWithParagraph('- - -')
+  indent:      -> @wrapSelectedParagraphs('blockquote')
+  outdent:     -> @unwrapSelectedParagraphs('blockquote')
 
-    bold:        -> @toggleWrapSelectedWords('bold')
-    italic:      -> @toggleWrapSelectedWords('italic')
-    underline:   -> @toggleWrapSelectedWords('underline')
-    strike:      -> @toggleWrapSelectedWords('strike')
-    subscript:   -> @toggleWrapSelectedWords('sub')
-    superscript: -> @toggleWrapSelectedWords('sup')
-    rule:        -> @replaceSelectionWithParagraph('- - -')
-    indent:      -> @wrapSelectedParagraphs('blockquote')
-    outdent:     -> @unwrapSelectedParagraphs('blockquote')
+  orderedList: ->
+    @unwrapSelectedParagraphs(wrapper) for wrapper in ['blockquote', 'unorderedList']
+    @wrapSelectedParagraphs('orderedList') unless @unwrapSelectedParagraphs('orderedList')
 
-    orderedList: ->
-      @unwrapSelectedParagraphs(wrapper) for wrapper in ['blockquote', 'unorderedList']
-      @wrapSelectedParagraphs('orderedList') unless @unwrapSelectedParagraphs('orderedList')
+  unorderedList: ->
+    @unwrapSelectedParagraphs(wrapper) for wrapper in ['blockquote', 'orderedList']
+    @wrapSelectedParagraphs('unorderedList') unless @unwrapSelectedParagraphs('unorderedList')
 
-    unorderedList: ->
-      @unwrapSelectedParagraphs(wrapper) for wrapper in ['blockquote', 'orderedList']
-      @wrapSelectedParagraphs('unorderedList') unless @unwrapSelectedParagraphs('unorderedList')
+  style: (value) ->
+    wrapper = if value.indexOf(':') > -1 then 'style' else 'class'
+    @unwrapSelectedWords(if wrapper == 'style' then 'class' else 'style')
+    @toggleWrapSelectedWords(@processWrapper(wrapper, [value]))
 
-    style: (value) ->
-      wrapper = if value.indexOf(':') > -1 then 'style' else 'class'
-      @unwrapSelectedWords(if wrapper == 'style' then 'class' else 'style')
-      @toggleWrapSelectedWords(@processWrapper(wrapper, [value]))
+  html: (html) ->
+    @replaceSelection(html = (html.get && html.get(0) || html).outerHTML || html)
 
-    html: (html) ->
-      @replaceSelection(html = (html.get && html.get(0) || html).outerHTML || html)
+  block: (format) ->
+    if format == 'blockquote'
+      @unwrapSelectedParagraphs(wrapper) for wrapper in ['orderedList', 'unorderedList']
+      @handleAction('indent') unless @unwrapSelectedParagraphs('blockquote')
+      return
+    if format == 'pre' || format == 'paragraph'
+      @unwrapSelectedParagraphs('pre', all: true)
+      return @wrapSelectedParagraphs(format, all: true) if @wrappers[format]
+    @unwrapSelectedLines(wrapper) for wrapper in @blocks
+    @wrapSelectedLines(format) if @wrappers[format]
 
-    block: (format) ->
-      if format == 'blockquote'
-        @unwrapSelectedParagraphs(wrapper) for wrapper in ['orderedList', 'unorderedList']
-        @handleAction('indent') unless @unwrapSelectedParagraphs('blockquote')
-        return
-      if format == 'pre' || format == 'paragraph'
-        @unwrapSelectedParagraphs('pre', all: true)
-        return @wrapSelectedParagraphs(format, all: true) if @wrappers[format]
-      @unwrapSelectedLines(wrapper) for wrapper in @blocks
-      @wrapSelectedLines(format) if @wrappers[format]
+  character: (html) ->
+    @handleAction('html', html)
 
-    character: (html) ->
-      @handleAction('html', html)
+  table: (table) ->
+    @handleAction('html', table.get('html'))
 
-    table: (table) ->
-      @handleAction('html', table.get('html'))
+  file: (file) ->
+    action = if file.isImage() then 'image' else 'link'
+    @handleAction(action, url: file.get('url'), text: file.get('name'))
 
-    file: (file) ->
-      action = if file.isImage() then 'image' else 'link'
-      @handleAction(action, url: file.get('url'), text: file.get('name'))
+  link: (link) ->
+    text = link.get('text')
+    @wrapSelected(@processWrapper('link', [link.get('url'), text]), text: text, select: 'end')
 
-    link: (link) ->
-      text = link.get('text')
-      @wrapSelected(@processWrapper('link', [link.get('url'), text]), text: text, select: 'end')
+  image: (image) ->
+    text = image.get('text')
+    @wrapSelected(@processWrapper('image', [image.get('url'), text]), text: text, select: 'end')
 
-    image: (image) ->
-      text = image.get('text')
-      @wrapSelected(@processWrapper('image', [image.get('url'), text]), text: text, select: 'end')
+
+Mercury.Region.Markdown.addContext
+
+  bold:          -> @isWithinToken('bold')
+  italic:        -> @isWithinToken('italic')
+  underline:     -> @isWithinToken('underline')
+  strike:        -> @isWithinToken('strike')
+  subscript:     -> @isWithinToken('sub')
+  superscript:   -> @isWithinToken('sup')
+  unorderedList: -> @firstLineMatches(/^(> )*- /)
+  orderedList:   -> @firstLineMatches(/^(> )*\d+\./)

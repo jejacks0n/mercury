@@ -41,6 +41,18 @@ Mercury.Region.Modules.TextSelection =
     @setSelection(sel)
 
 
+  isWithinToken: (wrapper) ->
+    [fix, sel] = @getTokenAndSelection(wrapper)
+    exp = @expandSelectionToTokens(sel, fix)
+    return true if exp.cleaned
+
+
+  firstLineMatches: (matcher) ->
+    sel = @getSelection()
+    exp = @expandSelectionToLines(sel)
+    return true if exp.text.match(matcher)
+
+
   # ---------------------------------------------------------------------------
   # Selection replacements
   # ---------------------------------------------------------------------------

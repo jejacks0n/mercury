@@ -44,6 +44,7 @@ describe "Mercury.Statusbar", ->
   describe "#show", ->
 
     it "set css bottom to 0", ->
+      spyOn(subject, 'delay').yieldsOn(subject)
       subject.el.css(bottom: 42)
       subject.show()
       expect( subject.el.css('bottom') ).to.eq('0px')

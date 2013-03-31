@@ -83,7 +83,7 @@ initialize = ->
     chrome: navigator.userAgent.indexOf('Chrome') > 0
     gecko: navigator.userAgent.indexOf('Firefox') > 0
     trident: navigator.userAgent.indexOf('MSIE') > 0
-    ie10: if isIE = navigator.userAgent.match(/MSIE\s([\d|\.]+)/) then parseFloat(isIE[1], 10) else false
+    ie10: if isIE = navigator.userAgent.match(/MSIE\s([\d|\.]+)/) then parseFloat(isIE[1], 10) >= 10 else false
   @support.wysiwyg = (document.designMode) &&                                    # we have designMode
                      (!@support.trident || @support.ie10) &&                     # we're in IE10+
                      (window.rangy && window.rangy.supported)                    # rangy is loaded and supported

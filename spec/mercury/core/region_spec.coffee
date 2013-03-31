@@ -35,15 +35,19 @@ describe "Mercury.Region", ->
       expect( Klass.className ).to.eq('TestRegion')
       expect( Klass.type ).to.eq('_test_')
 
+    it "sets the @logPrefix", ->
+      Klass.define('TestRegion')
+      expect( Klass.logPrefix ).to.eq('TestRegion:')
+      expect( Klass::logPrefix ).to.eq('TestRegion:')
+
     it "merges actions with prototype.actions", ->
       Klass::actions = foo: 'bar'
       Klass.define('TestRegion', '_test_', bar: 'baz')
       expect( Klass::actions ).to.eql(foo: 'bar', bar: 'baz')
 
-    it "sets the @logPrefix", ->
-      Klass.define('TestRegion')
-      expect( Klass.logPrefix ).to.eq('TestRegion:')
-      expect( Klass::logPrefix ).to.eq('TestRegion:')
+    it "defaults the toolbars based on @type", ->
+      Klass.define('TestRegion', '_test_', bar: 'baz')
+      expect( Klass::toolbars ).to.eql(['_test_'])
 
     it "calls .off", ->
       spyOn(Klass, 'off')
@@ -82,9 +86,33 @@ describe "Mercury.Region", ->
   describe ".addAction", ->
 
     it "adds the action with a handler", ->
-      handler = spy()
-      Klass.addAction('foo', handler)
-      expect( Klass.actions.foo ).to.eq(handler)
+      Klass.addAction('foo', '_handler_')
+      expect( Klass.actions.foo ).to.eq('_handler_')
+
+    it "allows passing an object of actions/handlers", ->
+      Klass.addAction(foo: '_handler_')
+      expect( Klass.actions.foo ).to.eq('_handler_')
+
+    it "merges the actions with the existing actions", ->
+      Klass.addAction(foo: '_foo_handler_')
+      Klass.addAction(bar: '_bar_handler_')
+      expect( Klass.actions ).to.eql(foo: '_foo_handler_', bar: '_bar_handler_')
+
+
+  describe ".addContext", ->
+
+    it "adds the context with a handler", ->
+      Klass.addContext('foo', '_handler_')
+      expect( Klass.context.foo ).to.eq('_handler_')
+
+    it "allows passing an object of actions/handlers", ->
+      Klass.addContext(foo: '_handler_')
+      expect( Klass.context.foo ).to.eq('_handler_')
+
+    it "merges the contexts with existing contexts", =>
+      Klass.addContext(foo: '_foo_handler_')
+      Klass.addContext(bar: '_bar_handler_')
+      expect( Klass.context ).to.eql(foo: '_foo_handler_', bar: '_bar_handler_')
 
 
   describe ".addToolbar", ->
@@ -111,6 +139,12 @@ describe "Mercury.Region", ->
       expect( subject.options.previewing ).to.be.true
       expect( subject.options.foo ).to.eq('bar')
       expect( subject.foo ).to.eq('bar')
+
+    it "merges context with constructor.context", ->
+      Klass.context = foo: 'bar'
+      Klass::context = bar: 'baz'
+      subject = new Klass('<div>')
+      expect( subject.context ).to.eql(foo: 'bar', bar: 'baz')
 
     it "calls #beforeBuild if it's defined", ->
       Klass::beforeBuild = spy()
@@ -212,6 +246,28 @@ describe "Mercury.Region", ->
       spyOn(Mercury, 'trigger')
       subject.trigger('foo')
       expect( Mercury.trigger ).calledWith('region:foo', subject)
+
+
+  describe "#hasAction", ->
+
+    it "returns true if an action is defined", ->
+      subject.actions.foo = '_action_'
+      expect( subject.hasAction('foo') ).to.be.true
+
+    it "returns false if an action isn't defined", ->
+      expect( subject.hasAction('foo') ).to.be.false
+
+
+  describe "#hasContext", ->
+
+    it "returns false if a context isn't defined", ->
+      expect( subject.hasContext('foo') ).to.be.false
+
+    it "returns the result of the context method converted to a boolean", ->
+      subject.context.foo = -> return 'foo'
+      expect( subject.hasContext('foo') ).to.be.true
+      subject.context.foo = -> return false
+      expect( subject.hasContext('foo') ).to.be.false
 
 
   describe "#handleAction", ->
@@ -519,6 +575,7 @@ describe "Mercury.Region", ->
     beforeEach ->
       spyOn(subject, 'bindFocusEvents')
       spyOn(subject, 'bindKeyEvents')
+      spyOn(subject, 'bindMouseEvents')
       spyOn(subject, 'bindDropEvents')
 
     it "binds to the global 'action' event", ->
@@ -556,6 +613,10 @@ describe "Mercury.Region", ->
     it "calls #bindKeyEvents", ->
       subject.bindDefaultEvents()
       expect( subject.bindKeyEvents ).called
+
+    it "calls #bindMouseEvents", ->
+      subject.bindDefaultEvents()
+      expect( subject.bindMouseEvents ).called
 
     it "calls #bindDropEvents if there's an #onDropFile/#opDropItem method defined", ->
       subject.bindDefaultEvents()
@@ -623,17 +684,30 @@ describe "Mercury.Region", ->
 
   describe "#bindKeyEvents", ->
 
+    beforeEach ->
+      @events = {}
+      spyOn(subject, 'delegateEvents', => @events = arguments[1])
+
     it "calls #delegateEvents with the expected events on @focusable", ->
-      spyOn(subject, 'delegateEvents')
       subject.bindKeyEvents()
       expect( subject.delegateEvents ).calledWith subject.focusable,
+        keyup: sinon.match.func
         keydown: sinon.match.func
+
+    describe "keyup", ->
+
+      beforeEach ->
+        subject.bindKeyEvents()
+        @e = {}
+
+      it "triggers an update event", ->
+        spyOn(subject, 'trigger')
+        @events.keyup(@e)
+        expect( subject.trigger ).calledWith('update')
 
     describe "keydown", ->
 
       beforeEach ->
-        @events = {}
-        spyOn(subject, 'delegateEvents', => @events = arguments[1])
         spyOn(subject, 'handleAction')
         subject.bindKeyEvents()
         @e = metaKey: true, keyCode: 90, shiftKey: false, preventDefault: spy()
@@ -657,10 +731,36 @@ describe "Mercury.Region", ->
         expect( subject.handleAction ).not.called
 
 
-  describe "#bindDropEvents", ->
+  describe "#bindMouseEvents", ->
+
+    beforeEach ->
+      @events = {}
+      spyOn(subject, 'delegateEvents', => @events = arguments[1])
 
     it "calls #delegateEvents with the expected events on @focusable", ->
-      spyOn(subject, 'delegateEvents')
+      subject.bindMouseEvents()
+      expect( subject.delegateEvents ).calledWith subject.focusable,
+        mouseup: sinon.match.func
+
+    describe "mouseup", ->
+
+      beforeEach ->
+        subject.bindMouseEvents()
+        @e = {}
+
+      it "triggers an update event", ->
+        spyOn(subject, 'trigger')
+        @events.mouseup(@e)
+        expect( subject.trigger ).calledWith('update')
+
+
+  describe "#bindDropEvents", ->
+
+    beforeEach ->
+      @events = {}
+      spyOn(subject, 'delegateEvents', => @events = arguments[1])
+
+    it "calls #delegateEvents with the expected events on @focusable", ->
       subject.bindDropEvents()
       expect( subject.delegateEvents ).calledWith subject.focusable,
         dragenter: sinon.match.func
@@ -670,8 +770,6 @@ describe "Mercury.Region", ->
     describe "drop", ->
 
       beforeEach ->
-        @events = {}
-        spyOn(subject, 'delegateEvents', => @events = arguments[1])
         subject.bindDropEvents()
         subject.onDropFile = spy()
         @e = originalEvent: {dataTransfer: {files: ['_file1_', '_file2_']}}, preventDefault: spy()

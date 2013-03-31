@@ -38,6 +38,7 @@ class Mercury.Region extends Mercury.View
   @define: (@className, @type, actions = {}) ->
     @logPrefix = @::logPrefix = "#{@className}:"
     @::actions = $.extend(@::actions, actions)
+    @::toolbars = [type]
     @off()
     @
 
@@ -60,9 +61,24 @@ class Mercury.Region extends Mercury.View
   # be tied to a button, or something else.
   #
   @addAction: (action, handler) ->
-    obj = {}
-    obj[action] = handler
-    @actions = $.extend(@actions || {}, obj)
+    if typeof(action) == 'object'
+      actions = action
+    else
+      actions = {}
+      actions[action] = handler
+    @actions = $.extend(@actions || {}, actions)
+
+
+  # Exposes the ability to add context to the region type. This allows you to provide your own custom context behavior
+  # that may be tied to a button, or something else.
+  #
+  @addContext: (context, handler) ->
+    if typeof(context) == 'object'
+      contexts = context
+    else
+      contexts = {}
+      contexts[context] = handler
+    @context = $.extend(@context || {}, contexts)
 
 
   # Exposes the ability to add actions to the region type. This allows you to provide your own custom actions that may
@@ -82,6 +98,8 @@ class Mercury.Region extends Mercury.View
       return false
 
     @options = $.extend({}, JSON.parse(@el.attr(@config('regions:options')) || '{}'), options) if @el.data
+    @context = $.extend({}, @constructor.context, @context)
+    @actions ||= {}
 
     @beforeBuild?()                                        # call the beforeBuild method if it's defined
     super(@options)                                        # let the view do it's thing
@@ -117,6 +135,20 @@ class Mercury.Region extends Mercury.View
   trigger: (event) ->
     super
     Mercury.trigger("region:#{event}", @)
+
+
+  # Allows buttons and other things to ask if a region handles a given action.
+  #
+  hasAction: (action) ->
+    !!@actions[action]
+
+
+  # Allows buttons and other things to ask if a region has a given context. Contexts are things like if the cursor is
+  # within a bold area -- the context method should return a boolean.
+  #
+  hasContext: (context) ->
+    return false unless @context[context]
+    return !!@context[context].call(@, context)
 
 
   # Handles action events by taking the first argument, which should be the action, and passes through to the action
@@ -289,6 +321,7 @@ class Mercury.Region extends Mercury.View
     # bind various events to the focusable element (which defaults to @el)
     @bindFocusEvents()                                          # binds focus/blur events
     @bindKeyEvents()                                            # binds undo/redo events
+    @bindMouseEvents()                                          # binds various mouse events
     @bindDropEvents() if @onDropFile || @onDropItem             # binds drag/drop events for file/item dropping
 
 
@@ -310,10 +343,18 @@ class Mercury.Region extends Mercury.View
   #
   bindKeyEvents: ->
     @delegateEvents @focusable,
+      keyup: => @trigger('update')
       keydown: (e) =>
         return unless e.metaKey && e.keyCode == 90
         e.preventDefault()
         if e.shiftKey then @handleAction('redo') else @handleAction('undo')
+
+
+  # Binds to mouse events on the focusable element so we can handle more complex interactions.
+  #
+  bindMouseEvents: ->
+    @delegateEvents @focusable,
+      mouseup: => @trigger('update')
 
 
   # Binds the drag/drop events to handle files that have been dragged into the browser and dropped on our focusable

@@ -67,7 +67,8 @@ describe "Mercury.Regions.Snippets", ->
       it "destroys the sortable", ->
         spy = spyOn($.fn, 'sortable').andCallFake(=>)
         Mercury.trigger('unfocus:regions')
-        expect(spy.argsForCall[0]).toEqual(['destroy'])
+        # expect(spy.argsForCall[0]).toEqual(['destroy'])
+        expect(spy.argsForCall[0]).toEqual(['disable'])
 
       it "triggers the region:blurred event", ->
         spy = spyOn(Mercury, 'trigger').andCallThrough()
@@ -97,7 +98,8 @@ describe "Mercury.Regions.Snippets", ->
       it "destroys the sortable", ->
         spy = spyOn($.fn, 'sortable').andCallFake(=>)
         Mercury.trigger('focus:window')
-        expect(spy.argsForCall[0]).toEqual(['destroy'])
+        # expect(spy.argsForCall[0]).toEqual(['destroy'])
+        expect(spy.argsForCall[0]).toEqual(['disable'])
 
       it "triggers the region:blurred event", ->
         spy = spyOn(Mercury, 'trigger').andCallThrough()
@@ -208,7 +210,8 @@ describe "Mercury.Regions.Snippets", ->
         spy = spyOn($.fn, 'sortable').andCallFake(=>)
         @region.togglePreview()
         expect(spy.callCount).toEqual(1)
-        expect(spy.argsForCall[0]).toEqual(['destroy'])
+        # expect(spy.argsForCall[0]).toEqual(['destroy'])
+        expect(spy.argsForCall[0]).toEqual(['disable'])
 
       it "removes the focus class", ->
         @regionElement.addClass('focus')
@@ -242,29 +245,69 @@ describe "Mercury.Regions.Snippets", ->
   describe "#makeSortable", ->
 
     beforeEach ->
-      @region = new Mercury.Regions.Snippets(@regionElement, window)
       @sortableSpy = spyOn($.fn, 'sortable')
-
-    it "makes the snippets sortable", ->
-      @sortableSpy.andCallFake((arg) => return @region.element if arg == 'destroy' )
-      @region.makeSortable()
-      expect(@sortableSpy.callCount).toEqual(2)
-      expect(@sortableSpy.argsForCall[0]).toEqual(['destroy'])
-      expect(@sortableSpy.argsForCall[1][0]['document']).toEqual(@region.document)
-
-    it "triggers the hide:toolbar event at the end of the dragging", ->
+      
+    it "makes snippets sortable on creation", ->
+      @sortableSpy.andCallFake(=>)
+      @region = new Mercury.Regions.Snippets(@regionElement, window)
+      expect(@sortableSpy.callCount).toEqual(1)
+      expect(@sortableSpy.argsForCall[0][0]['document']).toEqual(@region.document)
+      
+    it "enables sortable if previously disabled", ->
+      @sortableSpy.andCallThrough()
+      @region = new Mercury.Regions.Snippets(@regionElement, window) # call 1
+      expect(@sortableSpy.callCount).toEqual(1)
+      expect(@region.element.hasClass('ui-sortable')).toBe(true)
+      @region.disableSortable() # call 2
+      expect(@region.element.hasClass('ui-sortable-disabled')).toBe(true)
+      @region.makeSortable() # call 3
+      expect(@sortableSpy.argsForCall[2]).toEqual(['enable'])
+      
+    it "never stacks sortable", ->
+      @sortableSpy.andCallThrough()
+      @region = new Mercury.Regions.Snippets(@regionElement, window) # call 1
+      expect(@region.element.hasClass('ui-sortable')).toBe(true)
+      @region.makeSortable() for [1..3] # call 2-4
+      expect(@sortableSpy.argsForCall[0][0]['document']).toEqual(@region.document)
+      expect(@sortableSpy.argsForCall[1]).toEqual(['enable'])
+      expect(@sortableSpy.argsForCall[2]).toEqual(['enable'])
+      expect(@sortableSpy.argsForCall[3]).toEqual(['enable'])
+      
+    it "triggers the hide:toolbar event at the end of dragging", ->
       spy = spyOn(Mercury, 'trigger').andCallFake(=>)
-      @sortableSpy.andCallFake((arg) => if arg == 'destroy' then return @region.element else arg.beforeStop())
-      @region.makeSortable()
+      @sortableSpy.andCallFake((arg) => arg.beforeStop())
+      @region = new Mercury.Regions.Snippets(@regionElement, window)
       expect(spy.callCount).toEqual(1)
       expect(spy.argsForCall[0]).toEqual(['hide:toolbar', {type: 'snippet', immediately: true}])
-
+      
     it "pushes to the history after dragging", ->
+      @sortableSpy.andCallFake((arg) => arg.stop())
+      @region = new Mercury.Regions.Snippets(@regionElement, window)
       spy = spyOn(Mercury.Regions.Snippets.prototype, 'pushHistory').andCallFake(=>)
-      spyOn(window, 'setTimeout').andCallFake((callback, timeout)=> callback())
-      @sortableSpy.andCallFake((arg) => if arg == 'destroy' then return @region.element else arg.stop())
+      spyOn(window, 'setTimeout').andCallFake((callback, timeout) => callback())
       @region.makeSortable()
       expect(spy.callCount).toEqual(1)
+      
+      
+  describe "#disableSortable", ->
+    
+    beforeEach ->
+      @sortableSpy = spyOn($.fn, 'sortable')
+    
+    it "does nothing if sortable has not been initialized", ->
+      @sortableSpy.andCallFake(=>)
+      @region = new Mercury.Regions.Snippets(@regionElement, window) # call 1
+      expect(@region.element.hasClass('ui-sortable')).toBe(false)
+      @region.disableSortable() # should not add to call
+      expect(@sortableSpy.callCount).toEqual(1)
+      
+    it "disables sortable if sortable is initialized", ->
+      @sortableSpy.andCallThrough()
+      @region = new Mercury.Regions.Snippets(@regionElement, window) # call 1
+      expect(@region.element.hasClass('ui-sortable')).toBe(true)
+      @region.disableSortable() # should add to call
+      expect(@sortableSpy.callCount).toEqual(2)
+      expect(@region.element.hasClass('ui-sortable-disabled')).toBe(true)
 
 
 

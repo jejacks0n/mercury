@@ -29,6 +29,10 @@ class Mercury.Region.Image extends Mercury.Region
   events:
     'mousedown': 'onMousedown'
 
+  init: ->
+    @data(align: @attr('align') || null)
+
+
   value: (value) ->
     if value == null || typeof(value) == 'undefined'
       @attr('src')
@@ -36,8 +40,9 @@ class Mercury.Region.Image extends Mercury.Region
       @attr('src', value)
 
 
-  setAlignment: (alignment) ->
-    @el.data(align: alignment).attr(align: alignment)
+  setData: (obj) ->
+    super
+    @attr(align: @data('align'))
 
 
   onMousedown: (e) ->
@@ -55,25 +60,21 @@ class Mercury.Region.Image extends Mercury.Region
 
 Mercury.Region.Image.addAction
 
-  alignLeft:   -> @setAlignment('left')
-  alignRight:  -> @setAlignment('right')
-  alignTop:    -> @setAlignment('top')
-  alignMiddle: -> @setAlignment('middle')
-  alignBottom: -> @setAlignment('bottom')
-  alignNone:   -> @setAlignment(null)
-
-  file: (file) ->
-    @handleAction('image', url: file.get('url')) if file.isImage()
-
-  image: (image) ->
-    @value(image.get('url'))
+  alignLeft:   -> @data(align: 'left')
+  alignRight:  -> @data(align: 'right')
+  alignTop:    -> @data(align: 'top')
+  alignMiddle: -> @data(align: 'middle')
+  alignBottom: -> @data(align: 'bottom')
+  alignNone:   -> @data(align: null)
+  file: (file) -> @handleAction('image', url: file.get('url')) if file.isImage()
+  image: (img) -> @value(img.get('url'))
 
 
 Mercury.Region.Image.addContext
 
-  alignLeft:   -> @el.attr('align') == 'left'
-  alignRight:  -> @el.attr('align') == 'right'
-  alignTop:    -> @el.attr('align') == 'top'
-  alignMiddle: -> @el.attr('align') == 'middle'
-  alignBottom: -> @el.attr('align') == 'bottom'
-  alignNone:   -> !@el.attr('align')
+  alignLeft:   -> @data('align') == 'left'
+  alignRight:  -> @data('align') == 'right'
+  alignTop:    -> @data('align') == 'top'
+  alignMiddle: -> @data('align') == 'middle'
+  alignBottom: -> @data('align') == 'bottom'
+  alignNone:   -> !@data('align')

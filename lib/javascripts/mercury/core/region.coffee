@@ -197,9 +197,9 @@ class Mercury.Region extends Mercury.View
 
     clearTimeout(@historyTimeout)
     if pushNow
-      @pushStack(@valueForStack?() ? @value())
+      @pushStack(@toStack())
     else
-      @historyTimeout = @delay(2500, => @pushStack(@valueForStack?() ? @value()))
+      @historyTimeout = @delay(2500, => @pushStack(@toStack()))
 
 
   # Focuses the region, which will call focus on the element and an onFocus method if the subclass implements one. Used
@@ -234,10 +234,24 @@ class Mercury.Region extends Mercury.View
   # Delegate jQuery data.
   #
   data: (key, value) ->
-    if typeof(value) != 'undefined' && value != null
-      @el.data(key, value)
-    else
-      @el.data(key)
+    if typeof(key) == 'string' && arguments.length == 1 || arguments.length == 0
+      data = @el.data(key)
+      if arguments.length == 0
+        data = $.extend({}, data)
+        delete(data.region)
+        delete(data.mercury)
+      return data
+    obj = key
+    (obj = {}; obj[key] = value) if typeof(key) == 'string'
+    @setData(obj)
+    @el
+
+
+  # When setting data via the #data method, this is called. It's provided so it can be overridden and adjusted for when
+  # data is being set on the element.
+  #
+  setData: (obj) ->
+    @el.data(obj)
 
 
   # Finds and collect the snippets out of the content.
@@ -265,26 +279,47 @@ class Mercury.Region extends Mercury.View
   # Default undo behavior. Calls #value with whatever's previous in the stack.
   #
   onUndo: ->
-    @value(@undoStack())
+    @fromStack(@undoStack())
 
 
   # Default redo behavior. Calls #value with whatever's next in the stack.
   #
   onRedo: ->
-    @value(@redoStack())
+    @fromStack(@redoStack())
+
+
+  # Provides a mechinism for overriding what goes into the stack. By default this just returns the region serialized
+  # into JSON.
+  #
+  toStack: ->
+    @toJSON()
+
+
+  # Provides a mechinism for overriding how content comes out of the stack. By default it's assumed that it's the JSON
+  # serialized value.
+  #
+  fromStack: (val) ->
+    @fromJSON(val) if val
 
 
   # Serializes our content, type, any data, and snippets into an object.
   # Returns an object.
   #
   toJSON: ->
-    data = $.extend({}, @data())
-    delete data.region
     name: @name
     type: @constructor.type
     value: @value()
-    data: data
+    data: @data()
     snippets: @snippets()
+
+
+  # Deserializes content and any data into the region.
+  #
+  fromJSON: (json) ->
+    json = JSON.parse(json) if typeof(json) == 'string'
+    @value(json.value) if json.value
+    @data(json.data) if json.data
+    #@snippets(json.snippets)
 
 
   # Releases the instance and triggers a release event. Releasing a region doesn't remove the element, but does remove

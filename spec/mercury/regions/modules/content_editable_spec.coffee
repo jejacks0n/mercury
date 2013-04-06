@@ -132,7 +132,6 @@ describe "Mercury.Region.Modules.ContentEditable", ->
       subject.stack = [{}, {sel: 'foo', val: '_val_'}]
       expect( subject.stackEquality(sel: 'foo', val: '_val_') ).to.be.true
 
-
     it "returns false if the value doesn't match using JSON comparison", ->
       subject.stackPosition = 1
       subject.stack = [{}, {sel: 'bar', val: '_val_'}]

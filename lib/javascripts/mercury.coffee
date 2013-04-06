@@ -23,13 +23,14 @@ jQuery ->
 #
 # First, we add the buttons we want to add. We could do this in various ways, but this is one of the most straight
 # forward ways to accomplish it.
-Mercury.configure 'toolbars:html:custom', sep1: '-', direction: ['RTL/LTR', icon: '0']
+Mercury.configure 'toolbars:markdown:custom', sep1: '-', direction: ['RTL/LTR', icon: '0']
 
 # Then we add the action to the regions we want to understand it. You'll notice we're setting this property on the
 # region element itself, which isn't serialized on save, so we also put this into the data, which is saved.
-Mercury.Region.Html.addAction 'direction', ->
-  @direction = if @direction == 'rtl' then 'ltr' else 'rtl'
-  @el.data(direction: @direction).css(direction: @direction)
+Mercury.Region.Markdown.addContext 'direction', -> @el.data('direction') == 'rtl'
+Mercury.Region.Markdown.addAction 'direction', ->
+  direction = if @el.data('direction') == 'rtl' then 'ltr' else 'rtl'
+  @el.data(direction: direction).css(direction: direction)
 
 # For more advanced custom toolbar functionality you may consider adding a full toolbar and adding that toolbar to the
 # regions that you've added the custom behavior to.

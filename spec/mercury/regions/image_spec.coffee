@@ -21,6 +21,18 @@ describe "Mercury.Region.Image", ->
     expect( subject.events ).to.have.keys(['mousedown'])
 
 
+  describe "#init", ->
+
+    it "sets the data to whatever the align attribute is (or null)", ->
+      spyOn(subject, 'data')
+      subject.el.attr(align: 'foo')
+      subject.init()
+      expect( subject.data ).calledWith(align: 'foo')
+      subject.el.removeAttr('align')
+      subject.init()
+      expect( subject.data ).calledWith(align: null)
+
+
   describe "#value", ->
 
     it "sets the value if the value isn't null or undefined", ->
@@ -32,12 +44,19 @@ describe "Mercury.Region.Image", ->
       expect( subject.value() ).to.eq('/teabag/fixtures/image.gif')
 
 
-  describe "#setAlignment", ->
+  describe "#setData", ->
 
-    it "sets the data and align attribute", ->
-      subject.setAlignment('left')
-      expect( subject.el.data('align') ).to.eq('left')
-      expect( subject.el.attr('align') ).to.eq('left')
+    beforeEach ->
+      spyOn(subject, 'attr')
+
+    it "calls super", ->
+      spyOn(Klass.__super__, 'setData')
+      subject.setData()
+      expect( Klass.__super__.setData ).called
+
+    it "sets the align attribute", ->
+      subject.setData(align: 'left')
+      expect( subject.attr ).calledWith(align: 'left')
 
 
   describe "#onMousedown", ->
@@ -74,73 +93,47 @@ describe "Mercury.Region.Image", ->
       expect( subject.handleAction ).calledWith('file', '_file_')
 
 
-  describe "#onDropItem", ->
-
-    beforeEach ->
-      @e = preventDefault: spy()
-      @data = getData: -> '<img src="/teabag/fixtures/image.gif"><meta>'
-
-    it "prevents the default event", ->
-      subject.onDropItem(@e, @data)
-      expect( @e.preventDefault ).called
-
-    it "calls #focus", ->
-      spyOn(subject, 'focus')
-      subject.onDropItem(@e, @data)
-      expect( subject.focus ).called
-
-    it "calls #handleAction", ->
-      spyOn(subject, 'handleAction')
-      subject.onDropItem(@e, @data)
-      expect( subject.handleAction ).calledWith('image', url: '/teabag/fixtures/image.gif')
-
-    it "does nothing if there's no url", ->
-      @data.getData = -> null
-      subject.onDropItem(@e, @data)
-      expect( @e.preventDefault ).not.called
-
-
   describe "actions", ->
 
     beforeEach ->
       subject.focused = true
-      spyOn(subject, 'setAlignment')
+      spyOn(subject, 'data')
 
     describe "#alignLeft", ->
 
       it "calls setAlignment", ->
         subject.handleAction('alignLeft')
-        expect( subject.setAlignment ).calledWith('left')
+        expect( subject.data ).calledWith(align: 'left')
 
     describe "#alignRight", ->
 
       it "calls setAlignment", ->
         subject.handleAction('alignRight')
-        expect( subject.setAlignment ).calledWith('right')
+        expect( subject.data ).calledWith(align: 'right')
 
     describe "#alignTop", ->
 
       it "calls setAlignment", ->
         subject.handleAction('alignTop')
-        expect( subject.setAlignment ).calledWith('top')
+        expect( subject.data ).calledWith(align: 'top')
 
     describe "#alignMiddle", ->
 
       it "calls setAlignment", ->
         subject.handleAction('alignMiddle')
-        expect( subject.setAlignment ).calledWith('middle')
+        expect( subject.data ).calledWith(align: 'middle')
 
     describe "#alignBottom", ->
 
       it "calls setAlignment", ->
         subject.handleAction('alignBottom')
-        expect( subject.setAlignment ).calledWith('bottom')
+        expect( subject.data ).calledWith(align: 'bottom')
 
     describe "#alignNone", ->
 
       it "calls setAlignment", ->
         subject.handleAction('alignNone')
-        expect( subject.setAlignment ).calledWith(null)
+        expect( subject.data ).calledWith(align: null)
 
     describe "#file", ->
 
@@ -167,51 +160,51 @@ describe "Mercury.Region.Image", ->
     describe "#alignLeft", ->
 
       it "returns true when aligned left", ->
-        subject.el.attr(align: 'left')
+        subject.data(align: 'left')
         expect( subject.hasContext('alignLeft') ).to.be.true
 
       it "returns false when not aligned left", ->
-        subject.el.attr(align: 'right')
+        subject.data(align: 'right')
         expect( subject.hasContext('alignLeft') ).to.be.false
 
     describe "#alignRight", ->
 
       it "returns true when aligned right", ->
-        subject.el.attr(align: 'right')
+        subject.data(align: 'right')
         expect( subject.hasContext('alignRight') ).to.be.true
 
       it "returns false when not aligned right", ->
-        subject.el.attr(align: 'left')
+        subject.data(align: 'left')
         expect( subject.hasContext('alignRight') ).to.be.false
 
     describe "#alignTop", ->
 
       it "returns true when aligned top", ->
-        subject.el.attr(align: 'top')
+        subject.data(align: 'top')
         expect( subject.hasContext('alignTop') ).to.be.true
 
       it "returns false when not aligned top", ->
-        subject.el.attr(align: 'left')
+        subject.data(align: 'left')
         expect( subject.hasContext('alignTop') ).to.be.false
 
     describe "#alignMiddle", ->
 
       it "returns true when aligned middle", ->
-        subject.el.attr(align: 'middle')
+        subject.data(align: 'middle')
         expect( subject.hasContext('alignMiddle') ).to.be.true
 
       it "returns false when not aligned middle", ->
-        subject.el.attr(align: 'left')
+        subject.data(align: 'left')
         expect( subject.hasContext('alignMiddle') ).to.be.false
 
     describe "#alignBottom", ->
 
       it "returns true when aligned bottom", ->
-        subject.el.attr(align: 'bottom')
+        subject.data(align: 'bottom')
         expect( subject.hasContext('alignBottom') ).to.be.true
 
       it "returns false when not aligned bottom", ->
-        subject.el.attr(align: 'left')
+        subject.data(align: 'left')
         expect( subject.hasContext('alignBottom') ).to.be.false
 
     describe "#alignNone", ->
@@ -220,5 +213,5 @@ describe "Mercury.Region.Image", ->
         expect( subject.hasContext('alignNone') ).to.be.true
 
       it "returns false when not aligned bottom", ->
-        subject.el.attr(align: 'left')
+        subject.data(align: 'left')
         expect( subject.hasContext('alignNone') ).to.be.false

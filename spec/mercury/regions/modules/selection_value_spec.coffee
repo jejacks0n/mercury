@@ -14,29 +14,30 @@ describe "Mercury.Region.Modules.SelectionValue", ->
       @include Module
     subject = new Klass('<div id="foo">')
 
-  describe "#value", ->
+  describe "#toStack", ->
 
-    it "returns the value if no value was passed", ->
-      subject.html('_value_')
-      expect( subject.value() ).to.eq('_value_')
+    beforeEach ->
+      spyOn(subject, 'toJSON', -> '_json_')
 
-    describe "setting the value", ->
+    it "returns the expected object", ->
+      expect( subject.toStack() ).to.eql(val: '_json_', sel: undefined)
 
-      it "sets the html to the value", ->
-        subject.value('_value_')
-        expect( subject.html() ).to.eq('_value_')
-
-      it "can use an object to set the value and selection", ->
-        subject.setSerializedSelection = spy()
-        subject.value(val: '_value_', sel: {start: 1, end: 2})
-        expect( subject.setSerializedSelection ).calledWith(start: 1, end: 2)
-        expect( subject.html() ).to.eq('_value_')
+    it "includes the selection if possible", ->
+      subject.getSerializedSelection = -> '_selection_'
+      expect( subject.toStack() ).to.eql(val: '_json_', sel: '_selection_')
 
 
-  describe "#valueForStack", ->
+  describe "#fromStack", ->
 
-    it "returns the selection and value", ->
-      spyOn(subject, 'value', -> '_value_')
-      subject.getSerializedSelection = ->
-      spyOn(subject, 'getSerializedSelection', -> '1:2')
-      expect( subject.valueForStack() ).to.eql(sel: '1:2', val: '_value_')
+    beforeEach ->
+      spyOn(subject, 'fromJSON')
+
+    it "calls #fromJSON", ->
+      subject.fromStack(val: '_val_')
+      expect( subject.fromJSON ).calledWith('_val_')
+
+    it "calls #setSerializeSelection if there's a method and a selection", ->
+      subject.setSerializedSelection = spy()
+      subject.fromStack(val: '_val_', sel: '_sel_')
+      expect( subject.setSerializedSelection ).calledWith('_sel_')
+

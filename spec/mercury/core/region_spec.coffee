@@ -363,40 +363,32 @@ describe "Mercury.Region", ->
 
     beforeEach ->
       spyOn(subject, 'pushStack')
-      spyOn(subject, 'value', -> '_value_')
+      spyOn(subject, 'toStack', -> '_stack_')
 
     it "pushes to the stack", ->
       subject.pushHistory()
-      expect( subject.value ).called
-      expect( subject.pushStack ).calledWith('_value_')
-
-    it "pushes to the stack with valueForStack if it's defined", ->
-      subject.valueForStack = stub()
-      subject.valueForStack.returns('_value for stack_')
-      subject.pushHistory()
-      expect( subject.valueForStack ).called
-      expect( subject.pushStack ).calledWith('_value for stack_')
-
+      expect( subject.toStack ).called
+      expect( subject.pushStack ).calledWith('_stack_')
 
     describe "with a keycode", ->
 
       it "pushes to the stack on return, delete, or backspace", ->
         subject.pushHistory(13)
-        expect( subject.value ).calledOnce
+        expect( subject.toStack ).calledOnce
         expect( subject.pushStack ).calledOnce
         subject.pushHistory(46)
-        expect( subject.value ).calledTwice
+        expect( subject.toStack ).calledTwice
         expect( subject.pushStack ).calledTwice
         subject.pushHistory(8)
-        expect( subject.value ).calledThrice
+        expect( subject.toStack ).calledThrice
         expect( subject.pushStack ).calledThrice
 
       it "delays pushing to the stack", ->
         spyOn(subject, 'delay').yields()
         subject.pushHistory(42)
         expect( subject.delay ).calledWith(2500, sinon.match.func)
-        expect( subject.pushStack ).calledWith('_value_')
-        expect( subject.value ).called
+        expect( subject.toStack ).called
+        expect( subject.pushStack ).calledWith('_stack_')
 
 
   describe "#focus", ->
@@ -448,15 +440,23 @@ describe "Mercury.Region", ->
 
   describe "#data", ->
 
+    it "allows getting data", ->
+      subject.el.data(foo: 'bar')
+      expect( subject.data() ).to.eql(foo: 'bar')
+      expect( subject.data('foo') ).to.eq('bar')
+
     it "sets the element data", ->
-      subject.data(foo: 'bar')
+      expect( subject.data(foo: 'bar') ).to.eq(subject.el)
       expect( subject.el.data() ).to.eql(foo: 'bar', mercury: 'foo', region: subject)
       subject.data('bar', 'baz')
       expect( subject.el.data() ).to.eql(foo: 'bar', mercury: 'foo', bar: 'baz', region: subject)
 
-    it "returns the element data if no arguments", ->
+
+  describe "#setData", ->
+
+    it "sets the data to the element", ->
       subject.el.data(foo: 'bar')
-      expect( subject.data() ).to.eql(foo: 'bar', mercury: 'foo', region: subject)
+      expect( subject.el.data() ).to.eql(foo: 'bar', mercury: 'foo', region: subject)
 
 
   describe "#snippets", ->
@@ -492,19 +492,35 @@ describe "Mercury.Region", ->
   describe "#onUndo", ->
 
     it "calls #value with the value returned from #undoStack", ->
-      spyOn(subject, 'value')
+      spyOn(subject, 'fromStack')
       spyOn(subject, 'undoStack', -> '_undo_stack_')
       subject.onUndo()
-      expect( subject.value ).calledWith('_undo_stack_')
+      expect( subject.fromStack ).calledWith('_undo_stack_')
 
 
   describe "#onRedo", ->
 
     it "calls #value with the value returned from #redoStack", ->
-      spyOn(subject, 'value')
+      spyOn(subject, 'fromStack')
       spyOn(subject, 'redoStack', -> '_redo_stack_')
       subject.onRedo()
-      expect( subject.value ).calledWith('_redo_stack_')
+      expect( subject.fromStack ).calledWith('_redo_stack_')
+
+
+  describe "#toStack", ->
+
+    it "returns the results of #toJSON", ->
+      spyOn(subject, 'toJSON', -> '_json_')
+      expect( subject.toStack() ).to.eq('_json_')
+      expect( subject.toJSON ).called
+
+
+  describe "#fromStack", ->
+
+    it "calls #fromJSON", ->
+      spyOn(subject, 'fromJSON')
+      subject.fromStack(foo: 'bar')
+      expect( subject.fromJSON ).calledWith(foo: 'bar')
 
 
   describe "#toJSON", ->
@@ -513,7 +529,7 @@ describe "Mercury.Region", ->
       subject.name = '_name_'
       subject.constructor.type = '_type_'
       spyOn(subject, 'value', -> '_value_')
-      spyOn(subject, 'data', -> {region: 'foo', foo: 'bar'})
+      spyOn(subject, 'data', -> {foo: 'bar'})
       spyOn(subject, 'snippets', -> '_snippets_')
 
     it "returns the expected object", ->
@@ -523,6 +539,30 @@ describe "Mercury.Region", ->
         value: '_value_'
         data: {foo: 'bar'}
         snippets: '_snippets_'
+
+
+  describe "#fromJSON", ->
+
+    beforeEach ->
+      spyOn(subject, 'value', -> '_value_')
+      spyOn(subject, 'data', -> {region: 'foo', foo: 'bar'})
+
+    it "parses the json if it's a string", ->
+      spyOn(JSON, 'parse', -> {})
+      subject.fromJSON('_json_')
+      expect( JSON.parse ).calledWith('_json_')
+
+    it "sets the value if present", ->
+      subject.fromJSON({})
+      expect( subject.value ).not.called
+      subject.fromJSON(value: '_value_')
+      expect( subject.value ).calledWith('_value_')
+
+    it "sets the data if present", ->
+      subject.fromJSON({})
+      expect( subject.data ).not.called
+      subject.fromJSON(data: '_data_')
+      expect( subject.data ).calledWith('_data_')
 
 
   describe "#release", ->

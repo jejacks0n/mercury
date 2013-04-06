@@ -1,11 +1,10 @@
 Mercury.Region.Modules.SelectionValue =
 
-  value: (value = null) ->
-    return @html() if value == null || typeof(value) == 'undefined'
-    @html(value.val ? value)
-    @setSerializedSelection?(value.sel) if value.sel
-
-
-  valueForStack: ->
-    val: @value()
+  toStack: ->
+    val: @toJSON()
     sel: @getSerializedSelection?()
+
+
+  fromStack: (val) ->
+    @fromJSON(val.val)
+    @setSerializedSelection?(val.sel) if val.sel

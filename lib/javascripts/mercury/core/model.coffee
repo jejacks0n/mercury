@@ -185,7 +185,7 @@ class Mercury.Model extends Mercury.Module
   set: (key, value) ->
     attrs = {}
     if typeof(key) == 'object' then attrs = key else attrs[key] = value
-    @pushStack($.extend(true, {}, @attributes))
+    @pushStack(@toJSON())
     @attributes[key] = value for key, value of attrs
 
 

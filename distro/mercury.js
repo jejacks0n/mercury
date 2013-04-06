@@ -822,7 +822,7 @@ Copyright (c) 2013 Jeremy Jackson
       } else {
         attrs[key] = value;
       }
-      this.pushStack($.extend(true, {}, this.attributes));
+      this.pushStack(this.toJSON());
       _results = [];
       for (key in attrs) {
         value = attrs[key];
@@ -1250,7 +1250,7 @@ Copyright (c) 2013 Jeremy Jackson
     };
 
     Region.prototype.pushHistory = function(keyCode) {
-      var knownKeyCode, pushNow, _ref,
+      var knownKeyCode, pushNow,
         _this = this;
       if (keyCode == null) {
         keyCode = null;
@@ -1264,11 +1264,10 @@ Copyright (c) 2013 Jeremy Jackson
       this.lastKeyCode = knownKeyCode;
       clearTimeout(this.historyTimeout);
       if (pushNow) {
-        return this.pushStack((_ref = typeof this.valueForStack === "function" ? this.valueForStack() : void 0) != null ? _ref : this.value());
+        return this.pushStack(this.toStack());
       } else {
         return this.historyTimeout = this.delay(2500, function() {
-          var _ref1;
-          return _this.pushStack((_ref1 = typeof _this.valueForStack === "function" ? _this.valueForStack() : void 0) != null ? _ref1 : _this.value());
+          return _this.pushStack(_this.toStack());
         });
       }
     };
@@ -1297,11 +1296,27 @@ Copyright (c) 2013 Jeremy Jackson
     };
 
     Region.prototype.data = function(key, value) {
-      if (typeof value !== 'undefined' && value !== null) {
-        return this.el.data(key, value);
-      } else {
-        return this.el.data(key);
+      var data, obj;
+      if (typeof key === 'string' && arguments.length === 1 || arguments.length === 0) {
+        data = this.el.data(key);
+        if (arguments.length === 0) {
+          data = $.extend({}, data);
+          delete data.region;
+          delete data.mercury;
+        }
+        return data;
       }
+      obj = key;
+      if (typeof key === 'string') {
+        obj = {};
+        obj[key] = value;
+      }
+      this.setData(obj);
+      return this.el;
+    };
+
+    Region.prototype.setData = function(obj) {
+      return this.el.data(obj);
     };
 
     Region.prototype.snippets = function() {
@@ -1318,24 +1333,43 @@ Copyright (c) 2013 Jeremy Jackson
     };
 
     Region.prototype.onUndo = function() {
-      return this.value(this.undoStack());
+      return this.fromStack(this.undoStack());
     };
 
     Region.prototype.onRedo = function() {
-      return this.value(this.redoStack());
+      return this.fromStack(this.redoStack());
+    };
+
+    Region.prototype.toStack = function() {
+      return this.toJSON();
+    };
+
+    Region.prototype.fromStack = function(val) {
+      if (val) {
+        return this.fromJSON(val);
+      }
     };
 
     Region.prototype.toJSON = function() {
-      var data;
-      data = $.extend({}, this.data());
-      delete data.region;
       return {
         name: this.name,
         type: this.constructor.type,
         value: this.value(),
-        data: data,
+        data: this.data(),
         snippets: this.snippets()
       };
+    };
+
+    Region.prototype.fromJSON = function(json) {
+      if (typeof json === 'string') {
+        json = JSON.parse(json);
+      }
+      if (json.value) {
+        this.value(json.value);
+      }
+      if (json.data) {
+        return this.data(json.data);
+      }
     };
 
     Region.prototype.release = function() {
@@ -2512,7 +2546,7 @@ Copyright (c) 2013 Jeremy Jackson
     },
     stackEquality: function(value) {
       if (this.stackPosition === 0 && this.stack[this.stackPosition]) {
-        return this.stack[this.stackPosition].val === value.val;
+        return JSON.stringify(this.stack[this.stackPosition].val) === JSON.stringify(value.val);
       }
       return JSON.stringify(this.stack[this.stackPosition]) === JSON.stringify(value);
     }
@@ -2761,24 +2795,17 @@ Copyright (c) 2013 Jeremy Jackson
 (function() {
 
   Mercury.Region.Modules.SelectionValue = {
-    value: function(value) {
-      var _ref;
-      if (value == null) {
-        value = null;
-      }
-      if (value === null || typeof value === 'undefined') {
-        return this.html();
-      }
-      this.html((_ref = value.val) != null ? _ref : value);
-      if (value.sel) {
-        return typeof this.setSerializedSelection === "function" ? this.setSerializedSelection(value.sel) : void 0;
-      }
-    },
-    valueForStack: function() {
+    toStack: function() {
       return {
-        val: this.value(),
+        val: this.toJSON(),
         sel: typeof this.getSerializedSelection === "function" ? this.getSerializedSelection() : void 0
       };
+    },
+    fromStack: function(val) {
+      this.fromJSON(val.val);
+      if (val.sel) {
+        return typeof this.setSerializedSelection === "function" ? this.setSerializedSelection(val.sel) : void 0;
+      }
     }
   };
 

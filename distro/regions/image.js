@@ -48,6 +48,12 @@ image with the one that was uploaded.
       'mousedown': 'onMousedown'
     };
 
+    Image.prototype.init = function() {
+      return this.data({
+        align: this.attr('align') || null
+      });
+    };
+
     Image.prototype.value = function(value) {
       if (value === null || typeof value === 'undefined') {
         return this.attr('src');
@@ -56,11 +62,10 @@ image with the one that was uploaded.
       }
     };
 
-    Image.prototype.setAlignment = function(alignment) {
-      return this.el.data({
-        align: alignment
-      }).attr({
-        align: alignment
+    Image.prototype.setData = function(obj) {
+      Image.__super__.setData.apply(this, arguments);
+      return this.attr({
+        align: this.data('align')
       });
     };
 
@@ -87,22 +92,34 @@ image with the one that was uploaded.
 
   Mercury.Region.Image.addAction({
     alignLeft: function() {
-      return this.setAlignment('left');
+      return this.data({
+        align: 'left'
+      });
     },
     alignRight: function() {
-      return this.setAlignment('right');
+      return this.data({
+        align: 'right'
+      });
     },
     alignTop: function() {
-      return this.setAlignment('top');
+      return this.data({
+        align: 'top'
+      });
     },
     alignMiddle: function() {
-      return this.setAlignment('middle');
+      return this.data({
+        align: 'middle'
+      });
     },
     alignBottom: function() {
-      return this.setAlignment('bottom');
+      return this.data({
+        align: 'bottom'
+      });
     },
     alignNone: function() {
-      return this.setAlignment(null);
+      return this.data({
+        align: null
+      });
     },
     file: function(file) {
       if (file.isImage()) {
@@ -111,29 +128,29 @@ image with the one that was uploaded.
         });
       }
     },
-    image: function(image) {
-      return this.value(image.get('url'));
+    image: function(img) {
+      return this.value(img.get('url'));
     }
   });
 
   Mercury.Region.Image.addContext({
     alignLeft: function() {
-      return this.el.attr('align') === 'left';
+      return this.data('align') === 'left';
     },
     alignRight: function() {
-      return this.el.attr('align') === 'right';
+      return this.data('align') === 'right';
     },
     alignTop: function() {
-      return this.el.attr('align') === 'top';
+      return this.data('align') === 'top';
     },
     alignMiddle: function() {
-      return this.el.attr('align') === 'middle';
+      return this.data('align') === 'middle';
     },
     alignBottom: function() {
-      return this.el.attr('align') === 'bottom';
+      return this.data('align') === 'bottom';
     },
     alignNone: function() {
-      return !this.el.attr('align');
+      return !this.data('align');
     }
   });
 

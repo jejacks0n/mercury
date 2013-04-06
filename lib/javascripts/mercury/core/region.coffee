@@ -103,7 +103,6 @@ class Mercury.Region extends Mercury.View
 
     @beforeBuild?()                                        # call the beforeBuild method if it's defined
     super(@options)                                        # let the view do it's thing
-    @trigger('build')                                      # trigger the build event
     @attr(tabindex: 0) unless @focusable                   # make the element focusable (unless we've set one ourselves)
     @name ||= @el.attr(@config('regions:identifier'))      # get the name from the element
     @previewing ||= false                                  # assume previewing is false

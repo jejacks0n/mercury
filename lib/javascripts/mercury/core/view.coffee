@@ -10,6 +10,8 @@ class Mercury.View extends Mercury.Module
   @include Mercury.I18n
   @include Mercury.Logger
 
+  @Modules: {}
+
   logPrefix: 'Mercury.View:'
 
   eventSplitter: /^(\S+)\s*(.*)$/
@@ -23,23 +25,31 @@ class Mercury.View extends Mercury.Module
   constructor: (@options = {}) ->
     @[key] = value for key, value of @options
 
-    @el  = document.createElement(@tag) unless @el
-    @el  = $(@el)
-    @$el = @el
-    @attr(@attributes)
-    @addClass(@className)
-
-    @html(@renderTemplate(@template)) if @template
+    @buildElement()
 
     @elements ||= @constructor.elements
     @events ||= @constructor.events
 
-    @build?()
+    @build?()                                              # call build if it's defined
+    @trigger('build')                                      # trigger the build event
 
     @delegateEvents(@events) if @events
     @refreshElements() if @elements
 
     super
+    @trigger('init')
+
+
+  # Builds the element that this view will use -- unless one is already defined. This method can be overridden to create
+  # your own element, or add additional functionality to the initial build process.
+  #
+  buildElement: ->
+    @el = document.createElement(@tag) unless @el
+    @el = $(@el)
+    @$el = @el
+    @attr(@attributes)
+    @addClass(@className)
+    @html(@renderTemplate(@template)) if @template
 
 
   # Delegates to jQuery find. Simplifies scoped finds within our own element.

@@ -7,6 +7,7 @@ describe "Mercury.View", ->
   subject = null
 
   beforeEach ->
+    Mercury.configure 'logging', true
     class Klass extends Mercury.View
     subject = new Klass()
 
@@ -25,24 +26,10 @@ describe "Mercury.View", ->
       subject = new Klass(foo: 'bar')
       expect( subject.foo ).to.eq('bar')
 
-    it "creates an element", ->
-      subject = new Klass()
-      expect( $('<div>').append(subject.el).html() ).to.eq('<div></div>')
-
-    it "creates an element with expected attributes", ->
-      subject = new Klass(tag: 'section', className: 'test_class', attributes: {id: 'test_id', class: 'extra_class'})
-      expect( subject.el.is('section') ).to.be.true
-      expect( subject.el.attr('id') ).to.eq('test_id')
-      expect( subject.el.attr('class') ).to.eq('extra_class test_class')
-
-    it "doesn't create an element if already created", ->
-      subject = new Klass(el: $('<foo>'))
-      expect( subject.el.is('foo') ).to.be.true
-
-    it "loads a template if one was set", ->
-      spyOn(Klass::, 'renderTemplate')
-      subject = new Klass(template: '_foo_')
-      expect( subject.renderTemplate ).calledWith('_foo_')
+    it "calls #buildElement", ->
+      spyOn(Klass::, 'buildElement')
+      subject = new Klass(foo: 'bar')
+      expect( Klass::buildElement ).called
 
     it "assigns events to constructor events unless already set", ->
       Klass.events = event1: '$'
@@ -58,10 +45,15 @@ describe "Mercury.View", ->
       subject = new Klass(elements: {foo: 'bar'})
       expect( subject.elements ).to.eql(foo: 'bar')
 
-    it "calls #build", ->
+    it "calls #build if one is defined", ->
       Klass::build = spy()
       subject = new Klass()
       expect( subject.build ).called
+
+    it "triggers a build event", ->
+      spyOn(Klass::, 'trigger')
+      subject = new Klass()
+      expect( subject.trigger ).calledWith('build')
 
     it "calls #delegateEvents if there's events", ->
       spyOn(Klass::, 'delegateEvents')
@@ -72,6 +64,46 @@ describe "Mercury.View", ->
       spyOn(Klass::, 'refreshElements')
       subject = new Klass(elements: {foo: 'bar'})
       expect( subject.refreshElements ).called
+
+    it "calls super", ->
+      spyOn(Klass.__super__, 'constructor')
+      subject = new Klass(foo: 'bar')
+      expect( Klass.__super__.constructor ).calledWith(foo: 'bar')
+
+    it "triggers an init event", ->
+      spyOn(Klass::, 'trigger')
+      subject = new Klass()
+      expect( subject.trigger ).calledWith('init')
+
+
+  describe "#buildElement", ->
+
+    beforeEach ->
+      subject.el = null
+
+    it "creates an element", ->
+      subject.buildElement()
+      expect( subject.el.is('div') ).to.be.true
+
+    it "creates an element with expected attributes", ->
+      subject.tag = 'section'
+      subject.className = 'test_class'
+      subject.attributes = id: 'test_id', class: 'extra_class'
+      subject.buildElement()
+      expect( subject.el.is('section') ).to.be.true
+      expect( subject.el.attr('id') ).to.eq('test_id')
+      expect( subject.el.attr('class') ).to.eq('extra_class test_class')
+
+    it "doesn't create an element if already created", ->
+      subject.el = $('<foo>')
+      subject.buildElement()
+      expect( subject.el.is('foo') ).to.be.true
+
+    it "loads a template if one was set", ->
+      subject.template = '_foo_'
+      spyOn(subject, 'renderTemplate')
+      subject.buildElement()
+      expect( subject.renderTemplate ).calledWith('_foo_')
 
 
   describe "#$", ->

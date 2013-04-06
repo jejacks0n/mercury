@@ -151,11 +151,6 @@ describe "Mercury.Region", ->
       subject = new Klass('<div>')
       expect( subject.beforeBuild ).called
 
-    it "triggers a build event", ->
-      Klass::trigger = spy()
-      subject = new Klass('<div>')
-      expect( subject.trigger ).calledWith('build')
-
     it "sets a tabindex (so it's focusable) unless we've provided our own focusable element", ->
       subject = new Klass('<div id="_name_">')
       expect( subject.attr('tabindex') ).to.eq('0')

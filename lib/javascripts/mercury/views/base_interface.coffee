@@ -102,7 +102,7 @@ class Mercury.BaseInterface extends Mercury.View
 
   focusActiveRegion: (e) ->
     e?.preventDefault?()
-    @region.focus()
+    @region?.focus()
 
 
   onRegionFocus: (region) ->

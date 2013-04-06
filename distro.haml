@@ -15,6 +15,6 @@
                              "regions/plain.min",
                              "regions/text.min"
     = stylesheet_link_tag "mercury.bundle"
-    %script jQuery(function() { window.mercury = Mercury.init({frame: '#mercury_frame'}) })
+    %script jQuery(function() { Mercury.init({frame: '#mercury_frame'}) })
   %body
     %iframe(id="mercury_frame" frameborder="0" src="/index.html")

@@ -62,9 +62,9 @@ Mercury.configuration =
     class      : 'FrameInterface'                          # interface class (
     toolbar    : 'Toolbar'                                 # toolbar class to use within the interface
     statusbar  : 'Statusbar'                               # statusbar class to use within the interface
-    enabled    : false                                     # initial visible state -- trigger 'interface:show' to show
+    enabled    : true                                      # initial visible state -- trigger 'interface:show' to show
     silent     : false                                     # set to true to disable asking about changes when leaving
-    shadowed   : true                                      # puts the interface into a shadow dom when it's available
+    shadowed   : false                                     # puts the interface into a shadow dom when it's available
 
 
   # Toolbars

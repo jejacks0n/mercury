@@ -35,9 +35,9 @@ Copyright (c) 2013 Jeremy Jackson
       "class": 'FrameInterface',
       toolbar: 'Toolbar',
       statusbar: 'Statusbar',
-      enabled: false,
+      enabled: true,
       silent: false,
-      shadowed: true
+      shadowed: false
     },
     toolbars: {
       floating: false,
@@ -1655,12 +1655,13 @@ Copyright (c) 2013 Jeremy Jackson
     };
 
     BaseInterface.prototype.focusActiveRegion = function(e) {
+      var _ref;
       if (e != null) {
         if (typeof e.preventDefault === "function") {
           e.preventDefault();
         }
       }
-      return this.region.focus();
+      return (_ref = this.region) != null ? _ref.focus() : void 0;
     };
 
     BaseInterface.prototype.onRegionFocus = function(region) {
@@ -1726,16 +1727,6 @@ Copyright (c) 2013 Jeremy Jackson
       }
     };
 
-    FrameInterface.prototype.initializeFrame = function() {
-      if (this.initialized) {
-        return;
-      }
-      this.initialized = true;
-      this.setupDocument();
-      this.addAllRegions();
-      return Mercury.trigger('initialized');
-    };
-
     FrameInterface.prototype.bindDefaultEvents = function() {
       var _this = this;
       this.frame.on('load', function() {
@@ -1745,6 +1736,16 @@ Copyright (c) 2013 Jeremy Jackson
         return _this.initializeFrame();
       });
       return FrameInterface.__super__.bindDefaultEvents.apply(this, arguments);
+    };
+
+    FrameInterface.prototype.initializeFrame = function() {
+      if (this.initialized) {
+        return;
+      }
+      this.initialized = true;
+      this.setupDocument();
+      this.addAllRegions();
+      return Mercury.trigger('initialized');
     };
 
     FrameInterface.prototype.setupDocument = function() {

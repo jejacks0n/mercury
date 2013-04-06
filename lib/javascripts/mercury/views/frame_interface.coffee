@@ -12,6 +12,12 @@ class Mercury.FrameInterface extends Mercury.BaseInterface
       return super
 
 
+  bindDefaultEvents: ->
+    @frame.on('load', => @initializeFrame())
+    Mercury.on('initialize', => @initializeFrame())
+    super
+
+
   initializeFrame: ->
     return if @initialized
     @initialized = true
@@ -19,12 +25,6 @@ class Mercury.FrameInterface extends Mercury.BaseInterface
     @setupDocument()
     @addAllRegions()
     Mercury.trigger('initialized')
-
-
-  bindDefaultEvents: ->
-    @frame.on('load', => @initializeFrame())
-    Mercury.on('initialize', => @initializeFrame())
-    super
 
 
   setupDocument: ->

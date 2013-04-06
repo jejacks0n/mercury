@@ -18,12 +18,13 @@ class Mercury.ToolbarButton extends Mercury.View
     super(@options)
 
 
-  build: ->
+  init: ->
     @action = @determineAction()
     @actionName = @determineActionName()
     @type = @determineType()
 
-    @attr('data-action', @action) if @action
+
+  build: ->
     @attr('data-type', @type)
     @attr('data-icon', Mercury.Toolbar.icons[@icon || @name] || @icon)
     @addClass("mercury-toolbar-#{@name.toDash()}-button")

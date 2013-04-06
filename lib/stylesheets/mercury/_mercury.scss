@@ -1,0 +1,30 @@
+// Core css and utility.
+
+@import "mercury/core/fonts";
+@import "mercury/core/general";
+@import "mercury/core/region";
+
+// Views.
+
+@import "mercury/views/base_interface";
+@import "mercury/views/frame_interface";
+@import "mercury/views/statusbar";
+@import "mercury/views/toolbar";
+@import "mercury/views/uploader";
+
+// General setup.
+
+mercury {
+  // disable text sizing in webkit (ipad/iphone etc)
+  -webkit-text-size-adjust: none;
+  position: absolute;
+  z-index: 20000;
+
+  // disable animations while initializing
+  &.loading * {
+    -moz-transition: none !important;
+    -webkit-transition: none !important;
+    -o-transition: color 0 ease-in !important;
+    transition: none !important;
+  }
+}

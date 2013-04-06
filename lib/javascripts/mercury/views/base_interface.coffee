@@ -1,17 +1,13 @@
 #= require mercury/core/view
-#= require mercury/templates/developer-toolbar
+#= require mercury/views/modules/developer_toolbar
 
-class Mercury.Editor extends Mercury.View
+class Mercury.BaseInterface extends Mercury.View
+  @include Mercury.View.Modules.DeveloperToolbar
 
-  logPrefix: 'Mercury.Editor:'
-  className: 'mercury-editor'
-  template: 'developer-toolbar'
-
-  attributes:
-    id: 'mercury'
+  logPrefix: 'Mercury.BaseInterface:'
+  tag: 'mercury'
 
   events:
-    'click .mercury-developer-toolbar [data-action]': 'developerAction'
     'mousedown': 'focusActiveRegion'
     'focusout': 'focusActiveRegion'
     'region:focus': 'onRegionFocus'
@@ -24,26 +20,48 @@ class Mercury.Editor extends Mercury.View
     super
 
     @regions ||= []
-
     $(window).on('beforeunload', => @onUnload())
 
-    @addClass('loading')
-    $('body').before(@el)
     @initialize()
     @buildInterface()
     @bindDefaultEvents()
     @el.removeClass('loading')
+    Mercury.trigger('initialized')
+
+
+  build: ->
+    @el = document.createElement(@tag) unless @el
+    @el = $(@el)
+    @$el = @el
+    @attr(@attributes)
+    @addClass(@className)
+
+
+  init: ->
+    $('body').before(@el)
+    @makeShadowed()
+    @html(@renderTemplate(@template)) if @template
+    @addClass('loading')
 
 
   initialize: ->
     @addAllRegions()
-    Mercury.trigger('initialized')
 
 
   buildInterface: ->
     @buildToolbar()
     @buildStatusbar()
     @focusDefaultRegion()
+
+
+  makeShadowed: ->
+    return unless @config('interface:shadowed') && @el.get(0).webkitCreateShadowRoot
+    @shadow = $(@el.get(0).webkitCreateShadowRoot())
+    # todo: this is a problem in that it allows css to bleed, which isn't exactly what we want here, but getting css
+    #       to load internally isn't viable. ??
+    @shadow.get(0).applyAuthorStyles = true
+    @shadow.append(@el = $(document.createElement(@tag)))
+    @$el = @el
 
 
   buildToolbar: ->
@@ -106,22 +124,3 @@ class Mercury.Editor extends Mercury.View
     for region in @regions
       data[region.name] = region.toJSON()
     data
-
-
-  developerAction: (e) ->
-    target = $(e.target)
-    act = target.data('action')
-    val = target.data('value')
-    switch act
-      when 'interface'
-        @hidden ?= @config('interface:enabled')
-        @hidden = !@hidden
-        if @hidden then Mercury.trigger('interface:show') else Mercury.trigger('interface:hide')
-        Mercury.trigger('mode', 'preview')
-      when 'html'
-        val = switch val
-          when 'html' then '<table>\n  <tr>\n    <td>1</td>\n    <td>2</td>\n  </tr>\n</table>'
-          when 'el' then $('<section class="foo"><h1>testing</h1></section>').get(0)
-          when 'jquery' then $('<section class="foo"><h1>testing</h1></section>')
-        Mercury.trigger('action', act, val)
-      else Mercury.trigger('action', act, val)

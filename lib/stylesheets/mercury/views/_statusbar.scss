@@ -1,6 +1,6 @@
 /* Mercury.Statusbar
  *----------------------------------------------------------------------------*/
-#mercury .mercury-statusbar {
+mercury .mercury-statusbar {
   @include mercury-no-selection;
   @include mercury-transition(bottom, ease-in-out);
   position: fixed;

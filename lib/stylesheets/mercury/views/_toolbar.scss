@@ -1,6 +1,6 @@
 /* Mercury.Toolbar
  *----------------------------------------------------------------------------*/
-#mercury .mercury-toolbar {
+mercury .mercury-toolbar {
   @extend .mercury-clearfix;
   @include mercury-no-selection;
   @include mercury-transition(top, ease-in-out);
@@ -108,59 +108,56 @@
       display: none;
     }
   }
-}
 
-/*
- * Mercury.Toolbar: Primary Toolbar
- *----------------------------------------------------------------------------*/
-#mercury .mercury-toolbar .mercury-toolbar-primary-container {
-  @include mercury-gradient(#e2e2e2, #c6c6c6);
-  display: block;
-  height: 58px;
-  padding: 0;
-  border-top: 1px solid #e5e5e5;
-  border-bottom: 1px solid #727272;
-  .mercury-toolbar-separator,
-  .mercury-toolbar-line-separator {
-    width: 40px;
-    height: 52px;
-  }
-  .mercury-toolbar-line-separator {
-    width: 0;
-    height: 45px;
-    margin: 0 20px;
-    border-left: 1px solid #ececec;
-    border-right: 1px solid #9b9b9b;
-  }
-  .mercury-toolbar-button {
-    @include mercury-icon-base(32px, 50px, 46px);
+  .mercury-toolbar-primary-container {
+    @include mercury-gradient(#e2e2e2, #c6c6c6);
+    display: block;
     height: 58px;
-    min-width: 55px;
-    margin-bottom: 20px;
-    border: 0;
-    background: transparent;
-    text-align: center;
-    white-space: nowrap;
-    color: #555;
-    em {
-      @include mercury-font(8.5pt);
-      display: block;
-      margin: -5px;
-      height: 15px;
-      line-height: 15px;
-      font-style: normal;
-      color: #222;
+    padding: 0;
+    border-top: 1px solid #e5e5e5;
+    border-bottom: 1px solid #727272;
+    .mercury-toolbar-separator,
+    .mercury-toolbar-line-separator {
+      width: 40px;
+      height: 52px;
     }
-    &:before {
-      left: 0;
+    .mercury-toolbar-line-separator {
+      width: 0;
+      height: 45px;
+      margin: 0 20px;
+      border-left: 1px solid #ececec;
+      border-right: 1px solid #9b9b9b;
     }
-    &.active {
-      &:before {
-        line-height: 48px;
+    .mercury-toolbar-button {
+      @include mercury-icon-base(32px, 50px, 46px);
+      height: 58px;
+      min-width: 55px;
+      margin-bottom: 20px;
+      border: 0;
+      background: transparent;
+      text-align: center;
+      white-space: nowrap;
+      color: #555;
+      em {
+        @include mercury-font(8.5pt);
+        display: block;
+        margin: -5px;
+        height: 15px;
+        line-height: 15px;
+        font-style: normal;
+        color: #222;
       }
-    }
-    &[data-icon]:before {
-      content: attr(data-icon);
+      &:before {
+        left: 0;
+      }
+      &.active {
+        &:before {
+          line-height: 48px;
+        }
+      }
+      &[data-icon]:before {
+        content: attr(data-icon);
+      }
     }
   }
 }

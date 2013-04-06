@@ -1,12 +1,12 @@
-#= require mercury/views/editor
+#= require mercury/views/base_interface
 
-class Mercury.FrameEditor extends Mercury.Editor
+class Mercury.FrameInterface extends Mercury.BaseInterface
 
-  logPrefix: 'Mercury.FrameEditor:'
-  className: 'mercury-frame-editor'
+  logPrefix: 'Mercury.FrameInterface:'
+  className: 'mercury-frame-interface'
 
   initialize: ->
-    @frame = $(@frame).addClass('mercury-frame-editor-frame')        # get the iframe and set the class
+    @frame = $(@frame).addClass('mercury-frame-interface-frame')     # get the iframe and set the class
     unless @frame.length                                             # fall back gracefully
       @initialized = true
       return super

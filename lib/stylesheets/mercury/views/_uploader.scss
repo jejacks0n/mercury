@@ -1,6 +1,6 @@
 /* Mercury.Uploader
  *----------------------------------------------------------------------------*/
-#mercury .mercury-uploader {
+mercury .mercury-uploader {
   @include mercury-transition(opacity, ease-in-out);
   position: fixed;
   z-index: 10100;

@@ -20,8 +20,8 @@
 #
 # Views.
 #
-#= require mercury/views/editor
-#= require mercury/views/frame_editor
+#= require mercury/views/base_interface
+#= require mercury/views/frame_interface
 #= require mercury/views/statusbar
 #= require mercury/views/toolbar
 #= require mercury/views/toolbar_item

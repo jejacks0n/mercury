@@ -30,22 +30,22 @@ describe "Mercury", ->
   describe ".init", ->
 
     beforeEach ->
-      Klass.initialized = false
-      spyOn(Klass, 'Editor')
-      Klass.config = stub().returns('Editor')
+      Klass.interface = false
+      spyOn(Klass, 'Interface')
+      Klass.config = stub().returns('Interface')
 
     it "sets @initialized", ->
       Klass.init(foo: 'bar')
-      expect( Klass.initialized ).to.be.true
+      expect( Klass.interface ).to.eql({})
 
-    it "instantiated the editor that's configured", ->
+    it "instantiated the interface that's configured", ->
       Klass.init(foo: 'bar')
-      expect( Klass.Editor ).calledWith(foo: 'bar')
+      expect( Klass.Interface ).calledWith(foo: 'bar')
 
     it "does nothing if already initialized", ->
-      Klass.initialized = true
+      Klass.interface = {}
       Klass.init()
-      expect( Klass.Editor ).not.called
+      expect( Klass.Interface ).not.called
 
 
   describe ".configure", ->

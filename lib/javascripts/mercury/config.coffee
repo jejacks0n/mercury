@@ -54,16 +54,17 @@ Mercury.configuration =
 
 
   # Interface
-  # Mercury will instantiate an editor on Mercury.init(). This configration allows you to specify which editor to use
-  # as well as the various user interface classes to instantiate from within the editor which provides a modular way to
-  # add to, or override Mercury functionality and it's interface elements.
+  # Mercury will instantiate an interface on Mercury.init(). This configration allows you to specify which interface to
+  # use, as well as the various user interface classes to instantiate, which provides a modular way to add to, or
+  # override default functionality and interface elements.
   #
   interface:
-    enabled    : true                                      # initial visible state -- trigger 'interface:show' to show
+    class      : 'FrameInterface'                          # interface class (
+    toolbar    : 'Toolbar'                                 # toolbar class to use within the interface
+    statusbar  : 'Statusbar'                               # statusbar class to use within the interface
+    enabled    : false                                     # initial visible state -- trigger 'interface:show' to show
     silent     : false                                     # set to true to disable asking about changes when leaving
-    editor     : 'FrameEditor'                             # editor to use on Mercury.init() - 'Editor', 'FrameEditor'
-    toolbar    : 'Toolbar'                                 # toolbar class to use within the editor
-    statusbar  : 'Statusbar'                               # statusbar class to use within the editor
+    shadowed   : true                                      # puts the interface into a shadow dom when it's available
 
 
   # Toolbars

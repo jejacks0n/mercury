@@ -100,9 +100,8 @@ describe "Mercury.Uploader", ->
       subject = new Klass()
 
     it "appends to the mercury element", ->
-      fixture.set('<div id="mercury"></div>')
       subject.build()
-      expect( $('.mercury-uploader', fixture.el).html() ).to.include('mercury-uploader-dialog')
+      expect( $('.mercury-uploader', Mercury.interface).html() ).to.include('mercury-uploader-dialog')
 
 
   describe "#show", ->

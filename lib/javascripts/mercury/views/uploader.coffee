@@ -46,7 +46,7 @@ class Mercury.Uploader extends Mercury.View
 
 
   build: ->
-    @appendTo($('#mercury'))
+    @appendTo(Mercury.interface)
 
 
   show: ->

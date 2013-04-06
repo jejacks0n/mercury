@@ -1,9 +1,9 @@
 #= require spec_helper
-#= require mercury/views/frame_editor
+#= require mercury/views/frame_interface
 
-describe "Mercury.FrameEditor", ->
+describe "Mercury.FrameInterface", ->
 
-  Klass = Mercury.FrameEditor
+  Klass = Mercury.FrameInterface
   subject = null
 
   beforeEach ->
@@ -14,7 +14,7 @@ describe "Mercury.FrameEditor", ->
   describe "#initialze", ->
 
     it "adds the classname to the frame", ->
-      expect( subject.frame.hasClass('mercury-frame-editor-frame') ).to.be.true
+      expect( subject.frame.hasClass('mercury-frame-interface-frame') ).to.be.true
 
     it "calls super if there's no frame", ->
       spyOn(Klass.__super__, 'initialize')

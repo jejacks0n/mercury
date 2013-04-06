@@ -15,12 +15,11 @@ initialize = ->
   # Provide global method to initialize.
   #
   # This is the standard means to instantiate Mercury Editor. If you need more custom behavior check the configuration,
-  # and if that doesn't suit your needs, feel free to instantiate the desired editor yourself.
+  # and if that doesn't suit your needs, feel free to instantiate the desired interface yourself.
   #
   @init = (options = {}) =>
-    return if @initialized
-    @initialized = true
-    new @[@config('interface:editor')](options)
+    return if @interface
+    @interface = new @[@config('interface:class')](options)
 
   # Add global configuration methods.
   #

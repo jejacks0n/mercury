@@ -42,7 +42,7 @@ module Mercury
 end
 
 class ApplicationController < ActionController::Base
-  prepend_view_path Rails.application.root
+  prepend_view_path Rails.application.root.join('examples')
 
   def page
     render template: params[:page] || 'index'

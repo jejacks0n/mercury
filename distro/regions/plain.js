@@ -35,9 +35,7 @@ Dependencies:
 
     Plain.include(Mercury.Region.Modules.ContentEditable);
 
-    Plain.supported = document.designMode && (!Mercury.support.msie || Mercury.support.msie >= 10) && (window.rangy && window.rangy.supported);
-
-    Plain.prototype.toolbars = ['plain'];
+    Plain.supported = Mercury.support.wysiwyg;
 
     Plain.prototype.events = {
       'keydown': 'onKeyEvent',
@@ -53,7 +51,7 @@ Dependencies:
       }
       Plain.__super__.constructor.apply(this, arguments);
       if (!this.config('regions:plain:actions')) {
-        this.actions = null;
+        this.actions = {};
       }
     }
 
@@ -91,22 +89,20 @@ Dependencies:
       return this.pushHistory(e.keyCode);
     };
 
-    Plain.prototype.actions = {
-      bold: function() {
-        return this.toggleWrapSelectedWordsInClass('red');
-      },
-      italic: function() {
-        return this.toggleWrapSelectedWordsInClass('highlight');
-      },
-      underline: function() {
-        return this.toggleWrapSelectedWordsInClass('blue');
-      },
-      link: function() {},
-      character: function() {}
-    };
-
     return Plain;
 
   })(Mercury.Region);
+
+  Mercury.Region.Plain.addAction({
+    bold: function() {
+      return this.toggleWrapSelectedWordsInClass('red');
+    },
+    italic: function() {
+      return this.toggleWrapSelectedWordsInClass('highlight');
+    },
+    underline: function() {
+      return this.toggleWrapSelectedWordsInClass('blue');
+    }
+  });
 
 }).call(this);

@@ -21,7 +21,8 @@ image with the one that was uploaded.
       alignRight: ['Align Right'],
       alignTop: ['Align Top'],
       alignMiddle: ['Align Middle'],
-      alignBottom: ['Align Bottom']
+      alignBottom: ['Align Bottom'],
+      alignNone: ['Align None']
     }
   });
 
@@ -37,9 +38,9 @@ image with the one that was uploaded.
 
     Image.include(Mercury.Region.Modules.DropIndicator);
 
-    Image.supported = true;
+    Image.include(Mercury.Region.Modules.DropItem);
 
-    Image.prototype.toolbars = ['image'];
+    Image.supported = true;
 
     Image.prototype.tag = 'img';
 
@@ -53,6 +54,14 @@ image with the one that was uploaded.
       } else {
         return this.attr('src', value);
       }
+    };
+
+    Image.prototype.setAlignment = function(alignment) {
+      return this.el.data({
+        align: alignment
+      }).attr({
+        align: alignment
+      });
     };
 
     Image.prototype.onMousedown = function(e) {
@@ -72,28 +81,60 @@ image with the one that was uploaded.
       });
     };
 
-    Image.prototype.onDropItem = function(e, data) {
-      var url;
-      if (url = $('<div>').html(data.getData('text/html')).find('img').attr('src')) {
-        e.preventDefault();
-        this.focus();
-        return this.handleAction('image', {
-          url: url
-        });
-      }
-    };
-
-    Image.prototype.actions = {
-      file: function(file) {
-        return this.value(file.get('url'));
-      },
-      image: function(image) {
-        return this.value(image.get('url'));
-      }
-    };
-
     return Image;
 
   })(Mercury.Region);
+
+  Mercury.Region.Image.addAction({
+    alignLeft: function() {
+      return this.setAlignment('left');
+    },
+    alignRight: function() {
+      return this.setAlignment('right');
+    },
+    alignTop: function() {
+      return this.setAlignment('top');
+    },
+    alignMiddle: function() {
+      return this.setAlignment('middle');
+    },
+    alignBottom: function() {
+      return this.setAlignment('bottom');
+    },
+    alignNone: function() {
+      return this.setAlignment(null);
+    },
+    file: function(file) {
+      if (file.isImage()) {
+        return this.handleAction('image', {
+          url: file.get('url')
+        });
+      }
+    },
+    image: function(image) {
+      return this.value(image.get('url'));
+    }
+  });
+
+  Mercury.Region.Image.addContext({
+    alignLeft: function() {
+      return this.el.attr('align') === 'left';
+    },
+    alignRight: function() {
+      return this.el.attr('align') === 'right';
+    },
+    alignTop: function() {
+      return this.el.attr('align') === 'top';
+    },
+    alignMiddle: function() {
+      return this.el.attr('align') === 'middle';
+    },
+    alignBottom: function() {
+      return this.el.attr('align') === 'bottom';
+    },
+    alignNone: function() {
+      return !this.el.attr('align');
+    }
+  });
 
 }).call(this);

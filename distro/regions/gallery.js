@@ -19,7 +19,7 @@ also takes into account undo/redo support using the keyboard or buttons.
     general: {
       prev: ['Previous Slide'],
       next: ['Next Slide'],
-      "delete": ['Delete Slide'],
+      remove: ['Delete Slide'],
       togglePlay: ['Play/Pause']
     }
   });
@@ -28,19 +28,15 @@ also takes into account undo/redo support using the keyboard or buttons.
 
     __extends(Gallery, _super);
 
-    function Gallery() {
-      return Gallery.__super__.constructor.apply(this, arguments);
-    }
-
     Gallery.define('Mercury.Region.Gallery', 'gallery');
 
     Gallery.include(Mercury.Region.Modules.DropIndicator);
 
+    Gallery.include(Mercury.Region.Modules.DropItem);
+
     Gallery.supported = true;
 
-    Gallery.prototype.toolbars = ['gallery'];
-
-    Gallery.prototype.skipHistoryOn = ['undo', 'redo'];
+    Gallery.prototype.skipHistoryOn = ['undo', 'redo', 'next', 'prev', 'togglePlay'];
 
     Gallery.prototype.elements = {
       controls: '.mercury-gallery-region-controls',
@@ -49,19 +45,27 @@ also takes into account undo/redo support using the keyboard or buttons.
     };
 
     Gallery.prototype.events = {
-      'click .mercury-gallery-region-controls em': 'removeSlide',
-      'click .mercury-gallery-region-controls img': 'gotoSlide'
+      'click .mercury-gallery-region-controls li': 'gotoSlide'
     };
 
-    Gallery.prototype.build = function() {
-      var _this = this;
+    function Gallery() {
+      var _ref;
+      Gallery.__super__.constructor.apply(this, arguments);
       this.speed || (this.speed = 3000);
-      this.index = 1;
-      this.append('<ul class="mercury-gallery-region-controls"></ul>');
+      this.index = 0;
+      if ((_ref = this.playing) == null) {
+        this.playing = true;
+      }
       this.refresh(true);
-      return this.delay(this.speed, function() {
-        return _this.nextSlide();
-      });
+    }
+
+    Gallery.prototype.build = function() {
+      if (!this.$('.slides').length) {
+        this.append('<div class="slides">');
+      }
+      if (!this.$('.paginator').length) {
+        return this.append('<div class="paginator">');
+      }
     };
 
     Gallery.prototype.value = function(value) {
@@ -69,92 +73,83 @@ also takes into account undo/redo support using the keyboard or buttons.
       if (value === null || typeof value === 'undefined') {
         el = $('<div>').html(this.html());
         el.find('.mercury-gallery-region-controls').remove();
+        el.find('.slide').show();
+        el.find('.paginator').empty();
         return el.html();
       }
       return Gallery.__super__.value.apply(this, arguments);
     };
 
     Gallery.prototype.refresh = function(controls) {
+      var _this = this;
       if (controls == null) {
         controls = false;
       }
+      clearTimeout(this.timeout);
       this.images = this.$('.slide').hide();
       if (this.index > this.images.length) {
         this.index = 1;
       }
+      if (this.index < 1) {
+        this.index = this.images.length;
+      }
       this.$(".slide:nth-child(" + this.index + ")").show();
-      this.paginator.html(Array(this.images.length + 1).join('<span>&bull;</span>'));
-      this.paginator.find("span:nth-child(" + this.index + ")").addClass('active');
+      this.refreshPaginator();
       if (controls) {
-        return this.refreshControls();
+        this.refreshControls();
+      }
+      if (this.playing) {
+        return this.timeout = this.delay(this.speed, function() {
+          return _this.nextSlide();
+        });
       }
     };
 
+    Gallery.prototype.refreshPaginator = function() {
+      this.paginator.html(Array(this.images.length + 1).join('<span>&bull;</span>'));
+      return this.paginator.find("span:nth-child(" + this.index + ")").addClass('active');
+    };
+
     Gallery.prototype.refreshControls = function() {
-      var slide, _i, _len, _ref;
-      this.controls.html('');
+      var slide, src, _i, _len, _ref;
+      this.controls.remove();
+      this.append('<ul class="mercury-gallery-region-controls"></ul>');
       _ref = this.images;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         slide = _ref[_i];
-        this.addControlLink($(slide));
+        src = $(slide).find('img').attr('src');
+        this.controls.append($("<li><img src=\"" + src + "\"/></li>"));
       }
       if (this.focused) {
         return this.controls.show();
       }
     };
 
-    Gallery.prototype.addControlLink = function(slide) {
-      var src;
-      src = slide.find('img').attr('src');
-      return this.controls.append($("<li><img src=\"" + src + "\"/><em>&times;</em></li>").data({
-        slide: slide
-      }));
+    Gallery.prototype.prevSlide = function() {
+      this.index -= 1;
+      return this.refresh();
     };
 
     Gallery.prototype.nextSlide = function() {
-      var _this = this;
       this.index += 1;
-      this.refresh();
-      return this.timeout = this.delay(this.speed, function() {
-        return _this.nextSlide();
-      });
+      return this.refresh();
     };
 
     Gallery.prototype.gotoSlide = function(e) {
-      var _this = this;
-      clearTimeout(this.timeout);
       this.index = $(e.target).closest('li').prevAll('li').length + 1;
-      this.refresh();
-      return this.timeout = this.delay(this.speed, function() {
-        return _this.nextSlide();
-      });
+      return this.refresh();
     };
 
     Gallery.prototype.appendSlide = function(slide) {
       this.slides.append(slide);
-      this.addControlLink(slide);
-      this.refresh();
+      this.refresh(true);
       this.pushHistory();
       return this.trigger('focused');
     };
 
-    Gallery.prototype.removeSlide = function(e) {
-      var el, index, slide,
-        _this = this;
-      el = $(e.target).closest('li');
-      slide = el.data('slide');
-      index = slide.prevAll('.slide').length + 1;
-      slide.remove();
-      el.remove();
-      if (index < this.index) {
-        this.index -= 1;
-      } else if (index === this.index) {
-        clearTimeout(this.timeout);
-        this.timeout = this.delay(this.speed, function() {
-          return _this.nextSlide();
-        });
-      }
-      this.refresh();
+    Gallery.prototype.removeSlide = function() {
+      this.$(".slide:nth-child(" + this.index + ")").remove();
+      this.refresh(true);
       return this.pushHistory();
     };
 
@@ -165,21 +160,9 @@ also takes into account undo/redo support using the keyboard or buttons.
         mimeTypes: this.config('regions:gallery:mimeTypes')
       });
       return uploader.on('uploaded', function(file) {
-        if (!file.isImage()) {
-          return;
-        }
         _this.focus();
-        return _this.appendSlide($("<div class=\"slide\"><img src=\"" + (file.get('url')) + "\"/></div>"));
+        return _this.handleAction('file', file);
       });
-    };
-
-    Gallery.prototype.onDropItem = function(e, data) {
-      var url;
-      if (url = $('<div>').html(data.getData('text/html')).find('img').attr('src')) {
-        e.preventDefault();
-        this.focus();
-        return this.appendSlide($("<div class=\"slide\"><img src=\"" + url + "\"/></div>"));
-      }
     };
 
     Gallery.prototype.onFocus = function() {
@@ -205,5 +188,37 @@ also takes into account undo/redo support using the keyboard or buttons.
     return Gallery;
 
   })(Mercury.Region);
+
+  Mercury.Region.Gallery.addAction({
+    prev: function() {
+      return this.prevSlide();
+    },
+    next: function() {
+      return this.nextSlide();
+    },
+    remove: function() {
+      return this.removeSlide();
+    },
+    togglePlay: function() {
+      this.playing = !this.playing;
+      return this.refresh();
+    },
+    file: function(file) {
+      if (file.isImage()) {
+        return this.handleAction('image', {
+          url: file.get('url')
+        });
+      }
+    },
+    image: function(image) {
+      return this.appendSlide("<div class=\"slide\"><img src=\"" + (image.get('url')) + "\"/></div>");
+    }
+  });
+
+  Mercury.Region.Gallery.addContext({
+    togglePlay: function() {
+      return this.playing;
+    }
+  });
 
 }).call(this);

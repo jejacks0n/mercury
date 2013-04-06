@@ -163,9 +163,7 @@ Dependencies:
 
     Html.include(Mercury.Region.Modules.ContentEditable);
 
-    Html.supported = document.designMode && (!Mercury.support.msie || Mercury.support.msie >= 10) && (window.rangy && window.rangy.supported);
-
-    Html.prototype.toolbars = ['html'];
+    Html.supported = Mercury.support.wysiwyg;
 
     Html.prototype.events = {
       'keydown': 'onKeyEvent',
@@ -225,56 +223,23 @@ Dependencies:
       return this.pushHistory(e.keyCode);
     };
 
-    Html.prototype.actions = {
-      bold: function() {
-        return this.toggleWrapSelectedWordsInClass('red');
-      },
-      italic: function() {
-        return this.toggleWrapSelectedWordsInClass('highlight');
-      },
-      underline: function() {
-        return this.toggleWrapSelectedWordsInClass('blue');
-      },
-      rule: function() {
-        return this.replaceSelection('<hr/>');
-      },
-      link: function() {},
-      table: function() {},
-      justifyRight: function() {},
-      justifyFull: function() {},
-      unorderedList: function() {},
-      orderedList: function() {},
-      indent: function() {},
-      outdent: function() {},
-      clean: function() {},
-      edit: function() {},
-      rowBefore: function() {},
-      rowAfter: function() {},
-      rowDelete: function() {},
-      colBefore: function() {},
-      colAfter: function() {},
-      colDelete: function() {},
-      sep1: function() {},
-      colIncrease: function() {},
-      colDecrease: function() {},
-      rowIncrease: function() {},
-      rowDecrease: function() {},
-      file: function(file) {
-        var action;
-        action = file.isImage() ? 'image' : 'link';
-        return this.handleAction(action, {
-          url: file.get('url'),
-          text: file.get('name')
-        });
-      },
-      snippets: function() {},
-      save: function() {},
-      preview: function() {},
-      history: function() {}
-    };
-
     return Html;
 
   })(Mercury.Region);
+
+  Mercury.Region.Html.addAction({
+    bold: function() {
+      return this.toggleWrapSelectedWordsInClass('red');
+    },
+    italic: function() {
+      return this.toggleWrapSelectedWordsInClass('highlight');
+    },
+    underline: function() {
+      return this.toggleWrapSelectedWordsInClass('blue');
+    },
+    rule: function() {
+      return this.replaceSelection('<hr/>');
+    }
+  });
 
 }).call(this);

@@ -23,8 +23,6 @@ them when you render the content.
 
     Text.supported = true;
 
-    Text.prototype.toolbars = false;
-
     Text.prototype.value = function(value) {
       var _ref, _ref1;
       if (value == null) {

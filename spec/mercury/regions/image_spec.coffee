@@ -21,15 +21,15 @@ describe "Mercury.Region.Image", ->
     expect( subject.events ).to.have.keys(['mousedown'])
 
 
-  describe "#init", ->
+  describe "#afterBuild", ->
 
     it "sets the data to whatever the align attribute is (or null)", ->
       spyOn(subject, 'data')
       subject.el.attr(align: 'foo')
-      subject.init()
+      subject.afterBuild()
       expect( subject.data ).calledWith(align: 'foo')
       subject.el.removeAttr('align')
-      subject.init()
+      subject.afterBuild()
       expect( subject.data ).calledWith(align: null)
 
 

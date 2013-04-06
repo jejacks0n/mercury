@@ -29,7 +29,7 @@ class Mercury.Region.Image extends Mercury.Region
   events:
     'mousedown': 'onMousedown'
 
-  init: ->
+  afterBuild: ->
     @data(align: @attr('align') || null)
 
 

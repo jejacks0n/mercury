@@ -48,7 +48,7 @@ image with the one that was uploaded.
       'mousedown': 'onMousedown'
     };
 
-    Image.prototype.init = function() {
+    Image.prototype.afterBuild = function() {
       return this.data({
         align: this.attr('align') || null
       });

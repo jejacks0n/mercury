@@ -1,7 +1,14 @@
-class @DeveloperToolbar extends Mercury.View
+# Developer Interface
+#
+# This provides examples for how to do various things with Mercury.
+#
+# We can use the Mercury Core library to create things like views, models, regions, etc. Dive into the code to check out
+# whats possible. It has a lot of comments and is pretty easy to read.
+#
+class @DeveloperInterface extends Mercury.View
 
-  template: 'developer-toolbar'
-  className: 'developer-toolbar'
+  template: 'developer-interface'
+  className: 'developer-interface'
   tag: 'ul'
 
   events:
@@ -107,12 +114,12 @@ JST['/mercury/templates/new-region'] = (scope) ->
   <div class="region">
     <div data-mercury="markdown" id="new_region_#{Math.floor(Math.random() * 10000)}">Lorem ipsum</div>
     <div class="region-controls">
-      <a class="delete" onclick="DeveloperToolbar.deleteRegion(this)">delete</a>|
-      <a class="release" onclick="DeveloperToolbar.releaseRegion(this)">release</a>
+      <a class="delete" onclick="DeveloperInterface.deleteRegion(this)">delete</a>|
+      <a class="release" onclick="DeveloperInterface.releaseRegion(this)">release</a>
     </div>
   </div>
   """
-JST['/mercury/templates/developer-toolbar'] = (scope) ->
+JST['/mercury/templates/developer-interface'] = (scope) ->
   """
   <li data-action="save">save</li>
   <li data-action="toggle_interface">toggle interface</li>

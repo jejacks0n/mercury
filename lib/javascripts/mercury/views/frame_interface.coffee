@@ -12,6 +12,14 @@ class Mercury.FrameInterface extends Mercury.BaseInterface
       return super
 
 
+  reinitialize: ->
+    if @frame.length
+      @initialized = false
+      @initializeFrame()
+    else
+      super
+
+
   bindDefaultEvents: ->
     @frame.on('load', => @initializeFrame())
     Mercury.on('initialize', => @initializeFrame())

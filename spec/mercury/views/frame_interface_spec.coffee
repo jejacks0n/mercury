@@ -7,6 +7,7 @@ describe "Mercury.FrameInterface", ->
   subject = null
 
   beforeEach ->
+    Mercury.configure 'logging:enabled', false
     spyOn($.fn, 'before')
     spyOn(Klass::, 'focusActiveRegion')
     subject = new Klass(frame: '<iframe>')
@@ -21,6 +22,30 @@ describe "Mercury.FrameInterface", ->
       subject.frame = null
       subject.initialize()
       expect( Klass.__super__.initialize ).called
+
+
+  describe "#reinitialze", ->
+
+    describe "with frame", ->
+
+      beforeEach ->
+        spyOn(subject, 'initializeFrame')
+
+      it "resets @initialized", ->
+        subject.reinitialize()
+        expect( subject.initialized ).to.be.false
+
+      it "calls #initializeFrame", ->
+        subject.reinitialize()
+        expect( subject.initializeFrame ).called
+
+    describe "with fallback", ->
+
+      it "calls super", ->
+        subject.frame = []
+        spyOn(Klass.__super__, 'reinitialize')
+        subject.reinitialize()
+        expect( Klass.__super__.reinitialize ).called
 
 
   describe "#bindDefaultEvents", ->

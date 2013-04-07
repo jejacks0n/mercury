@@ -15,18 +15,13 @@ also takes into account undo/redo support using the keyboard or buttons.
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  Mercury.configure('toolbars:gallery', {
-    general: {
-      prev: ['Previous Slide'],
-      next: ['Next Slide'],
-      remove: ['Delete Slide'],
-      togglePlay: ['Play/Pause']
-    }
-  });
-
   Mercury.Region.Gallery = (function(_super) {
 
     __extends(Gallery, _super);
+
+    function Gallery() {
+      return Gallery.__super__.constructor.apply(this, arguments);
+    }
 
     Gallery.define('Mercury.Region.Gallery', 'gallery');
 
@@ -48,16 +43,15 @@ also takes into account undo/redo support using the keyboard or buttons.
       'click .mercury-gallery-region-controls li': 'gotoSlide'
     };
 
-    function Gallery() {
+    Gallery.prototype.init = function() {
       var _ref;
-      Gallery.__super__.constructor.apply(this, arguments);
       this.speed || (this.speed = 3000);
       this.index = 0;
       if ((_ref = this.playing) == null) {
         this.playing = true;
       }
-      this.refresh(true);
-    }
+      return this.refresh(true);
+    };
 
     Gallery.prototype.build = function() {
       if (!this.$('.slides').length) {
@@ -188,6 +182,15 @@ also takes into account undo/redo support using the keyboard or buttons.
     return Gallery;
 
   })(Mercury.Region);
+
+  Mercury.Region.Gallery.addToolbar('gallery', {
+    general: {
+      prev: ['Previous Slide'],
+      next: ['Next Slide'],
+      remove: ['Delete Slide'],
+      togglePlay: ['Play/Pause']
+    }
+  });
 
   Mercury.Region.Gallery.addAction({
     prev: function() {

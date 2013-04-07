@@ -2,10 +2,11 @@
 /*!
 The Markdown region utilizes the Markdown syntax (http://en.wikipedia.org/wiki/Markdown) to generate an html preview.
 When saved this region will return the markdown content (unprocessed). This content can be used by your server to render
-html content to a user, or to serve the markdown when editing.
+html content to a user, or to serve the markdown when editing. The default converter uses Github Flavored Markdown, so
+your server should also implement the same thing.
 
 Dependencies:
-  showdown-1.0 - https://github.com/coreyti/showdown
+  marked - https://github.com/chjj/marked
 
 This is still experimental and could be changed later to provide a way to fetch the markdown content for a given region
 via Ajax.
@@ -15,52 +16,6 @@ via Ajax.
 (function() {
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
-
-  Mercury.configure('toolbars:markdown', {
-    defined: {
-      style: [
-        'Style', {
-          select: '/mercury/templates/style'
-        }
-      ],
-      sep1: ' ',
-      block: [
-        'Block Format', {
-          select: '/mercury/templates/block'
-        }
-      ],
-      sep2: '-'
-    },
-    decoration: {
-      bold: ['Bold'],
-      italic: ['Italicize'],
-      strike: ['Strikethrough'],
-      underline: ['Underline'],
-      sep1: '-'
-    },
-    script: {
-      subscript: ['Subscript'],
-      superscript: ['Superscript'],
-      sep1: '-'
-    },
-    list: {
-      unorderedList: ['Unordered List'],
-      orderedList: ['Numbered List'],
-      sep1: '-'
-    },
-    indent: {
-      indent: ['Increase Indentation'],
-      outdent: ['Decrease Indentation'],
-      sep1: '-'
-    },
-    rules: {
-      rule: [
-        'Horizontal Rule', {
-          title: 'Insert a horizontal rule'
-        }
-      ]
-    }
-  });
 
   Mercury.Region.Markdown = (function(_super) {
 
@@ -88,14 +43,15 @@ via Ajax.
       h5: ['##### ', ' #####'],
       h6: ['###### ', ' ######'],
       pre: ['```\n', '\n```'],
-      paragraph: ['\n', '\n'],
+      indentPre: ['    ', ''],
       blockquote: ['> ', ''],
+      paragraph: ['\n', '\n'],
       bold: ['**'],
       italic: ['_'],
       underline: ['<u>', '</u>'],
       strike: ['<del>', '</del>'],
-      sup: ['<sup>', '</sup>'],
-      sub: ['<sub>', '</sub>'],
+      superscript: ['<sup>', '</sup>'],
+      subscript: ['<sub>', '</sub>'],
       unorderedList: ['- ', ''],
       orderedList: ['1. ', '', /^\d+. |$/gi],
       link: ['[', '](%s)', /^\[|\]\([^)]\)/gi],
@@ -107,19 +63,37 @@ via Ajax.
     Markdown.prototype.blocks = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'blockquote', 'unorderedList', 'orderedList'];
 
     function Markdown(el, options) {
+      var _ref;
       this.el = el;
       this.options = options != null ? options : {};
-      try {
-        this.converter = this.options.converter || new Showdown.converter().makeHtml;
-      } catch (e) {
-        this.notify(this.t('requires Showdown'));
+      this.converter = (_ref = this.options.converter) != null ? _ref : window.marked;
+      if (!this.converter) {
+        this.notify(this.t('requires a markdown converter'));
         return false;
       }
+      this.setupConverter();
       Markdown.__super__.constructor.apply(this, arguments);
     }
 
+    Markdown.prototype.setupConverter = function() {
+      return this.converter.setOptions(this.config('regions:markdown') || {});
+    };
+
     Markdown.prototype.convertedValue = function() {
       return this.converter(this.value());
+    };
+
+    Markdown.prototype.toJSON = function(forSave) {
+      var obj;
+      if (forSave == null) {
+        forSave = false;
+      }
+      obj = Markdown.__super__.toJSON.apply(this, arguments);
+      if (!forSave) {
+        return obj;
+      }
+      obj.converted = this.convertedValue();
+      return obj;
     };
 
     Markdown.prototype.onDropFile = function(files) {
@@ -160,12 +134,108 @@ via Ajax.
         } else {
           return this.replaceSelectedLine(exp, '\n');
         }
+      } else if (match = val.match(/^\s{4}/g)) {
+        e.preventDefault();
+        if (val.match(/^\s{4}./)) {
+          return this.replaceSelection("\n    ");
+        } else {
+          return this.replaceSelectedLine(exp, '\n');
+        }
       }
     };
 
     return Markdown;
 
   })(Mercury.Region);
+
+  Mercury.Region.Markdown.addToolbar('markdown', {
+    defined: {
+      style: [
+        'Style', {
+          select: '/mercury/templates/style'
+        }
+      ],
+      sep1: '-'
+    },
+    headings: {
+      h1: [
+        'Heading 1', {
+          action: ['block', 'h1']
+        }
+      ],
+      h2: [
+        'Heading 2', {
+          action: ['block', 'h2']
+        }
+      ],
+      h3: [
+        'Heading 3', {
+          action: ['block', 'h3']
+        }
+      ],
+      h4: [
+        'Heading 4', {
+          action: ['block', 'h4']
+        }
+      ],
+      h5: [
+        'Heading 5', {
+          action: ['block', 'h5']
+        }
+      ],
+      h6: [
+        'Heading 6', {
+          action: ['block', 'h6']
+        }
+      ],
+      removeHeading: [
+        'No Heading', {
+          action: ['block', null]
+        }
+      ],
+      sep1: '-'
+    },
+    blocks: {
+      unorderedList: ['Unordered List'],
+      orderedList: ['Numbered List'],
+      blockquote: [
+        'Blockquote', {
+          action: ['block', 'blockquote']
+        }
+      ],
+      sep1: ' ',
+      pre: [
+        'Pre / Code', {
+          action: ['block', 'pre']
+        }
+      ],
+      sep2: '-'
+    },
+    decoration: {
+      bold: ['Bold'],
+      italic: ['Italicize'],
+      strike: ['Strikethrough'],
+      underline: ['Underline'],
+      sep1: '-'
+    },
+    script: {
+      subscript: ['Subscript'],
+      superscript: ['Superscript'],
+      sep1: '-'
+    },
+    indent: {
+      indent: ['Increase Indentation'],
+      outdent: ['Decrease Indentation'],
+      sep1: '-'
+    },
+    rules: {
+      rule: [
+        'Horizontal Rule', {
+          title: 'Insert a horizontal rule'
+        }
+      ]
+    }
+  });
 
   Mercury.Region.Markdown.addAction({
     bold: function() {
@@ -181,10 +251,10 @@ via Ajax.
       return this.toggleWrapSelectedWords('strike');
     },
     subscript: function() {
-      return this.toggleWrapSelectedWords('sub');
+      return this.toggleWrapSelectedWords('subscript');
     },
     superscript: function() {
-      return this.toggleWrapSelectedWords('sup');
+      return this.toggleWrapSelectedWords('superscript');
     },
     rule: function() {
       return this.replaceSelectionWithParagraph('- - -');
@@ -291,6 +361,30 @@ via Ajax.
   });
 
   Mercury.Region.Markdown.addContext({
+    h1: function() {
+      return this.isWithinLineToken('h1');
+    },
+    h2: function() {
+      return this.isWithinLineToken('h2');
+    },
+    h3: function() {
+      return this.isWithinLineToken('h3');
+    },
+    h4: function() {
+      return this.isWithinLineToken('h4');
+    },
+    h5: function() {
+      return this.isWithinLineToken('h5');
+    },
+    h6: function() {
+      return this.isWithinLineToken('h6');
+    },
+    blockquote: function() {
+      return this.firstLineMatches(/^> /);
+    },
+    pre: function() {
+      return this.paragraphMatches(/^```|```$/) || this.firstLineMatches(/^(> )*\s{4}/);
+    },
     bold: function() {
       return this.isWithinToken('bold');
     },
@@ -304,10 +398,10 @@ via Ajax.
       return this.isWithinToken('strike');
     },
     subscript: function() {
-      return this.isWithinToken('sub');
+      return this.isWithinToken('subscript');
     },
     superscript: function() {
-      return this.isWithinToken('sup');
+      return this.isWithinToken('superscript');
     },
     unorderedList: function() {
       return this.firstLineMatches(/^(> )*- /);

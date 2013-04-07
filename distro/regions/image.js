@@ -2,29 +2,14 @@
 /*!
 The Image region allows you to have a replaceable image region on your page. It provided the ability to drag/drop images
 from the desktop -- which will get uploaded (and probably processed by your server) and will then replace the existing
-image with the one that was uploaded.
+image with the one that was uploaded. You can change the image alignment, which will be provided in the data on
+serialization to the server.
 */
 
 
 (function() {
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
-
-  Mercury.configure('toolbars:image', {
-    general: {
-      crop: ['Crop Image'],
-      resize: ['Resize Image'],
-      sep1: '-'
-    },
-    alignment: {
-      alignLeft: ['Align Left'],
-      alignRight: ['Align Right'],
-      alignTop: ['Align Top'],
-      alignMiddle: ['Align Middle'],
-      alignBottom: ['Align Bottom'],
-      alignNone: ['Align None']
-    }
-  });
 
   Mercury.Region.Image = (function(_super) {
 
@@ -48,25 +33,12 @@ image with the one that was uploaded.
       'mousedown': 'onMousedown'
     };
 
-    Image.prototype.afterBuild = function() {
-      return this.data({
-        align: this.attr('align') || null
-      });
-    };
-
     Image.prototype.value = function(value) {
       if (value === null || typeof value === 'undefined') {
         return this.attr('src');
       } else {
         return this.attr('src', value);
       }
-    };
-
-    Image.prototype.setData = function(obj) {
-      Image.__super__.setData.apply(this, arguments);
-      return this.attr({
-        align: this.data('align')
-      });
     };
 
     Image.prototype.onMousedown = function(e) {
@@ -89,6 +61,30 @@ image with the one that was uploaded.
     return Image;
 
   })(Mercury.Region);
+
+  Mercury.Region.Image.addToolbar('image', {
+    general: {
+      crop: ['Crop Image'],
+      resize: ['Resize Image'],
+      sep1: '-'
+    },
+    alignment: {
+      alignLeft: ['Align Left'],
+      alignRight: ['Align Right'],
+      alignTop: ['Align Top'],
+      alignMiddle: ['Align Middle'],
+      alignBottom: ['Align Bottom'],
+      alignNone: ['Align None']
+    }
+  });
+
+  Mercury.Region.Image.addData({
+    align: function(val) {
+      return this.attr({
+        align: val
+      });
+    }
+  });
 
   Mercury.Region.Image.addAction({
     alignLeft: function() {

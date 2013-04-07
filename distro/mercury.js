@@ -124,7 +124,9 @@ Copyright (c) 2013 Jeremy Jackson
       },
       markdown: {
         autoSize: true,
-        mimeTypes: false
+        mimeTypes: false,
+        sanitize: false,
+        breaks: true
       },
       plain: {
         actions: true
@@ -1097,7 +1099,7 @@ Copyright (c) 2013 Jeremy Jackson
       }
       this.logPrefix = this.prototype.logPrefix = "" + this.className + ":";
       this.prototype.actions = $.extend(this.prototype.actions, actions);
-      this.prototype.toolbars = [type];
+      this.prototype.toolbars = [];
       this.off();
       return this;
     };
@@ -1138,15 +1140,35 @@ Copyright (c) 2013 Jeremy Jackson
       return this.context = $.extend(this.context || {}, contexts);
     };
 
-    Region.addToolbar = function(toolbar) {
+    Region.addData = function(attr, handler) {
+      var dataAttrs;
+      if (typeof attr === 'object') {
+        dataAttrs = attr;
+      } else {
+        dataAttrs = {};
+        dataAttrs[attr] = handler;
+      }
+      return this.dataAttrs = $.extend(this.dataAttrs || {}, dataAttrs);
+    };
+
+    Region.addToolbar = function(name, obj) {
       var _base;
+      if (obj == null) {
+        obj = null;
+      }
       (_base = this.prototype).toolbars || (_base.toolbars = []);
-      return this.prototype.toolbars.push(toolbar);
+      if (obj) {
+        Mercury.configure("toolbars:" + this.type + ":" + name, obj);
+      }
+      return this.prototype.toolbars.push(name);
     };
 
     function Region(el, options) {
       this.el = el;
       this.options = options != null ? options : {};
+      if (this.el && $(this.el).data('region')) {
+        return false;
+      }
       if (!this.constructor.supported) {
         this.notify(this.t('is unsupported in this browser'));
         return false;
@@ -1155,6 +1177,7 @@ Copyright (c) 2013 Jeremy Jackson
         this.options = $.extend({}, JSON.parse(this.el.attr(this.config('regions:options')) || '{}'), options);
       }
       this.context = $.extend({}, this.constructor.context, this.context);
+      this.dataAttrs = $.extend({}, this.constructor.dataAttrs, this.dataAttrs);
       this.actions || (this.actions = {});
       if (typeof this.beforeBuild === "function") {
         this.beforeBuild();
@@ -1171,6 +1194,7 @@ Copyright (c) 2013 Jeremy Jackson
       this.focusable || (this.focusable = this.el);
       this.skipHistoryOn || (this.skipHistoryOn = ['redo']);
       this.changed || (this.changed = false);
+      this.setInitialData();
       if (typeof this.afterBuild === "function") {
         this.afterBuild();
       }
@@ -1188,6 +1212,19 @@ Copyright (c) 2013 Jeremy Jackson
       this.bindDefaultEvents();
       this.initialValue = JSON.stringify(this.toJSON());
     }
+
+    Region.prototype.setInitialData = function() {
+      var attr, handler, obj, _ref, _results;
+      _ref = this.dataAttrs;
+      _results = [];
+      for (attr in _ref) {
+        handler = _ref[attr];
+        obj = {};
+        obj[attr] = this.el.data(attr) || null;
+        _results.push(this.data(obj));
+      }
+      return _results;
+    };
 
     Region.prototype.addRegionClassname = function() {
       return this.addClass("mercury-" + this.constructor.type + "-region");
@@ -1304,7 +1341,7 @@ Copyright (c) 2013 Jeremy Jackson
           delete data.region;
           delete data.mercury;
         }
-        return data;
+        return data != null ? data : null;
       }
       obj = key;
       if (typeof key === 'string') {
@@ -1316,7 +1353,14 @@ Copyright (c) 2013 Jeremy Jackson
     };
 
     Region.prototype.setData = function(obj) {
-      return this.el.data(obj);
+      var attr, value, _ref, _results;
+      this.el.data(obj);
+      _results = [];
+      for (attr in obj) {
+        value = obj[attr];
+        _results.push((_ref = this.dataAttrs[attr]) != null ? typeof _ref.call === "function" ? _ref.call(this, value) : void 0 : void 0);
+      }
+      return _results;
     };
 
     Region.prototype.snippets = function() {
@@ -1350,7 +1394,10 @@ Copyright (c) 2013 Jeremy Jackson
       }
     };
 
-    Region.prototype.toJSON = function() {
+    Region.prototype.toJSON = function(forSave) {
+      if (forSave == null) {
+        forSave = false;
+      }
       return {
         name: this.name,
         type: this.constructor.type,
@@ -1499,68 +1546,12 @@ Copyright (c) 2013 Jeremy Jackson
 
 }).call(this);
 (function() {
-
-  Mercury.View.Modules.DeveloperToolbar = {
-    included: function() {
-      return this.on('init', this.buildDeveloperToolbar);
-    },
-    buildDeveloperToolbar: function() {
-      this.append(this.renderTemplate('developer-toolbar'));
-      return this.delegateEvents({
-        'click .mercury-developer-toolbar [data-action]': 'developerAction'
-      });
-    },
-    developerAction: function(e) {
-      var act, target, val, _ref;
-      target = $(e.target);
-      act = target.data('action');
-      val = target.data('value');
-      switch (act) {
-        case 'interface':
-          if ((_ref = this.hidden) == null) {
-            this.hidden = this.config('interface:enabled');
-          }
-          this.hidden = !this.hidden;
-          if (this.hidden) {
-            Mercury.trigger('interface:show');
-          } else {
-            Mercury.trigger('interface:hide');
-          }
-          return Mercury.trigger('mode', 'preview');
-        case 'html':
-          val = (function() {
-            switch (val) {
-              case 'html':
-                return '<table>\n  <tr>\n    <td>1</td>\n    <td>2</td>\n  </tr>\n</table>';
-              case 'el':
-                return $('<section class="foo"><h1>testing</h1></section>').get(0);
-              case 'jquery':
-                return $('<section class="foo"><h1>testing</h1></section>');
-            }
-          })();
-          return Mercury.trigger('action', act, val);
-        default:
-          return Mercury.trigger('action', act, val);
-      }
-    }
-  };
-
-  this.JST || (this.JST = {});
-
-  JST['/mercury/templates/developer-toolbar'] = function(scope) {
-    return "<ul class=\"mercury-developer-toolbar\">\n<li data-action=\"interface\">toggle interface</li>\n<hr/>\n<li data-action=\"block\" data-value=\"none\">none</li>\n<li data-action=\"block\" data-value=\"h1\">h1</li>\n<li data-action=\"block\" data-value=\"h2\">h2</li>\n<li data-action=\"block\" data-value=\"h3\">h3</li>\n<li data-action=\"block\" data-value=\"h4\">h4</li>\n<li data-action=\"block\" data-value=\"h5\">h5</li>\n<li data-action=\"block\" data-value=\"h6\">h6</li>\n<li data-action=\"block\" data-value=\"pre\">pre</li>\n<li data-action=\"block\" data-value=\"paragraph\">paragraph</li>\n<li data-action=\"block\" data-value=\"blockquote\">blockquote</li>\n<hr/>\n<li data-action=\"style\" data-value=\"border:1px solid red\">style</li>\n<li data-action=\"style\" data-value=\"foo\">class</li>\n<hr/>\n<li data-action=\"html\" data-value=\"html\">html (with html)</li>\n<li data-action=\"html\" data-value=\"el\">html (with element)</li>\n<li data-action=\"html\" data-value=\"jquery\">html (with jQuery)</li>\n<hr/>\n<li data-action=\"link\" data-value='{\"url\": \"https://github.com/jejacks0n/mercury\", \"text\": \"Project Home\"}'>link</li>\n<li data-action=\"image\" data-value='{\"url\": \"http://goo.gl/sZb1K\", \"text\": \"Test Image\"}'>image</li>\n<hr/>\n<li><input type=\"text\"/></li>\n</ul>";
-  };
-
-}).call(this);
-(function() {
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
   Mercury.BaseInterface = (function(_super) {
 
     __extends(BaseInterface, _super);
-
-    BaseInterface.include(Mercury.View.Modules.DeveloperToolbar);
 
     BaseInterface.prototype.logPrefix = 'Mercury.BaseInterface:';
 
@@ -1569,7 +1560,10 @@ Copyright (c) 2013 Jeremy Jackson
     BaseInterface.prototype.events = {
       'mousedown': 'focusActiveRegion',
       'focusout': 'focusActiveRegion',
-      'region:focus': 'onRegionFocus'
+      'mercury:focus': 'focusActiveRegion',
+      'region:focus': 'onRegionFocus',
+      'region:release': 'onRegionRelease',
+      'mercury:reinitialize': 'reinitialize'
     };
 
     function BaseInterface() {
@@ -1613,6 +1607,11 @@ Copyright (c) 2013 Jeremy Jackson
       return this.addAllRegions();
     };
 
+    BaseInterface.prototype.reinitialize = function() {
+      this.initialize();
+      return this.focusActiveRegion();
+    };
+
     BaseInterface.prototype.buildInterface = function() {
       this.buildToolbar();
       this.buildStatusbar();
@@ -1653,8 +1652,8 @@ Copyright (c) 2013 Jeremy Jackson
 
     BaseInterface.prototype.bindDefaultEvents = function() {
       var _this = this;
-      Mercury.on('mode', function() {
-        return _this.focusActiveRegion();
+      Mercury.on('mode', function(mode) {
+        return _this.setMode(mode);
       });
       return Mercury.on('action', function() {
         return _this.focusActiveRegion();
@@ -1672,7 +1671,7 @@ Copyright (c) 2013 Jeremy Jackson
         el = _ref[_i];
         this.addRegion(el);
       }
-      this.region = this.regions[0];
+      this.region || (this.region = this.regions[0]);
       if (!this.config('interface:enabled')) {
         return Mercury.trigger('mode', 'preview');
       }
@@ -1684,6 +1683,9 @@ Copyright (c) 2013 Jeremy Jackson
 
     BaseInterface.prototype.addRegion = function(el) {
       var region;
+      if ($(el).data('region')) {
+        return;
+      }
       region = Mercury.Region.create(el);
       return this.regions.push(region);
     };
@@ -1698,8 +1700,43 @@ Copyright (c) 2013 Jeremy Jackson
       return (_ref = this.region) != null ? _ref.focus() : void 0;
     };
 
+    BaseInterface.prototype.setMode = function(mode) {
+      this["" + mode + "Mode"] = !this["" + mode + "Mode"];
+      return this.focusActiveRegion();
+    };
+
+    BaseInterface.prototype.toggleInterface = function() {
+      var _ref;
+      if ((_ref = this.interfaceHidden) == null) {
+        this.interfaceHidden = this.config('interface:enabled');
+      }
+      this.interfaceHidden = !this.interfaceHidden;
+      if (this.interfaceHidden) {
+        Mercury.trigger('interface:show');
+        if (this.previewMode) {
+          return Mercury.trigger('mode', 'preview');
+        }
+      } else {
+        Mercury.trigger('interface:hide');
+        if (!this.previewMode) {
+          return Mercury.trigger('mode', 'preview');
+        }
+      }
+    };
+
     BaseInterface.prototype.onRegionFocus = function(region) {
       return this.region = region;
+    };
+
+    BaseInterface.prototype.onRegionRelease = function(region) {
+      var index;
+      if (region === this.region) {
+        this.region = this.regions[0];
+      }
+      index = this.regions.indexOf(region);
+      if (index > -1) {
+        return this.regions.splice(index, 1);
+      }
     };
 
     BaseInterface.prototype.onUnload = function() {
@@ -1727,7 +1764,7 @@ Copyright (c) 2013 Jeremy Jackson
       _ref = this.regions;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         region = _ref[_i];
-        data[region.name] = region.toJSON();
+        data[region.name] = region.toJSON(true);
       }
       return data;
     };
@@ -1758,6 +1795,15 @@ Copyright (c) 2013 Jeremy Jackson
       if (!this.frame.length) {
         this.initialized = true;
         return FrameInterface.__super__.initialize.apply(this, arguments);
+      }
+    };
+
+    FrameInterface.prototype.reinitialize = function() {
+      if (this.frame.length) {
+        this.initialized = false;
+        return this.initializeFrame();
+      } else {
+        return FrameInterface.__super__.reinitialize.apply(this, arguments);
       }
     };
 
@@ -1992,6 +2038,15 @@ Copyright (c) 2013 Jeremy Jackson
       colDecrease: 'a',
       rowIncrease: 'b',
       rowDecrease: 'c',
+      h1: 'q',
+      h2: 'r',
+      h3: 's',
+      h4: 't',
+      h5: 'u',
+      h6: 'v',
+      removeHeading: 'w',
+      blockquote: 'm',
+      pre: 'S',
       crop: 'e',
       resize: 'f',
       alignLeft: 'g',
@@ -2122,14 +2177,11 @@ Copyright (c) 2013 Jeremy Jackson
       this.name = name;
       this.label = label;
       this.options = options != null ? options : {};
-      ToolbarButton.__super__.constructor.call(this, this.options);
-    }
-
-    ToolbarButton.prototype.init = function() {
       this.action = this.determineAction();
       this.actionName = this.determineActionName();
-      return this.type = this.determineType();
-    };
+      this.type = this.determineType();
+      ToolbarButton.__super__.constructor.call(this, this.options);
+    }
 
     ToolbarButton.prototype.build = function() {
       this.attr('data-type', this.type);
@@ -2175,7 +2227,10 @@ Copyright (c) 2013 Jeremy Jackson
     };
 
     ToolbarButton.prototype.onRegionFocus = function(region) {
-      return this.updateForRegion(region);
+      var _this = this;
+      return this.delay(100, function() {
+        return _this.updateForRegion(region);
+      });
     };
 
     ToolbarButton.prototype.updateForRegion = function(region) {
@@ -2802,6 +2857,9 @@ Copyright (c) 2013 Jeremy Jackson
       };
     },
     fromStack: function(val) {
+      if (!val) {
+        return;
+      }
       this.fromJSON(val.val);
       if (val.sel) {
         return typeof this.setSerializedSelection === "function" ? this.setSerializedSelection(val.sel) : void 0;
@@ -2868,10 +2926,28 @@ Copyright (c) 2013 Jeremy Jackson
         return true;
       }
     },
+    isWithinLineToken: function(wrapper) {
+      var exp, fix, sel, set, _ref;
+      _ref = this.getTokenAndSelection(wrapper), fix = _ref[0], sel = _ref[1];
+      exp = this.expandSelectionToLines(sel);
+      set = exp.text.match(fix.regexp);
+      if (!(set && set.length === 2)) {
+        return false;
+      }
+      return true;
+    },
     firstLineMatches: function(matcher) {
       var exp, sel;
       sel = this.getSelection();
       exp = this.expandSelectionToLines(sel);
+      if (exp.text.match(matcher)) {
+        return true;
+      }
+    },
+    paragraphMatches: function(matcher) {
+      var exp, sel;
+      sel = this.getSelection();
+      exp = this.expandSelectionToParagraphs(sel);
       if (exp.text.match(matcher)) {
         return true;
       }

@@ -64,31 +64,8 @@ Copyright (c) 2013 Jeremy Jackson
   *zoom: 1;
 }
 
-/* Mercury.Interface
+/* Mercury.BaseInterface
  *----------------------------------------------------------------------------*/
-/* line 3, ../../lib/stylesheets/mercury/views/_base_interface.scss */
-mercury .mercury-developer-toolbar {
-  position: fixed;
-  z-index: 10000;
-  right: 10px;
-  bottom: 30px;
-  border: 1px solid white;
-  border-radius: 5px;
-  color: #fff;
-  background: rgba(0, 0, 0, 0.7);
-  padding: 10px;
-  margin: 0;
-  list-style: none;
-}
-/* line 15, ../../lib/stylesheets/mercury/views/_base_interface.scss */
-mercury .mercury-developer-toolbar li {
-  cursor: pointer;
-}
-/* line 17, ../../lib/stylesheets/mercury/views/_base_interface.scss */
-mercury .mercury-developer-toolbar li:hover {
-  color: #00bce5;
-}
-
 /* Mercury.FrameInterface
  *----------------------------------------------------------------------------*/
 /* line 3, ../../lib/stylesheets/mercury/views/_frame_interface.scss */

@@ -19,6 +19,7 @@ jQuery ->
   $.ajaxSetup headers: {'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')}
   Mercury.init(frame: '#mercury_frame')
 
+
 # Adding functionality (toolbars)
 #
 # For more advanced custom toolbar functionality you may consider adding a full toolbar and adding that toolbar to the
@@ -29,7 +30,7 @@ jQuery ->
 # example we embed the action information directly in the button, but this may not always be optimal and adding a more
 # complex action method is advisable for more complex situations.
 Mercury.configure 'toolbars:advanced',
-  sep1:     '-'
+  sep:      '-'
   favorite: ['Favorite', icon: '1', action: ['html', '<a href="http://twitter.com/jejacks0n">jejacks0n</a>']]
 
 # Next we add that new toolbar to the regions that we want to be able to handle it. The toolbar button will be enabled
@@ -37,16 +38,17 @@ Mercury.configure 'toolbars:advanced',
 Mercury.Region.Markdown.addToolbar('advanced')
 Mercury.Region.Html.addToolbar('advanced')
 
-# Adding functionality (data and context):
+
+# Adding functionality (data and context)
 #
-# This article covers how to add more complex behaviors that understand context, and are stored in data, so it can be
+# This example covers how to add more complex behaviors that understand context, and are stored in data, so it can be
 # serialized on save.
 #
 # First, we add the toolbar buttons we will need. You'll notice here that we're using an icon character, and this maps
 # to a glyph that's defined in the font. You can add your own, and there's more info about that in the README. Now when
 # a user sets the direction we want to track it, so we're going to store it on a data attribute that will be serialized
 # on save, so we can use it later when we re-render the region.
-Mercury.configure 'toolbars:markdown:custom', sep1: '-', direction: ['RTL/LTR', icon: '0']
+Mercury.Region.Markdown.addToolbar 'custom', sep: '-', direction: ['RTL/LTR', icon: '0']
 
 # We add a context, so the button can highlight when it's set. This context checks to see if the region has it's
 # direction set to rtl -- making this button work like a toggle button.
@@ -61,6 +63,23 @@ Mercury.Region.Markdown.addData 'direction', (val) -> @el.css('direction', val |
 Mercury.Region.Markdown.addAction 'direction', ->
   direction = if @data('direction') == 'rtl' then 'ltr' else 'rtl'
   @data(direction: direction)
+
+
+# Adding functionality (getting and replacing selections)
+#
+# In this example we'll work with getting and replacing the selection.
+#
+# Like the previous examples we need a toolbar button / group that we can interact with. It's advisable to always
+# include a separator in your toolbars so they don't clump together with other toolbar buttons.
+Mercury.Region.Markdown.addToolbar 'calculations', sep: '-', calc: ['Calculate', icon: '2']
+
+# Now we just have to add the action that attempts to calculate the given selection. In this case we replace the
+# selection with whatever was evaled -- note, this also allows for javascript injection, so is intended as an example
+# only.
+Mercury.Region.Markdown.addAction 'calc', ->
+  try @replaceSelection(eval(@getSelection().text))
+  catch e
+    @notify('Unable to calcuate the selection -- try selecting a math equation')
 
 
 

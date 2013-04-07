@@ -1,8 +1,6 @@
 #= require mercury/core/view
-#= require mercury/views/modules/developer_toolbar
 
 class Mercury.BaseInterface extends Mercury.View
-  @include Mercury.View.Modules.DeveloperToolbar
 
   logPrefix: 'Mercury.BaseInterface:'
   tag: 'mercury'
@@ -10,7 +8,10 @@ class Mercury.BaseInterface extends Mercury.View
   events:
     'mousedown': 'focusActiveRegion'
     'focusout': 'focusActiveRegion'
+    'mercury:focus': 'focusActiveRegion'
     'region:focus': 'onRegionFocus'
+    'region:release': 'onRegionRelease'
+    'mercury:reinitialize': 'reinitialize'
 
   constructor: ->
     if parent != window && parent.Mercury
@@ -48,6 +49,11 @@ class Mercury.BaseInterface extends Mercury.View
     @addAllRegions()
 
 
+  reinitialize: ->
+    @initialize()
+    @focusActiveRegion()
+
+
   buildInterface: ->
     @buildToolbar()
     @buildStatusbar()
@@ -77,7 +83,7 @@ class Mercury.BaseInterface extends Mercury.View
 
 
   bindDefaultEvents: ->
-    Mercury.on 'mode', => @focusActiveRegion()
+    Mercury.on 'mode', (mode) => @setMode(mode)
     Mercury.on 'action', => @focusActiveRegion()
 
 
@@ -87,7 +93,7 @@ class Mercury.BaseInterface extends Mercury.View
 
   addAllRegions: ->
     @addRegion(el) for el in @regionElements()
-    @region = @regions[0]
+    @region ||= @regions[0]
     Mercury.trigger('mode', 'preview') unless @config('interface:enabled')
 
 
@@ -96,6 +102,7 @@ class Mercury.BaseInterface extends Mercury.View
 
 
   addRegion: (el) ->
+    return if $(el).data('region')
     region = Mercury.Region.create(el)
     @regions.push(region)
 
@@ -105,8 +112,30 @@ class Mercury.BaseInterface extends Mercury.View
     @region?.focus()
 
 
+  setMode: (mode) ->
+    @["#{mode}Mode"] = !@["#{mode}Mode"]
+    @focusActiveRegion()
+
+
+  toggleInterface: ->
+    @interfaceHidden ?= @config('interface:enabled')
+    @interfaceHidden = !@interfaceHidden
+    if @interfaceHidden
+      Mercury.trigger('interface:show')
+      Mercury.trigger('mode', 'preview') if @previewMode
+    else
+      Mercury.trigger('interface:hide')
+      Mercury.trigger('mode', 'preview') unless @previewMode
+
+
   onRegionFocus: (region) ->
     @region = region
+
+
+  onRegionRelease: (region) ->
+    @region = @regions[0] if region == @region
+    index = @regions.indexOf(region)
+    @regions.splice(index, 1) if index > -1
 
 
   onUnload: ->
@@ -122,5 +151,5 @@ class Mercury.BaseInterface extends Mercury.View
   save: ->
     data = {}
     for region in @regions
-      data[region.name] = region.toJSON()
+      data[region.name] = region.toJSON(true)
     data

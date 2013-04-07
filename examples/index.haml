@@ -2,9 +2,8 @@
 %html
   %head
     = csrf_meta_tag
-    = javascript_include_tag "mercury/dependencies", "mercury"
-    = stylesheet_link_tag "mercury"
-    %script jQuery(function() { if (parent.Mercury) parent.Mercury.trigger('initialize') })
+    = javascript_include_tag "mercury/dependencies", "mercury", "developer_toolbar"
+    = stylesheet_link_tag "mercury", "developer_toolbar"
   %body
     %h1 Mercury2 <a href="/teabag">Specs</a>
 
@@ -14,6 +13,10 @@
       %img(src="http://goo.gl/ZoJd4")
       <br/>
       = link_to('Google Link', 'http://google.com')
+
+    %hr
+    -# -----------------------------------------------------------------------------------------------------------------
+    %h2#new_regions New Regions
 
     %hr
     -# -----------------------------------------------------------------------------------------------------------------
@@ -90,3 +93,10 @@
   .highlight {
     background: yellow;
   }
+
+:javascript
+  jQuery(function() {
+    if (parent.Mercury) parent.Mercury.trigger('initialize')
+    if (!Mercury) return;
+    new DeveloperToolbar()
+  });

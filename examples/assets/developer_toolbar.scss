@@ -1,0 +1,42 @@
+.developer-toolbar {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  cursor: default;
+
+  position: fixed;
+  z-index: 10000;
+  right: 10px;
+  bottom: 30px;
+  border: 1px solid #fff;
+  border-radius: 5px;
+  color: #fff;
+  background: rgba(0, 0, 0, .7);
+  padding: 10px;
+  margin: 0;
+  list-style: none;
+  li {
+    cursor: pointer;
+    &:hover {
+      color: #f00;
+    }
+  }
+}
+
+.region {
+  position: relative;
+  .region-controls {
+    position: absolute;
+    right: 0;
+    top: -10px;
+    background: rgba(0, 0, 0, .6);
+    border-radius: 4px;
+    color: #fff;
+    padding: 2px;
+    a {
+      padding: 0 7px;
+      font-style: normal;
+      cursor: pointer;
+    }
+  }
+}

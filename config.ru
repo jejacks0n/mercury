@@ -25,6 +25,7 @@ module Mercury
 
     config.assets.paths << 'uploads'
     config.assets.paths << 'distro'
+    config.assets.paths << 'examples/assets'
   end
 
   Teabag.setup do |config|

@@ -1,7 +1,8 @@
 ###!
 The Image region allows you to have a replaceable image region on your page. It provided the ability to drag/drop images
 from the desktop -- which will get uploaded (and probably processed by your server) and will then replace the existing
-image with the one that was uploaded.
+image with the one that was uploaded. You can change the image alignment, which will be provided in the data on
+serialization to the server.
 ###
 Mercury.configure 'toolbars:image',
   general:
@@ -29,20 +30,12 @@ class Mercury.Region.Image extends Mercury.Region
   events:
     'mousedown': 'onMousedown'
 
-  afterBuild: ->
-    @data(align: @attr('align') || null)
-
 
   value: (value) ->
     if value == null || typeof(value) == 'undefined'
       @attr('src')
     else
       @attr('src', value)
-
-
-  setData: (obj) ->
-    super
-    @attr(align: @data('align'))
 
 
   onMousedown: (e) ->
@@ -56,6 +49,11 @@ class Mercury.Region.Image extends Mercury.Region
     uploader.on 'uploaded', (file) =>
       @focus()
       @handleAction('file', file)
+
+
+Mercury.Region.Image.addData
+
+  align: (val) -> @attr(align: val)
 
 
 Mercury.Region.Image.addAction

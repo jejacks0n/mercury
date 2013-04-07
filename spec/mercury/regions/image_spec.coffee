@@ -21,18 +21,6 @@ describe "Mercury.Region.Image", ->
     expect( subject.events ).to.have.keys(['mousedown'])
 
 
-  describe "#afterBuild", ->
-
-    it "sets the data to whatever the align attribute is (or null)", ->
-      spyOn(subject, 'data')
-      subject.el.attr(align: 'foo')
-      subject.afterBuild()
-      expect( subject.data ).calledWith(align: 'foo')
-      subject.el.removeAttr('align')
-      subject.afterBuild()
-      expect( subject.data ).calledWith(align: null)
-
-
   describe "#value", ->
 
     it "sets the value if the value isn't null or undefined", ->
@@ -91,6 +79,15 @@ describe "Mercury.Region.Image", ->
       subject.onDropFile([1, 2])
       expect( subject.focus ).called
       expect( subject.handleAction ).calledWith('file', '_file_')
+
+
+  describe "dataAttrs", ->
+
+    describe "#align", ->
+
+      it "sets the align attribute", ->
+        subject.data(align: 'right')
+        expect( subject.el.attr('align') ).to.eq('right')
 
 
   describe "actions", ->

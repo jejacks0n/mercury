@@ -15,13 +15,10 @@ class Mercury.ToolbarButton extends Mercury.View
     'region:update': 'updateForRegion'
 
   constructor: (@name, @label, @options = {}) ->
-    super(@options)
-
-
-  init: ->
     @action = @determineAction()
     @actionName = @determineActionName()
     @type = @determineType()
+    super(@options)
 
 
   build: ->
@@ -54,7 +51,7 @@ class Mercury.ToolbarButton extends Mercury.View
 
 
   onRegionFocus: (region) ->
-    @updateForRegion(region)
+    @delay(100, => @updateForRegion(region))
 
 
   updateForRegion: (region) ->

@@ -45,9 +45,9 @@ describe "Mercury.Region", ->
       Klass.define('TestRegion', '_test_', bar: 'baz')
       expect( Klass::actions ).to.eql(foo: 'bar', bar: 'baz')
 
-    it "defaults the toolbars based on @type", ->
+    it "defaults the toolbars", ->
       Klass.define('TestRegion', '_test_', bar: 'baz')
-      expect( Klass::toolbars ).to.eql(['_test_'])
+      expect( Klass::toolbars ).to.eql([])
 
     it "calls .off", ->
       spyOn(Klass, 'off')
@@ -138,6 +138,11 @@ describe "Mercury.Region", ->
       expect( Klass::toolbars ).to.eql(['foo'])
       Klass.addToolbar('bar')
       expect( Klass::toolbars ).to.eql(['foo', 'bar'])
+
+    it "allows passing an object that will be configured", ->
+      spyOn(Mercury, 'configure')
+      Klass.addToolbar('baz', sep: '-')
+      expect( Mercury.configure ).calledWith('toolbars:unknown:baz', sep: '-')
 
 
   describe "#constructor", ->

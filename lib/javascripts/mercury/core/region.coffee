@@ -38,7 +38,7 @@ class Mercury.Region extends Mercury.View
   @define: (@className, @type, actions = {}) ->
     @logPrefix = @::logPrefix = "#{@className}:"
     @::actions = $.extend(@::actions, actions)
-    @::toolbars = [type]
+    @::toolbars = []
     @off()
     @
 
@@ -96,9 +96,10 @@ class Mercury.Region extends Mercury.View
   # Exposes the ability to add actions to the region type. This allows you to provide your own custom actions that may
   # be tied to a button, or something else.
   #
-  @addToolbar: (toolbar) ->
+  @addToolbar: (name, obj = null) ->
     @::toolbars ||= []
-    @::toolbars.push(toolbar)
+    Mercury.configure("toolbars:#{@type}:#{name}", obj) if obj
+    @::toolbars.push(name)
 
 
   # The constructor sets up defaults and attempts to get the name from the element. It will notify if the region isn't

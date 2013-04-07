@@ -7,7 +7,62 @@ Dependencies:
   rangy-serializer
   rangy-cssclassapplier
 ###
-Mercury.configure 'toolbars:html'
+class Mercury.Region.Html extends Mercury.Region
+  @define 'Mercury.Region.Html', 'html'
+  @include Mercury.Region.Modules.DropIndicator
+  @include Mercury.Region.Modules.HtmlSelection
+  @include Mercury.Region.Modules.SelectionValue
+  @include Mercury.Region.Modules.ContentEditable
+
+  @supported: Mercury.support.wysiwyg
+
+  events:
+    'keydown': 'onKeyEvent'
+    'paste': 'onPaste'
+
+  constructor: ->
+    try window.rangy.init()
+    catch e
+      @notify(@t('requires Rangy'))
+      return false
+
+    super
+
+  onDropFile: (files, options) ->
+    uploader = new Mercury.Uploader(files, mimeTypes: @config('regions:html:mimeTypes'))
+    uploader.on 'uploaded', (file) =>
+      @focus()
+      @handleAction('file', file)
+
+
+  onDropItem: ->
+    @pushHistory()
+
+
+  onPaste: (e) ->
+    console.debug('pasted', e)
+
+
+  onKeyEvent: (e) ->
+    return if e.keyCode >= 37 && e.keyCode <= 40 # arrows
+    return if e.metaKey && e.keyCode == 90 # undo / redo
+
+    # common actions
+    if e.metaKey then switch e.keyCode
+      when 66 # b
+        e.preventDefault()
+        return @handleAction('bold')
+      when 73 # i
+        e.preventDefault()
+        return @handleAction('italic')
+      when 85 # u
+        e.preventDefault()
+        return @handleAction('underline')
+
+    @pushHistory(e.keyCode)
+
+
+Mercury.Region.Html.addToolbar 'html',
   defined:
     style:         ['Style', select: '/mercury/templates/style']
     sep1:          ' '
@@ -62,61 +117,6 @@ Mercury.configure 'toolbars:html'
     colDecrease:   ['Decrease Cell Columns', title: 'Decrease the cells colspan and add a new cell']
     rowIncrease:   ['Increase Cell Rows', title: 'Increase the cells rowspan']
     rowDecrease:   ['Decrease Cell Rows', title: 'Decrease the cells rowspan and add a new cell']
-
-
-class Mercury.Region.Html extends Mercury.Region
-  @define 'Mercury.Region.Html', 'html'
-  @include Mercury.Region.Modules.DropIndicator
-  @include Mercury.Region.Modules.HtmlSelection
-  @include Mercury.Region.Modules.SelectionValue
-  @include Mercury.Region.Modules.ContentEditable
-
-  @supported: Mercury.support.wysiwyg
-
-  events:
-    'keydown': 'onKeyEvent'
-    'paste': 'onPaste'
-
-  constructor: ->
-    try window.rangy.init()
-    catch e
-      @notify(@t('requires Rangy'))
-      return false
-
-    super
-
-  onDropFile: (files, options) ->
-    uploader = new Mercury.Uploader(files, mimeTypes: @config('regions:html:mimeTypes'))
-    uploader.on 'uploaded', (file) =>
-      @focus()
-      @handleAction('file', file)
-
-
-  onDropItem: ->
-    @pushHistory()
-
-
-  onPaste: (e) ->
-    console.debug('pasted', e)
-
-
-  onKeyEvent: (e) ->
-    return if e.keyCode >= 37 && e.keyCode <= 40 # arrows
-    return if e.metaKey && e.keyCode == 90 # undo / redo
-
-    # common actions
-    if e.metaKey then switch e.keyCode
-      when 66 # b
-        e.preventDefault()
-        return @handleAction('bold')
-      when 73 # i
-        e.preventDefault()
-        return @handleAction('italic')
-      when 85 # u
-        e.preventDefault()
-        return @handleAction('underline')
-
-    @pushHistory(e.keyCode)
 
 
 Mercury.Region.Html.addAction

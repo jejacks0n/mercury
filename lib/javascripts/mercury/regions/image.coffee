@@ -4,20 +4,6 @@ from the desktop -- which will get uploaded (and probably processed by your serv
 image with the one that was uploaded. You can change the image alignment, which will be provided in the data on
 serialization to the server.
 ###
-Mercury.configure 'toolbars:image',
-  general:
-    crop:        ['Crop Image']
-    resize:      ['Resize Image']
-    sep1:        '-'
-  alignment:
-    alignLeft:   ['Align Left']
-    alignRight:  ['Align Right']
-    alignTop:    ['Align Top']
-    alignMiddle: ['Align Middle']
-    alignBottom: ['Align Bottom']
-    alignNone:   ['Align None']
-
-
 class Mercury.Region.Image extends Mercury.Region
   @define 'Mercury.Region.Image', 'image'
   @include Mercury.Region.Modules.DropIndicator
@@ -49,6 +35,20 @@ class Mercury.Region.Image extends Mercury.Region
     uploader.on 'uploaded', (file) =>
       @focus()
       @handleAction('file', file)
+
+
+Mercury.Region.Image.addToolbar 'image',
+  general:
+    crop:        ['Crop Image']
+    resize:      ['Resize Image']
+    sep1:        '-'
+  alignment:
+    alignLeft:   ['Align Left']
+    alignRight:  ['Align Right']
+    alignTop:    ['Align Top']
+    alignMiddle: ['Align Middle']
+    alignBottom: ['Align Bottom']
+    alignNone:   ['Align None']
 
 
 Mercury.Region.Image.addData

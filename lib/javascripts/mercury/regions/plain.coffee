@@ -8,13 +8,6 @@ Dependencies:
   rangy-serializer
   rangy-cssclassapplier
 ###
-Mercury.configure 'toolbars:plain'
-  decoration:
-    bold:          ['Bold']
-    italic:        ['Italicize']
-    underline:     ['Underline']
-
-
 class Mercury.Region.Plain extends Mercury.Region
   @define 'Mercury.Region.Plain', 'plain'
   @include Mercury.Region.Modules.HtmlSelection
@@ -63,6 +56,13 @@ class Mercury.Region.Plain extends Mercury.Region
         return @handleAction('underline')
 
     @pushHistory(e.keyCode)
+
+
+Mercury.Region.Plain.addToolbar 'plain',
+  decoration:
+    bold:          ['Bold']
+    italic:        ['Italicize']
+    underline:     ['Underline']
 
 
 Mercury.Region.Plain.addAction

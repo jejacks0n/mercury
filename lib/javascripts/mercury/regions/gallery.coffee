@@ -8,13 +8,6 @@ slideshow.
 You can use the control panel to see thumbnails of each slide, to jump to a given slide, or to remove them. This example
 also takes into account undo/redo support using the keyboard or buttons.
 ###
-Mercury.configure 'toolbars:gallery',
-  general:
-    prev:       ['Previous Slide']
-    next:       ['Next Slide']
-    remove:     ['Delete Slide']
-    togglePlay: ['Play/Pause']
-
 class Mercury.Region.Gallery extends Mercury.Region
   @define 'Mercury.Region.Gallery', 'gallery'
   @include Mercury.Region.Modules.DropIndicator
@@ -130,6 +123,14 @@ class Mercury.Region.Gallery extends Mercury.Region
   onRedo: ->
     super
     @refresh(true)
+
+
+Mercury.Region.Gallery.addToolbar 'gallery',
+  general:
+    prev:       ['Previous Slide']
+    next:       ['Next Slide']
+    remove:     ['Delete Slide']
+    togglePlay: ['Play/Pause']
 
 
 Mercury.Region.Gallery.addAction

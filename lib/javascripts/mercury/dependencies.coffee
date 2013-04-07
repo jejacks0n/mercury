@@ -1,6 +1,6 @@
 # All Mercury dependencies.
 #
-#= require jquery-2.0.0
+#= require jquery-1.9.1
 #
 # Full region depdendencies.
 #

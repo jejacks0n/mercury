@@ -19,6 +19,7 @@ initialize = ->
   #
   @init = (options = {}) =>
     return if @interface
+    @trigger('configure')
     @interface = new @[@config('interface:class')](options)
 
   # Add global configuration methods.

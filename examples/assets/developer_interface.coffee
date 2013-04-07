@@ -1,6 +1,7 @@
-# Developer Interface
 #
-# This provides examples for how to do various things with Mercury.
+# Developer interface.
+#
+# This file provides examples for how to do various things with Mercury.
 #
 # We can use the Mercury Core library to create things like views, models, regions, etc. Dive into the code to check out
 # whats possible. It has a lot of comments and is pretty easy to read.

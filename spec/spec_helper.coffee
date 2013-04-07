@@ -55,3 +55,4 @@ afterEach ->
   I18n: {}
   Logger: {}
   Interface: ->
+  trigger: ->

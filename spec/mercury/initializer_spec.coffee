@@ -38,6 +38,11 @@ describe "Mercury", ->
       Klass.init(foo: 'bar')
       expect( Klass.interface ).to.eql({})
 
+    it "triggers the configure event", ->
+      spyOn(Klass, 'trigger')
+      Klass.init()
+      expect( Klass.trigger ).calledWith('configure')
+
     it "instantiated the interface that's configured", ->
       Klass.init(foo: 'bar')
       expect( Klass.Interface ).calledWith(foo: 'bar')

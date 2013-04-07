@@ -1,16 +1,30 @@
 Mercury Editor2
 ===============
 
-Mercury2 is a WYSIWYG editor, and takes a different approach than any editor out there. It was a great html editor that had additional functionality, but it's become more. Mercury2 has the same features as it's predecessor, but is more structured, and provides a full framework in which you can more easily create complex regions that are anything you want.
+Mercury2 is a WYSIWYG editor, and takes a different approach than any editor out there. Mercury2 has the same features as it's predecessor, but is more structured, and provides a full framework in which you can more easily create complex regions and interfaces.
 
-Regions dictate toolbars, buttons, and what actions they support. This simplifies the configuration for toolbars, but also provides more flexibility in terms of defining your own custom functionality that doesn't fit into the standard Mercury features. Check out the gallery region for an example of this.
-
-Mercury2 allows sandboxing content within an iframe or it can load directly on the page you're editing. This has been a complication in the past, so this version simplifies that while also retaining the ability to sandbox itself to mimimize conflicts with javascript libraries and css. It also supports moving it's interface into a [Shadow DOM](http://glazkov.com/2011/01/14/what-the-heck-is-shadow-dom), which removes the interface from the dom on the page that you're editing, which helps to alleviate conflicts on the page with other javascript and css, but isn't as reliable as using an iframe.
+Regions dictate toolbars, buttons, what actions they support, and context for highlighting buttons. This simplifies the configuration, and provides more flexibility in terms of defining your own custom functionality that doesn't fit into the default Mercury features. Check out the gallery region for an example of this.
 
 
 ## Developer Notice
 
-This branch represents the future version of Mercury Editor. This iteration of Mercury Editor (Mercury2) separates the Rails portions from the Javascript portions of the project. Rails is still used for development (for a server, coffeescript, sass, build process etc.) but the Rails Engine has been moved to [mercury-rails] -- this enables more functionality, and to serve as an example of how to implement functionality like snippets and image uploading. If you're interested in integrating Mercury with your own platform, this is the best place to start.
+This branch represents the future version of Mercury Editor. This iteration of Mercury Editor (Mercury2) separates the Rails portions from the Javascript portions of the project. Rails is still used for development (for a server, coffeescript, sass, build process etc.) but the Rails Engine has been moved to [mercury-rails](https://github.com/jejacks0n/mercury-rails) -- this enables more functionality, and to serve as an example of how to implement functionality like snippets and image uploading/resizing. If you're interested in integrating Mercury with your own platform, this is the best place to start.
+
+
+## Examples
+
+Mercury2 comes with several examples of how to integrate more complex features. Check the examples for usage examples and how to sandbox using an iframe, and for more complex integrations check `developer_toolbar.coffee`, which outlines many of the events and API, and `adding_functionality.coffee` which has examples of how to add your own toolbars and actions.
+
+An example of server integration is available in the [mercury-rails](https://github.com/jejacks0n/mercury-rails) project, which outlines all of the features that are needed by the server to fully work with the default regions.
+
+
+## Sandboxing & Shadow Dom
+
+Mercury2 allows sandboxing content within an iframe or it can load directly on the page you're editing. This has been a complication in the past, so this version simplifies that while also retaining the ability to sandbox itself to mimimize conflicts with javascript libraries and css.
+
+The iframe support has also been simplified and expects that you pass an iframe (or selector) when initializing using the FrameInterface. This allows you to determine what url is loaded, and simplifies the save process.
+
+Mercury2 also now has support for moving it's interface into a [Shadow DOM](http://glazkov.com/2011/01/14/what-the-heck-is-shadow-dom), which removes the interface from the dom on the page that you're editing, which helps to alleviate conflicts on the page with other javascript and css, but isn't as reliable as using an iframe nor as widely supported.
 
 
 ## Fonts & Graphics
@@ -22,7 +36,7 @@ The primary toolbar icons and general interface elements are in mercury.ttf, whi
 The toolbar icons (bold, italics, etc.) are in toolbars.ttf, and was built using [fontstruct.com](http://fontstruct.com/). [The original font](http://fontstruct.com/fontstructions/show/797530) can be cloned and edited as needed. Fontstruct is used here because it allows for small pixel fonts but also allows for more advanced shape that scale nicely.
 
 
-## Internationalization / Translations
+## I18n / Translations
 
 Mercury has support for the following locales.  If you'd like to contribute one, the easiest way is to fork the project, create a locale file with your translation, and submit a pull request -- that way you get full credit for your contributions.
 
@@ -45,7 +59,7 @@ Translations and contributors:
 
 ## Dependencies
 
-This version of Mercury is being built using jQuery 2.0, but attempts to minimize reliance on jQuery as much as is feasible, and near the end there may be a pass to remove things like $.extend. Selections in HTML regions are handled using Rangy. Each region can also have it's own dependencies, which is entirely up to the author. If you're writing a custom region it's expected to document the dependencies and version information. Check `lib/javascripts/mercury/dependencies.coffee` for a full list of dependencies.
+This version of Mercury is being built using jQuery 1.9.1/2.0, but attempts to minimize reliance on jQuery as much as is feasible, and near the end there may be a pass to remove things like $.extend. Selections in HTML regions are handled using Rangy. Each region can also have it's own dependencies, which is entirely up to the author. If you're writing a custom region it's expected to document the dependencies and version information. Check `lib/javascripts/mercury/dependencies.coffee` for a full list of dependencies.
 
 
 ## Development
@@ -73,39 +87,18 @@ bundle exec teabag --coverage
 
 ### Contributing
 
-Fork the project, follow the steps above (modifying the repo to reflect your own). Write code+specs, make sure tests pass, push, and submit a pull request.
+Awesome! Just fork the project, follow the steps above (modifying the repo to reflect your own). Write code + specs, making sure all the specs pass, push, and then submit a pull request.
+
+I'm looking to form a team or organization of like minded individuals who are willing to and can contribute to Mercury Editor and grow the community. I enjoy writing code alone, but I also enjoy the benefits of teamwork and other peoples ideas. If you're interested drop me a line, and I'll add you to the mailing list. This invitation isn't solely for developers and extends to designers, translators, support people, or anyone who thinks there's something to learn from contributing to open source. Those that contribute regularly will be invited to the mailing list and will get commit rights.
 
 
-## Notes Area (will be moved to wiki later)
+## Known issues
 
-### Custom Actions
-
-If I wanted to add the ability to change the direction of text in a markdown region I could do something like this:
-
-```html
-<div id="markdown1" data-mercury="markdown" data-region-options='{"allowDirection": true}'>
-```
-
-```coffeescript
-Mercury.MarkdownRegion.addAction 'direction', ->
-  return alert("This region doesn't allow switching text direction") unless @allowDirection
-  @direction = if @direction == 'rtl' then 'ltr' else 'rtl'
-  @el.css(direction: @direction)
-```
-
-Now if that region has focus we can trigger the action like this:
-
-```coffeescript
-Mercury.trigger('action', 'direction')
-```
-
-### Known issues
-
-#### Webkit
+### Webkit
 
 - Dropping files at the cursor position doesn't work.
 
-#### Gecko
+### Gecko
 
 - Dropping files doesn't display cursor position, and thus dropping at that place isn't applicable.
 

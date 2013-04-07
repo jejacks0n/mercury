@@ -3449,6 +3449,7 @@ Copyright (c) 2013 Jeremy Jackson
       if (_this["interface"]) {
         return;
       }
+      _this.trigger('configure');
       return _this["interface"] = new _this[_this.config('interface:class')](options);
     };
     this.Module.extend.call(this, this.Config);

@@ -47,9 +47,23 @@ Mercury.Region.Modules.TextSelection =
     return true if exp.cleaned
 
 
+  isWithinLineToken: (wrapper) ->
+    [fix, sel] = @getTokenAndSelection(wrapper)
+    exp = @expandSelectionToLines(sel)
+    set = exp.text.match(fix.regexp)
+    return false unless set && set.length == 2
+    return true
+
+
   firstLineMatches: (matcher) ->
     sel = @getSelection()
     exp = @expandSelectionToLines(sel)
+    return true if exp.text.match(matcher)
+
+
+  paragraphMatches: (matcher) ->
+    sel = @getSelection()
+    exp = @expandSelectionToParagraphs(sel)
     return true if exp.text.match(matcher)
 
 

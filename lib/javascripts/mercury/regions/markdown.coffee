@@ -1,10 +1,11 @@
 ###!
 The Markdown region utilizes the Markdown syntax (http://en.wikipedia.org/wiki/Markdown) to generate an html preview.
 When saved this region will return the markdown content (unprocessed). This content can be used by your server to render
-html content to a user, or to serve the markdown when editing.
+html content to a user, or to serve the markdown when editing. The default converter uses Github Flavored Markdown, so
+your server should also implement the same thing.
 
 Dependencies:
-  showdown-1.0 - https://github.com/coreyti/showdown
+  marked - https://github.com/chjj/marked
 
 This is still experimental and could be changed later to provide a way to fetch the markdown content for a given region
 via Ajax.
@@ -12,8 +13,22 @@ via Ajax.
 Mercury.configure 'toolbars:markdown'
   defined:
     style:         ['Style', select: '/mercury/templates/style']
+    sep1:          '-'
+  headings:
+    h1:            ['Heading 1', action: ['block', 'h1']]
+    h2:            ['Heading 2', action: ['block', 'h2']]
+    h3:            ['Heading 3', action: ['block', 'h3']]
+    h4:            ['Heading 4', action: ['block', 'h4']]
+    h5:            ['Heading 5', action: ['block', 'h5']]
+    h6:            ['Heading 6', action: ['block', 'h6']]
+    removeHeading: ['No Heading', action: ['block', null]]
+    sep1:          '-'
+  blocks:
+    unorderedList: ['Unordered List']
+    orderedList:   ['Numbered List']
+    blockquote:    ['Blockquote', action: ['block', 'blockquote']]
     sep1:          ' '
-    block:         ['Block Format', select: '/mercury/templates/block']
+    pre:           ['Pre / Code', action: ['block', 'pre']]
     sep2:          '-'
   decoration:
     bold:          ['Bold']
@@ -24,10 +39,6 @@ Mercury.configure 'toolbars:markdown'
   script:
     subscript:     ['Subscript']
     superscript:   ['Superscript']
-    sep1:          '-'
-  list:
-    unorderedList: ['Unordered List']
-    orderedList:   ['Numbered List']
     sep1:          '-'
   indent:
     indent:        ['Increase Indentation']
@@ -55,14 +66,15 @@ class Mercury.Region.Markdown extends Mercury.Region
     h5           : ['##### ', ' #####']
     h6           : ['###### ', ' ######']
     pre          : ['```\n', '\n```']
-    paragraph    : ['\n', '\n']
+    indentPre    : ['    ', '']
     blockquote   : ['> ', '']
+    paragraph    : ['\n', '\n']
     bold         : ['**']
     italic       : ['_']
     underline    : ['<u>', '</u>']
     strike       : ['<del>', '</del>']
-    sup          : ['<sup>', '</sup>']
-    sub          : ['<sub>', '</sub>']
+    superscript  : ['<sup>', '</sup>']
+    subscript    : ['<sub>', '</sub>']
     unorderedList: ['- ', '']
     orderedList  : ['1. ', '', /^\d+. |$/gi]
     link         : ['[', '](%s)', /^\[|\]\([^)]\)/gi]
@@ -73,16 +85,28 @@ class Mercury.Region.Markdown extends Mercury.Region
   blocks: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'blockquote', 'unorderedList', 'orderedList']
 
   constructor: (@el, @options = {}) ->
-    try @converter = @options.converter || new Showdown.converter().makeHtml
-    catch e
-      @notify(@t('requires Showdown'))
+    @converter = @options.converter ? window.marked
+    unless @converter
+      @notify(@t('requires a markdown converter'))
       return false
 
+    @setupConverter()
     super
+
+
+  setupConverter: ->
+    @converter.setOptions(@config('regions:markdown') || {})
 
 
   convertedValue: ->
     @converter(@value())
+
+
+  toJSON: (forSave = false) ->
+    obj = super
+    return obj unless forSave
+    obj.converted = @convertedValue()
+    obj
 
 
   onDropFile: (files) ->
@@ -112,6 +136,11 @@ class Mercury.Region.Markdown extends Mercury.Region
       e.preventDefault()
       if val.match(/^(> )+./g) then @replaceSelection("\n#{match[0]}") else @replaceSelectedLine(exp, '\n')
 
+    # pre
+    else if match = val.match(/^\s{4}/g)
+      e.preventDefault()
+      if val.match(/^\s{4}./) then @replaceSelection("\n    ") else @replaceSelectedLine(exp, '\n')
+
 
 Mercury.Region.Markdown.addAction
 
@@ -119,8 +148,8 @@ Mercury.Region.Markdown.addAction
   italic:      -> @toggleWrapSelectedWords('italic')
   underline:   -> @toggleWrapSelectedWords('underline')
   strike:      -> @toggleWrapSelectedWords('strike')
-  subscript:   -> @toggleWrapSelectedWords('sub')
-  superscript: -> @toggleWrapSelectedWords('sup')
+  subscript:   -> @toggleWrapSelectedWords('subscript')
+  superscript: -> @toggleWrapSelectedWords('superscript')
   rule:        -> @replaceSelectionWithParagraph('- - -')
   indent:      -> @wrapSelectedParagraphs('blockquote')
   outdent:     -> @unwrapSelectedParagraphs('blockquote')
@@ -173,11 +202,19 @@ Mercury.Region.Markdown.addAction
 
 Mercury.Region.Markdown.addContext
 
+  h1:            -> @isWithinLineToken('h1')
+  h2:            -> @isWithinLineToken('h2')
+  h3:            -> @isWithinLineToken('h3')
+  h4:            -> @isWithinLineToken('h4')
+  h5:            -> @isWithinLineToken('h5')
+  h6:            -> @isWithinLineToken('h6')
+  blockquote:    -> @firstLineMatches(/^> /)
+  pre:           -> @paragraphMatches(/^```|```$/) || @firstLineMatches(/^(> )*\s{4}/)
   bold:          -> @isWithinToken('bold')
   italic:        -> @isWithinToken('italic')
   underline:     -> @isWithinToken('underline')
   strike:        -> @isWithinToken('strike')
-  subscript:     -> @isWithinToken('sub')
-  superscript:   -> @isWithinToken('sup')
+  subscript:     -> @isWithinToken('subscript')
+  superscript:   -> @isWithinToken('superscript')
   unorderedList: -> @firstLineMatches(/^(> )*- /)
   orderedList:   -> @firstLineMatches(/^(> )*\d+\./)

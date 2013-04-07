@@ -149,15 +149,17 @@ Mercury.configuration =
       mimeTypes: ['image/jpeg']                            # file types - overrides general uploading configuration.
 
     # Markdown provides an easy way to provide some markup abilities without the exposing the ability to edit complex
-    # HTML, and is useful for people who don't fully understand HTML. Use the markdown sent to the server on save to
-    # render the content when not editing, and render the markdown when editing.
+    # HTML. Use the markdown sent to the server on save to render the content when not editing, and render the markdown
+    # when editing. Some options are for the converter - more here: https://github.com/chjj/marked
     #
-    #= require dependencies/showdown-1.0
+    #= require dependencies/marked-0.2.8
     #= require mercury/regions/markdown
     #
     markdown:
       autoSize : true                                      # the region will auto-resize to the content within it.
       mimeTypes: false                                     # file types - overrides general uploading to allow anything.
+      sanitize : false                                     # sanitize the output - ignore any html that has been input.
+      breaks   : true                                      # enable line breaks - new lines will become line breaks.
 
     # The Plain region is a simplified single line HTML5 Content Editable region. It restricts paste, drag/drop, and
     # only provides the ability to do some common actions like bold, italics, and underline. This is a useful region for

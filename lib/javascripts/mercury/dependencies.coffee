@@ -13,7 +13,7 @@
 #
 # Markdown region dependencies.
 #
-#= require showdown-1.0
+#= require marked-0.2.8
 #
 # Misc.
 #

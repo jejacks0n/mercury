@@ -41,3 +41,6 @@ describe "Mercury.Region.Modules.SelectionValue", ->
       subject.fromStack(val: '_val_', sel: '_sel_')
       expect( subject.setSerializedSelection ).calledWith('_sel_')
 
+    it "does nothing if the value isn't present", ->
+      subject.fromStack()
+      expect( subject.fromJSON ).not.called

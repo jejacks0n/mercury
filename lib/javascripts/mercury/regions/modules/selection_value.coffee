@@ -6,5 +6,6 @@ Mercury.Region.Modules.SelectionValue =
 
 
   fromStack: (val) ->
+    return unless val
     @fromJSON(val.val)
     @setSerializedSelection?(val.sel) if val.sel

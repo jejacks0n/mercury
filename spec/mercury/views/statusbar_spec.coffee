@@ -36,6 +36,7 @@ describe "Mercury.Statusbar", ->
   describe "#hide", ->
 
     it "set css bottom to the element height", ->
+      spyOn(subject, 'delay').yieldsOn(subject)
       fixture.set(subject.el.css(height: 42))
       subject.hide()
       expect( subject.el.css('bottom') ).to.eq('-42px')

@@ -22,4 +22,4 @@ describe "Mercury.Region.Html", ->
     expect( Klass.type ).to.eq('html')
     expect( Klass.supported ).to.be.true
 
-  it "needs to be tested eventually"
+  it "needs to be tested"

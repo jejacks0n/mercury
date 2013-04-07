@@ -32,8 +32,7 @@ class Mercury.Region.Gallery extends Mercury.Region
   events:
     'click .mercury-gallery-region-controls li': 'gotoSlide'
 
-  constructor: ->
-    super
+  init: ->
     @speed ||= 3000
     @index = 0
     @playing ?= true

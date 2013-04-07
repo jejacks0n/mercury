@@ -34,6 +34,13 @@ describe "Mercury.Region.Modules.DropItem", ->
       subject.onDropItem(@e, @data)
       expect( subject.handleAction ).calledWith('image', url: '_url_')
 
+    it "does nothing if there's no url", ->
+      spyOn(subject, 'handleAction')
+      subject.getActionAndUrlFromData.restore()
+      spyOn(subject, 'getActionAndUrlFromData', -> ['image'])
+      subject.onDropItem(@e, @data)
+      expect( subject.handleAction ).not.called
+
 
   describe "#getActionAndUrlFromDropItem", ->
 

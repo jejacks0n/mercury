@@ -81,6 +81,18 @@ class Mercury.Region extends Mercury.View
     @context = $.extend(@context || {}, contexts)
 
 
+  # Exposes the ability to add data handlers to the region type. This allows you to provide your own custom behavior for
+  # when data attributes are set.
+  #
+  @addData: (attr, handler) ->
+    if typeof(attr) == 'object'
+      dataAttrs = attr
+    else
+      dataAttrs = {}
+      dataAttrs[attr] = handler
+    @dataAttrs = $.extend(@dataAttrs || {}, dataAttrs)
+
+
   # Exposes the ability to add actions to the region type. This allows you to provide your own custom actions that may
   # be tied to a button, or something else.
   #
@@ -93,12 +105,14 @@ class Mercury.Region extends Mercury.View
   # supported in the given browser or if there's no name to use for serializing.
   #
   constructor: (@el, @options = {}) ->
+    return false if @el && $(@el).data('region')
     unless @constructor.supported
       @notify(@t('is unsupported in this browser'))
       return false
 
     @options = $.extend({}, JSON.parse(@el.attr(@config('regions:options')) || '{}'), options) if @el.data
     @context = $.extend({}, @constructor.context, @context)
+    @dataAttrs = $.extend({}, @constructor.dataAttrs, @dataAttrs)
     @actions ||= {}
 
     @beforeBuild?()                                        # call the beforeBuild method if it's defined
@@ -110,6 +124,7 @@ class Mercury.Region extends Mercury.View
     @focusable ||= @el                                     # define @focusable unless it's already defined
     @skipHistoryOn ||= ['redo']                            # we skip pushing to the history on redo by default
     @changed ||= false                                     # you can track changes in subclasses
+    @setInitialData()                                      # setup the initial data attributes from dataAttrs
     @afterBuild?()                                         # call the afterBuild method if it's defined
     @el.data(region: @)                                    # add instance reference to the element data
 
@@ -121,6 +136,16 @@ class Mercury.Region extends Mercury.View
     @pushHistory() unless @skipHistoryOnInitialize
     @bindDefaultEvents()
     @initialValue = JSON.stringify(@toJSON())
+
+
+  # Sets up initial data from the element. This is used to generate the correct data attributes for serializing for the
+  # undo/redo stack.
+  #
+  setInitialData: ->
+    for attr, handler of @dataAttrs
+      obj = {}
+      obj[attr] = @el.data(attr) || null
+      @data(obj)
 
 
   # Adds the classname based on the constructor type to the element.
@@ -240,7 +265,7 @@ class Mercury.Region extends Mercury.View
         data = $.extend({}, data)
         delete(data.region)
         delete(data.mercury)
-      return data
+      return data ? null
     obj = key
     (obj = {}; obj[key] = value) if typeof(key) == 'string'
     @setData(obj)
@@ -248,10 +273,11 @@ class Mercury.Region extends Mercury.View
 
 
   # When setting data via the #data method, this is called. It's provided so it can be overridden and adjusted for when
-  # data is being set on the element.
+  # data is being set on the element. Also calls dataAttr handlers if one is set.
   #
   setData: (obj) ->
     @el.data(obj)
+    @dataAttrs[attr]?.call?(@, value) for attr, value of obj
 
 
   # Finds and collect the snippets out of the content.
@@ -305,7 +331,7 @@ class Mercury.Region extends Mercury.View
   # Serializes our content, type, any data, and snippets into an object.
   # Returns an object.
   #
-  toJSON: ->
+  toJSON: (forSave = false) ->
     name: @name
     type: @constructor.type
     value: @value()

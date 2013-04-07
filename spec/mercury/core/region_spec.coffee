@@ -115,6 +115,22 @@ describe "Mercury.Region", ->
       expect( Klass.context ).to.eql(foo: '_foo_handler_', bar: '_bar_handler_')
 
 
+  describe ".addData", ->
+
+    it "adds the attribute with a handler", ->
+      Klass.addData('foo', '_handler_')
+      expect( Klass.dataAttrs.foo ).to.eq('_handler_')
+
+    it "allows passing an object of actions/handlers", ->
+      Klass.addData(foo: '_handler_')
+      expect( Klass.dataAttrs.foo ).to.eq('_handler_')
+
+    it "merges the contexts with existing contexts", =>
+      Klass.addData(foo: '_foo_handler_')
+      Klass.addData(bar: '_bar_handler_')
+      expect( Klass.dataAttrs ).to.eql(foo: '_foo_handler_', bar: '_bar_handler_')
+
+
   describe ".addToolbar", ->
 
     it "adds toolbars", ->
@@ -128,6 +144,11 @@ describe "Mercury.Region", ->
 
     beforeEach ->
       spyOn(Klass::, 'notify')
+
+    it "checks if the element already has a region", ->
+      spyOn($.fn, 'data', -> true)
+      subject = new Klass('<div>')
+      expect( $.fn.data ).calledWith('region')
 
     it "notifies if not supported", ->
       Klass.supported = false
@@ -145,6 +166,12 @@ describe "Mercury.Region", ->
       Klass::context = bar: 'baz'
       subject = new Klass('<div>')
       expect( subject.context ).to.eql(foo: 'bar', bar: 'baz')
+
+    it "merges dataAttrs with constructor.dataAttrs", ->
+      Klass.dataAttrs = foo: 'bar'
+      Klass::dataAttrs = bar: 'baz'
+      subject = new Klass('<div>')
+      expect( subject.dataAttrs ).to.eql(foo: 'bar', bar: 'baz')
 
     it "calls #beforeBuild if it's defined", ->
       Klass::beforeBuild = spy()
@@ -181,6 +208,11 @@ describe "Mercury.Region", ->
       expect( subject.focused ).to.be.true
       expect( subject.focusable ).to.eq(focusable)
       expect( subject.skipHistoryOn ).to.eql(['foo'])
+
+    it "calls #setInitialData", ->
+      spyOn(Klass::, 'setInitialData')
+      subject = new Klass('<div>')
+      expect( subject.setInitialData ).called
 
     it "calls #afterBuild if it's defined", ->
       Klass::afterBuild = spy()
@@ -455,8 +487,13 @@ describe "Mercury.Region", ->
   describe "#setData", ->
 
     it "sets the data to the element", ->
-      subject.el.data(foo: 'bar')
+      subject.setData(foo: 'bar')
       expect( subject.el.data() ).to.eql(foo: 'bar', mercury: 'foo', region: subject)
+
+    it "calls any data attr handlers that are defined", ->
+      subject.dataAttrs.foo = spy()
+      subject.setData(foo: 'bar')
+      expect( subject.dataAttrs.foo ).calledWith('bar')
 
 
   describe "#snippets", ->

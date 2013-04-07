@@ -15,7 +15,7 @@ Mercury.configuration =
   #
   logging:
     enabled    : false
-    notifier   : 'console'                                 # console, alert, or error (default is error)
+    notifier   : 'console'                                 # error, console, or alert.
 
 
   # Localization
@@ -27,13 +27,13 @@ Mercury.configuration =
   #
   localization:
     enabled    : true
-    preferred  : 'en-US'                                   # preferred locale - if the user locale isn't supported
+    preferred  : 'en-US'                                   # preferred locale - if the client locale isn't supported
 
 
   # Uploading
-  # When enabled you can drag and drop images/files onto a given region and that file will be uploaded. It's expected
+  # When enabled you can drag and drop images/files onto some regions and the file(s) will be uploaded. It's expected
   # that the server respond with JSON containing a url. How the file is inserting into the region it was dropped on is
-  # determined by the region itself and some regions may not allow all file types.
+  # determined by the region itself and some regions may not allow all file types specified here.
   #
   uploading:
     enabled    : true
@@ -45,8 +45,8 @@ Mercury.configuration =
 
   # Templates
   # By default Mercury provides all templates as JST templates that are loaded statically, however to provide more
-  # flexibility if a template isn't found locally, an synchronous ajax request will be made to the server to fetch the
-  # content.
+  # flexibility if a template isn't found locally, a synchronous ajax request will be made to the server to fetch the
+  # content of that template. The server is expected to respond with HTML.
   #
   templates:
     enabled    : true
@@ -69,7 +69,7 @@ Mercury.configuration =
 
   # Toolbars
   # You can configure which toolbars and buttons are available here. Provide the title, and options. The name is used
-  # for icons and when triggering action events, unless the options specify otherwise. Some regions provide their own
+  # for icons and when triggering action events, unless the options specify otherwise. Most regions provide their own
   # toolbars, or additional buttons to existing toolbars.
   #
   # Button Options:
@@ -87,9 +87,9 @@ Mercury.configuration =
     floating   : false                                     # make the toolbar float to the region being edited
     style      : 'standard'                                # toolbar style - 'standard', 'small'
 
-    # The primary toolbar is special in that it will always be built and visible (it's required). Buttons may become
-    # disabled when a region that doesn't support a given action is focused. Some buttons like save, preview, snippet,
-    # etc. will always be active because they apply to the entire page and are not specific to the focused region.
+    # The primary toolbar is always built and visible (it's required). Buttons may become disabled when a region that
+    # doesn't support a given action is focused. Some buttons like save, preview, snippet, etc. will always be active
+    # because they apply to the entire page and are not specific to the focused region.
     #
     primary:
       save:            ['Save', title: 'Save this page', event: 'save', global: true]

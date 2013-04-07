@@ -1,3 +1,27 @@
+/* Fonts
+ *----------------------------------------------------------------------------*/
+@font-face {
+  font-family: 'mercury';
+  src: font-url('mercury/mercury.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'mercury-toolbars';
+  src: font-url('mercury/toolbars.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* Keyframes
+ *----------------------------------------------------------------------------*/
+@-webkit-keyframes mercury-uploader-indicator { to { background-position: 0 0 } from { background-position: -45px 0 } }
+@-moz-keyframes mercury-uploader-indicator { to { background-position: 0 0 } from { background-position: -45px 0 } }
+
+// Configuration.
+
+@import "mercury/config";
+
 // Core css and utility.
 
 @import "mercury/core/fonts";

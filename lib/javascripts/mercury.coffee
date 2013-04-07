@@ -44,7 +44,6 @@ jQuery ->
 # todo interface:
 #   better strategy for snippet management/removal -- focusable with toolbar buttons would be nice, combined with a lesser toolbar in line? (drag handle on hover, etc?)
 #   add all interface elements, like modal, panel, and toolbar dialogs
-#   break the region (and other required) css off so the entire thing doesn't need to be included when using frames? (overly complex for some)?
 # todo regions:
 #   add list region (sort of like workflowy)
 #   add canvas region (save/load as base64 image)

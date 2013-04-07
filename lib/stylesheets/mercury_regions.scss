@@ -4,22 +4,19 @@ Documentation and other useful information can be found at https://github.com/je
 
 Copyright (c) 2013 Jeremy Jackson
 
-This file contains all of the required css for the Mercury interface as well as the region css.
+This file contains only the css required for regions, and is useful if you're sandboxing Mercury using an iframe.
 */
 
 // Configuration.
 
 @import "mercury/config";
 
-// Mercury dependencies and core.
+// Core css and utility.
 
-@import "mercury/dependencies";
-@import "mercury/mercury";
+@import "mercury/core/fonts";
+@import "mercury/core/general";
+@import "mercury/core/region";
 
 // All region types.
 
 @import "mercury/regions";
-
-// All locales.
-
-@import "mercury/locales";

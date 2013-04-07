@@ -12,7 +12,7 @@ namespace :mercury do
   namespace :build do
     env          = Rails.application.assets
     output_path  = Rails.root.join('distro')
-    stylesheets  = ['mercury.css']
+    stylesheets  = ['mercury.css', 'mercury_regions.css']
     asset_paths  = ['fonts/mercury']
     javascripts  = {
       dependencies: 'mercury/dependencies.js',

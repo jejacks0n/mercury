@@ -3,7 +3,13 @@ Mercury Editor is a Coffeescript and jQuery based WYSIWYG editor released under 
 Documentation and other useful information can be found at https://github.com/jejacks0n/mercury
 
 Copyright (c) 2013 Jeremy Jackson
+
+This file contains all of the required css for the Mercury interface as well as the region css.
 */
+/* Global
+ *----------------------------------------------------------------------------*/
+/* View Specific
+ *----------------------------------------------------------------------------*/
 /* Fonts
  *----------------------------------------------------------------------------*/
 @font-face {
@@ -23,24 +29,24 @@ Copyright (c) 2013 Jeremy Jackson
 /* Keyframes
  *----------------------------------------------------------------------------*/
 @-webkit-keyframes mercury-uploader-indicator {
-  /* line 18, ../../lib/stylesheets/mercury/_config.scss */
+  /* line 18, ../../lib/stylesheets/mercury/_mercury.scss */
   to {
     background-position: 0 0;
   }
 
-  /* line 18, ../../lib/stylesheets/mercury/_config.scss */
+  /* line 18, ../../lib/stylesheets/mercury/_mercury.scss */
   from {
     background-position: -45px 0;
   }
 }
 
 @-moz-keyframes mercury-uploader-indicator {
-  /* line 19, ../../lib/stylesheets/mercury/_config.scss */
+  /* line 19, ../../lib/stylesheets/mercury/_mercury.scss */
   to {
     background-position: 0 0;
   }
 
-  /* line 19, ../../lib/stylesheets/mercury/_config.scss */
+  /* line 19, ../../lib/stylesheets/mercury/_mercury.scss */
   from {
     background-position: -45px 0;
   }
@@ -577,13 +583,13 @@ mercury .mercury-uploader .mercury-uploader-progress .mercury-uploader-indicator
   color: rgba(255, 255, 255, 0.8);
 }
 
-/* line 17, ../../lib/stylesheets/mercury/_mercury.scss */
+/* line 41, ../../lib/stylesheets/mercury/_mercury.scss */
 mercury {
   -webkit-text-size-adjust: none;
   position: absolute;
   z-index: 20000;
 }
-/* line 24, ../../lib/stylesheets/mercury/_mercury.scss */
+/* line 48, ../../lib/stylesheets/mercury/_mercury.scss */
 mercury.loading * {
   -moz-transition: none !important;
   -webkit-transition: none !important;

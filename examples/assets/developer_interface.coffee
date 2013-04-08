@@ -56,6 +56,7 @@ class @DeveloperInterface extends Mercury.View
       when 'toggle_interface' then @toggleInterface()
       when 'reinitialize' then @reinitialize()
       when 'add_new_region' then @addNewRegion()
+      when 'release' then @release()
       when 'html'
         value = switch value
           when 'html' then '<table>\n  <tr>\n    <td>1</td>\n    <td>2</td>\n  </tr>\n</table>'
@@ -109,6 +110,13 @@ class @DeveloperInterface extends Mercury.View
     @reinitialize()
 
 
+  # Release this view, and tell Mercury to clean itself up.
+  #
+  release: ->
+    Mercury.release()
+    super
+
+
 @JST ||= {}
 JST['/mercury/templates/new-region'] = (scope) ->
   """
@@ -126,6 +134,7 @@ JST['/mercury/templates/developer-interface'] = (scope) ->
   <li data-action="toggle_interface">toggle interface</li>
   <li data-action="reinitialize">reinitialize</li>
   <li data-action="add_new_region">add new region</li>
+  <li data-action="release">release</li>
   <hr/>
   <li data-action="style" data-value="border:1px solid red">style</li>
   <li data-action="style" data-value="foo">class</li>

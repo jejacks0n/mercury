@@ -53,6 +53,36 @@ describe "Mercury", ->
       expect( Klass.Interface ).not.called
 
 
+  describe ".release", ->
+
+    beforeEach ->
+      @interface = release: spy()
+      Klass.interface = @interface
+
+    it "triggers the released event", ->
+      spyOn(Klass, 'trigger')
+      Klass.release()
+      expect( Klass.trigger ).calledWith('released')
+
+    it "calls release on the interface", ->
+      Klass.release()
+      expect( @interface.release ).called
+
+    it "deletes the reference to @interface", ->
+      Klass.release()
+      expect( Klass.interface ).to.be.undefined
+
+    it "calls .off", ->
+      spyOn(Klass, 'off')
+      Klass.release()
+      expect( Klass.off ).called
+
+    it "does nothing if there's no interface", ->
+      Klass.interface = false
+      Klass.release()
+      expect( @interface.release ).not.called
+
+
   describe ".configure", ->
 
     beforeEach ->

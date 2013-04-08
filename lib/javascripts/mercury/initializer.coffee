@@ -12,15 +12,26 @@ initialize = ->
 
   @version = '0.0.1alpha'
 
-  # Provide global method to initialize.
+  # Provides global method to initialize.
   #
   # This is the standard means to instantiate Mercury Editor. If you need more custom behavior check the configuration,
   # and if that doesn't suit your needs, feel free to instantiate the desired interface yourself.
   #
-  @init = (options = {}) =>
+  @init = (options = {}) ->
     return if @interface
     @trigger('configure')
     @interface = new @[@config('interface:class')](options)
+
+  # Provides global method to release.
+  #
+  # This will remove the interface and restore all regions.
+  #
+  @release = ->
+    return unless @interface
+    @trigger('released')
+    @interface.release()
+    delete(@interface)
+    @off()
 
   # Add global configuration methods.
   #

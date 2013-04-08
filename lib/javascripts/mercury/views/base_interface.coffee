@@ -148,6 +148,14 @@ class Mercury.BaseInterface extends Mercury.View
     false
 
 
+  release: ->
+    @toolbar.release()
+    @statusbar.release()
+    while @regions.length
+      @regions.shift().release()
+    super
+
+
   save: ->
     data = {}
     for region in @regions

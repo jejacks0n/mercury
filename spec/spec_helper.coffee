@@ -56,3 +56,4 @@ afterEach ->
   Logger: {}
   Interface: ->
   trigger: ->
+  off: ->

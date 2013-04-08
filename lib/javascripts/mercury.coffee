@@ -36,7 +36,6 @@ jQuery ->
 
 
 # todo:
-#   add release method to global object that cleans up the interface and restores regions.
 #   figure out how to better integrate snippets.
 #   can we make editing content within snippets work?
 #   html/plain: when using the iframe, rangy isn't behaving the same (doesn't work because it doesn't understand the context).

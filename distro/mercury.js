@@ -1874,7 +1874,8 @@ Copyright (c) 2013 Jeremy Jackson
       this.setupDocument();
       this.bindDocumentEvents();
       this.addAllRegions();
-      return Mercury.trigger('initialized');
+      Mercury.trigger('initialized');
+      return this.delay(100, this.focusDefaultRegion);
     };
 
     FrameInterface.prototype.setupDocument = function() {

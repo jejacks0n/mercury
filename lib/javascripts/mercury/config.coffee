@@ -158,6 +158,7 @@ Mercury.configuration =
     markdown:
       autoSize : true                                      # the region will auto-resize to the content within it.
       mimeTypes: false                                     # file types - overrides general uploading to allow anything.
+      wrapping : true                                      # enables/disables soft line wrapping.
       sanitize : false                                     # sanitize the output - ignore any html that has been input.
       breaks   : true                                      # enable line breaks - new lines will become line breaks.
 
@@ -182,3 +183,4 @@ Mercury.configuration =
     text:
       autoSize : true                                      # the region will auto-resize to the content within it.
       stripTags: true                                      # strip html when saving/previewing (keeps it only text).
+      wrapping : false                                     # enables/disables soft line wrapping.

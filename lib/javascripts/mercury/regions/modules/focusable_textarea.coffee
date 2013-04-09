@@ -16,6 +16,7 @@ Mercury.Region.Modules.FocusableTextarea =
 
     @preview = $("""<div class="mercury-#{@constructor.type}-region-preview">""")
     @focusable = $("""<textarea class="mercury-#{@constructor.type}-region-textarea">""")
+    @focusable.attr(wrap: 'off') unless @config("regions:#{@constructor.type}:wrapping")
 
     @el.empty()
     @append(@preview, @focusable.css(width: '100%', height: @el.height() || @height || 20, resize: resize))

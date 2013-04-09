@@ -36,6 +36,8 @@ jQuery ->
 
 
 # todo:
+#   potentially rename toolbar_palette and toolbar_select into just select/palette so that other could more easily be added.
+#   would a routing-esque system be useful for determining what toolbar view to open for things like selects, palettes, modals etc.?
 #   figure out how to better integrate snippets.
 #   can we make editing content within snippets work?
 #   html/plain: when using the iframe, rangy isn't behaving the same (doesn't work because it doesn't understand the context).

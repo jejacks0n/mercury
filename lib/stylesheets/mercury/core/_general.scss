@@ -51,14 +51,14 @@
   font-size: $size;
 }
 
-@mixin mercury-transition($property, $easing) {
+@mixin mercury-transition($property, $easing, $timing: 0.25s) {
   -webkit-transition-property: $property;
-  -webkit-transition-duration: 0.25s;
+  -webkit-transition-duration: $timing;
   -webkit-transition-timing-function: $easing;
   -moz-transition-property: $property;
-  -moz-transition-duration: 0.25s;
+  -moz-transition-duration: $timing;
   -moz-transition-timing-function: $easing;
   transition-property: $property;
-  transition-duration: 0.25s;
+  transition-duration: $timing;
   transition-timing-function: $easing;
 }

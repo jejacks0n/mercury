@@ -104,10 +104,9 @@ class Mercury.Region.Markdown extends Mercury.Region
       if val.match(/^\s{4}./) then @replaceSelection("\n    ") else @replaceSelectedLine(exp, '\n')
 
 
-Mercury.Region.Markdown.addToolbar 'markdown'
+Mercury.Region.Markdown.addToolbar
   defined:
-    style:         ['Style', select: '/mercury/templates/style']
-    sep1:          '-'
+    style:         ['Style', select: 'styles_select']
   headings:
     h1:            ['Heading 1', action: ['block', 'h1']]
     h2:            ['Heading 2', action: ['block', 'h2']]
@@ -116,28 +115,23 @@ Mercury.Region.Markdown.addToolbar 'markdown'
     h5:            ['Heading 5', action: ['block', 'h5']]
     h6:            ['Heading 6', action: ['block', 'h6']]
     removeHeading: ['No Heading', action: ['block', null]]
-    sep1:          '-'
   blocks:
     unorderedList: ['Unordered List']
     orderedList:   ['Numbered List']
     blockquote:    ['Blockquote', action: ['block', 'blockquote']]
-    sep1:          ' '
+    sep:           ' '
     pre:           ['Pre / Code', action: ['block', 'pre']]
-    sep2:          '-'
   decoration:
     bold:          ['Bold']
     italic:        ['Italicize']
     strike:        ['Strikethrough']
     underline:     ['Underline']
-    sep1:          '-'
   script:
     subscript:     ['Subscript']
     superscript:   ['Superscript']
-    sep1:          '-'
   indent:
     indent:        ['Increase Indentation']
     outdent:       ['Decrease Indentation']
-    sep1:          '-'
   rules:
     rule:          ['Horizontal Rule', title: 'Insert a horizontal rule']
 
@@ -163,7 +157,7 @@ Mercury.Region.Markdown.addAction
     @wrapSelectedParagraphs('unorderedList') unless @unwrapSelectedParagraphs('unorderedList')
 
   style: (value) ->
-    wrapper = if value.indexOf(':') > -1 then 'style' else 'class'
+    wrapper = if (value || '').indexOf(':') > -1 then 'style' else 'class'
     @unwrapSelectedWords(if wrapper == 'style' then 'class' else 'style')
     @toggleWrapSelectedWords(@processWrapper(wrapper, [value]))
 

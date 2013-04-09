@@ -58,7 +58,7 @@ class Mercury.Region.Plain extends Mercury.Region
     @pushHistory(e.keyCode)
 
 
-Mercury.Region.Plain.addToolbar 'plain',
+Mercury.Region.Plain.addToolbar
   decoration:
     bold:          ['Bold']
     italic:        ['Italicize']

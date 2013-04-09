@@ -62,49 +62,40 @@ class Mercury.Region.Html extends Mercury.Region
     @pushHistory(e.keyCode)
 
 
-Mercury.Region.Html.addToolbar 'html',
+Mercury.Region.Html.addToolbar
   defined:
-    style:         ['Style', select: '/mercury/templates/style']
-    sep1:          ' '
-    block:         ['Block Format', select: '/mercury/templates/block']
-    sep2:          '-'
+    style:         ['Style', select: 'styles_select']
+    sep:           ' '
+    block:         ['Block Format', select: 'block_types']
   color:
-    bgcolor:       ['Background Color', palette: '/mercury/templates/bgcolor']
-    sep1:          ' '
-    color:         ['Text Color', palette: '/mercury/templates/color']
-    sep2:          '-'
+    bgcolor:       ['Background Color', palette: 'color_palette']
+    sep:           ' '
+    color:         ['Text Color', palette: 'color_palette']
   decoration:
     bold:          ['Bold']
     italic:        ['Italicize']
     strike:        ['Strikethrough']
     underline:     ['Underline']
-    sep1:          '-'
   script:
     subscript:     ['Subscript']
     superscript:   ['Superscript']
-    sep1:          '-'
   justify:
     justifyLeft:   ['Align Left']
     justifyCenter: ['Center']
     justifyRight:  ['Align Right']
     justifyFull:   ['Justify Full']
-    sep1:          '-'
   list:
     unorderedList: ['Unordered List']
     orderedList:   ['Numbered List']
-    sep1:          '-'
   indent:
     indent:        ['Increase Indentation']
     outdent:       ['Decrease Indentation']
-    sep1:          '-'
   rules:
     rule:          ['Horizontal Rule', title: 'Insert a horizontal rule']
-    sep1:          '-'
   extra:
     clean:         ['Remove Formatting', title: 'Remove formatting for the selection']
-    sep1:          ' '
+    sep:           ' '
     edit:          ['Edit HTML', title: 'Edit the HTML content']
-    sep2:          '-'
   table:
     rowBefore:     ['Insert Table Row', title: 'Insert a table row before the cursor']
     rowAfter:      ['Insert Table Row', title: 'Insert a table row after the cursor']
@@ -112,7 +103,7 @@ Mercury.Region.Html.addToolbar 'html',
     colBefore:     ['Insert Table Column', title: 'Insert a table column before the cursor']
     colAfter:      ['Insert Table Column', title: 'Insert a table column after the cursor']
     colDelete:     ['Delete Table Column', title: 'Delete this table column']
-    sep1:          ' '
+    sep:           ' '
     colIncrease:   ['Increase Cell Columns', title: 'Increase the cells colspan']
     colDecrease:   ['Decrease Cell Columns', title: 'Decrease the cells colspan and add a new cell']
     rowIncrease:   ['Increase Cell Rows', title: 'Increase the cells rowspan']
@@ -125,3 +116,5 @@ Mercury.Region.Html.addAction
   italic:        -> @toggleWrapSelectedWordsInClass('highlight')
   underline:     -> @toggleWrapSelectedWordsInClass('blue')
   rule:          -> @replaceSelection('<hr/>')
+  style:         ->
+  color:         ->

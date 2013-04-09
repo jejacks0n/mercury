@@ -19,6 +19,7 @@ class Mercury.ToolbarItem extends Mercury.View
         when 'array'  then new Mercury.ToolbarButton(name, value...)
       @items.push(item)
       @append(item) if item
+    @append(new Mercury.ToolbarItem('sep_final', 'separator', '-')) if @type == 'group'
 
 
   addClasses: ->

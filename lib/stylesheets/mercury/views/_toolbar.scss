@@ -26,9 +26,6 @@ mercury .mercury-toolbar {
   .mercury-toolbar-button {
     display: inline-block;
   }
-  .mercury-toolbar-group {
-    height: 18px;
-  }
   .mercury-toolbar-separator,
   .mercury-toolbar-line-separator {
     height: 15px;
@@ -41,6 +38,12 @@ mercury .mercury-toolbar {
     height: 17px;
     margin: -1px 3px;
     border-left: 1px solid #707070;
+  }
+  .mercury-toolbar-collection:last-child .mercury-toolbar-group:last-child {
+    .mercury-toolbar-separator:last-child,
+    .mercury-toolbar-line-separator:last-child {
+      display: none;
+    }
   }
   .mercury-toolbar-button {
     @include mercury-toolbar-button-base;
@@ -58,6 +61,25 @@ mercury .mercury-toolbar {
     &:before, em {
       color: #3a3a3a;
       text-shadow: #eee 0 1px 0;
+    }
+    &.mercury-button-disabled {
+      opacity: .5;
+    }
+    &.mercury-button-active,
+    &.mercury-button-pressed {
+      @include mercury-gradient(#bebebe, #9c9c9c);
+      &:before {
+        color: #333;
+        text-shadow: none;
+      }
+    }
+    &.mercury-button-pressed {
+      &:before {
+        top: 1px;
+      }
+    }
+    em {
+      display: none;
     }
     &[data-icon]:before {
       content: attr(data-icon);
@@ -87,28 +109,71 @@ mercury .mercury-toolbar {
         color: #eee;
         text-shadow: none;
       }
-    }
-    &.mercury-button-disabled {
-      opacity: .5;
-    }
-    &.mercury-button-active,
-    &.mercury-button-pressed {
-      @include mercury-gradient(#bebebe, #9c9c9c);
-      &:before {
-        color: #333;
-        text-shadow: none;
+      &.mercury-button-active,
+      &.mercury-button-pressed {
+        color: #eee;
+        &:before {
+          top: 0;
+        }
       }
-    }
-    &.mercury-button-pressed {
-      &:before {
-        top: 1px;
-      }
-    }
-    em {
-      display: none;
     }
   }
-
+  .mercury-toolbar-select,
+  .mercury-toolbar-palette {
+    @include mercury-transition(opacity, ease-in-out, 0.1s);
+    @include mercury-border-radius(4px);
+    @include mercury-font(8.5pt);
+    @include mercury-box-shadow(1px 1px 4px rgba(0, 0, 0, .5));
+    position: absolute;
+    z-index: 20100;
+    min-width: 30px;
+    min-height: 30px;
+    margin: -2px;
+    overflow: auto;
+    white-space: normal;
+    border: 1px solid #727272;
+    background: #fff;
+    color: #333;
+    ul {
+      list-style: none;
+      margin: 0;
+      padding: 4px;
+    }
+  }
+  .mercury-toolbar-select {
+    li {
+      padding: 2px 10px;
+      &:hover {
+        background-color: #E2E1E2 !important;
+        color: #000 !important;
+      }
+    }
+  }
+  .mercury-toolbar-palette {
+    width: 165px;
+    height: auto;
+    padding: 1px;
+    ul {
+      li {
+        padding: 0;
+        display: inline-block;
+        width: 15px;
+        height: 15px;
+        margin: -1px;
+        &:hover {
+          outline: 1px solid #333;
+        }
+        &.last-picked {
+          width: 100%;
+          text-align: center;
+          text-transform: lowercase;
+          line-height: 15px;
+          margin: 0;
+        }
+      }
+    }
+  }
+  // primary toolbar overrides
   .mercury-toolbar-primary-container {
     @include mercury-gradient(#e2e2e2, #c6c6c6);
     display: block;

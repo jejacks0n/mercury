@@ -125,7 +125,7 @@ class Mercury.Region.Gallery extends Mercury.Region
     @refresh(true)
 
 
-Mercury.Region.Gallery.addToolbar 'gallery',
+Mercury.Region.Gallery.addToolbar
   general:
     prev:       ['Previous Slide']
     next:       ['Next Slide']

@@ -37,11 +37,10 @@ class Mercury.Region.Image extends Mercury.Region
       @handleAction('file', file)
 
 
-Mercury.Region.Image.addToolbar 'image',
+Mercury.Region.Image.addToolbar
   general:
     crop:        ['Crop Image']
     resize:      ['Resize Image']
-    sep1:        '-'
   alignment:
     alignLeft:   ['Align Left']
     alignRight:  ['Align Right']

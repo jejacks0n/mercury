@@ -33,7 +33,7 @@ Copyright (c) 2013 Jeremy Jackson
     },
     "interface": {
       enabled: true,
-      "interface": 'FrameInterface',
+      "class": 'FrameInterface',
       toolbar: 'Toolbar',
       statusbar: 'Statusbar',
       silent: false,

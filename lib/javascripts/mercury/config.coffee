@@ -60,7 +60,7 @@ Mercury.configuration =
   #
   interface:
     enabled    : true                                      # initial visible state -- trigger 'interface:show' to show
-    interface  : 'FrameInterface'                          # interface class -- used on Mercury.init()
+    class      : 'FrameInterface'                          # interface class -- used on Mercury.init()
     toolbar    : 'Toolbar'                                 # toolbar class to use within the interface
     statusbar  : 'Statusbar'                               # statusbar class to use within the interface
     silent     : false                                     # set to true to disable asking about changes when leaving

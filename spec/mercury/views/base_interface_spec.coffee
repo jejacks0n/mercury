@@ -6,6 +6,4 @@ describe "Mercury.BaseInterface", ->
   Klass = Mercury.BaseInterface
   subject = null
 
-  beforeEach ->
-
   it "needs to be tested"

@@ -26,11 +26,16 @@ class Mercury.FrameInterface extends Mercury.BaseInterface
     super
 
 
+  bindDocumentEvents: ->
+    $('body', @document).on 'mousedown', -> Mercury.trigger('dialogs:hide')
+
+
   initializeFrame: ->
     return if @initialized
     @initialized = true
 
     @setupDocument()
+    @bindDocumentEvents()
     @addAllRegions()
     Mercury.trigger('initialized')
 

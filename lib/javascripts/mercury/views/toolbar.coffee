@@ -6,6 +6,7 @@ class Mercury.Toolbar extends Mercury.View
   className: 'mercury-toolbar'
 
   events:
+    'mousedown': 'dialogs:hide'
     'interface:hide': 'hide'
     'interface:show': 'show'
     'region:focus': 'onRegionFocus'
@@ -36,7 +37,8 @@ class Mercury.Toolbar extends Mercury.View
     return if @region == region
     @region = region
     @$('.mercury-toolbar-collection').remove()
-    @buildToolbar(name).updateForRegion(region) for name in region.toolbars || []
+    @buildToolbar(name) for name in region.toolbars || []
+    Mercury.trigger('region:update', region)
 
 
   buildToolbar: (name) ->

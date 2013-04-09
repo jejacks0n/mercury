@@ -120,20 +120,7 @@ mercury .mercury-toolbar {
   }
   .mercury-toolbar-select,
   .mercury-toolbar-palette {
-    @include mercury-transition(opacity, ease-in-out, 0.1s);
-    @include mercury-border-radius(4px);
-    @include mercury-font(8.5pt);
-    @include mercury-box-shadow(1px 1px 4px rgba(0, 0, 0, .5));
-    position: absolute;
-    z-index: 20100;
-    min-width: 30px;
-    min-height: 30px;
-    margin: -2px;
-    overflow: auto;
-    white-space: normal;
-    border: 1px solid #727272;
-    background: #fff;
-    color: #333;
+    @include mercury-toolbar-subview;
     ul {
       list-style: none;
       margin: 0;

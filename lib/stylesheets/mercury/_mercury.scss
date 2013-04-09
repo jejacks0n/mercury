@@ -27,6 +27,7 @@
 @import "mercury/core/fonts";
 @import "mercury/core/general";
 @import "mercury/core/region";
+@import "mercury/core/view";
 
 // Views.
 
@@ -44,6 +45,9 @@ mercury {
   position: absolute;
   z-index: 20000;
 
+  // disable tap highlighting in webkit (ipad/iphone etc)
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+
   // disable animations while initializing
   &.loading * {
     -moz-transition: none !important;
@@ -51,4 +55,12 @@ mercury {
     -o-transition: color 0 ease-in !important;
     transition: none !important;
   }
+}
+
+// CSS for examples.
+
+.mercury-toolbar-slider {
+  @include mercury-toolbar-subview;
+  padding: 2px 5px 0;
+  min-height: 0;
 }

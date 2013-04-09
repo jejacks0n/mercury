@@ -6,6 +6,4 @@ describe "Mercury.ToolbarButton", ->
   Klass = Mercury.ToolbarButton
   subject = null
 
-  beforeEach ->
-
   it "needs to be tested"

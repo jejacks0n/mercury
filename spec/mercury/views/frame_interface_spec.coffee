@@ -66,15 +66,35 @@ describe "Mercury.FrameInterface", ->
       expect( subject.initializeFrame ).called
 
 
+  describe "#bindDocumentEvents", ->
+
+    beforeEach ->
+      @mock = on: stub().yieldsOn(subject)
+      spyOn(window, '$', => @mock)
+
+    it "binds to the mouse down on the document", ->
+      spyOn(Mercury, 'trigger')
+      subject.document = '_document_'
+      subject.bindDocumentEvents()
+      expect( $ ).calledWith('body', '_document_')
+      expect( @mock.on ).calledWith('mousedown', sinon.match.func)
+      expect( Mercury.trigger ).calledWith('dialogs:hide')
+
+
   describe "#initializeFrame", ->
 
     beforeEach ->
       spyOn(subject, 'setupDocument')
       spyOn(subject, 'addAllRegions')
+      spyOn(subject, 'bindDocumentEvents')
 
     it "calls #setupDocument", ->
       subject.initializeFrame()
       expect( subject.setupDocument ).called
+
+    it "calls #bindDocumentEvents", ->
+      subject.initializeFrame()
+      expect( subject.bindDocumentEvents ).called
 
     it "calls #addAllRegions", ->
       subject.initializeFrame()

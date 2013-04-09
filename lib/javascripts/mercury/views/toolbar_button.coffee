@@ -6,13 +6,23 @@ class Mercury.ToolbarButton extends Mercury.View
   className: 'mercury-toolbar-button'
 
   events:
-    'mousedown': -> @addClass('mercury-button-pressed')
+    'mousedown': (e) ->
+      e.stopPropagation() if @subView && @subView.visible
+      @addClass('mercury-button-pressed')
     'mouseup': -> @el.removeClass('mercury-button-pressed')
     'mouseout': -> @el.removeClass('mercury-button-pressed')
     'click': 'triggerAction'
     'region:focus': 'onRegionFocus'
-    'region:action': 'updateForRegion'
-    'region:update': 'updateForRegion'
+    'region:action': 'onRegionUpdate'
+    'region:update': 'onRegionUpdate'
+
+  standardOptions: ['title', 'icon', 'action', 'global', 'button']
+
+  @create: (name, label, options = {}) ->
+    if options.button && Klass = Mercury["toolbar_#{options.button}".toCamelCase(true)]
+      return new Klass(name, label, options)
+    return new Mercury.ToolbarButton(name, label, options)
+
 
   constructor: (@name, @label, @options = {}) ->
     @action = @determineAction()
@@ -26,17 +36,14 @@ class Mercury.ToolbarButton extends Mercury.View
     @attr('data-icon', Mercury.Toolbar.icons[@icon || @name] || @icon)
     @addClass("mercury-toolbar-#{@name.toDash()}-button")
     @html("<em>#{@label}</em>")
-    @subView = @buildSubview()
-    @subView?.appendTo(@)
+    @buildSubView()?.appendTo(@)
 
 
-  buildSubview: ->
-    return new Mercury.ToolbarSelect(template: @options.select) if @type == 'select'
-    return new Mercury.ToolbarPalette(template: @options.palette) if @type == 'palette'
-
-
-  determineActionName: ->
-    @determineAction()?[0]
+  buildSubView: ->
+    if Klass = Mercury["toolbar_#{@type}".toCamelCase(true)]
+      options = @options[@type]
+      options = {template: options} if typeof(options) == 'string'
+      return @subView = new Klass(options)
 
 
   determineAction: ->
@@ -45,24 +52,30 @@ class Mercury.ToolbarButton extends Mercury.View
     action
 
 
+  determineActionName: ->
+    @determineAction()?[0]
+
+
   determineType: ->
-    return 'select' if @options.select
-    return 'palette' if @options.palette
-    return 'mode' if @options.mode
+    return @type if @type
+    return @type = @options.type if @options.type
+    types = $.extend({}, @options)
+    delete(types[option]) for option in @standardOptions
+    return @type = type for type, value of types
 
 
   triggerAction: ->
-    return @subView.toggle() if @type == 'select' || @type == 'palette'
+    return @subView.toggle() if @subView
     Mercury.trigger(@event) if @event
     Mercury.trigger('mode', @mode) if @mode
     Mercury.trigger('action', @action...)
 
 
   onRegionFocus: (region) ->
-    @delay(100, => @updateForRegion(region))
+    @delay(100, => @onRegionUpdate(region))
 
 
-  updateForRegion: (region) ->
+  onRegionUpdate: (region) ->
     @el.removeClass('mercury-button-active')
     if region.hasAction(@actionName) || @global
       @el.removeClass('mercury-button-disabled')

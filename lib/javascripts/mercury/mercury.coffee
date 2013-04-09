@@ -52,6 +52,12 @@
 #= require mercury/regions/modules/selection_value
 #= require mercury/regions/modules/text_selection
 #
+# View modules.
+#
+#= require mercury/views/modules/toolbar_dialog
+#= require mercury/views/modules/toolbar_focusable
+#= require mercury/views/modules/visibility_toggleable
+#
 # Initialize script.
 #
 #= require mercury/initializer

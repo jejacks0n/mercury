@@ -85,6 +85,7 @@ class Mercury.BaseInterface extends Mercury.View
   bindDefaultEvents: ->
     Mercury.on 'mode', (mode) => @setMode(mode)
     Mercury.on 'action', => @focusActiveRegion()
+    $('body').on 'mousedown', -> Mercury.trigger('dialogs:hide')
 
 
   focusDefaultRegion: ->

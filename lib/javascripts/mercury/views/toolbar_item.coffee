@@ -16,7 +16,7 @@ class Mercury.ToolbarItem extends Mercury.View
       item = switch (if $.isArray(value) then 'array' else typeof(value))
         when 'object' then new Mercury.ToolbarItem(name, 'group', value)
         when 'string' then new Mercury.ToolbarItem(name, 'separator', value)
-        when 'array'  then new Mercury.ToolbarButton(name, value...)
+        when 'array'  then new Mercury.ToolbarButton.create(name, value...)
       @items.push(item)
       @append(item) if item
     @append(new Mercury.ToolbarItem('sep_final', 'separator', '-')) if @type == 'group'
@@ -26,7 +26,3 @@ class Mercury.ToolbarItem extends Mercury.View
     extraClass = "mercury-toolbar-#{@type.toDash()}"
     extraClass = "mercury-toolbar-line-#{@type.toDash()}" if @value == '-'
     @addClass(["mercury-toolbar-#{@name.toDash()}-#{@type.toDash()}", extraClass].join(' '))
-
-
-  updateForRegion: (region) ->
-    item.updateForRegion(region) for item in @items

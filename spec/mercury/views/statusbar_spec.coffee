@@ -35,17 +35,55 @@ describe "Mercury.Statusbar", ->
 
   describe "#hide", ->
 
-    it "set css bottom to the element height", ->
-      spyOn(subject, 'delay').yieldsOn(subject)
+    beforeEach ->
+      subject.visibilityTimeout = '_timer_'
+
+    it "calls clearTimeout", ->
+      spyOn(window, 'clearTimeout')
+      subject.hide()
+      expect( window.clearTimeout ).calledWith('_timer_')
+
+    it "sets @visible to false", ->
+      subject.visible = true
+      subject.hide()
+      expect( subject.visible ).to.be.false
+
+    it "sets css bottom to the element height", ->
       fixture.set(subject.el.css(height: 42))
       subject.hide()
       expect( subject.el.css('bottom') ).to.eq('-42px')
 
+    it "delays hiding the element", ->
+      spyOn(subject, 'delay').yieldsOn(subject)
+      spyOn(subject.el, 'hide')
+      subject.hide()
+      expect( subject.delay ).calledWith(250, sinon.match.func)
+      expect( subject.el.hide ).called
+
 
   describe "#show", ->
 
-    it "set css bottom to 0", ->
-      spyOn(subject, 'delay').yieldsOn(subject)
-      subject.el.css(bottom: 42)
+    beforeEach ->
+      subject.visibilityTimeout = '_timer_'
+
+    it "calls clearTimeout", ->
+      spyOn(window, 'clearTimeout')
       subject.show()
+      expect( window.clearTimeout ).calledWith('_timer_')
+
+    it "sets @visible to true", ->
+      subject.visible = false
+      subject.show()
+      expect( subject.visible ).to.be.true
+
+    it "shows the element", ->
+      spyOn(subject.el, 'show')
+      subject.show()
+      expect( subject.el.show ).called
+
+    it "delays setting the elements css bottom", ->
+      spyOn(subject, 'delay').yieldsOn(subject)
+      spyOn(subject.el, 'hide')
+      subject.show()
+      expect( subject.delay ).calledWith(1, sinon.match.func)
       expect( subject.el.css('bottom') ).to.eq('0px')

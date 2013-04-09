@@ -32,10 +32,14 @@ class Mercury.Statusbar extends Mercury.View
 
 
   hide: ->
+    clearTimeout(@visibilityTimeout)
+    @visible = false
     @el.css(bottom: -@el.height())
-    @delay(250, => @el.hide())
+    @visibilityTimeout = @delay(250, => @el.hide())
 
 
   show: ->
+    clearTimeout(@visibilityTimeout)
+    @visible = true
     @el.show()
-    @delay(1, => @el.css(bottom: 0))
+    @visibilityTimeout = @delay(1, => @el.css(bottom: 0))

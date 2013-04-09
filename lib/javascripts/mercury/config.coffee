@@ -59,10 +59,10 @@ Mercury.configuration =
   # override default functionality and interface elements.
   #
   interface:
-    class      : 'FrameInterface'                          # interface class (
+    enabled    : true                                      # initial visible state -- trigger 'interface:show' to show
+    interface  : 'FrameInterface'                          # interface class -- used on Mercury.init()
     toolbar    : 'Toolbar'                                 # toolbar class to use within the interface
     statusbar  : 'Statusbar'                               # statusbar class to use within the interface
-    enabled    : true                                      # initial visible state -- trigger 'interface:show' to show
     silent     : false                                     # set to true to disable asking about changes when leaving
     shadowed   : false                                     # puts the interface into a shadow dom when it's available
 
@@ -80,6 +80,7 @@ Mercury.configuration =
   #   mode: a toggle button, which will trigger a mode event with the value.
   #   select: a select button and will present the user with a dropdown select using the given template.
   #   palette: a palette button and will present the user with a color picker using the given template.
+  #   button: the class to use when instantiating the button.
   #
   # For more information about button options or adding your own functionality check todo: wiki url here
   #
@@ -88,24 +89,24 @@ Mercury.configuration =
     style      : 'standard'                                # toolbar style - 'standard', 'small'
 
     # The primary toolbar is always built and visible (it's required). Buttons may become disabled when a region that
-    # doesn't support a given action is focused. Some buttons like save, preview, snippet, etc. will always be active
-    # because they apply to the entire page and are not specific to the focused region.
+    # doesn't support a given action is focused, and some buttons like save, preview, snippet, will always be active as
+    # they apply to the entire page and are not specific to the focused region.
     #
     primary:
-      save:            ['Save', title: 'Save this page', event: 'save', global: true]
-      preview:         ['Preview', title: 'Preview this page', mode: 'preview', global: true]
-      sep1:            ' '
-      undo:            ['Undo', title: 'Undo your last action']
-      redo:            ['Redo', title: 'Redo your last action']
-      sep2:            '-'
-      link:            ['Link', title: 'Insert Link']
-      file:            ['Media', title: 'Insert Media and Files (images, videos, etc.)']
-      table:           ['Table', title: 'Insert Table']
-      character:       ['Character', title: 'Special Characters']
-      snippets:        ['Snippet', title: 'Snippet Panel']
-      sep3:            ' '
-      history:         ['History', title: 'Page Version History', global: true]
-      notes:           ['Notes', title: 'Page Notes', global: true]
+      save     : ['Save', title: 'Save this page', event: 'save', global: true]
+      preview  : ['Preview', title: 'Preview this page', mode: 'preview', global: true]
+      sep1     : ' '
+      undo     : ['Undo', title: 'Undo your last action']
+      redo     : ['Redo', title: 'Redo your last action']
+      sep2     : '-'
+      link     : ['Link', title: 'Insert Link']
+      file     : ['Media', title: 'Insert Media and Files (images, videos, etc.)']
+      table    : ['Table', title: 'Insert Table']
+      character: ['Character', title: 'Special Characters']
+      snippets : ['Snippet', title: 'Snippet Panel']
+      sep3     : ' '
+      history  : ['History', title: 'Page Version History', global: true]
+      notes    : ['Notes', title: 'Page Notes', global: true]
 
 
   # Regions

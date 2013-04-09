@@ -36,7 +36,14 @@ jQuery ->
 
 
 # todo:
-#   potentially rename toolbar_palette and toolbar_select into just select/palette so that other could more easily be added.
+#   make toolbar view element classes easier to setup. eg. select -> ToolbarSelect etc. -- provide example.
+#   make toolbar dialogs to hide with certain events -- mousedown when it's not a button with it's subview showing.
+#   consider switching to using a mask for toolbar dialogs (that cover the entire viewport) instead of mousedown on body.
+#   make region use the shadow dom if possible/configured to do so.
+#   spend some time making what's in work really well on ios.
+#   work on modal -- and lightview.
+#   work on panel.
+#   potentially rename toolbar_palette and toolbar_select into just select/palette so that others could more easily be added.
 #   would a routing-esque system be useful for determining what toolbar view to open for things like selects, palettes, modals etc.?
 #   figure out how to better integrate snippets.
 #   can we make editing content within snippets work?

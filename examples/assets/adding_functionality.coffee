@@ -71,15 +71,14 @@ Mercury?.on 'initialize', ->
 
   # Actions - Getting and Replacing Selections
   #
-  # In this example we'll work with getting and replacing the selection.
-  #
-  # Like the previous examples we need a toolbar button / group that we can interact with. It's advisable to always
-  # include a separator in your toolbars so they don't clump together with other toolbar buttons.
+  # In this example we'll work with getting and replacing the selection. Like the previous examples we need a toolbar
+  # that we can interact with.
   Mercury.Region.Markdown.addToolbar 'calculations', calc: ['Calculate', icon: '3']
 
   # Now we just have to add the action that attempts to calculate the given selection. In this case we replace the
   # selection with whatever was evaled -- note, this also allows for javascript injection, so is intended as an example
-  # only.
+  # only. Now if you select a math equation ("1+2") and click this button, you'll get the result of that ("3") in your
+  # selection.
   Mercury.Region.Markdown.addAction 'calc', ->
     try @replaceSelection(eval(@getSelection().text))
     catch e
@@ -152,9 +151,11 @@ Mercury?.on 'initialize', ->
   # we're just going to define a simple string with a slider input.
   JST['/mercury/templates/brightness_slider'] = -> '<input type="range"/>'
 
-  # At this point we have the button, the subview and everything we need. If you were to go check the button would still
-  # be disabled -- because the image region doesn't know what to do with brightness. Now we just need to tie it all
-  # together with an action.
+  # At this point we have the button, the subview and everything we need. If you were to check, the button would still
+  # be disabled -- because the image region doesn't know what to do with brightness yet. Now we just need to tie it all
+  # together with an action. If you wanted this to be part of the undo stack you may consider using a data attribute and
+  # calling @pushHistory after setting it -- though this is a bad example for that since change triggers as the slider
+  # is moved.
   Mercury.Region.Image.addAction 'brightness', (val) -> console.debug("brightness set to #{val}")
 
 

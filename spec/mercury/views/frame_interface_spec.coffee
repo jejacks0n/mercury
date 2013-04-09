@@ -87,6 +87,7 @@ describe "Mercury.FrameInterface", ->
       spyOn(subject, 'setupDocument')
       spyOn(subject, 'addAllRegions')
       spyOn(subject, 'bindDocumentEvents')
+      spyOn(subject, 'delay')
 
     it "calls #setupDocument", ->
       subject.initializeFrame()
@@ -104,6 +105,13 @@ describe "Mercury.FrameInterface", ->
       spyOn(Mercury, 'trigger')
       subject.initializeFrame()
       expect( Mercury.trigger ).calledWith('initialized')
+
+    it "delays a call to #focusDefaultRegion", ->
+      spyOn(subject, 'focusDefaultRegion')
+      subject.delay.yieldsOn(subject)
+      subject.initializeFrame()
+      expect( subject.delay ).calledWith(100, sinon.match.func)
+      expect( subject.focusDefaultRegion ).called
 
     it "does nothing if already initialize", ->
       subject.initialized = true

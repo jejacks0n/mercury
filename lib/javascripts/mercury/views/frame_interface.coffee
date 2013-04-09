@@ -38,6 +38,7 @@ class Mercury.FrameInterface extends Mercury.BaseInterface
     @bindDocumentEvents()
     @addAllRegions()
     Mercury.trigger('initialized')
+    @delay(100, @focusDefaultRegion)
 
 
   setupDocument: ->

@@ -3,6 +3,10 @@
 #= require mercury/templates/statusbar
 #= require mercury/templates/uploader
 #
+#= require mercury/templates/block_types
+#= require mercury/templates/color_palette
+#= require mercury/templates/styles_select
+#
 # Core library / utility.
 #
 #= require mercury/extensions/number
@@ -26,6 +30,8 @@
 #= require mercury/views/toolbar
 #= require mercury/views/toolbar_item
 #= require mercury/views/toolbar_button
+#= require mercury/views/toolbar_palette
+#= require mercury/views/toolbar_select
 #= require mercury/views/uploader
 #
 # Models.

@@ -26,6 +26,13 @@ class Mercury.ToolbarButton extends Mercury.View
     @attr('data-icon', Mercury.Toolbar.icons[@icon || @name] || @icon)
     @addClass("mercury-toolbar-#{@name.toDash()}-button")
     @html("<em>#{@label}</em>")
+    @subView = @buildSubview()
+    @subView?.appendTo(@)
+
+
+  buildSubview: ->
+    return new Mercury.ToolbarSelect(template: @options.select) if @type == 'select'
+    return new Mercury.ToolbarPalette(template: @options.palette) if @type == 'palette'
 
 
   determineActionName: ->
@@ -45,6 +52,7 @@ class Mercury.ToolbarButton extends Mercury.View
 
 
   triggerAction: ->
+    return @subView.toggle() if @type == 'select' || @type == 'palette'
     Mercury.trigger(@event) if @event
     Mercury.trigger('mode', @mode) if @mode
     Mercury.trigger('action', @action...)

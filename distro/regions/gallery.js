@@ -183,7 +183,7 @@ also takes into account undo/redo support using the keyboard or buttons.
 
   })(Mercury.Region);
 
-  Mercury.Region.Gallery.addToolbar('gallery', {
+  Mercury.Region.Gallery.addToolbar({
     general: {
       prev: ['Previous Slide'],
       next: ['Next Slide'],

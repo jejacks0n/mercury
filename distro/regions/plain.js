@@ -85,7 +85,7 @@ Dependencies:
 
   })(Mercury.Region);
 
-  Mercury.Region.Plain.addToolbar('plain', {
+  Mercury.Region.Plain.addToolbar({
     decoration: {
       bold: ['Bold'],
       italic: ['Italicize'],

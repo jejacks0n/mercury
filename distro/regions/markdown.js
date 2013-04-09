@@ -148,14 +148,13 @@ via Ajax.
 
   })(Mercury.Region);
 
-  Mercury.Region.Markdown.addToolbar('markdown', {
+  Mercury.Region.Markdown.addToolbar({
     defined: {
       style: [
         'Style', {
-          select: '/mercury/templates/style'
+          select: 'styles_select'
         }
-      ],
-      sep1: '-'
+      ]
     },
     headings: {
       h1: [
@@ -192,8 +191,7 @@ via Ajax.
         'No Heading', {
           action: ['block', null]
         }
-      ],
-      sep1: '-'
+      ]
     },
     blocks: {
       unorderedList: ['Unordered List'],
@@ -203,30 +201,26 @@ via Ajax.
           action: ['block', 'blockquote']
         }
       ],
-      sep1: ' ',
+      sep: ' ',
       pre: [
         'Pre / Code', {
           action: ['block', 'pre']
         }
-      ],
-      sep2: '-'
+      ]
     },
     decoration: {
       bold: ['Bold'],
       italic: ['Italicize'],
       strike: ['Strikethrough'],
-      underline: ['Underline'],
-      sep1: '-'
+      underline: ['Underline']
     },
     script: {
       subscript: ['Subscript'],
-      superscript: ['Superscript'],
-      sep1: '-'
+      superscript: ['Superscript']
     },
     indent: {
       indent: ['Increase Indentation'],
-      outdent: ['Decrease Indentation'],
-      sep1: '-'
+      outdent: ['Decrease Indentation']
     },
     rules: {
       rule: [
@@ -289,7 +283,7 @@ via Ajax.
     },
     style: function(value) {
       var wrapper;
-      wrapper = value.indexOf(':') > -1 ? 'style' : 'class';
+      wrapper = (value || '').indexOf(':') > -1 ? 'style' : 'class';
       this.unwrapSelectedWords(wrapper === 'style' ? 'class' : 'style');
       return this.toggleWrapSelectedWords(this.processWrapper(wrapper, [value]));
     },

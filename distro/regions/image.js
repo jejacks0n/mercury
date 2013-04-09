@@ -62,11 +62,10 @@ serialization to the server.
 
   })(Mercury.Region);
 
-  Mercury.Region.Image.addToolbar('image', {
+  Mercury.Region.Image.addToolbar({
     general: {
       crop: ['Crop Image'],
-      resize: ['Resize Image'],
-      sep1: '-'
+      resize: ['Resize Image']
     },
     alignment: {
       alignLeft: ['Align Left'],

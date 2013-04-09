@@ -92,71 +92,63 @@ Dependencies:
 
   })(Mercury.Region);
 
-  Mercury.Region.Html.addToolbar('html', {
+  Mercury.Region.Html.addToolbar({
     defined: {
       style: [
         'Style', {
-          select: '/mercury/templates/style'
+          select: 'styles_select'
         }
       ],
-      sep1: ' ',
+      sep: ' ',
       block: [
         'Block Format', {
-          select: '/mercury/templates/block'
+          select: 'block_types'
         }
-      ],
-      sep2: '-'
+      ]
     },
     color: {
       bgcolor: [
         'Background Color', {
-          palette: '/mercury/templates/bgcolor'
+          palette: 'color_palette'
         }
       ],
-      sep1: ' ',
+      sep: ' ',
       color: [
         'Text Color', {
-          palette: '/mercury/templates/color'
+          palette: 'color_palette'
         }
-      ],
-      sep2: '-'
+      ]
     },
     decoration: {
       bold: ['Bold'],
       italic: ['Italicize'],
       strike: ['Strikethrough'],
-      underline: ['Underline'],
-      sep1: '-'
+      underline: ['Underline']
     },
     script: {
       subscript: ['Subscript'],
-      superscript: ['Superscript'],
-      sep1: '-'
+      superscript: ['Superscript']
     },
     justify: {
       justifyLeft: ['Align Left'],
       justifyCenter: ['Center'],
       justifyRight: ['Align Right'],
-      justifyFull: ['Justify Full'],
-      sep1: '-'
+      justifyFull: ['Justify Full']
     },
     list: {
       unorderedList: ['Unordered List'],
-      orderedList: ['Numbered List'],
-      sep1: '-'
+      orderedList: ['Numbered List']
     },
     indent: {
       indent: ['Increase Indentation'],
-      outdent: ['Decrease Indentation'],
-      sep1: '-'
+      outdent: ['Decrease Indentation']
     },
     rules: {
       rule: [
         'Horizontal Rule', {
           title: 'Insert a horizontal rule'
         }
-      ],
-      sep1: '-'
+      ]
     },
     extra: {
       clean: [
@@ -164,13 +156,12 @@ Dependencies:
           title: 'Remove formatting for the selection'
         }
       ],
-      sep1: ' ',
+      sep: ' ',
       edit: [
         'Edit HTML', {
           title: 'Edit the HTML content'
         }
-      ],
-      sep2: '-'
+      ]
     },
     table: {
       rowBefore: [
@@ -203,7 +194,7 @@ Dependencies:
           title: 'Delete this table column'
         }
       ],
-      sep1: ' ',
+      sep: ' ',
       colIncrease: [
         'Increase Cell Columns', {
           title: 'Increase the cells colspan'
@@ -239,7 +230,9 @@ Dependencies:
     },
     rule: function() {
       return this.replaceSelection('<hr/>');
-    }
+    },
+    style: function() {},
+    color: function() {}
   });
 
 }).call(this);

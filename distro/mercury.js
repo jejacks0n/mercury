@@ -32,10 +32,10 @@ Copyright (c) 2013 Jeremy Jackson
       prefixUrl: '/mercury/templates'
     },
     "interface": {
-      "class": 'FrameInterface',
+      enabled: true,
+      "interface": 'FrameInterface',
       toolbar: 'Toolbar',
       statusbar: 'Statusbar',
-      enabled: true,
       silent: false,
       shadowed: false
     },
@@ -125,6 +125,7 @@ Copyright (c) 2013 Jeremy Jackson
       markdown: {
         autoSize: true,
         mimeTypes: false,
+        wrapping: true,
         sanitize: false,
         breaks: true
       },
@@ -133,7 +134,8 @@ Copyright (c) 2013 Jeremy Jackson
       },
       text: {
         autoSize: true,
-        stripTags: true
+        stripTags: true,
+        wrapping: false
       }
     }
   };
@@ -154,6 +156,33 @@ Copyright (c) 2013 Jeremy Jackson
 
   JST['/mercury/templates/uploader'] = function(scope) {
     return "<div class=\"mercury-uploader-dialog\">\n  <div class=\"mercury-uploader-preview\"><b><img/></b></div>\n  <div class=\"mercury-uploader-details\"></div>\n  <div class=\"mercury-uploader-progress\">\n    <span></span>\n    <div class=\"mercury-uploader-indicator\"><div><b>0%</b></div></div>\n  </div>\n</div>";
+  };
+
+}).call(this);
+(function() {
+
+  this.JST || (this.JST = {});
+
+  JST['/mercury/templates/block_types'] = function(scope) {
+    return "<ul>\n</ul>";
+  };
+
+}).call(this);
+(function() {
+
+  this.JST || (this.JST = {});
+
+  JST['/mercury/templates/color_palette'] = function(scope) {
+    return "<ul>\n  <li data-value=\"#FFFFFF\" style=\"background:#FFFFFF\"></li>\n  <li data-value=\"#FFCCCC\" style=\"background:#FFCCCC\"></li>\n  <li data-value=\"#FFCC99\" style=\"background:#FFCC99\"></li>\n  <li data-value=\"#FFFF99\" style=\"background:#FFFF99\"></li>\n  <li data-value=\"#FFFFCC\" style=\"background:#FFFFCC\"></li>\n  <li data-value=\"#99FF99\" style=\"background:#99FF99\"></li>\n  <li data-value=\"#99FFFF\" style=\"background:#99FFFF\"></li>\n  <li data-value=\"#CCFFFF\" style=\"background:#CCFFFF\"></li>\n  <li data-value=\"#CCCCFF\" style=\"background:#CCCCFF\"></li>\n  <li data-value=\"#FFCCFF\" style=\"background:#FFCCFF\"></li>\n  <li data-value=\"#CCCCCC\" style=\"background:#CCCCCC\"></li>\n  <li data-value=\"#FF6666\" style=\"background:#FF6666\"></li>\n  <li data-value=\"#FF9966\" style=\"background:#FF9966\"></li>\n  <li data-value=\"#FFFF66\" style=\"background:#FFFF66\"></li>\n  <li data-value=\"#FFFF33\" style=\"background:#FFFF33\"></li>\n  <li data-value=\"#66FF99\" style=\"background:#66FF99\"></li>\n  <li data-value=\"#33FFFF\" style=\"background:#33FFFF\"></li>\n  <li data-value=\"#66FFFF\" style=\"background:#66FFFF\"></li>\n  <li data-value=\"#9999FF\" style=\"background:#9999FF\"></li>\n  <li data-value=\"#FF99FF\" style=\"background:#FF99FF\"></li>\n  <li data-value=\"#C0C0C0\" style=\"background:#C0C0C0\"></li>\n  <li data-value=\"#FF0000\" style=\"background:#FF0000\"></li>\n  <li data-value=\"#FF9900\" style=\"background:#FF9900\"></li>\n  <li data-value=\"#FFCC66\" style=\"background:#FFCC66\"></li>\n  <li data-value=\"#FFFF00\" style=\"background:#FFFF00\"></li>\n  <li data-value=\"#33FF33\" style=\"background:#33FF33\"></li>\n  <li data-value=\"#66CCCC\" style=\"background:#66CCCC\"></li>\n  <li data-value=\"#33CCFF\" style=\"background:#33CCFF\"></li>\n  <li data-value=\"#6666CC\" style=\"background:#6666CC\"></li>\n  <li data-value=\"#CC66CC\" style=\"background:#CC66CC\"></li>\n  <li data-value=\"#999999\" style=\"background:#999999\"></li>\n  <li data-value=\"#CC0000\" style=\"background:#CC0000\"></li>\n  <li data-value=\"#FF6600\" style=\"background:#FF6600\"></li>\n  <li data-value=\"#FFCC33\" style=\"background:#FFCC33\"></li>\n  <li data-value=\"#FFCC00\" style=\"background:#FFCC00\"></li>\n  <li data-value=\"#33CC00\" style=\"background:#33CC00\"></li>\n  <li data-value=\"#00CCCC\" style=\"background:#00CCCC\"></li>\n  <li data-value=\"#3366FF\" style=\"background:#3366FF\"></li>\n  <li data-value=\"#6633FF\" style=\"background:#6633FF\"></li>\n  <li data-value=\"#CC33CC\" style=\"background:#CC33CC\"></li>\n  <li data-value=\"#666666\" style=\"background:#666666\"></li>\n  <li data-value=\"#990000\" style=\"background:#990000\"></li>\n  <li data-value=\"#CC6600\" style=\"background:#CC6600\"></li>\n  <li data-value=\"#CC9933\" style=\"background:#CC9933\"></li>\n  <li data-value=\"#999900\" style=\"background:#999900\"></li>\n  <li data-value=\"#009900\" style=\"background:#009900\"></li>\n  <li data-value=\"#339999\" style=\"background:#339999\"></li>\n  <li data-value=\"#3333FF\" style=\"background:#3333FF\"></li>\n  <li data-value=\"#6600CC\" style=\"background:#6600CC\"></li>\n  <li data-value=\"#993399\" style=\"background:#993399\"></li>\n  <li data-value=\"#333333\" style=\"background:#333333\"></li>\n  <li data-value=\"#660000\" style=\"background:#660000\"></li>\n  <li data-value=\"#993300\" style=\"background:#993300\"></li>\n  <li data-value=\"#996633\" style=\"background:#996633\"></li>\n  <li data-value=\"#666600\" style=\"background:#666600\"></li>\n  <li data-value=\"#006600\" style=\"background:#006600\"></li>\n  <li data-value=\"#336666\" style=\"background:#336666\"></li>\n  <li data-value=\"#000099\" style=\"background:#000099\"></li>\n  <li data-value=\"#333399\" style=\"background:#333399\"></li>\n  <li data-value=\"#663366\" style=\"background:#663366\"></li>\n  <li data-value=\"#000000\" style=\"background:#000000\"></li>\n  <li data-value=\"#330000\" style=\"background:#330000\"></li>\n  <li data-value=\"#663300\" style=\"background:#663300\"></li>\n  <li data-value=\"#663333\" style=\"background:#663333\"></li>\n  <li data-value=\"#333300\" style=\"background:#333300\"></li>\n  <li data-value=\"#003300\" style=\"background:#003300\"></li>\n  <li data-value=\"#003333\" style=\"background:#003333\"></li>\n  <li data-value=\"#000066\" style=\"background:#000066\"></li>\n  <li data-value=\"#330099\" style=\"background:#330099\"></li>\n  <li data-value=\"#330033\" style=\"background:#330033\"></li>\n  <li class=\"last-picked\">Last Color Picked</li>\n</ul>";
+  };
+
+}).call(this);
+(function() {
+
+  this.JST || (this.JST = {});
+
+  JST['/mercury/templates/styles_select'] = function(scope) {
+    return "<ul>\n  <li class=\"red\" data-value=\"red\">Red Text</li>\n  <li class=\"blue\" data-value=\"blue\">Blue Text</li>\n  <li class=\"highlight\" data-value=\"highlight\">Highlighted</li>\n</ul>";
   };
 
 }).call(this);
@@ -1099,7 +1128,7 @@ Copyright (c) 2013 Jeremy Jackson
       }
       this.logPrefix = this.prototype.logPrefix = "" + this.className + ":";
       this.prototype.actions = $.extend(this.prototype.actions, actions);
-      this.prototype.toolbars = [];
+      this.prototype.toolbars = [this.type];
       this.off();
       return this;
     };
@@ -1152,15 +1181,16 @@ Copyright (c) 2013 Jeremy Jackson
     };
 
     Region.addToolbar = function(name, obj) {
-      var _base;
+      var path;
       if (obj == null) {
-        obj = null;
+        obj = {};
       }
-      (_base = this.prototype).toolbars || (_base.toolbars = []);
-      if (obj) {
-        Mercury.configure("toolbars:" + this.type + ":" + name, obj);
+      if (typeof name === 'object') {
+        obj = name;
+        name = this.type;
       }
-      return this.prototype.toolbars.push(name);
+      path = name === this.type ? "toolbars:" + name : "toolbars:" + this.type + ":" + name;
+      return Mercury.configure(path, obj);
     };
 
     function Region(el, options) {
@@ -1655,8 +1685,11 @@ Copyright (c) 2013 Jeremy Jackson
       Mercury.on('mode', function(mode) {
         return _this.setMode(mode);
       });
-      return Mercury.on('action', function() {
+      Mercury.on('action', function() {
         return _this.focusActiveRegion();
+      });
+      return $('body').on('mousedown', function() {
+        return Mercury.trigger('dialogs:hide');
       });
     };
 
@@ -1758,6 +1791,15 @@ Copyright (c) 2013 Jeremy Jackson
       return false;
     };
 
+    BaseInterface.prototype.release = function() {
+      this.toolbar.release();
+      this.statusbar.release();
+      while (this.regions.length) {
+        this.regions.shift().release();
+      }
+      return BaseInterface.__super__.release.apply(this, arguments);
+    };
+
     BaseInterface.prototype.save = function() {
       var data, region, _i, _len, _ref;
       data = {};
@@ -1818,12 +1860,19 @@ Copyright (c) 2013 Jeremy Jackson
       return FrameInterface.__super__.bindDefaultEvents.apply(this, arguments);
     };
 
+    FrameInterface.prototype.bindDocumentEvents = function() {
+      return $('body', this.document).on('mousedown', function() {
+        return Mercury.trigger('dialogs:hide');
+      });
+    };
+
     FrameInterface.prototype.initializeFrame = function() {
       if (this.initialized) {
         return;
       }
       this.initialized = true;
       this.setupDocument();
+      this.bindDocumentEvents();
       this.addAllRegions();
       return Mercury.trigger('initialized');
     };
@@ -1900,18 +1949,22 @@ Copyright (c) 2013 Jeremy Jackson
 
     Statusbar.prototype.hide = function() {
       var _this = this;
+      clearTimeout(this.visibilityTimeout);
+      this.visible = false;
       this.el.css({
         bottom: -this.el.height()
       });
-      return this.delay(250, function() {
+      return this.visibilityTimeout = this.delay(250, function() {
         return _this.el.hide();
       });
     };
 
     Statusbar.prototype.show = function() {
       var _this = this;
+      clearTimeout(this.visibilityTimeout);
+      this.visible = true;
       this.el.show();
-      return this.delay(1, function() {
+      return this.visibilityTimeout = this.delay(1, function() {
         return _this.el.css({
           bottom: 0
         });
@@ -1940,6 +1993,7 @@ Copyright (c) 2013 Jeremy Jackson
     Toolbar.prototype.className = 'mercury-toolbar';
 
     Toolbar.prototype.events = {
+      'mousedown': 'dialogs:hide',
       'interface:hide': 'hide',
       'interface:show': 'show',
       'region:focus': 'onRegionFocus'
@@ -1956,18 +2010,22 @@ Copyright (c) 2013 Jeremy Jackson
 
     Toolbar.prototype.hide = function() {
       var _this = this;
+      clearTimeout(this.visibilityTimeout);
+      this.visible = false;
       this.el.css({
         top: -this.el.height()
       });
-      return this.delay(250, function() {
+      return this.visibilityTimeout = this.delay(250, function() {
         return _this.el.hide();
       });
     };
 
     Toolbar.prototype.show = function() {
       var _this = this;
+      clearTimeout(this.visibilityTimeout);
+      this.visible = true;
       this.el.show();
-      return this.delay(1, function() {
+      return this.visibilityTimeout = this.delay(1, function() {
         return _this.el.css({
           top: 0
         });
@@ -1975,19 +2033,18 @@ Copyright (c) 2013 Jeremy Jackson
     };
 
     Toolbar.prototype.onRegionFocus = function(region) {
-      var name, _i, _len, _ref, _results;
+      var name, _i, _len, _ref;
       if (this.region === region) {
         return;
       }
       this.region = region;
       this.$('.mercury-toolbar-collection').remove();
       _ref = region.toolbars || [];
-      _results = [];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         name = _ref[_i];
-        _results.push(this.buildToolbar(name).updateForRegion(region));
+        this.buildToolbar(name);
       }
-      return _results;
+      return Mercury.trigger('region:update', region);
     };
 
     Toolbar.prototype.buildToolbar = function(name) {
@@ -2086,13 +2143,12 @@ Copyright (c) 2013 Jeremy Jackson
     }
 
     ToolbarItem.prototype.build = function() {
-      var item, name, value, _ref, _results;
+      var item, name, value, _ref;
       this.addClasses();
       if (typeof this.value !== 'object') {
         return;
       }
       _ref = this.value;
-      _results = [];
       for (name in _ref) {
         value = _ref[name];
         item = (function() {
@@ -2106,17 +2162,17 @@ Copyright (c) 2013 Jeremy Jackson
                 ctor.prototype = func.prototype;
                 var child = new ctor, result = func.apply(child, args);
                 return Object(result) === result ? result : child;
-              })(Mercury.ToolbarButton, [name].concat(__slice.call(value)), function(){});
+              })(Mercury.ToolbarButton.create, [name].concat(__slice.call(value)), function(){});
           }
         })();
         this.items.push(item);
         if (item) {
-          _results.push(this.append(item));
-        } else {
-          _results.push(void 0);
+          this.append(item);
         }
       }
-      return _results;
+      if (this.type === 'group') {
+        return this.append(new Mercury.ToolbarItem('sep_final', 'separator', '-'));
+      }
     };
 
     ToolbarItem.prototype.addClasses = function() {
@@ -2126,17 +2182,6 @@ Copyright (c) 2013 Jeremy Jackson
         extraClass = "mercury-toolbar-line-" + (this.type.toDash());
       }
       return this.addClass(["mercury-toolbar-" + (this.name.toDash()) + "-" + (this.type.toDash()), extraClass].join(' '));
-    };
-
-    ToolbarItem.prototype.updateForRegion = function(region) {
-      var item, _i, _len, _ref, _results;
-      _ref = this.items;
-      _results = [];
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        item = _ref[_i];
-        _results.push(item.updateForRegion(region));
-      }
-      return _results;
     };
 
     return ToolbarItem;
@@ -2158,7 +2203,10 @@ Copyright (c) 2013 Jeremy Jackson
     ToolbarButton.prototype.className = 'mercury-toolbar-button';
 
     ToolbarButton.prototype.events = {
-      'mousedown': function() {
+      'mousedown': function(e) {
+        if (this.subView && this.subView.visible) {
+          e.stopPropagation();
+        }
         return this.addClass('mercury-button-pressed');
       },
       'mouseup': function() {
@@ -2169,8 +2217,21 @@ Copyright (c) 2013 Jeremy Jackson
       },
       'click': 'triggerAction',
       'region:focus': 'onRegionFocus',
-      'region:action': 'updateForRegion',
-      'region:update': 'updateForRegion'
+      'region:action': 'onRegionUpdate',
+      'region:update': 'onRegionUpdate'
+    };
+
+    ToolbarButton.prototype.standardOptions = ['title', 'icon', 'action', 'global', 'button'];
+
+    ToolbarButton.create = function(name, label, options) {
+      var Klass;
+      if (options == null) {
+        options = {};
+      }
+      if (options.button && (Klass = Mercury[("toolbar_" + options.button).toCamelCase(true)])) {
+        return new Klass(name, label, options);
+      }
+      return new Mercury.ToolbarButton(name, label, options);
     };
 
     function ToolbarButton(name, label, options) {
@@ -2184,15 +2245,25 @@ Copyright (c) 2013 Jeremy Jackson
     }
 
     ToolbarButton.prototype.build = function() {
+      var _ref;
       this.attr('data-type', this.type);
       this.attr('data-icon', Mercury.Toolbar.icons[this.icon || this.name] || this.icon);
       this.addClass("mercury-toolbar-" + (this.name.toDash()) + "-button");
-      return this.html("<em>" + this.label + "</em>");
+      this.html("<em>" + this.label + "</em>");
+      return (_ref = this.buildSubView()) != null ? _ref.appendTo(this) : void 0;
     };
 
-    ToolbarButton.prototype.determineActionName = function() {
-      var _ref;
-      return (_ref = this.determineAction()) != null ? _ref[0] : void 0;
+    ToolbarButton.prototype.buildSubView = function() {
+      var Klass, options;
+      if (Klass = Mercury[("toolbar_" + this.type).toCamelCase(true)]) {
+        options = this.options[this.type];
+        if (typeof options === 'string') {
+          options = {
+            template: options
+          };
+        }
+        return this.subView = new Klass(options);
+      }
     };
 
     ToolbarButton.prototype.determineAction = function() {
@@ -2204,19 +2275,35 @@ Copyright (c) 2013 Jeremy Jackson
       return action;
     };
 
+    ToolbarButton.prototype.determineActionName = function() {
+      var _ref;
+      return (_ref = this.determineAction()) != null ? _ref[0] : void 0;
+    };
+
     ToolbarButton.prototype.determineType = function() {
-      if (this.options.select) {
-        return 'select';
+      var option, type, types, value, _i, _len, _ref;
+      if (this.type) {
+        return this.type;
       }
-      if (this.options.palette) {
-        return 'palette';
+      if (this.options.type) {
+        return this.type = this.options.type;
       }
-      if (this.options.mode) {
-        return 'mode';
+      types = $.extend({}, this.options);
+      _ref = this.standardOptions;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        option = _ref[_i];
+        delete types[option];
+      }
+      for (type in types) {
+        value = types[type];
+        return this.type = type;
       }
     };
 
     ToolbarButton.prototype.triggerAction = function() {
+      if (this.subView) {
+        return this.subView.toggle();
+      }
       if (this.event) {
         Mercury.trigger(this.event);
       }
@@ -2229,11 +2316,11 @@ Copyright (c) 2013 Jeremy Jackson
     ToolbarButton.prototype.onRegionFocus = function(region) {
       var _this = this;
       return this.delay(100, function() {
-        return _this.updateForRegion(region);
+        return _this.onRegionUpdate(region);
       });
     };
 
-    ToolbarButton.prototype.updateForRegion = function(region) {
+    ToolbarButton.prototype.onRegionUpdate = function(region) {
       this.el.removeClass('mercury-button-active');
       if (region.hasAction(this.actionName) || this.global) {
         this.el.removeClass('mercury-button-disabled');
@@ -2246,6 +2333,119 @@ Copyright (c) 2013 Jeremy Jackson
     };
 
     return ToolbarButton;
+
+  })(Mercury.View);
+
+}).call(this);
+(function() {
+
+  Mercury.View.Modules.ToolbarDialog = {
+    included: function() {
+      return this.on('build', this.buildToolbarDialog);
+    },
+    buildToolbarDialog: function() {
+      return this.delegateEvents({
+        'dialogs:hide': function() {
+          return typeof this.hide === "function" ? this.hide() : void 0;
+        }
+      });
+    }
+  };
+
+}).call(this);
+(function() {
+
+  Mercury.View.Modules.VisibilityToggleable = {
+    included: function() {
+      return this.on('build', this.buildVisibilityToggleable);
+    },
+    buildVisibilityToggleable: function() {
+      this.visible || (this.visible = false);
+      if (!this.visible) {
+        this.hide();
+      }
+      return this.delegateEvents({
+        'interface:hide': 'hide'
+      });
+    },
+    toggle: function() {
+      if (this.visible) {
+        return this.hide();
+      } else {
+        return this.show();
+      }
+    },
+    hide: function() {
+      var _this = this;
+      clearTimeout(this.visibilityTimeout);
+      this.visible = false;
+      this.el.css({
+        opacity: 0
+      });
+      return this.visibilityTimeout = this.delay(100, function() {
+        return _this.el.hide();
+      });
+    },
+    show: function() {
+      var _this = this;
+      clearTimeout(this.visibilityTimeout);
+      this.visible = true;
+      this.el.show();
+      return this.visibilityTimeout = this.delay(1, function() {
+        return _this.el.css({
+          opacity: 1
+        });
+      });
+    }
+  };
+
+}).call(this);
+(function() {
+  var __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+  Mercury.ToolbarPalette = (function(_super) {
+
+    __extends(ToolbarPalette, _super);
+
+    function ToolbarPalette() {
+      return ToolbarPalette.__super__.constructor.apply(this, arguments);
+    }
+
+    ToolbarPalette.include(Mercury.View.Modules.ToolbarDialog);
+
+    ToolbarPalette.include(Mercury.View.Modules.VisibilityToggleable);
+
+    ToolbarPalette.prototype.logPrefix = 'Mercury.ToolbarPalette:';
+
+    ToolbarPalette.prototype.className = 'mercury-toolbar-palette';
+
+    return ToolbarPalette;
+
+  })(Mercury.View);
+
+}).call(this);
+(function() {
+  var __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+  Mercury.ToolbarSelect = (function(_super) {
+
+    __extends(ToolbarSelect, _super);
+
+    function ToolbarSelect() {
+      return ToolbarSelect.__super__.constructor.apply(this, arguments);
+    }
+
+    ToolbarSelect.include(Mercury.View.Modules.ToolbarDialog);
+
+    ToolbarSelect.include(Mercury.View.Modules.VisibilityToggleable);
+
+    ToolbarSelect.prototype.logPrefix = 'Mercury.ToolbarSelect:';
+
+    ToolbarSelect.prototype.className = 'mercury-toolbar-select';
+
+    return ToolbarSelect;
 
   })(Mercury.View);
 
@@ -2713,6 +2913,11 @@ Copyright (c) 2013 Jeremy Jackson
       resize = this.autoSize ? 'none' : 'vertical';
       this.preview = $("<div class=\"mercury-" + this.constructor.type + "-region-preview\">");
       this.focusable = $("<textarea class=\"mercury-" + this.constructor.type + "-region-textarea\">");
+      if (!this.config("regions:" + this.constructor.type + ":wrapping")) {
+        this.focusable.attr({
+          wrap: 'off'
+        });
+      }
       this.el.empty();
       this.append(this.preview, this.focusable.css({
         width: '100%',
@@ -3435,22 +3640,49 @@ Copyright (c) 2013 Jeremy Jackson
 
 }).call(this);
 (function() {
+
+  Mercury.View.Modules.ToolbarFocusable = {
+    included: function() {
+      return this.on('build', this.buildToolbarFocusable);
+    },
+    buildToolbarFocusable: function() {
+      return this.delegateEvents({
+        'mousedown': function(e) {
+          return e.stopPropagation();
+        },
+        'mouseup': function(e) {
+          return e.stopPropagation();
+        }
+      });
+    }
+  };
+
+}).call(this);
+(function() {
   var initialize,
     __slice = [].slice;
 
   initialize = function() {
-    var isIE,
-      _this = this;
+    var isIE;
     this.version = '0.0.1alpha';
     this.init = function(options) {
       if (options == null) {
         options = {};
       }
-      if (_this["interface"]) {
+      if (this["interface"]) {
         return;
       }
-      _this.trigger('configure');
-      return _this["interface"] = new _this[_this.config('interface:class')](options);
+      this.trigger('configure');
+      return this["interface"] = new this[this.config('interface:class')](options);
+    };
+    this.release = function() {
+      if (!this["interface"]) {
+        return;
+      }
+      this.trigger('released');
+      this["interface"].release();
+      delete this["interface"];
+      return this.off();
     };
     this.Module.extend.call(this, this.Config);
     this.configure = function() {

@@ -7,7 +7,9 @@ class Mercury.ToolbarButton extends Mercury.View
 
   events:
     'mousedown': (e) ->
-      e.stopPropagation() if @subView && @subView.visible
+      if @subview?.visible
+        e.preventDefault()
+        e.stopPropagation()
       @addClass('mercury-button-pressed')
     'mouseup': -> @el.removeClass('mercury-button-pressed')
     'mouseout': -> @el.removeClass('mercury-button-pressed')
@@ -36,14 +38,14 @@ class Mercury.ToolbarButton extends Mercury.View
     @attr('data-icon', Mercury.Toolbar.icons[@icon || @name] || @icon)
     @addClass("mercury-toolbar-#{@name.toDash()}-button")
     @html("<em>#{@label}</em>")
-    @buildSubView()?.appendTo(@)
+    @buildSubview()?.appendTo(@)
 
 
-  buildSubView: ->
+  buildSubview: ->
     if Klass = Mercury["toolbar_#{@type}".toCamelCase(true)]
       options = @options[@type]
       options = {template: options} if typeof(options) == 'string'
-      return @subView = new Klass(options)
+      return @subview = new Klass(options)
 
 
   determineAction: ->
@@ -65,7 +67,7 @@ class Mercury.ToolbarButton extends Mercury.View
 
 
   triggerAction: ->
-    return @subView.toggle() if @subView
+    return @subview.toggle() if @subview
     Mercury.trigger(@event) if @event
     Mercury.trigger('mode', @mode) if @mode
     Mercury.trigger('action', @action...)

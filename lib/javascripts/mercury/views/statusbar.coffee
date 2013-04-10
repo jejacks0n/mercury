@@ -27,8 +27,11 @@ class Mercury.Statusbar extends Mercury.View
       @path.append(' &raquo; ') unless el == path[path.length - 1]
 
 
-  onRegionUpdate: (region) ->
-    @setPath(path) if path = region.path?()
+  show: ->
+    clearTimeout(@visibilityTimeout)
+    @visible = true
+    @el.show()
+    @visibilityTimeout = @delay(50, => @el.css(bottom: 0))
 
 
   hide: ->
@@ -38,8 +41,5 @@ class Mercury.Statusbar extends Mercury.View
     @visibilityTimeout = @delay(250, => @el.hide())
 
 
-  show: ->
-    clearTimeout(@visibilityTimeout)
-    @visible = true
-    @el.show()
-    @visibilityTimeout = @delay(50, => @el.css(bottom: 0))
+  onRegionUpdate: (region) ->
+    @setPath(path) if path = region.path?()

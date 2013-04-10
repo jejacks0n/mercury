@@ -76,7 +76,7 @@ describe "Mercury.Region.Gallery", ->
       subject.timeout = '_timeout_'
       spyOn(window, 'clearTimeout')
       subject.refresh()
-      expect( window.clearTimeout ).calledWith('_timeout_')
+      expect( clearTimeout ).calledWith('_timeout_')
 
     it "hides all the images (and assigns to @images)", ->
       subject.refresh()
@@ -324,6 +324,26 @@ describe "Mercury.Region.Gallery", ->
       expect( subject.refresh ).called
 
 
+  describe "#release", ->
+
+    it "clears the timeout", ->
+      spyOn(window, 'clearTimeout')
+      subject.timeout = '_timeout_'
+      subject.release()
+      expect( clearTimeout ).calledWith('_timeout_')
+
+    it "sets the html back (using #value)", ->
+      spyOn(subject, 'html')
+      spyOn(subject, 'value', -> '_value_')
+      subject.release()
+      expect( subject.html ).calledWith('_value_')
+
+    it "calls super", ->
+      spyOn(Klass.__super__, 'release')
+      subject.release()
+      expect( Klass.__super__.release ).called
+
+
   describe "actions", ->
 
     beforeEach ->
@@ -381,8 +401,6 @@ describe "Mercury.Region.Gallery", ->
         spyOn(subject, 'appendSlide')
         subject.handleAction('image', url: '_url_')
         expect( subject.appendSlide ).calledWith("""<div class="slide"><img src="_url_"/></div>""")
-
-
 
 
   describe "context", ->

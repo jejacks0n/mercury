@@ -18,7 +18,7 @@ Mercury2 comes with several examples of how to integrate more complex features. 
 An example of server integration is available in the [mercury-rails](https://github.com/jejacks0n/mercury-rails) project, which outlines all of the features that are needed by the server to fully work with the default regions.
 
 
-## Sandboxing & Shadow Dom
+## Sandboxing & The Shadow Dom
 
 Mercury2 allows sandboxing content within an iframe or it can load directly on the page you're editing. This has been a complication in the past, so this version simplifies that while also retaining the ability to sandbox itself to mimimize conflicts with javascript libraries and css.
 

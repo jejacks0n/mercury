@@ -1,4 +1,5 @@
 #= require mercury/core/view
+#= require mercury/views/toolbar_item
 
 class Mercury.Toolbar extends Mercury.View
 
@@ -19,11 +20,8 @@ class Mercury.Toolbar extends Mercury.View
     @append(new Mercury.ToolbarItem('secondary', 'container', {}))
 
 
-  hide: ->
-    clearTimeout(@visibilityTimeout)
-    @visible = false
-    @el.css(top: -@el.height())
-    @visibilityTimeout = @delay(250, => @el.hide())
+  buildToolbar: (name) ->
+    new Mercury.ToolbarItem(name, 'collection', @config("toolbars:#{name}")).appendTo(@toolbar)
 
 
   show: ->
@@ -33,18 +31,19 @@ class Mercury.Toolbar extends Mercury.View
     @visibilityTimeout = @delay(50, => @el.css(top: 0))
 
 
+  hide: ->
+    clearTimeout(@visibilityTimeout)
+    @visible = false
+    @el.css(top: -@el.height())
+    @visibilityTimeout = @delay(250, => @el.hide())
+
+
   onRegionFocus: (region) ->
     return if @region == region
     @region = region
     @$('.mercury-toolbar-collection').remove()
     @buildToolbar(name) for name in region.toolbars || []
     Mercury.trigger('region:update', region)
-
-
-  buildToolbar: (name) ->
-    toolbar = new Mercury.ToolbarItem(name, 'collection', @config("toolbars:#{name}"))
-    toolbar.appendTo(@toolbar)
-    toolbar
 
 
   @icons:

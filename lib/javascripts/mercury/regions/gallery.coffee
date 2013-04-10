@@ -125,6 +125,12 @@ class Mercury.Region.Gallery extends Mercury.Region
     @refresh(true)
 
 
+  release: ->
+    clearTimeout(@timeout)
+    @html(@value())
+    super
+
+
 Mercury.Region.Gallery.addToolbar
   general:
     prev:       ['Previous Slide']

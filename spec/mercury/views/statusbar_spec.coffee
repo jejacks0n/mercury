@@ -7,6 +7,7 @@ describe "Mercury.Statusbar", ->
   subject = null
 
   beforeEach ->
+    Mercury.configure 'logging:enabled', false
     subject = new Klass()
 
   describe "#build", ->
@@ -24,13 +25,32 @@ describe "Mercury.Statusbar", ->
       expect( subject.path.html() ).to.eq('<b>Path: </b>foo » <span>bar</span>')
 
 
-  describe "#onRegionUpdate", ->
+  describe "#show", ->
 
-    it "calls #setPath with the region path", ->
-      spyOn(subject, 'setPath')
-      subject.onRegionUpdate({})
-      subject.onRegionUpdate(path: -> [])
-      expect( subject.setPath ).calledOnce
+    beforeEach ->
+      subject.visibilityTimeout = '_timer_'
+
+    it "calls clearTimeout", ->
+      spyOn(window, 'clearTimeout')
+      subject.show()
+      expect( clearTimeout ).calledWith('_timer_')
+
+    it "sets @visible to true", ->
+      subject.visible = false
+      subject.show()
+      expect( subject.visible ).to.be.true
+
+    it "shows the element", ->
+      spyOn(subject.el, 'show')
+      subject.show()
+      expect( subject.el.show ).called
+
+    it "delays setting the elements css bottom", ->
+      spyOn(subject, 'delay').yieldsOn(subject)
+      spyOn(subject.el, 'hide')
+      subject.show()
+      expect( subject.delay ).calledWith(50, sinon.match.func)
+      expect( subject.el.css('bottom') ).to.eq('0px')
 
 
   describe "#hide", ->
@@ -41,7 +61,7 @@ describe "Mercury.Statusbar", ->
     it "calls clearTimeout", ->
       spyOn(window, 'clearTimeout')
       subject.hide()
-      expect( window.clearTimeout ).calledWith('_timer_')
+      expect( clearTimeout ).calledWith('_timer_')
 
     it "sets @visible to false", ->
       subject.visible = true
@@ -61,29 +81,10 @@ describe "Mercury.Statusbar", ->
       expect( subject.el.hide ).called
 
 
-  describe "#show", ->
+  describe "#onRegionUpdate", ->
 
-    beforeEach ->
-      subject.visibilityTimeout = '_timer_'
-
-    it "calls clearTimeout", ->
-      spyOn(window, 'clearTimeout')
-      subject.show()
-      expect( window.clearTimeout ).calledWith('_timer_')
-
-    it "sets @visible to true", ->
-      subject.visible = false
-      subject.show()
-      expect( subject.visible ).to.be.true
-
-    it "shows the element", ->
-      spyOn(subject.el, 'show')
-      subject.show()
-      expect( subject.el.show ).called
-
-    it "delays setting the elements css bottom", ->
-      spyOn(subject, 'delay').yieldsOn(subject)
-      spyOn(subject.el, 'hide')
-      subject.show()
-      expect( subject.delay ).calledWith(50, sinon.match.func)
-      expect( subject.el.css('bottom') ).to.eq('0px')
+    it "calls #setPath with the region path", ->
+      spyOn(subject, 'setPath')
+      subject.onRegionUpdate({})
+      subject.onRegionUpdate(path: -> [])
+      expect( subject.setPath ).calledOnce

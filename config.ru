@@ -36,7 +36,7 @@ module Mercury
     config.suite do |suite|
       suite.matcher      = 'spec/**/*_spec.{js,js.coffee,coffee}'
       suite.helper       = 'spec_helper'
-      suite.javascripts  = ['teabag/mocha', 'support/chai', 'support/sinon', 'support/sinon-chai']
+      suite.javascripts  = ['teabag-mocha', 'support/chai', 'support/sinon', 'support/sinon-chai']
       suite.no_coverage << %r(/dependencies|/templates)
     end
   end

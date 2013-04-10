@@ -13,13 +13,12 @@ class Mercury.Modal extends Mercury.View
   template: 'modal'
 
   elements:
-    overlayEl: '.mercury-modal-overlay'
-    dialogEl: '.mercury-modal-dialog'
-    positionerEl: '.mercury-modal-dialog-positioner'
-    contentEl: '.mercury-modal-dialog-content'
-    contentContainerEl: '.mercury-modal-dialog-content-container'
-    titleContainerEl: '.mercury-modal-dialog-title'
-    titleEl: '.mercury-modal-dialog-title span'
+    overlay: '.mercury-modal-overlay'
+    dialog: '.mercury-modal-dialog-positioner'
+    content: '.mercury-modal-dialog-content'
+    contentContainer: '.mercury-modal-dialog-content-container'
+    titleContainer: '.mercury-modal-dialog-title'
+    title: '.mercury-modal-dialog-title span'
 
   events:
     'click .mercury-modal-dialog-title em': 'release'
@@ -28,7 +27,7 @@ class Mercury.Modal extends Mercury.View
     'interface:show': -> @show(false)
 
   constructor: (@options = {}) ->
-    return if @ensureSingleton(arguments...)
+    return instance if instance = @ensureSingleton(arguments...)
     super(options: @options)
     @show()
 
@@ -37,41 +36,50 @@ class Mercury.Modal extends Mercury.View
     @addClass('loading')
     @appendTo(Mercury.interface)
     $(window).on('resize', @resize)
-    @preventScrollPropagation(@contentContainerEl)
-
-
-  content: ->
-    return @renderTemplate(@options.template) if @options.template
-    return @options.content
+    @preventScrollPropagation(@contentContainer)
 
 
   update: (options) ->
+    return unless @visible
     @options = options if typeof(options) == 'object'
-    @titleEl.html(@options.title)
-    @positionerEl.css(width: @options.width)
-    content = @content()
+    @title.html(@options.title)
+    @dialog.css(width: @options.width)
+    content = @contentFromOptions()
     return if content == @lastContent
     @addClass('loading')
-    @contentEl.css(visibility: 'hidden', opacity: 0, width: @options.width).html(content)
+    @content.css(visibility: 'hidden', opacity: 0, width: @options.width).html(content)
     @lastContent = content
     @resize()
 
 
   resize: (noAnimation) =>
+    clearTimeout(@showContentTimeout)
     @addClass('mercury-no-animation') if noAnimation
-    @contentContainerEl.css(height: 'auto')
-    titleHeight = @titleContainerEl.outerHeight()
-    height = Math.min(@contentEl.outerHeight() + titleHeight, $(window).height() - 10)
-    @positionerEl.css(height: height)
-    @contentContainerEl.css(height: height - titleHeight)
-    if noAnimation then @showContent(true) else @delay(300, @showContent)
+    @contentContainer.css(height: 'auto')
+    titleHeight = @titleContainer.outerHeight()
+    height = Math.min(@content.outerHeight() + titleHeight, $(window).height() - 10)
+    @dialog.css(height: height)
+    @contentContainer.css(height: height - titleHeight)
+    if noAnimation
+      @showContent(true)
+    else
+      @showContentTimeout = @delay(300, @showContent)
     @el.removeClass('mercury-no-animation')
 
 
+  contentFromOptions: ->
+    return @renderTemplate(@options.template) if @options.template
+    return @options.content
+
+
   showContent: (noAnimation) ->
+    clearTimeout(@contentOpacityTimeout)
     @el.removeClass('loading')
-    @contentEl.css(visibility: 'visible', width: 'auto')
-    if noAnimation then @contentEl.css(opacity: 1) else @delay(50, -> @contentEl.css(opacity: 1))
+    @content.css(visibility: 'visible', width: 'auto')
+    if noAnimation
+      @content.css(opacity: 1)
+    else
+      @contentOpacityTimeout = @delay(50, -> @content.css(opacity: 1))
 
 
   show: (update = true) ->
@@ -95,5 +103,6 @@ class Mercury.Modal extends Mercury.View
 
   release: ->
     return @hide(true) if @visible
+    @constructor.instance = null
     $(window).off('resize', @resize)
     super

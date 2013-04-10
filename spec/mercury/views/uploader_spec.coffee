@@ -116,6 +116,7 @@ describe "Mercury.Uploader", ->
 
     it "animates the css (in a delay)", ->
       subject.show()
+      expect( subject.delay ).calledWith(50, sinon.match.func)
       expect( subject.el.css('opacity') ).to.eq('1')
 
 

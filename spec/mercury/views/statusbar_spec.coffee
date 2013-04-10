@@ -85,5 +85,5 @@ describe "Mercury.Statusbar", ->
       spyOn(subject, 'delay').yieldsOn(subject)
       spyOn(subject.el, 'hide')
       subject.show()
-      expect( subject.delay ).calledWith(1, sinon.match.func)
+      expect( subject.delay ).calledWith(50, sinon.match.func)
       expect( subject.el.css('bottom') ).to.eq('0px')

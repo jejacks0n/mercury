@@ -51,7 +51,7 @@ class Mercury.Uploader extends Mercury.View
 
   show: ->
     @update(@t('Processing...'))
-    @delay(1, => @el.css(opacity: 1))
+    @delay(50, => @el.css(opacity: 1))
 
 
   release: (ms = 0) ->

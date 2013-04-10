@@ -30,7 +30,7 @@ class Mercury.Toolbar extends Mercury.View
     clearTimeout(@visibilityTimeout)
     @visible = true
     @el.show()
-    @visibilityTimeout = @delay(1, => @el.css(top: 0))
+    @visibilityTimeout = @delay(50, => @el.css(top: 0))
 
 
   onRegionFocus: (region) ->

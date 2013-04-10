@@ -72,7 +72,7 @@ describe "Mercury.Region.Modules.DropIndicator", ->
     it "delays setting the opacity", ->
       spyOn(subject, 'delay').yieldsOn(subject)
       subject.el.trigger('dragenter')
-      expect( subject.delay ).calledWith(1, sinon.match.func)
+      expect( subject.delay ).calledWith(50, sinon.match.func)
       expect( subject.dropIndicator.css('opacity') ).to.eq('1')
 
     it "does nothing if we're previewing", ->

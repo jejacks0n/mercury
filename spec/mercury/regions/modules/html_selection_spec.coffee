@@ -14,4 +14,4 @@ describe "Mercury.Region.Modules.HtmlSelection", ->
       @include Module
     subject = new Klass('<div id="foo">')
 
-  it "should be tested eventually"
+  it "needs to be tested"

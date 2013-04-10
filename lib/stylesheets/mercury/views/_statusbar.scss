@@ -2,9 +2,9 @@
  *----------------------------------------------------------------------------*/
 mercury .mercury-statusbar {
   @include mercury-no-selection;
-  @include mercury-transition(bottom, ease-in-out);
+  @include mercury-transition(bottom);
   position: fixed;
-  z-index: 10020;
+  z-index: 10000;
   bottom: 0;
   left: 0;
   width: 100%;

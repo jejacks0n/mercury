@@ -2,6 +2,7 @@
 #
 #= require mercury/templates/statusbar
 #= require mercury/templates/uploader
+#= require mercury/templates/modal
 #
 #= require mercury/templates/block_types
 #= require mercury/templates/color_palette
@@ -26,6 +27,7 @@
 #
 #= require mercury/views/base_interface
 #= require mercury/views/frame_interface
+#= require mercury/views/modal
 #= require mercury/views/statusbar
 #= require mercury/views/toolbar
 #= require mercury/views/toolbar_item
@@ -51,12 +53,6 @@
 #= require mercury/regions/modules/html_selection
 #= require mercury/regions/modules/selection_value
 #= require mercury/regions/modules/text_selection
-#
-# View modules.
-#
-#= require mercury/views/modules/toolbar_dialog
-#= require mercury/views/modules/toolbar_focusable
-#= require mercury/views/modules/visibility_toggleable
 #
 # Initialize script.
 #

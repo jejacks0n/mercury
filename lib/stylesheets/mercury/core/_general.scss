@@ -51,7 +51,7 @@
   font-size: $size;
 }
 
-@mixin mercury-transition($property, $easing, $timing: 0.25s) {
+@mixin mercury-transition($property, $easing: ease-in-out, $timing: 0.25s) {
   -webkit-transition-property: $property;
   -webkit-transition-duration: $timing;
   -webkit-transition-timing-function: $easing;
@@ -61,4 +61,20 @@
   transition-property: $property;
   transition-duration: $timing;
   transition-timing-function: $easing;
+  // fixes a flicker in safari
+  @if $property == "opacity" {
+    -webkit-backface-visibility: hidden;
+  }
+}
+
+@mixin mercury-loading-indicator($size: 32px) {
+  @include mercury-icon-base($size, $size, $size);
+  text-align: center;
+  &:before {
+    -webkit-animation: mercury-loading-indicator 1s linear infinite;
+    -moz-animation: mercury-loading-indicator 1s linear infinite;
+    animation: mercury-loading-indicator 1s linear infinite;
+    color: #666;
+    content: "/";
+  }
 }

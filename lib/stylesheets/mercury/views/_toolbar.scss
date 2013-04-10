@@ -3,8 +3,9 @@
 mercury .mercury-toolbar {
   @extend .mercury-clearfix;
   @include mercury-no-selection;
-  @include mercury-transition(top, ease-in-out);
+  @include mercury-transition(top);
   position: fixed;
+  z-index: 10001;
   top: 0;
   left: 0;
   width: 100%;
@@ -137,16 +138,18 @@ mercury .mercury-toolbar {
     }
   }
   .mercury-toolbar-palette {
-    width: 165px;
+    width: 167px;
     height: auto;
     padding: 1px;
     ul {
+      margin-right: -1px;
       li {
         padding: 0;
-        display: inline-block;
+        display: block;
+        float: left;
         width: 15px;
         height: 15px;
-        margin: -1px;
+        margin: 0 1px 1px 0;
         &:hover {
           outline: 1px solid #333;
         }
@@ -155,7 +158,7 @@ mercury .mercury-toolbar {
           text-align: center;
           text-transform: lowercase;
           line-height: 15px;
-          margin: 0;
+          margin: 2px 3px 4px 0;
         }
       }
     }

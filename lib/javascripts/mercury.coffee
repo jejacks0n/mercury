@@ -36,10 +36,12 @@ jQuery ->
 
 
 # todo:
-#   consider switching to using a mask for toolbar dialogs (that cover the entire viewport) instead of mousedown on body.
+#   spend time making sure focus is working well and dialed before moving forward.
+#   pass through the css and migrate colors etc to config.
+#   migrate existing locale content into new locales and document missing values.
 #   make region use the shadow dom if possible/configured to do so.
 #   spend some time making what's in work really well on ios.
-#   work on modal -- and lightview.
+#   work on lightview.
 #   work on panel.
 #   figure out how to better integrate snippets.
 #   can we make editing content within snippets work?

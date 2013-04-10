@@ -15,8 +15,10 @@
 
 /* Keyframes
  *----------------------------------------------------------------------------*/
-@-webkit-keyframes mercury-uploader-indicator { to { background-position: 0 0 } from { background-position: -45px 0 } }
-@-moz-keyframes mercury-uploader-indicator { to { background-position: 0 0 } from { background-position: -45px 0 } }
+@-webkit-keyframes mercury-uploader-indicator { from { background-position: -45px 0 } to { background-position: 0 0 } }
+@-moz-keyframes mercury-uploader-indicator { from { background-position: -45px 0 } to { background-position: 0 0 } }
+@-webkit-keyframes mercury-loading-indicator { from { -webkit-transform: rotate(0deg) } to { -webkit-transform: rotate(360deg) } }
+@-moz-keyframes mercury-loading-indicator { from { -moz-transform: rotate(0deg) } to { -moz-transform: rotate(360deg) } }
 
 // Configuration.
 
@@ -33,6 +35,7 @@
 
 @import "mercury/views/base_interface";
 @import "mercury/views/frame_interface";
+@import "mercury/views/modal";
 @import "mercury/views/statusbar";
 @import "mercury/views/toolbar";
 @import "mercury/views/uploader";
@@ -43,13 +46,14 @@ mercury {
   // disable text sizing in webkit (ipad/iphone etc)
   -webkit-text-size-adjust: none;
   position: absolute;
-  z-index: 20000;
+  z-index: 10000;
 
   // disable tap highlighting in webkit (ipad/iphone etc)
   -webkit-tap-highlight-color: rgba(0,0,0,0);
 
   // disable animations while initializing
-  &.loading * {
+  &.loading *,
+  .mercury-no-animation * {
     -moz-transition: none !important;
     -webkit-transition: none !important;
     -o-transition: color 0 ease-in !important;

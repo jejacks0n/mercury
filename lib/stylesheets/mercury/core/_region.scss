@@ -8,7 +8,7 @@
 }
 
 @mixin mercury-region-drop-indicator {
-  @include mercury-transition(opacity, ease-in-out);
+  @include mercury-transition(opacity);
   @include mercury-border-radius(10px);
   @include mercury-icon-base(32px, 60px, 60px);
   display: none;

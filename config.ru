@@ -58,7 +58,7 @@ class ApplicationController < ActionController::Base
   end
 
   def template
-    render text: "#{params[:name]}foo"
+    render text: "missing template #{params[:name]}"
   end
 end
 

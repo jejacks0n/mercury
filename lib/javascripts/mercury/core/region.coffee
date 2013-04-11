@@ -349,7 +349,6 @@ class Mercury.Region extends Mercury.View
     json = JSON.parse(json) if typeof(json) == 'string'
     @value(json.value) if json.value
     @data(json.data) if json.data
-    #@snippets(json.snippets)
 
 
   # Releases the instance and triggers a release event. Releasing a region doesn't remove the element, but does remove
@@ -370,17 +369,13 @@ class Mercury.Region extends Mercury.View
   # defined in subclasses, and the dropFile event.
   #
   bindDefaultEvents: ->
-    # handle action events using a custom event handler
-    Mercury.on('action', => @handleAction(arguments...))
-
-    # handle mode events using a custom mode handler
-    Mercury.on('mode', => @handleMode(arguments...))
-
-    # handle resetting changed/stack position when save is triggered
-    Mercury.on('save', => @onSave())
-
     # delegate all the actions defined in various places
     @delegateActions($.extend(true, @constructor.actions, @constructor.defaultActions, @actions ||= {}))
+
+    @delegateEvents
+      'mercury:action': -> @handleAction(arguments...)          # handle action events using a custom event handler
+      'mercury:mode': -> @handleMode(arguments...)              # handle mode events using a custom mode handler
+      'mercury:save': -> @onSave()                              # handle resetting changed/stack position on save
 
     # bind various events to the focusable element (which defaults to @el)
     @bindFocusEvents()                                          # binds focus/blur events

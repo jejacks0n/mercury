@@ -145,6 +145,7 @@ class Mercury.View extends Mercury.Module
   release: ->
     @trigger('release')
     @el.remove()
+    Mercury.off(name, method) for name, method of @__global_handlers__ || {}
     @off()
 
 
@@ -163,6 +164,7 @@ class Mercury.View extends Mercury.Module
       events = el
       el = @el
 
+    @__global_handlers__ ||= {}
     for key, method of events
 
       if typeof(method) == 'function'
@@ -183,7 +185,9 @@ class Mercury.View extends Mercury.Module
             true
 
       if key.indexOf(':') > -1 # bind to global event
-        Mercury.on(key.replace(/^mercury:/, ''), method)
+        key = key.replace(/^mercury:/, '')
+        @__global_handlers__[key] = method
+        Mercury.on(key, method)
         continue
 
       [match, event, selector] = key.match(@eventSplitter)

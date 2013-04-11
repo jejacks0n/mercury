@@ -36,6 +36,9 @@ jQuery ->
 
 
 # todo:
+#   there's a problem with some of the stuff I spiked on with blocking the interface -- modals are holding onto their interface:show event.
+#   add a Mercury.Plugin to core that provides common and obvious ways to tie into the extensibility api (use the character picker as an example).
+#   provide aloha editor look alike toolbar and toolbar behavior.
 #   spend time making sure focus is working well and dialed before moving forward.
 #   pass through the css and migrate colors etc to config.
 #   migrate existing locale content into new locales and document missing values.

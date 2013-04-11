@@ -266,6 +266,13 @@ describe "Mercury.View", ->
       subject.release()
       expect( subject.off ).called
 
+    it "calls Mercury.off for all events stored in the global handlers", ->
+      spyOn(Mercury, 'off')
+      subject.__global_handlers__ = foo: 'bar', bar: 'baz'
+      subject.release()
+      expect( Mercury.off ).calledWith('foo', 'bar')
+      expect( Mercury.off ).calledWith('bar', 'baz')
+
 
   describe "#delegateEvents", ->
 
@@ -313,6 +320,8 @@ describe "Mercury.View", ->
         Mercury.on.callArg(1, 'foo')
         expect( callback ).calledWith('foo')
         expect( callback ).calledOn(subject)
+        console.debug(subject.__global_handlers__)
+        expect( subject.__global_handlers__ ).to.have.keys(['global:event'])
 
     describe "binding to trigger a global event (by using : in the key)", ->
 

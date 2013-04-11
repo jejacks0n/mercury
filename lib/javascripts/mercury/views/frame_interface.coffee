@@ -22,7 +22,7 @@ class Mercury.FrameInterface extends Mercury.BaseInterface
 
   bindDefaultEvents: ->
     @frame.on('load', => @initializeFrame())
-    Mercury.on('initialize', => @initializeFrame())
+    @delegateEvents('mercury:initialize': -> @initializeFrame())
     super
 
 

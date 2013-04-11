@@ -653,6 +653,21 @@ describe "Mercury.Region", ->
       spyOn(subject, 'bindMouseEvents')
       spyOn(subject, 'bindDropEvents')
 
+    it "calls #delegateActions with what we've defined", ->
+      subject.actions = {foo: 'bar'}
+      subject.constructor.actions = {bit: 'bot'}
+      spyOn(subject, 'delegateActions')
+      subject.bindDefaultEvents()
+      expect( subject.delegateActions ).calledWith(foo: 'bar', bit: 'bot', undo: 'onUndo', redo: 'onRedo')
+
+    it "calls #delagateEvents with the expected events", ->
+      spyOn(subject, 'delegateEvents')
+      subject.bindDefaultEvents()
+      expect( subject.delegateEvents ).calledWith
+        'mercury:action': sinon.match.func
+        'mercury:mode': sinon.match.func
+        'mercury:save': sinon.match.func
+
     it "binds to the global 'action' event", ->
       spyOn(subject, 'handleAction')
       spyOn(Mercury, 'on').callsArgOnWith(1, subject, 1, 2, '3')
@@ -673,13 +688,6 @@ describe "Mercury.Region", ->
       subject.bindDefaultEvents()
       expect( Mercury.on ).calledWith('save', sinon.match.func)
       expect( subject.onSave ).called
-
-    it "calls #delegateActions with what we've defined", ->
-      subject.actions = {foo: 'bar'}
-      subject.constructor.actions = {bit: 'bot'}
-      spyOn(subject, 'delegateActions')
-      subject.bindDefaultEvents()
-      expect( subject.delegateActions ).calledWith(foo: 'bar', bit: 'bot', undo: 'onUndo', redo: 'onRedo')
 
     it "calls #bindFocusEvents", ->
       subject.bindDefaultEvents()

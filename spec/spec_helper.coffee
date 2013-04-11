@@ -6,6 +6,7 @@
 
 # define global methods that might not exist
 Mercury.on ||= ->
+Mercury.off ||= ->
 Mercury.trigger ||= ->
 Mercury.support = webkit: true
 beforeEach ->

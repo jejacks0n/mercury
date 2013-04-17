@@ -31,9 +31,7 @@ class Mercury.BaseInterface extends Mercury.View
 
 
   build: ->
-    @el = document.createElement(@tag) unless @el
-    @el = $(@el)
-    @$el = @el
+    @$el = @el = $(@tag) unless @el
     @attr(@attributes)
     @addClass(@className)
 
@@ -83,9 +81,9 @@ class Mercury.BaseInterface extends Mercury.View
 
 
   bindDefaultEvents: ->
-    Mercury.on 'mode', (mode) => @setMode(mode)
-    Mercury.on 'action', => @focusActiveRegion()
-    $('body').on 'mousedown', -> Mercury.trigger('dialogs:hide')
+    @delegateEvents
+     'mercury:mode': (mode) -> @setMode(mode)
+     'mercury:action': -> @focusActiveRegion()
 
 
   focusDefaultRegion: ->

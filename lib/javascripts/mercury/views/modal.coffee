@@ -50,6 +50,7 @@ class Mercury.Modal extends Mercury.View
     @content.css(visibility: 'hidden', opacity: 0, width: @options.width).html(content)
     @lastContent = content
     @resize()
+    @show(false)
 
 
   resize: (noAnimation) =>

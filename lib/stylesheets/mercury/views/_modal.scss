@@ -68,6 +68,7 @@ mercury .mercury-modal {
     .mercury-modal-dialog-content-container {
       float: left;
       overflow: auto;
+      -webkit-overflow-scrolling: touch;
       min-width: 100%;
     }
     .mercury-modal-dialog-content {

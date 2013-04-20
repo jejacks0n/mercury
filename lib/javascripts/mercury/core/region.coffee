@@ -172,9 +172,10 @@ class Mercury.Region extends Mercury.View
   # Allows buttons and other things to ask if a region has a given context. Contexts are things like if the cursor is
   # within a bold area -- the context method should return a boolean.
   #
-  hasContext: (context) ->
+  hasContext: (context, result = false) ->
     return false unless @context[context]
-    return !!@context[context].call(@, context)
+    context = @context[context].call(@, context)
+    return if result then context else !!context
 
 
   # Handles action events by taking the first argument, which should be the action, and passes through to the action
@@ -354,7 +355,7 @@ class Mercury.Region extends Mercury.View
   #
   release: ->
     @$el.data(region: null)
-    @$el.removeClass("mercury-#{@constructor.type}-region")
+    @removeClass("mercury-#{@constructor.type}-region")
     @$focusable.removeAttr('tabindex')
     @trigger('release')
     @$el.off()

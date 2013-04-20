@@ -128,6 +128,14 @@ describe "Mercury.View", ->
       expect( subject.$el.hasClass('foo') ).to.be.true
 
 
+  describe "#removeClass", ->
+
+    it "removes the class from @$el", ->
+      subject.$el.addClass('foo')
+      subject.removeClass('foo')
+      expect( subject.$el.hasClass('foo') ).to.be.false
+
+
   describe "#attr", ->
 
     it "adds the attributes to @$el", ->

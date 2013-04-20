@@ -71,6 +71,12 @@ class Mercury.View extends Mercury.Module
     @$el.addClass(className)
 
 
+  # Delegates to jQuery removeClass.
+  #
+  removeClass: (className) ->
+    @$el.removeClass(className)
+
+
   # Delegate to jQuery attr.
   #
   attr: (key, value) ->

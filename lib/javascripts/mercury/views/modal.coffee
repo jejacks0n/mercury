@@ -74,7 +74,7 @@ class Mercury.Modal extends Mercury.View
       @showContent(true)
     else
       @showContentTimeout = @delay(300, @showContent)
-    @$el.removeClass('mercury-no-animation')
+    @removeClass('mercury-no-animation')
 
 
   contentFromOptions: ->
@@ -84,7 +84,7 @@ class Mercury.Modal extends Mercury.View
 
   showContent: (noAnimation) ->
     clearTimeout(@contentOpacityTimeout)
-    @$el.removeClass('loading')
+    @removeClass('loading')
     @$content.css(visibility: 'visible', width: 'auto')
     if noAnimation
       @$content.css(opacity: 1)

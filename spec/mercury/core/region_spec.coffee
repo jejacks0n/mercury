@@ -294,9 +294,10 @@ describe "Mercury.Region", ->
       expect( subject.hasContext('foo') ).to.be.false
 
     it "returns the result of the context method converted to a boolean", ->
-      subject.context.foo = -> return 'foo'
+      subject.context.foo = -> 'foo'
       expect( subject.hasContext('foo') ).to.be.true
-      subject.context.foo = -> return false
+      expect( subject.hasContext('foo', true) ).to.eql('foo')
+      subject.context.foo = -> false
       expect( subject.hasContext('foo') ).to.be.false
 
 

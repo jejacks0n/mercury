@@ -26,7 +26,7 @@ class Mercury.BaseInterface extends Mercury.View
     @initialize()
     @buildInterface()
     @bindDefaultEvents()
-    @$el.removeClass('loading')
+    @removeClass('loading')
     Mercury.trigger('initialized')
 
 

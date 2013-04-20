@@ -5,4 +5,4 @@ Mercury.View.Modules.ToolbarDialog =
 
 
   buildToolbarDialog: ->
-    @delegateEvents('dialogs:hide': -> @hide?())
+    @delegateEvents('mercury:dialogs:hide': -> @hide?())

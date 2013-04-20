@@ -39,7 +39,7 @@ Mercury?.on 'initialize', ->
 
   # The action handler simply toggles the wrap attribute on the focusable element (which is the common name for text
   # based regions.) If you want the button to work like a toggle button check out the next example -- adding context.
-  Mercury.Region.Markdown.addAction 'wrap', -> @focusable.attr(wrap: if @focusable.attr('wrap') then null else 'off')
+  Mercury.Region.Markdown.addAction 'wrap', -> @$focusable.attr(wrap: if @$focusable.attr('wrap') then null else 'off')
 
 
   # Actions - Data and Context
@@ -54,12 +54,12 @@ Mercury?.on 'initialize', ->
   # To have the button highlight under various conditions we need to add a context. The button will highlight when it's
   # context is true. Our context simply checks to see if the region has it's direction set to rtl -- which makes our
   # button work like a toggle.
-  Mercury.Region.Markdown.addContext 'direction', -> @el.css('direction') == 'rtl'
+  Mercury.Region.Markdown.addContext 'direction', -> @css('direction') == 'rtl'
 
   # Next, since we're using a data attribute we need to know what to do when it's set. This allows us to restore things
   # from the undo/redo stack. Initially this handler will be called with null, and you're expected to set a default --
   # which allows specifying defaults as well as resetting it in the case when it's removed.
-  Mercury.Region.Markdown.addData 'direction', (val) -> @el.css('direction', val || 'ltr')
+  Mercury.Region.Markdown.addData 'direction', (val) -> @css('direction', val || 'ltr')
 
   # And finally we add the action. You'll notice we're going through the #data method when setting this, which will call
   # through to the data handler that we defined using the .addData method above. If you attempt to set the element data

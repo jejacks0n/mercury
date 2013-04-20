@@ -48,41 +48,51 @@ class Mercury.View extends Mercury.Module
   # your own element, or add additional functionality to the initial build process.
   #
   buildElement: ->
-    @el = document.createElement(@tag) unless @el
-    @el = $(@el)
-    @$el = @el
+    if @$el
+      @el = @$el.get(0)
+    else
+      @el = document.createElement(@tag || @constructor.tag) unless @el
+      @$el = $(@el)
     @attr(@attributes)
+    @addClass(@constructor.className)
     @addClass(@className)
-    @html(@renderTemplate(@template)) if @template
+    @html(@renderTemplate(@template || @constructor.template)) if @template || @constructor.template
 
 
   # Delegates to jQuery find. Simplifies scoped finds within our own element.
   #
   $: (selector) ->
-    $(selector, @el)
+    $(selector, @$el)
 
 
   # Delegates to jQuery addClass.
   #
   addClass: (className) ->
-    @el.addClass(className)
+    @$el.addClass(className)
 
 
   # Delegate to jQuery attr.
   #
   attr: (key, value) ->
-    return @el.attr(key) if key && arguments.length == 1
-    @el.attr(key, value)
+    return @$el.attr(key) if key && arguments.length == 1
+    @$el.attr(key, value)
+
+
+  # Delegate to jQuery css.
+  #
+  css: (key, value) ->
+    return @$el.css(key) if key && arguments.length == 1
+    @$el.css(key, value)
 
 
   # Sets the html of our element and re-finds any elements that we're actively tracking.
   # Returns el for chaining, or contents if no arguments.
   #
   html: (element) ->
-    return @el.html() unless arguments.length
-    @el.html(element?.el || element)
+    return @$el.html() unless arguments.length
+    @$el.html(element?.$el || element?.el || element)
     @refreshElements()
-    @el
+    @$el
 
 
   # Append an element, elements, or view(s). Accepts a list of elements or views, and re-finds any elements we're
@@ -90,18 +100,18 @@ class Mercury.View extends Mercury.Module
   # Returns el for chaining.
   #
   append: (elements...) ->
-    elements = (e.el || e for e in elements)
-    @el.append(elements...)
+    elements = (e.$el || e.el || e for e in elements)
+    @$el.append(elements...)
     @refreshElements()
-    @el
+    @$el
 
 
   # Append this view to another element or view.
   # Returns el for chaining.
   #
   appendTo: (element) ->
-    @el.appendTo(element.el || element)
-    @el
+    @$el.appendTo(element.$el || element.el || element)
+    @$el
 
 
   # Delegates to setTimeout swapping the argument order, and calling the callback within our scope.
@@ -115,8 +125,7 @@ class Mercury.View extends Mercury.Module
   # variables to resolved elements.
   #
   refreshElements: ->
-    for key, value of @elements
-      @[key] = @$(value)
+    @["$#{key}"] = @$(value) for key, value of @elements
 
 
   # Renders a template as a function or string. Looks in JST for the path provided (prefixed with /mercury/templates/),
@@ -148,7 +157,7 @@ class Mercury.View extends Mercury.Module
   #
   release: ->
     @trigger('release')
-    @el.remove()
+    @$el.remove()
     Mercury.off(name, method) for name, method of @__global_handlers__ || {}
     @off()
 
@@ -166,7 +175,7 @@ class Mercury.View extends Mercury.Module
   delegateEvents: (el, events) ->
     if arguments.length == 1
       events = el
-      el = @el
+      el = @$el
 
     @__global_handlers__ ||= {}
     for key, method of events
@@ -176,7 +185,7 @@ class Mercury.View extends Mercury.Module
           method.apply(@, arguments)
           true # always return true from event handlers
       else
-        if method.indexOf(':') > -1 # trigger global event
+        if method.indexOf('mercury:') == 0 # trigger global event
           method = method.replace(/^mercury:/, '')
           method = do (method) => =>
             Mercury.trigger(method, @)
@@ -188,7 +197,7 @@ class Mercury.View extends Mercury.Module
             @[method].apply(@, arguments)
             true
 
-      if key.indexOf(':') > -1 # bind to global event
+      if key.indexOf('mercury:') == 0 # bind to global event
         key = key.replace(/^mercury:/, '')
         @__global_handlers__[key] = method
         Mercury.on(key, method)

@@ -36,7 +36,7 @@ describe "Mercury.Toolbar", ->
       spyOn(Mercury, 'ToolbarItem', => @mock)
 
     it "appends a collection ToolbarItem based on the name", ->
-      subject.toolbar = '_toolbar_'
+      subject.$toolbar = '_toolbar_'
       subject.buildToolbar('foo')
       expect( Mercury.ToolbarItem ).calledWith('foo', 'collection', foo: 'bar')
       expect( @mock.appendTo ).calledWith('_toolbar_')
@@ -58,16 +58,16 @@ describe "Mercury.Toolbar", ->
       expect( subject.visible ).to.be.true
 
     it "shows the element", ->
-      spyOn(subject.el, 'show')
+      spyOn(subject.$el, 'show')
       subject.show()
-      expect( subject.el.show ).called
+      expect( subject.$el.show ).called
 
     it "delays setting the elements css top", ->
       spyOn(subject, 'delay').yieldsOn(subject)
-      spyOn(subject.el, 'hide')
+      spyOn(subject.$el, 'hide')
       subject.show()
       expect( subject.delay ).calledWith(50, sinon.match.func)
-      expect( subject.el.css('top') ).to.eq('0px')
+      expect( subject.$el.css('top') ).to.eq('0px')
 
 
   describe "#hide", ->
@@ -86,16 +86,16 @@ describe "Mercury.Toolbar", ->
       expect( subject.visible ).to.be.false
 
     it "sets css top to the element height", ->
-      fixture.set(subject.el.css(height: 42))
+      fixture.set(subject.$el.css(height: 42))
       subject.hide()
-      expect( subject.el.css('top') ).to.eq('-42px')
+      expect( subject.$el.css('top') ).to.eq('-42px')
 
     it "delays hiding the element", ->
       spyOn(subject, 'delay').yieldsOn(subject)
-      spyOn(subject.el, 'hide')
+      spyOn(subject.$el, 'hide')
       subject.hide()
       expect( subject.delay ).calledWith(250, sinon.match.func)
-      expect( subject.el.hide ).called
+      expect( subject.$el.hide ).called
 
 
   describe "#onRegionFocus", ->

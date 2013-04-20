@@ -8,7 +8,7 @@ Mercury.Region.Modules.ContentEditable =
 
   buildContentEditable: ->
     @editableDropBehavior ?= true
-    @document ||= @el.get(0).ownerDocument
+    @document ||= @$el.get(0).ownerDocument
 
     @makeContentEditable()
     @forceContentEditableDisplay()
@@ -24,21 +24,21 @@ Mercury.Region.Modules.ContentEditable =
 
   releaseContentEditable: ->
     @makeNotContentEditable()
-    @el.css(display: @originalDisplay) if @originalDisplay
+    @css(display: @originalDisplay) if @originalDisplay
 
 
   makeContentEditable: ->
-    @el.get(0).contentEditable = true
+    @$el.get(0).contentEditable = true
 
 
   makeNotContentEditable: ->
-    @el.get(0).contentEditable = false
+    @$el.get(0).contentEditable = false
 
 
   forceContentEditableDisplay: ->
-    if @el.css('display') == 'inline'
+    if @css('display') == 'inline'
       @originalDisplay = 'inline'
-      @el.css(display: 'inline-block')
+      @css(display: 'inline-block')
 
 
   setContentEditablePreferences: -> try

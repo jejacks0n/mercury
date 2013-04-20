@@ -120,16 +120,16 @@ class Mercury.Region extends Mercury.View
 
     @beforeBuild?()                                        # call the beforeBuild method if it's defined
     super(@options)                                        # let the view do it's thing
-    @attr(tabindex: 0) unless @focusable                   # make the element focusable (unless we've set one ourselves)
-    @name ||= @el.attr(@config('regions:identifier'))      # get the name from the element
+    @attr(tabindex: 0) unless @$focusable                  # make the element focusable (unless we've set one ourselves)
+    @name ||= @$el.attr(@config('regions:identifier'))     # get the name from the element
     @previewing ||= false                                  # assume previewing is false
     @focused ||= false                                     # assume focused is false
-    @focusable ||= @el                                     # define @focusable unless it's already defined
+    @$focusable ||= @$el                                   # define @focusable unless it's already defined
     @skipHistoryOn ||= ['redo']                            # we skip pushing to the history on redo by default
     @changed ||= false                                     # you can track changes in subclasses
     @setInitialData()                                      # setup the initial data attributes from dataAttrs
     @afterBuild?()                                         # call the afterBuild method if it's defined
-    @el.data(region: @)                                    # add instance reference to the element data
+    @$el.data(region: @)                                   # add instance reference to the element data
 
     unless @name
       @notify(@t('no name provided for the "%s" region, falling back to random', @constructor.type))
@@ -147,7 +147,7 @@ class Mercury.Region extends Mercury.View
   setInitialData: ->
     for attr, handler of @dataAttrs
       obj = {}
-      obj[attr] = @el.data(attr) || null
+      obj[attr] = @$el.data(attr) || null
       @data(obj)
 
 
@@ -206,9 +206,9 @@ class Mercury.Region extends Mercury.View
     @trigger('preview', @previewing)
     if @previewing
       @blur()
-      @focusable.removeAttr('tabindex')
+      @$focusable.removeAttr('tabindex')
     else
-      @focusable.attr(tabindex: 0)
+      @$focusable.attr(tabindex: 0)
     @onTogglePreview?()
 
 
@@ -235,7 +235,7 @@ class Mercury.Region extends Mercury.View
   #
   focus: ->
     @focused = true
-    @focusable.focus()
+    @$focusable.focus()
     @onFocus?()
 
 
@@ -244,7 +244,7 @@ class Mercury.Region extends Mercury.View
   #
   blur: ->
     @focused = false
-    @focusable.blur()
+    @$focusable.blur()
     @onBlur?()
 
 
@@ -263,7 +263,7 @@ class Mercury.Region extends Mercury.View
   #
   data: (key, value) ->
     if typeof(key) == 'string' && arguments.length == 1 || arguments.length == 0
-      data = @el.data(key)
+      data = @$el.data(key)
       if arguments.length == 0
         data = $.extend({}, data)
         delete(data.region)
@@ -272,14 +272,14 @@ class Mercury.Region extends Mercury.View
     obj = key
     (obj = {}; obj[key] = value) if typeof(key) == 'string'
     @setData(obj)
-    @el
+    @$el
 
 
   # When setting data via the #data method, this is called. It's provided so it can be overridden and adjusted for when
   # data is being set on the element. Also calls dataAttr handlers if one is set.
   #
   setData: (obj) ->
-    @el.data(obj)
+    @$el.data(obj)
     @dataAttrs[attr]?.call?(@, value) for attr, value of obj
 
 
@@ -354,12 +354,12 @@ class Mercury.Region extends Mercury.View
   # all event listeners including those that have been added externally.
   #
   release: ->
-    @el.data(region: null)
-    @el.removeClass("mercury-#{@constructor.type}-region")
-    @focusable.removeAttr('tabindex')
+    @$el.data(region: null)
+    @$el.removeClass("mercury-#{@constructor.type}-region")
+    @$focusable.removeAttr('tabindex')
     @trigger('release')
-    @el.off()
-    @focusable.off()
+    @$el.off()
+    @$focusable.off()
     @off()
     @blur()
 
@@ -376,7 +376,7 @@ class Mercury.Region extends Mercury.View
       'mercury:mode': -> @handleMode(arguments...)              # handle mode events using a custom mode handler
       'mercury:save': -> @onSave()                              # handle resetting changed/stack position on save
 
-    # bind various events to the focusable element (which defaults to @el)
+    # bind various events to the focusable element (which defaults to @$el)
     @bindFocusEvents()                                          # binds focus/blur events
     @bindKeyEvents()                                            # binds undo/redo events
     @bindMouseEvents()                                          # binds various mouse events
@@ -386,7 +386,7 @@ class Mercury.Region extends Mercury.View
   # Binds to focus/blur events on focusable so we can track the focused state.
   #
   bindFocusEvents: ->
-    @delegateEvents @focusable,
+    @delegateEvents @$focusable,
       focus: =>
         @focused = true
         @trigger('focus')
@@ -400,7 +400,7 @@ class Mercury.Region extends Mercury.View
   # Binds to key events on the focusable element so we can handle more complex interactions.
   #
   bindKeyEvents: ->
-    @delegateEvents @focusable,
+    @delegateEvents @$focusable,
       keyup: => @trigger('update')
       keydown: (e) =>
         return unless e.metaKey && e.keyCode == 90
@@ -411,7 +411,7 @@ class Mercury.Region extends Mercury.View
   # Binds to mouse events on the focusable element so we can handle more complex interactions.
   #
   bindMouseEvents: ->
-    @delegateEvents @focusable,
+    @delegateEvents @$focusable,
       mouseup: => @trigger('update')
 
 
@@ -419,7 +419,7 @@ class Mercury.Region extends Mercury.View
   # element. Will call an onDropFile method with the files that were dropped if your subclass implements that method.
   #
   bindDropEvents: ->
-    @delegateEvents @el,
+    @delegateEvents @$el,
       dragenter: (e) -> e.preventDefault()
       dragover: (e) => e.preventDefault() unless @editableDropBehavior && Mercury.support.webkit
       drop: (e) =>

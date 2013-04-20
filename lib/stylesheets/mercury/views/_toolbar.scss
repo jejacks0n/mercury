@@ -142,23 +142,31 @@ mercury .mercury-toolbar {
     height: auto;
     padding: 1px;
     ul {
+      @extend .mercury-clearfix;
       margin-right: -1px;
-      li {
-        padding: 0;
-        display: block;
-        float: left;
-        width: 15px;
-        height: 15px;
-        margin: 0 1px 1px 0;
+    }
+    li {
+      padding: 0;
+      display: block;
+      float: left;
+      width: 15px;
+      height: 15px;
+      margin: 0 1px 1px 0;
+      text-align: center;
+      line-height: 15px;
+      &:hover {
+        margin: -1px 0 0 -1px;
+        border: 1px solid #333;
+      }
+      &.last-picked {
+        width: 160px;
+        text-align: center;
+        text-transform: lowercase;
+        line-height: 15px;
+        margin: 2px 0 0;
         &:hover {
-          outline: 1px solid #333;
-        }
-        &.last-picked {
-          width: 100%;
-          text-align: center;
-          text-transform: lowercase;
-          line-height: 15px;
-          margin: 2px 3px 4px 0;
+          color: #fff;
+          margin: 1px 0 -1px -1px;
         }
       }
     }

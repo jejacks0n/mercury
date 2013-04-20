@@ -6,14 +6,14 @@ class Mercury.FrameInterface extends Mercury.BaseInterface
   @className: 'mercury-frame-interface'
 
   initialize: ->
-    @frame = $(@frame).addClass('mercury-frame-interface-frame')     # get the iframe and set the class
-    unless @frame.length                                             # fall back gracefully
+    @$frame = $(@frame).addClass('mercury-frame-interface-frame')    # get the iframe and set the class
+    unless @$frame.length                                            # fall back gracefully
       @initialized = true
       return super
 
 
   reinitialize: ->
-    if @frame.length
+    if @$frame.length
       @initialized = false
       @initializeFrame()
     else
@@ -21,7 +21,7 @@ class Mercury.FrameInterface extends Mercury.BaseInterface
 
 
   bindDefaultEvents: ->
-    @frame.on('load', => @initializeFrame())
+    @$frame.on('load', => @initializeFrame())
     @delegateEvents('mercury:initialize': -> @initializeFrame())
     super
 
@@ -42,6 +42,6 @@ class Mercury.FrameInterface extends Mercury.BaseInterface
 
 
   setupDocument: ->
-    contentWindow = @frame.get(0).contentWindow
+    contentWindow = @$frame.get(0).contentWindow
     contentWindow.Mercury = Mercury
     @document = $(contentWindow.document)

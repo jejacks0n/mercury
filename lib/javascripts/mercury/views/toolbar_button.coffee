@@ -7,12 +7,13 @@ class Mercury.ToolbarButton extends Mercury.View
 
   @events:
     'mousedown': (e) ->
+      return if @isDisabled()
       if @subview?.visible
         e.preventDefault()
         e.stopPropagation()
       @addClass('mercury-button-pressed')
-    'mouseup': -> @el.removeClass('mercury-button-pressed')
-    'mouseout': -> @el.removeClass('mercury-button-pressed')
+    'mouseup': -> @$el.removeClass('mercury-button-pressed')
+    'mouseout': -> @$el.removeClass('mercury-button-pressed')
     'click': 'triggerAction'
     'mercury:region:focus': 'onRegionFocus'
     'mercury:region:action': 'onRegionUpdate'
@@ -27,10 +28,22 @@ class Mercury.ToolbarButton extends Mercury.View
 
 
   constructor: (@name, @label, @options = {}) ->
-    @action = @determineAction()
-    @actionName = @determineActionName()
-    @type = @determineType()
+    @determineAction()
+    @determineType()
+    @type = @types[0]
     super(@options)
+
+
+  determineAction: ->
+    @action = @options.action || @name
+    @action = [@action] if typeof(@action) == 'string'
+    @actionName = @action[0]
+
+
+  determineType: ->
+    @types = []
+    return @types = [@options.type] if @options.type
+    @types.push(type) for type, value of @options when type not in @standardOptions
 
 
   build: ->
@@ -42,35 +55,26 @@ class Mercury.ToolbarButton extends Mercury.View
 
 
   buildSubview: ->
+    return @subview if @subview
     if Klass = Mercury["toolbar_#{@type}".toCamelCase(true)]
       options = @options[@type]
       options = {template: options} if typeof(options) == 'string'
       return @subview = new Klass(options)
 
 
-  determineAction: ->
-    action = @options.action || @name
-    return [action] if typeof(action) == 'string'
-    action
-
-
-  determineActionName: ->
-    @determineAction()?[0]
-
-
-  determineType: ->
-    return @type if @type
-    return @type = @options.type if @options.type
-    types = $.extend({}, @options)
-    delete(types[option]) for option in @standardOptions
-    return @type = type for type, value of types
 
 
   triggerAction: ->
-    return @subview.toggle() if @subview
+    return if @isDisabled()
+    @subview.toggle() if @subview
+    return if @subview
     Mercury.trigger(@event) if @event
     Mercury.trigger('mode', @mode) if @mode
     Mercury.trigger('action', @action...)
+
+
+  isDisabled: ->
+    @$el.closest('.mercury-button-disabled').length
 
 
   onRegionFocus: (region) ->
@@ -78,9 +82,13 @@ class Mercury.ToolbarButton extends Mercury.View
 
 
   onRegionUpdate: (region) ->
-    @el.removeClass('mercury-button-active')
-    if region.hasAction(@actionName) || @global
-      @el.removeClass('mercury-button-disabled')
-      @el.addClass('mercury-button-active') if region.hasContext(@name)
+    @$el.removeClass('mercury-button-active')
+    if @global || @regionSupported(region)
+      @$el.removeClass('mercury-button-disabled')
+      @$el.addClass('mercury-button-active') if region.hasContext(@name)
     else
-      @el.addClass('mercury-button-disabled')
+      @$el.addClass('mercury-button-disabled')
+
+
+  regionSupported: (region) ->
+    region.hasAction(@actionName)

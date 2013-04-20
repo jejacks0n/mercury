@@ -69,8 +69,8 @@ describe "Mercury.Region.Gallery", ->
   describe "#refresh", ->
 
     beforeEach ->
-      subject.slides.append('<div class="slide">')
-      subject.slides.append('<div class="slide">')
+      subject.$slides.append('<div class="slide">')
+      subject.$slides.append('<div class="slide">')
 
     it "clears the @timeout", ->
       subject.timeout = '_timeout_'
@@ -128,13 +128,13 @@ describe "Mercury.Region.Gallery", ->
       subject.index = 1
 
     it "sets the html of the paginator", ->
-      spyOn(subject.paginator, 'html')
+      spyOn(subject.$paginator, 'html')
       subject.refreshPaginator()
-      expect( subject.paginator.html ).calledWith('<span>&bull;</span><span>&bull;</span>')
+      expect( subject.$paginator.html ).calledWith('<span>&bull;</span><span>&bull;</span>')
 
     it "activates the correct page indicator", ->
       subject.refreshPaginator()
-      expect( subject.paginator.find('span:nth-child(1)').is('.active') ).to.be.true
+      expect( subject.$paginator.find('span:nth-child(1)').is('.active') ).to.be.true
 
 
   describe "#refreshControls", ->
@@ -281,21 +281,21 @@ describe "Mercury.Region.Gallery", ->
   describe "#onFocus", ->
 
     it "shows the controls unless we're previewing", ->
-      spyOn(subject.controls, 'show')
+      spyOn(subject.$controls, 'show')
       subject.previewing = true
       subject.onFocus()
-      expect( subject.controls.show ).not.called
+      expect( subject.$controls.show ).not.called
       subject.previewing = false
       subject.onFocus()
-      expect( subject.controls.show ).called
+      expect( subject.$controls.show ).called
 
 
   describe "#onBlur", ->
 
     it "hides the controls", ->
-      spyOn(subject.controls, 'hide')
+      spyOn(subject.$controls, 'hide')
       subject.onBlur()
-      expect( subject.controls.hide ).called
+      expect( subject.$controls.hide ).called
 
 
   describe "#onUndo", ->

@@ -15,7 +15,7 @@ describe "Mercury.FrameInterface", ->
   describe "#initialze", ->
 
     it "adds the classname to the frame", ->
-      expect( subject.frame.hasClass('mercury-frame-interface-frame') ).to.be.true
+      expect( subject.$frame.hasClass('mercury-frame-interface-frame') ).to.be.true
 
     it "calls super if there's no frame", ->
       spyOn(Klass.__super__, 'initialize')
@@ -42,7 +42,7 @@ describe "Mercury.FrameInterface", ->
     describe "with fallback", ->
 
       it "calls super", ->
-        subject.frame = []
+        subject.$frame = []
         spyOn(Klass.__super__, 'reinitialize')
         subject.reinitialize()
         expect( Klass.__super__.reinitialize ).called
@@ -52,9 +52,9 @@ describe "Mercury.FrameInterface", ->
 
     it "binds to @frame.load", ->
       spyOn(subject, 'initializeFrame')
-      spyOn(subject.frame, 'on').yieldsOn(subject)
+      spyOn(subject.$frame, 'on').yieldsOn(subject)
       subject.bindDefaultEvents()
-      expect( subject.frame.on ).calledWith('load', sinon.match.func)
+      expect( subject.$frame.on ).calledWith('load', sinon.match.func)
       expect( subject.initializeFrame ).called
 
     it "binds to initialize", ->
@@ -124,7 +124,7 @@ describe "Mercury.FrameInterface", ->
 
     beforeEach ->
       @contentWindow = document: '<div class="test-document">'
-      subject.frame = get: => contentWindow: @contentWindow
+      subject.$frame = get: => contentWindow: @contentWindow
 
     it "sets @document", ->
       subject.setupDocument()

@@ -7,8 +7,7 @@ Mercury.View.Modules.VisibilityToggleable =
   buildVisibilityToggleable: ->
     @visible ||= false
     @hide() unless @visible
-    @delegateEvents
-      'interface:hide': 'hide'
+    @delegateEvents('mercury:interface:hide': 'hide')
 
 
   toggle: ->
@@ -18,12 +17,12 @@ Mercury.View.Modules.VisibilityToggleable =
   hide: ->
     clearTimeout(@visibilityTimeout)
     @visible = false
-    @el.css(opacity: 0)
-    @visibilityTimeout = @delay(100, => @el.hide())
+    @css(opacity: 0)
+    @visibilityTimeout = @delay(100, => @$el.hide())
 
 
   show: ->
     clearTimeout(@visibilityTimeout)
     @visible = true
-    @el.show()
-    @visibilityTimeout = @delay(1, => @el.css(opacity: 1))
+    @$el.show()
+    @visibilityTimeout = @delay(1, => @css(opacity: 1))

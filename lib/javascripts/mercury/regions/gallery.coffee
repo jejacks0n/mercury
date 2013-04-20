@@ -59,17 +59,17 @@ class Mercury.Region.Gallery extends Mercury.Region
 
 
   refreshPaginator: ->
-    @paginator.html(Array(@images.length + 1).join('<span>&bull;</span>'))
-    @paginator.find("span:nth-child(#{@index})").addClass('active')
+    @$paginator.html(Array(@images.length + 1).join('<span>&bull;</span>'))
+    @$paginator.find("span:nth-child(#{@index})").addClass('active')
 
 
   refreshControls: ->
-    @controls.remove()
+    @$controls.remove()
     @append('<ul class="mercury-gallery-region-controls"></ul>')
     for slide in @images
       src = $(slide).find('img').attr('src')
-      @controls.append($("""<li><img src="#{src}"/></li>"""))
-    @controls.show() if @focused
+      @$controls.append($("""<li><img src="#{src}"/></li>"""))
+    @$controls.show() if @focused
 
 
   prevSlide: ->
@@ -88,7 +88,7 @@ class Mercury.Region.Gallery extends Mercury.Region
 
 
   appendSlide: (slide) ->
-    @slides.append(slide)
+    @$slides.append(slide)
     @refresh(true)
     @pushHistory()
     @trigger('focused')
@@ -108,11 +108,11 @@ class Mercury.Region.Gallery extends Mercury.Region
 
 
   onFocus: ->
-    @controls.show() unless @previewing
+    @$controls.show() unless @previewing
 
 
   onBlur: ->
-    @controls.hide()
+    @$controls.hide()
 
 
   onUndo: ->

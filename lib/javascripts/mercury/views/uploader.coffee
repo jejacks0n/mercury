@@ -51,12 +51,12 @@ class Mercury.Uploader extends Mercury.View
 
   show: ->
     @update(@t('Processing...'))
-    @delay(50, => @el.css(opacity: 1))
+    @delay(50, => @css(opacity: 1))
 
 
   release: (ms = 0) ->
     @delay ms, ->
-      @el.css(opacity: 0)
+      @css(opacity: 0)
       @delay(250, -> super)
 
 
@@ -71,21 +71,21 @@ class Mercury.Uploader extends Mercury.View
 
 
   update: (message, loaded = 0) ->
-    @status.html(message) if message
     percent = Math.floor((@loaded + loaded) * 100 / @total) + '%'
-    @indicator.css(width: percent)
-    @percent.html(percent)
+    @$status.html(message) if message
+    @$indicator.css(width: percent)
+    @$percent.html(percent)
 
 
   loadDetails: ->
-    @details.html [
+    @$details.html [
       @t('Name: %s', @file.get('name')),
       @t('Type: %s', @file.get('type')),
       @t('Size: %s', @file.readableSize())
     ].join('<br/>')
 
     return unless @file.isImage()
-    @file.readAsDataURL (result) => @preview.html($('<img>', src: result))
+    @file.readAsDataURL (result) => @$preview.html($('<img>', src: result))
 
 
   success: ->
@@ -104,4 +104,4 @@ class Mercury.Uploader extends Mercury.View
 
     progress: (e) =>
       @update(@t('Uploading...'), e.loaded)
-      @percent.show()
+      @$percent.show()

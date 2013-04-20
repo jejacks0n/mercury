@@ -14,12 +14,12 @@ Mercury.Region.Modules.FocusableTextarea =
     value = @html().replace('&gt;', '>').replace('&lt;', '<').trim()
     resize = if @autoSize then 'none' else 'vertical'
 
-    @preview = $("""<div class="mercury-#{@constructor.type}-region-preview">""")
-    @focusable = $("""<textarea class="mercury-#{@constructor.type}-region-textarea">""")
-    @focusable.attr(wrap: 'off') unless @config("regions:#{@constructor.type}:wrapping")
+    @$preview = $("""<div class="mercury-#{@constructor.type}-region-preview">""")
+    @$focusable = $("""<textarea class="mercury-#{@constructor.type}-region-textarea">""")
+    @$focusable.attr(wrap: 'off') unless @config("regions:#{@constructor.type}:wrapping")
 
-    @el.empty()
-    @append(@preview, @focusable.css(width: '100%', height: @el.height() || @height || 20, resize: resize))
+    @$el.empty()
+    @append(@$preview, @$focusable.css(width: '100%', height: @$el.height() || @height || 20, resize: resize))
     @value(value)
     @resizeFocusable()
 
@@ -32,27 +32,27 @@ Mercury.Region.Modules.FocusableTextarea =
 
 
   value: (value = null) ->
-    return @focusable.val() if value == null || typeof(value) == 'undefined'
-    @focusable.val(value.val ? value)
+    return @$focusable.val() if value == null || typeof(value) == 'undefined'
+    @$focusable.val(value.val ? value)
     @setSerializedSelection(value.sel) if value.sel
 
 
   resizeFocusable: ->
     return unless @autoSize
-    focusable = @focusable.get(0)
-    body = $('body', @el.get(0).ownerDocument)
+    focusable = @$focusable.get(0)
+    body = $('body', @el.ownerDocument)
     current = body.scrollTop()
-    @focusable.css(height: 1).css(height: focusable.scrollHeight)
+    @$focusable.css(height: 1).css(height: focusable.scrollHeight)
     body.scrollTop(current)
 
 
   toggleFocusablePreview: ->
     if @previewing
-      @focusable.hide()
-      @preview.html(@convertedValue?() || @value()).show()
+      @$focusable.hide()
+      @$preview.html(@convertedValue?() || @value()).show()
     else
-      @preview.hide()
-      @focusable.show()
+      @$preview.hide()
+      @$focusable.show()
 
 
   handleKeyEvent: (e) ->

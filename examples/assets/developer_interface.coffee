@@ -95,6 +95,7 @@ class @DeveloperInterface extends Mercury.View
     # Mercury.trigger('interface')
     Mercury.interface.toggleInterface()
 
+
   # If you reload your page, or have added new regions you can tell Mercury to go looking for new regions by triggering
   # the 'reinitialize' method or by calling the reinitialize method on the interface. Each interface class can implement
   # this differently, but by default this only looks for new regions.
@@ -117,6 +118,7 @@ class @DeveloperInterface extends Mercury.View
   # Release this view, and tell Mercury to clean itself up.
   #
   release: ->
+    $('.region-controls').remove()
     Mercury.release()
     super
 
@@ -132,6 +134,7 @@ JST['/mercury/templates/new-region'] = (scope) ->
     </div>
   </div>
   """
+
 JST['/mercury/templates/developer-interface'] = (scope) ->
   """
   <li data-action="save">save</li>

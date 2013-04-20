@@ -21,24 +21,24 @@ class Mercury.Statusbar extends Mercury.View
 
 
   setPath: (path = []) ->
-    @path.html("<b>#{@t('Path:')} </b>")
+    @$path.html("<b>#{@t('Path:')} </b>")
     for el in path
-      @path.append(el)
-      @path.append(' &raquo; ') unless el == path[path.length - 1]
+      @$path.append(el)
+      @$path.append(' &raquo; ') unless el == path[path.length - 1]
 
 
   show: ->
     clearTimeout(@visibilityTimeout)
     @visible = true
-    @el.show()
-    @visibilityTimeout = @delay(50, => @el.css(bottom: 0))
+    @$el.show()
+    @visibilityTimeout = @delay(50, => @css(bottom: 0))
 
 
   hide: ->
     clearTimeout(@visibilityTimeout)
     @visible = false
-    @el.css(bottom: -@el.height())
-    @visibilityTimeout = @delay(250, => @el.hide())
+    @css(bottom: -@$el.height())
+    @visibilityTimeout = @delay(250, => @$el.hide())
 
 
   onRegionUpdate: (region) ->

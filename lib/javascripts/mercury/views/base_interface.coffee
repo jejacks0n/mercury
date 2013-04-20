@@ -26,7 +26,7 @@ class Mercury.BaseInterface extends Mercury.View
     @initialize()
     @buildInterface()
     @bindDefaultEvents()
-    @el.removeClass('loading')
+    @$el.removeClass('loading')
     Mercury.trigger('initialized')
 
 
@@ -37,7 +37,7 @@ class Mercury.BaseInterface extends Mercury.View
 
 
   init: ->
-    $('body').before(@el)
+    $('body').before(@$el)
     @makeShadowed()
     @html(@renderTemplate(@template)) if @template
     @addClass('loading')
@@ -59,13 +59,12 @@ class Mercury.BaseInterface extends Mercury.View
 
 
   makeShadowed: ->
-    return unless @config('interface:shadowed') && @el.get(0).webkitCreateShadowRoot
-    @shadow = $(@el.get(0).webkitCreateShadowRoot())
+    return unless @config('interface:shadowed') && @el.webkitCreateShadowRoot
+    @shadow = $(@el.webkitCreateShadowRoot())
     # todo: this is a problem in that it allows css to bleed, which isn't exactly what we want here, but getting css
     #       to load internally isn't viable. ??
     @shadow.get(0).applyAuthorStyles = true
-    @shadow.append(@el = $(document.createElement(@tag)))
-    @$el = @el
+    @shadow.append(@$el = @el = $(document.createElement(@tag)))
 
 
   buildToolbar: ->

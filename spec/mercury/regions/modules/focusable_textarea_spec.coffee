@@ -16,11 +16,11 @@ describe "Mercury.Region.Modules.FocusableTextarea", ->
 
   describe "#included", ->
 
-    it "sets up the @preview element", ->
-      expect( subject.preview.is('.mercury-unknown-region-preview') ).to.be.true
+    it "sets up the @$preview element", ->
+      expect( subject.$preview.is('.mercury-unknown-region-preview') ).to.be.true
 
-    it "sets up the @focusable element", ->
-      expect( subject.focusable.is('.mercury-unknown-region-textarea') ).to.be.true
+    it "sets up the @$focusable element", ->
+      expect( subject.$focusable.is('.mercury-unknown-region-textarea') ).to.be.true
 
 
   describe "#buildFocusable (via the build event)", ->
@@ -38,21 +38,21 @@ describe "Mercury.Region.Modules.FocusableTextarea", ->
       expect( subject.editableDropBehavior ).to.be.false
 
     it "empties the element", ->
-      spyOn(subject.el, 'empty')
+      spyOn(subject.$el, 'empty')
       subject.buildFocusable()
-      expect( subject.el.empty ).called
+      expect( subject.$el.empty ).called
 
     it "sets the value and css for the focusable element", ->
       spyOn(subject, 'html', -> ' _&lt;html&gt;_ ')
       subject.buildFocusable()
-      expect( subject.focusable.val() ).to.eq('_<html>_')
-      expect( subject.focusable.css('width') ).to.eq('100%')
-      expect( subject.focusable.css('height') ).to.eq('20px')
-      expect( subject.focusable.css('resize') ).to.eq('vertical')
+      expect( subject.$focusable.val() ).to.eq('_<html>_')
+      expect( subject.$focusable.css('width') ).to.eq('100%')
+      expect( subject.$focusable.css('height') ).to.eq('20px')
+      expect( subject.$focusable.css('resize') ).to.eq('vertical')
 
     it "appends the preview and focusable elements", ->
-      expect( subject.preview.parent().get(0) ).to.eql(subject.el.get(0))
-      expect( subject.focusable.parent().get(0) ).to.eql(subject.el.get(0))
+      expect( subject.$preview.parent().get(0) ).to.eql(subject.$el.get(0))
+      expect( subject.$focusable.parent().get(0) ).to.eql(subject.$el.get(0))
 
     it "calls #resizeFocusable", ->
       spyOn(subject, 'resizeFocusable')
@@ -83,20 +83,20 @@ describe "Mercury.Region.Modules.FocusableTextarea", ->
   describe "#value", ->
 
     it "returns the value if no value was passed", ->
-      subject.focusable.val('_value_')
+      subject.$focusable.val('_value_')
       expect( subject.value() ).to.eq('_value_')
 
     describe "setting the value", ->
 
-      it "sets the @focusable value", ->
+      it "sets the @$focusable value", ->
         subject.value('_value_')
-        expect( subject.focusable.val() ).to.eq('_value_')
+        expect( subject.$focusable.val() ).to.eq('_value_')
 
       it "can use an object to set the value and selection", ->
         subject.setSerializedSelection = spy()
         subject.value(val: '_value_', sel: {start: 1, end: 2})
         expect( subject.setSerializedSelection ).calledWith(start: 1, end: 2)
-        expect( subject.focusable.val() ).to.eq('_value_')
+        expect( subject.$focusable.val() ).to.eq('_value_')
 
 
   describe "#resizeFocusable (via the action event)", ->
@@ -105,10 +105,10 @@ describe "Mercury.Region.Modules.FocusableTextarea", ->
       subject.autoSize = true
 
     it "sets the height on the focusable element", ->
-      spyOn(subject.focusable, 'css', -> subject.focusable)
+      spyOn(subject.$focusable, 'css', -> subject.$focusable)
       subject.resizeFocusable()
-      expect( subject.focusable.css ).calledWith(height: 1)
-      expect( subject.focusable.css ).calledWith(height: 0)
+      expect( subject.$focusable.css ).calledWith(height: 1)
+      expect( subject.$focusable.css ).calledWith(height: 0)
 
     it "sets the scrollTop on body", ->
       spyOn($.fn, 'scrollTop', -> 42)
@@ -130,19 +130,19 @@ describe "Mercury.Region.Modules.FocusableTextarea", ->
         subject.previewing = true
 
       it "hides the focusable", ->
-        spyOn(subject.focusable, 'hide')
+        spyOn(subject.$focusable, 'hide')
         subject.trigger('preview')
-        expect( subject.focusable.hide ).called
+        expect( subject.$focusable.hide ).called
 
       it "sets the html of the preview element and shows it (using #convertedValue when available)", ->
-        spyOn(subject.preview, 'show')
+        spyOn(subject.$preview, 'show')
         spyOn(subject, 'value', -> '_value_')
         subject.trigger('preview')
-        expect( subject.preview.html() ).to.eq('_value_')
-        expect( subject.preview.show ).called
+        expect( subject.$preview.html() ).to.eq('_value_')
+        expect( subject.$preview.show ).called
         subject.convertedValue = -> '_converted_value_'
         subject.trigger('preview')
-        expect( subject.preview.html() ).to.eq('_converted_value_')
+        expect( subject.$preview.html() ).to.eq('_converted_value_')
 
     describe "when not previewing", ->
 
@@ -150,11 +150,11 @@ describe "Mercury.Region.Modules.FocusableTextarea", ->
         subject.previewing = false
 
       it "hides the preview and shows the focusable elements", ->
-        spyOn(subject.preview, 'hide')
-        spyOn(subject.focusable, 'show')
+        spyOn(subject.$preview, 'hide')
+        spyOn(subject.$focusable, 'show')
         subject.trigger('preview')
-        expect( subject.preview.hide ).called
-        expect( subject.focusable.show ).called
+        expect( subject.$preview.hide ).called
+        expect( subject.$focusable.show ).called
 
 
   describe "#handleKeyEvent", ->

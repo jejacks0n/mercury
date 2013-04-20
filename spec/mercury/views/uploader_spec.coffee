@@ -36,7 +36,7 @@ describe "Mercury.Uploader", ->
       template = spyOn(JST, '/mercury/templates/uploader', -> '_template_')
       subject = new Klass([], foo: 'bar')
       expect( template ).calledWith( subject )
-      expect( subject.el.html() ).to.eq('_template_')
+      expect( subject.$el.html() ).to.eq('_template_')
 
     it "calls #calculate", ->
       subject = new Klass([1, 2])
@@ -117,7 +117,7 @@ describe "Mercury.Uploader", ->
     it "animates the css (in a delay)", ->
       subject.show()
       expect( subject.delay ).calledWith(50, sinon.match.func)
-      expect( subject.el.css('opacity') ).to.eq('1')
+      expect( subject.$el.css('opacity') ).to.eq('1')
 
 
   describe "#release", ->
@@ -128,7 +128,7 @@ describe "Mercury.Uploader", ->
 
     it "sets the opacity to 0", ->
       subject.release()
-      expect( subject.el.css('opacity') ).to.eq('0')
+      expect( subject.$el.css('opacity') ).to.eq('0')
 
     it "calls super", ->
       sup = spyOn(Klass.__super__, 'release')
@@ -184,14 +184,14 @@ describe "Mercury.Uploader", ->
 
     it "updates the status element with the message", ->
       subject.update('_message_')
-      expect( subject.status.html() ).to.eq('_message_')
+      expect( subject.$status.html() ).to.eq('_message_')
 
     it "calculates the percentage loaded and updates the indicator", ->
       subject.loaded = 10
       subject.total = 100
       subject.update(null, 10)
-      expect( subject.percent.html() ).to.eq('20%')
-      expect( subject.indicator.css('width') ).to.eq('20%')
+      expect( subject.$percent.html() ).to.eq('20%')
+      expect( subject.$indicator.css('width') ).to.eq('20%')
 
 
   describe "#loadDetails", ->
@@ -207,13 +207,13 @@ describe "Mercury.Uploader", ->
 
     it "it updates the details element with the file details", ->
       subject.loadDetails()
-      expect( subject.details.html() ).to.eq('Name: _name_<br>Type: _type_<br>Size: 42.00 kb')
+      expect( subject.$details.html() ).to.eq('Name: _name_<br>Type: _type_<br>Size: 42.00 kb')
 
     it "loads a preview if the file is an image", ->
       subject.file.isImage = -> true
       subject.loadDetails()
       subject.file.readAsDataURL.callArg(0, '/teabag/fixtures/image.gif')
-      expect( subject.preview.html() ).to.eq('<img src="/teabag/fixtures/image.gif">')
+      expect( subject.$preview.html() ).to.eq('<img src="/teabag/fixtures/image.gif">')
 
 
   describe "#success", ->
@@ -275,5 +275,5 @@ describe "Mercury.Uploader", ->
 
       it "shows the percent element", ->
         @progress({})
-        expect( subject.percent.css('display') ).to.not.eq('none')
+        expect( subject.$percent.css('display') ).to.not.eq('none')
 

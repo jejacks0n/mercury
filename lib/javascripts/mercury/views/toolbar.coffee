@@ -21,21 +21,21 @@ class Mercury.Toolbar extends Mercury.View
 
 
   buildToolbar: (name) ->
-    new Mercury.ToolbarItem(name, 'collection', @config("toolbars:#{name}")).appendTo(@toolbar)
+    new Mercury.ToolbarItem(name, 'collection', @config("toolbars:#{name}")).appendTo(@$toolbar)
 
 
   show: ->
     clearTimeout(@visibilityTimeout)
     @visible = true
-    @el.show()
-    @visibilityTimeout = @delay(50, => @el.css(top: 0))
+    @$el.show()
+    @visibilityTimeout = @delay(50, => @css(top: 0))
 
 
   hide: ->
     clearTimeout(@visibilityTimeout)
     @visible = false
-    @el.css(top: -@el.height())
-    @visibilityTimeout = @delay(250, => @el.hide())
+    @css(top: -@$el.height())
+    @visibilityTimeout = @delay(250, => @$el.hide())
 
 
   onRegionFocus: (region) ->

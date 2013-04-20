@@ -14,7 +14,7 @@
 Mercury.Region.Modules.TextSelection =
 
   getSelection: ->
-    el = @focusable.get(0)
+    el = @$focusable.get(0)
     value = el.value
     start = el.selectionStart
     end = el.selectionEnd
@@ -25,7 +25,7 @@ Mercury.Region.Modules.TextSelection =
     start = sel.start + preAdjust
     end = sel.end + (sufAdjust ? preAdjust)
     end = start if end < start || typeof(end) == 'undefined' || collapse
-    el = @focusable.get(0)
+    el = @$focusable.get(0)
     value = el.value
     start += value.length if start < 0
     end += value.length if end < 0
@@ -72,7 +72,7 @@ Mercury.Region.Modules.TextSelection =
   # ---------------------------------------------------------------------------
 
   replaceSelection: (text = '') ->
-    el = @focusable.get(0)
+    el = @$focusable.get(0)
     value = el.value
     sel = @getSelection()
     el.value = [value.slice(0, sel.start), text, value.slice(sel.end)].join('')

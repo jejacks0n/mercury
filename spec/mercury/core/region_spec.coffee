@@ -184,7 +184,7 @@ describe "Mercury.Region", ->
     it "sets a tabindex (so it's focusable) unless we've provided our own focusable element", ->
       subject = new Klass('<div id="_name_">')
       expect( subject.attr('tabindex') ).to.eq('0')
-      subject = new Klass('<div id="_name_">', focusable: $('<div>'))
+      subject = new Klass('<div id="_name_">', $focusable: $('<div>'))
       expect( subject.attr('tabindex') ).to.be.undefined
 
     it "sets the name from the configurable attribute", ->
@@ -202,14 +202,14 @@ describe "Mercury.Region", ->
       subject = new Klass('<div id="name">')
       expect( subject.previewing ).to.be.false
       expect( subject.focused ).to.be.false
-      expect( subject.focusable ).to.eq(subject.el)
+      expect( subject.$focusable ).to.eq(subject.$el)
       expect( subject.skipHistoryOn ).to.eql(['redo'])
 
       focusable = $('<textarea>')
-      subject = new Klass('<div id="name">', previewing: true, focused: true, focusable: focusable, skipHistoryOn: ['foo'])
+      subject = new Klass('<div id="name">', previewing: true, focused: true, $focusable: focusable, skipHistoryOn: ['foo'])
       expect( subject.previewing ).to.be.true
       expect( subject.focused ).to.be.true
-      expect( subject.focusable ).to.eq(focusable)
+      expect( subject.$focusable ).to.eq(focusable)
       expect( subject.skipHistoryOn ).to.eql(['foo'])
 
     it "calls #setInitialData", ->
@@ -224,7 +224,7 @@ describe "Mercury.Region", ->
 
     it "sets data-region to the instance", ->
       subject = new Klass('<div>')
-      expect( subject.el.data('region') ).to.eq(subject)
+      expect( subject.$el.data('region') ).to.eq(subject)
 
     it "notifies if we have no name", ->
       subject = new Klass('<div>')
@@ -260,9 +260,9 @@ describe "Mercury.Region", ->
   describe "#addRegionClassname", ->
 
     it "adds a class to the element", ->
-      subject.el.removeAttr('class')
+      subject.$el.removeAttr('class')
       subject.addRegionClassname()
-      expect( subject.el.attr('class') ).to.eq('mercury-unknown-region')
+      expect( subject.$el.attr('class') ).to.eq('mercury-unknown-region')
 
 
   describe "#trigger", ->
@@ -379,9 +379,9 @@ describe "Mercury.Region", ->
         expect( subject.blur ).called
 
       it "removes the tabindex attribute (so it's no longer focusable)", ->
-        subject.focusable.attr(tabindex: 42)
+        subject.$focusable.attr(tabindex: 42)
         subject.togglePreview()
-        expect( subject.focusable.attr('tabindex') ).to.be.undefined
+        expect( subject.$focusable.attr('tabindex') ).to.be.undefined
 
     describe "when not previewing", ->
 
@@ -389,9 +389,9 @@ describe "Mercury.Region", ->
         subject.previewing = true
 
       it "adds a tabindex attribute", ->
-        subject.focusable.removeAttr('tabindex')
+        subject.$focusable.removeAttr('tabindex')
         subject.togglePreview()
-        expect( subject.focusable.attr('tabindex') ).to.eq('0')
+        expect( subject.$focusable.attr('tabindex') ).to.eq('0')
 
 
   describe "#pushHistory", ->
@@ -433,9 +433,9 @@ describe "Mercury.Region", ->
       expect( subject.focused ).to.be.true
 
     it "calls focus on the element", ->
-      spyOn(subject.el, 'focus')
+      spyOn(subject.$el, 'focus')
       subject.focus()
-      expect( subject.el.focus ).called
+      expect( subject.$el.focus ).called
 
     it "calls @onFocus if it's defined", ->
       subject.onFocus = spy()
@@ -450,9 +450,9 @@ describe "Mercury.Region", ->
       expect( subject.focused ).to.be.false
 
     it "calls blur on the element", ->
-      spyOn(subject.el, 'blur')
+      spyOn(subject.$el, 'blur')
       subject.blur()
-      expect( subject.el.blur ).called
+      expect( subject.$el.blur ).called
 
     it "calls @onBlur if it's defined", ->
       subject.onBlur = spy()
@@ -476,22 +476,22 @@ describe "Mercury.Region", ->
   describe "#data", ->
 
     it "allows getting data", ->
-      subject.el.data(foo: 'bar')
+      subject.$el.data(foo: 'bar')
       expect( subject.data() ).to.eql(foo: 'bar')
       expect( subject.data('foo') ).to.eq('bar')
 
     it "sets the element data", ->
-      expect( subject.data(foo: 'bar') ).to.eq(subject.el)
-      expect( subject.el.data() ).to.eql(foo: 'bar', mercury: 'foo', region: subject)
+      expect( subject.data(foo: 'bar') ).to.eq(subject.$el)
+      expect( subject.$el.data() ).to.eql(foo: 'bar', mercury: 'foo', region: subject)
       subject.data('bar', 'baz')
-      expect( subject.el.data() ).to.eql(foo: 'bar', mercury: 'foo', bar: 'baz', region: subject)
+      expect( subject.$el.data() ).to.eql(foo: 'bar', mercury: 'foo', bar: 'baz', region: subject)
 
 
   describe "#setData", ->
 
     it "sets the data to the element", ->
       subject.setData(foo: 'bar')
-      expect( subject.el.data() ).to.eql(foo: 'bar', mercury: 'foo', region: subject)
+      expect( subject.$el.data() ).to.eql(foo: 'bar', mercury: 'foo', region: subject)
 
     it "calls any data attr handlers that are defined", ->
       subject.dataAttrs.foo = spy()
@@ -608,31 +608,31 @@ describe "Mercury.Region", ->
   describe "#release", ->
 
     it "removes the reference for data-region", ->
-      expect( subject.el.data('region') ).to.be.defined
+      expect( subject.$el.data('region') ).to.be.defined
       subject.release()
-      expect( subject.el.data('region') ).to.be.null
+      expect( subject.$el.data('region') ).to.be.null
 
-    it "removes the region class from @el", ->
-      expect( subject.el.hasClass('mercury-unknown-region') ).to.be.true
+    it "removes the region class from @$el", ->
+      expect( subject.$el.hasClass('mercury-unknown-region') ).to.be.true
       subject.release()
-      expect( subject.el.hasClass('mercury-unknown-region') ).to.be.false
+      expect( subject.$el.hasClass('mercury-unknown-region') ).to.be.false
 
-    it "removes the tabindex attribute from @focusable", ->
-      expect( subject.focusable.attr('tabindex') ).to.eq('0')
+    it "removes the tabindex attribute from @$focusable", ->
+      expect( subject.$focusable.attr('tabindex') ).to.eq('0')
       subject.release()
-      expect( subject.focusable.attr('tabindex') ).to.be.undefined
+      expect( subject.$focusable.attr('tabindex') ).to.be.undefined
 
     it "triggers a release event", ->
       spyOn(subject, 'trigger')
       subject.release()
       expect( subject.trigger ).calledWith('release')
 
-    it "calls @el.off and @focusable.off", ->
-      subject.focusable = off: spy(), removeAttr: spy(), blur: spy()
-      spyOn(subject.el, 'off')
+    it "calls @$el.off and @$focusable.off", ->
+      subject.$focusable = off: spy(), removeAttr: spy(), blur: spy()
+      spyOn(subject.$el, 'off')
       subject.release()
-      expect( subject.el.off ).called
-      expect( subject.focusable.off ).called
+      expect( subject.$el.off ).called
+      expect( subject.$focusable.off ).called
 
     it "calls #off", ->
       spyOn(subject, 'off')
@@ -715,10 +715,10 @@ describe "Mercury.Region", ->
 
   describe "#bindFocusEvents", ->
 
-    it "calls #delegateEvents with the expected events on @focusable", ->
+    it "calls #delegateEvents with the expected events on @$focusable", ->
       spyOn(subject, 'delegateEvents')
       subject.bindFocusEvents()
-      expect( subject.delegateEvents ).calledWith subject.focusable,
+      expect( subject.delegateEvents ).calledWith subject.$focusable,
         focus: sinon.match.func
         blur: sinon.match.func
 
@@ -771,9 +771,9 @@ describe "Mercury.Region", ->
       @events = {}
       spyOn(subject, 'delegateEvents', => @events = arguments[1])
 
-    it "calls #delegateEvents with the expected events on @focusable", ->
+    it "calls #delegateEvents with the expected events on @$focusable", ->
       subject.bindKeyEvents()
-      expect( subject.delegateEvents ).calledWith subject.focusable,
+      expect( subject.delegateEvents ).calledWith subject.$focusable,
         keyup: sinon.match.func
         keydown: sinon.match.func
 
@@ -820,9 +820,9 @@ describe "Mercury.Region", ->
       @events = {}
       spyOn(subject, 'delegateEvents', => @events = arguments[1])
 
-    it "calls #delegateEvents with the expected events on @focusable", ->
+    it "calls #delegateEvents with the expected events on @$focusable", ->
       subject.bindMouseEvents()
-      expect( subject.delegateEvents ).calledWith subject.focusable,
+      expect( subject.delegateEvents ).calledWith subject.$focusable,
         mouseup: sinon.match.func
 
     describe "mouseup", ->
@@ -843,9 +843,9 @@ describe "Mercury.Region", ->
       @events = {}
       spyOn(subject, 'delegateEvents', => @events = arguments[1])
 
-    it "calls #delegateEvents with the expected events on @focusable", ->
+    it "calls #delegateEvents with the expected events on @$focusable", ->
       subject.bindDropEvents()
-      expect( subject.delegateEvents ).calledWith subject.focusable,
+      expect( subject.delegateEvents ).calledWith subject.$focusable,
         dragenter: sinon.match.func
         dragover: sinon.match.func
         drop: sinon.match.func

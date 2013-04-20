@@ -56,7 +56,7 @@ describe "Mercury.Region.Markdown", ->
   describe "#convertedValue", ->
 
     it "converts the value", ->
-      subject.focusable.val('_value_')
+      subject.$focusable.val('_value_')
       expect( subject.convertedValue() ).to.eq('<p><em>value</em></p>\n')
 
 

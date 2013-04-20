@@ -63,27 +63,27 @@ describe "Mercury.Region.Modules.ContentEditable", ->
   describe "#releaseContentEditable (via the release event)", ->
 
     it "sets content editable to false on the element", ->
-      expect( subject.el.get(0).contentEditable ).to.eq('true')
+      expect( subject.$el.get(0).contentEditable ).to.eq('true')
       subject.trigger('release')
-      expect( subject.el.get(0).contentEditable ).to.eq('false')
+      expect( subject.$el.get(0).contentEditable ).to.eq('false')
 
     it "sets the display back to the original", ->
       subject.originalDisplay = 'none'
       subject.trigger('release')
-      expect( subject.el.css('display') ).to.eq('none')
+      expect( subject.$el.css('display') ).to.eq('none')
 
 
   describe "#makeContentEditable", ->
 
     it "sets content editable on the element", ->
-      expect( subject.el.get(0).contentEditable ).to.eq('true')
+      expect( subject.$el.get(0).contentEditable ).to.eq('true')
 
 
   describe "#makeNotContentEditable", ->
 
     it "sets content editable on the element", ->
       subject.makeNotContentEditable()
-      expect( subject.el.get(0).contentEditable ).to.eq('false')
+      expect( subject.$el.get(0).contentEditable ).to.eq('false')
 
 
   describe "#forceContentEditableDisplay", ->
@@ -93,15 +93,15 @@ describe "Mercury.Region.Modules.ContentEditable", ->
       subject.appendTo(fixture)
 
     it "sets display to inline block if the display is inline", ->
-      subject.el.css(display: 'inline')
+      subject.$el.css(display: 'inline')
       subject.forceContentEditableDisplay()
       expect( subject.originalDisplay ).to.eq('inline')
-      expect( subject.el.css('display') ).to.eq('inline-block')
+      expect( subject.$el.css('display') ).to.eq('inline-block')
 
     it "leaves other display types alone", ->
-      subject.el.css(display: 'block')
+      subject.$el.css(display: 'block')
       subject.forceContentEditableDisplay()
-      expect( subject.el.css('display') ).to.eq('block')
+      expect( subject.$el.css('display') ).to.eq('block')
 
 
   describe "#setContentEditablePreferences", ->

@@ -25,10 +25,10 @@ describe "Mercury.Region.Image", ->
 
     it "sets the value if the value isn't null or undefined", ->
       subject.value('/teabag/fixtures/foo.gif')
-      expect( subject.el.attr('src') ).to.eq('/teabag/fixtures/foo.gif')
+      expect( subject.$el.attr('src') ).to.eq('/teabag/fixtures/foo.gif')
 
     it "returns the value if the value wasn't provided", ->
-      subject.el.attr(src: '/teabag/fixtures/image.gif')
+      subject.$el.attr(src: '/teabag/fixtures/image.gif')
       expect( subject.value() ).to.eq('/teabag/fixtures/image.gif')
 
 
@@ -56,10 +56,10 @@ describe "Mercury.Region.Image", ->
       subject.onMousedown(@e)
       expect( @e.preventDefault ).called
 
-    it "triggers a focus event on @el", ->
-      spyOn(subject.el, 'trigger')
+    it "triggers a focus event on @$el", ->
+      spyOn(subject.$el, 'trigger')
       subject.onMousedown(@e)
-      expect( subject.el.trigger ).calledWith('focus')
+      expect( subject.$el.trigger ).calledWith('focus')
 
 
   describe "#onDropFile", ->
@@ -87,7 +87,7 @@ describe "Mercury.Region.Image", ->
 
       it "sets the align attribute", ->
         subject.data(align: 'right')
-        expect( subject.el.attr('align') ).to.eq('right')
+        expect( subject.$el.attr('align') ).to.eq('right')
 
 
   describe "actions", ->

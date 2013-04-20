@@ -76,9 +76,10 @@ describe "Mercury.Events", ->
     describe "without a handler", ->
 
       it "removes all handlers for that event", ->
-        subject.off('event1')
+        subject.off('event1 event2')
         handlers = subject.__handlers__
         expect( handlers['event1'] ).to.be.undefined
+        expect( handlers['event2'] ).to.be.undefined
 
     describe "with an event and a handler", ->
 

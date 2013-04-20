@@ -1,5 +1,3 @@
-#= require mercury/core/plugin
-
 Plugin =
   # General plugin definition.
   #
@@ -61,7 +59,7 @@ class Plugin.Modal extends Mercury.Modal
   className: 'mercury-character-modal'
   title:     'Character Picker'
   width:     400
-  events:    'click li': (e) -> Plugin.triggerAction($(e.target).data('value'))
+  events:    'click li': (e) -> Plugin.triggerAction($(e.target).data('value')) && @hide()
 
 
 # Defines the palette view -- if configured not to use modal.

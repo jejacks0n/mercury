@@ -40,7 +40,7 @@ describe "Mercury.Config", ->
     beforeEach ->
       Mercury.configuration = null
 
-    it "sets the configuration object (if path wasn't provided)", ->
+    it "sets the configuration object (if the path is an object)", ->
       expect( subject.set(foo: 'bar') ).to.eql(foo: 'bar')
       expect( Mercury.configuration ).to.eql(foo: 'bar')
 

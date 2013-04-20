@@ -39,19 +39,20 @@ Mercury.Events =
   # off('event1 event2')                         => self # remove all handlers for these events
   # off('event', handler)                        => self # remove only this handler for this event
   #
-  off: (event, handler) ->
-    unless event
+  off: (events, handler) ->
+    unless events
       @__handlers__ = {}
       return @
-    return @ unless list = @__handlers__?[event]
-    unless handler
-      delete @__handlers__[event]
-      return @
-    for h, i in list when h is handler
-      list = list.slice()
-      list.splice(i, 1)
-      @__handlers__[event] = list
-      break
+    for name in events.split(' ')
+      continue unless list = @__handlers__?[name]
+      unless handler
+        delete @__handlers__[name]
+        continue
+      for h, i in list when h is handler
+        list = list.slice()
+        list.splice(i, 1)
+        @__handlers__[name] = list
+        break
     @
 
 

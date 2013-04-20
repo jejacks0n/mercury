@@ -1,4 +1,3 @@
-# todo: look into @__determined__ -- should we use a global?
 #= require mercury/extensions/string
 @Mercury ||= {}
 

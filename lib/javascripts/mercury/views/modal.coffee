@@ -10,7 +10,6 @@ class Mercury.Modal extends Mercury.View
 
   @logPrefix: 'Mercury.Modal:'
   @className: 'mercury-modal'
-  @template: 'modal'
 
   @elements:
     overlay: '.mercury-modal-overlay'
@@ -28,8 +27,15 @@ class Mercury.Modal extends Mercury.View
 
   constructor: (@options = {}) ->
     return instance if instance = @ensureSingleton('modal', arguments...)
-    super
+    @options.template ||= @template
+    super(@options)
     @show()
+
+
+  buildElement: ->
+    @subTemplate = @options.template
+    @template = 'modal'
+    super
 
 
   build: ->
@@ -39,9 +45,12 @@ class Mercury.Modal extends Mercury.View
     @preventScrollPropagation(@$contentContainer)
 
 
-  update: (@options = {}) ->
+  update: (options) ->
     return unless @visible
+    @options = $.extend({}, @options, options || {})
     @[key] = value for key, value of @options
+    @subTemplate = @options.template
+    @template = 'modal'
     @$title.html(@title)
     @$dialog.css(width: @width)
     content = @contentFromOptions()
@@ -65,17 +74,17 @@ class Mercury.Modal extends Mercury.View
       @showContent(true)
     else
       @showContentTimeout = @delay(300, @showContent)
-    @el.removeClass('mercury-no-animation')
+    @$el.removeClass('mercury-no-animation')
 
 
   contentFromOptions: ->
-    return @renderTemplate(@template) if @template
+    return @renderTemplate(@subTemplate) if @subTemplate
     return @content
 
 
   showContent: (noAnimation) ->
     clearTimeout(@contentOpacityTimeout)
-    @el.removeClass('loading')
+    @$el.removeClass('loading')
     @$content.css(visibility: 'visible', width: 'auto')
     if noAnimation
       @$content.css(opacity: 1)
@@ -86,7 +95,7 @@ class Mercury.Modal extends Mercury.View
   show: (update = true) ->
     clearTimeout(@visibilityTimout)
     @visible = true
-    @el.show()
+    @$el.show()
     @visibilityTimout = @delay 50, ->
       @css(opacity: 1)
       @update() if update
@@ -98,7 +107,7 @@ class Mercury.Modal extends Mercury.View
     @visible = false
     @css(opacity: 0)
     @visibilityTimout = @delay 250, ->
-      @el.hide()
+      @$el.hide()
       @release() if release
 
 

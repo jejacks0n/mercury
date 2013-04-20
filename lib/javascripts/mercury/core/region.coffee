@@ -34,7 +34,6 @@ class Mercury.Region extends Mercury.View
   #   newAction: function() { }
   # }
   #
-  #
   @define: (@klass, @type, actions = {}) ->
     @logPrefix = @::logPrefix = "#{@klass}:"
     @::actions = $.extend(@::actions, actions)
@@ -441,9 +440,7 @@ class Mercury.Region extends Mercury.View
   #
   delegateActions: (actions) ->
     for key, method of actions
-
       if typeof(method) != 'function'
         throw new Error("#{method} doesn't exist") unless @[method]
         method = @[method]
-
       @actions[key] = method

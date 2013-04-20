@@ -27,7 +27,7 @@ Mercury.Config =
   # set('myPlugin', {enabled: true})             => {enabled: true}
   # set('myPlugin:enabled', true)                => true
   #
-  # Set the global configuration by not passing the path (careful!).
+  # Set the global configuration by not providing a path (careful!).
   # set({foo: 'bar'})                            => {foo: 'bar'}
   #
   set: (args...) ->
@@ -35,7 +35,7 @@ Mercury.Config =
     value = args.pop()
     merge = args.pop()
 
-    return Mercury.configuration = path if !value && typeof(path) == 'object'
+    return Mercury.configuration = path if typeof(path) == 'object'
 
     config = Mercury.configuration ||= {}
     parts = path.split(':')

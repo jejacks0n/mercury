@@ -56,7 +56,6 @@ class Mercury.Toolbar extends Mercury.View
     link:          '%'
     file:          '&'
     table:         "'"
-    character:     'y'
     snippets:      ')'
     history:       '*'
     notes:         '+'

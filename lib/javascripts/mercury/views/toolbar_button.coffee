@@ -6,20 +6,15 @@ class Mercury.ToolbarButton extends Mercury.View
   @className: 'mercury-toolbar-button'
 
   @events:
-    'mousedown': (e) ->
-      return if @isDisabled()
-      if @subview?.visible
-        e.preventDefault()
-        e.stopPropagation()
-      @addClass('mercury-button-pressed')
-    'mouseup': -> @$el.removeClass('mercury-button-pressed')
-    'mouseout': -> @$el.removeClass('mercury-button-pressed')
+    'mousedown': 'indicate'
+    'mouseup': 'deindicate'
+    'mouseout': 'deindicate'
     'click': 'triggerAction'
     'mercury:region:focus': 'onRegionFocus'
     'mercury:region:action': 'onRegionUpdate'
     'mercury:region:update': 'onRegionUpdate'
 
-  standardOptions: ['title', 'icon', 'action', 'global', 'button']
+  standardOptions: ['title', 'icon', 'action', 'global', 'button', 'settings']
 
   @create: (name, label, options = {}) ->
     if options.button && Klass = Mercury["toolbar_#{options.button}".toCamelCase(true)]
@@ -36,6 +31,44 @@ class Mercury.ToolbarButton extends Mercury.View
     super(@options)
 
 
+  get: (key) ->
+    @[key]
+
+
+  set: (key, value) ->
+    attrs = {}
+    if typeof(key) == 'object' then attrs = key else attrs[key] = value
+    @[key] = value for key, value of attrs
+
+
+  deactivate: ->
+    @removeClass('mercury-button-active')
+
+
+  activate: ->
+    @addClass('mercury-button-active')
+
+
+  enable: ->
+    @removeClass('mercury-button-disabled')
+
+
+  disable: ->
+    @addClass('mercury-button-disabled')
+
+
+  deindicate: ->
+    @removeClass('mercury-button-pressed')
+
+
+  indicate: (e) ->
+    return if @isDisabled()
+    if e && @subview?.visible
+      e.preventDefault()
+      e.stopPropagation()
+    @addClass('mercury-button-pressed')
+
+
   determineAction: ->
     @action = @options.action || @name
     @action = [@action] if typeof(@action) == 'string'
@@ -49,11 +82,11 @@ class Mercury.ToolbarButton extends Mercury.View
 
 
   build: ->
+    @enablePlugin()
     @attr('data-type', @type)
     @attr('data-icon', Mercury.Toolbar.icons[@icon || @name] || @icon)
     @addClass("mercury-toolbar-#{@name.toDash()}-button")
     @html("<em>#{@label}</em>")
-    @enablePlugin()
     @buildSubview()?.appendTo(@)
 
 
@@ -67,8 +100,8 @@ class Mercury.ToolbarButton extends Mercury.View
 
   enablePlugin: ->
     return unless @plugin
-    @plugin = Mercury.getPlugin(@plugin)
-    @plugin.registerButton(@)
+    @plugin = Mercury.getPlugin(@plugin, true)
+    @plugin.buttonRegistered(@)
 
 
   triggerAction: ->
@@ -85,19 +118,19 @@ class Mercury.ToolbarButton extends Mercury.View
     @$el.closest('.mercury-button-disabled').length
 
 
+  regionSupported: (region) ->
+    return @plugin.regionSupported(region) if @plugin
+    region.hasAction(@actionName)
+
+
   onRegionFocus: (region) ->
     @delay(100, => @onRegionUpdate(region))
 
 
   onRegionUpdate: (region) ->
-    @$el.removeClass('mercury-button-active')
+    @deactivate()
     if @global || @regionSupported(region)
-      @$el.removeClass('mercury-button-disabled')
-      @$el.addClass('mercury-button-active') if region.hasContext(@name)
+      @enable()
+      @activate() if region.hasContext(@name)
     else
-      @$el.addClass('mercury-button-disabled')
-
-
-  regionSupported: (region) ->
-    return @plugin.regionSupported(region) if @plugin
-    region.hasAction(@actionName)
+      @disable()

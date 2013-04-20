@@ -85,39 +85,24 @@ mercury .mercury-toolbar {
     &[data-icon]:before {
       content: attr(data-icon);
     }
-    &[data-type="select"] {
-      width: auto;
-      &:before {
-        content: 'B';
-        float: right;
-        width: 18px;
-      }
-      em {
-        @include mercury-font(8pt);
-        display: block;
-        float: left;
-        padding: 0 0 0 6px;
-        line-height: 15px;
-        font-style: normal;
-        position: relative;
-        text-transform: lowercase;
-      }
-    }
-    &[data-type="palette"] {
-      @include mercury-border-radius(0);
-      &:before {
-        content: 'd';
-        color: #eee;
-        text-shadow: none;
-      }
-      &.mercury-button-active,
-      &.mercury-button-pressed {
-        color: #eee;
-        &:before {
-          top: 0;
-        }
-      }
-    }
+    //&[data-type="select"] {
+    //  width: auto;
+    //  &:before {
+    //    content: 'B';
+    //    float: right;
+    //    width: 18px;
+    //  }
+    //  em {
+    //    @include mercury-font(8pt);
+    //    display: block;
+    //    float: left;
+    //    padding: 0 0 0 6px;
+    //    line-height: 15px;
+    //    font-style: normal;
+    //    position: relative;
+    //    text-transform: lowercase;
+    //  }
+    //}
   }
   .mercury-toolbar-select,
   .mercury-toolbar-palette {
@@ -157,17 +142,6 @@ mercury .mercury-toolbar {
       &:hover {
         margin: -1px 0 0 -1px;
         border: 1px solid #333;
-      }
-      &.last-picked {
-        width: 160px;
-        text-align: center;
-        text-transform: lowercase;
-        line-height: 15px;
-        margin: 2px 0 0;
-        &:hover {
-          color: #fff;
-          margin: 1px 0 -1px -1px;
-        }
       }
     }
   }

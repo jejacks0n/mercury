@@ -68,9 +68,9 @@ Mercury.Region.Html.addToolbar
     sep:           ' '
     block:         ['Block Format', select: 'block_types']
   color:
-    bgcolor:       ['Background Color', palette: 'color_palette']
+    bgcolor:       ['Background Color', plugin: 'color']
     sep:           ' '
-    color:         ['Text Color', palette: 'color_palette']
+    color:         ['Text Color', plugin: 'color']
   decoration:
     bold:          ['Bold']
     italic:        ['Italicize']
@@ -117,4 +117,3 @@ Mercury.Region.Html.addAction
   underline:     -> @toggleWrapSelectedWordsInClass('blue')
   rule:          -> @replaceSelection('<hr/>')
   style:         ->
-  color:         ->

@@ -1,0 +1,33 @@
+mercury .mercury-toolbar {
+  .mercury-toolbar-button[data-type="color"] {
+    @include mercury-border-radius(0);
+    color: #eee;
+    &:before {
+      content: 'd';
+      color: inherit;
+      text-shadow: none;
+    }
+    &.mercury-button-active {
+      @include mercury-gradient(#e8e8e8, #cbcbcb);
+    }
+    &.mercury-button-pressed {
+      @include mercury-gradient(#bebebe, #9c9c9c);
+      &:before {
+        top: 0;
+      }
+    }
+  }
+  .mercury-color-palette {
+    li.last-picked {
+      width: 159px;
+      text-align: center;
+      text-transform: lowercase;
+      line-height: 15px;
+      margin: 2px 0 0;
+      &:hover {
+        color: #fff;
+        margin: 1px 0 -1px -1px;
+      }
+    }
+  }
+}

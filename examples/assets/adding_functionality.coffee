@@ -1,11 +1,9 @@
-# Adding functionality
-#
 # Adding functionality.
 #
 # This file provides examples on how to add functionality to Mercury.
 #
 # For our examples, we need to wait until Mercury is defined and initialized, but if you do this in the file that's
-# requiring Mercury, or if you know that frames will never be used you add functionality like in these example at any
+# requiring Mercury, or if you know that frames will never be used you add functionality like in these examples at any
 # point before Mercury.init is called.
 #
 Mercury?.on 'initialize', ->
@@ -186,28 +184,39 @@ Mercury?.on 'initialize', ->
   # Since we've already provided this action for the image region there's no need to do it again. We're done.
 
 
-  # Advanced Integration - Plugins
+  # Advanced Integration - Using Plugins
+  #
+  # Let's take a look at a plugin and make some adjustments first. The Character Plugin allows using it within in a
+  # modal, or it can use a toolbar palette (like the color plugin). This is just one example of how you could write
+  # plugins, and there's more advanced ones to look into. Reading the existing plugin code is probably the best way to
+  # figure out how to implement something.
+  #
+  # Let's start by adding the toolbar button where we want it -- in this case it's the markdown region. You'll notice
+  # that we've specified the plugin here as an option to the button.
+  Mercury.Region.Markdown.addToolbar 'character', character: ['Character', plugin: 'character']
+
+  # Additionally, and this is up to the plugin, options can be provided through the button. If you specify a config
+  # object in the button definition this will be passed to the plugin. Here we want to change it to use a palette and
+  # not the modal, so we're going to redefine the button we just added to not use a modal -- which means the button in
+  # the primary toolbar will still use a modal, but the one that we've added to the markdown toolbar will use a palette.
+  Mercury.Region.Markdown.addToolbar 'character', character: ['Character', plugin: 'character', settings: {modal: false}]
+
+  # We can also configure the plugin globally -- much like how we can configure Mercury. Each plugin can be configured
+  # independently. This is optional for this example.
+  #Mercury.getPlugin('character').configure('modal', false)
+
+  # As a final step we might want to remove the existing button (that's in the primary toolbar by default). This is
+  # optional for this example.
+  #Mercury.configure('toolbars:primary:character', false)
+
+  # Example Setup Adjustments
+  #
+  # These are used by the example, but also serve as an example of adding functionality around to various regions, etc.
+  Mercury.Region.Markdown.addToolbar 'color', color: ['Color', plugin: 'color']
+
+
+  # Advanced Integration - Defining Plugins
   #
   # Mercury provides a plugin architecture that allows you to define and register a plugin that enables adding more
   # advanced functionality. In this example we'll expand on one of the previous examples so you can see how to integrate
   # more advanced features with plugins.
-
-
-
-  # Let's take a look at an existing plugin and make adjustments. The Character Picker plugin allows for being used in a
-  # modal, or it can use a toolbar palette (like the color picker). This is just one example of how you could write
-  # plugins, and there's more advanced ones to look into.
-  #
-  # By adding this plugin into the markdown toolbar we can change the plugin behavior. Let's start by adding the
-  # toolbar/button where we want it -- if we wanted to restrict it for instance. You'll notice that we've specified the
-  # plugin here as an option to the button.
-  Mercury.Region.Markdown.addToolbar 'character', character: ['Character', plugin: 'character']
-  Mercury.Region.Html.addToolbar 'character', character: ['Character', plugin: 'character']
-
-  # Now we can configure the plugin -- much like how we can configure Mercury directly, each plugin is able to be
-  # configured independently. And since we probably don't want to use a model from within the secondary toolbars we
-  # adjust the plugin to fall back to the toolbar palette.
-  #Mercury.getPlugin('character').configure('modal', false)
-
-  # As a final step we might want to remove the existing button (that's in the primary toolbar by default).
-  #Mercury.configure('toolbars:primary:character', false)

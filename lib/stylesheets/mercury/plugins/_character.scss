@@ -1,5 +1,8 @@
-mercury {
-  .mercury-toolbar .mercury-character-palette {
+mercury .mercury-toolbar {
+  .mercury-toolbar-button[data-type="character"]:before {
+    content: 'y';
+  }
+  .mercury-character-palette {
     width: 242px;
     font-size: 15px;
     padding: 2px;

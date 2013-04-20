@@ -10,12 +10,10 @@ class Mercury.Region.Image extends Mercury.Region
   @include Mercury.Region.Modules.DropItem
 
   @supported: true
+  @tag: 'img'
 
-  tag: 'img'
-
-  events:
+  @events:
     'mousedown': 'onMousedown'
-
 
   value: (value) ->
     if value == null || typeof(value) == 'undefined'

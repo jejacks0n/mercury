@@ -10,7 +10,7 @@ Mercury.Logger =
   #
   log: (args...) ->
     return unless Mercury.configuration.logging?.enabled
-    args.unshift(@logPrefix) if @logPrefix
+    args.unshift(@logPrefix || @constructor.logPrefix) if @logPrefix || @constructor.logPrefix
     console?.debug?(args...)
 
 
@@ -20,7 +20,7 @@ Mercury.Logger =
   # notify('something went wrong')               => console.error('Mercury: something went wrong')
   #
   notify: (msg) ->
-    msg = "#{@logPrefix} #{msg}" if @logPrefix
+    msg = "#{@constructor.logPrefix || @logPrefix} #{msg}" if @logPrefix || @constructor.logPrefix
 
     if Mercury.configuration.logging?.notifier == 'console'
       try return console.error(msg) catch e # intentionally do nothing

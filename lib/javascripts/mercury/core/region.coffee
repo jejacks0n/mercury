@@ -35,8 +35,8 @@ class Mercury.Region extends Mercury.View
   # }
   #
   #
-  @define: (@className, @type, actions = {}) ->
-    @logPrefix = @::logPrefix = "#{@className}:"
+  @define: (@klass, @type, actions = {}) ->
+    @logPrefix = @::logPrefix = "#{@klass}:"
     @::actions = $.extend(@::actions, actions)
     @::toolbars = [@type]
     @off()
@@ -104,7 +104,6 @@ class Mercury.Region extends Mercury.View
     Mercury.configure(path, obj)
 
 
-
   # The constructor sets up defaults and attempts to get the name from the element. It will notify if the region isn't
   # supported in the given browser or if there's no name to use for serializing.
   #
@@ -114,10 +113,10 @@ class Mercury.Region extends Mercury.View
       @notify(@t('is unsupported in this browser'))
       return false
 
-    @options = $.extend({}, JSON.parse(@el.attr(@config('regions:options')) || '{}'), options) if @el.data
+    @actions ||= {}
     @context = $.extend({}, @constructor.context, @context)
     @dataAttrs = $.extend({}, @constructor.dataAttrs, @dataAttrs)
-    @actions ||= {}
+    @options = $.extend(JSON.parse($(@el).attr(attr) || '{}'), @options) if @el && attr = @config('regions:options')
 
     @beforeBuild?()                                        # call the beforeBuild method if it's defined
     super(@options)                                        # let the view do it's thing

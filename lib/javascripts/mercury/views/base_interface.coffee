@@ -2,15 +2,15 @@
 
 class Mercury.BaseInterface extends Mercury.View
 
-  logPrefix: 'Mercury.BaseInterface:'
-  tag: 'mercury'
+  @logPrefix: 'Mercury.BaseInterface:'
+  @tag: 'mercury'
 
-  events:
+  @events:
     'mousedown': 'focusActiveRegion'
     'focusout': 'focusActiveRegion'
     'mercury:focus': 'focusActiveRegion'
-    'region:focus': 'onRegionFocus'
-    'region:release': 'onRegionRelease'
+    'mercury:region:focus': 'onRegionFocus'
+    'mercury:region:release': 'onRegionRelease'
     'mercury:reinitialize': 'reinitialize'
 
   constructor: ->

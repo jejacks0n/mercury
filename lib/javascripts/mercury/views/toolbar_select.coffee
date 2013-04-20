@@ -6,5 +6,5 @@ class Mercury.ToolbarSelect extends Mercury.View
   @include Mercury.View.Modules.ToolbarDialog
   @include Mercury.View.Modules.VisibilityToggleable
 
-  logPrefix: 'Mercury.ToolbarSelect:'
-  className: 'mercury-toolbar-select'
+  @logPrefix: 'Mercury.ToolbarSelect:'
+  @className: 'mercury-toolbar-select'

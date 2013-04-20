@@ -13,7 +13,7 @@ describe "Mercury.Region.Text", ->
     subject = new Klass('<div id="foo">')
 
   it "is defined correctly", ->
-    expect( Klass.className ).to.eq('Mercury.Region.Text')
+    expect( Klass.klass ).to.eq('Mercury.Region.Text')
     expect( Klass.type ).to.eq('text')
     expect( Klass.supported ).to.be.true
 

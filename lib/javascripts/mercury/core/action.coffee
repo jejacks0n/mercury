@@ -7,6 +7,8 @@ class Mercury.Action extends Mercury.Module
   @include Mercury.I18n
   @include Mercury.Logger
 
+  @logPrefix: 'Mercury.Action:'
+
   # Create provides the means to either resolve to a specific action class or fall back to the base action. In the case
   # where we want to pass a model (or anything other than a plain object) we return that model instance, or whatever
   # else it may be.

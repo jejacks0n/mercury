@@ -6,14 +6,14 @@ class Mercury.Uploader extends Mercury.View
 
   @supported: !!(window.FormData && new XMLHttpRequest().upload)
 
-  logPrefix: 'Mercury.Uploader:'
-  className: 'mercury-uploader'
-  template: 'uploader'
+  @logPrefix: 'Mercury.Uploader:'
+  @className: 'mercury-uploader'
+  @template: 'uploader'
 
-  attributes:
+  @attributes:
     style: 'opacity:0'
 
-  elements:
+  @elements:
     status: '.mercury-uploader-progress span'
     details: '.mercury-uploader-details'
     preview: '.mercury-uploader-preview b'

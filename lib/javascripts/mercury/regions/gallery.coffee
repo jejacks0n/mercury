@@ -15,15 +15,15 @@ class Mercury.Region.Gallery extends Mercury.Region
 
   @supported: true
 
-  skipHistoryOn: ['undo', 'redo', 'next', 'prev', 'togglePlay']
-
-  elements:
+  @elements:
     controls: '.mercury-gallery-region-controls'
     slides: '.slides'
     paginator: '.paginator'
 
-  events:
+  @events:
     'click .mercury-gallery-region-controls li': 'gotoSlide'
+
+  skipHistoryOn: ['undo', 'redo', 'next', 'prev', 'togglePlay']
 
   init: ->
     @speed ||= 3000

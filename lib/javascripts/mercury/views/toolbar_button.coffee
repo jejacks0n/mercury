@@ -2,10 +2,10 @@
 
 class Mercury.ToolbarButton extends Mercury.View
 
-  logPrefix: 'Mercury.ToolbarButton:'
-  className: 'mercury-toolbar-button'
+  @logPrefix: 'Mercury.ToolbarButton:'
+  @className: 'mercury-toolbar-button'
 
-  events:
+  @events:
     'mousedown': (e) ->
       if @subview?.visible
         e.preventDefault()
@@ -14,9 +14,9 @@ class Mercury.ToolbarButton extends Mercury.View
     'mouseup': -> @el.removeClass('mercury-button-pressed')
     'mouseout': -> @el.removeClass('mercury-button-pressed')
     'click': 'triggerAction'
-    'region:focus': 'onRegionFocus'
-    'region:action': 'onRegionUpdate'
-    'region:update': 'onRegionUpdate'
+    'mercury:region:focus': 'onRegionFocus'
+    'mercury:region:action': 'onRegionUpdate'
+    'mercury:region:update': 'onRegionUpdate'
 
   standardOptions: ['title', 'icon', 'action', 'global', 'button']
 

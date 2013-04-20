@@ -3,16 +3,16 @@
 
 class Mercury.Statusbar extends Mercury.View
 
-  logPrefix: 'Mercury.Statusbar:'
-  className: 'mercury-statusbar'
-  template: 'statusbar'
+  @logPrefix: 'Mercury.Statusbar:'
+  @className: 'mercury-statusbar'
+  @template: 'statusbar'
 
-  events:
-    'region:update': 'onRegionUpdate'
-    'interface:hide': 'hide'
-    'interface:show': 'show'
+  @events:
+    'mercury:region:update': 'onRegionUpdate'
+    'mercury:interface:hide': 'hide'
+    'mercury:interface:show': 'show'
 
-  elements:
+  @elements:
     path: '.mercury-statusbar-path'
 
 

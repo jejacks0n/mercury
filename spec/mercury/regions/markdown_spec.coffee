@@ -18,7 +18,7 @@ describe "Mercury.Region.Markdown", ->
     subject = new Klass('<div id="foo">')
 
   it "is defined correctly", ->
-    expect( Klass.className ).to.eq('Mercury.Region.Markdown')
+    expect( Klass.klass ).to.eq('Mercury.Region.Markdown')
     expect( Klass.type ).to.eq('markdown')
     expect( subject.editableDropBehavior ).to.be.true
     expect( subject.wrappers ).to.be.defined

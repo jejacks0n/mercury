@@ -15,6 +15,9 @@ describe "Mercury.Logger", ->
 
   describe "#log", ->
 
+    afterEach ->
+      subject.constructor.logPrefix = null
+
     it "calls console.debug with the expected args", ->
       subject.log(1, 2, '3')
       expect( console.debug ).calledWith('Mercury:', 1, 2, '3')
@@ -26,6 +29,9 @@ describe "Mercury.Logger", ->
       subject.logPrefix = null
       subject.log(1, 2, '3')
       expect( console.debug ).calledWith(1, 2, '3')
+      subject.constructor.logPrefix = 'Bar:'
+      subject.log(1, 2, '3')
+      expect( console.debug ).calledWith('Bar:', 1, 2, '3')
 
     it "doesn't log if logging is disabled in configuration", ->
       Mercury.configure 'logging:enabled', false

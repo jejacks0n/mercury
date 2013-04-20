@@ -1,3 +1,4 @@
+#= require mercury/core/config
 #= require mercury/core/events
 #= require mercury/core/i18n
 #= require mercury/core/logger
@@ -12,11 +13,11 @@ class Mercury.View extends Mercury.Module
 
   @Modules: {}
 
-  logPrefix: 'Mercury.View:'
+  @logPrefix: 'Mercury.View:'
+
+  @tag: 'div'
 
   eventSplitter: /^(\S+)\s*(.*)$/
-
-  tag: 'div'
 
   # The constructor will take any property of the options passed and assign them to instance variables. It creates the
   # base element, assigns attributes, and loads a template if one has been provided. Events and elements will be
@@ -27,14 +28,17 @@ class Mercury.View extends Mercury.Module
 
     @buildElement()
 
-    @elements ||= @constructor.elements
-    @events ||= @constructor.events
+    @elements = $.extend({}, @constructor.elements, @elements)
+    @events = $.extend({}, @constructor.events, @events)
+    @attributes = $.extend({}, @constructor.attributes, @attributes)
+
+    @refreshElements()
 
     @build?()                                              # call build if it's defined
     @trigger('build')                                      # trigger the build event
 
-    @delegateEvents(@events) if @events
-    @refreshElements() if @elements
+    @delegateEvents(@events)
+    @refreshElements()
 
     super
     @trigger('init')

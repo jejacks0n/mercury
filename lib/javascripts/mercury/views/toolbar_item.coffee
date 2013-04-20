@@ -3,7 +3,7 @@
 
 class Mercury.ToolbarItem extends Mercury.View
 
-  logPrefix: 'Mercury.ToolbarItem:'
+  @logPrefix: 'Mercury.ToolbarItem:'
 
   constructor: (@name = 'unknown', @type = 'unknown', @value = null) ->
     super()

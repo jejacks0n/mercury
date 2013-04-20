@@ -2,8 +2,8 @@
 
 class Mercury.FrameInterface extends Mercury.BaseInterface
 
-  logPrefix: 'Mercury.FrameInterface:'
-  className: 'mercury-frame-interface'
+  @logPrefix: 'Mercury.FrameInterface:'
+  @className: 'mercury-frame-interface'
 
   initialize: ->
     @frame = $(@frame).addClass('mercury-frame-interface-frame')     # get the iframe and set the class

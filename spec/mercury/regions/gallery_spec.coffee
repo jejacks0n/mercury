@@ -15,7 +15,7 @@ describe "Mercury.Region.Gallery", ->
     subject = new Klass('<div id="foo">')
 
   it "is defined correctly", ->
-    expect( Klass.className ).to.eq('Mercury.Region.Gallery')
+    expect( Klass.klass ).to.eq('Mercury.Region.Gallery')
     expect( Klass.type ).to.eq('gallery')
     expect( subject.skipHistoryOn ).to.eql(['undo', 'redo', 'next', 'prev', 'togglePlay'])
     expect( subject.toolbars ).to.eql(['gallery'])

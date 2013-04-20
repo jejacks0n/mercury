@@ -3,16 +3,16 @@
 
 class Mercury.Toolbar extends Mercury.View
 
-  logPrefix: 'Mercury.Toolbar:'
-  className: 'mercury-toolbar'
+  @logPrefix: 'Mercury.Toolbar:'
+  @className: 'mercury-toolbar'
 
-  events:
-    'mousedown': 'dialogs:hide'
-    'interface:hide': 'hide'
-    'interface:show': 'show'
-    'region:focus': 'onRegionFocus'
+  @events:
+    'mousedown': 'mercury:dialogs:hide'
+    'mercury:interface:hide': 'hide'
+    'mercury:interface:show': 'show'
+    'mercury:region:focus': 'onRegionFocus'
 
-  elements:
+  @elements:
     toolbar: '.mercury-toolbar-secondary-container'
 
   build: ->

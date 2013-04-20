@@ -15,9 +15,9 @@ describe "Mercury.Region.Image", ->
     subject = new Klass('<img id="foo">')
 
   it "is defined correctly", ->
-    expect( Klass.className ).to.eq('Mercury.Region.Image')
+    expect( Klass.klass ).to.eq('Mercury.Region.Image')
     expect( Klass.type ).to.eq('image')
-    expect( subject.tag ).to.eq('img')
+    expect( Klass.tag ).to.eq('img')
     expect( subject.events ).to.have.keys(['mousedown'])
 
 

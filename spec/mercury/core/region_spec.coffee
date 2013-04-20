@@ -30,9 +30,9 @@ describe "Mercury.Region", ->
 
   describe ".define", ->
 
-    it "assigns @className and @type", ->
+    it "assigns @klass and @type", ->
       Klass.define('TestRegion', '_test_')
-      expect( Klass.className ).to.eq('TestRegion')
+      expect( Klass.klass ).to.eq('TestRegion')
       expect( Klass.type ).to.eq('_test_')
 
     it "sets the @logPrefix", ->

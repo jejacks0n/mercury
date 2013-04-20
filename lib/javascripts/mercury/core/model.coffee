@@ -14,7 +14,7 @@ class Mercury.Model extends Mercury.Module
   @include Mercury.Logger
   @include Mercury.Stack
 
-  logPrefix: 'Mercury.Model:'
+  @logPrefix: 'Mercury.Model:'
 
   @idCounter: 1
 

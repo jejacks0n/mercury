@@ -17,7 +17,7 @@ describe "Mercury.Region.Plain", ->
     subject = new Klass('<div id="foo">')
 
   it "is defined correctly", ->
-    expect( Klass.className ).to.eq('Mercury.Region.Plain')
+    expect( Klass.klass ).to.eq('Mercury.Region.Plain')
     expect( Klass.type ).to.eq('plain')
     expect( subject.events ).to.have.keys [
       'keydown'

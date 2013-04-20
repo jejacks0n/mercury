@@ -6,5 +6,5 @@ class Mercury.ToolbarPalette extends Mercury.View
   @include Mercury.View.Modules.ToolbarDialog
   @include Mercury.View.Modules.VisibilityToggleable
 
-  logPrefix: 'Mercury.ToolbarPalette:'
-  className: 'mercury-toolbar-palette'
+  @logPrefix: 'Mercury.ToolbarPalette:'
+  @className: 'mercury-toolbar-palette'

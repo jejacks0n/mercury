@@ -16,7 +16,7 @@ class Mercury.Region.Plain extends Mercury.Region
 
   @supported: Mercury.support.wysiwyg
 
-  events:
+  @events:
     'keydown': 'onKeyEvent'
     'paste': 'onPaste'
 

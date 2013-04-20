@@ -1,11 +1,16 @@
+instances = {}
 Mercury.View.Modules.Singleton =
 
-  ensureSingleton: ->
-    instance = @constructor.instance
-    if instance && instance instanceof @constructor
-      instance.update(arguments...)
+  ensureSingleton: (name, args...) ->
+    instance = instances[name]
+    if instance && instance.constructor == @constructor
+      instance.update(args...)
       return instance
     else
       instance?.release()
-      @constructor.instance = @
+      instances[name] = @
       return false
+
+
+  removeSingleton: (name) ->
+    instances[name] = null

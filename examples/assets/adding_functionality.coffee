@@ -184,3 +184,30 @@ Mercury?.on 'initialize', ->
   Mercury.Region.Image.addToolbar 'advanced', brightness: ['Brightness', button: 'slider_button']
 
   # Since we've already provided this action for the image region there's no need to do it again. We're done.
+
+
+  # Advanced Integration - Plugins
+  #
+  # Mercury provides a plugin architecture that allows you to define and register a plugin that enables adding more
+  # advanced functionality. In this example we'll expand on one of the previous examples so you can see how to integrate
+  # more advanced features with plugins.
+
+
+
+  # Let's take a look at an existing plugin and make adjustments. The Character Picker plugin allows for being used in a
+  # modal, or it can use a toolbar palette (like the color picker). This is just one example of how you could write
+  # plugins, and there's more advanced ones to look into.
+  #
+  # By adding this plugin into the markdown toolbar we can change the plugin behavior. Let's start by adding the
+  # toolbar/button where we want it -- if we wanted to restrict it for instance. You'll notice that we've specified the
+  # plugin here as an option to the button.
+  Mercury.Region.Markdown.addToolbar 'character', character: ['Character', plugin: 'character']
+  Mercury.Region.Html.addToolbar 'character', character: ['Character', plugin: 'character']
+
+  # Now we can configure the plugin -- much like how we can configure Mercury directly, each plugin is able to be
+  # configured independently. And since we probably don't want to use a model from within the secondary toolbars we
+  # adjust the plugin to fall back to the toolbar palette.
+  #Mercury.getPlugin('character').configure('modal', false)
+
+  # As a final step we might want to remove the existing button (that's in the primary toolbar by default).
+  #Mercury.configure('toolbars:primary:character', false)

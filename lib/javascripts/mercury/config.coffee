@@ -81,6 +81,7 @@ Mercury.configuration =
   #   select: a select button and will present the user with a dropdown select using the given template.
   #   palette: a palette button and will present the user with a color picker using the given template.
   #   button: the class to use when instantiating the button.
+  #   plugin: expects a plugin with the given name to respond to button click.
   #
   # For more information about button options or adding your own functionality check todo: wiki url here
   #
@@ -102,7 +103,7 @@ Mercury.configuration =
       link     : ['Link', title: 'Insert Link']
       file     : ['Media', title: 'Insert Media and Files (images, videos, etc.)']
       table    : ['Table', title: 'Insert Table']
-      character: ['Character', title: 'Special Characters']
+      character: ['Character', title: 'Special Characters', plugin: 'character']
       snippets : ['Snippet', title: 'Snippet Panel']
       sep3     : ' '
       history  : ['History', title: 'Page Version History', global: true]

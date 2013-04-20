@@ -83,6 +83,18 @@ initialize = ->
   #
   @Module.extend.call(@, @Logger)
 
+  # Add global plugin registration.
+  #
+  # This provides the means to register your plugins dynamically, as well as to get them easily.
+  #
+  # Mercury.registerPlugin
+  # Define a plugin and register it so it can be configured and used.
+  #
+  # Mercury.getPlugin
+  # Allows getting a plugin by name.
+  #
+  @Module.extend.call(@, @Plugin)
+
   # Do some detection.
   #
   # We need to detect various support, and as nice as it would be to feature detection for all of this, some of the more

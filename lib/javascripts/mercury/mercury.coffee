@@ -20,6 +20,7 @@
 #= require mercury/core/logger
 #= require mercury/core/model
 #= require mercury/core/module
+#= require mercury/core/plugin
 #= require mercury/core/region
 #= require mercury/core/view
 #
@@ -57,3 +58,7 @@
 # Initialize script.
 #
 #= require mercury/initializer
+#
+# Plugins.
+#
+#= require mercury/plugins/character_plugin

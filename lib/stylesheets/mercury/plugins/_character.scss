@@ -1,0 +1,26 @@
+mercury {
+  .mercury-toolbar .mercury-character-palette {
+    width: 242px;
+    font-size: 15px;
+    padding: 2px;
+    li {
+      @include mercury-border-radius(3px);
+      width: 18px;
+      height: 18px;
+      line-height: 18px;
+      margin: 0;
+      overflow: hidden;
+      &:hover {
+        @include mercury-transition(font-size, ease-in-out, 0.1s);
+        position: relative;
+        z-index: 1;
+        width: 26px;
+        height: 26px;
+        line-height: 26px;
+        margin: -5px;
+        background: #e2e1e2;
+        font-size: 180%;
+      }
+    }
+  }
+}

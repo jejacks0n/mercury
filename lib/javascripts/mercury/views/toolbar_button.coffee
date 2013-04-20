@@ -24,6 +24,8 @@ class Mercury.ToolbarButton extends Mercury.View
   @create: (name, label, options = {}) ->
     if options.button && Klass = Mercury["toolbar_#{options.button}".toCamelCase(true)]
       return new Klass(name, label, options)
+    if options.plugin && Klass = Mercury.getPlugin(options.plugin).Button
+      return new Klass(name, label, options)
     return new Mercury.ToolbarButton(name, label, options)
 
 
@@ -51,6 +53,7 @@ class Mercury.ToolbarButton extends Mercury.View
     @attr('data-icon', Mercury.Toolbar.icons[@icon || @name] || @icon)
     @addClass("mercury-toolbar-#{@name.toDash()}-button")
     @html("<em>#{@label}</em>")
+    @enablePlugin()
     @buildSubview()?.appendTo(@)
 
 
@@ -62,11 +65,16 @@ class Mercury.ToolbarButton extends Mercury.View
       return @subview = new Klass(options)
 
 
+  enablePlugin: ->
+    return unless @plugin
+    @plugin = Mercury.getPlugin(@plugin)
+    @plugin.registerButton(@)
 
 
   triggerAction: ->
     return if @isDisabled()
     @subview.toggle() if @subview
+    return @plugin.trigger('button:click') if @plugin
     return if @subview
     Mercury.trigger(@event) if @event
     Mercury.trigger('mode', @mode) if @mode
@@ -91,4 +99,5 @@ class Mercury.ToolbarButton extends Mercury.View
 
 
   regionSupported: (region) ->
+    return @plugin.regionSupported(region) if @plugin
     region.hasAction(@actionName)

@@ -57,10 +57,10 @@ class @DeveloperInterface extends Mercury.View
       when 'reinitialize' then @reinitialize()
       when 'add_new_region' then @addNewRegion()
       when 'release' then @release()
-      when 'modal1' then new Mercury.Modal(width: 400, title: 'Color Palette Modal', template: 'color_palette')
-      when 'modal2' then new Mercury.Modal(width: 300, title: 'Styles Select Modal', template: 'styles_select')
-      when 'modal3' then new Mercury.Modal(width: 600, title: 'Lorem Ipsum Modal', template: 'lorem')
-      when 'release_modal' then Mercury.Modal.instance?.release()
+      when 'modal1' then @modal = new Mercury.Modal(width: 400, title: 'Color Palette Modal', template: 'color_palette')
+      when 'modal2' then @modal = new Mercury.Modal(width: 300, title: 'Styles Select Modal', template: 'styles_select')
+      when 'modal3' then @modal = new Mercury.Modal(width: 600, title: 'Lorem Ipsum Modal', template: 'lorem')
+      when 'release_modal' then @modal?.release()
       when 'html'
         value = switch value
           when 'html' then '<table>\n  <tr>\n    <td>1</td>\n    <td>2</td>\n  </tr>\n</table>'

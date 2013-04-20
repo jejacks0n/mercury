@@ -21,6 +21,25 @@
 
     %hr
     -# -----------------------------------------------------------------------------------------------------------------
+    %h2 Markdown Regions
+
+    #markdown1(data-mercury="markdown" data-region-options='{"name": "markdown_region_1", "allowDirection": true}')
+      :preserve
+        1
+        **something here**
+        2
+
+        paragraph1
+        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy
+
+        paragraph2
+
+        paragraph3
+
+    #markdown2(data-mercury="markdown") Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+
+    %hr
+    -# -----------------------------------------------------------------------------------------------------------------
     %h2 HTML Regions
 
     #html1(data-mercury="html")
@@ -40,25 +59,6 @@
 
     %h2#plain(data-mercury="plain")
       Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy
-
-    %hr
-    -# -----------------------------------------------------------------------------------------------------------------
-    %h2 Markdown Regions
-
-    #markdown1(data-mercury="markdown" data-region-options='{"name": "markdown_region_1", "allowDirection": true}')
-      :preserve
-        1
-        **something here**
-        2
-
-        paragraph1
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy
-
-        paragraph2
-
-        paragraph3
-
-    #markdown2(data-mercury="markdown") Lorem Ipsum is simply dummy text of the printing and typesetting industry.
 
     %hr
     -# -----------------------------------------------------------------------------------------------------------------

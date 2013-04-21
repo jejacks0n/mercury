@@ -209,14 +209,14 @@ Mercury?.on 'initialize', ->
   # optional for this example.
   #Mercury.configure('toolbars:primary:character', false)
 
-  # Example Setup Adjustments
-  #
-  # These are used by the example, but also serve as an example of adding functionality around to various regions, etc.
-  Mercury.Region.Markdown.addToolbar 'color', color: ['Color', plugin: 'color']
-
 
   # Advanced Integration - Defining Plugins
   #
   # Mercury provides a plugin architecture that allows you to define and register a plugin that enables adding more
   # advanced functionality. In this example we'll expand on one of the previous examples so you can see how to integrate
   # more advanced features with plugins.
+
+
+  # You now have all the information to mold Mercury into what you need it to be. Anything beyond this level of
+  # documentation requires a solid understanding of how Javascript, CSS, and how the browser works. Just go reading
+  # through the Mercury code, and review the specs to learn more about how you can modify Mercury to suit your needs.

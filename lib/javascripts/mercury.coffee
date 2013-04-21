@@ -35,6 +35,9 @@ jQuery ->
   Mercury.init(frame: '#mercury_frame')
 
 
+Mercury.Region.Markdown.addToolbar 'color', color: ['Color', plugin: 'color']
+Mercury.Region.Markdown.addToolbar 'block', block: ['Block', plugin: 'blocks']
+
 # todo:
 #   port jQuery.extend into module so we can use that within instances (which is where it's mostly used).
 #   provide aloha editor look alike toolbar and toolbar behavior.
@@ -57,3 +60,4 @@ jQuery ->
 #   add canvas region (save/load as base64 image)
 #   add more control to image region (resize, crop)
 #   finish html region
+#   polish markdown region (if you're not dead from the html reigon)

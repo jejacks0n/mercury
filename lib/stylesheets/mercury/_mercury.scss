@@ -36,6 +36,7 @@
 @import "mercury/views/base_interface";
 @import "mercury/views/frame_interface";
 @import "mercury/views/modal";
+@import "mercury/views/panel";
 @import "mercury/views/statusbar";
 @import "mercury/views/toolbar";
 @import "mercury/views/uploader";
@@ -53,6 +54,7 @@ mercury {
 
   // disable animations while initializing
   &.loading *,
+  .mercury-no-animation,
   .mercury-no-animation * {
     -moz-transition: none !important;
     -webkit-transition: none !important;

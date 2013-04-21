@@ -1,8 +1,9 @@
 # Templates (at the top so the can be removed/changed).
 #
+#= require mercury/templates/modal
+#= require mercury/templates/panel
 #= require mercury/templates/statusbar
 #= require mercury/templates/uploader
-#= require mercury/templates/modal
 #
 # Core library / utility.
 #
@@ -25,6 +26,7 @@
 #= require mercury/views/base_interface
 #= require mercury/views/frame_interface
 #= require mercury/views/modal
+#= require mercury/views/panel
 #= require mercury/views/statusbar
 #= require mercury/views/toolbar
 #= require mercury/views/toolbar_item

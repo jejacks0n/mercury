@@ -1,9 +1,9 @@
 #= require spec_helper
-#= require mercury/views/modal
+#= require mercury/views/panel
 
-describe "Mercury.Modal", ->
+describe "Mercury.Panel", ->
 
-  Klass = Mercury.Modal
+  Klass = Mercury.Panel
   subject = null
 
   beforeEach ->

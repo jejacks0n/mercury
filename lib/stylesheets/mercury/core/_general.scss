@@ -61,20 +61,17 @@
   transition-property: $property;
   transition-duration: $timing;
   transition-timing-function: $easing;
-  // fixes a flicker in safari
-  @if $property == "opacity" {
-    -webkit-backface-visibility: hidden;
-  }
+  @if $property == "opacity" { -webkit-backface-visibility: hidden; } // fixes a flicker in safari
 }
 
-@mixin mercury-loading-indicator($size: 32px) {
+@mixin mercury-loading-indicator($size: 32px, $color: #666) {
   @include mercury-icon-base($size, $size, $size);
   text-align: center;
   &:before {
     -webkit-animation: mercury-loading-indicator 1s linear infinite;
     -moz-animation: mercury-loading-indicator 1s linear infinite;
     animation: mercury-loading-indicator 1s linear infinite;
-    color: $loading_indicator_color;
+    color: $color;
     content: "/";
   }
 }

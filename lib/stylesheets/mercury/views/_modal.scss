@@ -1,9 +1,9 @@
-/* Mercury.Statusbar
+/* Mercury.Modal
  *----------------------------------------------------------------------------*/
 mercury .mercury-modal {
   @include mercury-transition(opacity);
   position: fixed;
-  z-index: 10100;
+  z-index: 11000;
   display: none;
   opacity: 0;
   .mercury-modal-overlay {
@@ -16,7 +16,7 @@ mercury .mercury-modal {
     background: $modal_overlay_bg;
   }
   .mercury-modal-loading-indicator {
-    @include mercury-loading-indicator(28px);
+    @include mercury-loading-indicator(28px, $modal_loading_indicator_color);
     display: none;
     padding: 10px 20px;
   }

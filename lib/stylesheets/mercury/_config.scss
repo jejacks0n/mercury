@@ -6,7 +6,6 @@ $dialog_bg:                                  #efefef !default;
 $dialog_color:                               #333 !default;
 $dialog_border_color:                        #ccc !default;
 $focus_color:                                $primary_color !default;
-$loading_indicator_color:                    #666 !default;
 
 /* View Specific
  *----------------------------------------------------------------------------*/
@@ -28,9 +27,20 @@ $modal_dialog_title_color:                   #000 !default;
 $modal_dialog_title_border_color:            $dialog_border_color !default;
 $modal_dialog_close_color:                   #666 !default;
 $modal_dialog_close_hover_color:             #333 !default;
+$modal_loading_indicator_color:              #666 !default;
+
+// _panel
+$panel_bg:                                   rgba(0, 0, 0, .8) !default;
+$panel_color:                                #ccc !default;
+$panel_title_bg:                             #222 !default;
+$panel_title_color:                          #eee !default;
+$panel_title_border_color:                   #555 !default;
+$panel_close_color:                          #ddd !default;
+$panel_close_hover_color:                    #eee !default;
+$panel_loading_indicator_color:              #ccc !default;
 
 // _statusbar
-$statusbar_bg: r                             rgba(0, 0, 0, 0.8) !default;
+$statusbar_bg:                               rgba(0, 0, 0, 0.8) !default;
 $statusbar_path_separator_color:             #aaa !default;
 $statusbar_path_part_color:                  #ddd !default;
 $statusbar_about_color:                      #aaa !default;

@@ -14,7 +14,6 @@ mercury .mercury-toolbar {
     @include mercury-gradient($toolbar_bg_1, $toolbar_bg_2);
     min-height: 21px;
     padding: 3px 3px 0px 10px;
-    overflow: hidden;
     border-top: 1px solid $toolbar_border_color_top;
     border-bottom: 1px solid $toolbar_border_color_bottom;
   }
@@ -50,9 +49,9 @@ mercury .mercury-toolbar {
     @include mercury-toolbar-button-base;
     @include mercury-border-radius(2px);
     @include mercury-gradient($toolbar_button_bg_1, $toolbar_button_bg_2);
+    position: relative;
     width: 22px;
     height: 15px;
-    overflow: hidden;
     border: 1px solid $toolbar_button_border_color;
     cursor: pointer;
     &+ .mercury-toolbar-button{
@@ -151,6 +150,7 @@ mercury .mercury-toolbar {
     display: block;
     height: 58px;
     padding: 0;
+    overflow: hidden;
     .mercury-toolbar-separator,
     .mercury-toolbar-line-separator {
       width: 40px;

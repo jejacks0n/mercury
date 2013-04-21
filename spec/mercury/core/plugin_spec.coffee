@@ -115,7 +115,9 @@ describe "Mercury.Plugin", ->
   describe "#buttonRegistered", ->
 
     beforeEach ->
-      @mock = get: -> foo: 'baz', bar: 'foo'
+      @mock = get: (prop) ->
+        return foo: 'baz', bar: 'foo' if prop == 'settings'
+        return '_action_' if prop == 'actionName'
 
     it "assigns @button", ->
       subject.buttonRegistered(@mock)
@@ -126,6 +128,12 @@ describe "Mercury.Plugin", ->
       subject.buttonRegistered(@mock)
       expect( subject.configuration.foo ).to.eq('baz')
       expect( subject.configuration.bar ).to.eq('foo')
+
+    it "prepends the button action if @prependButtonAction is set", ->
+      spyOn(subject, 'prependAction')
+      subject.prependButtonAction = 'config'
+      subject.buttonRegistered(@mock)
+      expect( subject.prependAction ).calledWith('_action_', 'config')
 
     it "calls #registerButton if it's defined", ->
       subject.registerButton = spy()

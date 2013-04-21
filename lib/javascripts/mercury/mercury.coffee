@@ -4,9 +4,6 @@
 #= require mercury/templates/uploader
 #= require mercury/templates/modal
 #
-#= require mercury/templates/block_types
-#= require mercury/templates/styles_select
-#
 # Core library / utility.
 #
 #= require mercury/extensions/number
@@ -60,5 +57,7 @@
 #
 # Plugins.
 #
+#= require mercury/plugins/blocks_plugin
 #= require mercury/plugins/character_plugin
 #= require mercury/plugins/color_plugin
+#= require mercury/plugins/styles_plugin

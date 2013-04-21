@@ -1,11 +1,13 @@
 Plugin = Mercury.registerPlugin 'color'
-  description: 'Provides interface for selecting foreground colors.'
+  description: 'Provides interface for selecting colors.'
   version: '1.0.0'
 
-  actions: # the button action will be prepended to these actions
-    color: 'insertColor'
-    html: 'insertColor'
-    text: 'insertColor'
+  prependButtonAction: 'insert'
+
+  actions:
+    color: 'insert'
+    html: 'insert'
+    text: 'insert'
 
   config:
     colors: 'FFFFFF FFCCCC FFCC99 FFFF99 FFFFCC 99FF99 99FFFF CCFFFF CCCCFF FFCCFF CCCCCC FF6666 FF9966 FFFF66 FFFF33 '+
@@ -15,20 +17,21 @@ Plugin = Mercury.registerPlugin 'color'
             '000000 330000 663300 663333 333300 003300 003333 000066 330099 330033'
 
   registerButton: ->
-    @context = @button.get('actionName')
-    @prependAction(@context, 'insertColor')
     @button.set(type: 'color', subview: @bindTo(new Plugin.Palette()))
 
+
   bindTo: (view) ->
-    view.on 'color:picked', (color) =>
-      @button.css(color: "##{color}")
-      @triggerAction(color)
+    view.on 'color:picked', (value) =>
+      @triggerAction(value)
+      @button.css(color: "##{value}")
+
 
   regionContext: ->
-    color = @region.hasContext(@context, true) || @region.hasContext('color', true)
-    @button.css(color: color) if color
+    @button.css(color: color) if color = @region.hasContext(@context, true) || @region.hasContext('color', true)
 
-  insertColor: (name, value) -> Mercury.trigger('action', name, "##{value}")
+
+  insert: (name, value) ->
+    Mercury.trigger('action', name, "##{value}")
 
 
 class Plugin.Palette extends Mercury.ToolbarPalette

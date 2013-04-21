@@ -1,28 +1,61 @@
-mercury .mercury-toolbar {
-  .mercury-toolbar-button[data-type="character"]:before {
-    content: 'y';
+mercury {
+  .mercury-toolbar {
+    .mercury-toolbar-button[data-type="character"]:before {
+      content: 'y';
+    }
+    .mercury-character-palette {
+      width: 242px;
+      font-size: 15px;
+      padding: 2px;
+      li {
+        @include mercury-border-radius(3px);
+        width: 18px;
+        height: 18px;
+        line-height: 18px;
+        margin: 0;
+        overflow: hidden;
+        &:hover {
+          @include mercury-transition(font-size, ease-in-out, 0.1s);
+          position: relative;
+          z-index: 1;
+          width: 26px;
+          height: 26px;
+          line-height: 26px;
+          margin: -5px;
+          background: #e2e1e2;
+          font-size: 180%;
+        }
+      }
+    }
   }
-  .mercury-character-palette {
-    width: 242px;
-    font-size: 15px;
-    padding: 2px;
-    li {
-      @include mercury-border-radius(3px);
-      width: 18px;
-      height: 18px;
-      line-height: 18px;
-      margin: 0;
-      overflow: hidden;
-      &:hover {
-        @include mercury-transition(font-size, ease-in-out, 0.1s);
-        position: relative;
-        z-index: 1;
-        width: 26px;
-        height: 26px;
-        line-height: 26px;
-        margin: -5px;
-        background: #e2e1e2;
-        font-size: 180%;
+  .mercury-character-modal {
+    ul {
+      @extend .mercury-clearfix;
+      list-style: none;
+      margin: 0 -2px 0 0;
+      padding: 5px 0 0;
+      li {
+        float: left;
+        width: 25px;
+        height: 25px;
+        margin: 0 2px 2px 0;
+        line-height: 25px;
+        border: 1px solid #999;
+        text-align: center;
+        font-size: 12pt;
+        cursor: pointer;
+        background: #FFF;
+        &:hover {
+          @include mercury-transition(font-size, ease-in-out, 0.1s);
+          position: relative;
+          z-index: 1;
+          width: 37px;
+          height: 37px;
+          line-height: 37px;
+          margin: -7px -5px -3px;
+          background: #e2e1e2;
+          font-size: 240%;
+        }
       }
     }
   }

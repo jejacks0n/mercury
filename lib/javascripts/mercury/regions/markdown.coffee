@@ -106,7 +106,7 @@ class Mercury.Region.Markdown extends Mercury.Region
 
 Mercury.Region.Markdown.addToolbar
   defined:
-    style:         ['Style', select: 'styles_select']
+    style:         ['Style', plugin: 'styles']
   headings:
     h1:            ['Heading 1', action: ['block', 'h1']]
     h2:            ['Heading 2', action: ['block', 'h2']]

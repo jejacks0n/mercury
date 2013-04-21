@@ -28,6 +28,7 @@ class Mercury.Region.Html extends Mercury.Region
 
     super
 
+
   onDropFile: (files, options) ->
     uploader = new Mercury.Uploader(files, mimeTypes: @config('regions:html:mimeTypes'))
     uploader.on 'uploaded', (file) =>
@@ -64,9 +65,9 @@ class Mercury.Region.Html extends Mercury.Region
 
 Mercury.Region.Html.addToolbar
   defined:
-    style:         ['Style', select: 'styles_select']
+    style:         ['Style', plugin: 'styles']
     sep:           ' '
-    block:         ['Block Format', select: 'block_types']
+    block:         ['Block Format', plugin: 'blocks']
   color:
     bgcolor:       ['Background Color', plugin: 'color']
     sep:           ' '

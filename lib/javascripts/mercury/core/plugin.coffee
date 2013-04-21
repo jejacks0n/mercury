@@ -81,6 +81,9 @@ class Mercury.Plugin extends Mercury.Module
   #
   buttonRegistered: (@button) ->
     @configuration = $.extend({}, @configuration, @button.get('settings'))
+    if @prependButtonAction
+      @context = @button.get('actionName')
+      @prependAction(@context, @prependButtonAction)
     @registerButton?()
 
 

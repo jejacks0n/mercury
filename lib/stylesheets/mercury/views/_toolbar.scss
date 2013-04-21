@@ -85,24 +85,24 @@ mercury .mercury-toolbar {
     &[data-icon]:before {
       content: attr(data-icon);
     }
-    //&[data-type="select"] {
-    //  width: auto;
-    //  &:before {
-    //    content: 'B';
-    //    float: right;
-    //    width: 18px;
-    //  }
-    //  em {
-    //    @include mercury-font(8pt);
-    //    display: block;
-    //    float: left;
-    //    padding: 0 0 0 6px;
-    //    line-height: 15px;
-    //    font-style: normal;
-    //    position: relative;
-    //    text-transform: lowercase;
-    //  }
-    //}
+    &[data-type="select"] {
+      width: auto;
+      &:before {
+        content: 'B';
+        float: right;
+        width: 18px;
+      }
+      em {
+        @include mercury-font(8pt);
+        display: block;
+        float: left;
+        padding: 0 0 0 6px;
+        line-height: 15px;
+        font-style: normal;
+        position: relative;
+        text-transform: lowercase;
+      }
+    }
   }
   .mercury-toolbar-select,
   .mercury-toolbar-palette {

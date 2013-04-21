@@ -81,6 +81,13 @@ describe "Mercury.Statusbar", ->
       expect( subject.$el.hide ).called
 
 
+  describe "#height", ->
+
+    it "returns the element height", ->
+      spyOn(subject.$el, 'outerHeight', -> 42)
+      expect( subject.height() ).to.eq(42)
+
+
   describe "#onRegionUpdate", ->
 
     it "calls #setPath with the region path", ->

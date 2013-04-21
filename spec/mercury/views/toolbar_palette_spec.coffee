@@ -10,4 +10,9 @@ describe "Mercury.ToolbarPalette", ->
     Mercury.configure 'logging:enabled', false
     subject = new Klass()
 
-  it "needs to be tested"
+  describe "#constructor", ->
+
+    it "calls super", ->
+      spyOn(Klass.__super__, 'constructor')
+      subject = new Klass()
+      expect( Klass.__super__.constructor ).called

@@ -98,6 +98,13 @@ describe "Mercury.Toolbar", ->
       expect( subject.$el.hide ).called
 
 
+  describe "#height", ->
+
+    it "returns the element height", ->
+      spyOn(subject.$el, 'outerHeight', -> 42)
+      expect( subject.height() ).to.eq(42)
+
+
   describe "#onRegionFocus", ->
 
     beforeEach ->

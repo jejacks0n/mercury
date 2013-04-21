@@ -277,6 +277,7 @@ describe "Mercury.Plugin", ->
   describe "#onButtonClick", ->
 
     it "does nothing", ->
+      subject.onButtonClick()
 
 
   describe "#appendActions", ->

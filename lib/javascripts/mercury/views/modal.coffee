@@ -24,7 +24,7 @@ class Mercury.Modal extends Mercury.View
     'click .mercury-modal-overlay': 'release'
     'mercury:interface:hide': -> @hide(false)
     'mercury:interface:show': -> @show(false)
-    'mercury:interface:resize': (e) -> @resize(false, e)
+    'mercury:interface:resize': -> @resize(false)
 
   constructor: (@options = {}) ->
     return instance if instance = @ensureSingleton('modal', arguments...)
@@ -62,7 +62,7 @@ class Mercury.Modal extends Mercury.View
     @show(false)
 
 
-  resize: (animate = true, dimensions) ->
+  resize: (animate = true) ->
     clearTimeout(@showContentTimeout)
     @addClass('mercury-no-animation') unless animate
     @$contentContainer.css(height: 'auto')

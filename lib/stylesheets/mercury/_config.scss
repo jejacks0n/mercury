@@ -18,6 +18,17 @@ $uploader_preview_bg:                        #fff !default;
 $uploader_progress_bg:                       $primary_color !default;
 $uploader_progress_color:                    rgba(255, 255, 255, .8) !default;
 
+// _lightview
+$lightview_overlay_bg:                       $overlay_bg !default;
+$lightview_dialog_bg:                        $dialog_bg !default;
+$lightview_dialog_color:                     $dialog_color !default;
+$lightview_dialog_title_bg:                  #ddd !default;
+$lightview_dialog_title_color:               #000 !default;
+$lightview_dialog_title_border_color:        $dialog_border_color !default;
+$lightview_dialog_close_color:               #666 !default;
+$lightview_dialog_close_hover_color:         #333 !default;
+$lightview_loading_indicator_color:          #666 !default;
+
 // _modal
 $modal_overlay_bg:                           $overlay_bg !default;
 $modal_dialog_bg:                            $dialog_bg !default;

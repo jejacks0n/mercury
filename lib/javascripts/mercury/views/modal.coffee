@@ -26,8 +26,10 @@ class Mercury.Modal extends Mercury.View
     'mercury:interface:show': -> @show(false)
     'mercury:interface:resize': -> @resize(false)
 
+  primaryTemplate: 'modal'
+
   constructor: (@options = {}) ->
-    return instance if instance = @ensureSingleton('modal', arguments...)
+    return instance if instance = @ensureSingleton(@primaryTemplate, arguments...)
     @options.template ||= @template
     super(@options)
     @show()
@@ -35,7 +37,7 @@ class Mercury.Modal extends Mercury.View
 
   buildElement: ->
     @subTemplate = @options.template
-    @template = 'modal'
+    @template = @primaryTemplate
     super
 
 
@@ -50,7 +52,7 @@ class Mercury.Modal extends Mercury.View
     @options = $.extend({}, @options, options || {})
     @[key] = value for key, value of @options
     @subTemplate = @options.template
-    @template = 'modal'
+    @template = @primaryTemplate
     @$title.html(@title)
     @$dialog.css(width: @width)
     content = @contentFromOptions()
@@ -113,5 +115,5 @@ class Mercury.Modal extends Mercury.View
 
   release: ->
     return @hide(true) if @visible
-    @removeSingleton('modal')
+    @removeSingleton(@primaryTemplate)
     super

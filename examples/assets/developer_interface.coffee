@@ -60,6 +60,9 @@ class @DeveloperInterface extends Mercury.View
       when 'modal1' then @modal = new Mercury.Modal(width: 300, title: 'Short Lorem Modal', template: 'lorem_short')
       when 'modal2' then @modal = new Mercury.Modal(width: 600, title: 'Long Lorem Modal', template: 'lorem_long')
       when 'release_modal' then @modal?.release()
+      when 'lightview1' then @lightview = new Mercury.Lightview(width: 300, height: 200, title: 'Short Lorem Lightview', template: 'lorem_short')
+      when 'lightview2' then @lightview = new Mercury.Lightview(width: 600, height: 500, title: 'Long Lorem Lightview', template: 'lorem_long')
+      when 'release_lightview' then @lightview?.release()
       when 'panel1' then @panel = new Mercury.Panel(width: 200, title: 'Short Lorem Panel', template: 'lorem_short')
       when 'panel2' then @panel = new Mercury.Panel(width: 300, title: 'Long Lorem Panel', template: 'lorem_long')
       when 'update_panel' then @panel.update(width: Math.round(Math.random() * 400), title: 'Updated Lorem Panel', template: 'lorem_long')
@@ -149,6 +152,10 @@ JST['/mercury/templates/developer-interface'] = (scope) ->
   <li data-action="modal1">modal1</li>
   <li data-action="modal2">modal2</li>
   <li data-action="release_modal">release modal</li>
+  <hr/>
+  <li data-action="lightview1">lightview1</li>
+  <li data-action="lightview2">lightview2</li>
+  <li data-action="release_lightview">release lightview</li>
   <hr/>
   <li data-action="panel1">panel1</li>
   <li data-action="panel2">panel2</li>

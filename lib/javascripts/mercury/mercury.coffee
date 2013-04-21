@@ -1,5 +1,6 @@
 # Templates (at the top so the can be removed/changed).
 #
+#= require mercury/templates/lightview
 #= require mercury/templates/modal
 #= require mercury/templates/panel
 #= require mercury/templates/statusbar
@@ -25,6 +26,7 @@
 #
 #= require mercury/views/base_interface
 #= require mercury/views/frame_interface
+#= require mercury/views/lightview
 #= require mercury/views/modal
 #= require mercury/views/panel
 #= require mercury/views/statusbar

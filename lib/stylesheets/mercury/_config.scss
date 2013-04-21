@@ -1,23 +1,73 @@
 /* Global
  *----------------------------------------------------------------------------*/
-$primary_color:                 #00bce5 !default;
-$overlay_bg:                    rgba(0, 0, 0, .75) !default;
-$dialog_bg:                     #efefef !default;
-$dialog_color:                  #333 !default;
-$focus_color:                   $primary_color !default;
+$primary_color:                              #00bce5 !default; // FFA200
+$overlay_bg:                                 rgba(0, 0, 0, .75) !default;
+$dialog_bg:                                  #efefef !default;
+$dialog_color:                               #333 !default;
+$dialog_border_color:                        #ccc !default;
+$focus_color:                                $primary_color !default;
+$loading_indicator_color:                    #666 !default;
 
 /* View Specific
  *----------------------------------------------------------------------------*/
 // _uploader
-$uploader_overlay_bg:           $overlay_bg !default;
-$uploader_dialog_bg:            $dialog_bg !default;
-$uploader_dialog_color:         $dialog_color !default;
-$uploader_preview_border_color: #ccc !default;
-$uploader_preview_bg:           #fff !default;
-$uploader_progress_bg:          $primary_color !default;
-$uploader_progress_color:       rgba(255, 255, 255, .8) !default;
+$uploader_overlay_bg:                        $overlay_bg !default;
+$uploader_dialog_bg:                         $dialog_bg !default;
+$uploader_dialog_color:                      $dialog_color !default;
+$uploader_preview_border_color:              $dialog_border_color !default;
+$uploader_preview_bg:                        #fff !default;
+$uploader_progress_bg:                       $primary_color !default;
+$uploader_progress_color:                    rgba(255, 255, 255, .8) !default;
+
+// _modal
+$modal_overlay_bg:                           $overlay_bg !default;
+$modal_dialog_bg:                            $dialog_bg !default;
+$modal_dialog_color:                         $dialog_color !default;
+$modal_dialog_title_bg:                      #ddd !default;
+$modal_dialog_title_color:                   #000 !default;
+$modal_dialog_title_border_color:            $dialog_border_color !default;
+$modal_dialog_close_color:                   #666 !default;
+$modal_dialog_close_hover_color:             #333 !default;
+
+// _statusbar
+$statusbar_bg: r                             rgba(0, 0, 0, 0.8) !default;
+$statusbar_path_separator_color:             #aaa !default;
+$statusbar_path_part_color:                  #ddd !default;
+$statusbar_about_color:                      #aaa !default;
+
+// _toolbar
+$toolbar_bg_1:                               #d2d2d2 !default;
+$toolbar_bg_2:                               #c6c6c6 !default;
+$toolbar_border_color_top:                   #e5e5e5 !default;
+$toolbar_border_color_bottom:                #727272 !default;
+$toolbar_line_separator_color:               #707070 !default;
+$toolbar_button_bg_1:                        #e8e8e8 !default;
+$toolbar_button_bg_2:                        #cbcbcb !default;
+$toolbar_button_border_color:                #707070 !default;
+$toolbar_button_color:                       #3a3a3a !default;
+$toolbar_button_active_bg_1:                 #bebebe !default;
+$toolbar_button_active_bg_2:                 #9c9c9c !default;
+$toolbar_button_active_color:                $dialog_color !default;
+$toolbar_subview_bg:                         #fff !default;
+$toolbar_subview_border_color:               #727272 !default;
+$toolbar_subview_color:                      $dialog_color !default;
+$toolbar_select_hover_bg:                    #E2E1E2 !default;
+$toolbar_select_hover_color:                 #000 !default;
+$toolbar_palette_hover_border_color:         #333 !default;
+$toolbar_primary_bg_1:                       #e2e2e2 !default;
+$toolbar_primary_bg_2:                       #c6c6c6 !default;
+$toolbar_primary_line_separator_left_color:  #ececec !default;
+$toolbar_primary_line_separator_right_color: #9b9b9b !default;
+$toolbar_primary_button_color:               #555 !default;
+$toolbar_primary_button_label_color:         #222 !default;
+
+/* Region Specific
+ *----------------------------------------------------------------------------*/
+// _region
+$region_drop_indicator_bg:                   rgba(0, 0, 0, .75) !default;
+$region_drop_indicator_color:                rgba(255, 255, 255, .85) !default;
 
 // _gallery
-$gallery_region_bg: #000 !default;
-$gallery_region_paginator_color: #666 !default;
-$gallery_region_paginator_active_color: #fff !default;
+$gallery_region_bg:                          #000 !default;
+$gallery_region_paginator_color:             #666 !default;
+$gallery_region_paginator_active_color:      #fff !default;

@@ -9,19 +9,19 @@ mercury .mercury-statusbar {
   left: 0;
   width: 100%;
   white-space: nowrap;
-  background: rgba(0, 0, 0, 0.8);
+  background: $statusbar_bg;
   .mercury-statusbar-path {
     @include mercury-font(9pt);
     overflow: hidden;
     margin: 4px 160px 3px 7px;
     text-overflow: ellipsis;
-    color: #aaa;
+    color: $statusbar_path_separator_color;
     a, b {
       @include mercury-font(9pt);
       font-weight: normal;
     }
     a {
-      color: #ddd;
+      color: $statusbar_path_part_color;
     }
   }
   .mercury-statusbar-about {
@@ -33,7 +33,7 @@ mercury .mercury-statusbar {
     font-style: normal;
     text-shadow: #000 0 1px 0;
     a {
-      color: #aaa;
+      color: $statusbar_about_color;
       text-decoration: none;
       outline: none;
       &:hover, &:focus {

@@ -10,7 +10,7 @@
   margin: -2px;
   overflow: auto;
   white-space: normal;
-  border: 1px solid #727272;
-  background: #fff;
-  color: #333;
+  border: 1px solid $toolbar_subview_border_color;
+  background: $toolbar_subview_bg;
+  color: $toolbar_subview_color;
 }

@@ -42,7 +42,6 @@ Mercury.Region.Markdown.addToolbar 'block', block: ['Block', plugin: 'blocks']
 #   port jQuery.extend into module so we can use that within instances (which is where it's mostly used).
 #   provide aloha editor look alike toolbar and toolbar behavior.
 #   spend time making sure focus is working well and dialed before moving forward.
-#   pass through the css and migrate colors etc to config.
 #   migrate existing locale content into new locales and document missing values.
 #   make region use the shadow dom if possible/configured to do so.
 #   spend some time making what's in work really well on ios.

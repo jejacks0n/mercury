@@ -10,7 +10,7 @@
 #
 initialize = ->
 
-  @version = '0.0.1alpha'
+  @version = '2.0.1 pre alpha'
 
   # Provides global method to initialize.
   #

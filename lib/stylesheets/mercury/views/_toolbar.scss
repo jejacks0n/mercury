@@ -11,12 +11,12 @@ mercury .mercury-toolbar {
   width: 100%;
   cursor: default;
   .mercury-toolbar-container {
-    @include mercury-gradient(#d2d2d2, #c6c6c6);
+    @include mercury-gradient($toolbar_bg_1, $toolbar_bg_2);
     min-height: 21px;
     padding: 3px 3px 0px 10px;
     overflow: hidden;
-    border-top: 1px solid #e5e5e5;
-    border-bottom: 1px solid #727272;
+    border-top: 1px solid $toolbar_border_color_top;
+    border-bottom: 1px solid $toolbar_border_color_bottom;
   }
   .mercury-toolbar-collection {
     display: inline;
@@ -38,7 +38,7 @@ mercury .mercury-toolbar {
     width: 0;
     height: 17px;
     margin: -1px 3px;
-    border-left: 1px solid #707070;
+    border-left: 1px solid $toolbar_line_separator_color;
   }
   .mercury-toolbar-collection:last-child .mercury-toolbar-group:last-child {
     .mercury-toolbar-separator:last-child,
@@ -49,18 +49,18 @@ mercury .mercury-toolbar {
   .mercury-toolbar-button {
     @include mercury-toolbar-button-base;
     @include mercury-border-radius(2px);
-    @include mercury-gradient(#e8e8e8, #cbcbcb);
+    @include mercury-gradient($toolbar_button_bg_1, $toolbar_button_bg_2);
     width: 22px;
     height: 15px;
     overflow: hidden;
-    border: 1px solid #707070;
+    border: 1px solid $toolbar_button_border_color;
     cursor: pointer;
     &+ .mercury-toolbar-button{
       @include mercury-border-radius(0 2px 2px 0);
       margin-left: -1px;
     }
     &:before, em {
-      color: #3a3a3a;
+      color: $toolbar_button_color;
       text-shadow: #eee 0 1px 0;
     }
     &.mercury-button-disabled {
@@ -68,9 +68,9 @@ mercury .mercury-toolbar {
     }
     &.mercury-button-active,
     &.mercury-button-pressed {
-      @include mercury-gradient(#bebebe, #9c9c9c);
+      @include mercury-gradient($toolbar_button_active_bg_1, $toolbar_button_active_bg_2);
       &:before {
-        color: #333;
+        color: $toolbar_button_active_color;
         text-shadow: none;
       }
     }
@@ -117,8 +117,8 @@ mercury .mercury-toolbar {
     li {
       padding: 2px 10px;
       &:hover {
-        background-color: #E2E1E2 !important;
-        color: #000 !important;
+        background-color: $toolbar_select_hover_bg !important;
+        color: $toolbar_select_hover_color !important;
       }
     }
   }
@@ -141,18 +141,16 @@ mercury .mercury-toolbar {
       line-height: 15px;
       &:hover {
         margin: -1px 0 0 -1px;
-        border: 1px solid #333;
+        border: 1px solid $toolbar_palette_hover_border_color;
       }
     }
   }
   // primary toolbar overrides
   .mercury-toolbar-primary-container {
-    @include mercury-gradient(#e2e2e2, #c6c6c6);
+    @include mercury-gradient($toolbar_primary_bg_1, $toolbar_primary_bg_2);
     display: block;
     height: 58px;
     padding: 0;
-    border-top: 1px solid #e5e5e5;
-    border-bottom: 1px solid #727272;
     .mercury-toolbar-separator,
     .mercury-toolbar-line-separator {
       width: 40px;
@@ -162,8 +160,8 @@ mercury .mercury-toolbar {
       width: 0;
       height: 45px;
       margin: 0 20px;
-      border-left: 1px solid #ececec;
-      border-right: 1px solid #9b9b9b;
+      border-left: 1px solid $toolbar_primary_line_separator_left_color;
+      border-right: 1px solid $toolbar_primary_line_separator_right_color;
     }
     .mercury-toolbar-button {
       @include mercury-icon-base(32px, 50px, 46px);
@@ -174,7 +172,7 @@ mercury .mercury-toolbar {
       background: transparent;
       text-align: center;
       white-space: nowrap;
-      color: #555;
+      color: $toolbar_primary_button_color;
       em {
         @include mercury-font(8.5pt);
         display: block;
@@ -182,7 +180,7 @@ mercury .mercury-toolbar {
         height: 15px;
         line-height: 15px;
         font-style: normal;
-        color: #222;
+        color: $toolbar_primary_button_label_color;
       }
       &:before {
         left: 0;

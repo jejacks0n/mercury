@@ -74,7 +74,7 @@
     -webkit-animation: mercury-loading-indicator 1s linear infinite;
     -moz-animation: mercury-loading-indicator 1s linear infinite;
     animation: mercury-loading-indicator 1s linear infinite;
-    color: #666;
+    color: $loading_indicator_color;
     content: "/";
   }
 }

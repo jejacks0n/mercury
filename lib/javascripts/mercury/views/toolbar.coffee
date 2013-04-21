@@ -38,6 +38,10 @@ class Mercury.Toolbar extends Mercury.View
     @visibilityTimeout = @delay(250, => @$el.hide())
 
 
+  height: ->
+    @$el.outerHeight()
+
+
   onRegionFocus: (region) ->
     return if @region == region
     @region = region

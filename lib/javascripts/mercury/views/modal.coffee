@@ -24,6 +24,7 @@ class Mercury.Modal extends Mercury.View
     'click .mercury-modal-overlay': 'release'
     'mercury:interface:hide': -> @hide(false)
     'mercury:interface:show': -> @show(false)
+    'mercury:interface:resize': (e) -> @resize(false, e)
 
   constructor: (@options = {}) ->
     return instance if instance = @ensureSingleton('modal', arguments...)
@@ -41,7 +42,6 @@ class Mercury.Modal extends Mercury.View
   build: ->
     @addClass('loading')
     @appendTo(Mercury.interface)
-    $(window).on('resize', @resize)
     @preventScrollPropagation(@$contentContainer)
 
 
@@ -62,18 +62,18 @@ class Mercury.Modal extends Mercury.View
     @show(false)
 
 
-  resize: (noAnimation) =>
+  resize: (animate = true, dimensions) ->
     clearTimeout(@showContentTimeout)
-    @addClass('mercury-no-animation') if noAnimation
+    @addClass('mercury-no-animation') unless animate
     @$contentContainer.css(height: 'auto')
     titleHeight = @$titleContainer.outerHeight()
     height = Math.min(@$content.outerHeight() + titleHeight, $(window).height() - 10)
     @$dialog.css(height: height)
     @$contentContainer.css(height: height - titleHeight)
-    if noAnimation
-      @showContent(true)
-    else
+    if animate
       @showContentTimeout = @delay(300, @showContent)
+    else
+      @showContent(false)
     @removeClass('mercury-no-animation')
 
 
@@ -82,14 +82,14 @@ class Mercury.Modal extends Mercury.View
     return @content
 
 
-  showContent: (noAnimation) ->
+  showContent: (animate = true) ->
     clearTimeout(@contentOpacityTimeout)
     @removeClass('loading')
     @$content.css(visibility: 'visible', width: 'auto')
-    if noAnimation
-      @$content.css(opacity: 1)
-    else
+    if animate
       @contentOpacityTimeout = @delay(50, -> @$content.css(opacity: 1))
+    else
+      @$content.css(opacity: 1)
 
 
   show: (update = true) ->
@@ -114,5 +114,4 @@ class Mercury.Modal extends Mercury.View
   release: ->
     return @hide(true) if @visible
     @removeSingleton('modal')
-    $(window).off('resize', @resize)
     super

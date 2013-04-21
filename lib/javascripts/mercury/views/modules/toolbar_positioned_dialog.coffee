@@ -5,7 +5,7 @@ Mercury.View.Modules.ToolbarPositionedDialog =
 
 
   buildPositionedDialog: ->
-    $(window).on('resize', => @position())
+    @delegateEvents('mercury:interface:resize', @position)
 
 
   position: ->

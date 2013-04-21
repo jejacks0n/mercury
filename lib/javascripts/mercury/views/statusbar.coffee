@@ -41,5 +41,9 @@ class Mercury.Statusbar extends Mercury.View
     @visibilityTimeout = @delay(250, => @$el.hide())
 
 
+  height: ->
+    @$el.outerHeight()
+
+
   onRegionUpdate: (region) ->
     @setPath(path) if path = region.path?()

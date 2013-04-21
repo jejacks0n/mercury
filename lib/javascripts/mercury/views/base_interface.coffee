@@ -21,7 +21,8 @@ class Mercury.BaseInterface extends Mercury.View
     super
 
     @regions ||= []
-    $(window).on('beforeunload', => @onUnload())
+    $(window).on('beforeunload', @onUnload)
+    $(window).on('resize', @onResize)
 
     @initialize()
     @buildInterface()
@@ -126,6 +127,17 @@ class Mercury.BaseInterface extends Mercury.View
       Mercury.trigger('mode', 'preview') unless @previewMode
 
 
+  dimensions: ->
+    toolbarHeight = @toolbar.height()
+    statusbarHeight = @statusbar.height()
+    top: toolbarHeight
+    left: 0
+    right: 0
+    bottom: statusbarHeight
+    width: $(window).width()
+    height: $(window).height() - toolbarHeight - statusbarHeight
+
+
   onRegionFocus: (region) ->
     @region = region
 
@@ -136,7 +148,11 @@ class Mercury.BaseInterface extends Mercury.View
     @regions.splice(index, 1) if index > -1
 
 
-  onUnload: ->
+  onResize: =>
+    Mercury.trigger('interface:resize', @dimensions())
+
+
+  onUnload: =>
     return null if @config('interface:silent') || !@hasChanges()
     return @t('You have unsaved changes.  Are you sure you want to leave without saving them first?')
 
@@ -149,9 +165,11 @@ class Mercury.BaseInterface extends Mercury.View
   release: ->
     @toolbar.release()
     @statusbar.release()
+    $(window).off('resize', @resize)
     while @regions.length
       @regions.shift().release()
     super
+
 
 
   save: ->

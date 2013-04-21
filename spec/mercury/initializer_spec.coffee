@@ -6,7 +6,7 @@ describe "Mercury", ->
   Klass = MockMercury
 
   it "has the exepected version", ->
-    expect( Klass.version ).to.eq('0.0.1alpha')
+    expect( Klass.version ).to.eq('2.0.1 pre alpha')
 
   it "extends Config and adds the .configure method", ->
     expect( Klass.Module.extend ).calledWith(Klass.Config)

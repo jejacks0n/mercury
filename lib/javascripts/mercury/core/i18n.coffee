@@ -22,11 +22,18 @@ Mercury.I18n =
     return @__determined__ if @__determined__
     return [{}, {}] unless Mercury.configuration.localization?.enabled
 
-    [top, sub] = (@clientLocale() || Mercury.configuration.localization?.preferred).split('-')
+    [top, sub] = @detectLocale()
     top = @.__locales__[top]
-    sub = top["_#{sub.toUpperCase()}_"] if top && sub
+    sub = if top && sub then top["_#{sub.toUpperCase()}_"] else false
 
     @__determined__ = [top || {}, sub || {}]
+
+
+  # Detects the locale that should be used when running translations.
+  # Returns array containing the top and sub locales.
+  #
+  detectLocale: ->
+    @__detected__ ||= (@clientLocale() || Mercury.configuration.localization?.preferred).split('-')
 
 
   # Translates a given string with printf-like variable replacement using the determined translation. Check

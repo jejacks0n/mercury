@@ -38,6 +38,7 @@ class Mercury.BaseInterface extends Mercury.View
 
 
   init: ->
+    @addLocaleClass()
     $('body').before(@$el)
     @makeShadowed()
     @html(@renderTemplate(@template)) if @template
@@ -57,6 +58,10 @@ class Mercury.BaseInterface extends Mercury.View
     @buildToolbar()
     @buildStatusbar()
     @focusDefaultRegion()
+
+
+  addLocaleClass: ->
+    @addClass("locale-#{Mercury.I18n.detectLocale().join('-').toLowerCase()}")
 
 
   makeShadowed: ->

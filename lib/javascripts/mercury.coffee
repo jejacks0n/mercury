@@ -39,10 +39,9 @@ Mercury.Region.Markdown.addToolbar 'color', color: ['Color', plugin: 'color']
 Mercury.Region.Markdown.addToolbar 'block', block: ['Block', plugin: 'blocks']
 
 # todo:
-#   add detected locale to the mercury element as a class or data attribute so we can style based on locale.
 #   adjust how the templates are rendered -- use .call and pass the view.
 #   port jQuery.extend into module so we can use that within instances (which is where it's mostly used).
-#   provide aloha editor look alike toolbar and toolbar behavior.
+#   provide aloha editor look alike toolbar and toolbar behavior (but better).
 #   spend time making sure focus is working well and dialed before moving forward.
 #   migrate existing locale content into new locales and document missing values.
 #   make region use the shadow dom if possible/configured to do so.

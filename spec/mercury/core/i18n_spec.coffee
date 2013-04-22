@@ -19,7 +19,7 @@ describe "Mercury.I18n", ->
   beforeEach ->
     Mercury.configure 'localization', enabled: true, preferred: 'swedish_chef-BORK'
     Klass:: = Mercury.I18n.Module
-    subject = $.extend(Mercury.I18n, __determined__: null, __locales__: locales)
+    subject = $.extend(Mercury.I18n, __determined__: null, __locales__: locales, __detected__: null)
 
   describe ".define", ->
 
@@ -39,13 +39,13 @@ describe "Mercury.I18n", ->
       expect( subject.locale() ).to.eql([{}, {}])
 
     it "detects from the navigator.language", ->
-      spyOn(subject, 'clientLocale', -> 'foo-BAR')
+      spyOn(subject, 'detectLocale', -> ['foo', 'BAR'])
       [top, sub] = subject.locale()
       expect( top ).to.eql(subject.__locales__['foo'])
       expect( sub ).to.eql(subject.__locales__['foo']['_BAR_'])
 
     it "falls back to the preferred language provided in the configuration", ->
-      spyOn(subject, 'clientLocale', -> false)
+      spyOn(subject, 'detectLocale', -> ['swedish_chef', 'BORK'])
       [top, sub] = subject.locale()
       expect( top ).to.eq(subject.__locales__['swedish_chef'])
       expect( sub ).to.be.empty
@@ -53,6 +53,21 @@ describe "Mercury.I18n", ->
     it "returns empty information if not no translations were found", ->
       spyOn(subject, 'clientLocale', -> 'missing')
       expect( subject.locale() ).to.eql([{}, {}])
+
+
+  describe ".detectLocale", ->
+
+    it "detects from the navigator.language", ->
+      spyOn(subject, 'clientLocale', -> 'foo-BAR')
+      [top, sub] = subject.detectLocale()
+      expect( top ).to.eql('foo')
+      expect( sub ).to.eql('BAR')
+
+    it "falls back to the preferred language provided in the configuration", ->
+      spyOn(subject, 'clientLocale', -> false)
+      [top, sub] = subject.detectLocale()
+      expect( top ).to.eq('swedish_chef')
+      expect( sub ).to.eq('BORK')
 
 
   describe ".t", ->

@@ -21,7 +21,6 @@ class Mercury.Modal extends Mercury.View
 
   @events:
     'click .mercury-modal-dialog-title em': 'release'
-    'click .mercury-modal-overlay': 'release'
     'mercury:interface:hide': -> @hide(false)
     'mercury:interface:show': -> @show(false)
     'mercury:interface:resize': -> @resize(false)

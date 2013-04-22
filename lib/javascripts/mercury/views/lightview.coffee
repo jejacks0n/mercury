@@ -16,7 +16,6 @@ class Mercury.Lightview extends Mercury.Modal
 
   @events:
     'click .mercury-lightview-dialog-title em': 'release'
-    'click .mercury-lightview-overlay': 'release'
     'mercury:interface:hide': -> @hide(false)
     'mercury:interface:show': -> @show(false)
     'mercury:interface:resize': -> @resize(false)

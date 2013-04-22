@@ -71,7 +71,8 @@ mercury .mercury-toolbar {
         text-shadow: none;
       }
     }
-    &.mercury-button-pressed {
+    &.mercury-button-pressed,
+    &.mercury-button-toggled {
       &:before {
         top: 1px;
       }
@@ -148,6 +149,7 @@ mercury .mercury-toolbar {
     height: 58px;
     padding: 0;
     overflow: hidden;
+    border-top: 0;
     .mercury-toolbar-separator,
     .mercury-toolbar-line-separator {
       width: 40px;
@@ -182,14 +184,13 @@ mercury .mercury-toolbar {
       &:before {
         left: 0;
       }
-      &.active {
-        &:before {
-          line-height: 48px;
-        }
+      &.mercury-button-toggled {
+        background-size: 100% 100%;
+        background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAA6CAMAAADFsvruAAABL1BMVEVra2tsbGxtbW1vb29xcXFycnJzc3N0dHR1dXV3d3d4eHh6enp7e3t+fn5/f3+AgICBgYGCgoKDg4OFhYWGhoaHh4eIiIiJiYmLi4uMjIyNjY2Ojo6Pj4+SkpKUlJSVlZWWlpaXl5eYmJiZmZmbm5ucnJydnZ2enp6fn5+goKChoaGioqKjo6OlpaWmpqanp6eoqKipqamqqqqrq6usrKytra2urq6vr6+wsLCxsbGysrKzs7O0tLS1tbW2tra3t7e4uLi5ubm6urq7u7u8vLy9vb2+vr6/v7/AwMDBwcHCwsLDw8PExMTFxcXGxsbHx8fIyMjJycnKysrLy8vMzMzNzc3Ozs7Pz8/Q0NDR0dHS0tLT09PU1NTV1dXW1tbX19fY2NjZ2dna2trb2dvb2ttejuwmAAAC4ElEQVRIDQXBQYIkRQIEMXlUwnx0/3+FpivDVtr/AAAAAAAAPAEAAAAAAHiuTo3O5QgAaI3WtDh5tGuxTA2AMGTGGvF8t2ztHQEuWM7Lyfu5C5Oeu8PF7u5RMID35La9uw3t3ufnr3u0e7rrZgAMv06Los5dv8+P82G9REAA4wZrl3u9P8/budBAAwBoADi33+f3z/dAgADQ4E7Wmq73+7y/nzIBQGBluCDX+P0+v/c9AiwAwC4Ai3q/z395NY1GMADIGmD6fX7eG7XL7gTAssAuhs7787zvC0QyCDR3QhNS7/f5fksDAICmATTYvd9zbwwgAJimEIjU8+/7HZNpDQSWZddau3PH7z/P/RbYBQAAu2C5LN/7tIAAAICAQK2e77csAwAAgKw15H3e93auRWuBAbTWkGqu931+7ytaYACIBWBhff973jcXoAEAAABO9z73Jg1NAmANMgDXe58ETRAYsNaA1tD1Pt/3PXet1hoQ0Got48La+z5vvRRpFwCsJAJW9T69NwAAAGgAsN2euwYAAADTZMA97vECAAAQGBuhdT079xOADACKQSNwdrZTVAQAYAYGGHs+O2IwawDAtAZgds4RAAEAYAaEjs+ZLoAZAAIBDK49OwcLAAADAxZ2zznnUwiGAQDAEOS25/M5CzAMACyWLSx2znHWGNgGAIRYELPnfG6yMBUAgAHA2faciVhhAQC0Vljc2fM5G4stHAiA5eRoba3P53mOERYEAy2ilWVZex7WTLCAwMLEYtBxnnPG2rBOYACj0zpNxj57ptVkMBCwMmaNNdWe59hgbAIHYDqa0ay15/nrzDCdzABgDIPhtOfPc84xMGMAABhg2PHsCAAAoKHRAPfjnL9tgAAAFg0U+PR5ns0AAwAwBjMAn+fv5wgLa8FAAADL/HkeQGANAGCCCew8n3OPyZANAJY1sMa5zp75XA3ZWgCAtFiLDjvdlC1uLgCW1WK7bqVb/wcH6CaFZ6FslQAAAABJRU5ErkJggg==);
       }
-      &[data-icon]:before {
-        content: attr(data-icon);
-      }
+      //&[data-icon]:before {
+      //  content: attr(data-icon);
+      //}
     }
   }
 }

@@ -2,11 +2,13 @@
 #= require mercury/views/modules/singleton
 #= require mercury/views/modules/toolbar_focusable
 #= require mercury/views/modules/scroll_propagation
+#= require mercury/views/modules/visibility_toggleable
 
 class Mercury.Panel extends Mercury.View
   @include Mercury.View.Modules.Singleton
   @include Mercury.View.Modules.ToolbarFocusable
   @include Mercury.View.Modules.ScrollPropagation
+  @include Mercury.View.Modules.VisibilityToggleable
 
   @logPrefix: 'Mercury.Panel:'
   @className: 'mercury-panel'
@@ -18,17 +20,16 @@ class Mercury.Panel extends Mercury.View
     title: '.mercury-panel-title span'
 
   @events:
-    'click .mercury-panel-title em': 'release'
+    'click .mercury-panel-title em': 'hide'
     'mercury:interface:hide': -> @hide(false)
     'mercury:interface:show': -> @show(false)
     'mercury:interface:resize': (e) -> @resize(false, e)
-    'mercury:panels:hide': 'release'
+    'mercury:panels:hide': 'hide'
 
   constructor: (@options = {}) ->
     @options.template ||= @template
-    Mercury.trigger('panels:hide')
     super(@options)
-    @show()
+    if @hidden then @visible = false else @show()
 
 
   buildElement: ->
@@ -90,6 +91,8 @@ class Mercury.Panel extends Mercury.View
 
 
   show: (update = true) ->
+    Mercury.trigger('panels:hide')
+    @trigger('show')
     clearTimeout(@visibilityTimout)
     @visible = true
     @$el.show()
@@ -98,16 +101,10 @@ class Mercury.Panel extends Mercury.View
       @update() if update
 
 
-  hide: (release = true) ->
+  hide: ->
     Mercury.trigger('focus')
+    @trigger('hide')
     clearTimeout(@visibilityTimout)
     @visible = false
     @css(opacity: 0)
-    @visibilityTimout = @delay 250, ->
-      @$el.hide()
-      @release() if release
-
-
-  release: ->
-    return @hide(true) if @visible
-    super
+    @visibilityTimout = @delay(250, -> @$el.hide())

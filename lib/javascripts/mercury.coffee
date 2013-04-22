@@ -39,15 +39,12 @@ Mercury.Region.Markdown.addToolbar 'color', color: ['Color', plugin: 'color']
 Mercury.Region.Markdown.addToolbar 'block', block: ['Block', plugin: 'blocks']
 
 # todo:
-#   adjust how the templates are rendered -- use .call and pass the view.
 #   port jQuery.extend into module so we can use that within instances (which is where it's mostly used).
 #   provide aloha editor look alike toolbar and toolbar behavior (but better).
 #   spend time making sure focus is working well and dialed before moving forward.
 #   migrate existing locale content into new locales and document missing values.
 #   make region use the shadow dom if possible/configured to do so.
 #   spend some time making what's in work really well on ios.
-#   work on lightview.
-#   work on panel.
 #   figure out how to better integrate snippets.
 #   can we make editing content within snippets work?
 #   html/plain: when using the iframe, rangy isn't behaving the same (doesn't work because it doesn't understand the context).

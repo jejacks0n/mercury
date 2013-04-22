@@ -41,27 +41,43 @@ class Mercury.ToolbarButton extends Mercury.View
     @[key] = value for key, value of attrs
 
 
-  deactivate: ->
-    @removeClass('mercury-button-active')
+  toggled: ->
+    @isToggled = true
+    @addClass('mercury-button-toggled')
+
+
+  untoggled: ->
+    @isToggled = false
+    @removeClass('mercury-button-toggled')
 
 
   activate: ->
+    @isActive = true
     @addClass('mercury-button-active')
 
 
+  deactivate: ->
+    @isActive = false
+    @removeClass('mercury-button-active')
+
+
   enable: ->
+    @isEnabled = true
     @removeClass('mercury-button-disabled')
 
 
   disable: ->
+    @isEnabled = false
     @addClass('mercury-button-disabled')
 
 
   deindicate: ->
+    @isIndicated = true
     @removeClass('mercury-button-pressed')
 
 
   indicate: (e) ->
+    @isIndicated = false
     return if @isDisabled()
     if e && @subview?.visible
       @deactivate()
@@ -107,6 +123,8 @@ class Mercury.ToolbarButton extends Mercury.View
 
   triggerAction: ->
     return if @isDisabled()
+    if @toggle || @mode
+      unless @isToggled then @toggled() else @untoggled()
     if @subview
       if @subview.visible then @deactivate() else @activate()
       @subview.toggle()

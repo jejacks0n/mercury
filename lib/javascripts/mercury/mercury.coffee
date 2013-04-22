@@ -63,4 +63,6 @@
 #= require mercury/plugins/blocks_plugin
 #= require mercury/plugins/character_plugin
 #= require mercury/plugins/color_plugin
+#= require mercury/plugins/history_plugin
+#= require mercury/plugins/notes_plugin
 #= require mercury/plugins/styles_plugin

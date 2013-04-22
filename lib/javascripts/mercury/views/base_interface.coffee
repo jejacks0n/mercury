@@ -18,6 +18,8 @@ class Mercury.BaseInterface extends Mercury.View
       @log(@t('is already defined in parent frame'))
       return
 
+    Mercury.interface = @
+
     super
 
     @regions ||= []

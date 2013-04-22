@@ -63,10 +63,16 @@ class @DeveloperInterface extends Mercury.View
       when 'lightview1' then @lightview = new Mercury.Lightview(width: 300, height: 200, title: 'Short Lorem Lightview', template: 'lorem_short')
       when 'lightview2' then @lightview = new Mercury.Lightview(width: 600, height: 500, title: 'Long Lorem Lightview', template: 'lorem_long')
       when 'release_lightview' then @lightview?.release()
-      when 'panel1' then @panel = new Mercury.Panel(width: 200, title: 'Short Lorem Panel', template: 'lorem_short')
-      when 'panel2' then @panel = new Mercury.Panel(width: 300, title: 'Long Lorem Panel', template: 'lorem_long')
-      when 'update_panel' then @panel.update(width: Math.round(Math.random() * 400), title: 'Updated Lorem Panel', template: 'lorem_long')
-      when 'release_panel' then @panel?.release()
+      when 'panel'
+        if @panel
+          @panel.show() unless @panel.visible
+        else
+          @panel = new Mercury.Panel(width: 200, title: 'Short Lorem Panel', template: 'lorem_short')
+      when 'update_panel'
+        @panel?.update(width: Math.round(Math.random() * 300) + 100, title: 'Updated Lorem Panel', template: 'lorem_long')
+      when 'release_panel'
+        @panel?.release()
+        @panel = null
       when 'html'
         value = switch value
           when 'html' then '<table>\n  <tr>\n    <td>1</td>\n    <td>2</td>\n  </tr>\n</table>'
@@ -157,8 +163,7 @@ JST['/mercury/templates/developer-interface'] = (scope) ->
   <li data-action="lightview2">lightview2</li>
   <li data-action="release_lightview">release lightview</li>
   <hr/>
-  <li data-action="panel1">panel1</li>
-  <li data-action="panel2">panel2</li>
+  <li data-action="panel">panel</li>
   <li data-action="update_panel">update panel</li>
   <li data-action="release_panel">release panel</li>
   <hr/>

@@ -6,14 +6,6 @@ Copyright (c) 2013 Jeremy Jackson
 
 This file contains all of the required css for the Mercury interface as well as the region css.
 */
-/* Global
- *----------------------------------------------------------------------------*/
-/* View Specific
- *----------------------------------------------------------------------------*/
-/* Region Specific
- *----------------------------------------------------------------------------*/
-/* Fonts
- *----------------------------------------------------------------------------*/
 @font-face {
   font-family: 'mercury';
   src: url(/assets/mercury/mercury.ttf) format("truetype");
@@ -28,8 +20,6 @@ This file contains all of the required css for the Mercury interface as well as 
   font-style: normal;
 }
 
-/* Keyframes
- *----------------------------------------------------------------------------*/
 @-webkit-keyframes mercury-uploader-indicator {
   /* line 18, ../../lib/stylesheets/mercury/_mercury.scss */
   from {
@@ -78,12 +68,6 @@ This file contains all of the required css for the Mercury interface as well as 
   }
 }
 
-/* Global
- *----------------------------------------------------------------------------*/
-/* View Specific
- *----------------------------------------------------------------------------*/
-/* Region Specific
- *----------------------------------------------------------------------------*/
 /* line 2, ../../lib/stylesheets/mercury/core/_general.scss */
 .mercury-clearfix:before, mercury .mercury-toolbar:before, mercury .mercury-toolbar .mercury-toolbar-palette ul:before, mercury .mercury-character-modal ul:before, .mercury-clearfix:after, mercury .mercury-toolbar:after, mercury .mercury-toolbar .mercury-toolbar-palette ul:after, mercury .mercury-character-modal ul:after {
   content: " ";
@@ -98,11 +82,7 @@ This file contains all of the required css for the Mercury interface as well as 
   *zoom: 1;
 }
 
-/* Mercury.BaseInterface
- *----------------------------------------------------------------------------*/
-/* Mercury.FrameInterface
- *----------------------------------------------------------------------------*/
-/* line 3, ../../lib/stylesheets/mercury/views/_frame_interface.scss */
+/* line 1, ../../lib/stylesheets/mercury/views/_frame_interface.scss */
 .mercury-frame-interface-frame {
   position: fixed;
   top: 0;
@@ -111,9 +91,7 @@ This file contains all of the required css for the Mercury interface as well as 
   height: 100%;
 }
 
-/* Mercury.Lightview
- *----------------------------------------------------------------------------*/
-/* line 3, ../../lib/stylesheets/mercury/views/_lightview.scss */
+/* line 1, ../../lib/stylesheets/mercury/views/_lightview.scss */
 mercury .mercury-lightview {
   -webkit-transition-property: opacity;
   -webkit-transition-duration: 0.25s;
@@ -130,7 +108,7 @@ mercury .mercury-lightview {
   display: none;
   opacity: 0;
 }
-/* line 9, ../../lib/stylesheets/mercury/views/_lightview.scss */
+/* line 7, ../../lib/stylesheets/mercury/views/_lightview.scss */
 mercury .mercury-lightview .mercury-lightview-overlay {
   position: fixed;
   z-index: 10101;
@@ -140,7 +118,7 @@ mercury .mercury-lightview .mercury-lightview-overlay {
   height: 100%;
   background: rgba(0, 0, 0, 0.75);
 }
-/* line 18, ../../lib/stylesheets/mercury/views/_lightview.scss */
+/* line 16, ../../lib/stylesheets/mercury/views/_lightview.scss */
 mercury .mercury-lightview .mercury-lightview-loading-indicator {
   text-align: center;
   display: none;
@@ -169,7 +147,7 @@ mercury .mercury-lightview .mercury-lightview-loading-indicator:before {
   color: #666666;
   content: "/";
 }
-/* line 23, ../../lib/stylesheets/mercury/views/_lightview.scss */
+/* line 21, ../../lib/stylesheets/mercury/views/_lightview.scss */
 mercury .mercury-lightview .mercury-lightview-dialog {
   font-family: Helvetica, Tahoma, Arial, sans-serif;
   font-size: 12px;
@@ -179,7 +157,7 @@ mercury .mercury-lightview .mercury-lightview-dialog {
   left: 0;
   width: 100%;
 }
-/* line 30, ../../lib/stylesheets/mercury/views/_lightview.scss */
+/* line 28, ../../lib/stylesheets/mercury/views/_lightview.scss */
 mercury .mercury-lightview .mercury-lightview-dialog .mercury-lightview-dialog-positioner {
   -webkit-transition-property: all;
   -webkit-transition-duration: 0.25s;
@@ -206,7 +184,7 @@ mercury .mercury-lightview .mercury-lightview-dialog .mercury-lightview-dialog-p
   background: #efefef;
   color: #333333;
 }
-/* line 44, ../../lib/stylesheets/mercury/views/_lightview.scss */
+/* line 42, ../../lib/stylesheets/mercury/views/_lightview.scss */
 mercury .mercury-lightview .mercury-lightview-dialog .mercury-lightview-dialog-title {
   -webkit-border-radius: 4px 4px 0 0;
   -moz-border-radius: 4px 4px 0 0;
@@ -226,30 +204,30 @@ mercury .mercury-lightview .mercury-lightview-dialog .mercury-lightview-dialog-t
   overflow: hidden;
   text-overflow: ellipsis;
 }
-/* line 56, ../../lib/stylesheets/mercury/views/_lightview.scss */
+/* line 54, ../../lib/stylesheets/mercury/views/_lightview.scss */
 mercury .mercury-lightview .mercury-lightview-dialog .mercury-lightview-dialog-title span {
   color: black;
   text-shadow: #eeeeee 1px 1px 0;
 }
-/* line 60, ../../lib/stylesheets/mercury/views/_lightview.scss */
+/* line 58, ../../lib/stylesheets/mercury/views/_lightview.scss */
 mercury .mercury-lightview .mercury-lightview-dialog .mercury-lightview-dialog-title em {
   float: right;
   font-style: normal;
   color: #666666;
   cursor: pointer;
 }
-/* line 65, ../../lib/stylesheets/mercury/views/_lightview.scss */
+/* line 63, ../../lib/stylesheets/mercury/views/_lightview.scss */
 mercury .mercury-lightview .mercury-lightview-dialog .mercury-lightview-dialog-title em:hover {
   color: #333333;
 }
-/* line 70, ../../lib/stylesheets/mercury/views/_lightview.scss */
+/* line 68, ../../lib/stylesheets/mercury/views/_lightview.scss */
 mercury .mercury-lightview .mercury-lightview-dialog .mercury-lightview-dialog-content-container {
   float: left;
   overflow: auto;
   -webkit-overflow-scrolling: touch;
   min-width: 100%;
 }
-/* line 76, ../../lib/stylesheets/mercury/views/_lightview.scss */
+/* line 74, ../../lib/stylesheets/mercury/views/_lightview.scss */
 mercury .mercury-lightview .mercury-lightview-dialog .mercury-lightview-dialog-content {
   -webkit-transition-property: opacity;
   -webkit-transition-duration: 0.1s;
@@ -266,14 +244,12 @@ mercury .mercury-lightview .mercury-lightview-dialog .mercury-lightview-dialog-c
   box-sizing: border-box;
   padding: 20px;
 }
-/* line 83, ../../lib/stylesheets/mercury/views/_lightview.scss */
+/* line 81, ../../lib/stylesheets/mercury/views/_lightview.scss */
 mercury .mercury-lightview.loading .mercury-lightview-loading-indicator {
   display: block;
 }
 
-/* Mercury.Modal
- *----------------------------------------------------------------------------*/
-/* line 3, ../../lib/stylesheets/mercury/views/_modal.scss */
+/* line 1, ../../lib/stylesheets/mercury/views/_modal.scss */
 mercury .mercury-modal {
   -webkit-transition-property: opacity;
   -webkit-transition-duration: 0.25s;
@@ -290,7 +266,7 @@ mercury .mercury-modal {
   display: none;
   opacity: 0;
 }
-/* line 9, ../../lib/stylesheets/mercury/views/_modal.scss */
+/* line 7, ../../lib/stylesheets/mercury/views/_modal.scss */
 mercury .mercury-modal .mercury-modal-overlay {
   position: fixed;
   z-index: 10101;
@@ -300,7 +276,7 @@ mercury .mercury-modal .mercury-modal-overlay {
   height: 100%;
   background: rgba(0, 0, 0, 0.75);
 }
-/* line 18, ../../lib/stylesheets/mercury/views/_modal.scss */
+/* line 16, ../../lib/stylesheets/mercury/views/_modal.scss */
 mercury .mercury-modal .mercury-modal-loading-indicator {
   text-align: center;
   display: none;
@@ -329,7 +305,7 @@ mercury .mercury-modal .mercury-modal-loading-indicator:before {
   color: #666666;
   content: "/";
 }
-/* line 23, ../../lib/stylesheets/mercury/views/_modal.scss */
+/* line 21, ../../lib/stylesheets/mercury/views/_modal.scss */
 mercury .mercury-modal .mercury-modal-dialog {
   font-family: Helvetica, Tahoma, Arial, sans-serif;
   font-size: 12px;
@@ -339,7 +315,7 @@ mercury .mercury-modal .mercury-modal-dialog {
   left: 0;
   width: 100%;
 }
-/* line 30, ../../lib/stylesheets/mercury/views/_modal.scss */
+/* line 28, ../../lib/stylesheets/mercury/views/_modal.scss */
 mercury .mercury-modal .mercury-modal-dialog .mercury-modal-dialog-positioner {
   -webkit-transition-property: width height;
   -webkit-transition-duration: 0.25s;
@@ -366,7 +342,7 @@ mercury .mercury-modal .mercury-modal-dialog .mercury-modal-dialog-positioner {
   background: #efefef;
   color: #333333;
 }
-/* line 44, ../../lib/stylesheets/mercury/views/_modal.scss */
+/* line 42, ../../lib/stylesheets/mercury/views/_modal.scss */
 mercury .mercury-modal .mercury-modal-dialog .mercury-modal-dialog-title {
   font-family: Helvetica, Tahoma, Arial, sans-serif;
   font-size: 14px;
@@ -383,30 +359,30 @@ mercury .mercury-modal .mercury-modal-dialog .mercury-modal-dialog-title {
   overflow: hidden;
   text-overflow: ellipsis;
 }
-/* line 55, ../../lib/stylesheets/mercury/views/_modal.scss */
+/* line 53, ../../lib/stylesheets/mercury/views/_modal.scss */
 mercury .mercury-modal .mercury-modal-dialog .mercury-modal-dialog-title span {
   color: black;
   text-shadow: #eeeeee 1px 1px 0;
 }
-/* line 59, ../../lib/stylesheets/mercury/views/_modal.scss */
+/* line 57, ../../lib/stylesheets/mercury/views/_modal.scss */
 mercury .mercury-modal .mercury-modal-dialog .mercury-modal-dialog-title em {
   float: right;
   font-style: normal;
   color: #666666;
   cursor: pointer;
 }
-/* line 64, ../../lib/stylesheets/mercury/views/_modal.scss */
+/* line 62, ../../lib/stylesheets/mercury/views/_modal.scss */
 mercury .mercury-modal .mercury-modal-dialog .mercury-modal-dialog-title em:hover {
   color: #333333;
 }
-/* line 69, ../../lib/stylesheets/mercury/views/_modal.scss */
+/* line 67, ../../lib/stylesheets/mercury/views/_modal.scss */
 mercury .mercury-modal .mercury-modal-dialog .mercury-modal-dialog-content-container {
   float: left;
   overflow: auto;
   -webkit-overflow-scrolling: touch;
   min-width: 100%;
 }
-/* line 75, ../../lib/stylesheets/mercury/views/_modal.scss */
+/* line 73, ../../lib/stylesheets/mercury/views/_modal.scss */
 mercury .mercury-modal .mercury-modal-dialog .mercury-modal-dialog-content {
   -webkit-transition-property: opacity;
   -webkit-transition-duration: 0.1s;
@@ -423,14 +399,12 @@ mercury .mercury-modal .mercury-modal-dialog .mercury-modal-dialog-content {
   box-sizing: border-box;
   padding: 20px;
 }
-/* line 82, ../../lib/stylesheets/mercury/views/_modal.scss */
+/* line 80, ../../lib/stylesheets/mercury/views/_modal.scss */
 mercury .mercury-modal.loading .mercury-modal-loading-indicator {
   display: block;
 }
 
-/* Mercury.Panel
- *----------------------------------------------------------------------------*/
-/* line 3, ../../lib/stylesheets/mercury/views/_panel.scss */
+/* line 1, ../../lib/stylesheets/mercury/views/_panel.scss */
 mercury .mercury-panel {
   -webkit-transition-property: opacity, width;
   -webkit-transition-duration: 0.25s;
@@ -454,7 +428,7 @@ mercury .mercury-panel {
   opacity: 0;
   background: rgba(0, 0, 0, 0.8);
 }
-/* line 15, ../../lib/stylesheets/mercury/views/_panel.scss */
+/* line 13, ../../lib/stylesheets/mercury/views/_panel.scss */
 mercury .mercury-panel .mercury-panel-loading-indicator {
   text-align: center;
   display: none;
@@ -483,7 +457,7 @@ mercury .mercury-panel .mercury-panel-loading-indicator:before {
   color: #cccccc;
   content: "/";
 }
-/* line 20, ../../lib/stylesheets/mercury/views/_panel.scss */
+/* line 18, ../../lib/stylesheets/mercury/views/_panel.scss */
 mercury .mercury-panel .mercury-panel-title {
   -webkit-user-select: none;
   -moz-user-select: none;
@@ -503,12 +477,12 @@ mercury .mercury-panel .mercury-panel-title {
   overflow: hidden;
   text-overflow: ellipsis;
 }
-/* line 32, ../../lib/stylesheets/mercury/views/_panel.scss */
+/* line 30, ../../lib/stylesheets/mercury/views/_panel.scss */
 mercury .mercury-panel .mercury-panel-title span {
   color: #eeeeee;
   text-shadow: black 1px 1px 0;
 }
-/* line 36, ../../lib/stylesheets/mercury/views/_panel.scss */
+/* line 34, ../../lib/stylesheets/mercury/views/_panel.scss */
 mercury .mercury-panel .mercury-panel-title em {
   position: relative;
   z-index: 1;
@@ -517,18 +491,18 @@ mercury .mercury-panel .mercury-panel-title em {
   color: #dddddd;
   cursor: pointer;
 }
-/* line 43, ../../lib/stylesheets/mercury/views/_panel.scss */
+/* line 41, ../../lib/stylesheets/mercury/views/_panel.scss */
 mercury .mercury-panel .mercury-panel-title em:hover {
   color: #eeeeee;
 }
-/* line 48, ../../lib/stylesheets/mercury/views/_panel.scss */
+/* line 46, ../../lib/stylesheets/mercury/views/_panel.scss */
 mercury .mercury-panel .mercury-panel-content-container {
   float: left;
   overflow: auto;
   -webkit-overflow-scrolling: touch;
   min-width: 100%;
 }
-/* line 54, ../../lib/stylesheets/mercury/views/_panel.scss */
+/* line 52, ../../lib/stylesheets/mercury/views/_panel.scss */
 mercury .mercury-panel .mercury-panel-content {
   -webkit-transition-property: opacity;
   -webkit-transition-duration: 0.1s;
@@ -548,14 +522,12 @@ mercury .mercury-panel .mercury-panel-content {
   padding: 20px;
   color: #cccccc;
 }
-/* line 62, ../../lib/stylesheets/mercury/views/_panel.scss */
+/* line 60, ../../lib/stylesheets/mercury/views/_panel.scss */
 mercury .mercury-panel.loading .mercury-panel-loading-indicator {
   display: block;
 }
 
-/* Mercury.Statusbar
- *----------------------------------------------------------------------------*/
-/* line 3, ../../lib/stylesheets/mercury/views/_statusbar.scss */
+/* line 1, ../../lib/stylesheets/mercury/views/_statusbar.scss */
 mercury .mercury-statusbar {
   -webkit-user-select: none;
   -moz-user-select: none;
@@ -578,7 +550,7 @@ mercury .mercury-statusbar {
   white-space: nowrap;
   background: rgba(0, 0, 0, 0.8);
 }
-/* line 13, ../../lib/stylesheets/mercury/views/_statusbar.scss */
+/* line 11, ../../lib/stylesheets/mercury/views/_statusbar.scss */
 mercury .mercury-statusbar .mercury-statusbar-path {
   font-family: Helvetica, Tahoma, Arial, sans-serif;
   font-size: 9pt;
@@ -587,17 +559,17 @@ mercury .mercury-statusbar .mercury-statusbar-path {
   text-overflow: ellipsis;
   color: #aaaaaa;
 }
-/* line 19, ../../lib/stylesheets/mercury/views/_statusbar.scss */
+/* line 17, ../../lib/stylesheets/mercury/views/_statusbar.scss */
 mercury .mercury-statusbar .mercury-statusbar-path a, mercury .mercury-statusbar .mercury-statusbar-path b {
   font-family: Helvetica, Tahoma, Arial, sans-serif;
   font-size: 9pt;
   font-weight: normal;
 }
-/* line 23, ../../lib/stylesheets/mercury/views/_statusbar.scss */
+/* line 21, ../../lib/stylesheets/mercury/views/_statusbar.scss */
 mercury .mercury-statusbar .mercury-statusbar-path a {
   color: #dddddd;
 }
-/* line 27, ../../lib/stylesheets/mercury/views/_statusbar.scss */
+/* line 25, ../../lib/stylesheets/mercury/views/_statusbar.scss */
 mercury .mercury-statusbar .mercury-statusbar-about {
   font-family: Helvetica, Tahoma, Arial, sans-serif;
   font-size: 9pt;
@@ -608,20 +580,18 @@ mercury .mercury-statusbar .mercury-statusbar-about {
   font-style: normal;
   text-shadow: black 0 1px 0;
 }
-/* line 35, ../../lib/stylesheets/mercury/views/_statusbar.scss */
+/* line 33, ../../lib/stylesheets/mercury/views/_statusbar.scss */
 mercury .mercury-statusbar .mercury-statusbar-about a {
   color: #aaaaaa;
   text-decoration: none;
   outline: none;
 }
-/* line 39, ../../lib/stylesheets/mercury/views/_statusbar.scss */
+/* line 37, ../../lib/stylesheets/mercury/views/_statusbar.scss */
 mercury .mercury-statusbar .mercury-statusbar-about a:hover, mercury .mercury-statusbar .mercury-statusbar-about a:focus {
   color: #00bce5;
 }
 
-/* Mercury.Toolbar
- *----------------------------------------------------------------------------*/
-/* line 3, ../../lib/stylesheets/mercury/views/_toolbar.scss */
+/* line 1, ../../lib/stylesheets/mercury/views/_toolbar.scss */
 mercury .mercury-toolbar {
   -webkit-user-select: none;
   -moz-user-select: none;
@@ -643,7 +613,7 @@ mercury .mercury-toolbar {
   width: 100%;
   cursor: default;
 }
-/* line 13, ../../lib/stylesheets/mercury/views/_toolbar.scss */
+/* line 11, ../../lib/stylesheets/mercury/views/_toolbar.scss */
 mercury .mercury-toolbar .mercury-toolbar-container {
   background: #d2d2d2;
   background: -moz-linear-gradient(top, #d2d2d2 1%, #c6c6c6 100%);
@@ -657,24 +627,24 @@ mercury .mercury-toolbar .mercury-toolbar-container {
   border-top: 1px solid #e5e5e5;
   border-bottom: 1px solid #727272;
 }
-/* line 20, ../../lib/stylesheets/mercury/views/_toolbar.scss */
+/* line 18, ../../lib/stylesheets/mercury/views/_toolbar.scss */
 mercury .mercury-toolbar .mercury-toolbar-collection {
   display: inline;
 }
-/* line 26, ../../lib/stylesheets/mercury/views/_toolbar.scss */
+/* line 24, ../../lib/stylesheets/mercury/views/_toolbar.scss */
 mercury .mercury-toolbar .mercury-toolbar-group,
 mercury .mercury-toolbar .mercury-toolbar-separator,
 mercury .mercury-toolbar .mercury-toolbar-line-separator,
 mercury .mercury-toolbar .mercury-toolbar-button {
   display: inline-block;
 }
-/* line 30, ../../lib/stylesheets/mercury/views/_toolbar.scss */
+/* line 28, ../../lib/stylesheets/mercury/views/_toolbar.scss */
 mercury .mercury-toolbar .mercury-toolbar-separator,
 mercury .mercury-toolbar .mercury-toolbar-line-separator {
   height: 15px;
   width: 6px;
 }
-/* line 34, ../../lib/stylesheets/mercury/views/_toolbar.scss */
+/* line 32, ../../lib/stylesheets/mercury/views/_toolbar.scss */
 mercury .mercury-toolbar .mercury-toolbar-line-separator {
   position: relative;
   top: -1px;
@@ -683,12 +653,12 @@ mercury .mercury-toolbar .mercury-toolbar-line-separator {
   margin: -1px 3px;
   border-left: 1px solid #707070;
 }
-/* line 44, ../../lib/stylesheets/mercury/views/_toolbar.scss */
+/* line 42, ../../lib/stylesheets/mercury/views/_toolbar.scss */
 mercury .mercury-toolbar .mercury-toolbar-collection:last-child .mercury-toolbar-group:last-child .mercury-toolbar-separator:last-child,
 mercury .mercury-toolbar .mercury-toolbar-collection:last-child .mercury-toolbar-group:last-child .mercury-toolbar-line-separator:last-child {
   display: none;
 }
-/* line 48, ../../lib/stylesheets/mercury/views/_toolbar.scss */
+/* line 46, ../../lib/stylesheets/mercury/views/_toolbar.scss */
 mercury .mercury-toolbar .mercury-toolbar-button {
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
@@ -728,23 +698,23 @@ mercury .mercury-toolbar .mercury-toolbar-button:before {
   text-align: left;
   line-height: 15px;
 }
-/* line 57, ../../lib/stylesheets/mercury/views/_toolbar.scss */
+/* line 55, ../../lib/stylesheets/mercury/views/_toolbar.scss */
 mercury .mercury-toolbar .mercury-toolbar-button + .mercury-toolbar-button {
   -webkit-border-radius: 0 2px 2px 0;
   -moz-border-radius: 0 2px 2px 0;
   border-radius: 0 2px 2px 0;
   margin-left: -1px;
 }
-/* line 61, ../../lib/stylesheets/mercury/views/_toolbar.scss */
+/* line 59, ../../lib/stylesheets/mercury/views/_toolbar.scss */
 mercury .mercury-toolbar .mercury-toolbar-button:before, mercury .mercury-toolbar .mercury-toolbar-button em {
   color: #3a3a3a;
   text-shadow: #eeeeee 0 1px 0;
 }
-/* line 65, ../../lib/stylesheets/mercury/views/_toolbar.scss */
+/* line 63, ../../lib/stylesheets/mercury/views/_toolbar.scss */
 mercury .mercury-toolbar .mercury-toolbar-button.mercury-button-disabled {
   opacity: .5;
 }
-/* line 69, ../../lib/stylesheets/mercury/views/_toolbar.scss */
+/* line 67, ../../lib/stylesheets/mercury/views/_toolbar.scss */
 mercury .mercury-toolbar .mercury-toolbar-button.mercury-button-active, mercury .mercury-toolbar .mercury-toolbar-button.mercury-button-pressed {
   background: #bebebe;
   background: -moz-linear-gradient(top, #bebebe 1%, #9c9c9c 100%);
@@ -754,34 +724,34 @@ mercury .mercury-toolbar .mercury-toolbar-button.mercury-button-active, mercury 
   background: -ms-linear-gradient(top, #bebebe 1%, #9c9c9c 100%);
   background: linear-gradient(to bottom, #bebebe 1%, #9c9c9c 100%);
 }
-/* line 71, ../../lib/stylesheets/mercury/views/_toolbar.scss */
+/* line 69, ../../lib/stylesheets/mercury/views/_toolbar.scss */
 mercury .mercury-toolbar .mercury-toolbar-button.mercury-button-active:before, mercury .mercury-toolbar .mercury-toolbar-button.mercury-button-pressed:before {
   color: #333333;
   text-shadow: none;
 }
-/* line 77, ../../lib/stylesheets/mercury/views/_toolbar.scss */
+/* line 75, ../../lib/stylesheets/mercury/views/_toolbar.scss */
 mercury .mercury-toolbar .mercury-toolbar-button.mercury-button-pressed:before {
   top: 1px;
 }
-/* line 81, ../../lib/stylesheets/mercury/views/_toolbar.scss */
+/* line 79, ../../lib/stylesheets/mercury/views/_toolbar.scss */
 mercury .mercury-toolbar .mercury-toolbar-button em {
   display: none;
 }
-/* line 84, ../../lib/stylesheets/mercury/views/_toolbar.scss */
+/* line 82, ../../lib/stylesheets/mercury/views/_toolbar.scss */
 mercury .mercury-toolbar .mercury-toolbar-button[data-icon]:before {
   content: attr(data-icon);
 }
-/* line 87, ../../lib/stylesheets/mercury/views/_toolbar.scss */
+/* line 85, ../../lib/stylesheets/mercury/views/_toolbar.scss */
 mercury .mercury-toolbar .mercury-toolbar-button[data-type="select"] {
   width: auto;
 }
-/* line 89, ../../lib/stylesheets/mercury/views/_toolbar.scss */
+/* line 87, ../../lib/stylesheets/mercury/views/_toolbar.scss */
 mercury .mercury-toolbar .mercury-toolbar-button[data-type="select"]:before {
   content: 'B';
   float: right;
   width: 18px;
 }
-/* line 94, ../../lib/stylesheets/mercury/views/_toolbar.scss */
+/* line 92, ../../lib/stylesheets/mercury/views/_toolbar.scss */
 mercury .mercury-toolbar .mercury-toolbar-button[data-type="select"] em {
   font-family: Helvetica, Tahoma, Arial, sans-serif;
   font-size: 8pt;
@@ -793,7 +763,7 @@ mercury .mercury-toolbar .mercury-toolbar-button[data-type="select"] em {
   position: relative;
   text-transform: lowercase;
 }
-/* line 107, ../../lib/stylesheets/mercury/views/_toolbar.scss */
+/* line 105, ../../lib/stylesheets/mercury/views/_toolbar.scss */
 mercury .mercury-toolbar .mercury-toolbar-select,
 mercury .mercury-toolbar .mercury-toolbar-palette {
   -webkit-transition-property: opacity;
@@ -819,7 +789,7 @@ mercury .mercury-toolbar .mercury-toolbar-palette {
   top: 0;
   left: 0;
   min-width: 30px;
-  min-height: 30px;
+  min-height: 10px;
   margin: 18px -2px -2px;
   overflow: auto;
   white-space: normal;
@@ -827,33 +797,32 @@ mercury .mercury-toolbar .mercury-toolbar-palette {
   background: white;
   color: #333333;
 }
-/* line 109, ../../lib/stylesheets/mercury/views/_toolbar.scss */
+/* line 107, ../../lib/stylesheets/mercury/views/_toolbar.scss */
 mercury .mercury-toolbar .mercury-toolbar-select ul,
 mercury .mercury-toolbar .mercury-toolbar-palette ul {
   list-style: none;
   margin: 0;
   padding: 4px;
 }
-/* line 116, ../../lib/stylesheets/mercury/views/_toolbar.scss */
+/* line 114, ../../lib/stylesheets/mercury/views/_toolbar.scss */
 mercury .mercury-toolbar .mercury-toolbar-select li {
   padding: 2px 10px;
 }
-/* line 118, ../../lib/stylesheets/mercury/views/_toolbar.scss */
+/* line 116, ../../lib/stylesheets/mercury/views/_toolbar.scss */
 mercury .mercury-toolbar .mercury-toolbar-select li:hover {
   background-color: #e2e1e2 !important;
   color: black !important;
 }
-/* line 124, ../../lib/stylesheets/mercury/views/_toolbar.scss */
+/* line 122, ../../lib/stylesheets/mercury/views/_toolbar.scss */
 mercury .mercury-toolbar .mercury-toolbar-palette {
-  width: 167px;
   height: auto;
   padding: 1px;
 }
-/* line 128, ../../lib/stylesheets/mercury/views/_toolbar.scss */
+/* line 125, ../../lib/stylesheets/mercury/views/_toolbar.scss */
 mercury .mercury-toolbar .mercury-toolbar-palette ul {
   margin-right: -1px;
 }
-/* line 132, ../../lib/stylesheets/mercury/views/_toolbar.scss */
+/* line 129, ../../lib/stylesheets/mercury/views/_toolbar.scss */
 mercury .mercury-toolbar .mercury-toolbar-palette li {
   padding: 0;
   display: block;
@@ -864,12 +833,12 @@ mercury .mercury-toolbar .mercury-toolbar-palette li {
   text-align: center;
   line-height: 15px;
 }
-/* line 141, ../../lib/stylesheets/mercury/views/_toolbar.scss */
+/* line 138, ../../lib/stylesheets/mercury/views/_toolbar.scss */
 mercury .mercury-toolbar .mercury-toolbar-palette li:hover {
   margin: -1px 0 0 -1px;
   border: 1px solid #333333;
 }
-/* line 148, ../../lib/stylesheets/mercury/views/_toolbar.scss */
+/* line 145, ../../lib/stylesheets/mercury/views/_toolbar.scss */
 mercury .mercury-toolbar .mercury-toolbar-primary-container {
   background: #e2e2e2;
   background: -moz-linear-gradient(top, #e2e2e2 1%, #c6c6c6 100%);
@@ -883,13 +852,13 @@ mercury .mercury-toolbar .mercury-toolbar-primary-container {
   padding: 0;
   overflow: hidden;
 }
-/* line 155, ../../lib/stylesheets/mercury/views/_toolbar.scss */
+/* line 152, ../../lib/stylesheets/mercury/views/_toolbar.scss */
 mercury .mercury-toolbar .mercury-toolbar-primary-container .mercury-toolbar-separator,
 mercury .mercury-toolbar .mercury-toolbar-primary-container .mercury-toolbar-line-separator {
   width: 40px;
   height: 52px;
 }
-/* line 159, ../../lib/stylesheets/mercury/views/_toolbar.scss */
+/* line 156, ../../lib/stylesheets/mercury/views/_toolbar.scss */
 mercury .mercury-toolbar .mercury-toolbar-primary-container .mercury-toolbar-line-separator {
   width: 0;
   height: 45px;
@@ -897,7 +866,7 @@ mercury .mercury-toolbar .mercury-toolbar-primary-container .mercury-toolbar-lin
   border-left: 1px solid #ececec;
   border-right: 1px solid #9b9b9b;
 }
-/* line 166, ../../lib/stylesheets/mercury/views/_toolbar.scss */
+/* line 163, ../../lib/stylesheets/mercury/views/_toolbar.scss */
 mercury .mercury-toolbar .mercury-toolbar-primary-container .mercury-toolbar-button {
   height: 58px;
   min-width: 55px;
@@ -923,7 +892,7 @@ mercury .mercury-toolbar .mercury-toolbar-primary-container .mercury-toolbar-but
   speak: none;
   -webkit-font-smoothing: antialiased;
 }
-/* line 176, ../../lib/stylesheets/mercury/views/_toolbar.scss */
+/* line 173, ../../lib/stylesheets/mercury/views/_toolbar.scss */
 mercury .mercury-toolbar .mercury-toolbar-primary-container .mercury-toolbar-button em {
   font-family: Helvetica, Tahoma, Arial, sans-serif;
   font-size: 8.5pt;
@@ -934,22 +903,20 @@ mercury .mercury-toolbar .mercury-toolbar-primary-container .mercury-toolbar-but
   font-style: normal;
   color: #222222;
 }
-/* line 185, ../../lib/stylesheets/mercury/views/_toolbar.scss */
+/* line 182, ../../lib/stylesheets/mercury/views/_toolbar.scss */
 mercury .mercury-toolbar .mercury-toolbar-primary-container .mercury-toolbar-button:before {
   left: 0;
 }
-/* line 189, ../../lib/stylesheets/mercury/views/_toolbar.scss */
+/* line 186, ../../lib/stylesheets/mercury/views/_toolbar.scss */
 mercury .mercury-toolbar .mercury-toolbar-primary-container .mercury-toolbar-button.active:before {
   line-height: 48px;
 }
-/* line 193, ../../lib/stylesheets/mercury/views/_toolbar.scss */
+/* line 190, ../../lib/stylesheets/mercury/views/_toolbar.scss */
 mercury .mercury-toolbar .mercury-toolbar-primary-container .mercury-toolbar-button[data-icon]:before {
   content: attr(data-icon);
 }
 
-/* Mercury.Uploader
- *----------------------------------------------------------------------------*/
-/* line 3, ../../lib/stylesheets/mercury/views/_uploader.scss */
+/* line 1, ../../lib/stylesheets/mercury/views/_uploader.scss */
 mercury .mercury-uploader {
   -webkit-transition-property: opacity;
   -webkit-transition-duration: 0.25s;
@@ -970,7 +937,7 @@ mercury .mercury-uploader {
   background: rgba(0, 0, 0, 0.75);
   opacity: 0;
 }
-/* line 14, ../../lib/stylesheets/mercury/views/_uploader.scss */
+/* line 12, ../../lib/stylesheets/mercury/views/_uploader.scss */
 mercury .mercury-uploader .mercury-uploader-dialog {
   -webkit-border-radius: 10px;
   -moz-border-radius: 10px;
@@ -993,7 +960,7 @@ mercury .mercury-uploader .mercury-uploader-dialog {
   background: #efefef;
   color: #333333;
 }
-/* line 30, ../../lib/stylesheets/mercury/views/_uploader.scss */
+/* line 28, ../../lib/stylesheets/mercury/views/_uploader.scss */
 mercury .mercury-uploader .mercury-uploader-preview {
   -webkit-user-select: none;
   -moz-user-select: none;
@@ -1011,7 +978,7 @@ mercury .mercury-uploader .mercury-uploader-preview {
   border: 1px solid #cccccc;
   background: white;
 }
-/* line 39, ../../lib/stylesheets/mercury/views/_uploader.scss */
+/* line 37, ../../lib/stylesheets/mercury/views/_uploader.scss */
 mercury .mercury-uploader .mercury-uploader-preview b {
   display: table-cell;
   width: 150px;
@@ -1019,13 +986,13 @@ mercury .mercury-uploader .mercury-uploader-preview b {
   text-align: center;
   vertical-align: middle;
 }
-/* line 45, ../../lib/stylesheets/mercury/views/_uploader.scss */
+/* line 43, ../../lib/stylesheets/mercury/views/_uploader.scss */
 mercury .mercury-uploader .mercury-uploader-preview b img {
   margin: 5px;
   max-width: 138px;
   max-height: 138px;
 }
-/* line 53, ../../lib/stylesheets/mercury/views/_uploader.scss */
+/* line 51, ../../lib/stylesheets/mercury/views/_uploader.scss */
 mercury .mercury-uploader .mercury-uploader-details {
   float: left;
   width: 305px;
@@ -1035,7 +1002,7 @@ mercury .mercury-uploader .mercury-uploader-details {
   text-overflow: ellipsis;
   line-height: 20px;
 }
-/* line 63, ../../lib/stylesheets/mercury/views/_uploader.scss */
+/* line 61, ../../lib/stylesheets/mercury/views/_uploader.scss */
 mercury .mercury-uploader .mercury-uploader-progress {
   -webkit-user-select: none;
   -moz-user-select: none;
@@ -1046,7 +1013,7 @@ mercury .mercury-uploader .mercury-uploader-progress {
   right: 15px;
   width: 305px;
 }
-/* line 69, ../../lib/stylesheets/mercury/views/_uploader.scss */
+/* line 67, ../../lib/stylesheets/mercury/views/_uploader.scss */
 mercury .mercury-uploader .mercury-uploader-progress .mercury-uploader-indicator {
   -webkit-border-radius: 35px;
   -moz-border-radius: 35px;
@@ -1066,7 +1033,7 @@ mercury .mercury-uploader .mercury-uploader-progress .mercury-uploader-indicator
   height: 25px;
   margin: 5px 0 0;
 }
-/* line 77, ../../lib/stylesheets/mercury/views/_uploader.scss */
+/* line 75, ../../lib/stylesheets/mercury/views/_uploader.scss */
 mercury .mercury-uploader .mercury-uploader-progress .mercury-uploader-indicator div {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -1105,7 +1072,7 @@ mercury .mercury-uploader .mercury-uploader-progress .mercury-uploader-indicator
   background-color: #00bce5;
   border: 1px solid #007d98;
 }
-/* line 100, ../../lib/stylesheets/mercury/views/_uploader.scss */
+/* line 98, ../../lib/stylesheets/mercury/views/_uploader.scss */
 mercury .mercury-uploader .mercury-uploader-progress .mercury-uploader-indicator div b {
   display: none;
   position: absolute;
@@ -1116,460 +1083,6 @@ mercury .mercury-uploader .mercury-uploader-progress .mercury-uploader-indicator
   font-weight: normal;
   text-shadow: rgba(0, 0, 0, 0.9) 0 -1px 0px;
   color: rgba(255, 255, 255, 0.8);
-}
-
-/* line 47, ../../lib/stylesheets/mercury/_mercury.scss */
-mercury {
-  -webkit-text-size-adjust: none;
-  position: absolute;
-  z-index: 10000;
-  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-}
-/* line 59, ../../lib/stylesheets/mercury/_mercury.scss */
-mercury.loading *,
-mercury .mercury-no-animation,
-mercury .mercury-no-animation * {
-  -moz-transition: none !important;
-  -webkit-transition: none !important;
-  -o-transition: color 0 ease-in !important;
-  transition: none !important;
-}
-
-/* line 69, ../../lib/stylesheets/mercury/_mercury.scss */
-.mercury-toolbar-slider {
-  -webkit-transition-property: opacity;
-  -webkit-transition-duration: 0.1s;
-  -webkit-transition-timing-function: ease-in-out;
-  -moz-transition-property: opacity;
-  -moz-transition-duration: 0.1s;
-  -moz-transition-timing-function: ease-in-out;
-  transition-property: opacity;
-  transition-duration: 0.1s;
-  transition-timing-function: ease-in-out;
-  -webkit-backface-visibility: hidden;
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  border-radius: 4px;
-  font-family: Helvetica, Tahoma, Arial, sans-serif;
-  font-size: 8.5pt;
-  -webkit-box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
-  -moz-box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
-  box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
-  position: absolute;
-  z-index: 20100;
-  top: 0;
-  left: 0;
-  min-width: 30px;
-  min-height: 30px;
-  margin: 18px -2px -2px;
-  overflow: auto;
-  white-space: normal;
-  border: 1px solid #727272;
-  background: white;
-  color: #333333;
-  padding: 2px 5px 0;
-  min-height: 0;
-}
-
-/* Mercury.Region.Gallery
- *----------------------------------------------------------------------------*/
-/* line 3, ../../lib/stylesheets/mercury/regions/_gallery.scss */
-.mercury-gallery-region {
-  position: relative;
-  width: 100%;
-  min-height: 300px;
-  background: black;
-}
-/* line 2, ../../lib/stylesheets/mercury/core/_region.scss */
-.mercury-gallery-region:focus {
-  outline: none;
-  -webkit-box-shadow: 0 0 7px #00bce5, 0 0 2px #003e4c;
-  -moz-box-shadow: 0 0 7px #00bce5, 0 0 2px #003e4c;
-  box-shadow: 0 0 7px #00bce5, 0 0 2px #003e4c;
-}
-/* line 9, ../../lib/stylesheets/mercury/regions/_gallery.scss */
-.mercury-gallery-region + .mercury-region-drop-indicator {
-  -webkit-transition-property: opacity;
-  -webkit-transition-duration: 0.25s;
-  -webkit-transition-timing-function: ease-in-out;
-  -moz-transition-property: opacity;
-  -moz-transition-duration: 0.25s;
-  -moz-transition-timing-function: ease-in-out;
-  transition-property: opacity;
-  transition-duration: 0.25s;
-  transition-timing-function: ease-in-out;
-  -webkit-backface-visibility: hidden;
-  -webkit-border-radius: 10px;
-  -moz-border-radius: 10px;
-  border-radius: 10px;
-  display: none;
-  opacity: 0;
-  position: absolute;
-  z-index: 20;
-  top: 30px;
-  left: 30px;
-  width: 60px;
-  height: 60px;
-  margin: -30px;
-  background: rgba(0, 0, 0, 0.75);
-  color: rgba(255, 255, 255, 0.85);
-  pointer-events: none;
-}
-/* line 2, ../../lib/stylesheets/mercury/core/_fonts.scss */
-.mercury-gallery-region + .mercury-region-drop-indicator:before {
-  display: inline-block;
-  font-family: "mercury";
-  width: 60px;
-  height: 60px;
-  font-size: 32px;
-  line-height: 60px;
-  font-weight: normal;
-  font-variant: normal;
-  text-transform: none;
-  text-align: center;
-  speak: none;
-  -webkit-font-smoothing: antialiased;
-}
-/* line 26, ../../lib/stylesheets/mercury/core/_region.scss */
-.mercury-gallery-region + .mercury-region-drop-indicator:before {
-  content: ",";
-}
-/* line 13, ../../lib/stylesheets/mercury/regions/_gallery.scss */
-.mercury-gallery-region .mercury-gallery-region-controls {
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  user-select: none;
-  cursor: default;
-  display: none;
-  position: absolute;
-  z-index: 20;
-  top: 0;
-  left: 0;
-  width: 100px;
-  margin: 10px;
-  max-height: 560px;
-  overflow-y: auto;
-  padding: 10px 10px 5px 10px;
-  list-style: none;
-  background: rgba(0, 0, 0, 0.75);
-  border-radius: 5px;
-  text-align: center;
-  font-size: 0;
-}
-/* line 30, ../../lib/stylesheets/mercury/regions/_gallery.scss */
-.mercury-gallery-region .mercury-gallery-region-controls li {
-  position: relative;
-  height: 60px;
-  margin-bottom: 5px;
-  background: rgba(255, 255, 255, 0.4);
-  text-align: center;
-}
-/* line 37, ../../lib/stylesheets/mercury/regions/_gallery.scss */
-.mercury-gallery-region .mercury-gallery-region-controls img {
-  max-width: 100px;
-  max-height: 60px;
-  cursor: pointer;
-}
-/* line 42, ../../lib/stylesheets/mercury/regions/_gallery.scss */
-.mercury-gallery-region .mercury-gallery-region-controls em {
-  position: absolute;
-  display: block;
-  left: -4px;
-  top: -4px;
-  width: 15px;
-  height: 15px;
-  line-height: 15px;
-  background: #000;
-  border: 1px solid #dddddd;
-  border-radius: 20px;
-  font-style: normal;
-  font-size: 12px;
-  color: #ddd;
-  cursor: pointer;
-}
-/* line 60, ../../lib/stylesheets/mercury/regions/_gallery.scss */
-.mercury-gallery-region .slides {
-  position: relative;
-  width: 100%;
-  min-height: 300px;
-  max-height: 600px;
-  overflow: hidden;
-  font-size: 0;
-}
-/* line 67, ../../lib/stylesheets/mercury/regions/_gallery.scss */
-.mercury-gallery-region .slides .slide {
-  width: 100%;
-  height: 100%;
-  background: black;
-  text-align: center;
-}
-/* line 72, ../../lib/stylesheets/mercury/regions/_gallery.scss */
-.mercury-gallery-region .slides .slide img {
-  height: 600px;
-}
-/* line 77, ../../lib/stylesheets/mercury/regions/_gallery.scss */
-.mercury-gallery-region .paginator {
-  position: absolute;
-  z-index: 19;
-  bottom: 5px;
-  width: 100%;
-  text-align: center;
-}
-/* line 83, ../../lib/stylesheets/mercury/regions/_gallery.scss */
-.mercury-gallery-region .paginator span {
-  margin: 0 8px;
-  text-shadow: 0 0 3px black;
-  font-size: 30px;
-  color: #666666;
-}
-/* line 89, ../../lib/stylesheets/mercury/regions/_gallery.scss */
-.mercury-gallery-region .paginator .active {
-  color: white;
-}
-
-/* Mercury.Region.Html
- *----------------------------------------------------------------------------*/
-/* line 3, ../../lib/stylesheets/mercury/regions/_html.scss */
-.mercury-html-region {
-  min-height: 20px;
-  min-width: 5px;
-}
-/* line 2, ../../lib/stylesheets/mercury/core/_region.scss */
-.mercury-html-region:focus {
-  outline: none;
-  -webkit-box-shadow: 0 0 7px #00bce5, 0 0 2px #003e4c;
-  -moz-box-shadow: 0 0 7px #00bce5, 0 0 2px #003e4c;
-  box-shadow: 0 0 7px #00bce5, 0 0 2px #003e4c;
-}
-/* line 7, ../../lib/stylesheets/mercury/regions/_html.scss */
-.mercury-html-region + .mercury-region-drop-indicator {
-  -webkit-transition-property: opacity;
-  -webkit-transition-duration: 0.25s;
-  -webkit-transition-timing-function: ease-in-out;
-  -moz-transition-property: opacity;
-  -moz-transition-duration: 0.25s;
-  -moz-transition-timing-function: ease-in-out;
-  transition-property: opacity;
-  transition-duration: 0.25s;
-  transition-timing-function: ease-in-out;
-  -webkit-backface-visibility: hidden;
-  -webkit-border-radius: 10px;
-  -moz-border-radius: 10px;
-  border-radius: 10px;
-  display: none;
-  opacity: 0;
-  position: absolute;
-  z-index: 20;
-  top: 30px;
-  left: 30px;
-  width: 60px;
-  height: 60px;
-  margin: -30px;
-  background: rgba(0, 0, 0, 0.75);
-  color: rgba(255, 255, 255, 0.85);
-  pointer-events: none;
-}
-/* line 2, ../../lib/stylesheets/mercury/core/_fonts.scss */
-.mercury-html-region + .mercury-region-drop-indicator:before {
-  display: inline-block;
-  font-family: "mercury";
-  width: 60px;
-  height: 60px;
-  font-size: 32px;
-  line-height: 60px;
-  font-weight: normal;
-  font-variant: normal;
-  text-transform: none;
-  text-align: center;
-  speak: none;
-  -webkit-font-smoothing: antialiased;
-}
-/* line 26, ../../lib/stylesheets/mercury/core/_region.scss */
-.mercury-html-region + .mercury-region-drop-indicator:before {
-  content: ",";
-}
-
-/* Mercury.Region.Image
- *----------------------------------------------------------------------------*/
-/* line 3, ../../lib/stylesheets/mercury/regions/_image.scss */
-.mercury-image-region {
-  min-width: 20px;
-  min-height: 20px;
-}
-/* line 2, ../../lib/stylesheets/mercury/core/_region.scss */
-.mercury-image-region:focus {
-  outline: none;
-  -webkit-box-shadow: 0 0 7px #00bce5, 0 0 2px #003e4c;
-  -moz-box-shadow: 0 0 7px #00bce5, 0 0 2px #003e4c;
-  box-shadow: 0 0 7px #00bce5, 0 0 2px #003e4c;
-}
-/* line 7, ../../lib/stylesheets/mercury/regions/_image.scss */
-.mercury-image-region + .mercury-region-drop-indicator {
-  -webkit-transition-property: opacity;
-  -webkit-transition-duration: 0.25s;
-  -webkit-transition-timing-function: ease-in-out;
-  -moz-transition-property: opacity;
-  -moz-transition-duration: 0.25s;
-  -moz-transition-timing-function: ease-in-out;
-  transition-property: opacity;
-  transition-duration: 0.25s;
-  transition-timing-function: ease-in-out;
-  -webkit-backface-visibility: hidden;
-  -webkit-border-radius: 10px;
-  -moz-border-radius: 10px;
-  border-radius: 10px;
-  display: none;
-  opacity: 0;
-  position: absolute;
-  z-index: 20;
-  top: 30px;
-  left: 30px;
-  width: 60px;
-  height: 60px;
-  margin: -30px;
-  background: rgba(0, 0, 0, 0.75);
-  color: rgba(255, 255, 255, 0.85);
-  pointer-events: none;
-}
-/* line 2, ../../lib/stylesheets/mercury/core/_fonts.scss */
-.mercury-image-region + .mercury-region-drop-indicator:before {
-  display: inline-block;
-  font-family: "mercury";
-  width: 60px;
-  height: 60px;
-  font-size: 32px;
-  line-height: 60px;
-  font-weight: normal;
-  font-variant: normal;
-  text-transform: none;
-  text-align: center;
-  speak: none;
-  -webkit-font-smoothing: antialiased;
-}
-/* line 26, ../../lib/stylesheets/mercury/core/_region.scss */
-.mercury-image-region + .mercury-region-drop-indicator:before {
-  content: ",";
-}
-
-/* Mercury.Region.Markdown
- *----------------------------------------------------------------------------*/
-/* line 4, ../../lib/stylesheets/mercury/regions/_markdown.scss */
-.mercury-markdown-region + .mercury-region-drop-indicator {
-  -webkit-transition-property: opacity;
-  -webkit-transition-duration: 0.25s;
-  -webkit-transition-timing-function: ease-in-out;
-  -moz-transition-property: opacity;
-  -moz-transition-duration: 0.25s;
-  -moz-transition-timing-function: ease-in-out;
-  transition-property: opacity;
-  transition-duration: 0.25s;
-  transition-timing-function: ease-in-out;
-  -webkit-backface-visibility: hidden;
-  -webkit-border-radius: 10px;
-  -moz-border-radius: 10px;
-  border-radius: 10px;
-  display: none;
-  opacity: 0;
-  position: absolute;
-  z-index: 20;
-  top: 30px;
-  left: 30px;
-  width: 60px;
-  height: 60px;
-  margin: -30px;
-  background: rgba(0, 0, 0, 0.75);
-  color: rgba(255, 255, 255, 0.85);
-  pointer-events: none;
-}
-/* line 2, ../../lib/stylesheets/mercury/core/_fonts.scss */
-.mercury-markdown-region + .mercury-region-drop-indicator:before {
-  display: inline-block;
-  font-family: "mercury";
-  width: 60px;
-  height: 60px;
-  font-size: 32px;
-  line-height: 60px;
-  font-weight: normal;
-  font-variant: normal;
-  text-transform: none;
-  text-align: center;
-  speak: none;
-  -webkit-font-smoothing: antialiased;
-}
-/* line 26, ../../lib/stylesheets/mercury/core/_region.scss */
-.mercury-markdown-region + .mercury-region-drop-indicator:before {
-  content: ",";
-}
-/* line 7, ../../lib/stylesheets/mercury/regions/_markdown.scss */
-.mercury-markdown-region textarea.mercury-markdown-region-textarea {
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-  outline: 0;
-  border: none;
-  margin: 0;
-  white-space: pre;
-  background: transparent;
-  font-family: Monaco, "Bitstream Vera Sans Mono", "Lucida Console", monospace;
-  font-size: 12px;
-  line-height: 13px;
-  resize: vertical;
-}
-/* line 2, ../../lib/stylesheets/mercury/core/_region.scss */
-.mercury-markdown-region textarea.mercury-markdown-region-textarea:focus {
-  outline: none;
-  -webkit-box-shadow: 0 0 7px #00bce5, 0 0 2px #003e4c;
-  -moz-box-shadow: 0 0 7px #00bce5, 0 0 2px #003e4c;
-  box-shadow: 0 0 7px #00bce5, 0 0 2px #003e4c;
-}
-
-/* Mercury.Region.Plain
- *----------------------------------------------------------------------------*/
-/* line 3, ../../lib/stylesheets/mercury/regions/_plain.scss */
-.mercury-plain-region {
-  min-height: 20px;
-  min-width: 5px;
-}
-/* line 2, ../../lib/stylesheets/mercury/core/_region.scss */
-.mercury-plain-region:focus {
-  outline: none;
-  -webkit-box-shadow: 0 0 7px #00bce5, 0 0 2px #003e4c;
-  -moz-box-shadow: 0 0 7px #00bce5, 0 0 2px #003e4c;
-  box-shadow: 0 0 7px #00bce5, 0 0 2px #003e4c;
-}
-
-/* Mercury.Region.Text
- *----------------------------------------------------------------------------*/
-/* line 4, ../../lib/stylesheets/mercury/regions/_text.scss */
-.mercury-text-region textarea.mercury-text-region-textarea {
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-  outline: 0;
-  border: none;
-  margin: 0;
-  white-space: pre;
-  background: transparent;
-  font-size: 12px;
-  line-height: 13px;
-  resize: vertical;
-}
-/* line 2, ../../lib/stylesheets/mercury/core/_region.scss */
-.mercury-text-region textarea.mercury-text-region-textarea:focus {
-  outline: none;
-  -webkit-box-shadow: 0 0 7px #00bce5, 0 0 2px #003e4c;
-  -moz-box-shadow: 0 0 7px #00bce5, 0 0 2px #003e4c;
-  box-shadow: 0 0 7px #00bce5, 0 0 2px #003e4c;
-}
-
-/* Mercury.Region (unknown region)
- *----------------------------------------------------------------------------*/
-/* line 4, ../../lib/stylesheets/mercury/regions/_unknown.scss */
-.mercury-unknown-region:focus {
-  outline: none;
-  -webkit-box-shadow: 0 0 7px red, 0 0 2px #550000;
-  -moz-box-shadow: 0 0 7px red, 0 0 2px #550000;
-  box-shadow: 0 0 7px red, 0 0 2px #550000;
 }
 
 /* line 1, ../../lib/stylesheets/mercury/plugins/_blocks.scss */
@@ -1701,7 +1214,11 @@ mercury .mercury-toolbar .mercury-toolbar-button[data-type="color"].mercury-butt
 mercury .mercury-toolbar .mercury-toolbar-button[data-type="color"].mercury-button-pressed:before {
   top: 0;
 }
-/* line 21, ../../lib/stylesheets/mercury/plugins/_color.scss */
+/* line 20, ../../lib/stylesheets/mercury/plugins/_color.scss */
+mercury .mercury-toolbar .mercury-color-palette {
+  width: 167px;
+}
+/* line 22, ../../lib/stylesheets/mercury/plugins/_color.scss */
 mercury .mercury-toolbar .mercury-color-palette li.last-picked {
   width: 159px;
   text-align: center;
@@ -1709,7 +1226,7 @@ mercury .mercury-toolbar .mercury-color-palette li.last-picked {
   line-height: 15px;
   margin: 2px 0 0;
 }
-/* line 27, ../../lib/stylesheets/mercury/plugins/_color.scss */
+/* line 28, ../../lib/stylesheets/mercury/plugins/_color.scss */
 mercury .mercury-toolbar .mercury-color-palette li.last-picked:hover {
   color: #fff;
   margin: 1px 0 -1px -1px;
@@ -1725,4 +1242,408 @@ mercury .mercury-toolbar .mercury-styles-select li {
   margin: 0;
   padding-top: 4px;
   padding-bottom: 4px;
+}
+
+/* line 54, ../../lib/stylesheets/mercury/_mercury.scss */
+mercury {
+  -webkit-text-size-adjust: none;
+  position: absolute;
+  z-index: 10000;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+/* line 66, ../../lib/stylesheets/mercury/_mercury.scss */
+mercury.loading *,
+mercury .mercury-no-animation,
+mercury .mercury-no-animation * {
+  -moz-transition: none !important;
+  -webkit-transition: none !important;
+  -o-transition: color 0 ease-in !important;
+  transition: none !important;
+}
+
+/* line 1, ../../lib/stylesheets/mercury/regions/_gallery.scss */
+.mercury-gallery-region {
+  position: relative;
+  width: 100%;
+  min-height: 300px;
+  background: black;
+}
+/* line 2, ../../lib/stylesheets/mercury/core/_region.scss */
+.mercury-gallery-region:focus {
+  outline: none;
+  -webkit-box-shadow: 0 0 7px #00bce5, 0 0 2px #003e4c;
+  -moz-box-shadow: 0 0 7px #00bce5, 0 0 2px #003e4c;
+  box-shadow: 0 0 7px #00bce5, 0 0 2px #003e4c;
+}
+/* line 7, ../../lib/stylesheets/mercury/regions/_gallery.scss */
+.mercury-gallery-region + .mercury-region-drop-indicator {
+  -webkit-transition-property: opacity;
+  -webkit-transition-duration: 0.25s;
+  -webkit-transition-timing-function: ease-in-out;
+  -moz-transition-property: opacity;
+  -moz-transition-duration: 0.25s;
+  -moz-transition-timing-function: ease-in-out;
+  transition-property: opacity;
+  transition-duration: 0.25s;
+  transition-timing-function: ease-in-out;
+  -webkit-backface-visibility: hidden;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+  display: none;
+  opacity: 0;
+  position: absolute;
+  z-index: 20;
+  top: 30px;
+  left: 30px;
+  width: 60px;
+  height: 60px;
+  margin: -30px;
+  background: rgba(0, 0, 0, 0.75);
+  color: rgba(255, 255, 255, 0.85);
+  pointer-events: none;
+}
+/* line 2, ../../lib/stylesheets/mercury/core/_fonts.scss */
+.mercury-gallery-region + .mercury-region-drop-indicator:before {
+  display: inline-block;
+  font-family: "mercury";
+  width: 60px;
+  height: 60px;
+  font-size: 32px;
+  line-height: 60px;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  text-align: center;
+  speak: none;
+  -webkit-font-smoothing: antialiased;
+}
+/* line 26, ../../lib/stylesheets/mercury/core/_region.scss */
+.mercury-gallery-region + .mercury-region-drop-indicator:before {
+  content: ",";
+}
+/* line 11, ../../lib/stylesheets/mercury/regions/_gallery.scss */
+.mercury-gallery-region .mercury-gallery-region-controls {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  cursor: default;
+  display: none;
+  position: absolute;
+  z-index: 20;
+  top: 0;
+  left: 0;
+  width: 100px;
+  margin: 10px;
+  max-height: 560px;
+  overflow-y: auto;
+  padding: 10px 10px 5px 10px;
+  list-style: none;
+  background: rgba(0, 0, 0, 0.75);
+  border-radius: 5px;
+  text-align: center;
+  font-size: 0;
+}
+/* line 28, ../../lib/stylesheets/mercury/regions/_gallery.scss */
+.mercury-gallery-region .mercury-gallery-region-controls li {
+  position: relative;
+  height: 60px;
+  margin-bottom: 5px;
+  background: rgba(255, 255, 255, 0.4);
+  text-align: center;
+}
+/* line 35, ../../lib/stylesheets/mercury/regions/_gallery.scss */
+.mercury-gallery-region .mercury-gallery-region-controls img {
+  max-width: 100px;
+  max-height: 60px;
+  cursor: pointer;
+}
+/* line 40, ../../lib/stylesheets/mercury/regions/_gallery.scss */
+.mercury-gallery-region .mercury-gallery-region-controls em {
+  position: absolute;
+  display: block;
+  left: -4px;
+  top: -4px;
+  width: 15px;
+  height: 15px;
+  line-height: 15px;
+  background: #000;
+  border: 1px solid #dddddd;
+  border-radius: 20px;
+  font-style: normal;
+  font-size: 12px;
+  color: #ddd;
+  cursor: pointer;
+}
+/* line 58, ../../lib/stylesheets/mercury/regions/_gallery.scss */
+.mercury-gallery-region .slides {
+  position: relative;
+  width: 100%;
+  min-height: 300px;
+  max-height: 600px;
+  overflow: hidden;
+  font-size: 0;
+}
+/* line 65, ../../lib/stylesheets/mercury/regions/_gallery.scss */
+.mercury-gallery-region .slides .slide {
+  width: 100%;
+  height: 100%;
+  background: black;
+  text-align: center;
+}
+/* line 70, ../../lib/stylesheets/mercury/regions/_gallery.scss */
+.mercury-gallery-region .slides .slide img {
+  height: 600px;
+}
+/* line 75, ../../lib/stylesheets/mercury/regions/_gallery.scss */
+.mercury-gallery-region .paginator {
+  position: absolute;
+  z-index: 19;
+  bottom: 5px;
+  width: 100%;
+  text-align: center;
+}
+/* line 81, ../../lib/stylesheets/mercury/regions/_gallery.scss */
+.mercury-gallery-region .paginator span {
+  margin: 0 8px;
+  text-shadow: 0 0 3px black;
+  font-size: 30px;
+  color: #666666;
+}
+/* line 87, ../../lib/stylesheets/mercury/regions/_gallery.scss */
+.mercury-gallery-region .paginator .active {
+  color: white;
+}
+
+/* line 1, ../../lib/stylesheets/mercury/regions/_html.scss */
+.mercury-html-region {
+  min-height: 20px;
+  min-width: 5px;
+}
+/* line 2, ../../lib/stylesheets/mercury/core/_region.scss */
+.mercury-html-region:focus {
+  outline: none;
+  -webkit-box-shadow: 0 0 7px #00bce5, 0 0 2px #003e4c;
+  -moz-box-shadow: 0 0 7px #00bce5, 0 0 2px #003e4c;
+  box-shadow: 0 0 7px #00bce5, 0 0 2px #003e4c;
+}
+/* line 5, ../../lib/stylesheets/mercury/regions/_html.scss */
+.mercury-html-region + .mercury-region-drop-indicator {
+  -webkit-transition-property: opacity;
+  -webkit-transition-duration: 0.25s;
+  -webkit-transition-timing-function: ease-in-out;
+  -moz-transition-property: opacity;
+  -moz-transition-duration: 0.25s;
+  -moz-transition-timing-function: ease-in-out;
+  transition-property: opacity;
+  transition-duration: 0.25s;
+  transition-timing-function: ease-in-out;
+  -webkit-backface-visibility: hidden;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+  display: none;
+  opacity: 0;
+  position: absolute;
+  z-index: 20;
+  top: 30px;
+  left: 30px;
+  width: 60px;
+  height: 60px;
+  margin: -30px;
+  background: rgba(0, 0, 0, 0.75);
+  color: rgba(255, 255, 255, 0.85);
+  pointer-events: none;
+}
+/* line 2, ../../lib/stylesheets/mercury/core/_fonts.scss */
+.mercury-html-region + .mercury-region-drop-indicator:before {
+  display: inline-block;
+  font-family: "mercury";
+  width: 60px;
+  height: 60px;
+  font-size: 32px;
+  line-height: 60px;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  text-align: center;
+  speak: none;
+  -webkit-font-smoothing: antialiased;
+}
+/* line 26, ../../lib/stylesheets/mercury/core/_region.scss */
+.mercury-html-region + .mercury-region-drop-indicator:before {
+  content: ",";
+}
+
+/* line 1, ../../lib/stylesheets/mercury/regions/_image.scss */
+.mercury-image-region {
+  min-width: 20px;
+  min-height: 20px;
+}
+/* line 2, ../../lib/stylesheets/mercury/core/_region.scss */
+.mercury-image-region:focus {
+  outline: none;
+  -webkit-box-shadow: 0 0 7px #00bce5, 0 0 2px #003e4c;
+  -moz-box-shadow: 0 0 7px #00bce5, 0 0 2px #003e4c;
+  box-shadow: 0 0 7px #00bce5, 0 0 2px #003e4c;
+}
+/* line 5, ../../lib/stylesheets/mercury/regions/_image.scss */
+.mercury-image-region + .mercury-region-drop-indicator {
+  -webkit-transition-property: opacity;
+  -webkit-transition-duration: 0.25s;
+  -webkit-transition-timing-function: ease-in-out;
+  -moz-transition-property: opacity;
+  -moz-transition-duration: 0.25s;
+  -moz-transition-timing-function: ease-in-out;
+  transition-property: opacity;
+  transition-duration: 0.25s;
+  transition-timing-function: ease-in-out;
+  -webkit-backface-visibility: hidden;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+  display: none;
+  opacity: 0;
+  position: absolute;
+  z-index: 20;
+  top: 30px;
+  left: 30px;
+  width: 60px;
+  height: 60px;
+  margin: -30px;
+  background: rgba(0, 0, 0, 0.75);
+  color: rgba(255, 255, 255, 0.85);
+  pointer-events: none;
+}
+/* line 2, ../../lib/stylesheets/mercury/core/_fonts.scss */
+.mercury-image-region + .mercury-region-drop-indicator:before {
+  display: inline-block;
+  font-family: "mercury";
+  width: 60px;
+  height: 60px;
+  font-size: 32px;
+  line-height: 60px;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  text-align: center;
+  speak: none;
+  -webkit-font-smoothing: antialiased;
+}
+/* line 26, ../../lib/stylesheets/mercury/core/_region.scss */
+.mercury-image-region + .mercury-region-drop-indicator:before {
+  content: ",";
+}
+
+/* line 2, ../../lib/stylesheets/mercury/regions/_markdown.scss */
+.mercury-markdown-region + .mercury-region-drop-indicator {
+  -webkit-transition-property: opacity;
+  -webkit-transition-duration: 0.25s;
+  -webkit-transition-timing-function: ease-in-out;
+  -moz-transition-property: opacity;
+  -moz-transition-duration: 0.25s;
+  -moz-transition-timing-function: ease-in-out;
+  transition-property: opacity;
+  transition-duration: 0.25s;
+  transition-timing-function: ease-in-out;
+  -webkit-backface-visibility: hidden;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+  display: none;
+  opacity: 0;
+  position: absolute;
+  z-index: 20;
+  top: 30px;
+  left: 30px;
+  width: 60px;
+  height: 60px;
+  margin: -30px;
+  background: rgba(0, 0, 0, 0.75);
+  color: rgba(255, 255, 255, 0.85);
+  pointer-events: none;
+}
+/* line 2, ../../lib/stylesheets/mercury/core/_fonts.scss */
+.mercury-markdown-region + .mercury-region-drop-indicator:before {
+  display: inline-block;
+  font-family: "mercury";
+  width: 60px;
+  height: 60px;
+  font-size: 32px;
+  line-height: 60px;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  text-align: center;
+  speak: none;
+  -webkit-font-smoothing: antialiased;
+}
+/* line 26, ../../lib/stylesheets/mercury/core/_region.scss */
+.mercury-markdown-region + .mercury-region-drop-indicator:before {
+  content: ",";
+}
+/* line 5, ../../lib/stylesheets/mercury/regions/_markdown.scss */
+.mercury-markdown-region textarea.mercury-markdown-region-textarea {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  outline: 0;
+  border: none;
+  margin: 0;
+  white-space: pre;
+  background: transparent;
+  font-family: Monaco, "Bitstream Vera Sans Mono", "Lucida Console", monospace;
+  font-size: 12px;
+  line-height: 13px;
+  resize: vertical;
+}
+/* line 2, ../../lib/stylesheets/mercury/core/_region.scss */
+.mercury-markdown-region textarea.mercury-markdown-region-textarea:focus {
+  outline: none;
+  -webkit-box-shadow: 0 0 7px #00bce5, 0 0 2px #003e4c;
+  -moz-box-shadow: 0 0 7px #00bce5, 0 0 2px #003e4c;
+  box-shadow: 0 0 7px #00bce5, 0 0 2px #003e4c;
+}
+
+/* line 1, ../../lib/stylesheets/mercury/regions/_plain.scss */
+.mercury-plain-region {
+  min-height: 20px;
+  min-width: 5px;
+}
+/* line 2, ../../lib/stylesheets/mercury/core/_region.scss */
+.mercury-plain-region:focus {
+  outline: none;
+  -webkit-box-shadow: 0 0 7px #00bce5, 0 0 2px #003e4c;
+  -moz-box-shadow: 0 0 7px #00bce5, 0 0 2px #003e4c;
+  box-shadow: 0 0 7px #00bce5, 0 0 2px #003e4c;
+}
+
+/* line 2, ../../lib/stylesheets/mercury/regions/_text.scss */
+.mercury-text-region textarea.mercury-text-region-textarea {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  outline: 0;
+  border: none;
+  margin: 0;
+  white-space: pre;
+  background: transparent;
+  font-size: 12px;
+  line-height: 13px;
+  resize: vertical;
+}
+/* line 2, ../../lib/stylesheets/mercury/core/_region.scss */
+.mercury-text-region textarea.mercury-text-region-textarea:focus {
+  outline: none;
+  -webkit-box-shadow: 0 0 7px #00bce5, 0 0 2px #003e4c;
+  -moz-box-shadow: 0 0 7px #00bce5, 0 0 2px #003e4c;
+  box-shadow: 0 0 7px #00bce5, 0 0 2px #003e4c;
+}
+
+/* line 2, ../../lib/stylesheets/mercury/regions/_unknown.scss */
+.mercury-unknown-region:focus {
+  outline: none;
+  -webkit-box-shadow: 0 0 7px red, 0 0 2px #550000;
+  -moz-box-shadow: 0 0 7px red, 0 0 2px #550000;
+  box-shadow: 0 0 7px red, 0 0 2px #550000;
 }

@@ -146,7 +146,7 @@ Copyright (c) 2013 Jeremy Jackson
 
   this.JST || (this.JST = {});
 
-  JST['/mercury/templates/lightview'] = function(scope) {
+  JST['/mercury/templates/lightview'] = function() {
     return "<div class=\"mercury-lightview-overlay\"></div>\n<div class=\"mercury-lightview-dialog\">\n  <div class=\"mercury-lightview-dialog-positioner\">\n    <div class=\"mercury-lightview-dialog-title\"><em>&times;</em><span></span></div>\n    <div class=\"mercury-lightview-loading-indicator\"></div>\n    <div class=\"mercury-lightview-dialog-content-container\">\n      <div class=\"mercury-lightview-dialog-content\">\n      </div>\n    </div>\n  </div>\n</div>";
   };
 
@@ -155,7 +155,7 @@ Copyright (c) 2013 Jeremy Jackson
 
   this.JST || (this.JST = {});
 
-  JST['/mercury/templates/modal'] = function(scope) {
+  JST['/mercury/templates/modal'] = function() {
     return "<div class=\"mercury-modal-overlay\"></div>\n<div class=\"mercury-modal-dialog\">\n  <div class=\"mercury-modal-dialog-positioner\">\n    <div class=\"mercury-modal-dialog-title\"><em>&times;</em><span></span></div>\n    <div class=\"mercury-modal-loading-indicator\"></div>\n    <div class=\"mercury-modal-dialog-content-container\">\n      <div class=\"mercury-modal-dialog-content\">\n      </div>\n    </div>\n  </div>\n</div>";
   };
 
@@ -164,7 +164,7 @@ Copyright (c) 2013 Jeremy Jackson
 
   this.JST || (this.JST = {});
 
-  JST['/mercury/templates/panel'] = function(scope) {
+  JST['/mercury/templates/panel'] = function() {
     return "<div class=\"mercury-panel-title\"><em>&times;</em><span>Test Panel</span></div>\n<div class=\"mercury-panel-loading-indicator\"></div>\n  <div class=\"mercury-panel-content-container\">\n    <div class=\"mercury-panel-content\">\n      content\n    </div>\n  </div>\n</div>";
   };
 
@@ -173,7 +173,7 @@ Copyright (c) 2013 Jeremy Jackson
 
   this.JST || (this.JST = {});
 
-  JST['/mercury/templates/statusbar'] = function(scope) {
+  JST['/mercury/templates/statusbar'] = function() {
     return "<div class=\"mercury-statusbar-about\">\n  <a href=\"https://github.com/jejacks0n/mercury\" target=\"_blank\">Mercury Editor v" + Mercury.version + "</a>\n</div>\n<div class=\"mercury-statusbar-path\"></div>";
   };
 
@@ -182,7 +182,7 @@ Copyright (c) 2013 Jeremy Jackson
 
   this.JST || (this.JST = {});
 
-  JST['/mercury/templates/uploader'] = function(scope) {
+  JST['/mercury/templates/uploader'] = function() {
     return "<div class=\"mercury-uploader-dialog\">\n  <div class=\"mercury-uploader-preview\"><b><img/></b></div>\n  <div class=\"mercury-uploader-details\"></div>\n  <div class=\"mercury-uploader-progress\">\n    <span></span>\n    <div class=\"mercury-uploader-indicator\"><div><b>0%</b></div></div>\n  </div>\n</div>";
   };
 
@@ -314,19 +314,21 @@ Copyright (c) 2013 Jeremy Jackson
       return this.__locales__[name] = mapping;
     },
     locale: function() {
-      var sub, top, _ref, _ref1, _ref2;
+      var sub, top, _ref, _ref1;
       if (this.__determined__) {
         return this.__determined__;
       }
       if (!((_ref = Mercury.configuration.localization) != null ? _ref.enabled : void 0)) {
         return [{}, {}];
       }
-      _ref2 = (this.clientLocale() || ((_ref1 = Mercury.configuration.localization) != null ? _ref1.preferred : void 0)).split('-'), top = _ref2[0], sub = _ref2[1];
+      _ref1 = this.detectLocale(), top = _ref1[0], sub = _ref1[1];
       top = this.__locales__[top];
-      if (top && sub) {
-        sub = top["_" + (sub.toUpperCase()) + "_"];
-      }
+      sub = top && sub ? top["_" + (sub.toUpperCase()) + "_"] : false;
       return this.__determined__ = [top || {}, sub || {}];
+    },
+    detectLocale: function() {
+      var _ref;
+      return this.__detected__ || (this.__detected__ = (this.clientLocale() || ((_ref = Mercury.configuration.localization) != null ? _ref.preferred : void 0)).split('-'));
     },
     t: function() {
       var args, source, sub, top, translated, _ref;
@@ -1360,7 +1362,7 @@ Copyright (c) 2013 Jeremy Jackson
         template = this.fetchTemplate(path);
       }
       if (typeof template === 'function') {
-        return template(options || this);
+        return template.call(options || this);
       }
       return template;
     };
@@ -1994,6 +1996,7 @@ Copyright (c) 2013 Jeremy Jackson
     };
 
     BaseInterface.prototype.init = function() {
+      this.addLocaleClass();
       $('body').before(this.$el);
       this.makeShadowed();
       if (this.template) {
@@ -2015,6 +2018,10 @@ Copyright (c) 2013 Jeremy Jackson
       this.buildToolbar();
       this.buildStatusbar();
       return this.focusDefaultRegion();
+    };
+
+    BaseInterface.prototype.addLocaleClass = function() {
+      return this.addClass("locale-" + (Mercury.I18n.detectLocale().join('-').toLowerCase()));
     };
 
     BaseInterface.prototype.makeShadowed = function() {
@@ -2373,7 +2380,6 @@ Copyright (c) 2013 Jeremy Jackson
 
     Modal.events = {
       'click .mercury-modal-dialog-title em': 'release',
-      'click .mercury-modal-overlay': 'release',
       'mercury:interface:hide': function() {
         return this.hide(false);
       },
@@ -2575,7 +2581,6 @@ Copyright (c) 2013 Jeremy Jackson
 
     Lightview.events = {
       'click .mercury-lightview-dialog-title em': 'release',
-      'click .mercury-lightview-overlay': 'release',
       'mercury:interface:hide': function() {
         return this.hide(false);
       },
@@ -3020,6 +3025,7 @@ Copyright (c) 2013 Jeremy Jackson
         return;
       }
       if (e && ((_ref = this.subview) != null ? _ref.visible : void 0)) {
+        this.deactivate();
         e.preventDefault();
         e.stopPropagation();
       }
@@ -3090,6 +3096,11 @@ Copyright (c) 2013 Jeremy Jackson
         return;
       }
       if (this.subview) {
+        if (this.subview.visible) {
+          this.deactivate();
+        } else {
+          this.activate();
+        }
         this.subview.toggle();
       }
       if (this.plugin) {
@@ -3126,7 +3137,10 @@ Copyright (c) 2013 Jeremy Jackson
     };
 
     ToolbarButton.prototype.onRegionUpdate = function(region) {
-      this.deactivate();
+      var _ref;
+      if (!((_ref = this.subview) != null ? _ref.visible : void 0)) {
+        this.deactivate();
+      }
       if (this.global || this.regionSupported(region)) {
         this.enable();
         if (region.hasContext(this.name)) {
@@ -3378,7 +3392,9 @@ Copyright (c) 2013 Jeremy Jackson
       return this.on('build', this.buildPositionedDialog);
     },
     buildPositionedDialog: function() {
-      return this.delegateEvents('mercury:interface:resize', this.position);
+      return this.delegateEvents({
+        'mercury:interface:resize': this.position
+      });
     },
     position: function() {
       var e, left, o, p, top, v;
@@ -3398,7 +3414,7 @@ Copyright (c) 2013 Jeremy Jackson
         width: this.$el.parent().outerWidth(),
         height: this.$el.parent().outerHeight()
       };
-      o = this.$el.offset();
+      o = this.$el.parent().position();
       left = 0;
       if (e.width + o.left > v.width) {
         left = -e.width + p.width;
@@ -3407,11 +3423,11 @@ Copyright (c) 2013 Jeremy Jackson
         left -= o.left + left;
       }
       top = 0;
-      if (e.height + o.top > v.height) {
+      if (e.height + o.top + p.height > v.height) {
         top = -e.height;
       }
-      if (o.top + top < 0) {
-        top -= o.top + top;
+      if (o.top + top + p.height < 0) {
+        top -= o.top + top + p.height;
       }
       return this.css({
         top: top,
@@ -4836,7 +4852,7 @@ Copyright (c) 2013 Jeremy Jackson
 
   this.JST || (this.JST = {});
 
-  JST['/mercury/templates/blocks'] = function(scope) {
+  JST['/mercury/templates/blocks'] = function() {
     var block, text;
     return "<ul>" + (((function() {
       var _ref, _results;
@@ -4947,7 +4963,7 @@ Copyright (c) 2013 Jeremy Jackson
 
   this.JST || (this.JST = {});
 
-  JST['/mercury/templates/character'] = function(scope) {
+  JST['/mercury/templates/character'] = function() {
     var char;
     return "<ul>" + (((function() {
       var _i, _len, _ref, _results;
@@ -5038,7 +5054,7 @@ Copyright (c) 2013 Jeremy Jackson
 
   this.JST || (this.JST = {});
 
-  JST['/mercury/templates/color'] = function(scope) {
+  JST['/mercury/templates/color'] = function() {
     var color;
     return "<ul>\n  " + (((function() {
       var _i, _len, _ref, _results;
@@ -5114,7 +5130,7 @@ Copyright (c) 2013 Jeremy Jackson
 
   this.JST || (this.JST = {});
 
-  JST['/mercury/templates/styles'] = function(scope) {
+  JST['/mercury/templates/styles'] = function() {
     var style, text;
     return "<ul>" + (((function() {
       var _ref, _results;

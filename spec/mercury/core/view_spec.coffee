@@ -252,8 +252,9 @@ describe "Mercury.View", ->
     it "renders the template", ->
       JST['/mercury/templates/foo'] = ->
       spyOn(JST, '/mercury/templates/foo', -> '_foo_function_template_')
-      expect( subject.renderTemplate('foo', foo: 'bar') ).to.eq('_foo_function_template_')
-      expect( JST['/mercury/templates/foo'] ).calledWith(foo: 'bar')
+      options = foo: 'bar'
+      expect( subject.renderTemplate('foo', options) ).to.eq('_foo_function_template_')
+      expect( JST['/mercury/templates/foo'] ).calledOn(options)
 
     it "falls back to a string", ->
       JST['/mercury/templates/foo'] = '_foo_string_template_'

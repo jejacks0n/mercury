@@ -84,5 +84,5 @@ class Plugin.Palette extends Mercury.ToolbarPalette
 
 # Define the template to be used in both the palette and modal -- since we can share the template.
 @JST ||= {}
-JST['/mercury/templates/character'] = (scope) ->
+JST['/mercury/templates/character'] = ->
   """<ul>#{("<li data-value='#{char}'>&##{char};</li>" for char in Plugin.config('characters').split(' ')).join('')}</ul>"""

@@ -1,5 +1,5 @@
 @JST ||= {}
-JST['/mercury/templates/lightview'] = (scope) ->
+JST['/mercury/templates/lightview'] = ->
   """
   <div class="mercury-lightview-overlay"></div>
   <div class="mercury-lightview-dialog">

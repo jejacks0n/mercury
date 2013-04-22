@@ -35,7 +35,7 @@ describe "Mercury.Uploader", ->
     it "renders the expected template", ->
       template = spyOn(JST, '/mercury/templates/uploader', -> '_template_')
       subject = new Klass([], foo: 'bar')
-      expect( template ).calledWith( subject )
+      expect( template ).calledOn( subject )
       expect( subject.$el.html() ).to.eq('_template_')
 
     it "calls #calculate", ->

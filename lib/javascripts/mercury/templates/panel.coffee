@@ -1,5 +1,5 @@
 @JST ||= {}
-JST['/mercury/templates/panel'] = (scope) ->
+JST['/mercury/templates/panel'] = ->
   """
   <div class="mercury-panel-title"><em>&times;</em><span>Test Panel</span></div>
   <div class="mercury-panel-loading-indicator"></div>

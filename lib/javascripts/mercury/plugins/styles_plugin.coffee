@@ -33,5 +33,5 @@ class Plugin.Select extends Mercury.ToolbarSelect
 
 
 @JST ||= {}
-JST['/mercury/templates/styles'] = (scope) ->
+JST['/mercury/templates/styles'] = ->
   """<ul>#{("<li data-value='#{style}' class='#{style}'>#{text}</li>" for style, text of Plugin.config('styles')).join('')}</ul>"""

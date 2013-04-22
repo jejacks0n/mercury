@@ -141,7 +141,7 @@ class Mercury.View extends Mercury.Module
   renderTemplate: (path, options = null) ->
     template = JST["/mercury/templates/#{path}"]
     template = @fetchTemplate(path) if @config('templates:enabled') && !template
-    return template(options || @) if typeof(template) == 'function'
+    return template.call(options || @) if typeof(template) == 'function'
     template
 
 

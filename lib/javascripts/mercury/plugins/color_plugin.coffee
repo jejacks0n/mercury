@@ -44,7 +44,7 @@ class Plugin.Palette extends Mercury.ToolbarPalette
 
 
 @JST ||= {}
-JST['/mercury/templates/color'] = (scope) ->
+JST['/mercury/templates/color'] = ->
   """
   <ul>
     #{("<li data-value='#{color}' style='background:##{color}'></li>" for color in Plugin.config('colors').split(' ')).join('')}

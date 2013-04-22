@@ -1,5 +1,5 @@
 @JST ||= {}
-JST['/mercury/templates/modal'] = (scope) ->
+JST['/mercury/templates/modal'] = ->
   """
   <div class="mercury-modal-overlay"></div>
   <div class="mercury-modal-dialog">

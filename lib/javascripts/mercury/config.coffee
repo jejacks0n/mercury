@@ -78,10 +78,10 @@ Mercury.configuration =
   #   action: an action button (default)
   #   event: the provided event name will be triggered when clicked.
   #   mode: a toggle button, which will trigger a mode event with the value.
-  #   select: a select button and will present the user with a dropdown select using the given template.
-  #   palette: a palette button and will present the user with a color picker using the given template.
-  #   button: the class to use when instantiating the button.
+  #   global: boolean indicating the button applies globally, and not regions.
+  #   button: the custom button class to use when instantiating the button.
   #   plugin: expects a plugin with the given name to respond to button click.
+  #   options: options to be passed to the plugin.
   #
   # For more information about button options or adding your own functionality check todo: wiki url here
   #

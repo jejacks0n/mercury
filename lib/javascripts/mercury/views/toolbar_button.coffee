@@ -64,6 +64,7 @@ class Mercury.ToolbarButton extends Mercury.View
   indicate: (e) ->
     return if @isDisabled()
     if e && @subview?.visible
+      @deactivate()
       e.preventDefault()
       e.stopPropagation()
     @addClass('mercury-button-pressed')
@@ -106,7 +107,9 @@ class Mercury.ToolbarButton extends Mercury.View
 
   triggerAction: ->
     return if @isDisabled()
-    @subview.toggle() if @subview
+    if @subview
+      if @subview.visible then @deactivate() else @activate()
+      @subview.toggle()
     return @plugin.trigger('button:click') if @plugin
     return if @subview
     Mercury.trigger(@event) if @event
@@ -128,7 +131,7 @@ class Mercury.ToolbarButton extends Mercury.View
 
 
   onRegionUpdate: (region) ->
-    @deactivate()
+    @deactivate() unless @subview?.visible
     if @global || @regionSupported(region)
       @enable()
       @activate() if region.hasContext(@name)

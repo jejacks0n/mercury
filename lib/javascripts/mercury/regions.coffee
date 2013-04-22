@@ -1,5 +1,5 @@
 # All region types.
-#
+#------------------------------------------------------------------------------
 #= require mercury/regions/gallery
 #= require mercury/regions/html
 #= require mercury/regions/image

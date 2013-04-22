@@ -96,26 +96,26 @@ Dependencies:
     defined: {
       style: [
         'Style', {
-          select: 'styles_select'
+          plugin: 'styles'
         }
       ],
       sep: ' ',
       block: [
         'Block Format', {
-          select: 'block_types'
+          plugin: 'blocks'
         }
       ]
     },
     color: {
       bgcolor: [
         'Background Color', {
-          palette: 'color_palette'
+          plugin: 'color'
         }
       ],
       sep: ' ',
       color: [
         'Text Color', {
-          palette: 'color_palette'
+          plugin: 'color'
         }
       ]
     },
@@ -231,8 +231,7 @@ Dependencies:
     rule: function() {
       return this.replaceSelection('<hr/>');
     },
-    style: function() {},
-    color: function() {}
+    style: function() {}
   });
 
 }).call(this);

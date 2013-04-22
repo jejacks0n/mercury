@@ -31,17 +31,17 @@ also takes into account undo/redo support using the keyboard or buttons.
 
     Gallery.supported = true;
 
-    Gallery.prototype.skipHistoryOn = ['undo', 'redo', 'next', 'prev', 'togglePlay'];
-
-    Gallery.prototype.elements = {
+    Gallery.elements = {
       controls: '.mercury-gallery-region-controls',
       slides: '.slides',
       paginator: '.paginator'
     };
 
-    Gallery.prototype.events = {
+    Gallery.events = {
       'click .mercury-gallery-region-controls li': 'gotoSlide'
     };
+
+    Gallery.prototype.skipHistoryOn = ['undo', 'redo', 'next', 'prev', 'togglePlay'];
 
     Gallery.prototype.init = function() {
       var _ref;
@@ -100,22 +100,22 @@ also takes into account undo/redo support using the keyboard or buttons.
     };
 
     Gallery.prototype.refreshPaginator = function() {
-      this.paginator.html(Array(this.images.length + 1).join('<span>&bull;</span>'));
-      return this.paginator.find("span:nth-child(" + this.index + ")").addClass('active');
+      this.$paginator.html(Array(this.images.length + 1).join('<span>&bull;</span>'));
+      return this.$paginator.find("span:nth-child(" + this.index + ")").addClass('active');
     };
 
     Gallery.prototype.refreshControls = function() {
       var slide, src, _i, _len, _ref;
-      this.controls.remove();
+      this.$controls.remove();
       this.append('<ul class="mercury-gallery-region-controls"></ul>');
       _ref = this.images;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         slide = _ref[_i];
         src = $(slide).find('img').attr('src');
-        this.controls.append($("<li><img src=\"" + src + "\"/></li>"));
+        this.$controls.append($("<li><img src=\"" + src + "\"/></li>"));
       }
       if (this.focused) {
-        return this.controls.show();
+        return this.$controls.show();
       }
     };
 
@@ -135,7 +135,7 @@ also takes into account undo/redo support using the keyboard or buttons.
     };
 
     Gallery.prototype.appendSlide = function(slide) {
-      this.slides.append(slide);
+      this.$slides.append(slide);
       this.refresh(true);
       this.pushHistory();
       return this.trigger('focused');
@@ -161,12 +161,12 @@ also takes into account undo/redo support using the keyboard or buttons.
 
     Gallery.prototype.onFocus = function() {
       if (!this.previewing) {
-        return this.controls.show();
+        return this.$controls.show();
       }
     };
 
     Gallery.prototype.onBlur = function() {
-      return this.controls.hide();
+      return this.$controls.hide();
     };
 
     Gallery.prototype.onUndo = function() {
@@ -177,6 +177,12 @@ also takes into account undo/redo support using the keyboard or buttons.
     Gallery.prototype.onRedo = function() {
       Gallery.__super__.onRedo.apply(this, arguments);
       return this.refresh(true);
+    };
+
+    Gallery.prototype.release = function() {
+      clearTimeout(this.timeout);
+      this.html(this.value());
+      return Gallery.__super__.release.apply(this, arguments);
     };
 
     return Gallery;

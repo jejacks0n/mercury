@@ -1,4 +1,3 @@
-#
 # Extends the global Mercury object with various modules.
 #
 # In general it's expected that you use the methods provided on the Mercury namespace, and don't call through to the

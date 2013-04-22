@@ -1,5 +1,5 @@
-/* Fonts
- *----------------------------------------------------------------------------*/
+// Glyph / Webfonts.
+//-----------------------------------------------------------------------------
 @font-face {
   font-family: 'mercury';
   src: font-url('mercury/mercury.ttf') format('truetype');
@@ -13,26 +13,26 @@
   font-style: normal;
 }
 
-/* Keyframes
- *----------------------------------------------------------------------------*/
+// Keyframes for animations.
+//-----------------------------------------------------------------------------
 @-webkit-keyframes mercury-uploader-indicator { from { background-position: -45px 0 } to { background-position: 0 0 } }
 @-moz-keyframes mercury-uploader-indicator { from { background-position: -45px 0 } to { background-position: 0 0 } }
 @-webkit-keyframes mercury-loading-indicator { from { -webkit-transform: rotate(0deg) } to { -webkit-transform: rotate(360deg) } }
 @-moz-keyframes mercury-loading-indicator { from { -moz-transform: rotate(0deg) } to { -moz-transform: rotate(360deg) } }
 
 // Configuration.
-
+//-----------------------------------------------------------------------------
 @import "mercury/config";
 
 // Core css and utility.
-
+//-----------------------------------------------------------------------------
 @import "mercury/core/fonts";
 @import "mercury/core/general";
 @import "mercury/core/region";
 @import "mercury/core/view";
 
 // Views.
-
+//-----------------------------------------------------------------------------
 @import "mercury/views/base_interface";
 @import "mercury/views/frame_interface";
 @import "mercury/views/lightview";
@@ -42,8 +42,15 @@
 @import "mercury/views/toolbar";
 @import "mercury/views/uploader";
 
-// General setup.
+// Plugins.
+//-----------------------------------------------------------------------------
+@import "mercury/plugins/blocks";
+@import "mercury/plugins/character";
+@import "mercury/plugins/color";
+@import "mercury/plugins/styles";
 
+// General setup.
+//-----------------------------------------------------------------------------
 mercury {
   // disable text sizing in webkit (ipad/iphone etc)
   -webkit-text-size-adjust: none;
@@ -51,9 +58,9 @@ mercury {
   z-index: 10000;
 
   // disable tap highlighting in webkit (ipad/iphone etc)
-  -webkit-tap-highlight-color: rgba(0,0,0,0);
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 
-  // disable animations while initializing
+  // disable animations while initializing/loading
   &.loading *,
   .mercury-no-animation,
   .mercury-no-animation * {
@@ -62,12 +69,4 @@ mercury {
     -o-transition: color 0 ease-in !important;
     transition: none !important;
   }
-}
-
-// CSS for examples.
-
-.mercury-toolbar-slider {
-  @include mercury-toolbar-subview;
-  padding: 2px 5px 0;
-  min-height: 0;
 }

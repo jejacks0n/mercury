@@ -27,9 +27,9 @@ serialization to the server.
 
     Image.supported = true;
 
-    Image.prototype.tag = 'img';
+    Image.tag = 'img';
 
-    Image.prototype.events = {
+    Image.events = {
       'mousedown': 'onMousedown'
     };
 
@@ -43,7 +43,7 @@ serialization to the server.
 
     Image.prototype.onMousedown = function(e) {
       e.preventDefault();
-      return this.el.trigger('focus');
+      return this.$el.trigger('focus');
     };
 
     Image.prototype.onDropFile = function(files) {

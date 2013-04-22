@@ -29,7 +29,7 @@ Dependencies:
 
     Plain.supported = Mercury.support.wysiwyg;
 
-    Plain.prototype.events = {
+    Plain.events = {
       'keydown': 'onKeyEvent',
       'paste': 'onPaste'
     };

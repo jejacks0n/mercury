@@ -30,14 +30,14 @@ them when you render the content.
       }
       if (value === null || typeof value === 'undefined') {
         if (!this.config('regions:text:stripTags')) {
-          return this.focusable.val();
+          return this.$focusable.val();
         }
         return this.sanitizedValue();
       }
       if (this.config('regions:text:stripTags')) {
-        this.focusable.val($('<div>').html(((_ref = value.val) != null ? _ref : value).replace(/<br\/?>/g, '\n').trim()).text());
+        this.$focusable.val($('<div>').html(((_ref = value.val) != null ? _ref : value).replace(/<br\/?>/g, '\n').trim()).text());
       } else {
-        this.focusable.val((_ref1 = value.val) != null ? _ref1 : value);
+        this.$focusable.val((_ref1 = value.val) != null ? _ref1 : value);
       }
       if (value.sel) {
         return this.setSerializedSelection(value.sel);
@@ -46,7 +46,7 @@ them when you render the content.
 
     Text.prototype.sanitizedValue = function() {
       var div;
-      div = $('<div>').html(this.focusable.val().trim().replace(/\n/g, '<span>[!!!br!!!]</span>'));
+      div = $('<div>').html(this.$focusable.val().trim().replace(/\n/g, '<span>[!!!br!!!]</span>'));
       return div.text().replace(/\[!!!br!!!\]/g, '<br>');
     };
 

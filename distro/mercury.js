@@ -86,7 +86,8 @@ Copyright (c) 2013 Jeremy Jackson
         ],
         character: [
           'Character', {
-            title: 'Special Characters'
+            title: 'Special Characters',
+            plugin: 'character'
           }
         ],
         snippets: [
@@ -145,6 +146,33 @@ Copyright (c) 2013 Jeremy Jackson
 
   this.JST || (this.JST = {});
 
+  JST['/mercury/templates/lightview'] = function(scope) {
+    return "<div class=\"mercury-lightview-overlay\"></div>\n<div class=\"mercury-lightview-dialog\">\n  <div class=\"mercury-lightview-dialog-positioner\">\n    <div class=\"mercury-lightview-dialog-title\"><em>&times;</em><span></span></div>\n    <div class=\"mercury-lightview-loading-indicator\"></div>\n    <div class=\"mercury-lightview-dialog-content-container\">\n      <div class=\"mercury-lightview-dialog-content\">\n      </div>\n    </div>\n  </div>\n</div>";
+  };
+
+}).call(this);
+(function() {
+
+  this.JST || (this.JST = {});
+
+  JST['/mercury/templates/modal'] = function(scope) {
+    return "<div class=\"mercury-modal-overlay\"></div>\n<div class=\"mercury-modal-dialog\">\n  <div class=\"mercury-modal-dialog-positioner\">\n    <div class=\"mercury-modal-dialog-title\"><em>&times;</em><span></span></div>\n    <div class=\"mercury-modal-loading-indicator\"></div>\n    <div class=\"mercury-modal-dialog-content-container\">\n      <div class=\"mercury-modal-dialog-content\">\n      </div>\n    </div>\n  </div>\n</div>";
+  };
+
+}).call(this);
+(function() {
+
+  this.JST || (this.JST = {});
+
+  JST['/mercury/templates/panel'] = function(scope) {
+    return "<div class=\"mercury-panel-title\"><em>&times;</em><span>Test Panel</span></div>\n<div class=\"mercury-panel-loading-indicator\"></div>\n  <div class=\"mercury-panel-content-container\">\n    <div class=\"mercury-panel-content\">\n      content\n    </div>\n  </div>\n</div>";
+  };
+
+}).call(this);
+(function() {
+
+  this.JST || (this.JST = {});
+
   JST['/mercury/templates/statusbar'] = function(scope) {
     return "<div class=\"mercury-statusbar-about\">\n  <a href=\"https://github.com/jejacks0n/mercury\" target=\"_blank\">Mercury Editor v" + Mercury.version + "</a>\n</div>\n<div class=\"mercury-statusbar-path\"></div>";
   };
@@ -156,33 +184,6 @@ Copyright (c) 2013 Jeremy Jackson
 
   JST['/mercury/templates/uploader'] = function(scope) {
     return "<div class=\"mercury-uploader-dialog\">\n  <div class=\"mercury-uploader-preview\"><b><img/></b></div>\n  <div class=\"mercury-uploader-details\"></div>\n  <div class=\"mercury-uploader-progress\">\n    <span></span>\n    <div class=\"mercury-uploader-indicator\"><div><b>0%</b></div></div>\n  </div>\n</div>";
-  };
-
-}).call(this);
-(function() {
-
-  this.JST || (this.JST = {});
-
-  JST['/mercury/templates/block_types'] = function(scope) {
-    return "<ul>\n</ul>";
-  };
-
-}).call(this);
-(function() {
-
-  this.JST || (this.JST = {});
-
-  JST['/mercury/templates/color_palette'] = function(scope) {
-    return "<ul>\n  <li data-value=\"#FFFFFF\" style=\"background:#FFFFFF\"></li>\n  <li data-value=\"#FFCCCC\" style=\"background:#FFCCCC\"></li>\n  <li data-value=\"#FFCC99\" style=\"background:#FFCC99\"></li>\n  <li data-value=\"#FFFF99\" style=\"background:#FFFF99\"></li>\n  <li data-value=\"#FFFFCC\" style=\"background:#FFFFCC\"></li>\n  <li data-value=\"#99FF99\" style=\"background:#99FF99\"></li>\n  <li data-value=\"#99FFFF\" style=\"background:#99FFFF\"></li>\n  <li data-value=\"#CCFFFF\" style=\"background:#CCFFFF\"></li>\n  <li data-value=\"#CCCCFF\" style=\"background:#CCCCFF\"></li>\n  <li data-value=\"#FFCCFF\" style=\"background:#FFCCFF\"></li>\n  <li data-value=\"#CCCCCC\" style=\"background:#CCCCCC\"></li>\n  <li data-value=\"#FF6666\" style=\"background:#FF6666\"></li>\n  <li data-value=\"#FF9966\" style=\"background:#FF9966\"></li>\n  <li data-value=\"#FFFF66\" style=\"background:#FFFF66\"></li>\n  <li data-value=\"#FFFF33\" style=\"background:#FFFF33\"></li>\n  <li data-value=\"#66FF99\" style=\"background:#66FF99\"></li>\n  <li data-value=\"#33FFFF\" style=\"background:#33FFFF\"></li>\n  <li data-value=\"#66FFFF\" style=\"background:#66FFFF\"></li>\n  <li data-value=\"#9999FF\" style=\"background:#9999FF\"></li>\n  <li data-value=\"#FF99FF\" style=\"background:#FF99FF\"></li>\n  <li data-value=\"#C0C0C0\" style=\"background:#C0C0C0\"></li>\n  <li data-value=\"#FF0000\" style=\"background:#FF0000\"></li>\n  <li data-value=\"#FF9900\" style=\"background:#FF9900\"></li>\n  <li data-value=\"#FFCC66\" style=\"background:#FFCC66\"></li>\n  <li data-value=\"#FFFF00\" style=\"background:#FFFF00\"></li>\n  <li data-value=\"#33FF33\" style=\"background:#33FF33\"></li>\n  <li data-value=\"#66CCCC\" style=\"background:#66CCCC\"></li>\n  <li data-value=\"#33CCFF\" style=\"background:#33CCFF\"></li>\n  <li data-value=\"#6666CC\" style=\"background:#6666CC\"></li>\n  <li data-value=\"#CC66CC\" style=\"background:#CC66CC\"></li>\n  <li data-value=\"#999999\" style=\"background:#999999\"></li>\n  <li data-value=\"#CC0000\" style=\"background:#CC0000\"></li>\n  <li data-value=\"#FF6600\" style=\"background:#FF6600\"></li>\n  <li data-value=\"#FFCC33\" style=\"background:#FFCC33\"></li>\n  <li data-value=\"#FFCC00\" style=\"background:#FFCC00\"></li>\n  <li data-value=\"#33CC00\" style=\"background:#33CC00\"></li>\n  <li data-value=\"#00CCCC\" style=\"background:#00CCCC\"></li>\n  <li data-value=\"#3366FF\" style=\"background:#3366FF\"></li>\n  <li data-value=\"#6633FF\" style=\"background:#6633FF\"></li>\n  <li data-value=\"#CC33CC\" style=\"background:#CC33CC\"></li>\n  <li data-value=\"#666666\" style=\"background:#666666\"></li>\n  <li data-value=\"#990000\" style=\"background:#990000\"></li>\n  <li data-value=\"#CC6600\" style=\"background:#CC6600\"></li>\n  <li data-value=\"#CC9933\" style=\"background:#CC9933\"></li>\n  <li data-value=\"#999900\" style=\"background:#999900\"></li>\n  <li data-value=\"#009900\" style=\"background:#009900\"></li>\n  <li data-value=\"#339999\" style=\"background:#339999\"></li>\n  <li data-value=\"#3333FF\" style=\"background:#3333FF\"></li>\n  <li data-value=\"#6600CC\" style=\"background:#6600CC\"></li>\n  <li data-value=\"#993399\" style=\"background:#993399\"></li>\n  <li data-value=\"#333333\" style=\"background:#333333\"></li>\n  <li data-value=\"#660000\" style=\"background:#660000\"></li>\n  <li data-value=\"#993300\" style=\"background:#993300\"></li>\n  <li data-value=\"#996633\" style=\"background:#996633\"></li>\n  <li data-value=\"#666600\" style=\"background:#666600\"></li>\n  <li data-value=\"#006600\" style=\"background:#006600\"></li>\n  <li data-value=\"#336666\" style=\"background:#336666\"></li>\n  <li data-value=\"#000099\" style=\"background:#000099\"></li>\n  <li data-value=\"#333399\" style=\"background:#333399\"></li>\n  <li data-value=\"#663366\" style=\"background:#663366\"></li>\n  <li data-value=\"#000000\" style=\"background:#000000\"></li>\n  <li data-value=\"#330000\" style=\"background:#330000\"></li>\n  <li data-value=\"#663300\" style=\"background:#663300\"></li>\n  <li data-value=\"#663333\" style=\"background:#663333\"></li>\n  <li data-value=\"#333300\" style=\"background:#333300\"></li>\n  <li data-value=\"#003300\" style=\"background:#003300\"></li>\n  <li data-value=\"#003333\" style=\"background:#003333\"></li>\n  <li data-value=\"#000066\" style=\"background:#000066\"></li>\n  <li data-value=\"#330099\" style=\"background:#330099\"></li>\n  <li data-value=\"#330033\" style=\"background:#330033\"></li>\n  <li class=\"last-picked\">Last Color Picked</li>\n</ul>";
-  };
-
-}).call(this);
-(function() {
-
-  this.JST || (this.JST = {});
-
-  JST['/mercury/templates/styles_select'] = function(scope) {
-    return "<ul>\n  <li class=\"red\" data-value=\"red\">Red Text</li>\n  <li class=\"blue\" data-value=\"blue\">Blue Text</li>\n  <li class=\"highlight\" data-value=\"highlight\">Highlighted</li>\n</ul>";
   };
 
 }).call(this);
@@ -361,15 +362,15 @@ Copyright (c) 2013 Jeremy Jackson
       if (!((_ref = Mercury.configuration.logging) != null ? _ref.enabled : void 0)) {
         return;
       }
-      if (this.logPrefix) {
-        args.unshift(this.logPrefix);
+      if (this.logPrefix || this.constructor.logPrefix) {
+        args.unshift(this.logPrefix || this.constructor.logPrefix);
       }
       return typeof console !== "undefined" && console !== null ? typeof console.debug === "function" ? console.debug.apply(console, args) : void 0 : void 0;
     },
     notify: function(msg) {
       var _ref, _ref1;
-      if (this.logPrefix) {
-        msg = "" + this.logPrefix + " " + msg;
+      if (this.logPrefix || this.constructor.logPrefix) {
+        msg = "" + (this.constructor.logPrefix || this.logPrefix) + " " + msg;
       }
       if (((_ref = Mercury.configuration.logging) != null ? _ref.notifier : void 0) === 'console') {
         try {
@@ -467,6 +468,8 @@ Copyright (c) 2013 Jeremy Jackson
 
     Action.include(Mercury.Logger);
 
+    Action.logPrefix = 'Mercury.Action:';
+
     Action.create = function(name, attrsOrOther) {
       var klass;
       if (attrsOrOther == null) {
@@ -528,7 +531,7 @@ Copyright (c) 2013 Jeremy Jackson
       path = args.shift();
       value = args.pop();
       merge = args.pop();
-      if (!value && typeof path === 'object') {
+      if (typeof path === 'object') {
         return Mercury.configuration = path;
       }
       config = Mercury.configuration || (Mercury.configuration = {});
@@ -577,28 +580,32 @@ Copyright (c) 2013 Jeremy Jackson
         return handler.apply(this, arguments);
       });
     },
-    off: function(event, handler) {
-      var h, i, list, _i, _len, _ref;
-      if (!event) {
+    off: function(events, handler) {
+      var h, i, list, name, _i, _j, _len, _len1, _ref, _ref1;
+      if (!events) {
         this.__handlers__ = {};
         return this;
       }
-      if (!(list = (_ref = this.__handlers__) != null ? _ref[event] : void 0)) {
-        return this;
-      }
-      if (!handler) {
-        delete this.__handlers__[event];
-        return this;
-      }
-      for (i = _i = 0, _len = list.length; _i < _len; i = ++_i) {
-        h = list[i];
-        if (!(h === handler)) {
+      _ref = events.split(' ');
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        name = _ref[_i];
+        if (!(list = (_ref1 = this.__handlers__) != null ? _ref1[name] : void 0)) {
           continue;
         }
-        list = list.slice();
-        list.splice(i, 1);
-        this.__handlers__[event] = list;
-        break;
+        if (!handler) {
+          delete this.__handlers__[name];
+          continue;
+        }
+        for (i = _j = 0, _len1 = list.length; _j < _len1; i = ++_j) {
+          h = list[i];
+          if (!(h === handler)) {
+            continue;
+          }
+          list = list.slice();
+          list.splice(i, 1);
+          this.__handlers__[name] = list;
+          break;
+        }
       }
       return this;
     },
@@ -688,7 +695,7 @@ Copyright (c) 2013 Jeremy Jackson
 
     Model.include(Mercury.Stack);
 
-    Model.prototype.logPrefix = 'Mercury.Model:';
+    Model.logPrefix = 'Mercury.Model:';
 
     Model.idCounter = 1;
 
@@ -872,6 +879,336 @@ Copyright (c) 2013 Jeremy Jackson
 
 }).call(this);
 (function() {
+  var registered,
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+    __slice = [].slice;
+
+  this.Mercury || (this.Mercury = {});
+
+  registered = {};
+
+  Mercury.Plugin = (function(_super) {
+
+    __extends(Plugin, _super);
+
+    Plugin.extend(Mercury.Logger);
+
+    Plugin.extend(Mercury.I18n);
+
+    Plugin.include(Mercury.Config);
+
+    Plugin.include(Mercury.Events);
+
+    Plugin.include(Mercury.I18n);
+
+    Plugin.include(Mercury.Logger);
+
+    Plugin.logPrefix = 'Mercury.Plugin:';
+
+    Plugin.events = {
+      'mercury:region:focus': 'onRegionFocus',
+      'button:click': 'onButtonClick'
+    };
+
+    Plugin.register = function(name, options) {
+      options.name = name;
+      return new Mercury.Plugin.Definition(options);
+    };
+
+    Plugin.get = function(name, instance) {
+      var definition;
+      if (instance == null) {
+        instance = false;
+      }
+      definition = registered[name];
+      if (!definition) {
+        throw new Error("unable to locate the " + name + " plugin");
+      }
+      if (instance) {
+        return new Mercury.Plugin(definition.signature());
+      } else {
+        return definition;
+      }
+    };
+
+    Plugin.all = function() {
+      return registered;
+    };
+
+    Plugin.unregister = function(name) {
+      var definition;
+      definition = registered[name];
+      if (!definition) {
+        throw new Error("unable to locate the " + name + " plugin");
+      }
+      return delete registered[name];
+    };
+
+    function Plugin(options) {
+      var key, value, _ref;
+      this.options = options != null ? options : {};
+      this.configuration = this.options.config || {};
+      _ref = this.options;
+      for (key in _ref) {
+        value = _ref[key];
+        if (key !== 'config') {
+          this[key] = value;
+        }
+      }
+      if (!this.name) {
+        throw new Error('must provide a name for plugins');
+      }
+      this.actionsArray = [];
+      this.actions || (this.actions = {});
+      this.events = $.extend({}, this.constructor.events, this.events);
+      this.delegateEvents(this.events);
+      this.appendActions(this.actions);
+      Plugin.__super__.constructor.apply(this, arguments);
+    }
+
+    Plugin.prototype.buttonRegistered = function(button) {
+      this.button = button;
+      this.configuration = $.extend({}, this.configuration, this.button.get('settings'));
+      if (this.prependButtonAction) {
+        this.context = this.button.get('actionName');
+        this.prependAction(this.context, this.prependButtonAction);
+      }
+      return typeof this.registerButton === "function" ? this.registerButton() : void 0;
+    };
+
+    Plugin.prototype.regionSupported = function(region) {
+      var action, _i, _len, _ref;
+      this.region = region;
+      _ref = this.actionsArray;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        action = _ref[_i];
+        if (this.region.hasAction(action[0])) {
+          if (typeof this.regionContext === "function") {
+            this.regionContext();
+          }
+          return true;
+        }
+      }
+      return false;
+    };
+
+    Plugin.prototype.triggerAction = function() {
+      var action, args, _i, _len, _ref;
+      args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+      if (!this.region) {
+        return false;
+      }
+      _ref = this.actionsArray;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        action = _ref[_i];
+        if (this.region.hasAction(action[0])) {
+          args.unshift(action[0]);
+          Mercury.trigger('focus');
+          action[1].apply(this, args);
+          return true;
+        }
+      }
+      return false;
+    };
+
+    Plugin.prototype.config = function(path) {
+      var config, part, _i, _len, _ref;
+      config = this.configuration || (this.configuration = {});
+      try {
+        _ref = path.split(':');
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          part = _ref[_i];
+          config = config[part];
+        }
+      } catch (e) {
+        return Mercury.Config.get(path);
+      }
+      if (typeof config === 'undefined') {
+        return Mercury.Config.get(path);
+      }
+      return config;
+    };
+
+    Plugin.prototype.configure = function() {
+      var args, config, merge, part, parts, path, value;
+      args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+      path = args.shift();
+      value = args.pop();
+      merge = args.pop();
+      if (typeof path === 'object') {
+        return this.configuration = path;
+      }
+      config = this.configuration || (this.configuration = {});
+      parts = path.split(':');
+      part = parts.shift();
+      while (part) {
+        if (parts.length === 0) {
+          if (merge && typeof config[part] === 'object') {
+            config[part] = $.extend(true, config[part], value);
+          } else {
+            config[part] = value;
+          }
+          return config[part];
+        }
+        config = config[part] ? config[part] : config[part] = {};
+        part = parts.shift();
+      }
+    };
+
+    Plugin.prototype.release = function() {
+      var method, name, _ref;
+      _ref = this.__global_handlers__ || {};
+      for (name in _ref) {
+        method = _ref[name];
+        Mercury.off(name, method);
+      }
+      return this.off();
+    };
+
+    Plugin.prototype.onRegionFocus = function(region) {
+      this.region = region;
+    };
+
+    Plugin.prototype.onButtonClick = function() {};
+
+    Plugin.prototype.appendActions = function(actions) {
+      var key, method, _results;
+      _results = [];
+      for (key in actions) {
+        method = actions[key];
+        if (typeof method !== 'function') {
+          if (!this[method]) {
+            throw new Error("" + method + " doesn't exist");
+          }
+          method = this[method];
+        }
+        _results.push(this.actionsArray.push([key, method]));
+      }
+      return _results;
+    };
+
+    Plugin.prototype.prependAction = function(key, method) {
+      if (typeof method !== 'function') {
+        if (!this[method]) {
+          throw new Error("" + method + " doesn't exist");
+        }
+        method = this[method];
+      }
+      return this.actionsArray.unshift([key, method]);
+    };
+
+    Plugin.prototype.delegateEvents = function(events) {
+      var key, method, _results,
+        _this = this;
+      this.__global_handlers__ || (this.__global_handlers__ = {});
+      _results = [];
+      for (key in events) {
+        method = events[key];
+        if (typeof method === 'function') {
+          method = (function(method) {
+            return function() {
+              method.apply(_this, arguments);
+              return true;
+            };
+          })(method);
+        } else {
+          if (!this[method]) {
+            throw new Error("" + method + " doesn't exist");
+          } else {
+            method = (function(method) {
+              return function() {
+                _this[method].apply(_this, arguments);
+                return true;
+              };
+            })(method);
+          }
+        }
+        if (key.indexOf('mercury:') === 0) {
+          key = key.replace(/^mercury:/, '');
+          this.__global_handlers__[key] = method;
+          Mercury.on(key, method);
+          continue;
+        }
+        _results.push(this.on(key, method));
+      }
+      return _results;
+    };
+
+    return Plugin;
+
+  })(Mercury.Module);
+
+  Mercury.Plugin.Module = {
+    registerPlugin: Mercury.Plugin.register,
+    getPlugin: Mercury.Plugin.get
+  };
+
+  Mercury.Plugin.Definition = (function() {
+
+    function Definition(options) {
+      this.options = options != null ? options : {};
+      this.configuration = this.options.config;
+      this.name = this.options.name;
+      registered[this.name] = this;
+    }
+
+    Definition.prototype.signature = function() {
+      return $.extend({}, this.options, {
+        config: this.configuration
+      });
+    };
+
+    Definition.prototype.config = function(path) {
+      var config, part, _i, _len, _ref;
+      config = this.configuration || (this.configuration = {});
+      try {
+        _ref = path.split(':');
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          part = _ref[_i];
+          config = config[part];
+        }
+      } catch (e) {
+        return Mercury.Config.get(path);
+      }
+      if (typeof config === 'undefined') {
+        return Mercury.Config.get(path);
+      }
+      return config;
+    };
+
+    Definition.prototype.configure = function() {
+      var args, config, merge, part, parts, path, value;
+      args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+      path = args.shift();
+      value = args.pop();
+      merge = args.pop();
+      if (typeof path === 'object') {
+        return this.configuration = path;
+      }
+      config = this.configuration || (this.configuration = {});
+      parts = path.split(':');
+      part = parts.shift();
+      while (part) {
+        if (parts.length === 0) {
+          if (merge && typeof config[part] === 'object') {
+            config[part] = $.extend(true, config[part], value);
+          } else {
+            config[part] = value;
+          }
+          return config[part];
+        }
+        config = config[part] ? config[part] : config[part] = {};
+        part = parts.shift();
+      }
+    };
+
+    return Definition;
+
+  })();
+
+}).call(this);
+(function() {
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
     __slice = [].slice;
@@ -892,11 +1229,11 @@ Copyright (c) 2013 Jeremy Jackson
 
     View.Modules = {};
 
-    View.prototype.logPrefix = 'Mercury.View:';
+    View.logPrefix = 'Mercury.View:';
+
+    View.tag = 'div';
 
     View.prototype.eventSplitter = /^(\S+)\s*(.*)$/;
-
-    View.prototype.tag = 'div';
 
     function View(options) {
       var key, value, _ref;
@@ -907,57 +1244,70 @@ Copyright (c) 2013 Jeremy Jackson
         this[key] = value;
       }
       this.buildElement();
-      this.elements || (this.elements = this.constructor.elements);
-      this.events || (this.events = this.constructor.events);
+      this.elements = $.extend({}, this.constructor.elements, this.elements);
+      this.events = $.extend({}, this.constructor.events, this.events);
+      this.attributes = $.extend({}, this.constructor.attributes, this.attributes);
+      this.refreshElements();
       if (typeof this.build === "function") {
         this.build();
       }
       this.trigger('build');
-      if (this.events) {
-        this.delegateEvents(this.events);
-      }
-      if (this.elements) {
-        this.refreshElements();
-      }
+      this.delegateEvents(this.events);
+      this.refreshElements();
       View.__super__.constructor.apply(this, arguments);
       this.trigger('init');
     }
 
     View.prototype.buildElement = function() {
-      if (!this.el) {
-        this.el = document.createElement(this.tag);
+      if (this.$el) {
+        this.el = this.$el.get(0);
+      } else {
+        if (!this.el) {
+          this.el = document.createElement(this.tag || this.constructor.tag);
+        }
+        this.$el = $(this.el);
       }
-      this.el = $(this.el);
-      this.$el = this.el;
       this.attr(this.attributes);
+      this.addClass(this.constructor.className);
       this.addClass(this.className);
-      if (this.template) {
-        return this.html(this.renderTemplate(this.template));
+      if (this.template || this.constructor.template) {
+        return this.html(this.renderTemplate(this.template || this.constructor.template));
       }
     };
 
     View.prototype.$ = function(selector) {
-      return $(selector, this.el);
+      return $(selector, this.$el);
     };
 
     View.prototype.addClass = function(className) {
-      return this.el.addClass(className);
+      return this.$el.addClass(className);
+    };
+
+    View.prototype.removeClass = function(className) {
+      return this.$el.removeClass(className);
     };
 
     View.prototype.attr = function(key, value) {
       if (key && arguments.length === 1) {
-        return this.el.attr(key);
+        return this.$el.attr(key);
       }
-      return this.el.attr(key, value);
+      return this.$el.attr(key, value);
+    };
+
+    View.prototype.css = function(key, value) {
+      if (key && arguments.length === 1) {
+        return this.$el.css(key);
+      }
+      return this.$el.css(key, value);
     };
 
     View.prototype.html = function(element) {
       if (!arguments.length) {
-        return this.el.html();
+        return this.$el.html();
       }
-      this.el.html((element != null ? element.el : void 0) || element);
+      this.$el.html((element != null ? element.$el : void 0) || (element != null ? element.el : void 0) || element);
       this.refreshElements();
-      return this.el;
+      return this.$el;
     };
 
     View.prototype.append = function() {
@@ -968,18 +1318,18 @@ Copyright (c) 2013 Jeremy Jackson
         _results = [];
         for (_i = 0, _len = elements.length; _i < _len; _i++) {
           e = elements[_i];
-          _results.push(e.el || e);
+          _results.push(e.$el || e.el || e);
         }
         return _results;
       })();
-      (_ref = this.el).append.apply(_ref, elements);
+      (_ref = this.$el).append.apply(_ref, elements);
       this.refreshElements();
-      return this.el;
+      return this.$el;
     };
 
     View.prototype.appendTo = function(element) {
-      this.el.appendTo(element.el || element);
-      return this.el;
+      this.$el.appendTo(element.$el || element.el || element);
+      return this.$el;
     };
 
     View.prototype.delay = function(ms, callback) {
@@ -995,7 +1345,7 @@ Copyright (c) 2013 Jeremy Jackson
       _results = [];
       for (key in _ref) {
         value = _ref[key];
-        _results.push(this[key] = this.$(value));
+        _results.push(this["$" + key] = this.$(value));
       }
       return _results;
     };
@@ -1029,8 +1379,14 @@ Copyright (c) 2013 Jeremy Jackson
     };
 
     View.prototype.release = function() {
+      var method, name, _ref;
       this.trigger('release');
-      this.el.remove();
+      this.$el.remove();
+      _ref = this.__global_handlers__ || {};
+      for (name in _ref) {
+        method = _ref[name];
+        Mercury.off(name, method);
+      }
       return this.off();
     };
 
@@ -1039,8 +1395,9 @@ Copyright (c) 2013 Jeremy Jackson
         _this = this;
       if (arguments.length === 1) {
         events = el;
-        el = this.el;
+        el = this.$el;
       }
+      this.__global_handlers__ || (this.__global_handlers__ = {});
       _results = [];
       for (key in events) {
         method = events[key];
@@ -1052,7 +1409,7 @@ Copyright (c) 2013 Jeremy Jackson
             };
           })(method);
         } else {
-          if (method.indexOf(':') > -1) {
+          if (method.indexOf('mercury:') === 0) {
             method = method.replace(/^mercury:/, '');
             method = (function(method) {
               return function() {
@@ -1071,8 +1428,10 @@ Copyright (c) 2013 Jeremy Jackson
             })(method);
           }
         }
-        if (key.indexOf(':') > -1) {
-          Mercury.on(key.replace(/^mercury:/, ''), method);
+        if (key.indexOf('mercury:') === 0) {
+          key = key.replace(/^mercury:/, '');
+          this.__global_handlers__[key] = method;
+          Mercury.on(key, method);
           continue;
         }
         _ref = key.match(this.eventSplitter), match = _ref[0], event = _ref[1], selector = _ref[2];
@@ -1120,13 +1479,13 @@ Copyright (c) 2013 Jeremy Jackson
       redo: 'onRedo'
     };
 
-    Region.define = function(className, type, actions) {
-      this.className = className;
+    Region.define = function(klass, type, actions) {
+      this.klass = klass;
       this.type = type;
       if (actions == null) {
         actions = {};
       }
-      this.logPrefix = this.prototype.logPrefix = "" + this.className + ":";
+      this.logPrefix = this.prototype.logPrefix = "" + this.klass + ":";
       this.prototype.actions = $.extend(this.prototype.actions, actions);
       this.prototype.toolbars = [this.type];
       this.off();
@@ -1194,6 +1553,7 @@ Copyright (c) 2013 Jeremy Jackson
     };
 
     function Region(el, options) {
+      var attr;
       this.el = el;
       this.options = options != null ? options : {};
       if (this.el && $(this.el).data('region')) {
@@ -1203,32 +1563,32 @@ Copyright (c) 2013 Jeremy Jackson
         this.notify(this.t('is unsupported in this browser'));
         return false;
       }
-      if (this.el.data) {
-        this.options = $.extend({}, JSON.parse(this.el.attr(this.config('regions:options')) || '{}'), options);
-      }
+      this.actions || (this.actions = {});
       this.context = $.extend({}, this.constructor.context, this.context);
       this.dataAttrs = $.extend({}, this.constructor.dataAttrs, this.dataAttrs);
-      this.actions || (this.actions = {});
+      if (this.el && (attr = this.config('regions:options'))) {
+        this.options = $.extend(JSON.parse($(this.el).attr(attr) || '{}'), this.options);
+      }
       if (typeof this.beforeBuild === "function") {
         this.beforeBuild();
       }
       Region.__super__.constructor.call(this, this.options);
-      if (!this.focusable) {
+      if (!this.$focusable) {
         this.attr({
           tabindex: 0
         });
       }
-      this.name || (this.name = this.el.attr(this.config('regions:identifier')));
+      this.name || (this.name = this.$el.attr(this.config('regions:identifier')));
       this.previewing || (this.previewing = false);
       this.focused || (this.focused = false);
-      this.focusable || (this.focusable = this.el);
+      this.$focusable || (this.$focusable = this.$el);
       this.skipHistoryOn || (this.skipHistoryOn = ['redo']);
       this.changed || (this.changed = false);
       this.setInitialData();
       if (typeof this.afterBuild === "function") {
         this.afterBuild();
       }
-      this.el.data({
+      this.$el.data({
         region: this
       });
       if (!this.name) {
@@ -1250,7 +1610,7 @@ Copyright (c) 2013 Jeremy Jackson
       for (attr in _ref) {
         handler = _ref[attr];
         obj = {};
-        obj[attr] = this.el.data(attr) || null;
+        obj[attr] = this.$el.data(attr) || null;
         _results.push(this.data(obj));
       }
       return _results;
@@ -1269,11 +1629,19 @@ Copyright (c) 2013 Jeremy Jackson
       return !!this.actions[action];
     };
 
-    Region.prototype.hasContext = function(context) {
+    Region.prototype.hasContext = function(context, result) {
+      if (result == null) {
+        result = false;
+      }
       if (!this.context[context]) {
         return false;
       }
-      return !!this.context[context].call(this, context);
+      context = this.context[context].call(this, context);
+      if (result) {
+        return context;
+      } else {
+        return !!context;
+      }
     };
 
     Region.prototype.handleAction = function(name, options) {
@@ -1307,9 +1675,9 @@ Copyright (c) 2013 Jeremy Jackson
       this.trigger('preview', this.previewing);
       if (this.previewing) {
         this.blur();
-        this.focusable.removeAttr('tabindex');
+        this.$focusable.removeAttr('tabindex');
       } else {
-        this.focusable.attr({
+        this.$focusable.attr({
           tabindex: 0
         });
       }
@@ -1341,13 +1709,13 @@ Copyright (c) 2013 Jeremy Jackson
 
     Region.prototype.focus = function() {
       this.focused = true;
-      this.focusable.focus();
+      this.$focusable.focus();
       return typeof this.onFocus === "function" ? this.onFocus() : void 0;
     };
 
     Region.prototype.blur = function() {
       this.focused = false;
-      this.focusable.blur();
+      this.$focusable.blur();
       return typeof this.onBlur === "function" ? this.onBlur() : void 0;
     };
 
@@ -1365,7 +1733,7 @@ Copyright (c) 2013 Jeremy Jackson
     Region.prototype.data = function(key, value) {
       var data, obj;
       if (typeof key === 'string' && arguments.length === 1 || arguments.length === 0) {
-        data = this.el.data(key);
+        data = this.$el.data(key);
         if (arguments.length === 0) {
           data = $.extend({}, data);
           delete data.region;
@@ -1379,12 +1747,12 @@ Copyright (c) 2013 Jeremy Jackson
         obj[key] = value;
       }
       this.setData(obj);
-      return this.el;
+      return this.$el;
     };
 
     Region.prototype.setData = function(obj) {
       var attr, value, _ref, _results;
-      this.el.data(obj);
+      this.$el.data(obj);
       _results = [];
       for (attr in obj) {
         value = obj[attr];
@@ -1450,30 +1818,31 @@ Copyright (c) 2013 Jeremy Jackson
     };
 
     Region.prototype.release = function() {
-      this.el.data({
+      this.$el.data({
         region: null
       });
-      this.el.removeClass("mercury-" + this.constructor.type + "-region");
-      this.focusable.removeAttr('tabindex');
+      this.removeClass("mercury-" + this.constructor.type + "-region");
+      this.$focusable.removeAttr('tabindex');
       this.trigger('release');
-      this.el.off();
-      this.focusable.off();
+      this.$el.off();
+      this.$focusable.off();
       this.off();
       return this.blur();
     };
 
     Region.prototype.bindDefaultEvents = function() {
-      var _this = this;
-      Mercury.on('action', function() {
-        return _this.handleAction.apply(_this, arguments);
-      });
-      Mercury.on('mode', function() {
-        return _this.handleMode.apply(_this, arguments);
-      });
-      Mercury.on('save', function() {
-        return _this.onSave();
-      });
       this.delegateActions($.extend(true, this.constructor.actions, this.constructor.defaultActions, this.actions || (this.actions = {})));
+      this.delegateEvents({
+        'mercury:action': function() {
+          return this.handleAction.apply(this, arguments);
+        },
+        'mercury:mode': function() {
+          return this.handleMode.apply(this, arguments);
+        },
+        'mercury:save': function() {
+          return this.onSave();
+        }
+      });
       this.bindFocusEvents();
       this.bindKeyEvents();
       this.bindMouseEvents();
@@ -1484,7 +1853,7 @@ Copyright (c) 2013 Jeremy Jackson
 
     Region.prototype.bindFocusEvents = function() {
       var _this = this;
-      return this.delegateEvents(this.focusable, {
+      return this.delegateEvents(this.$focusable, {
         focus: function() {
           _this.focused = true;
           _this.trigger('focus');
@@ -1500,7 +1869,7 @@ Copyright (c) 2013 Jeremy Jackson
 
     Region.prototype.bindKeyEvents = function() {
       var _this = this;
-      return this.delegateEvents(this.focusable, {
+      return this.delegateEvents(this.$focusable, {
         keyup: function() {
           return _this.trigger('update');
         },
@@ -1520,7 +1889,7 @@ Copyright (c) 2013 Jeremy Jackson
 
     Region.prototype.bindMouseEvents = function() {
       var _this = this;
-      return this.delegateEvents(this.focusable, {
+      return this.delegateEvents(this.$focusable, {
         mouseup: function() {
           return _this.trigger('update');
         }
@@ -1529,7 +1898,7 @@ Copyright (c) 2013 Jeremy Jackson
 
     Region.prototype.bindDropEvents = function() {
       var _this = this;
-      return this.delegateEvents(this.el, {
+      return this.delegateEvents(this.$el, {
         dragenter: function(e) {
           return e.preventDefault();
         },
@@ -1576,56 +1945,56 @@ Copyright (c) 2013 Jeremy Jackson
 
 }).call(this);
 (function() {
-  var __hasProp = {}.hasOwnProperty,
+  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+    __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
   Mercury.BaseInterface = (function(_super) {
 
     __extends(BaseInterface, _super);
 
-    BaseInterface.prototype.logPrefix = 'Mercury.BaseInterface:';
+    BaseInterface.logPrefix = 'Mercury.BaseInterface:';
 
-    BaseInterface.prototype.tag = 'mercury';
+    BaseInterface.tag = 'mercury';
 
-    BaseInterface.prototype.events = {
+    BaseInterface.events = {
       'mousedown': 'focusActiveRegion',
       'focusout': 'focusActiveRegion',
       'mercury:focus': 'focusActiveRegion',
-      'region:focus': 'onRegionFocus',
-      'region:release': 'onRegionRelease',
+      'mercury:region:focus': 'onRegionFocus',
+      'mercury:region:release': 'onRegionRelease',
       'mercury:reinitialize': 'reinitialize'
     };
 
     function BaseInterface() {
-      var _this = this;
+      this.onUnload = __bind(this.onUnload, this);
+
+      this.onResize = __bind(this.onResize, this);
       if (parent !== window && parent.Mercury) {
         this.log(this.t('is already defined in parent frame'));
         return;
       }
       BaseInterface.__super__.constructor.apply(this, arguments);
       this.regions || (this.regions = []);
-      $(window).on('beforeunload', function() {
-        return _this.onUnload();
-      });
+      $(window).on('beforeunload', this.onUnload);
+      $(window).on('resize', this.onResize);
       this.initialize();
       this.buildInterface();
       this.bindDefaultEvents();
-      this.el.removeClass('loading');
+      this.removeClass('loading');
       Mercury.trigger('initialized');
     }
 
     BaseInterface.prototype.build = function() {
       if (!this.el) {
-        this.el = document.createElement(this.tag);
+        this.$el = this.el = $(this.tag);
       }
-      this.el = $(this.el);
-      this.$el = this.el;
       this.attr(this.attributes);
       return this.addClass(this.className);
     };
 
     BaseInterface.prototype.init = function() {
-      $('body').before(this.el);
+      $('body').before(this.$el);
       this.makeShadowed();
       if (this.template) {
         this.html(this.renderTemplate(this.template));
@@ -1649,13 +2018,12 @@ Copyright (c) 2013 Jeremy Jackson
     };
 
     BaseInterface.prototype.makeShadowed = function() {
-      if (!(this.config('interface:shadowed') && this.el.get(0).webkitCreateShadowRoot)) {
+      if (!(this.config('interface:shadowed') && this.el.webkitCreateShadowRoot)) {
         return;
       }
-      this.shadow = $(this.el.get(0).webkitCreateShadowRoot());
+      this.shadow = $(this.el.webkitCreateShadowRoot());
       this.shadow.get(0).applyAuthorStyles = true;
-      this.shadow.append(this.el = $(document.createElement(this.tag)));
-      return this.$el = this.el;
+      return this.shadow.append(this.$el = this.el = $(document.createElement(this.tag)));
     };
 
     BaseInterface.prototype.buildToolbar = function() {
@@ -1681,15 +2049,13 @@ Copyright (c) 2013 Jeremy Jackson
     };
 
     BaseInterface.prototype.bindDefaultEvents = function() {
-      var _this = this;
-      Mercury.on('mode', function(mode) {
-        return _this.setMode(mode);
-      });
-      Mercury.on('action', function() {
-        return _this.focusActiveRegion();
-      });
-      return $('body').on('mousedown', function() {
-        return Mercury.trigger('dialogs:hide');
+      return this.delegateEvents({
+        'mercury:mode': function(mode) {
+          return this.setMode(mode);
+        },
+        'mercury:action': function() {
+          return this.focusActiveRegion();
+        }
       });
     };
 
@@ -1757,6 +2123,20 @@ Copyright (c) 2013 Jeremy Jackson
       }
     };
 
+    BaseInterface.prototype.dimensions = function() {
+      var statusbarHeight, toolbarHeight;
+      toolbarHeight = this.toolbar.height();
+      statusbarHeight = this.statusbar.height();
+      return {
+        top: toolbarHeight,
+        left: 0,
+        right: 0,
+        bottom: statusbarHeight,
+        width: $(window).width(),
+        height: $(window).height() - toolbarHeight - statusbarHeight
+      };
+    };
+
     BaseInterface.prototype.onRegionFocus = function(region) {
       return this.region = region;
     };
@@ -1770,6 +2150,10 @@ Copyright (c) 2013 Jeremy Jackson
       if (index > -1) {
         return this.regions.splice(index, 1);
       }
+    };
+
+    BaseInterface.prototype.onResize = function() {
+      return Mercury.trigger('interface:resize', this.dimensions());
     };
 
     BaseInterface.prototype.onUnload = function() {
@@ -1794,6 +2178,7 @@ Copyright (c) 2013 Jeremy Jackson
     BaseInterface.prototype.release = function() {
       this.toolbar.release();
       this.statusbar.release();
+      $(window).off('resize', this.resize);
       while (this.regions.length) {
         this.regions.shift().release();
       }
@@ -1828,20 +2213,20 @@ Copyright (c) 2013 Jeremy Jackson
       return FrameInterface.__super__.constructor.apply(this, arguments);
     }
 
-    FrameInterface.prototype.logPrefix = 'Mercury.FrameInterface:';
+    FrameInterface.logPrefix = 'Mercury.FrameInterface:';
 
-    FrameInterface.prototype.className = 'mercury-frame-interface';
+    FrameInterface.className = 'mercury-frame-interface';
 
     FrameInterface.prototype.initialize = function() {
-      this.frame = $(this.frame).addClass('mercury-frame-interface-frame');
-      if (!this.frame.length) {
+      this.$frame = $(this.frame).addClass('mercury-frame-interface-frame');
+      if (!this.$frame.length) {
         this.initialized = true;
         return FrameInterface.__super__.initialize.apply(this, arguments);
       }
     };
 
     FrameInterface.prototype.reinitialize = function() {
-      if (this.frame.length) {
+      if (this.$frame.length) {
         this.initialized = false;
         return this.initializeFrame();
       } else {
@@ -1851,11 +2236,13 @@ Copyright (c) 2013 Jeremy Jackson
 
     FrameInterface.prototype.bindDefaultEvents = function() {
       var _this = this;
-      this.frame.on('load', function() {
+      this.$frame.on('load', function() {
         return _this.initializeFrame();
       });
-      Mercury.on('initialize', function() {
-        return _this.initializeFrame();
+      this.delegateEvents({
+        'mercury:initialize': function() {
+          return this.initializeFrame();
+        }
       });
       return FrameInterface.__super__.bindDefaultEvents.apply(this, arguments);
     };
@@ -1880,7 +2267,7 @@ Copyright (c) 2013 Jeremy Jackson
 
     FrameInterface.prototype.setupDocument = function() {
       var contentWindow;
-      contentWindow = this.frame.get(0).contentWindow;
+      contentWindow = this.$frame.get(0).contentWindow;
       contentWindow.Mercury = Mercury;
       return this.document = $(contentWindow.document);
     };
@@ -1888,6 +2275,562 @@ Copyright (c) 2013 Jeremy Jackson
     return FrameInterface;
 
   })(Mercury.BaseInterface);
+
+}).call(this);
+(function() {
+  var instances,
+    __slice = [].slice;
+
+  instances = {};
+
+  Mercury.View.Modules.Singleton = {
+    ensureSingleton: function() {
+      var args, instance, name;
+      name = arguments[0], args = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
+      instance = instances[name];
+      if (instance && instance.constructor === this.constructor) {
+        instance.update.apply(instance, args);
+        return instance;
+      } else {
+        if (instance != null) {
+          instance.release();
+        }
+        instances[name] = this;
+        return false;
+      }
+    },
+    removeSingleton: function(name) {
+      return instances[name] = null;
+    }
+  };
+
+}).call(this);
+(function() {
+
+  Mercury.View.Modules.ToolbarFocusable = {
+    included: function() {
+      return this.on('build', this.buildToolbarFocusable);
+    },
+    buildToolbarFocusable: function() {
+      return this.delegateEvents({
+        'mousedown': function(e) {
+          return e.stopPropagation();
+        },
+        'mouseup': function(e) {
+          return e.stopPropagation();
+        }
+      });
+    }
+  };
+
+}).call(this);
+(function() {
+
+  Mercury.View.Modules.ScrollPropagation = {
+    preventScrollPropagation: function(el) {
+      return el.on('mousewheel DOMMouseScroll', function(e) {
+        var delta, scrollTop, _ref;
+        _ref = [e.originalEvent.wheelDelta || -e.originalEvent.detail, el.scrollTop()], delta = _ref[0], scrollTop = _ref[1];
+        if (delta > 0 && scrollTop <= 0) {
+          return false;
+        }
+        if (delta < 0 && scrollTop >= el.get(0).scrollHeight - el.height()) {
+          return false;
+        }
+        return true;
+      });
+    }
+  };
+
+}).call(this);
+(function() {
+  var __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+    __slice = [].slice;
+
+  Mercury.Modal = (function(_super) {
+
+    __extends(Modal, _super);
+
+    Modal.include(Mercury.View.Modules.Singleton);
+
+    Modal.include(Mercury.View.Modules.ToolbarFocusable);
+
+    Modal.include(Mercury.View.Modules.ScrollPropagation);
+
+    Modal.logPrefix = 'Mercury.Modal:';
+
+    Modal.className = 'mercury-modal';
+
+    Modal.elements = {
+      overlay: '.mercury-modal-overlay',
+      dialog: '.mercury-modal-dialog-positioner',
+      content: '.mercury-modal-dialog-content',
+      contentContainer: '.mercury-modal-dialog-content-container',
+      titleContainer: '.mercury-modal-dialog-title',
+      title: '.mercury-modal-dialog-title span'
+    };
+
+    Modal.events = {
+      'click .mercury-modal-dialog-title em': 'release',
+      'click .mercury-modal-overlay': 'release',
+      'mercury:interface:hide': function() {
+        return this.hide(false);
+      },
+      'mercury:interface:show': function() {
+        return this.show(false);
+      },
+      'mercury:interface:resize': function() {
+        return this.resize(false);
+      }
+    };
+
+    Modal.prototype.primaryTemplate = 'modal';
+
+    function Modal(options) {
+      var instance, _base;
+      this.options = options != null ? options : {};
+      if (instance = this.ensureSingleton.apply(this, [this.primaryTemplate].concat(__slice.call(arguments)))) {
+        return instance;
+      }
+      (_base = this.options).template || (_base.template = this.template);
+      Modal.__super__.constructor.call(this, this.options);
+      this.show();
+    }
+
+    Modal.prototype.buildElement = function() {
+      this.subTemplate = this.options.template;
+      this.template = this.primaryTemplate;
+      return Modal.__super__.buildElement.apply(this, arguments);
+    };
+
+    Modal.prototype.build = function() {
+      this.addClass('loading');
+      this.appendTo(Mercury["interface"]);
+      return this.preventScrollPropagation(this.$contentContainer);
+    };
+
+    Modal.prototype.update = function(options) {
+      var content, key, value, _ref;
+      if (!this.visible) {
+        return;
+      }
+      this.options = $.extend({}, this.options, options || {});
+      _ref = this.options;
+      for (key in _ref) {
+        value = _ref[key];
+        this[key] = value;
+      }
+      this.subTemplate = this.options.template;
+      this.template = this.primaryTemplate;
+      this.$title.html(this.title);
+      this.$dialog.css({
+        width: this.width
+      });
+      content = this.contentFromOptions();
+      if (content === this.lastContent) {
+        return;
+      }
+      this.addClass('loading');
+      this.$content.css({
+        visibility: 'hidden',
+        opacity: 0,
+        width: this.width
+      }).html(content);
+      this.lastContent = content;
+      this.resize();
+      return this.show(false);
+    };
+
+    Modal.prototype.resize = function(animate) {
+      var height, titleHeight;
+      if (animate == null) {
+        animate = true;
+      }
+      clearTimeout(this.showContentTimeout);
+      if (!animate) {
+        this.addClass('mercury-no-animation');
+      }
+      this.$contentContainer.css({
+        height: 'auto'
+      });
+      titleHeight = this.$titleContainer.outerHeight();
+      height = Math.min(this.$content.outerHeight() + titleHeight, $(window).height() - 10);
+      this.$dialog.css({
+        height: height
+      });
+      this.$contentContainer.css({
+        height: height - titleHeight
+      });
+      if (animate) {
+        this.showContentTimeout = this.delay(300, this.showContent);
+      } else {
+        this.showContent(false);
+      }
+      return this.removeClass('mercury-no-animation');
+    };
+
+    Modal.prototype.contentFromOptions = function() {
+      if (this.subTemplate) {
+        return this.renderTemplate(this.subTemplate);
+      }
+      return this.content;
+    };
+
+    Modal.prototype.showContent = function(animate) {
+      if (animate == null) {
+        animate = true;
+      }
+      clearTimeout(this.contentOpacityTimeout);
+      this.removeClass('loading');
+      this.$content.css({
+        visibility: 'visible',
+        width: 'auto'
+      });
+      if (animate) {
+        return this.contentOpacityTimeout = this.delay(50, function() {
+          return this.$content.css({
+            opacity: 1
+          });
+        });
+      } else {
+        return this.$content.css({
+          opacity: 1
+        });
+      }
+    };
+
+    Modal.prototype.show = function(update) {
+      if (update == null) {
+        update = true;
+      }
+      clearTimeout(this.visibilityTimout);
+      this.visible = true;
+      this.$el.show();
+      return this.visibilityTimout = this.delay(50, function() {
+        this.css({
+          opacity: 1
+        });
+        if (update) {
+          return this.update();
+        }
+      });
+    };
+
+    Modal.prototype.hide = function(release) {
+      if (release == null) {
+        release = true;
+      }
+      Mercury.trigger('focus');
+      clearTimeout(this.visibilityTimout);
+      this.visible = false;
+      this.css({
+        opacity: 0
+      });
+      return this.visibilityTimout = this.delay(250, function() {
+        this.$el.hide();
+        if (release) {
+          return this.release();
+        }
+      });
+    };
+
+    Modal.prototype.release = function() {
+      if (this.visible) {
+        return this.hide(true);
+      }
+      this.removeSingleton(this.primaryTemplate);
+      return Modal.__super__.release.apply(this, arguments);
+    };
+
+    return Modal;
+
+  })(Mercury.View);
+
+}).call(this);
+(function() {
+  var __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+  Mercury.Lightview = (function(_super) {
+
+    __extends(Lightview, _super);
+
+    function Lightview() {
+      return Lightview.__super__.constructor.apply(this, arguments);
+    }
+
+    Lightview.logPrefix = 'Mercury.Lightview:';
+
+    Lightview.className = 'mercury-lightview';
+
+    Lightview.elements = {
+      overlay: '.mercury-lightview-overlay',
+      dialog: '.mercury-lightview-dialog-positioner',
+      content: '.mercury-lightview-dialog-content',
+      contentContainer: '.mercury-lightview-dialog-content-container',
+      titleContainer: '.mercury-lightview-dialog-title',
+      title: '.mercury-lightview-dialog-title span'
+    };
+
+    Lightview.events = {
+      'click .mercury-lightview-dialog-title em': 'release',
+      'click .mercury-lightview-overlay': 'release',
+      'mercury:interface:hide': function() {
+        return this.hide(false);
+      },
+      'mercury:interface:show': function() {
+        return this.show(false);
+      },
+      'mercury:interface:resize': function() {
+        return this.resize(false);
+      }
+    };
+
+    Lightview.prototype.primaryTemplate = 'lightview';
+
+    Lightview.prototype.build = function() {
+      Lightview.__super__.build.apply(this, arguments);
+      return this.$dialog.css({
+        marginTop: ($(window).height() - 75) / 2
+      });
+    };
+
+    Lightview.prototype.resize = function(animate) {
+      var height, titleHeight;
+      if (animate == null) {
+        animate = true;
+      }
+      clearTimeout(this.showContentTimeout);
+      if (!animate) {
+        this.addClass('mercury-no-animation');
+      }
+      this.$contentContainer.css({
+        height: 'auto'
+      });
+      this.$content.css({
+        width: Math.min(this.$content.outerWidth(), $(window).width())
+      });
+      titleHeight = this.$titleContainer.outerHeight();
+      height = Math.min(this.$content.outerHeight() + titleHeight, $(window).height());
+      this.$dialog.css({
+        marginTop: ($(window).height() - height) / 2,
+        height: height
+      });
+      this.$content.css({
+        width: 'auto'
+      });
+      this.$contentContainer.css({
+        height: height - titleHeight
+      });
+      if (animate) {
+        this.showContentTimeout = this.delay(300, this.showContent);
+      } else {
+        this.showContent(false);
+      }
+      return this.removeClass('mercury-no-animation');
+    };
+
+    return Lightview;
+
+  })(Mercury.Modal);
+
+}).call(this);
+(function() {
+  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+  Mercury.Panel = (function(_super) {
+
+    __extends(Panel, _super);
+
+    Panel.include(Mercury.View.Modules.Singleton);
+
+    Panel.include(Mercury.View.Modules.ToolbarFocusable);
+
+    Panel.include(Mercury.View.Modules.ScrollPropagation);
+
+    Panel.logPrefix = 'Mercury.Panel:';
+
+    Panel.className = 'mercury-panel';
+
+    Panel.elements = {
+      content: '.mercury-panel-content',
+      contentContainer: '.mercury-panel-content-container',
+      titleContainer: '.mercury-panel-title',
+      title: '.mercury-panel-title span'
+    };
+
+    Panel.events = {
+      'click .mercury-panel-title em': 'release',
+      'mercury:interface:hide': function() {
+        return this.hide(false);
+      },
+      'mercury:interface:show': function() {
+        return this.show(false);
+      },
+      'mercury:interface:resize': function(e) {
+        return this.resize(false, e);
+      },
+      'mercury:panels:hide': 'release'
+    };
+
+    function Panel(options) {
+      var _base;
+      this.options = options != null ? options : {};
+      this.resize = __bind(this.resize, this);
+
+      (_base = this.options).template || (_base.template = this.template);
+      Mercury.trigger('panels:hide');
+      Panel.__super__.constructor.call(this, this.options);
+      this.show();
+    }
+
+    Panel.prototype.buildElement = function() {
+      this.subTemplate = this.options.template;
+      this.template = 'panel';
+      return Panel.__super__.buildElement.apply(this, arguments);
+    };
+
+    Panel.prototype.build = function() {
+      this.addClass('loading');
+      this.appendTo(Mercury["interface"]);
+      return this.preventScrollPropagation(this.$contentContainer);
+    };
+
+    Panel.prototype.update = function(options) {
+      var content, key, value, _ref;
+      if (!this.visible) {
+        return;
+      }
+      this.options = $.extend({}, this.options, options || {});
+      _ref = this.options;
+      for (key in _ref) {
+        value = _ref[key];
+        this[key] = value;
+      }
+      this.subTemplate = this.options.template;
+      this.template = 'panel';
+      this.$title.html(this.title);
+      this.css({
+        width: this.width
+      });
+      content = this.contentFromOptions();
+      if (content === this.lastContent) {
+        return;
+      }
+      this.addClass('loading');
+      this.$content.css({
+        visibility: 'hidden',
+        opacity: 0,
+        width: this.width
+      }).html(content);
+      this.lastContent = content;
+      this.resize(true, Mercury["interface"].dimensions());
+      return this.show(false);
+    };
+
+    Panel.prototype.resize = function(animate, dimensions) {
+      var height, titleHeight;
+      if (animate == null) {
+        animate = true;
+      }
+      clearTimeout(this.showContentTimeout);
+      if (dimensions) {
+        this.css({
+          top: dimensions.top + 10,
+          bottom: dimensions.bottom + 10
+        });
+      }
+      if (!animate) {
+        this.addClass('mercury-no-animation');
+      }
+      titleHeight = this.$titleContainer.outerHeight();
+      height = this.$el.height();
+      this.$contentContainer.css({
+        height: height - titleHeight
+      });
+      if (animate) {
+        this.showContentTimeout = this.delay(300, this.showContent);
+      } else {
+        this.showContent(false);
+      }
+      return this.removeClass('mercury-no-animation');
+    };
+
+    Panel.prototype.contentFromOptions = function() {
+      if (this.subTemplate) {
+        return this.renderTemplate(this.subTemplate);
+      }
+      return this.content;
+    };
+
+    Panel.prototype.showContent = function(animate) {
+      clearTimeout(this.contentOpacityTimeout);
+      this.removeClass('loading');
+      this.$content.css({
+        visibility: 'visible',
+        width: 'auto'
+      });
+      if (animate) {
+        return this.contentOpacityTimeout = this.delay(50, function() {
+          return this.$content.css({
+            opacity: 1
+          });
+        });
+      } else {
+        return this.$content.css({
+          opacity: 1
+        });
+      }
+    };
+
+    Panel.prototype.show = function(update) {
+      if (update == null) {
+        update = true;
+      }
+      clearTimeout(this.visibilityTimout);
+      this.visible = true;
+      this.$el.show();
+      return this.visibilityTimout = this.delay(50, function() {
+        this.css({
+          opacity: 1
+        });
+        if (update) {
+          return this.update();
+        }
+      });
+    };
+
+    Panel.prototype.hide = function(release) {
+      if (release == null) {
+        release = true;
+      }
+      Mercury.trigger('focus');
+      clearTimeout(this.visibilityTimout);
+      this.visible = false;
+      this.css({
+        opacity: 0
+      });
+      return this.visibilityTimout = this.delay(250, function() {
+        this.$el.hide();
+        if (release) {
+          return this.release();
+        }
+      });
+    };
+
+    Panel.prototype.release = function() {
+      if (this.visible) {
+        return this.hide(true);
+      }
+      return Panel.__super__.release.apply(this, arguments);
+    };
+
+    return Panel;
+
+  })(Mercury.View);
 
 }).call(this);
 (function() {
@@ -1902,19 +2845,19 @@ Copyright (c) 2013 Jeremy Jackson
       return Statusbar.__super__.constructor.apply(this, arguments);
     }
 
-    Statusbar.prototype.logPrefix = 'Mercury.Statusbar:';
+    Statusbar.logPrefix = 'Mercury.Statusbar:';
 
-    Statusbar.prototype.className = 'mercury-statusbar';
+    Statusbar.className = 'mercury-statusbar';
 
-    Statusbar.prototype.template = 'statusbar';
+    Statusbar.template = 'statusbar';
 
-    Statusbar.prototype.events = {
-      'region:update': 'onRegionUpdate',
-      'interface:hide': 'hide',
-      'interface:show': 'show'
+    Statusbar.events = {
+      'mercury:region:update': 'onRegionUpdate',
+      'mercury:interface:hide': 'hide',
+      'mercury:interface:show': 'show'
     };
 
-    Statusbar.prototype.elements = {
+    Statusbar.elements = {
       path: '.mercury-statusbar-path'
     };
 
@@ -1927,18 +2870,46 @@ Copyright (c) 2013 Jeremy Jackson
       if (path == null) {
         path = [];
       }
-      this.path.html("<b>" + (this.t('Path:')) + " </b>");
+      this.$path.html("<b>" + (this.t('Path:')) + " </b>");
       _results = [];
       for (_i = 0, _len = path.length; _i < _len; _i++) {
         el = path[_i];
-        this.path.append(el);
+        this.$path.append(el);
         if (el !== path[path.length - 1]) {
-          _results.push(this.path.append(' &raquo; '));
+          _results.push(this.$path.append(' &raquo; '));
         } else {
           _results.push(void 0);
         }
       }
       return _results;
+    };
+
+    Statusbar.prototype.show = function() {
+      var _this = this;
+      clearTimeout(this.visibilityTimeout);
+      this.visible = true;
+      this.$el.show();
+      return this.visibilityTimeout = this.delay(50, function() {
+        return _this.css({
+          bottom: 0
+        });
+      });
+    };
+
+    Statusbar.prototype.hide = function() {
+      var _this = this;
+      clearTimeout(this.visibilityTimeout);
+      this.visible = false;
+      this.css({
+        bottom: -this.$el.height()
+      });
+      return this.visibilityTimeout = this.delay(250, function() {
+        return _this.$el.hide();
+      });
+    };
+
+    Statusbar.prototype.height = function() {
+      return this.$el.outerHeight();
     };
 
     Statusbar.prototype.onRegionUpdate = function(region) {
@@ -1948,31 +2919,291 @@ Copyright (c) 2013 Jeremy Jackson
       }
     };
 
-    Statusbar.prototype.hide = function() {
-      var _this = this;
-      clearTimeout(this.visibilityTimeout);
-      this.visible = false;
-      this.el.css({
-        bottom: -this.el.height()
-      });
-      return this.visibilityTimeout = this.delay(250, function() {
-        return _this.el.hide();
-      });
-    };
-
-    Statusbar.prototype.show = function() {
-      var _this = this;
-      clearTimeout(this.visibilityTimeout);
-      this.visible = true;
-      this.el.show();
-      return this.visibilityTimeout = this.delay(1, function() {
-        return _this.el.css({
-          bottom: 0
-        });
-      });
-    };
-
     return Statusbar;
+
+  })(Mercury.View);
+
+}).call(this);
+(function() {
+  var __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+    __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; },
+    __slice = [].slice;
+
+  Mercury.ToolbarButton = (function(_super) {
+
+    __extends(ToolbarButton, _super);
+
+    ToolbarButton.logPrefix = 'Mercury.ToolbarButton:';
+
+    ToolbarButton.className = 'mercury-toolbar-button';
+
+    ToolbarButton.events = {
+      'mousedown': 'indicate',
+      'mouseup': 'deindicate',
+      'mouseout': 'deindicate',
+      'click': 'triggerAction',
+      'mercury:region:focus': 'onRegionFocus',
+      'mercury:region:action': 'onRegionUpdate',
+      'mercury:region:update': 'onRegionUpdate'
+    };
+
+    ToolbarButton.prototype.standardOptions = ['title', 'icon', 'action', 'global', 'button', 'settings'];
+
+    ToolbarButton.create = function(name, label, options) {
+      var Klass;
+      if (options == null) {
+        options = {};
+      }
+      if (options.button && (Klass = Mercury[("toolbar_" + options.button).toCamelCase(true)])) {
+        return new Klass(name, label, options);
+      }
+      if (options.plugin && (Klass = Mercury.getPlugin(options.plugin).Button)) {
+        return new Klass(name, label, options);
+      }
+      return new Mercury.ToolbarButton(name, label, options);
+    };
+
+    function ToolbarButton(name, label, options) {
+      this.name = name;
+      this.label = label;
+      this.options = options != null ? options : {};
+      this.determineAction();
+      this.determineType();
+      this.type = this.types[0];
+      ToolbarButton.__super__.constructor.call(this, this.options);
+    }
+
+    ToolbarButton.prototype.get = function(key) {
+      return this[key];
+    };
+
+    ToolbarButton.prototype.set = function(key, value) {
+      var attrs, _results;
+      attrs = {};
+      if (typeof key === 'object') {
+        attrs = key;
+      } else {
+        attrs[key] = value;
+      }
+      _results = [];
+      for (key in attrs) {
+        value = attrs[key];
+        _results.push(this[key] = value);
+      }
+      return _results;
+    };
+
+    ToolbarButton.prototype.deactivate = function() {
+      return this.removeClass('mercury-button-active');
+    };
+
+    ToolbarButton.prototype.activate = function() {
+      return this.addClass('mercury-button-active');
+    };
+
+    ToolbarButton.prototype.enable = function() {
+      return this.removeClass('mercury-button-disabled');
+    };
+
+    ToolbarButton.prototype.disable = function() {
+      return this.addClass('mercury-button-disabled');
+    };
+
+    ToolbarButton.prototype.deindicate = function() {
+      return this.removeClass('mercury-button-pressed');
+    };
+
+    ToolbarButton.prototype.indicate = function(e) {
+      var _ref;
+      if (this.isDisabled()) {
+        return;
+      }
+      if (e && ((_ref = this.subview) != null ? _ref.visible : void 0)) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+      return this.addClass('mercury-button-pressed');
+    };
+
+    ToolbarButton.prototype.determineAction = function() {
+      this.action = this.options.action || this.name;
+      if (typeof this.action === 'string') {
+        this.action = [this.action];
+      }
+      return this.actionName = this.action[0];
+    };
+
+    ToolbarButton.prototype.determineType = function() {
+      var type, value, _ref, _results;
+      this.types = [];
+      if (this.options.type) {
+        return this.types = [this.options.type];
+      }
+      _ref = this.options;
+      _results = [];
+      for (type in _ref) {
+        value = _ref[type];
+        if (__indexOf.call(this.standardOptions, type) < 0) {
+          _results.push(this.types.push(type));
+        }
+      }
+      return _results;
+    };
+
+    ToolbarButton.prototype.build = function() {
+      var _ref;
+      this.enablePlugin();
+      this.attr('data-type', this.type);
+      this.attr('data-icon', Mercury.Toolbar.icons[this.icon || this.name] || this.icon);
+      this.addClass("mercury-toolbar-" + (this.name.toDash()) + "-button");
+      this.html("<em>" + this.label + "</em>");
+      return (_ref = this.buildSubview()) != null ? _ref.appendTo(this) : void 0;
+    };
+
+    ToolbarButton.prototype.buildSubview = function() {
+      var Klass, options;
+      if (this.subview) {
+        return this.subview;
+      }
+      if (Klass = Mercury[("toolbar_" + this.type).toCamelCase(true)]) {
+        options = this.options[this.type];
+        if (typeof options === 'string') {
+          options = {
+            template: options
+          };
+        }
+        return this.subview = new Klass(options);
+      }
+    };
+
+    ToolbarButton.prototype.enablePlugin = function() {
+      if (!this.plugin) {
+        return;
+      }
+      this.plugin = Mercury.getPlugin(this.plugin, true);
+      return this.plugin.buttonRegistered(this);
+    };
+
+    ToolbarButton.prototype.triggerAction = function() {
+      if (this.isDisabled()) {
+        return;
+      }
+      if (this.subview) {
+        this.subview.toggle();
+      }
+      if (this.plugin) {
+        return this.plugin.trigger('button:click');
+      }
+      if (this.subview) {
+        return;
+      }
+      if (this.event) {
+        Mercury.trigger(this.event);
+      }
+      if (this.mode) {
+        Mercury.trigger('mode', this.mode);
+      }
+      return Mercury.trigger.apply(Mercury, ['action'].concat(__slice.call(this.action)));
+    };
+
+    ToolbarButton.prototype.isDisabled = function() {
+      return this.$el.closest('.mercury-button-disabled').length;
+    };
+
+    ToolbarButton.prototype.regionSupported = function(region) {
+      if (this.plugin) {
+        return this.plugin.regionSupported(region);
+      }
+      return region.hasAction(this.actionName);
+    };
+
+    ToolbarButton.prototype.onRegionFocus = function(region) {
+      var _this = this;
+      return this.delay(100, function() {
+        return _this.onRegionUpdate(region);
+      });
+    };
+
+    ToolbarButton.prototype.onRegionUpdate = function(region) {
+      this.deactivate();
+      if (this.global || this.regionSupported(region)) {
+        this.enable();
+        if (region.hasContext(this.name)) {
+          return this.activate();
+        }
+      } else {
+        return this.disable();
+      }
+    };
+
+    return ToolbarButton;
+
+  })(Mercury.View);
+
+}).call(this);
+(function() {
+  var __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+    __slice = [].slice;
+
+  Mercury.ToolbarItem = (function(_super) {
+
+    __extends(ToolbarItem, _super);
+
+    ToolbarItem.logPrefix = 'Mercury.ToolbarItem:';
+
+    function ToolbarItem(name, type, value) {
+      this.name = name != null ? name : 'unknown';
+      this.type = type != null ? type : 'unknown';
+      this.value = value != null ? value : null;
+      ToolbarItem.__super__.constructor.call(this);
+    }
+
+    ToolbarItem.prototype.build = function() {
+      var name, value, _ref;
+      this.addClasses();
+      if (typeof this.value !== 'object') {
+        return;
+      }
+      _ref = this.value;
+      for (name in _ref) {
+        value = _ref[name];
+        this.buildSubview(name, value);
+      }
+      if (this.type === 'group') {
+        return this.buildSubview('sep-final', '-');
+      }
+    };
+
+    ToolbarItem.prototype.buildSubview = function(name, value) {
+      var item;
+      item = (function() {
+        var _ref;
+        switch (($.isArray(value) ? 'array' : typeof value)) {
+          case 'object':
+            return new Mercury.ToolbarItem(name, 'group', value);
+          case 'string':
+            return new Mercury.ToolbarItem(name, 'separator', value);
+          case 'array':
+            return (_ref = Mercury.ToolbarButton).create.apply(_ref, [name].concat(__slice.call(value)));
+        }
+      })();
+      if (item) {
+        return this.append(item);
+      }
+    };
+
+    ToolbarItem.prototype.addClasses = function() {
+      var extraClass;
+      extraClass = "mercury-toolbar-" + (this.type.toDash());
+      if (this.value === '-') {
+        extraClass = "mercury-toolbar-line-" + (this.type.toDash());
+      }
+      return this.addClass(["mercury-toolbar-" + (this.name.toDash()) + "-" + (this.type.toDash()), extraClass].join(' '));
+    };
+
+    return ToolbarItem;
 
   })(Mercury.View);
 
@@ -1989,18 +3220,18 @@ Copyright (c) 2013 Jeremy Jackson
       return Toolbar.__super__.constructor.apply(this, arguments);
     }
 
-    Toolbar.prototype.logPrefix = 'Mercury.Toolbar:';
+    Toolbar.logPrefix = 'Mercury.Toolbar:';
 
-    Toolbar.prototype.className = 'mercury-toolbar';
+    Toolbar.className = 'mercury-toolbar';
 
-    Toolbar.prototype.events = {
-      'mousedown': 'dialogs:hide',
-      'interface:hide': 'hide',
-      'interface:show': 'show',
-      'region:focus': 'onRegionFocus'
+    Toolbar.events = {
+      'mousedown': 'mercury:dialogs:hide',
+      'mercury:interface:hide': 'hide',
+      'mercury:interface:show': 'show',
+      'mercury:region:focus': 'onRegionFocus'
     };
 
-    Toolbar.prototype.elements = {
+    Toolbar.elements = {
       toolbar: '.mercury-toolbar-secondary-container'
     };
 
@@ -2009,28 +3240,36 @@ Copyright (c) 2013 Jeremy Jackson
       return this.append(new Mercury.ToolbarItem('secondary', 'container', {}));
     };
 
-    Toolbar.prototype.hide = function() {
-      var _this = this;
-      clearTimeout(this.visibilityTimeout);
-      this.visible = false;
-      this.el.css({
-        top: -this.el.height()
-      });
-      return this.visibilityTimeout = this.delay(250, function() {
-        return _this.el.hide();
-      });
+    Toolbar.prototype.buildToolbar = function(name) {
+      return new Mercury.ToolbarItem(name, 'collection', this.config("toolbars:" + name)).appendTo(this.$toolbar);
     };
 
     Toolbar.prototype.show = function() {
       var _this = this;
       clearTimeout(this.visibilityTimeout);
       this.visible = true;
-      this.el.show();
-      return this.visibilityTimeout = this.delay(1, function() {
-        return _this.el.css({
+      this.$el.show();
+      return this.visibilityTimeout = this.delay(50, function() {
+        return _this.css({
           top: 0
         });
       });
+    };
+
+    Toolbar.prototype.hide = function() {
+      var _this = this;
+      clearTimeout(this.visibilityTimeout);
+      this.visible = false;
+      this.css({
+        top: -this.$el.height()
+      });
+      return this.visibilityTimeout = this.delay(250, function() {
+        return _this.$el.hide();
+      });
+    };
+
+    Toolbar.prototype.height = function() {
+      return this.$el.outerHeight();
     };
 
     Toolbar.prototype.onRegionFocus = function(region) {
@@ -2048,13 +3287,6 @@ Copyright (c) 2013 Jeremy Jackson
       return Mercury.trigger('region:update', region);
     };
 
-    Toolbar.prototype.buildToolbar = function(name) {
-      var toolbar;
-      toolbar = new Mercury.ToolbarItem(name, 'collection', this.config("toolbars:" + name));
-      toolbar.appendTo(this.toolbar);
-      return toolbar;
-    };
-
     Toolbar.icons = {
       save: '!',
       preview: '"',
@@ -2063,7 +3295,6 @@ Copyright (c) 2013 Jeremy Jackson
       link: '%',
       file: '&',
       table: "'",
-      character: '(',
       snippets: ')',
       history: '*',
       notes: '+',
@@ -2125,220 +3356,6 @@ Copyright (c) 2013 Jeremy Jackson
 
 }).call(this);
 (function() {
-  var __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-    __slice = [].slice;
-
-  Mercury.ToolbarItem = (function(_super) {
-
-    __extends(ToolbarItem, _super);
-
-    ToolbarItem.prototype.logPrefix = 'Mercury.ToolbarItem:';
-
-    function ToolbarItem(name, type, value) {
-      this.name = name;
-      this.type = type;
-      this.value = value;
-      this.items = [];
-      ToolbarItem.__super__.constructor.call(this);
-    }
-
-    ToolbarItem.prototype.build = function() {
-      var item, name, value, _ref;
-      this.addClasses();
-      if (typeof this.value !== 'object') {
-        return;
-      }
-      _ref = this.value;
-      for (name in _ref) {
-        value = _ref[name];
-        item = (function() {
-          switch (($.isArray(value) ? 'array' : typeof value)) {
-            case 'object':
-              return new Mercury.ToolbarItem(name, 'group', value);
-            case 'string':
-              return new Mercury.ToolbarItem(name, 'separator', value);
-            case 'array':
-              return (function(func, args, ctor) {
-                ctor.prototype = func.prototype;
-                var child = new ctor, result = func.apply(child, args);
-                return Object(result) === result ? result : child;
-              })(Mercury.ToolbarButton.create, [name].concat(__slice.call(value)), function(){});
-          }
-        })();
-        this.items.push(item);
-        if (item) {
-          this.append(item);
-        }
-      }
-      if (this.type === 'group') {
-        return this.append(new Mercury.ToolbarItem('sep_final', 'separator', '-'));
-      }
-    };
-
-    ToolbarItem.prototype.addClasses = function() {
-      var extraClass;
-      extraClass = "mercury-toolbar-" + (this.type.toDash());
-      if (this.value === '-') {
-        extraClass = "mercury-toolbar-line-" + (this.type.toDash());
-      }
-      return this.addClass(["mercury-toolbar-" + (this.name.toDash()) + "-" + (this.type.toDash()), extraClass].join(' '));
-    };
-
-    return ToolbarItem;
-
-  })(Mercury.View);
-
-}).call(this);
-(function() {
-  var __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-    __slice = [].slice;
-
-  Mercury.ToolbarButton = (function(_super) {
-
-    __extends(ToolbarButton, _super);
-
-    ToolbarButton.prototype.logPrefix = 'Mercury.ToolbarButton:';
-
-    ToolbarButton.prototype.className = 'mercury-toolbar-button';
-
-    ToolbarButton.prototype.events = {
-      'mousedown': function(e) {
-        if (this.subView && this.subView.visible) {
-          e.stopPropagation();
-        }
-        return this.addClass('mercury-button-pressed');
-      },
-      'mouseup': function() {
-        return this.el.removeClass('mercury-button-pressed');
-      },
-      'mouseout': function() {
-        return this.el.removeClass('mercury-button-pressed');
-      },
-      'click': 'triggerAction',
-      'region:focus': 'onRegionFocus',
-      'region:action': 'onRegionUpdate',
-      'region:update': 'onRegionUpdate'
-    };
-
-    ToolbarButton.prototype.standardOptions = ['title', 'icon', 'action', 'global', 'button'];
-
-    ToolbarButton.create = function(name, label, options) {
-      var Klass;
-      if (options == null) {
-        options = {};
-      }
-      if (options.button && (Klass = Mercury[("toolbar_" + options.button).toCamelCase(true)])) {
-        return new Klass(name, label, options);
-      }
-      return new Mercury.ToolbarButton(name, label, options);
-    };
-
-    function ToolbarButton(name, label, options) {
-      this.name = name;
-      this.label = label;
-      this.options = options != null ? options : {};
-      this.action = this.determineAction();
-      this.actionName = this.determineActionName();
-      this.type = this.determineType();
-      ToolbarButton.__super__.constructor.call(this, this.options);
-    }
-
-    ToolbarButton.prototype.build = function() {
-      var _ref;
-      this.attr('data-type', this.type);
-      this.attr('data-icon', Mercury.Toolbar.icons[this.icon || this.name] || this.icon);
-      this.addClass("mercury-toolbar-" + (this.name.toDash()) + "-button");
-      this.html("<em>" + this.label + "</em>");
-      return (_ref = this.buildSubView()) != null ? _ref.appendTo(this) : void 0;
-    };
-
-    ToolbarButton.prototype.buildSubView = function() {
-      var Klass, options;
-      if (Klass = Mercury[("toolbar_" + this.type).toCamelCase(true)]) {
-        options = this.options[this.type];
-        if (typeof options === 'string') {
-          options = {
-            template: options
-          };
-        }
-        return this.subView = new Klass(options);
-      }
-    };
-
-    ToolbarButton.prototype.determineAction = function() {
-      var action;
-      action = this.options.action || this.name;
-      if (typeof action === 'string') {
-        return [action];
-      }
-      return action;
-    };
-
-    ToolbarButton.prototype.determineActionName = function() {
-      var _ref;
-      return (_ref = this.determineAction()) != null ? _ref[0] : void 0;
-    };
-
-    ToolbarButton.prototype.determineType = function() {
-      var option, type, types, value, _i, _len, _ref;
-      if (this.type) {
-        return this.type;
-      }
-      if (this.options.type) {
-        return this.type = this.options.type;
-      }
-      types = $.extend({}, this.options);
-      _ref = this.standardOptions;
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        option = _ref[_i];
-        delete types[option];
-      }
-      for (type in types) {
-        value = types[type];
-        return this.type = type;
-      }
-    };
-
-    ToolbarButton.prototype.triggerAction = function() {
-      if (this.subView) {
-        return this.subView.toggle();
-      }
-      if (this.event) {
-        Mercury.trigger(this.event);
-      }
-      if (this.mode) {
-        Mercury.trigger('mode', this.mode);
-      }
-      return Mercury.trigger.apply(Mercury, ['action'].concat(__slice.call(this.action)));
-    };
-
-    ToolbarButton.prototype.onRegionFocus = function(region) {
-      var _this = this;
-      return this.delay(100, function() {
-        return _this.onRegionUpdate(region);
-      });
-    };
-
-    ToolbarButton.prototype.onRegionUpdate = function(region) {
-      this.el.removeClass('mercury-button-active');
-      if (region.hasAction(this.actionName) || this.global) {
-        this.el.removeClass('mercury-button-disabled');
-        if (region.hasContext(this.name)) {
-          return this.el.addClass('mercury-button-active');
-        }
-      } else {
-        return this.el.addClass('mercury-button-disabled');
-      }
-    };
-
-    return ToolbarButton;
-
-  })(Mercury.View);
-
-}).call(this);
-(function() {
 
   Mercury.View.Modules.ToolbarDialog = {
     included: function() {
@@ -2346,9 +3363,59 @@ Copyright (c) 2013 Jeremy Jackson
     },
     buildToolbarDialog: function() {
       return this.delegateEvents({
-        'dialogs:hide': function() {
+        'mercury:dialogs:hide': function() {
           return typeof this.hide === "function" ? this.hide() : void 0;
         }
+      });
+    }
+  };
+
+}).call(this);
+(function() {
+
+  Mercury.View.Modules.ToolbarPositionedDialog = {
+    included: function() {
+      return this.on('build', this.buildPositionedDialog);
+    },
+    buildPositionedDialog: function() {
+      return this.delegateEvents('mercury:interface:resize', this.position);
+    },
+    position: function() {
+      var e, left, o, p, top, v;
+      this.css({
+        left: 0,
+        top: 0
+      });
+      v = {
+        width: $(window).width(),
+        height: $(window).height()
+      };
+      e = {
+        width: this.$el.outerWidth(),
+        height: this.$el.outerHeight()
+      };
+      p = {
+        width: this.$el.parent().outerWidth(),
+        height: this.$el.parent().outerHeight()
+      };
+      o = this.$el.offset();
+      left = 0;
+      if (e.width + o.left > v.width) {
+        left = -e.width + p.width;
+      }
+      if (o.left + left < 0) {
+        left -= o.left + left;
+      }
+      top = 0;
+      if (e.height + o.top > v.height) {
+        top = -e.height;
+      }
+      if (o.top + top < 0) {
+        top -= o.top + top;
+      }
+      return this.css({
+        top: top,
+        left: left
       });
     }
   };
@@ -2366,7 +3433,7 @@ Copyright (c) 2013 Jeremy Jackson
         this.hide();
       }
       return this.delegateEvents({
-        'interface:hide': 'hide'
+        'mercury:interface:hide': 'hide'
       });
     },
     toggle: function() {
@@ -2380,20 +3447,23 @@ Copyright (c) 2013 Jeremy Jackson
       var _this = this;
       clearTimeout(this.visibilityTimeout);
       this.visible = false;
-      this.el.css({
+      this.css({
         opacity: 0
       });
       return this.visibilityTimeout = this.delay(100, function() {
-        return _this.el.hide();
+        return _this.$el.hide();
       });
     },
     show: function() {
       var _this = this;
       clearTimeout(this.visibilityTimeout);
       this.visible = true;
-      this.el.show();
+      this.$el.show();
+      if (typeof this.position === "function") {
+        this.position();
+      }
       return this.visibilityTimeout = this.delay(1, function() {
-        return _this.el.css({
+        return _this.css({
           opacity: 1
         });
       });
@@ -2415,11 +3485,13 @@ Copyright (c) 2013 Jeremy Jackson
 
     ToolbarPalette.include(Mercury.View.Modules.ToolbarDialog);
 
+    ToolbarPalette.include(Mercury.View.Modules.ToolbarPositionedDialog);
+
     ToolbarPalette.include(Mercury.View.Modules.VisibilityToggleable);
 
-    ToolbarPalette.prototype.logPrefix = 'Mercury.ToolbarPalette:';
+    ToolbarPalette.logPrefix = 'Mercury.ToolbarPalette:';
 
-    ToolbarPalette.prototype.className = 'mercury-toolbar-palette';
+    ToolbarPalette.className = 'mercury-toolbar-palette';
 
     return ToolbarPalette;
 
@@ -2440,11 +3512,13 @@ Copyright (c) 2013 Jeremy Jackson
 
     ToolbarSelect.include(Mercury.View.Modules.ToolbarDialog);
 
+    ToolbarSelect.include(Mercury.View.Modules.ToolbarPositionedDialog);
+
     ToolbarSelect.include(Mercury.View.Modules.VisibilityToggleable);
 
-    ToolbarSelect.prototype.logPrefix = 'Mercury.ToolbarSelect:';
+    ToolbarSelect.logPrefix = 'Mercury.ToolbarSelect:';
 
-    ToolbarSelect.prototype.className = 'mercury-toolbar-select';
+    ToolbarSelect.className = 'mercury-toolbar-select';
 
     return ToolbarSelect;
 
@@ -2567,17 +3641,17 @@ Copyright (c) 2013 Jeremy Jackson
 
     Uploader.supported = !!(window.FormData && new XMLHttpRequest().upload);
 
-    Uploader.prototype.logPrefix = 'Mercury.Uploader:';
+    Uploader.logPrefix = 'Mercury.Uploader:';
 
-    Uploader.prototype.className = 'mercury-uploader';
+    Uploader.className = 'mercury-uploader';
 
-    Uploader.prototype.template = 'uploader';
+    Uploader.template = 'uploader';
 
-    Uploader.prototype.attributes = {
+    Uploader.attributes = {
       style: 'opacity:0'
     };
 
-    Uploader.prototype.elements = {
+    Uploader.elements = {
       status: '.mercury-uploader-progress span',
       details: '.mercury-uploader-details',
       preview: '.mercury-uploader-preview b',
@@ -2625,8 +3699,8 @@ Copyright (c) 2013 Jeremy Jackson
     Uploader.prototype.show = function() {
       var _this = this;
       this.update(this.t('Processing...'));
-      return this.delay(1, function() {
-        return _this.el.css({
+      return this.delay(50, function() {
+        return _this.css({
           opacity: 1
         });
       });
@@ -2637,7 +3711,7 @@ Copyright (c) 2013 Jeremy Jackson
         ms = 0;
       }
       return this.delay(ms, function() {
-        this.el.css({
+        this.css({
           opacity: 0
         });
         return this.delay(250, function() {
@@ -2672,24 +3746,24 @@ Copyright (c) 2013 Jeremy Jackson
       if (loaded == null) {
         loaded = 0;
       }
-      if (message) {
-        this.status.html(message);
-      }
       percent = Math.floor((this.loaded + loaded) * 100 / this.total) + '%';
-      this.indicator.css({
+      if (message) {
+        this.$status.html(message);
+      }
+      this.$indicator.css({
         width: percent
       });
-      return this.percent.html(percent);
+      return this.$percent.html(percent);
     };
 
     Uploader.prototype.loadDetails = function() {
       var _this = this;
-      this.details.html([this.t('Name: %s', this.file.get('name')), this.t('Type: %s', this.file.get('type')), this.t('Size: %s', this.file.readableSize())].join('<br/>'));
+      this.$details.html([this.t('Name: %s', this.file.get('name')), this.t('Type: %s', this.file.get('type')), this.t('Size: %s', this.file.readableSize())].join('<br/>'));
       if (!this.file.isImage()) {
         return;
       }
       return this.file.readAsDataURL(function(result) {
-        return _this.preview.html($('<img>', {
+        return _this.$preview.html($('<img>', {
           src: result
         }));
       });
@@ -2712,7 +3786,7 @@ Copyright (c) 2013 Jeremy Jackson
       return {
         progress: function(e) {
           _this.update(_this.t('Uploading...'), e.loaded);
-          return _this.percent.show();
+          return _this.$percent.show();
         }
       };
     };
@@ -2758,7 +3832,7 @@ Copyright (c) 2013 Jeremy Jackson
       if ((_ref = this.editableDropBehavior) == null) {
         this.editableDropBehavior = true;
       }
-      this.document || (this.document = this.el.get(0).ownerDocument);
+      this.document || (this.document = this.$el.get(0).ownerDocument);
       this.makeContentEditable();
       this.forceContentEditableDisplay();
       return this.setContentEditablePreferences();
@@ -2773,21 +3847,21 @@ Copyright (c) 2013 Jeremy Jackson
     releaseContentEditable: function() {
       this.makeNotContentEditable();
       if (this.originalDisplay) {
-        return this.el.css({
+        return this.css({
           display: this.originalDisplay
         });
       }
     },
     makeContentEditable: function() {
-      return this.el.get(0).contentEditable = true;
+      return this.$el.get(0).contentEditable = true;
     },
     makeNotContentEditable: function() {
-      return this.el.get(0).contentEditable = false;
+      return this.$el.get(0).contentEditable = false;
     },
     forceContentEditableDisplay: function() {
-      if (this.el.css('display') === 'inline') {
+      if (this.css('display') === 'inline') {
         this.originalDisplay = 'inline';
-        return this.el.css({
+        return this.css({
           display: 'inline-block'
         });
       }
@@ -2817,8 +3891,8 @@ Copyright (c) 2013 Jeremy Jackson
       return this.on('release', this.releaseDropIndicator);
     },
     buildDropIndicator: function() {
-      this.el.after(this.dropIndicator = $('<div class="mercury-region-drop-indicator"></div>'));
-      return this.delegateEvents(this.el, {
+      this.$el.after(this.$dropIndicator = $('<div class="mercury-region-drop-indicator"></div>'));
+      return this.delegateEvents({
         dragenter: 'showDropIndicator',
         dragover: 'showDropIndicator',
         dragleave: 'hideDropIndicator',
@@ -2826,14 +3900,14 @@ Copyright (c) 2013 Jeremy Jackson
       });
     },
     releaseDropIndicator: function() {
-      return this.dropIndicator.remove();
+      return this.$dropIndicator.remove();
     },
     dropIndicatorPosition: function() {
       var pos;
-      pos = this.el.position();
+      pos = this.$el.position();
       return {
-        top: pos.top + this.el.outerHeight() / 2,
-        left: pos.left + this.el.outerWidth() / 2,
+        top: pos.top + this.$el.outerHeight() / 2,
+        left: pos.left + this.$el.outerWidth() / 2,
         display: 'block'
       };
     },
@@ -2844,9 +3918,9 @@ Copyright (c) 2013 Jeremy Jackson
       }
       this.dropIndicatorVisible = true;
       clearTimeout(this.dropIndicatorTimer);
-      this.dropIndicator.css(this.dropIndicatorPosition());
-      return this.delay(1, function() {
-        return _this.dropIndicator.css({
+      this.$dropIndicator.css(this.dropIndicatorPosition());
+      return this.delay(50, function() {
+        return _this.$dropIndicator.css({
           opacity: 1
         });
       });
@@ -2854,11 +3928,11 @@ Copyright (c) 2013 Jeremy Jackson
     hideDropIndicator: function() {
       var _this = this;
       this.dropIndicatorVisible = false;
-      this.dropIndicator.css({
+      this.$dropIndicator.css({
         opacity: 0
       });
       return this.dropIndicatorTimer = this.delay(500, function() {
-        return _this.dropIndicator.hide();
+        return _this.$dropIndicator.hide();
       });
     }
   };
@@ -2912,17 +3986,17 @@ Copyright (c) 2013 Jeremy Jackson
       }
       value = this.html().replace('&gt;', '>').replace('&lt;', '<').trim();
       resize = this.autoSize ? 'none' : 'vertical';
-      this.preview = $("<div class=\"mercury-" + this.constructor.type + "-region-preview\">");
-      this.focusable = $("<textarea class=\"mercury-" + this.constructor.type + "-region-textarea\">");
+      this.$preview = $("<div class=\"mercury-" + this.constructor.type + "-region-preview\">");
+      this.$focusable = $("<textarea class=\"mercury-" + this.constructor.type + "-region-textarea\">");
       if (!this.config("regions:" + this.constructor.type + ":wrapping")) {
-        this.focusable.attr({
+        this.$focusable.attr({
           wrap: 'off'
         });
       }
-      this.el.empty();
-      this.append(this.preview, this.focusable.css({
+      this.$el.empty();
+      this.append(this.$preview, this.$focusable.css({
         width: '100%',
-        height: this.el.height() || this.height || 20,
+        height: this.$el.height() || this.height || 20,
         resize: resize
       }));
       this.value(value);
@@ -2941,9 +4015,9 @@ Copyright (c) 2013 Jeremy Jackson
         value = null;
       }
       if (value === null || typeof value === 'undefined') {
-        return this.focusable.val();
+        return this.$focusable.val();
       }
-      this.focusable.val((_ref = value.val) != null ? _ref : value);
+      this.$focusable.val((_ref = value.val) != null ? _ref : value);
       if (value.sel) {
         return this.setSerializedSelection(value.sel);
       }
@@ -2953,10 +4027,10 @@ Copyright (c) 2013 Jeremy Jackson
       if (!this.autoSize) {
         return;
       }
-      focusable = this.focusable.get(0);
-      body = $('body', this.el.get(0).ownerDocument);
+      focusable = this.$focusable.get(0);
+      body = $('body', this.el.ownerDocument);
       current = body.scrollTop();
-      this.focusable.css({
+      this.$focusable.css({
         height: 1
       }).css({
         height: focusable.scrollHeight
@@ -2965,11 +4039,11 @@ Copyright (c) 2013 Jeremy Jackson
     },
     toggleFocusablePreview: function() {
       if (this.previewing) {
-        this.focusable.hide();
-        return this.preview.html((typeof this.convertedValue === "function" ? this.convertedValue() : void 0) || this.value()).show();
+        this.$focusable.hide();
+        return this.$preview.html((typeof this.convertedValue === "function" ? this.convertedValue() : void 0) || this.value()).show();
       } else {
-        this.preview.hide();
-        return this.focusable.show();
+        this.$preview.hide();
+        return this.$focusable.show();
       }
     },
     handleKeyEvent: function(e) {
@@ -3080,7 +4154,7 @@ Copyright (c) 2013 Jeremy Jackson
   Mercury.Region.Modules.TextSelection = {
     getSelection: function() {
       var el, end, start, value;
-      el = this.focusable.get(0);
+      el = this.$focusable.get(0);
       value = el.value;
       start = el.selectionStart;
       end = el.selectionEnd;
@@ -3107,7 +4181,7 @@ Copyright (c) 2013 Jeremy Jackson
       if (end < start || typeof end === 'undefined' || collapse) {
         end = start;
       }
-      el = this.focusable.get(0);
+      el = this.$focusable.get(0);
       value = el.value;
       if (start < 0) {
         start += value.length;
@@ -3163,7 +4237,7 @@ Copyright (c) 2013 Jeremy Jackson
       if (text == null) {
         text = '';
       }
-      el = this.focusable.get(0);
+      el = this.$focusable.get(0);
       value = el.value;
       sel = this.getSelection();
       el.value = [value.slice(0, sel.start), text, value.slice(sel.end)].join('');
@@ -3641,31 +4715,12 @@ Copyright (c) 2013 Jeremy Jackson
 
 }).call(this);
 (function() {
-
-  Mercury.View.Modules.ToolbarFocusable = {
-    included: function() {
-      return this.on('build', this.buildToolbarFocusable);
-    },
-    buildToolbarFocusable: function() {
-      return this.delegateEvents({
-        'mousedown': function(e) {
-          return e.stopPropagation();
-        },
-        'mouseup': function(e) {
-          return e.stopPropagation();
-        }
-      });
-    }
-  };
-
-}).call(this);
-(function() {
   var initialize,
     __slice = [].slice;
 
   initialize = function() {
     var isIE;
-    this.version = '0.0.1alpha';
+    this.version = '2.0.1 pre alpha';
     this.init = function(options) {
       if (options == null) {
         options = {};
@@ -3700,6 +4755,7 @@ Copyright (c) 2013 Jeremy Jackson
     this.Module.extend.call(this, this.Events);
     this.Module.extend.call(this, this.I18n);
     this.Module.extend.call(this, this.Logger);
+    this.Module.extend.call(this, this.Plugin);
     this.support = {
       webkit: navigator.userAgent.indexOf('WebKit') > 0,
       safari: navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') === -1,
@@ -3712,6 +4768,365 @@ Copyright (c) 2013 Jeremy Jackson
   };
 
   initialize.call(this.MockMercury || this.Mercury);
+
+}).call(this);
+(function() {
+  var Plugin,
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+  Plugin = Mercury.registerPlugin('blocks', {
+    description: 'Provides interface for selecting common block elements.',
+    version: '1.0.0',
+    prependButtonAction: 'insert',
+    actions: {
+      block: 'insert'
+    },
+    config: {
+      blocks: {
+        h1: 'Heading 1',
+        h2: 'Heading 2',
+        h3: 'Heading 3',
+        h4: 'Heading 4',
+        h5: 'Heading 5',
+        h6: 'Heading 6',
+        p: 'Paragraph',
+        blockquote: 'Blockquote',
+        pre: 'Preformatted'
+      }
+    },
+    registerButton: function() {
+      return this.button.set({
+        type: 'select',
+        subview: this.bindTo(new Plugin.Select())
+      });
+    },
+    bindTo: function(view) {
+      var _this = this;
+      return view.on('block:picked', function(value) {
+        return _this.triggerAction(value);
+      });
+    },
+    insert: function(name, value) {
+      return Mercury.trigger('action', name, "" + value);
+    }
+  });
+
+  Plugin.Select = (function(_super) {
+
+    __extends(Select, _super);
+
+    function Select() {
+      return Select.__super__.constructor.apply(this, arguments);
+    }
+
+    Select.prototype.template = 'blocks';
+
+    Select.prototype.className = 'mercury-blocks-select';
+
+    Select.prototype.events = {
+      'click [data-value]': function(e) {
+        return this.trigger('block:picked', $(e.target).closest('li').data('value'));
+      }
+    };
+
+    return Select;
+
+  })(Mercury.ToolbarSelect);
+
+  this.JST || (this.JST = {});
+
+  JST['/mercury/templates/blocks'] = function(scope) {
+    var block, text;
+    return "<ul>" + (((function() {
+      var _ref, _results;
+      _ref = Plugin.config('blocks');
+      _results = [];
+      for (block in _ref) {
+        text = _ref[block];
+        _results.push("<li data-value='" + block + "'><" + block + ">" + text + "</" + block + "></li>");
+      }
+      return _results;
+    })()).join('')) + "</ul>";
+  };
+
+}).call(this);
+(function() {
+  var Plugin,
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+  Plugin = Mercury.registerPlugin('character', {
+    description: 'Provides interface for selecting and inserting special characters.',
+    version: '1.0.0',
+    actions: {
+      html: 'insertHtml',
+      text: 'insertText'
+    },
+    config: {
+      modal: true,
+      characters: '162 8364 163 165 169 174 8482 8240 181 183 8226 8230 8242 8243 167 182 223 8249 8250 171 187 8216 ' + '8217 8220 8221 8218 8222 8804 8805 8211 8212 175 8254 164 166 168 161 191 710 732 176 8722 177 247 ' + '8260 215 185 178 179 188 189 190 402 8747 8721 8734 8730 8764 8773 8776 8800 8801 8712 8713 8715 ' + '8719 8743 8744 172 8745 8746 8706 8704 8707 8709 8711 8727 8733 8736 180 184 170 186 8224 8225 192 ' + '193 194 195 196 197 198 199 200 201 202 203 204 205 206 207 208 209 210 211 212 213 214 216 338 352 ' + '217 218 219 220 221 376 222 224 225 226 227 228 229 230 231 232 233 234 235 236 237 238 239 240 241 ' + '242 243 244 245 246 248 339 353 249 250 251 252 253 254 255 913 914 915 916 917 918 919 920 921 922 ' + '923 924 925 926 927 928 929 931 932 933 934 935 936 937 945 946 947 948 949 950 951 952 953 954 955 ' + '956 957 958 959 960 961 962 963 964 965 966 967 968 969 8501 982 8476 977 978 8472 8465 8592 8593 ' + '8594 8595 8596 8629 8656 8657 8658 8659 8660 8756 8834 8835 8836 8838 8839 8853 8855 8869 8901 8968 ' + '8969 8970 8971 9001 9002 9674 9824 9827 9829 9830 x2603'
+    },
+    registerButton: function() {
+      this.button.set({
+        type: 'character'
+      });
+      if (this.config('modal')) {
+        return;
+      }
+      return this.button.set({
+        subview: this.bindTo(new Plugin.Palette())
+      });
+    },
+    onButtonClick: function() {
+      if (this.config('modal')) {
+        return this.bindTo(new Plugin.Modal());
+      }
+    },
+    bindTo: function(view) {
+      var _this = this;
+      return view.on('character:picked', function(char) {
+        return _this.triggerAction(char);
+      });
+    },
+    insertHtml: function(name, value) {
+      return Mercury.trigger('action', 'html', "&#" + value + ";");
+    },
+    insertText: function(name, value) {
+      return Mercury.trigger('action', 'text', $("<em>&#" + value + ";</em>").html());
+    }
+  });
+
+  Plugin.Modal = (function(_super) {
+
+    __extends(Modal, _super);
+
+    function Modal() {
+      return Modal.__super__.constructor.apply(this, arguments);
+    }
+
+    Modal.prototype.template = 'character';
+
+    Modal.prototype.className = 'mercury-character-modal';
+
+    Modal.prototype.title = 'Character Picker';
+
+    Modal.prototype.width = 387;
+
+    Modal.prototype.events = {
+      'click li': function(e) {
+        return this.trigger('character:picked', $(e.target).data('value')) && this.hide();
+      }
+    };
+
+    return Modal;
+
+  })(Mercury.Modal);
+
+  Plugin.Palette = (function(_super) {
+
+    __extends(Palette, _super);
+
+    function Palette() {
+      return Palette.__super__.constructor.apply(this, arguments);
+    }
+
+    Palette.prototype.template = 'character';
+
+    Palette.prototype.className = 'mercury-character-palette';
+
+    Palette.prototype.events = {
+      'click li': function(e) {
+        return this.trigger('character:picked', $(e.target).data('value'));
+      }
+    };
+
+    return Palette;
+
+  })(Mercury.ToolbarPalette);
+
+  this.JST || (this.JST = {});
+
+  JST['/mercury/templates/character'] = function(scope) {
+    var char;
+    return "<ul>" + (((function() {
+      var _i, _len, _ref, _results;
+      _ref = Plugin.config('characters').split(' ');
+      _results = [];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        char = _ref[_i];
+        _results.push("<li data-value='" + char + "'>&#" + char + ";</li>");
+      }
+      return _results;
+    })()).join('')) + "</ul>";
+  };
+
+}).call(this);
+(function() {
+  var Plugin,
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+  Plugin = Mercury.registerPlugin('color', {
+    description: 'Provides interface for selecting colors.',
+    version: '1.0.0',
+    prependButtonAction: 'insert',
+    actions: {
+      color: 'insert',
+      html: 'insert',
+      text: 'insert'
+    },
+    config: {
+      colors: 'FFFFFF FFCCCC FFCC99 FFFF99 FFFFCC 99FF99 99FFFF CCFFFF CCCCFF FFCCFF CCCCCC FF6666 FF9966 FFFF66 FFFF33 ' + '66FF99 33FFFF 66FFFF 9999FF FF99FF C0C0C0 FF0000 FF9900 FFCC66 FFFF00 33FF33 66CCCC 33CCFF 6666CC CC66CC ' + '999999 CC0000 FF6600 FFCC33 FFCC00 33CC00 00CCCC 3366FF 6633FF CC33CC 666666 990000 CC6600 CC9933 999900 ' + '009900 339999 3333FF 6600CC 993399 333333 660000 993300 996633 666600 006600 336666 000099 333399 663366 ' + '000000 330000 663300 663333 333300 003300 003333 000066 330099 330033'
+    },
+    registerButton: function() {
+      return this.button.set({
+        type: 'color',
+        subview: this.bindTo(new Plugin.Palette())
+      });
+    },
+    bindTo: function(view) {
+      var _this = this;
+      return view.on('color:picked', function(value) {
+        _this.triggerAction(value);
+        return _this.button.css({
+          color: "#" + value
+        });
+      });
+    },
+    regionContext: function() {
+      var color;
+      if (color = this.region.hasContext(this.context, true) || this.region.hasContext('color', true)) {
+        return this.button.css({
+          color: color
+        });
+      }
+    },
+    insert: function(name, value) {
+      return Mercury.trigger('action', name, "#" + value);
+    }
+  });
+
+  Plugin.Palette = (function(_super) {
+
+    __extends(Palette, _super);
+
+    function Palette() {
+      return Palette.__super__.constructor.apply(this, arguments);
+    }
+
+    Palette.prototype.template = 'color';
+
+    Palette.prototype.className = 'mercury-color-palette';
+
+    Palette.prototype.events = {
+      'click li': function(e) {
+        var value;
+        value = $(e.target).data('value');
+        this.$('.last-picked').data({
+          value: value
+        }).css({
+          background: "#" + value
+        });
+        return this.trigger('color:picked', value);
+      }
+    };
+
+    return Palette;
+
+  })(Mercury.ToolbarPalette);
+
+  this.JST || (this.JST = {});
+
+  JST['/mercury/templates/color'] = function(scope) {
+    var color;
+    return "<ul>\n  " + (((function() {
+      var _i, _len, _ref, _results;
+      _ref = Plugin.config('colors').split(' ');
+      _results = [];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        color = _ref[_i];
+        _results.push("<li data-value='" + color + "' style='background:#" + color + "'></li>");
+      }
+      return _results;
+    })()).join('')) + "\n  <li class=\"last-picked\">Last Color Picked</li>\n</ul>";
+  };
+
+}).call(this);
+(function() {
+  var Plugin,
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+  Plugin = Mercury.registerPlugin('styles', {
+    description: 'Provides interface for selecting predefined styles / classes.',
+    version: '1.0.0',
+    prependButtonAction: 'insert',
+    actions: {
+      style: 'insert',
+      text: 'insert'
+    },
+    config: {
+      styles: {
+        red: 'Red Text',
+        blue: 'Blue Text',
+        highlight: 'Highlighted'
+      }
+    },
+    registerButton: function() {
+      return this.button.set({
+        type: 'select',
+        subview: this.bindTo(new Plugin.Select())
+      });
+    },
+    bindTo: function(view) {
+      var _this = this;
+      return view.on('style:picked', function(value) {
+        return _this.triggerAction(value);
+      });
+    },
+    insert: function(name, value) {
+      return Mercury.trigger('action', name, "" + value);
+    }
+  });
+
+  Plugin.Select = (function(_super) {
+
+    __extends(Select, _super);
+
+    function Select() {
+      return Select.__super__.constructor.apply(this, arguments);
+    }
+
+    Select.prototype.template = 'styles';
+
+    Select.prototype.className = 'mercury-styles-select';
+
+    Select.prototype.events = {
+      'click li': function(e) {
+        return this.trigger('style:picked', $(e.target).data('value'));
+      }
+    };
+
+    return Select;
+
+  })(Mercury.ToolbarSelect);
+
+  this.JST || (this.JST = {});
+
+  JST['/mercury/templates/styles'] = function(scope) {
+    var style, text;
+    return "<ul>" + (((function() {
+      var _ref, _results;
+      _ref = Plugin.config('styles');
+      _results = [];
+      for (style in _ref) {
+        text = _ref[style];
+        _results.push("<li data-value='" + style + "' class='" + style + "'>" + text + "</li>");
+      }
+      return _results;
+    })()).join('')) + "</ul>";
+  };
 
 }).call(this);
 (function() {

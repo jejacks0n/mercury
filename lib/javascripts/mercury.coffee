@@ -1,23 +1,23 @@
-# Mercury dependencies and core libary.
+# Configuration.
+#------------------------------------------------------------------------------
+#= require mercury/config
 #
+# Mercury dependencies and core libary.
+#------------------------------------------------------------------------------
 #= require mercury/dependencies
 #= require mercury/mercury
 #
 # All region types.
-#
+#------------------------------------------------------------------------------
 #= require mercury/regions
 #
 # All locales.
-#
+#------------------------------------------------------------------------------
 #= require mercury/locales
 #
-# Configuration.
-#
-#= require mercury/config
-#
 # Additional functionality.
-#
-# you can require any files that add additional functionality to Mercury here.
+#------------------------------------------------------------------------------
+# You can require any files that add additional functionality to Mercury here.
 #
 # Initialize Mercury.
 jQuery ->
@@ -39,6 +39,8 @@ Mercury.Region.Markdown.addToolbar 'color', color: ['Color', plugin: 'color']
 Mercury.Region.Markdown.addToolbar 'block', block: ['Block', plugin: 'blocks']
 
 # todo:
+#   add detected locale to the mercury element as a class or data attribute so we can style based on locale.
+#   adjust how the templates are rendered -- use .call and pass the view.
 #   port jQuery.extend into module so we can use that within instances (which is where it's mostly used).
 #   provide aloha editor look alike toolbar and toolbar behavior.
 #   spend time making sure focus is working well and dialed before moving forward.

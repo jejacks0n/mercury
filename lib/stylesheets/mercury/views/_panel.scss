@@ -1,5 +1,3 @@
-/* Mercury.Panel
- *----------------------------------------------------------------------------*/
 mercury .mercury-panel {
   @include mercury-transition((opacity, width));
   @include mercury-border-radius(7px);

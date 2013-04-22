@@ -10,6 +10,8 @@ This file contains only the css required for regions, and is useful if you're sa
  *----------------------------------------------------------------------------*/
 /* View Specific
  *----------------------------------------------------------------------------*/
+/* Region Specific
+ *----------------------------------------------------------------------------*/
 /* line 2, ../../lib/stylesheets/mercury/core/_general.scss */
 .mercury-clearfix:before, .mercury-clearfix:after {
   content: " ";
@@ -51,6 +53,7 @@ This file contains only the css required for regions, and is useful if you're sa
   transition-property: opacity;
   transition-duration: 0.25s;
   transition-timing-function: ease-in-out;
+  -webkit-backface-visibility: hidden;
   -webkit-border-radius: 10px;
   -moz-border-radius: 10px;
   border-radius: 10px;
@@ -204,6 +207,7 @@ This file contains only the css required for regions, and is useful if you're sa
   transition-property: opacity;
   transition-duration: 0.25s;
   transition-timing-function: ease-in-out;
+  -webkit-backface-visibility: hidden;
   -webkit-border-radius: 10px;
   -moz-border-radius: 10px;
   border-radius: 10px;
@@ -265,6 +269,7 @@ This file contains only the css required for regions, and is useful if you're sa
   transition-property: opacity;
   transition-duration: 0.25s;
   transition-timing-function: ease-in-out;
+  -webkit-backface-visibility: hidden;
   -webkit-border-radius: 10px;
   -moz-border-radius: 10px;
   border-radius: 10px;
@@ -314,6 +319,7 @@ This file contains only the css required for regions, and is useful if you're sa
   transition-property: opacity;
   transition-duration: 0.25s;
   transition-timing-function: ease-in-out;
+  -webkit-backface-visibility: hidden;
   -webkit-border-radius: 10px;
   -moz-border-radius: 10px;
   border-radius: 10px;

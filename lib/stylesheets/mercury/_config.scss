@@ -1,5 +1,5 @@
-/* Global
- *----------------------------------------------------------------------------*/
+// Global configuration.
+//-----------------------------------------------------------------------------
 $primary_color:                              #00bce5 !default; // FFA200
 $overlay_bg:                                 rgba(0, 0, 0, .75) !default;
 $dialog_bg:                                  #efefef !default;
@@ -7,8 +7,8 @@ $dialog_color:                               #333 !default;
 $dialog_border_color:                        #ccc !default;
 $focus_color:                                $primary_color !default;
 
-/* View Specific
- *----------------------------------------------------------------------------*/
+// View specific configuration.
+//-----------------------------------------------------------------------------
 // _uploader
 $uploader_overlay_bg:                        $overlay_bg !default;
 $uploader_dialog_bg:                         $dialog_bg !default;
@@ -82,8 +82,8 @@ $toolbar_primary_line_separator_right_color: #9b9b9b !default;
 $toolbar_primary_button_color:               #555 !default;
 $toolbar_primary_button_label_color:         #222 !default;
 
-/* Region Specific
- *----------------------------------------------------------------------------*/
+// Region specific configuration.
+//-----------------------------------------------------------------------------
 // _region
 $region_drop_indicator_bg:                   rgba(0, 0, 0, .75) !default;
 $region_drop_indicator_color:                rgba(255, 255, 255, .85) !default;

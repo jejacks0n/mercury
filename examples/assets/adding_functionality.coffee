@@ -123,15 +123,10 @@ Mercury?.on 'initialize', ->
   # First, let's create a view that we want to utilize when a given button is clicked. We'll create a slider drop down
   # for a hypothetical image brightness control. Obviously we can't fit that much into this example, so it will only be
   # mocked. Notice how we name it ToolbarSlider -- this is important, because when we define the button we'll use
-  # "slider". We're also including the VisibilityToggleable module -- which allows it to be easily toggable (there's
-  # other modules you can use as well.)
-  #
-  # The CSS has been provided to simplify the example, and can be found in _mercury.scss.
-  class Mercury.ToolbarSlider extends Mercury.View
-    @include Mercury.View.Modules.ToolbarDialog                      # has handling for hiding on certain events.
+  # "slider". We're also including the ToolbarFocusable module -- which allows event handling for inputs within the
+  # toolbar dialogs (there's other modules you can use as well.)
+  class Mercury.ToolbarSlider extends Mercury.ToolbarPalette
     @include Mercury.View.Modules.ToolbarFocusable                   # minimize events bubbling to button/toolbar.
-    @include Mercury.View.Modules.VisibilityToggleable               # handles visibility toggle & show/hide.
-    className: 'mercury-toolbar-slider'                              # for styling.
     events: 'change input': (e) ->                                   # when the input is changed.
       Mercury.trigger('focus')                                       # we need to give focus back to mercury.
       Mercury.trigger('action', 'brightness', @$('input').val())     # trigger action.

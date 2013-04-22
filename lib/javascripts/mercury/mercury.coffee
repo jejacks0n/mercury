@@ -1,5 +1,5 @@
 # Templates (at the top so the can be removed/changed).
-#
+#------------------------------------------------------------------------------
 #= require mercury/templates/lightview
 #= require mercury/templates/modal
 #= require mercury/templates/panel
@@ -7,10 +7,9 @@
 #= require mercury/templates/uploader
 #
 # Core library / utility.
-#
+#------------------------------------------------------------------------------
 #= require mercury/extensions/number
 #= require mercury/extensions/string
-#
 #= require mercury/core/action
 #= require mercury/core/config
 #= require mercury/core/events
@@ -23,7 +22,7 @@
 #= require mercury/core/view
 #
 # Views.
-#
+#------------------------------------------------------------------------------
 #= require mercury/views/base_interface
 #= require mercury/views/frame_interface
 #= require mercury/views/lightview
@@ -38,15 +37,15 @@
 #= require mercury/views/uploader
 #
 # Models.
-#
+#------------------------------------------------------------------------------
 #= require mercury/models/file
 #
 # Actions.
-#
+#------------------------------------------------------------------------------
 #= require mercury/actions/image
 #
 # Region modules.
-#
+#------------------------------------------------------------------------------
 #= require mercury/regions/modules/content_editable
 #= require mercury/regions/modules/drop_indicator
 #= require mercury/regions/modules/drop_item
@@ -55,12 +54,12 @@
 #= require mercury/regions/modules/selection_value
 #= require mercury/regions/modules/text_selection
 #
-# Initialize script.
-#
+# Initializer/boot script.
+#------------------------------------------------------------------------------
 #= require mercury/initializer
 #
 # Plugins.
-#
+#------------------------------------------------------------------------------
 #= require mercury/plugins/blocks_plugin
 #= require mercury/plugins/character_plugin
 #= require mercury/plugins/color_plugin

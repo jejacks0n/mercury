@@ -8,22 +8,22 @@ This file contains all of the required css for the Mercury interface as well as 
 */
 
 // Configuration.
-
+//-----------------------------------------------------------------------------
 @import "mercury/config";
 
 // Mercury dependencies and core.
-
+//-----------------------------------------------------------------------------
 @import "mercury/dependencies";
 @import "mercury/mercury";
 
 // All region types.
-
+//-----------------------------------------------------------------------------
 @import "mercury/regions";
 
 // All locales.
-
+//-----------------------------------------------------------------------------
 @import "mercury/locales";
 
-// All plugins.
-
-@import "mercury/plugins";
+// Additional functionality.
+//-----------------------------------------------------------------------------
+// You can require any files that add additional functionality to Mercury here.

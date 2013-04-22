@@ -152,7 +152,7 @@ via Ajax.
     defined: {
       style: [
         'Style', {
-          select: 'styles_select'
+          plugin: 'styles'
         }
       ]
     },

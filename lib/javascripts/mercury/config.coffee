@@ -81,7 +81,7 @@ Mercury.configuration =
   #   global: boolean indicating the button applies globally, and not regions.
   #   button: the custom button class to use when instantiating the button.
   #   plugin: expects a plugin with the given name to respond to button click.
-  #   options: options to be passed to the plugin.
+  #   settings: configuration to be passed to the plugin.
   #
   # For more information about button options or adding your own functionality check todo: wiki url here
   #
@@ -100,9 +100,9 @@ Mercury.configuration =
       undo     : ['Undo', title: 'Undo your last action']
       redo     : ['Redo', title: 'Redo your last action']
       sep2     : '-'
-      link     : ['Link', title: 'Insert Link']
-      file     : ['Media', title: 'Insert Media and Files (images, videos, etc.)']
-      table    : ['Table', title: 'Insert Table']
+      link     : ['Link', title: 'Insert Link', plugin: 'link']
+      file     : ['Media', title: 'Insert Media and Files (images, videos, etc.)', plugin: 'media']
+      table    : ['Table', title: 'Insert Table', plugin: 'table']
       character: ['Character', title: 'Special Characters', plugin: 'character']
       snippets : ['Snippet', title: 'Snippet Panel']
       sep3     : ' '

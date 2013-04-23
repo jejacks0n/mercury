@@ -64,5 +64,8 @@
 #= require mercury/plugins/character_plugin
 #= require mercury/plugins/color_plugin
 #= require mercury/plugins/history_plugin
+#= require mercury/plugins/link_plugin
+#= require mercury/plugins/media_plugin
 #= require mercury/plugins/notes_plugin
 #= require mercury/plugins/styles_plugin
+#= require mercury/plugins/table_plugin

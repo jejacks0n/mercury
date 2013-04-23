@@ -22,7 +22,6 @@ class Mercury.Panel extends Mercury.View
   @events:
     'click .mercury-panel-title em': 'hide'
     'mercury:interface:hide': -> @hide(false)
-    'mercury:interface:show': -> @show(false)
     'mercury:interface:resize': (e) -> @resize(false, e)
     'mercury:panels:hide': 'hide'
 

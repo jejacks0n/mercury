@@ -37,7 +37,7 @@ Plugin = Mercury.registerPlugin 'character',
                 '923 924 925 926 927 928 929 931 932 933 934 935 936 937 945 946 947 948 949 950 951 952 953 954 955 ' +
                 '956 957 958 959 960 961 962 963 964 965 966 967 968 969 8501 982 8476 977 978 8472 8465 8592 8593 '   +
                 '8594 8595 8596 8629 8656 8657 8658 8659 8660 8756 8834 8835 8836 8838 8839 8853 8855 8869 8901 8968 ' +
-                '8969 8970 8971 9001 9002 9674 9824 9827 9829 9830 x2603'
+                '8969 8970 8971 9001 9002 9674 9824 9827 9829 9830 x263F'
 
   # When a plugin is specified for a button, this will be called with the button. You can add additional functionality
   # to the button from within this method.

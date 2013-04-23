@@ -60,8 +60,8 @@ class @DeveloperInterface extends Mercury.View
       when 'modal1' then @modal = new Mercury.Modal(width: 300, title: 'Short Lorem Modal', template: 'lorem_short')
       when 'modal2' then @modal = new Mercury.Modal(width: 600, title: 'Long Lorem Modal', template: 'lorem_long')
       when 'release_modal' then @modal?.release()
-      when 'lightview1' then @lightview = new Mercury.Lightview(width: 300, height: 200, title: 'Short Lorem Lightview', template: 'lorem_short')
-      when 'lightview2' then @lightview = new Mercury.Lightview(width: 600, height: 500, title: 'Long Lorem Lightview', template: 'lorem_long')
+      when 'lightview1' then @lightview = new Mercury.Lightview(width: 300, title: 'Short Lorem Lightview', template: 'lorem_short')
+      when 'lightview2' then @lightview = new Mercury.Lightview(width: 900, title: 'Long Lorem Lightview', template: 'lorem_long')
       when 'release_lightview' then @lightview?.release()
       when 'panel'
         if @panel

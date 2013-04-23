@@ -71,17 +71,20 @@ Copyright (c) 2013 Jeremy Jackson
         sep2: '-',
         link: [
           'Link', {
-            title: 'Insert Link'
+            title: 'Insert Link',
+            plugin: 'link'
           }
         ],
         file: [
           'Media', {
-            title: 'Insert Media and Files (images, videos, etc.)'
+            title: 'Insert Media and Files (images, videos, etc.)',
+            plugin: 'media'
           }
         ],
         table: [
           'Table', {
-            title: 'Insert Table'
+            title: 'Insert Table',
+            plugin: 'table'
           }
         ],
         character: [
@@ -99,13 +102,15 @@ Copyright (c) 2013 Jeremy Jackson
         history: [
           'History', {
             title: 'Page Version History',
-            global: true
+            global: true,
+            plugin: 'history'
           }
         ],
         notes: [
           'Notes', {
             title: 'Page Notes',
-            global: true
+            global: true,
+            plugin: 'notes'
           }
         ]
       }
@@ -1976,6 +1981,7 @@ Copyright (c) 2013 Jeremy Jackson
         this.log(this.t('is already defined in parent frame'));
         return;
       }
+      Mercury["interface"] = this;
       BaseInterface.__super__.constructor.apply(this, arguments);
       this.regions || (this.regions = []);
       $(window).on('beforeunload', this.onUnload);
@@ -2380,6 +2386,7 @@ Copyright (c) 2013 Jeremy Jackson
 
     Modal.events = {
       'click .mercury-modal-dialog-title em': 'release',
+      'click .mercury-modal-overlay': 'release',
       'mercury:interface:hide': function() {
         return this.hide(false);
       },
@@ -2449,7 +2456,7 @@ Copyright (c) 2013 Jeremy Jackson
     };
 
     Modal.prototype.resize = function(animate) {
-      var height, titleHeight;
+      var height, titleHeight, width;
       if (animate == null) {
         animate = true;
       }
@@ -2461,9 +2468,21 @@ Copyright (c) 2013 Jeremy Jackson
         height: 'auto'
       });
       titleHeight = this.$titleContainer.outerHeight();
-      height = Math.min(this.$content.outerHeight() + titleHeight, $(window).height() - 10);
+      if (!this.width) {
+        this.$content.css({
+          position: 'absolute'
+        });
+        width = this.$content.outerWidth();
+        height = Math.min(this.$content.outerHeight() + titleHeight, $(window).height() - 10);
+        this.$content.css({
+          position: 'static'
+        });
+      } else {
+        height = Math.min(this.$content.outerHeight() + titleHeight, $(window).height() - 10);
+      }
       this.$dialog.css({
-        height: height
+        height: height,
+        width: width || this.width
       });
       this.$contentContainer.css({
         height: height - titleHeight
@@ -2642,6 +2661,56 @@ Copyright (c) 2013 Jeremy Jackson
 
 }).call(this);
 (function() {
+
+  Mercury.View.Modules.VisibilityToggleable = {
+    included: function() {
+      return this.on('build', this.buildVisibilityToggleable);
+    },
+    buildVisibilityToggleable: function() {
+      this.visible || (this.visible = false);
+      if (!this.visible) {
+        this.hide();
+      }
+      return this.delegateEvents({
+        'mercury:interface:hide': 'hide'
+      });
+    },
+    toggle: function() {
+      if (this.visible) {
+        return this.hide();
+      } else {
+        return this.show();
+      }
+    },
+    hide: function() {
+      var _this = this;
+      clearTimeout(this.visibilityTimeout);
+      this.visible = false;
+      this.css({
+        opacity: 0
+      });
+      return this.visibilityTimeout = this.delay(100, function() {
+        return _this.$el.hide();
+      });
+    },
+    show: function() {
+      var _this = this;
+      clearTimeout(this.visibilityTimeout);
+      this.visible = true;
+      this.$el.show();
+      if (typeof this.position === "function") {
+        this.position();
+      }
+      return this.visibilityTimeout = this.delay(1, function() {
+        return _this.css({
+          opacity: 1
+        });
+      });
+    }
+  };
+
+}).call(this);
+(function() {
   var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -2656,6 +2725,8 @@ Copyright (c) 2013 Jeremy Jackson
 
     Panel.include(Mercury.View.Modules.ScrollPropagation);
 
+    Panel.include(Mercury.View.Modules.VisibilityToggleable);
+
     Panel.logPrefix = 'Mercury.Panel:';
 
     Panel.className = 'mercury-panel';
@@ -2668,17 +2739,14 @@ Copyright (c) 2013 Jeremy Jackson
     };
 
     Panel.events = {
-      'click .mercury-panel-title em': 'release',
+      'click .mercury-panel-title em': 'hide',
       'mercury:interface:hide': function() {
         return this.hide(false);
-      },
-      'mercury:interface:show': function() {
-        return this.show(false);
       },
       'mercury:interface:resize': function(e) {
         return this.resize(false, e);
       },
-      'mercury:panels:hide': 'release'
+      'mercury:panels:hide': 'hide'
     };
 
     function Panel(options) {
@@ -2687,9 +2755,12 @@ Copyright (c) 2013 Jeremy Jackson
       this.resize = __bind(this.resize, this);
 
       (_base = this.options).template || (_base.template = this.template);
-      Mercury.trigger('panels:hide');
       Panel.__super__.constructor.call(this, this.options);
-      this.show();
+      if (this.hidden) {
+        this.visible = false;
+      } else {
+        this.show();
+      }
     }
 
     Panel.prototype.buildElement = function() {
@@ -2795,6 +2866,8 @@ Copyright (c) 2013 Jeremy Jackson
       if (update == null) {
         update = true;
       }
+      Mercury.trigger('panels:hide');
+      this.trigger('show');
       clearTimeout(this.visibilityTimout);
       this.visible = true;
       this.$el.show();
@@ -2808,29 +2881,17 @@ Copyright (c) 2013 Jeremy Jackson
       });
     };
 
-    Panel.prototype.hide = function(release) {
-      if (release == null) {
-        release = true;
-      }
+    Panel.prototype.hide = function() {
       Mercury.trigger('focus');
+      this.trigger('hide');
       clearTimeout(this.visibilityTimout);
       this.visible = false;
       this.css({
         opacity: 0
       });
       return this.visibilityTimout = this.delay(250, function() {
-        this.$el.hide();
-        if (release) {
-          return this.release();
-        }
+        return this.$el.hide();
       });
-    };
-
-    Panel.prototype.release = function() {
-      if (this.visible) {
-        return this.hide(true);
-      }
-      return Panel.__super__.release.apply(this, arguments);
     };
 
     return Panel;
@@ -2974,63 +3035,9 @@ Copyright (c) 2013 Jeremy Jackson
       this.label = label;
       this.options = options != null ? options : {};
       this.determineAction();
-      this.determineType();
-      this.type = this.types[0];
+      this.determineTypes();
       ToolbarButton.__super__.constructor.call(this, this.options);
     }
-
-    ToolbarButton.prototype.get = function(key) {
-      return this[key];
-    };
-
-    ToolbarButton.prototype.set = function(key, value) {
-      var attrs, _results;
-      attrs = {};
-      if (typeof key === 'object') {
-        attrs = key;
-      } else {
-        attrs[key] = value;
-      }
-      _results = [];
-      for (key in attrs) {
-        value = attrs[key];
-        _results.push(this[key] = value);
-      }
-      return _results;
-    };
-
-    ToolbarButton.prototype.deactivate = function() {
-      return this.removeClass('mercury-button-active');
-    };
-
-    ToolbarButton.prototype.activate = function() {
-      return this.addClass('mercury-button-active');
-    };
-
-    ToolbarButton.prototype.enable = function() {
-      return this.removeClass('mercury-button-disabled');
-    };
-
-    ToolbarButton.prototype.disable = function() {
-      return this.addClass('mercury-button-disabled');
-    };
-
-    ToolbarButton.prototype.deindicate = function() {
-      return this.removeClass('mercury-button-pressed');
-    };
-
-    ToolbarButton.prototype.indicate = function(e) {
-      var _ref;
-      if (this.isDisabled()) {
-        return;
-      }
-      if (e && ((_ref = this.subview) != null ? _ref.visible : void 0)) {
-        this.deactivate();
-        e.preventDefault();
-        e.stopPropagation();
-      }
-      return this.addClass('mercury-button-pressed');
-    };
 
     ToolbarButton.prototype.determineAction = function() {
       this.action = this.options.action || this.name;
@@ -3040,21 +3047,20 @@ Copyright (c) 2013 Jeremy Jackson
       return this.actionName = this.action[0];
     };
 
-    ToolbarButton.prototype.determineType = function() {
-      var type, value, _ref, _results;
+    ToolbarButton.prototype.determineTypes = function() {
+      var type, value, _ref;
       this.types = [];
       if (this.options.type) {
         return this.types = [this.options.type];
       }
       _ref = this.options;
-      _results = [];
       for (type in _ref) {
         value = _ref[type];
         if (__indexOf.call(this.standardOptions, type) < 0) {
-          _results.push(this.types.push(type));
+          this.types.push(type);
         }
       }
-      return _results;
+      return this.type = this.types[0];
     };
 
     ToolbarButton.prototype.build = function() {
@@ -3083,17 +3089,16 @@ Copyright (c) 2013 Jeremy Jackson
       }
     };
 
-    ToolbarButton.prototype.enablePlugin = function() {
-      if (!this.plugin) {
-        return;
-      }
-      this.plugin = Mercury.getPlugin(this.plugin, true);
-      return this.plugin.buttonRegistered(this);
-    };
-
     ToolbarButton.prototype.triggerAction = function() {
       if (this.isDisabled()) {
         return;
+      }
+      if (this.toggle || this.mode) {
+        if (!this.isToggled) {
+          this.toggled();
+        } else {
+          this.untoggled();
+        }
       }
       if (this.subview) {
         if (this.subview.visible) {
@@ -3118,8 +3123,12 @@ Copyright (c) 2013 Jeremy Jackson
       return Mercury.trigger.apply(Mercury, ['action'].concat(__slice.call(this.action)));
     };
 
-    ToolbarButton.prototype.isDisabled = function() {
-      return this.$el.closest('.mercury-button-disabled').length;
+    ToolbarButton.prototype.enablePlugin = function() {
+      if (!this.plugin) {
+        return;
+      }
+      this.plugin = Mercury.getPlugin(this.plugin, true);
+      return this.plugin.buttonRegistered(this);
     };
 
     ToolbarButton.prototype.regionSupported = function(region) {
@@ -3149,6 +3158,79 @@ Copyright (c) 2013 Jeremy Jackson
       } else {
         return this.disable();
       }
+    };
+
+    ToolbarButton.prototype.get = function(key) {
+      return this[key];
+    };
+
+    ToolbarButton.prototype.set = function(key, value) {
+      var attrs, _results;
+      attrs = {};
+      if (typeof key === 'object') {
+        attrs = key;
+      } else {
+        attrs[key] = value;
+      }
+      _results = [];
+      for (key in attrs) {
+        value = attrs[key];
+        _results.push(this[key] = value);
+      }
+      return _results;
+    };
+
+    ToolbarButton.prototype.toggled = function() {
+      this.isToggled = true;
+      return this.addClass('mercury-button-toggled');
+    };
+
+    ToolbarButton.prototype.untoggled = function() {
+      this.isToggled = false;
+      return this.removeClass('mercury-button-toggled');
+    };
+
+    ToolbarButton.prototype.activate = function() {
+      this.isActive = true;
+      return this.addClass('mercury-button-active');
+    };
+
+    ToolbarButton.prototype.deactivate = function() {
+      this.isActive = false;
+      return this.removeClass('mercury-button-active');
+    };
+
+    ToolbarButton.prototype.enable = function() {
+      this.isEnabled = true;
+      return this.removeClass('mercury-button-disabled');
+    };
+
+    ToolbarButton.prototype.disable = function() {
+      this.isEnabled = false;
+      return this.addClass('mercury-button-disabled');
+    };
+
+    ToolbarButton.prototype.isDisabled = function() {
+      return this.isEnabled === false || this.$el.closest('.mercury-button-disabled').length;
+    };
+
+    ToolbarButton.prototype.indicate = function(e) {
+      var _ref;
+      this.isIndicated = false;
+      if (this.isDisabled()) {
+        return;
+      }
+      if (e && ((_ref = this.subview) != null ? _ref.visible : void 0)) {
+        this.deactivate();
+        e.preventDefault();
+        e.stopPropagation();
+      }
+      return this.addClass('mercury-button-pressed');
+    };
+
+    ToolbarButton.prototype.deindicate = function() {
+      this.isIndicated = true;
+      return this.removeClass('mercury-button-pressed');
     };
 
     return ToolbarButton;
@@ -3302,45 +3384,34 @@ Copyright (c) 2013 Jeremy Jackson
     };
 
     Toolbar.icons = {
-      save: '!',
-      preview: '"',
-      undo: '#',
-      redo: '$',
-      link: '%',
-      file: '&',
-      table: "'",
-      snippets: ')',
-      history: '*',
-      notes: '+',
-      upload: ',',
-      search: '-',
-      bold: 'C',
-      italic: 'D',
-      strike: 'E',
-      underline: 'F',
-      subscript: 'G',
-      superscript: 'H',
-      justifyLeft: 'I',
-      justifyCenter: 'J',
-      justifyRight: 'K',
-      justifyFull: 'L',
-      unorderedList: 'M',
-      orderedList: 'N',
-      indent: 'P',
-      outdent: 'O',
-      rule: 'Q',
-      clean: 'R',
-      edit: 'S',
-      rowBefore: 'T',
-      rowAfter: 'U',
-      rowDelete: 'V',
-      colBefore: 'W',
-      colAfter: 'X',
-      colDelete: 'Y',
-      colIncrease: 'Z',
-      colDecrease: 'a',
-      rowIncrease: 'b',
-      rowDecrease: 'c',
+      save: 'A',
+      preview: 'B',
+      undo: 'C',
+      redo: 'D',
+      link: 'J',
+      file: 'K',
+      table: 'L',
+      character: 'M',
+      snippets: 'N',
+      history: 'O',
+      notes: 'P',
+      upload: 'X',
+      search: 'Y',
+      bold: 'b',
+      italic: 'c',
+      strike: 'd',
+      underline: 'e',
+      subscript: 'f',
+      superscript: 'g',
+      justifyLeft: 'h',
+      justifyCenter: 'i',
+      justifyRight: 'j',
+      justifyFull: 'k',
+      unorderedList: 'l',
+      orderedList: 'm',
+      outdent: 'n',
+      indent: 'o',
+      rule: 'p',
       h1: 'q',
       h2: 'r',
       h3: 's',
@@ -3348,20 +3419,38 @@ Copyright (c) 2013 Jeremy Jackson
       h5: 'u',
       h6: 'v',
       removeHeading: 'w',
-      blockquote: 'm',
-      pre: 'S',
-      crop: 'e',
-      resize: 'f',
-      alignLeft: 'g',
-      alignRight: 'h',
-      alignTop: 'i',
-      alignMiddle: 'j',
-      alignBottom: 'k',
-      alignNone: 'l',
-      prev: 'n',
-      next: 'o',
-      remove: 'R',
-      togglePlay: 'p'
+      blockquote: 'x',
+      clean: 'y',
+      edit: 'z',
+      pre: 'z',
+      rowBefore: '0',
+      rowAfter: '1',
+      rowDelete: '2',
+      colBefore: '3',
+      colAfter: '4',
+      colDelete: '5',
+      colIncrease: '6',
+      colDecrease: '7',
+      rowIncrease: '8',
+      rowDecrease: '9',
+      alignLeft: '"',
+      alignRight: "'",
+      alignTop: '?',
+      alignMiddle: '!',
+      alignBottom: '@',
+      alignNone: '_',
+      crop: '*',
+      resize: '#',
+      prev: '$',
+      next: '%',
+      remove: 'y',
+      togglePlay: '&',
+      fav: '^',
+      softWrap: '`',
+      direction: '{',
+      calculate: '|',
+      user: '}',
+      brightness: '~'
     };
 
     return Toolbar;
@@ -3432,56 +3521,6 @@ Copyright (c) 2013 Jeremy Jackson
       return this.css({
         top: top,
         left: left
-      });
-    }
-  };
-
-}).call(this);
-(function() {
-
-  Mercury.View.Modules.VisibilityToggleable = {
-    included: function() {
-      return this.on('build', this.buildVisibilityToggleable);
-    },
-    buildVisibilityToggleable: function() {
-      this.visible || (this.visible = false);
-      if (!this.visible) {
-        this.hide();
-      }
-      return this.delegateEvents({
-        'mercury:interface:hide': 'hide'
-      });
-    },
-    toggle: function() {
-      if (this.visible) {
-        return this.hide();
-      } else {
-        return this.show();
-      }
-    },
-    hide: function() {
-      var _this = this;
-      clearTimeout(this.visibilityTimeout);
-      this.visible = false;
-      this.css({
-        opacity: 0
-      });
-      return this.visibilityTimeout = this.delay(100, function() {
-        return _this.$el.hide();
-      });
-    },
-    show: function() {
-      var _this = this;
-      clearTimeout(this.visibilityTimeout);
-      this.visible = true;
-      this.$el.show();
-      if (typeof this.position === "function") {
-        this.position();
-      }
-      return this.visibilityTimeout = this.delay(1, function() {
-        return _this.css({
-          opacity: 1
-        });
       });
     }
   };
@@ -4881,7 +4920,7 @@ Copyright (c) 2013 Jeremy Jackson
     },
     config: {
       modal: true,
-      characters: '162 8364 163 165 169 174 8482 8240 181 183 8226 8230 8242 8243 167 182 223 8249 8250 171 187 8216 ' + '8217 8220 8221 8218 8222 8804 8805 8211 8212 175 8254 164 166 168 161 191 710 732 176 8722 177 247 ' + '8260 215 185 178 179 188 189 190 402 8747 8721 8734 8730 8764 8773 8776 8800 8801 8712 8713 8715 ' + '8719 8743 8744 172 8745 8746 8706 8704 8707 8709 8711 8727 8733 8736 180 184 170 186 8224 8225 192 ' + '193 194 195 196 197 198 199 200 201 202 203 204 205 206 207 208 209 210 211 212 213 214 216 338 352 ' + '217 218 219 220 221 376 222 224 225 226 227 228 229 230 231 232 233 234 235 236 237 238 239 240 241 ' + '242 243 244 245 246 248 339 353 249 250 251 252 253 254 255 913 914 915 916 917 918 919 920 921 922 ' + '923 924 925 926 927 928 929 931 932 933 934 935 936 937 945 946 947 948 949 950 951 952 953 954 955 ' + '956 957 958 959 960 961 962 963 964 965 966 967 968 969 8501 982 8476 977 978 8472 8465 8592 8593 ' + '8594 8595 8596 8629 8656 8657 8658 8659 8660 8756 8834 8835 8836 8838 8839 8853 8855 8869 8901 8968 ' + '8969 8970 8971 9001 9002 9674 9824 9827 9829 9830 x2603'
+      characters: '162 8364 163 165 169 174 8482 8240 181 183 8226 8230 8242 8243 167 182 223 8249 8250 171 187 8216 ' + '8217 8220 8221 8218 8222 8804 8805 8211 8212 175 8254 164 166 168 161 191 710 732 176 8722 177 247 ' + '8260 215 185 178 179 188 189 190 402 8747 8721 8734 8730 8764 8773 8776 8800 8801 8712 8713 8715 ' + '8719 8743 8744 172 8745 8746 8706 8704 8707 8709 8711 8727 8733 8736 180 184 170 186 8224 8225 192 ' + '193 194 195 196 197 198 199 200 201 202 203 204 205 206 207 208 209 210 211 212 213 214 216 338 352 ' + '217 218 219 220 221 376 222 224 225 226 227 228 229 230 231 232 233 234 235 236 237 238 239 240 241 ' + '242 243 244 245 246 248 339 353 249 250 251 252 253 254 255 913 914 915 916 917 918 919 920 921 922 ' + '923 924 925 926 927 928 929 931 932 933 934 935 936 937 945 946 947 948 949 950 951 952 953 954 955 ' + '956 957 958 959 960 961 962 963 964 965 966 967 968 969 8501 982 8476 977 978 8472 8465 8592 8593 ' + '8594 8595 8596 8629 8656 8657 8658 8659 8660 8756 8834 8835 8836 8838 8839 8853 8855 8869 8901 8968 ' + '8969 8970 8971 9001 9002 9674 9824 9827 9829 9830 x263F'
     },
     registerButton: function() {
       this.button.set({
@@ -4926,8 +4965,6 @@ Copyright (c) 2013 Jeremy Jackson
     Modal.prototype.className = 'mercury-character-modal';
 
     Modal.prototype.title = 'Character Picker';
-
-    Modal.prototype.width = 387;
 
     Modal.prototype.events = {
       'click li': function(e) {
@@ -5074,6 +5111,219 @@ Copyright (c) 2013 Jeremy Jackson
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
+  Plugin = Mercury.registerPlugin('history', {
+    description: 'Provides interface for selecting saved versions -- requires server implementation.',
+    version: '1.0.0',
+    registerButton: function() {
+      this.button.set({
+        type: 'history',
+        toggle: true
+      });
+      return this.bindTo(this.panel = new Plugin.Panel());
+    },
+    bindTo: function(view) {
+      var _this = this;
+      view.on('show', function() {
+        return _this.button.toggled();
+      });
+      return view.on('hide', function() {
+        return _this.button.untoggled();
+      });
+    },
+    onButtonClick: function() {
+      return this.panel.toggle();
+    }
+  });
+
+  Plugin.Panel = (function(_super) {
+
+    __extends(Panel, _super);
+
+    function Panel() {
+      return Panel.__super__.constructor.apply(this, arguments);
+    }
+
+    Panel.prototype.template = 'history';
+
+    Panel.prototype.className = 'mercury-history-panel';
+
+    Panel.prototype.title = 'Page Version History';
+
+    Panel.prototype.width = 250;
+
+    Panel.prototype.hidden = true;
+
+    return Panel;
+
+  })(Mercury.Panel);
+
+  this.JST || (this.JST = {});
+
+  JST['/mercury/templates/history'] || (JST['/mercury/templates/history'] = function() {
+    return "<p>The History Plugin expects a server implementation.</p>\n<p>Since this is a demo, it wasn't included, but you can check the <a href=\"https://github.com/jejacks0n/mercury-rails\">mercury-rails project</a> on github for examples of how to integrate it with your server technology.</p>";
+  });
+
+}).call(this);
+(function() {
+  var Plugin,
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+  Plugin = Mercury.registerPlugin('link', {
+    description: 'Provides interface for inserting and editing links.',
+    version: '1.0.0',
+    actions: {
+      link: 'insert'
+    },
+    registerButton: function() {
+      return this.button.set({
+        type: 'link'
+      });
+    },
+    onButtonClick: function() {
+      return new Plugin.Modal();
+    },
+    insert: function() {}
+  });
+
+  Plugin.Modal = (function(_super) {
+
+    __extends(Modal, _super);
+
+    function Modal() {
+      return Modal.__super__.constructor.apply(this, arguments);
+    }
+
+    Modal.prototype.template = 'link';
+
+    Modal.prototype.className = 'mercury-link-modal';
+
+    Modal.prototype.title = 'Link Manager';
+
+    Modal.prototype.width = 600;
+
+    return Modal;
+
+  })(Mercury.Modal);
+
+  this.JST || (this.JST = {});
+
+  JST['/mercury/templates/link'] || (JST['/mercury/templates/link'] = function() {
+    return "<form class=\"form-horizontal\">\n  <div class=\"form-inputs\">\n\n    <fieldset class=\"link_text_container\">\n      <div class=\"control-group string required\">\n        <label class=\"string optional control-label\" for=\"link_text\">Link Content</label>\n        <div class=\"controls\">\n          <input class=\"span6 string optional\" id=\"link_text\" name=\"link[text]\" size=\"50\" type=\"text\">\n        </div>\n      </div>\n    </fieldset>\n\n    <fieldset>\n      <legend>Standard Links</legend>\n      <div class=\"control-group url optional\">\n        <label class=\"url optional control-label\" for=\"link_external_url\">\n          <input name=\"link_type\" type=\"radio\" value=\"external_url\" checked=\"checked\"/>URL\n        </label>\n        <div class=\"controls\">\n          <input class=\"span6 string url optional\" id=\"link_external_url\" name=\"link[external_url]\" size=\"50\" type=\"text\">\n        </div>\n      </div>\n    </fieldset>\n\n    <fieldset>\n      <legend>Index / Bookmark Links</legend>\n      <div class=\"control-group select optional\">\n        <label class=\"select optional control-label\" for=\"link_existing_bookmark\">\n          <input name=\"link_type\" type=\"radio\" value=\"existing_bookmark\"/>Existing Links\n        </label>\n        <div class=\"controls\">\n          <select class=\"select optional\" id=\"link_existing_bookmark\" name=\"link[existing_bookmark]\"></select>\n        </div>\n      </div>\n      <div class=\"control-group string optional\">\n        <label class=\"string optional control-label\" for=\"link_new_bookmark\">\n          <input name=\"link_type\" type=\"radio\" value=\"new_bookmark\"/>Bookmark\n        </label>\n        <div class=\"controls\">\n          <input class=\"string optional\" id=\"link_new_bookmark\" name=\"link[new_bookmark]\" size=\"50\" type=\"text\">\n        </div>\n      </div>\n    </fieldset>\n\n    <fieldset>\n      <legend>Options</legend>\n      <div class=\"control-group select optional\">\n        <label class=\"select optional control-label\" for=\"link_target\">Link Target</label>\n        <div class=\"controls\">\n          <select class=\"select optional\" id=\"link_target\" name=\"link[target]\">\n            <option value=\"\">Self (the same window or tab)</option>\n            <option value=\"_blank\">Blank (a new window or tab)</option>\n            <option value=\"_top\">Top (removes any frames)</option>\n            <option value=\"popup\">Popup Window (javascript new window popup)</option>\n          </select>\n        </div>\n      </div>\n      <div id=\"popup_options\" class=\"link-target-options\" style=\"display:none\">\n        <div class=\"control-group number optional\">\n          <label class=\"number optional control-label\" for=\"link_popup_width\">Popup Width</label>\n          <div class=\"controls\">\n            <input class=\"span2 number optional\" id=\"link_popup_width\" name=\"link[popup_width]\" size=\"50\" type=\"number\" value=\"960\">\n          </div>\n        </div>\n        <div class=\"control-group number optional\">\n          <label class=\"number optional control-label\" for=\"link_popup_height\">Popup Height</label>\n          <div class=\"controls\">\n            <input class=\"span2 number optional\" id=\"link_popup_height\" name=\"link[popup_height]\" size=\"50\" type=\"number\" value=\"800\">\n          </div>\n        </div>\n      </div>\n    </fieldset>\n\n  </div>\n  <div class=\"form-actions\">\n    <input class=\"btn btn-primary\" name=\"commit\" type=\"submit\" value=\"Insert Link\">\n  </div>\n</form>";
+  });
+
+}).call(this);
+(function() {
+  var Plugin,
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+  Plugin = Mercury.registerPlugin('media', {
+    description: 'Provides interface for inserting and editing media.',
+    version: '1.0.0',
+    actions: {
+      link: 'insert'
+    },
+    registerButton: function() {
+      return this.button.set({
+        type: 'media'
+      });
+    },
+    onButtonClick: function() {
+      return new Plugin.Modal();
+    },
+    insert: function() {}
+  });
+
+  Plugin.Modal = (function(_super) {
+
+    __extends(Modal, _super);
+
+    function Modal() {
+      return Modal.__super__.constructor.apply(this, arguments);
+    }
+
+    Modal.prototype.template = 'media';
+
+    Modal.prototype.className = 'mercury-media-modal';
+
+    Modal.prototype.title = 'Media Manager';
+
+    Modal.prototype.width = 600;
+
+    return Modal;
+
+  })(Mercury.Modal);
+
+  this.JST || (this.JST = {});
+
+  JST['/mercury/templates/media'] || (JST['/mercury/templates/media'] = function() {
+    return "<form class=\"form-horizontal\">\n  <div class=\"form-inputs\">\n\n    <fieldset>\n      <legend>Images</legend>\n      <div class=\"control-group url optional\">\n        <label class=\"url optional control-label\" for=\"media_image_url\">\n          <input name=\"media_type\" type=\"radio\" value=\"image_url\" checked=\"checked\"/>URL\n        </label>\n        <div class=\"controls\">\n          <input class=\"span6 string url optional\" id=\"media_image_url\" name=\"media[image_url]\" size=\"50\" type=\"text\">\n        </div>\n      </div>\n    </fieldset>\n\n    <fieldset>\n      <legend>Videos</legend>\n      <div class=\"control-group url optional\">\n        <label class=\"url optional control-label\" for=\"media_youtube_url\">\n          <input name=\"media_type\" type=\"radio\" value=\"youtube_url\"/>YouTube URL\n        </label>\n        <div class=\"controls\">\n          <input class=\"span6 string url optional\" id=\"media_youtube_url\" name=\"media[youtube_url]\" size=\"50\" type=\"text\" placeholder=\"http://youtu.be/28tZ-S1LFok\">\n        </div>\n      </div>\n      <div class=\"control-group url optional\">\n        <label class=\"url optional control-label\" for=\"media_vimeo_url\">\n          <input name=\"media_type\" type=\"radio\" value=\"vimeo_url\"/>Vimeo URL\n        </label>\n        <div class=\"controls\">\n          <input class=\"span6 string url optional\" id=\"media_vimeo_url\" name=\"media[vimeo_url]\" size=\"50\" type=\"text\" placeholder=\"http://vimeo.com/36684976\">\n        </div>\n      </div>\n    </fieldset>\n\n    <fieldset>\n      <legend>Options</legend>\n\n      <div class=\"media-options\" id=\"image_url_options\">\n        <div class=\"control-group select optional\">\n          <label class=\"select optional control-label\" for=\"media_image_alignment\">Alignment</label>\n          <div class=\"controls\">\n            <select class=\"select optional\" id=\"media_image_alignment\" name=\"media[image_alignment]\">\n              <option value=\"\">None</option>\n              <option value=\"left\">Left</option>\n              <option value=\"right\">Right</option>\n              <option value=\"top\">Top</option>\n              <option value=\"middle\">Middle</option>\n              <option value=\"bottom\">Bottom</option>\n              <option value=\"absmiddle\">Absolute Middle</option>\n              <option value=\"absbottom\">Absolute Bottom</option>\n            </select>\n          </div>\n          <label class=\"select optional control-label\" for=\"media_image_float\">Float</label>\n          <div class=\"controls\">\n            <select class=\"select optional\" id=\"media_image_float\" name=\"media[image_float]\">\n              <option value=\"\">None</option>\n              <option value=\"left\">Left</option>\n              <option value=\"right\">Right</option>\n              <option value=\"none\">None</option>\n              <option value=\"inherit\">Inherit</option>\n            </select>\n          </div>\n        </div>\n      </div>\n\n      <div class=\"media-options\" id=\"youtube_url_options\" style=\"display:none\">\n        <div class=\"control-group number optional\">\n          <label class=\"number optional control-label\" for=\"media_youtube_width\">Width</label>\n          <div class=\"controls\">\n            <input class=\"span2 number optional\" id=\"media_youtube_width\" name=\"media[youtube_width]\" size=\"50\" type=\"number\" value=\"560\">\n          </div>\n        </div>\n        <div class=\"control-group number optional\">\n          <label class=\"number optional control-label\" for=\"media_youtube_height\">Height</label>\n          <div class=\"controls\">\n            <input class=\"span2 number optional\" id=\"media_youtube_height\" name=\"media[youtube_height]\" size=\"50\" type=\"number\" value=\"349\">\n          </div>\n        </div>\n      </div>\n\n      <div class=\"media-options\" id=\"vimeo_url_options\" style=\"display:none\">\n        <div class=\"control-group number optional\">\n          <label class=\"number optional control-label\" for=\"media_vimeo_width\">Width</label>\n          <div class=\"controls\">\n            <input class=\"span2 number optional\" id=\"media_vimeo_width\" name=\"media[vimeo_width]\" size=\"50\" type=\"number\" value=\"400\">\n          </div>\n        </div>\n        <div class=\"control-group number optional\">\n          <label class=\"number optional control-label\" for=\"media_vimeo_height\">Height</label>\n          <div class=\"controls\">\n            <input class=\"span2 number optional\" id=\"media_vimeo_height\" name=\"media[vimeo_height]\" size=\"50\" type=\"number\" value=\"225\">\n          </div>\n        </div>\n      </div>\n    </fieldset>\n\n  </div>\n  <div class=\"form-actions\">\n    <input class=\"btn btn-primary\" name=\"commit\" type=\"submit\" value=\"Insert Media\"/>\n  </div>\n</form>";
+  });
+
+}).call(this);
+(function() {
+  var Plugin,
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+  Plugin = Mercury.registerPlugin('notes', {
+    description: 'Provides interface for reading and adding notes for the page -- requires server implementation.',
+    version: '1.0.0',
+    registerButton: function() {
+      this.button.set({
+        type: 'toggle'
+      });
+      return this.bindTo(this.panel = new Plugin.Panel());
+    },
+    bindTo: function(view) {
+      var _this = this;
+      view.on('show', function() {
+        return _this.button.toggled();
+      });
+      return view.on('hide', function() {
+        return _this.button.untoggled();
+      });
+    },
+    onButtonClick: function() {
+      return this.panel.toggle();
+    }
+  });
+
+  Plugin.Panel = (function(_super) {
+
+    __extends(Panel, _super);
+
+    function Panel() {
+      return Panel.__super__.constructor.apply(this, arguments);
+    }
+
+    Panel.prototype.template = 'notes';
+
+    Panel.prototype.className = 'mercury-notes-panel';
+
+    Panel.prototype.title = 'Page Notes';
+
+    Panel.prototype.width = 250;
+
+    Panel.prototype.hidden = true;
+
+    return Panel;
+
+  })(Mercury.Panel);
+
+  this.JST || (this.JST = {});
+
+  JST['/mercury/templates/notes'] = function() {
+    return "<p>The Notes Plugin expects a server implementation.</p>\n<p>Since this is a demo, it wasn't included, but you can check the <a href=\"https://github.com/jejacks0n/mercury-rails\">mercury-rails project</a> on github for examples of how to integrate it with your server technology.</p>";
+  };
+
+}).call(this);
+(function() {
+  var Plugin,
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
   Plugin = Mercury.registerPlugin('styles', {
     description: 'Provides interface for selecting predefined styles / classes.',
     version: '1.0.0',
@@ -5143,6 +5393,55 @@ Copyright (c) 2013 Jeremy Jackson
       return _results;
     })()).join('')) + "</ul>";
   };
+
+}).call(this);
+(function() {
+  var Plugin,
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+  Plugin = Mercury.registerPlugin('table', {
+    description: 'Provides interface for inserting and editing tables.',
+    version: '1.0.0',
+    actions: {
+      link: 'insert'
+    },
+    registerButton: function() {
+      return this.button.set({
+        type: 'table'
+      });
+    },
+    onButtonClick: function() {
+      return new Plugin.Modal();
+    },
+    insert: function() {}
+  });
+
+  Plugin.Modal = (function(_super) {
+
+    __extends(Modal, _super);
+
+    function Modal() {
+      return Modal.__super__.constructor.apply(this, arguments);
+    }
+
+    Modal.prototype.template = 'table';
+
+    Modal.prototype.className = 'mercury-table-modal';
+
+    Modal.prototype.title = 'Table Manager';
+
+    Modal.prototype.width = 600;
+
+    return Modal;
+
+  })(Mercury.Modal);
+
+  this.JST || (this.JST = {});
+
+  JST['/mercury/templates/table'] || (JST['/mercury/templates/table'] = function() {
+    return "<form class=\"form-horizontal\">\n  <div class=\"form-inputs\">\n\n    <fieldset id=\"table_display\">\n      <div class=\"control-group optional\">\n        <div class=\"controls\">\n          <table border=\"1\" cellspacing=\"0\">\n            <tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>\n            <tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>\n            <tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>\n          </table>\n        </div>\n      </div>\n    </fieldset>\n\n    <fieldset>\n      <div class=\"control-group buttons optional\">\n        <label class=\"buttons optional control-label\">Rows</label>\n        <div class=\"controls btn-group\">\n          <button class=\"btn\" data-action=\"addRowBefore\">Add Before</button>\n          <button class=\"btn\" data-action=\"addRowAfter\">Add After</button>\n          <button class=\"btn\" data-action=\"removeRow\">Remove</button>\n        </div>\n      </div>\n      <div class=\"control-group buttons optional\">\n        <label class=\"buttons optional control-label\">Columns</label>\n        <div class=\"controls btn-group\">\n          <button class=\"btn\" data-action=\"addColumnBefore\">Add Before</button>\n          <button class=\"btn\" data-action=\"addColumnAfter\">Add After</button>\n          <button class=\"btn\" data-action=\"removeColumn\">Remove</button>\n        </div>\n      </div>\n\n      <hr/>\n\n      <div class=\"control-group buttons optional\">\n        <label class=\"buttons optional control-label\">Row Span</label>\n        <div class=\"controls btn-group\">\n          <button class=\"btn\" data-action=\"increaseRowspan\">+</button>\n          <button class=\"btn\" data-action=\"decreaseRowspan\">-</button>\n        </div>\n      </div>\n      <div class=\"control-group buttons optional\">\n        <label class=\"buttons optional control-label\">Column Span</label>\n        <div class=\"controls btn-group\">\n          <button class=\"btn\" data-action=\"increaseColspan\">+</button>\n          <button class=\"btn\" data-action=\"decreaseColspan\">-</button>\n        </div>\n      </div>\n    </fieldset>\n\n    <fieldset>\n      <legend>Options</legend>\n      <div class=\"control-group select optional\">\n        <label class=\"select optional control-label\" for=\"table_alignment\">Alignment</label>\n        <div class=\"controls\">\n          <select class=\"select optional\" id=\"table_alignment\" name=\"table[alignment]\">\n            <option value=\"\">None</option>\n            <option value=\"right\">Right</option>\n            <option value=\"left\">Left</option>\n          </select>\n        </div>\n      </div>\n      <div class=\"control-group number optional\">\n        <label class=\"number optional control-label\" for=\"table_border\">Border</label>\n        <div class=\"controls\">\n          <input class=\"span1 number optional\" id=\"table_border\" name=\"table[border]\" size=\"50\" type=\"number\" value=\"1\">\n        </div>\n      </div>\n      <div class=\"control-group number optional\">\n        <label class=\"number optional control-label\" for=\"table_spacing\">Spacing</label>\n        <div class=\"controls\">\n          <input class=\"span1 number optional\" id=\"table_spacing\" name=\"table[spacing]\" size=\"50\" type=\"number\" value=\"0\">\n        </div>\n      </div>\n    </fieldset>\n\n  </div>\n  <div class=\"form-actions\">\n    <input class=\"btn btn-primary\" name=\"commit\" type=\"submit\" value=\"Insert Table\"/>\n  </div>\n</form>";
+  });
 
 }).call(this);
 (function() {

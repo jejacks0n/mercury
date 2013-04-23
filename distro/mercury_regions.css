@@ -79,7 +79,7 @@ This file contains only the css required for regions, and is useful if you're sa
 }
 /* line 26, ../../lib/stylesheets/mercury/core/_region.scss */
 .mercury-gallery-region + .mercury-region-drop-indicator:before {
-  content: ",";
+  content: "X";
 }
 /* line 11, ../../lib/stylesheets/mercury/regions/_gallery.scss */
 .mercury-gallery-region .mercury-gallery-region-controls {
@@ -231,7 +231,7 @@ This file contains only the css required for regions, and is useful if you're sa
 }
 /* line 26, ../../lib/stylesheets/mercury/core/_region.scss */
 .mercury-html-region + .mercury-region-drop-indicator:before {
-  content: ",";
+  content: "X";
 }
 
 /* line 1, ../../lib/stylesheets/mercury/regions/_image.scss */
@@ -291,7 +291,7 @@ This file contains only the css required for regions, and is useful if you're sa
 }
 /* line 26, ../../lib/stylesheets/mercury/core/_region.scss */
 .mercury-image-region + .mercury-region-drop-indicator:before {
-  content: ",";
+  content: "X";
 }
 
 /* line 2, ../../lib/stylesheets/mercury/regions/_markdown.scss */
@@ -339,7 +339,7 @@ This file contains only the css required for regions, and is useful if you're sa
 }
 /* line 26, ../../lib/stylesheets/mercury/core/_region.scss */
 .mercury-markdown-region + .mercury-region-drop-indicator:before {
-  content: ",";
+  content: "X";
 }
 /* line 5, ../../lib/stylesheets/mercury/regions/_markdown.scss */
 .mercury-markdown-region textarea.mercury-markdown-region-textarea {

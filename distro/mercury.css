@@ -145,7 +145,7 @@ mercury .mercury-lightview .mercury-lightview-loading-indicator:before {
   -moz-animation: mercury-loading-indicator 1s linear infinite;
   animation: mercury-loading-indicator 1s linear infinite;
   color: #666666;
-  content: "/";
+  content: "Z";
 }
 /* line 21, ../../lib/stylesheets/mercury/views/_lightview.scss */
 mercury .mercury-lightview .mercury-lightview-dialog {
@@ -303,7 +303,7 @@ mercury .mercury-modal .mercury-modal-loading-indicator:before {
   -moz-animation: mercury-loading-indicator 1s linear infinite;
   animation: mercury-loading-indicator 1s linear infinite;
   color: #666666;
-  content: "/";
+  content: "Z";
 }
 /* line 21, ../../lib/stylesheets/mercury/views/_modal.scss */
 mercury .mercury-modal .mercury-modal-dialog {
@@ -455,7 +455,7 @@ mercury .mercury-panel .mercury-panel-loading-indicator:before {
   -moz-animation: mercury-loading-indicator 1s linear infinite;
   animation: mercury-loading-indicator 1s linear infinite;
   color: #cccccc;
-  content: "/";
+  content: "Z";
 }
 /* line 18, ../../lib/stylesheets/mercury/views/_panel.scss */
 mercury .mercury-panel .mercury-panel-title {
@@ -729,29 +729,29 @@ mercury .mercury-toolbar .mercury-toolbar-button.mercury-button-active:before, m
   color: #333333;
   text-shadow: none;
 }
-/* line 75, ../../lib/stylesheets/mercury/views/_toolbar.scss */
-mercury .mercury-toolbar .mercury-toolbar-button.mercury-button-pressed:before {
+/* line 76, ../../lib/stylesheets/mercury/views/_toolbar.scss */
+mercury .mercury-toolbar .mercury-toolbar-button.mercury-button-pressed:before, mercury .mercury-toolbar .mercury-toolbar-button.mercury-button-toggled:before {
   top: 1px;
 }
-/* line 79, ../../lib/stylesheets/mercury/views/_toolbar.scss */
+/* line 80, ../../lib/stylesheets/mercury/views/_toolbar.scss */
 mercury .mercury-toolbar .mercury-toolbar-button em {
   display: none;
 }
-/* line 82, ../../lib/stylesheets/mercury/views/_toolbar.scss */
+/* line 83, ../../lib/stylesheets/mercury/views/_toolbar.scss */
 mercury .mercury-toolbar .mercury-toolbar-button[data-icon]:before {
   content: attr(data-icon);
 }
-/* line 85, ../../lib/stylesheets/mercury/views/_toolbar.scss */
+/* line 86, ../../lib/stylesheets/mercury/views/_toolbar.scss */
 mercury .mercury-toolbar .mercury-toolbar-button[data-type="select"] {
   width: auto;
 }
-/* line 87, ../../lib/stylesheets/mercury/views/_toolbar.scss */
+/* line 88, ../../lib/stylesheets/mercury/views/_toolbar.scss */
 mercury .mercury-toolbar .mercury-toolbar-button[data-type="select"]:before {
-  content: 'B';
+  content: ',';
   float: right;
   width: 18px;
 }
-/* line 92, ../../lib/stylesheets/mercury/views/_toolbar.scss */
+/* line 93, ../../lib/stylesheets/mercury/views/_toolbar.scss */
 mercury .mercury-toolbar .mercury-toolbar-button[data-type="select"] em {
   font-family: Helvetica, Tahoma, Arial, sans-serif;
   font-size: 8pt;
@@ -763,7 +763,7 @@ mercury .mercury-toolbar .mercury-toolbar-button[data-type="select"] em {
   position: relative;
   text-transform: lowercase;
 }
-/* line 105, ../../lib/stylesheets/mercury/views/_toolbar.scss */
+/* line 106, ../../lib/stylesheets/mercury/views/_toolbar.scss */
 mercury .mercury-toolbar .mercury-toolbar-select,
 mercury .mercury-toolbar .mercury-toolbar-palette {
   -webkit-transition-property: opacity;
@@ -797,32 +797,32 @@ mercury .mercury-toolbar .mercury-toolbar-palette {
   background: white;
   color: #333333;
 }
-/* line 107, ../../lib/stylesheets/mercury/views/_toolbar.scss */
+/* line 108, ../../lib/stylesheets/mercury/views/_toolbar.scss */
 mercury .mercury-toolbar .mercury-toolbar-select ul,
 mercury .mercury-toolbar .mercury-toolbar-palette ul {
   list-style: none;
   margin: 0;
   padding: 4px;
 }
-/* line 114, ../../lib/stylesheets/mercury/views/_toolbar.scss */
+/* line 115, ../../lib/stylesheets/mercury/views/_toolbar.scss */
 mercury .mercury-toolbar .mercury-toolbar-select li {
   padding: 2px 10px;
 }
-/* line 116, ../../lib/stylesheets/mercury/views/_toolbar.scss */
+/* line 117, ../../lib/stylesheets/mercury/views/_toolbar.scss */
 mercury .mercury-toolbar .mercury-toolbar-select li:hover {
   background-color: #e2e1e2 !important;
   color: black !important;
 }
-/* line 122, ../../lib/stylesheets/mercury/views/_toolbar.scss */
+/* line 123, ../../lib/stylesheets/mercury/views/_toolbar.scss */
 mercury .mercury-toolbar .mercury-toolbar-palette {
   height: auto;
   padding: 1px;
 }
-/* line 125, ../../lib/stylesheets/mercury/views/_toolbar.scss */
+/* line 126, ../../lib/stylesheets/mercury/views/_toolbar.scss */
 mercury .mercury-toolbar .mercury-toolbar-palette ul {
   margin-right: -1px;
 }
-/* line 129, ../../lib/stylesheets/mercury/views/_toolbar.scss */
+/* line 130, ../../lib/stylesheets/mercury/views/_toolbar.scss */
 mercury .mercury-toolbar .mercury-toolbar-palette li {
   padding: 0;
   display: block;
@@ -833,12 +833,12 @@ mercury .mercury-toolbar .mercury-toolbar-palette li {
   text-align: center;
   line-height: 15px;
 }
-/* line 138, ../../lib/stylesheets/mercury/views/_toolbar.scss */
+/* line 139, ../../lib/stylesheets/mercury/views/_toolbar.scss */
 mercury .mercury-toolbar .mercury-toolbar-palette li:hover {
   margin: -1px 0 0 -1px;
   border: 1px solid #333333;
 }
-/* line 145, ../../lib/stylesheets/mercury/views/_toolbar.scss */
+/* line 146, ../../lib/stylesheets/mercury/views/_toolbar.scss */
 mercury .mercury-toolbar .mercury-toolbar-primary-container {
   background: #e2e2e2;
   background: -moz-linear-gradient(top, #e2e2e2 1%, #c6c6c6 100%);
@@ -851,14 +851,15 @@ mercury .mercury-toolbar .mercury-toolbar-primary-container {
   height: 58px;
   padding: 0;
   overflow: hidden;
+  border-top: 0;
 }
-/* line 152, ../../lib/stylesheets/mercury/views/_toolbar.scss */
+/* line 154, ../../lib/stylesheets/mercury/views/_toolbar.scss */
 mercury .mercury-toolbar .mercury-toolbar-primary-container .mercury-toolbar-separator,
 mercury .mercury-toolbar .mercury-toolbar-primary-container .mercury-toolbar-line-separator {
   width: 40px;
   height: 52px;
 }
-/* line 156, ../../lib/stylesheets/mercury/views/_toolbar.scss */
+/* line 158, ../../lib/stylesheets/mercury/views/_toolbar.scss */
 mercury .mercury-toolbar .mercury-toolbar-primary-container .mercury-toolbar-line-separator {
   width: 0;
   height: 45px;
@@ -866,7 +867,7 @@ mercury .mercury-toolbar .mercury-toolbar-primary-container .mercury-toolbar-lin
   border-left: 1px solid #ececec;
   border-right: 1px solid #9b9b9b;
 }
-/* line 163, ../../lib/stylesheets/mercury/views/_toolbar.scss */
+/* line 165, ../../lib/stylesheets/mercury/views/_toolbar.scss */
 mercury .mercury-toolbar .mercury-toolbar-primary-container .mercury-toolbar-button {
   height: 58px;
   min-width: 55px;
@@ -892,7 +893,7 @@ mercury .mercury-toolbar .mercury-toolbar-primary-container .mercury-toolbar-but
   speak: none;
   -webkit-font-smoothing: antialiased;
 }
-/* line 173, ../../lib/stylesheets/mercury/views/_toolbar.scss */
+/* line 175, ../../lib/stylesheets/mercury/views/_toolbar.scss */
 mercury .mercury-toolbar .mercury-toolbar-primary-container .mercury-toolbar-button em {
   font-family: Helvetica, Tahoma, Arial, sans-serif;
   font-size: 8.5pt;
@@ -903,17 +904,14 @@ mercury .mercury-toolbar .mercury-toolbar-primary-container .mercury-toolbar-but
   font-style: normal;
   color: #222222;
 }
-/* line 182, ../../lib/stylesheets/mercury/views/_toolbar.scss */
+/* line 184, ../../lib/stylesheets/mercury/views/_toolbar.scss */
 mercury .mercury-toolbar .mercury-toolbar-primary-container .mercury-toolbar-button:before {
   left: 0;
 }
-/* line 186, ../../lib/stylesheets/mercury/views/_toolbar.scss */
-mercury .mercury-toolbar .mercury-toolbar-primary-container .mercury-toolbar-button.active:before {
-  line-height: 48px;
-}
-/* line 190, ../../lib/stylesheets/mercury/views/_toolbar.scss */
-mercury .mercury-toolbar .mercury-toolbar-primary-container .mercury-toolbar-button[data-icon]:before {
-  content: attr(data-icon);
+/* line 187, ../../lib/stylesheets/mercury/views/_toolbar.scss */
+mercury .mercury-toolbar .mercury-toolbar-primary-container .mercury-toolbar-button.mercury-button-toggled {
+  background-size: 100% 100%;
+  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAA6CAMAAADFsvruAAABL1BMVEVra2tsbGxtbW1vb29xcXFycnJzc3N0dHR1dXV3d3d4eHh6enp7e3t+fn5/f3+AgICBgYGCgoKDg4OFhYWGhoaHh4eIiIiJiYmLi4uMjIyNjY2Ojo6Pj4+SkpKUlJSVlZWWlpaXl5eYmJiZmZmbm5ucnJydnZ2enp6fn5+goKChoaGioqKjo6OlpaWmpqanp6eoqKipqamqqqqrq6usrKytra2urq6vr6+wsLCxsbGysrKzs7O0tLS1tbW2tra3t7e4uLi5ubm6urq7u7u8vLy9vb2+vr6/v7/AwMDBwcHCwsLDw8PExMTFxcXGxsbHx8fIyMjJycnKysrLy8vMzMzNzc3Ozs7Pz8/Q0NDR0dHS0tLT09PU1NTV1dXW1tbX19fY2NjZ2dna2trb2dvb2ttejuwmAAAC4ElEQVRIDQXBQYIkRQIEMXlUwnx0/3+FpivDVtr/AAAAAAAAPAEAAAAAAHiuTo3O5QgAaI3WtDh5tGuxTA2AMGTGGvF8t2ztHQEuWM7Lyfu5C5Oeu8PF7u5RMID35La9uw3t3ufnr3u0e7rrZgAMv06Los5dv8+P82G9REAA4wZrl3u9P8/budBAAwBoADi33+f3z/dAgADQ4E7Wmq73+7y/nzIBQGBluCDX+P0+v/c9AiwAwC4Ai3q/z395NY1GMADIGmD6fX7eG7XL7gTAssAuhs7787zvC0QyCDR3QhNS7/f5fksDAICmATTYvd9zbwwgAJimEIjU8+/7HZNpDQSWZddau3PH7z/P/RbYBQAAu2C5LN/7tIAAAICAQK2e77csAwAAgKw15H3e93auRWuBAbTWkGqu931+7ytaYACIBWBhff973jcXoAEAAABO9z73Jg1NAmANMgDXe58ETRAYsNaA1tD1Pt/3PXet1hoQ0Got48La+z5vvRRpFwCsJAJW9T69NwAAAGgAsN2euwYAAADTZMA97vECAAAQGBuhdT079xOADACKQSNwdrZTVAQAYAYGGHs+O2IwawDAtAZgds4RAAEAYAaEjs+ZLoAZAAIBDK49OwcLAAADAxZ2zznnUwiGAQDAEOS25/M5CzAMACyWLSx2znHWGNgGAIRYELPnfG6yMBUAgAHA2faciVhhAQC0Vljc2fM5G4stHAiA5eRoba3P53mOERYEAy2ilWVZex7WTLCAwMLEYtBxnnPG2rBOYACj0zpNxj57ptVkMBCwMmaNNdWe59hgbAIHYDqa0ay15/nrzDCdzABgDIPhtOfPc84xMGMAABhg2PHsCAAAoKHRAPfjnL9tgAAAFg0U+PR5ns0AAwAwBjMAn+fv5wgLa8FAAADL/HkeQGANAGCCCew8n3OPyZANAJY1sMa5zp75XA3ZWgCAtFiLDjvdlC1uLgCW1WK7bqVb/wcH6CaFZ6FslQAAAABJRU5ErkJggg==);
 }
 
 /* line 1, ../../lib/stylesheets/mercury/views/_uploader.scss */
@@ -1098,11 +1096,11 @@ mercury .mercury-toolbar .mercury-blocks-select h1, mercury .mercury-toolbar .me
 
 /* line 3, ../../lib/stylesheets/mercury/plugins/_character.scss */
 mercury .mercury-toolbar .mercury-toolbar-button[data-type="character"]:before {
-  content: 'y';
+  content: 'M';
 }
 /* line 6, ../../lib/stylesheets/mercury/plugins/_character.scss */
 mercury .mercury-toolbar .mercury-character-palette {
-  width: 242px;
+  width: 278px;
   font-size: 15px;
   padding: 2px;
 }
@@ -1139,11 +1137,12 @@ mercury .mercury-toolbar .mercury-character-palette li:hover {
 }
 /* line 32, ../../lib/stylesheets/mercury/plugins/_character.scss */
 mercury .mercury-character-modal ul {
+  max-width: 464px;
   list-style: none;
   margin: 0 -2px 0 0;
   padding: 5px 0 0;
 }
-/* line 37, ../../lib/stylesheets/mercury/plugins/_character.scss */
+/* line 38, ../../lib/stylesheets/mercury/plugins/_character.scss */
 mercury .mercury-character-modal ul li {
   float: left;
   width: 25px;
@@ -1156,7 +1155,7 @@ mercury .mercury-character-modal ul li {
   cursor: pointer;
   background: #FFF;
 }
-/* line 48, ../../lib/stylesheets/mercury/plugins/_character.scss */
+/* line 49, ../../lib/stylesheets/mercury/plugins/_character.scss */
 mercury .mercury-character-modal ul li:hover {
   -webkit-transition-property: font-size;
   -webkit-transition-duration: 0.1s;
@@ -1186,7 +1185,7 @@ mercury .mercury-toolbar .mercury-toolbar-button[data-type="color"] {
 }
 /* line 5, ../../lib/stylesheets/mercury/plugins/_color.scss */
 mercury .mercury-toolbar .mercury-toolbar-button[data-type="color"]:before {
-  content: 'd';
+  content: '.';
   color: inherit;
   text-shadow: none;
 }
@@ -1320,7 +1319,7 @@ mercury .mercury-no-animation * {
 }
 /* line 26, ../../lib/stylesheets/mercury/core/_region.scss */
 .mercury-gallery-region + .mercury-region-drop-indicator:before {
-  content: ",";
+  content: "X";
 }
 /* line 11, ../../lib/stylesheets/mercury/regions/_gallery.scss */
 .mercury-gallery-region .mercury-gallery-region-controls {
@@ -1472,7 +1471,7 @@ mercury .mercury-no-animation * {
 }
 /* line 26, ../../lib/stylesheets/mercury/core/_region.scss */
 .mercury-html-region + .mercury-region-drop-indicator:before {
-  content: ",";
+  content: "X";
 }
 
 /* line 1, ../../lib/stylesheets/mercury/regions/_image.scss */
@@ -1532,7 +1531,7 @@ mercury .mercury-no-animation * {
 }
 /* line 26, ../../lib/stylesheets/mercury/core/_region.scss */
 .mercury-image-region + .mercury-region-drop-indicator:before {
-  content: ",";
+  content: "X";
 }
 
 /* line 2, ../../lib/stylesheets/mercury/regions/_markdown.scss */
@@ -1580,7 +1579,7 @@ mercury .mercury-no-animation * {
 }
 /* line 26, ../../lib/stylesheets/mercury/core/_region.scss */
 .mercury-markdown-region + .mercury-region-drop-indicator:before {
-  content: ",";
+  content: "X";
 }
 /* line 5, ../../lib/stylesheets/mercury/regions/_markdown.scss */
 .mercury-markdown-region textarea.mercury-markdown-region-textarea {

@@ -21,6 +21,7 @@ class Mercury.Modal extends Mercury.View
 
   @events:
     'click .mercury-modal-dialog-title em': 'release'
+    'click .mercury-modal-overlay': 'release'
     'mercury:interface:hide': -> @hide(false)
     'mercury:interface:show': -> @show(false)
     'mercury:interface:resize': -> @resize(false)
@@ -68,8 +69,14 @@ class Mercury.Modal extends Mercury.View
     @addClass('mercury-no-animation') unless animate
     @$contentContainer.css(height: 'auto')
     titleHeight = @$titleContainer.outerHeight()
-    height = Math.min(@$content.outerHeight() + titleHeight, $(window).height() - 10)
-    @$dialog.css(height: height)
+    if !@width
+      @$content.css(position: 'absolute')
+      width = @$content.outerWidth()
+      height = Math.min(@$content.outerHeight() + titleHeight, $(window).height() - 10)
+      @$content.css(position: 'static')
+    else
+      height = Math.min(@$content.outerHeight() + titleHeight, $(window).height() - 10)
+    @$dialog.css(height: height, width: width || @width)
     @$contentContainer.css(height: height - titleHeight)
     if animate
       @showContentTimeout = @delay(300, @showContent)

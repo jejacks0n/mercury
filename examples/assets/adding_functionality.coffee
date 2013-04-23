@@ -20,7 +20,7 @@ Mercury?.on 'initialize', ->
   #
   # You'll notice here that we're using an icon character on the button, which maps to a glyph that's defined in the
   # font. You can add your own, and there's more info about that in the README.
-  toolbar = twitter: ['Twitter', icon: '0', action: ['html', '<a href="http://twitter.com/jejacks0n">jejacks0n</a>']]
+  toolbar = twitter: ['Twitter', icon: 'fav', action: ['html', '<a href="http://twitter.com/jejacks0n">jejacks0n</a>']]
 
   # Next we add the new toolbar to the regions that we want to be able to handle it. The toolbar button will be added
   # and enabled for any region that we add the toolbar to and that also supports the HTML action. For regions that don't
@@ -33,7 +33,7 @@ Mercury?.on 'initialize', ->
   #
   # A more complex example of functionality is adding a soft wrap toggle for the markdown region. Like above, we need to
   # add a toolbar button, but in this case we want a more complex method that will handle the action.
-  Mercury.Region.Markdown.addToolbar 'settings', wrap: ['Soft Wrap', icon: '1']
+  Mercury.Region.Markdown.addToolbar 'settings', wrap: ['Soft Wrap', icon: 'softWrap']
 
   # The action handler simply toggles the wrap attribute on the focusable element (which is the common name for text
   # based regions.) If you want the button to work like a toggle button check out the next example -- adding context.
@@ -47,7 +47,7 @@ Mercury?.on 'initialize', ->
   #
   # First, we add the toolbar buttons we'll need. When a user sets the direction we want to track what it is, so we're
   # going to store it in the element data -- which we can use use later when we render the region from the server.
-  Mercury.Region.Markdown.addToolbar 'directions', direction: ['RTL/LTR', icon: '2']
+  Mercury.Region.Markdown.addToolbar 'directions', direction: ['RTL/LTR', icon: 'direction']
 
   # To have the button highlight under various conditions we need to add a context. The button will highlight when it's
   # context is true. Our context simply checks to see if the region has it's direction set to rtl -- which makes our
@@ -71,7 +71,7 @@ Mercury?.on 'initialize', ->
   #
   # In this example we'll work with getting and replacing the selection. Like the previous examples we need a toolbar
   # that we can interact with.
-  Mercury.Region.Markdown.addToolbar 'calculations', calc: ['Calculate', icon: '3']
+  Mercury.Region.Markdown.addToolbar 'calculations', calc: ['Calculate', icon: 'calculate']
 
   # Now we just have to add the action that attempts to calculate the given selection. In this case we replace the
   # selection with whatever was evaled -- note, this also allows for javascript injection, so is intended as an example
@@ -108,7 +108,7 @@ Mercury?.on 'initialize', ->
   # Now, if we trigger the action it will make it through and can be handled differently based on the region type. This
   # is also true when passing Models. Actions specifically mimic models so they can be interchangable. If you were to
   # pass a model instance to an action it can be used the same as an Action instance.
-  toolbar = person: ['Personal Details', icon: '4', action: ['person', name: 'Jeremy', title: 'Developer']]
+  toolbar = person: ['Personal Details', icon: 'user', action: ['person', name: 'Jeremy', title: 'Developer']]
   Mercury.Region.Markdown.addToolbar('people', toolbar)
   Mercury.Region.Html.addToolbar('people', toolbar)
 
@@ -137,7 +137,7 @@ Mercury?.on 'initialize', ->
   # in this case it's the brightness_slider template, which we'll define in next. If the value of the subview is a
   # string, but we could also provide an object, in which case the entire object would be passed to the constructor for
   # our view.
-  Mercury.Region.Image.addToolbar 'filters', brightness: ['Brightness', icon: 'x', slider: 'brightness_slider']
+  Mercury.Region.Image.addToolbar 'filters', brightness: ['Brightness', icon: 'brightness', slider: 'brightness_slider']
 
   # To finish up the ToolbarSlider view we need to define the template that we're telling the ToolbarSlider to use. We
   # can define this in the JST namespace, or we can have our server respond -- which is configurable. But for the demo

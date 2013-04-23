@@ -1,10 +1,10 @@
 mercury {
   .mercury-toolbar {
     .mercury-toolbar-button[data-type="character"]:before {
-      content: 'y';
+      content: 'M';
     }
     .mercury-character-palette {
-      width: 242px;
+      width: 278px;
       font-size: 15px;
       padding: 2px;
       li {
@@ -30,6 +30,7 @@ mercury {
   }
   .mercury-character-modal {
     ul {
+      max-width: 464px;
       @extend .mercury-clearfix;
       list-style: none;
       margin: 0 -2px 0 0;

@@ -71,7 +71,6 @@ class Plugin.Modal extends Mercury.Modal
   template:  'character'
   className: 'mercury-character-modal'
   title:     'Character Picker'
-  width:     387
   events:    'click li': (e) -> @trigger('character:picked', $(e.target).data('value')) && @hide()
 
 

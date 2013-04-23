@@ -24,6 +24,6 @@
   color: $region_drop_indicator_color;
   pointer-events: none;
   &:before {
-    content: ','
+    content: 'X'
   }
 }

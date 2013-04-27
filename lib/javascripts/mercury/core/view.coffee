@@ -162,7 +162,7 @@ class Mercury.View extends Mercury.Module
   # find the first element with a positive tab index that's visile and call focus on it.
   #
   focusFirstFocusable: ->
-    @$(':input:visible')[0].focus()
+    @$(':input:visible[tabindex != "-1"]')[0]?.focus()
 
 
   # Standard event handler that will prevent an event, and optionally stop it from propagating.

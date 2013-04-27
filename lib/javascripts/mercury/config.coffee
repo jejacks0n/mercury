@@ -63,6 +63,7 @@ Mercury.configuration =
     class      : 'FrameInterface'                          # interface class -- used on Mercury.init()
     toolbar    : 'Toolbar'                                 # toolbar class to use within the interface
     statusbar  : 'Statusbar'                               # statusbar class to use within the interface
+    uploader   : 'Uploader'                                # uploader class to use within the interface
     silent     : false                                     # set to true to disable asking about changes when leaving
     shadowed   : false                                     # puts the interface into a shadow dom when it's available
 

@@ -113,14 +113,14 @@ via Ajax.
       exp = this.expandSelectionToLines(this.getSelection());
       val = exp.text;
       if (val.match(/^- /)) {
-        e.preventDefault();
+        this.prevent(e);
         if (val.match(/^- ./)) {
           return this.replaceSelection('\n- ');
         } else {
           return this.replaceSelectedLine(exp, '\n');
         }
       } else if (match = val.match(/^(\d+)\. /)) {
-        e.preventDefault();
+        this.prevent(e);
         next = parseInt(match[1], 10) + 1;
         if (val.match(/^\d+\. ./)) {
           return this.replaceSelection("\n" + next + ". ");
@@ -128,14 +128,14 @@ via Ajax.
           return this.replaceSelectedLine(exp, '\n');
         }
       } else if (match = val.match(/^(> )+/g)) {
-        e.preventDefault();
+        this.prevent(e);
         if (val.match(/^(> )+./g)) {
           return this.replaceSelection("\n" + match[0]);
         } else {
           return this.replaceSelectedLine(exp, '\n');
         }
       } else if (match = val.match(/^\s{4}/g)) {
-        e.preventDefault();
+        this.prevent(e);
         if (val.match(/^\s{4}./)) {
           return this.replaceSelection("\n    ");
         } else {

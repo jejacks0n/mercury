@@ -36,8 +36,10 @@ Copyright (c) 2013 Jeremy Jackson
       "class": 'FrameInterface',
       toolbar: 'Toolbar',
       statusbar: 'Statusbar',
+      uploader: 'Uploader',
       silent: false,
-      shadowed: false
+      shadowed: false,
+      maskable: false
     },
     toolbars: {
       floating: false,
@@ -151,6 +153,15 @@ Copyright (c) 2013 Jeremy Jackson
 
   this.JST || (this.JST = {});
 
+  JST['/mercury/templates/interface'] = function() {
+    return "<div class=\"mercury-interface-mask\"></div>";
+  };
+
+}).call(this);
+(function() {
+
+  this.JST || (this.JST = {});
+
   JST['/mercury/templates/lightview'] = function() {
     return "<div class=\"mercury-lightview-overlay\"></div>\n<div class=\"mercury-lightview-dialog\">\n  <div class=\"mercury-lightview-dialog-positioner\">\n    <div class=\"mercury-lightview-dialog-title\"><em>&times;</em><span></span></div>\n    <div class=\"mercury-lightview-loading-indicator\"></div>\n    <div class=\"mercury-lightview-dialog-content-container\">\n      <div class=\"mercury-lightview-dialog-content\">\n      </div>\n    </div>\n  </div>\n</div>";
   };
@@ -218,6 +229,40 @@ Copyright (c) 2013 Jeremy Jackson
     } else {
       return "" + bytes + " bytes";
     }
+  };
+
+}).call(this);
+(function() {
+  var __hasProp = {}.hasOwnProperty;
+
+  Object.toParams = function(params) {
+    var pairs, proc;
+    pairs = [];
+    (proc = function(object, prefix) {
+      var el, i, key, value, _results;
+      _results = [];
+      for (key in object) {
+        if (!__hasProp.call(object, key)) continue;
+        value = object[key];
+        if (value instanceof Array) {
+          _results.push((function() {
+            var _i, _len, _results1;
+            _results1 = [];
+            for (i = _i = 0, _len = value.length; _i < _len; i = ++_i) {
+              el = value[i];
+              _results1.push(proc(el, prefix != null ? "" + prefix + "[" + key + "][]" : "" + key + "[]"));
+            }
+            return _results1;
+          })());
+        } else if (value instanceof Object) {
+          _results.push(proc(value, prefix != null ? prefix += "[" + key + "]" : prefix = key));
+        } else {
+          _results.push(pairs.push(prefix != null ? "" + prefix + "[" + key + "]=" + value : "" + key + "=" + value));
+        }
+      }
+      return _results;
+    })(params, null);
+    return pairs.join('&');
   };
 
 }).call(this);
@@ -1385,6 +1430,24 @@ Copyright (c) 2013 Jeremy Jackson
       return template;
     };
 
+    View.prototype.focusFirstFocusable = function() {
+      var _ref;
+      return (_ref = this.$(':input:visible[tabindex != "-1"]')[0]) != null ? _ref.focus() : void 0;
+    };
+
+    View.prototype.prevent = function(e, stop) {
+      if (stop == null) {
+        stop = false;
+      }
+      if (!(e && e.preventDefault)) {
+        return;
+      }
+      e.preventDefault();
+      if (stop) {
+        return e.stopPropagation();
+      }
+    };
+
     View.prototype.release = function() {
       var method, name, _ref;
       this.trigger('release');
@@ -1884,7 +1947,7 @@ Copyright (c) 2013 Jeremy Jackson
           if (!(e.metaKey && e.keyCode === 90)) {
             return;
           }
-          e.preventDefault();
+          _this.prevent(e);
           if (e.shiftKey) {
             return _this.handleAction('redo');
           } else {
@@ -1907,11 +1970,11 @@ Copyright (c) 2013 Jeremy Jackson
       var _this = this;
       return this.delegateEvents(this.$el, {
         dragenter: function(e) {
-          return e.preventDefault();
+          return _this.prevent(e);
         },
         dragover: function(e) {
           if (!(_this.editableDropBehavior && Mercury.support.webkit)) {
-            return e.preventDefault();
+            return _this.prevent(e);
           }
         },
         drop: function(e) {
@@ -1921,7 +1984,7 @@ Copyright (c) 2013 Jeremy Jackson
           }
           data = e.originalEvent.dataTransfer;
           if (data.files.length && _this.onDropFile) {
-            e.preventDefault();
+            _this.prevent(e);
             return _this.onDropFile(data.files);
           } else if (_this.onDropItem) {
             return _this.onDropItem(e, data);
@@ -1952,6 +2015,233 @@ Copyright (c) 2013 Jeremy Jackson
 
 }).call(this);
 (function() {
+
+  Mercury.View.Modules.FormHandler = {
+    included: function() {
+      return this.on('build', this.buildFormHandler);
+    },
+    buildFormHandler: function() {
+      return this.delegateEvents({
+        'submit': 'onFormSubmit'
+      });
+    },
+    validate: function() {
+      return this.clearInputErrors();
+    },
+    addInputError: function(input, message) {
+      input.after("<span class=\"help-inline error-message\">" + message + "</span>").closest('.control-group').addClass('error');
+      return this.valid = false;
+    },
+    clearInputErrors: function() {
+      this.$('.control-group.error').removeClass('error').find('.error-message').remove();
+      return this.valid = true;
+    },
+    onFormSubmit: function(e) {
+      this.prevent(e);
+      this.validate();
+      if (this.valid) {
+        return typeof this.onSubmit === "function" ? this.onSubmit() : void 0;
+      }
+    }
+  };
+
+}).call(this);
+(function() {
+
+  Mercury.View.Modules.InterfaceFocusable = {
+    included: function() {
+      return this.on('build', this.buildInterfaceFocusable);
+    },
+    buildInterfaceFocusable: function() {
+      if (!this.revertFocusOn) {
+        return;
+      }
+      this.delegateEvents({
+        'mousedown': 'handleFocusableEvent',
+        'mouseup': 'handleFocusableEvent',
+        'click': 'handleFocusableEvent'
+      });
+      return this.delegateRevertedFocus(this.revertFocusOn);
+    },
+    delegateRevertedFocus: function(matcher) {
+      var reverted;
+      reverted = {};
+      reverted["mousedown " + matcher] = function() {
+        return this.delay(1, function() {
+          return Mercury.trigger('focus');
+        });
+      };
+      reverted["click " + matcher] = function() {
+        return this.delay(1, function() {
+          return Mercury.trigger('focus');
+        });
+      };
+      return this.delegateEvents(reverted);
+    },
+    handleFocusableEvent: function(e) {
+      e.stopPropagation();
+      if (!$(e.target).is(this.focusableSelector || ':input, [tabindex]')) {
+        return this.prevent(e);
+      }
+    }
+  };
+
+}).call(this);
+(function() {
+
+  Mercury.View.Modules.ScrollPropagation = {
+    preventScrollPropagation: function(el) {
+      return el.on('mousewheel DOMMouseScroll', function(e) {
+        var delta, scrollTop, _ref;
+        _ref = [e.originalEvent.wheelDelta || -e.originalEvent.detail, el.scrollTop()], delta = _ref[0], scrollTop = _ref[1];
+        if (delta > 0 && scrollTop <= 0) {
+          return false;
+        }
+        if (delta < 0 && scrollTop >= el.get(0).scrollHeight - el.height()) {
+          return false;
+        }
+        return true;
+      });
+    }
+  };
+
+}).call(this);
+(function() {
+
+  Mercury.View.Modules.ToolbarDialog = {
+    included: function() {
+      return this.on('build', this.buildToolbarDialog);
+    },
+    buildToolbarDialog: function() {
+      return this.delegateEvents({
+        'mercury:dialogs:hide': function() {
+          return typeof this.hide === "function" ? this.hide() : void 0;
+        },
+        'mercury:interface:resize': 'positionAndResize'
+      });
+    },
+    positionAndResize: function(dimensions) {
+      this.position(dimensions);
+      return this.resize(false, dimensions);
+    },
+    position: function(dimensions) {
+      var e, left, o, p, top, v;
+      this.css({
+        left: 0,
+        top: 0
+      });
+      v = {
+        width: $(window).width(),
+        height: $(window).height()
+      };
+      e = {
+        width: this.$el.outerWidth(),
+        height: this.$el.outerHeight()
+      };
+      p = {
+        width: this.$el.parent().outerWidth(),
+        height: this.$el.parent().outerHeight()
+      };
+      o = this.$el.parent().position();
+      left = 0;
+      if (e.width + o.left > v.width) {
+        left = -e.width + p.width;
+      }
+      if (o.left + left < 0) {
+        left -= o.left + left;
+      }
+      top = 0;
+      if (e.height + o.top + p.height > v.height) {
+        top = -e.height;
+      }
+      if (o.top + top + p.height < 0) {
+        top -= o.top + top + p.height;
+      }
+      return this.css({
+        top: top,
+        left: left
+      });
+    },
+    resize: function(animate, dimensions) {
+      if (animate == null) {
+        animate = true;
+      }
+    }
+  };
+
+}).call(this);
+(function() {
+
+  Mercury.View.Modules.VisibilityToggleable = {
+    included: function() {
+      return this.on('build', this.buildVisibilityToggleable);
+    },
+    buildVisibilityToggleable: function() {
+      this.delegateEvents({
+        'mercury:interface:hide': function() {
+          return this.hide();
+        }
+      });
+      if (this.hidden) {
+        this.visible = true;
+        return this.hide();
+      } else {
+        return this.show();
+      }
+    },
+    toggle: function() {
+      if (this.visible) {
+        return this.hide();
+      } else {
+        return this.show();
+      }
+    },
+    show: function(update) {
+      if (update == null) {
+        update = true;
+      }
+      if (this.visible) {
+        return false;
+      }
+      this.trigger('show');
+      clearTimeout(this.visibilityTimout);
+      this.visible = true;
+      this.$el.show();
+      this.visibilityTimout = this.delay(50, function() {
+        this.css({
+          opacity: 1
+        });
+        if (update) {
+          return typeof this.update === "function" ? this.update() : void 0;
+        }
+      });
+      return true;
+    },
+    hide: function(release) {
+      if (release == null) {
+        release = false;
+      }
+      if (!this.visible) {
+        return false;
+      }
+      this.trigger('hide');
+      clearTimeout(this.visibilityTimout);
+      this.visible = false;
+      this.css({
+        opacity: 0
+      });
+      this.visibilityTimout = this.delay(250, function() {
+        this.$el.hide();
+        if (release) {
+          return this.release();
+        }
+      });
+      return true;
+    }
+  };
+
+}).call(this);
+(function() {
   var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -1962,15 +2252,33 @@ Copyright (c) 2013 Jeremy Jackson
 
     BaseInterface.logPrefix = 'Mercury.BaseInterface:';
 
+    BaseInterface.template = 'interface';
+
     BaseInterface.tag = 'mercury';
 
+    BaseInterface.elements = {
+      mask: '.mercury-interface-mask'
+    };
+
     BaseInterface.events = {
-      'mousedown': 'focusActiveRegion',
-      'focusout': 'focusActiveRegion',
       'mercury:focus': 'focusActiveRegion',
+      'mercury:action': 'focusActiveRegion',
+      'mercury:blur': 'blurActiveRegion',
       'mercury:region:focus': 'onRegionFocus',
       'mercury:region:release': 'onRegionRelease',
-      'mercury:reinitialize': 'reinitialize'
+      'mercury:reinitialize': 'reinitialize',
+      'mercury:interface:mask': 'mask',
+      'mercury:interface:unmask': 'unmask',
+      'mousedown .mercury-interface-mask': function(e) {
+        return this.prevent(e);
+      },
+      'mouseup .mercury-interface-mask': function(e) {
+        return this.prevent(e);
+      },
+      'click .mercury-interface-mask': function(e) {
+        this.prevent(e, true);
+        return Mercury.trigger('dialogs:hide');
+      }
     };
 
     function BaseInterface() {
@@ -2012,7 +2320,8 @@ Copyright (c) 2013 Jeremy Jackson
     };
 
     BaseInterface.prototype.initialize = function() {
-      return this.addAllRegions();
+      this.addAllRegions();
+      return this.bindDocumentEvents();
     };
 
     BaseInterface.prototype.reinitialize = function() {
@@ -2072,6 +2381,14 @@ Copyright (c) 2013 Jeremy Jackson
       });
     };
 
+    BaseInterface.prototype.bindDocumentEvents = function() {
+      if (!this.config('interface:mask')) {
+        return $('body', this.document).on('mousedown', function() {
+          return Mercury.trigger('dialogs:hide');
+        });
+      }
+    };
+
     BaseInterface.prototype.focusDefaultRegion = function() {
       return this.delay(100, this.focusActiveRegion);
     };
@@ -2104,12 +2421,13 @@ Copyright (c) 2013 Jeremy Jackson
 
     BaseInterface.prototype.focusActiveRegion = function(e) {
       var _ref;
-      if (e != null) {
-        if (typeof e.preventDefault === "function") {
-          e.preventDefault();
-        }
-      }
+      this.prevent(e);
       return (_ref = this.region) != null ? _ref.focus() : void 0;
+    };
+
+    BaseInterface.prototype.blurActiveRegion = function() {
+      var _ref;
+      return (_ref = this.region) != null ? _ref.blur() : void 0;
     };
 
     BaseInterface.prototype.setMode = function(mode) {
@@ -2134,6 +2452,17 @@ Copyright (c) 2013 Jeremy Jackson
           return Mercury.trigger('mode', 'preview');
         }
       }
+    };
+
+    BaseInterface.prototype.mask = function() {
+      if (!this.config('interface:mask')) {
+        return;
+      }
+      return this.$mask.show();
+    };
+
+    BaseInterface.prototype.unmask = function() {
+      return this.$mask.hide();
     };
 
     BaseInterface.prototype.dimensions = function() {
@@ -2260,12 +2589,6 @@ Copyright (c) 2013 Jeremy Jackson
       return FrameInterface.__super__.bindDefaultEvents.apply(this, arguments);
     };
 
-    FrameInterface.prototype.bindDocumentEvents = function() {
-      return $('body', this.document).on('mousedown', function() {
-        return Mercury.trigger('dialogs:hide');
-      });
-    };
-
     FrameInterface.prototype.initializeFrame = function() {
       if (this.initialized) {
         return;
@@ -2291,89 +2614,24 @@ Copyright (c) 2013 Jeremy Jackson
 
 }).call(this);
 (function() {
-  var instances,
-    __slice = [].slice;
-
-  instances = {};
-
-  Mercury.View.Modules.Singleton = {
-    ensureSingleton: function() {
-      var args, instance, name;
-      name = arguments[0], args = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
-      instance = instances[name];
-      if (instance && instance.constructor === this.constructor) {
-        instance.update.apply(instance, args);
-        return instance;
-      } else {
-        if (instance != null) {
-          instance.release();
-        }
-        instances[name] = this;
-        return false;
-      }
-    },
-    removeSingleton: function(name) {
-      return instances[name] = null;
-    }
-  };
-
-}).call(this);
-(function() {
-
-  Mercury.View.Modules.ToolbarFocusable = {
-    included: function() {
-      return this.on('build', this.buildToolbarFocusable);
-    },
-    buildToolbarFocusable: function() {
-      return this.delegateEvents({
-        'mousedown': function(e) {
-          return e.stopPropagation();
-        },
-        'mouseup': function(e) {
-          return e.stopPropagation();
-        }
-      });
-    }
-  };
-
-}).call(this);
-(function() {
-
-  Mercury.View.Modules.ScrollPropagation = {
-    preventScrollPropagation: function(el) {
-      return el.on('mousewheel DOMMouseScroll', function(e) {
-        var delta, scrollTop, _ref;
-        _ref = [e.originalEvent.wheelDelta || -e.originalEvent.detail, el.scrollTop()], delta = _ref[0], scrollTop = _ref[1];
-        if (delta > 0 && scrollTop <= 0) {
-          return false;
-        }
-        if (delta < 0 && scrollTop >= el.get(0).scrollHeight - el.height()) {
-          return false;
-        }
-        return true;
-      });
-    }
-  };
-
-}).call(this);
-(function() {
   var __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-    __slice = [].slice;
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
   Mercury.Modal = (function(_super) {
 
     __extends(Modal, _super);
 
-    Modal.include(Mercury.View.Modules.Singleton);
+    Modal.include(Mercury.View.Modules.FormHandler);
 
-    Modal.include(Mercury.View.Modules.ToolbarFocusable);
+    Modal.include(Mercury.View.Modules.InterfaceFocusable);
 
     Modal.include(Mercury.View.Modules.ScrollPropagation);
 
+    Modal.include(Mercury.View.Modules.VisibilityToggleable);
+
     Modal.logPrefix = 'Mercury.Modal:';
 
-    Modal.className = 'mercury-modal';
+    Modal.className = 'mercury-dialog mercury-modal';
 
     Modal.elements = {
       overlay: '.mercury-modal-overlay',
@@ -2385,30 +2643,32 @@ Copyright (c) 2013 Jeremy Jackson
     };
 
     Modal.events = {
-      'click .mercury-modal-dialog-title em': 'release',
-      'click .mercury-modal-overlay': 'release',
       'mercury:interface:hide': function() {
-        return this.hide(false);
+        return this.hide();
       },
-      'mercury:interface:show': function() {
-        return this.show(false);
+      'mercury:interface:resize': function(dimensions) {
+        return this.resize(false, dimensions);
       },
-      'mercury:interface:resize': function() {
-        return this.resize(false);
+      'mercury:modals:hide': function() {
+        return this.hide();
+      },
+      'click .mercury-modal-dialog-title em': function() {
+        return this.hide();
       }
     };
 
     Modal.prototype.primaryTemplate = 'modal';
 
     function Modal(options) {
-      var instance, _base;
+      var _base;
       this.options = options != null ? options : {};
-      if (instance = this.ensureSingleton.apply(this, [this.primaryTemplate].concat(__slice.call(arguments)))) {
-        return instance;
-      }
       (_base = this.options).template || (_base.template = this.template);
       Modal.__super__.constructor.call(this, this.options);
-      this.show();
+      if (this.hidden) {
+        this.visible = false;
+      } else {
+        this.show();
+      }
     }
 
     Modal.prototype.buildElement = function() {
@@ -2452,10 +2712,12 @@ Copyright (c) 2013 Jeremy Jackson
       }).html(content);
       this.lastContent = content;
       this.resize();
-      return this.show(false);
+      this.show(false);
+      this.refreshElements();
+      return this.delay(300, this.focusFirstFocusable);
     };
 
-    Modal.prototype.resize = function(animate) {
+    Modal.prototype.resize = function(animate, dimensions) {
       var height, titleHeight, width;
       if (animate == null) {
         animate = true;
@@ -2492,7 +2754,9 @@ Copyright (c) 2013 Jeremy Jackson
       } else {
         this.showContent(false);
       }
-      return this.removeClass('mercury-no-animation');
+      return this.delay(250, function() {
+        return this.removeClass('mercury-no-animation');
+      });
     };
 
     Modal.prototype.contentFromOptions = function() {
@@ -2529,6 +2793,12 @@ Copyright (c) 2013 Jeremy Jackson
       if (update == null) {
         update = true;
       }
+      if (this.visible) {
+        return;
+      }
+      Mercury.trigger('blur');
+      Mercury.trigger('modals:hide');
+      this.trigger('show');
       clearTimeout(this.visibilityTimout);
       this.visible = true;
       this.$el.show();
@@ -2544,9 +2814,13 @@ Copyright (c) 2013 Jeremy Jackson
 
     Modal.prototype.hide = function(release) {
       if (release == null) {
-        release = true;
+        release = false;
+      }
+      if (!this.visible && !release) {
+        return;
       }
       Mercury.trigger('focus');
+      this.trigger('hide');
       clearTimeout(this.visibilityTimout);
       this.visible = false;
       this.css({
@@ -2560,11 +2834,15 @@ Copyright (c) 2013 Jeremy Jackson
       });
     };
 
+    Modal.prototype.appendTo = function() {
+      this.log(this.t('appending to mercury interface instead'));
+      return Modal.__super__.appendTo.call(this, Mercury["interface"]);
+    };
+
     Modal.prototype.release = function() {
       if (this.visible) {
         return this.hide(true);
       }
-      this.removeSingleton(this.primaryTemplate);
       return Modal.__super__.release.apply(this, arguments);
     };
 
@@ -2587,7 +2865,7 @@ Copyright (c) 2013 Jeremy Jackson
 
     Lightview.logPrefix = 'Mercury.Lightview:';
 
-    Lightview.className = 'mercury-lightview';
+    Lightview.className = 'mercury-dialog mercury-lightview';
 
     Lightview.elements = {
       overlay: '.mercury-lightview-overlay',
@@ -2599,15 +2877,17 @@ Copyright (c) 2013 Jeremy Jackson
     };
 
     Lightview.events = {
-      'click .mercury-lightview-dialog-title em': 'release',
       'mercury:interface:hide': function() {
-        return this.hide(false);
+        return this.hide();
       },
-      'mercury:interface:show': function() {
-        return this.show(false);
+      'mercury:interface:resize': function(dimensions) {
+        return this.resize(false, dimensions);
       },
-      'mercury:interface:resize': function() {
-        return this.resize(false);
+      'mercury:modals:hide': function() {
+        return this.hide();
+      },
+      'click .mercury-lightview-dialog-title em': function() {
+        return this.hide();
       }
     };
 
@@ -2620,7 +2900,7 @@ Copyright (c) 2013 Jeremy Jackson
       });
     };
 
-    Lightview.prototype.resize = function(animate) {
+    Lightview.prototype.resize = function(animate, dimensions) {
       var height, titleHeight;
       if (animate == null) {
         animate = true;
@@ -2661,56 +2941,6 @@ Copyright (c) 2013 Jeremy Jackson
 
 }).call(this);
 (function() {
-
-  Mercury.View.Modules.VisibilityToggleable = {
-    included: function() {
-      return this.on('build', this.buildVisibilityToggleable);
-    },
-    buildVisibilityToggleable: function() {
-      this.visible || (this.visible = false);
-      if (!this.visible) {
-        this.hide();
-      }
-      return this.delegateEvents({
-        'mercury:interface:hide': 'hide'
-      });
-    },
-    toggle: function() {
-      if (this.visible) {
-        return this.hide();
-      } else {
-        return this.show();
-      }
-    },
-    hide: function() {
-      var _this = this;
-      clearTimeout(this.visibilityTimeout);
-      this.visible = false;
-      this.css({
-        opacity: 0
-      });
-      return this.visibilityTimeout = this.delay(100, function() {
-        return _this.$el.hide();
-      });
-    },
-    show: function() {
-      var _this = this;
-      clearTimeout(this.visibilityTimeout);
-      this.visible = true;
-      this.$el.show();
-      if (typeof this.position === "function") {
-        this.position();
-      }
-      return this.visibilityTimeout = this.delay(1, function() {
-        return _this.css({
-          opacity: 1
-        });
-      });
-    }
-  };
-
-}).call(this);
-(function() {
   var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -2719,9 +2949,9 @@ Copyright (c) 2013 Jeremy Jackson
 
     __extends(Panel, _super);
 
-    Panel.include(Mercury.View.Modules.Singleton);
+    Panel.include(Mercury.View.Modules.FormHandler);
 
-    Panel.include(Mercury.View.Modules.ToolbarFocusable);
+    Panel.include(Mercury.View.Modules.InterfaceFocusable);
 
     Panel.include(Mercury.View.Modules.ScrollPropagation);
 
@@ -2729,7 +2959,7 @@ Copyright (c) 2013 Jeremy Jackson
 
     Panel.logPrefix = 'Mercury.Panel:';
 
-    Panel.className = 'mercury-panel';
+    Panel.className = 'mercury-dialog mercury-panel';
 
     Panel.elements = {
       content: '.mercury-panel-content',
@@ -2739,15 +2969,24 @@ Copyright (c) 2013 Jeremy Jackson
     };
 
     Panel.events = {
-      'click .mercury-panel-title em': 'hide',
       'mercury:interface:hide': function() {
-        return this.hide(false);
+        return this.hide();
       },
       'mercury:interface:resize': function(e) {
         return this.resize(false, e);
       },
-      'mercury:panels:hide': 'hide'
+      'mercury:panels:hide': function() {
+        return this.hide();
+      },
+      'mousedown .mercury-panel-title em': function(e) {
+        return this.prevent(e);
+      },
+      'click .mercury-panel-title em': function() {
+        return this.hide();
+      }
     };
+
+    Panel.prototype.primaryTemplate = 'panel';
 
     function Panel(options) {
       var _base;
@@ -2765,7 +3004,7 @@ Copyright (c) 2013 Jeremy Jackson
 
     Panel.prototype.buildElement = function() {
       this.subTemplate = this.options.template;
-      this.template = 'panel';
+      this.template = this.primaryTemplate;
       return Panel.__super__.buildElement.apply(this, arguments);
     };
 
@@ -2787,7 +3026,7 @@ Copyright (c) 2013 Jeremy Jackson
         this[key] = value;
       }
       this.subTemplate = this.options.template;
-      this.template = 'panel';
+      this.template = this.primaryTemplate;
       this.$title.html(this.title);
       this.css({
         width: this.width
@@ -2804,7 +3043,8 @@ Copyright (c) 2013 Jeremy Jackson
       }).html(content);
       this.lastContent = content;
       this.resize(true, Mercury["interface"].dimensions());
-      return this.show(false);
+      this.show(false);
+      return this.refreshElements();
     };
 
     Panel.prototype.resize = function(animate, dimensions) {
@@ -2866,6 +3106,9 @@ Copyright (c) 2013 Jeremy Jackson
       if (update == null) {
         update = true;
       }
+      if (this.visible) {
+        return;
+      }
       Mercury.trigger('panels:hide');
       this.trigger('show');
       clearTimeout(this.visibilityTimout);
@@ -2881,7 +3124,13 @@ Copyright (c) 2013 Jeremy Jackson
       });
     };
 
-    Panel.prototype.hide = function() {
+    Panel.prototype.hide = function(release) {
+      if (release == null) {
+        release = false;
+      }
+      if (!this.visible) {
+        return;
+      }
       Mercury.trigger('focus');
       this.trigger('hide');
       clearTimeout(this.visibilityTimout);
@@ -2890,8 +3139,23 @@ Copyright (c) 2013 Jeremy Jackson
         opacity: 0
       });
       return this.visibilityTimout = this.delay(250, function() {
-        return this.$el.hide();
+        this.$el.hide();
+        if (release) {
+          return this.release();
+        }
       });
+    };
+
+    Panel.prototype.appendTo = function() {
+      this.log(this.t('appending to mercury interface instead'));
+      return Panel.__super__.appendTo.call(this, Mercury["interface"]);
+    };
+
+    Panel.prototype.release = function() {
+      if (this.visible) {
+        return this.hide(true);
+      }
+      return Panel.__super__.release.apply(this, arguments);
     };
 
     return Panel;
@@ -2917,14 +3181,15 @@ Copyright (c) 2013 Jeremy Jackson
 
     Statusbar.template = 'statusbar';
 
-    Statusbar.events = {
-      'mercury:region:update': 'onRegionUpdate',
-      'mercury:interface:hide': 'hide',
-      'mercury:interface:show': 'show'
-    };
-
     Statusbar.elements = {
       path: '.mercury-statusbar-path'
+    };
+
+    Statusbar.events = {
+      'mercury:interface:hide': 'hide',
+      'mercury:interface:show': 'show',
+      'mercury:region:update': 'onRegionUpdate',
+      'mousedown': 'onMousedown'
     };
 
     Statusbar.prototype.build = function() {
@@ -2976,6 +3241,12 @@ Copyright (c) 2013 Jeremy Jackson
 
     Statusbar.prototype.height = function() {
       return this.$el.outerHeight();
+    };
+
+    Statusbar.prototype.onMousedown = function(e) {
+      this.prevent(e);
+      Mercury.trigger('dialogs:hide');
+      return Mercury.trigger('focus');
     };
 
     Statusbar.prototype.onRegionUpdate = function(region) {
@@ -3065,7 +3336,7 @@ Copyright (c) 2013 Jeremy Jackson
 
     ToolbarButton.prototype.build = function() {
       var _ref;
-      this.enablePlugin();
+      this.registerPlugin();
       this.attr('data-type', this.type);
       this.attr('data-icon', Mercury.Toolbar.icons[this.icon || this.name] || this.icon);
       this.addClass("mercury-toolbar-" + (this.name.toDash()) + "-button");
@@ -3073,9 +3344,28 @@ Copyright (c) 2013 Jeremy Jackson
       return (_ref = this.buildSubview()) != null ? _ref.appendTo(this) : void 0;
     };
 
+    ToolbarButton.prototype.registerPlugin = function() {
+      if (!this.plugin) {
+        return;
+      }
+      this.plugin = Mercury.getPlugin(this.plugin, true);
+      return this.plugin.buttonRegistered(this);
+    };
+
     ToolbarButton.prototype.buildSubview = function() {
-      var Klass, options;
+      var Klass, options,
+        _this = this;
       if (this.subview) {
+        this.subview.on('show', function() {
+          if (_this.toggle) {
+            _this.toggled();
+          }
+          return _this.activate();
+        });
+        this.subview.on('hide', function() {
+          _this.untoggled();
+          return _this.deactivate();
+        });
         return this.subview;
       }
       if (Klass = Mercury[("toolbar_" + this.type).toCamelCase(true)]) {
@@ -3085,7 +3375,9 @@ Copyright (c) 2013 Jeremy Jackson
             template: options
           };
         }
-        return this.subview = new Klass(options);
+        return this.subview = new Klass($.extend({
+          parent: this.$el
+        }, options));
       }
     };
 
@@ -3121,14 +3413,6 @@ Copyright (c) 2013 Jeremy Jackson
         Mercury.trigger('mode', this.mode);
       }
       return Mercury.trigger.apply(Mercury, ['action'].concat(__slice.call(this.action)));
-    };
-
-    ToolbarButton.prototype.enablePlugin = function() {
-      if (!this.plugin) {
-        return;
-      }
-      this.plugin = Mercury.getPlugin(this.plugin, true);
-      return this.plugin.buttonRegistered(this);
     };
 
     ToolbarButton.prototype.regionSupported = function(region) {
@@ -3222,8 +3506,7 @@ Copyright (c) 2013 Jeremy Jackson
       }
       if (e && ((_ref = this.subview) != null ? _ref.visible : void 0)) {
         this.deactivate();
-        e.preventDefault();
-        e.stopPropagation();
+        this.prevent(e, true);
       }
       return this.addClass('mercury-button-pressed');
     };
@@ -3320,15 +3603,21 @@ Copyright (c) 2013 Jeremy Jackson
 
     Toolbar.className = 'mercury-toolbar';
 
-    Toolbar.events = {
-      'mousedown': 'mercury:dialogs:hide',
-      'mercury:interface:hide': 'hide',
-      'mercury:interface:show': 'show',
-      'mercury:region:focus': 'onRegionFocus'
-    };
-
     Toolbar.elements = {
       toolbar: '.mercury-toolbar-secondary-container'
+    };
+
+    Toolbar.events = {
+      'mercury:interface:hide': 'hide',
+      'mercury:interface:show': 'show',
+      'mercury:region:focus': 'onRegionFocus',
+      'mousedown': 'onMousedown',
+      'mouseup': function(e) {
+        return this.prevent(e, true);
+      },
+      'click': function(e) {
+        return this.prevent(e, true);
+      }
     };
 
     Toolbar.prototype.build = function() {
@@ -3366,6 +3655,12 @@ Copyright (c) 2013 Jeremy Jackson
 
     Toolbar.prototype.height = function() {
       return this.$el.outerHeight();
+    };
+
+    Toolbar.prototype.onMousedown = function(e) {
+      this.prevent(e);
+      Mercury.trigger('dialogs:hide');
+      return Mercury.trigger('focus');
     };
 
     Toolbar.prototype.onRegionFocus = function(region) {
@@ -3459,74 +3754,6 @@ Copyright (c) 2013 Jeremy Jackson
 
 }).call(this);
 (function() {
-
-  Mercury.View.Modules.ToolbarDialog = {
-    included: function() {
-      return this.on('build', this.buildToolbarDialog);
-    },
-    buildToolbarDialog: function() {
-      return this.delegateEvents({
-        'mercury:dialogs:hide': function() {
-          return typeof this.hide === "function" ? this.hide() : void 0;
-        }
-      });
-    }
-  };
-
-}).call(this);
-(function() {
-
-  Mercury.View.Modules.ToolbarPositionedDialog = {
-    included: function() {
-      return this.on('build', this.buildPositionedDialog);
-    },
-    buildPositionedDialog: function() {
-      return this.delegateEvents({
-        'mercury:interface:resize': this.position
-      });
-    },
-    position: function() {
-      var e, left, o, p, top, v;
-      this.css({
-        left: 0,
-        top: 0
-      });
-      v = {
-        width: $(window).width(),
-        height: $(window).height()
-      };
-      e = {
-        width: this.$el.outerWidth(),
-        height: this.$el.outerHeight()
-      };
-      p = {
-        width: this.$el.parent().outerWidth(),
-        height: this.$el.parent().outerHeight()
-      };
-      o = this.$el.parent().position();
-      left = 0;
-      if (e.width + o.left > v.width) {
-        left = -e.width + p.width;
-      }
-      if (o.left + left < 0) {
-        left -= o.left + left;
-      }
-      top = 0;
-      if (e.height + o.top + p.height > v.height) {
-        top = -e.height;
-      }
-      if (o.top + top + p.height < 0) {
-        top -= o.top + top + p.height;
-      }
-      return this.css({
-        top: top,
-        left: left
-      });
-    }
-  };
-
-}).call(this);
-(function() {
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -3538,15 +3765,30 @@ Copyright (c) 2013 Jeremy Jackson
       return ToolbarPalette.__super__.constructor.apply(this, arguments);
     }
 
-    ToolbarPalette.include(Mercury.View.Modules.ToolbarDialog);
+    ToolbarPalette.include(Mercury.View.Modules.InterfaceFocusable);
 
-    ToolbarPalette.include(Mercury.View.Modules.ToolbarPositionedDialog);
+    ToolbarPalette.include(Mercury.View.Modules.ToolbarDialog);
 
     ToolbarPalette.include(Mercury.View.Modules.VisibilityToggleable);
 
     ToolbarPalette.logPrefix = 'Mercury.ToolbarPalette:';
 
-    ToolbarPalette.className = 'mercury-toolbar-palette';
+    ToolbarPalette.className = 'mercury-dialog mercury-toolbar-palette';
+
+    ToolbarPalette.prototype.hidden = true;
+
+    ToolbarPalette.prototype.init = function() {
+      this.on('show', function() {
+        if (!this.visible) {
+          return Mercury.trigger('interface:mask');
+        }
+      });
+      return this.on('hide', function() {
+        if (this.visible) {
+          return Mercury.trigger('interface:unmask');
+        }
+      });
+    };
 
     return ToolbarPalette;
 
@@ -3565,15 +3807,30 @@ Copyright (c) 2013 Jeremy Jackson
       return ToolbarSelect.__super__.constructor.apply(this, arguments);
     }
 
-    ToolbarSelect.include(Mercury.View.Modules.ToolbarDialog);
+    ToolbarSelect.include(Mercury.View.Modules.InterfaceFocusable);
 
-    ToolbarSelect.include(Mercury.View.Modules.ToolbarPositionedDialog);
+    ToolbarSelect.include(Mercury.View.Modules.ToolbarDialog);
 
     ToolbarSelect.include(Mercury.View.Modules.VisibilityToggleable);
 
     ToolbarSelect.logPrefix = 'Mercury.ToolbarSelect:';
 
-    ToolbarSelect.className = 'mercury-toolbar-select';
+    ToolbarSelect.className = 'mercury-dialog mercury-toolbar-select';
+
+    ToolbarSelect.prototype.hidden = true;
+
+    ToolbarSelect.prototype.init = function() {
+      this.on('show', function() {
+        if (!this.visible) {
+          return Mercury.trigger('interface:mask');
+        }
+      });
+      return this.on('hide', function() {
+        if (this.visible) {
+          return Mercury.trigger('interface:unmask');
+        }
+      });
+    };
 
     return ToolbarSelect;
 
@@ -4002,7 +4259,7 @@ Copyright (c) 2013 Jeremy Jackson
       if (!url) {
         return;
       }
-      e.preventDefault();
+      this.prevent(e);
       this.focus();
       return this.handleAction(action, {
         url: url
@@ -4117,13 +4374,13 @@ Copyright (c) 2013 Jeremy Jackson
       if (e.metaKey) {
         switch (e.keyCode) {
           case 66:
-            e.preventDefault();
+            this.prevent(e);
             return this.handleAction('bold');
           case 73:
-            e.preventDefault();
+            this.prevent(e);
             return this.handleAction('italic');
           case 85:
-            e.preventDefault();
+            this.prevent(e);
             return this.handleAction('underline');
         }
       }
@@ -4807,6 +5064,12 @@ Copyright (c) 2013 Jeremy Jackson
         return this.Config.set(args[0], true, args[1]);
       });
     };
+    this.focus = function() {
+      return this.trigger('focus');
+    };
+    this.blur = function() {
+      return this.trigger('blur');
+    };
     this.Module.extend.call(this, this.Events);
     this.Module.extend.call(this, this.I18n);
     this.Module.extend.call(this, this.Logger);
@@ -4923,19 +5186,16 @@ Copyright (c) 2013 Jeremy Jackson
       characters: '162 8364 163 165 169 174 8482 8240 181 183 8226 8230 8242 8243 167 182 223 8249 8250 171 187 8216 ' + '8217 8220 8221 8218 8222 8804 8805 8211 8212 175 8254 164 166 168 161 191 710 732 176 8722 177 247 ' + '8260 215 185 178 179 188 189 190 402 8747 8721 8734 8730 8764 8773 8776 8800 8801 8712 8713 8715 ' + '8719 8743 8744 172 8745 8746 8706 8704 8707 8709 8711 8727 8733 8736 180 184 170 186 8224 8225 192 ' + '193 194 195 196 197 198 199 200 201 202 203 204 205 206 207 208 209 210 211 212 213 214 216 338 352 ' + '217 218 219 220 221 376 222 224 225 226 227 228 229 230 231 232 233 234 235 236 237 238 239 240 241 ' + '242 243 244 245 246 248 339 353 249 250 251 252 253 254 255 913 914 915 916 917 918 919 920 921 922 ' + '923 924 925 926 927 928 929 931 932 933 934 935 936 937 945 946 947 948 949 950 951 952 953 954 955 ' + '956 957 958 959 960 961 962 963 964 965 966 967 968 969 8501 982 8476 977 978 8472 8465 8592 8593 ' + '8594 8595 8596 8629 8656 8657 8658 8659 8660 8756 8834 8835 8836 8838 8839 8853 8855 8869 8901 8968 ' + '8969 8970 8971 9001 9002 9674 9824 9827 9829 9830 x263F'
     },
     registerButton: function() {
-      this.button.set({
-        type: 'character'
-      });
-      if (this.config('modal')) {
-        return;
-      }
       return this.button.set({
-        subview: this.bindTo(new Plugin.Palette())
+        type: 'character',
+        subview: this.bindTo(this.view())
       });
     },
-    onButtonClick: function() {
+    view: function() {
       if (this.config('modal')) {
-        return this.bindTo(new Plugin.Modal());
+        return new Plugin.Modal();
+      } else {
+        return new Plugin.Palette();
       }
     },
     bindTo: function(view) {
@@ -4966,6 +5226,8 @@ Copyright (c) 2013 Jeremy Jackson
 
     Modal.prototype.title = 'Character Picker';
 
+    Modal.prototype.hidden = true;
+
     Modal.prototype.events = {
       'click li': function(e) {
         return this.trigger('character:picked', $(e.target).data('value')) && this.hide();
@@ -4987,6 +5249,8 @@ Copyright (c) 2013 Jeremy Jackson
     Palette.prototype.template = 'character';
 
     Palette.prototype.className = 'mercury-character-palette';
+
+    Palette.prototype.hidden = true;
 
     Palette.prototype.events = {
       'click li': function(e) {
@@ -5115,23 +5379,11 @@ Copyright (c) 2013 Jeremy Jackson
     description: 'Provides interface for selecting saved versions -- requires server implementation.',
     version: '1.0.0',
     registerButton: function() {
-      this.button.set({
+      return this.button.set({
         type: 'history',
-        toggle: true
+        toggle: true,
+        subview: new Plugin.Panel()
       });
-      return this.bindTo(this.panel = new Plugin.Panel());
-    },
-    bindTo: function(view) {
-      var _this = this;
-      view.on('show', function() {
-        return _this.button.toggled();
-      });
-      return view.on('hide', function() {
-        return _this.button.untoggled();
-      });
-    },
-    onButtonClick: function() {
-      return this.panel.toggle();
     }
   });
 
@@ -5145,7 +5397,7 @@ Copyright (c) 2013 Jeremy Jackson
 
     Panel.prototype.template = 'history';
 
-    Panel.prototype.className = 'mercury-history-panel';
+    Panel.prototype.className = 'mercury-history-dialog';
 
     Panel.prototype.title = 'Page Version History';
 
@@ -5160,7 +5412,7 @@ Copyright (c) 2013 Jeremy Jackson
   this.JST || (this.JST = {});
 
   JST['/mercury/templates/history'] || (JST['/mercury/templates/history'] = function() {
-    return "<p>The History Plugin expects a server implementation.</p>\n<p>Since this is a demo, it wasn't included, but you can check the <a href=\"https://github.com/jejacks0n/mercury-rails\">mercury-rails project</a> on github for examples of how to integrate it with your server technology.</p>";
+    return "<input type=\"text\" class=\"search-input\"/>\n<p>The History Plugin expects a server implementation.</p>\n<p>Since this is a demo, it wasn't included, but you can check the <a href=\"https://github.com/jejacks0n/mercury-rails\">mercury-rails project</a> on github for examples of how to integrate it with your server technology.</p>";
   });
 
 }).call(this);
@@ -5175,13 +5427,22 @@ Copyright (c) 2013 Jeremy Jackson
     actions: {
       link: 'insert'
     },
+    events: {
+      'mercury:edit:link': 'showDialog',
+      'button:click': 'showDialog'
+    },
     registerButton: function() {
       return this.button.set({
         type: 'link'
       });
     },
-    onButtonClick: function() {
-      return new Plugin.Modal();
+    showDialog: function() {
+      return this.bindTo(new Plugin.Modal());
+    },
+    bindTo: function(view) {
+      return view.on('form:submitted', function(value) {
+        return console.debug(value);
+      });
     },
     insert: function() {}
   });
@@ -5196,11 +5457,98 @@ Copyright (c) 2013 Jeremy Jackson
 
     Modal.prototype.template = 'link';
 
-    Modal.prototype.className = 'mercury-link-modal';
+    Modal.prototype.className = 'mercury-link-dialog';
 
     Modal.prototype.title = 'Link Manager';
 
     Modal.prototype.width = 600;
+
+    Modal.prototype.elements = {
+      text: '#link_text',
+      target: '#link_target'
+    };
+
+    Modal.prototype.events = {
+      'change .control-label input': 'onLabelChecked',
+      'focus .controls [name]': 'onInputFocused',
+      'change #link_target': 'onChangeTarget'
+    };
+
+    Modal.prototype.onLabelChecked = function(e) {
+      var $el, inputId;
+      $el = $(e.target);
+      inputId = $el.closest('.control-label').attr('for');
+      return $el.closest('.control-group').find("#" + inputId).focus();
+    };
+
+    Modal.prototype.onInputFocused = function(e) {
+      var $el;
+      $el = $(e.target);
+      return $el.closest('.control-group').find('input[type=radio]').prop('checked', true);
+    };
+
+    Modal.prototype.onChangeTarget = function(e) {
+      var $el;
+      $el = $(e.target);
+      this.$('.link-target-options').hide();
+      this.$("#" + ($el.val()) + "_options").show();
+      return this.resize(false);
+    };
+
+    Modal.prototype.validate = function() {
+      var $el;
+      Modal.__super__.validate.apply(this, arguments);
+      $el = this.$("#link_" + (this.$('input[name=link_type]:checked').val()));
+      if (!$el.val()) {
+        this.addInputError($el, this.t("can't be blank"));
+      }
+      if (this.$text.is(':visible') && !this.$text.val().trim()) {
+        this.addInputError(this.$text, this.t("can't be blank"));
+      }
+      return this.resize(false);
+    };
+
+    Modal.prototype.onSubmit = function() {
+      var args, attrs, content, target, type;
+      this.validate();
+      content = this.$text.val();
+      target = this.$target.val();
+      type = this.$('input[name=link_type]:checked').val();
+      switch (type) {
+        case 'existing_bookmark':
+          attrs = {
+            href: "#" + (this.$('#link_existing_bookmark').val())
+          };
+          break;
+        case 'new_bookmark':
+          attrs = {
+            name: "" + (this.$('#link_new_bookmark').val())
+          };
+          break;
+        default:
+          attrs = {
+            href: this.$("#link_" + type).val()
+          };
+      }
+      switch (target) {
+        case 'popup':
+          args = {
+            width: parseInt(this.$('#link_popup_width').val(), 10) || 500,
+            height: parseInt(this.$('#link_popup_height').val(), 10) || 500,
+            menubar: 'no',
+            toolbar: 'no'
+          };
+          attrs['href'] = "javascript:void(window.open('" + attrs['href'] + "','popup_window','" + (Object.toParams(args).replace(/&/g, ',')) + "'))";
+          break;
+        default:
+          if (target) {
+            attrs['target'] = target;
+          }
+      }
+      attrs['content'] = this.content || content;
+      this.trigger('form:submitted', attrs);
+      return this.hide();
+    };
 
     return Modal;
 
@@ -5209,7 +5557,7 @@ Copyright (c) 2013 Jeremy Jackson
   this.JST || (this.JST = {});
 
   JST['/mercury/templates/link'] || (JST['/mercury/templates/link'] = function() {
-    return "<form class=\"form-horizontal\">\n  <div class=\"form-inputs\">\n\n    <fieldset class=\"link_text_container\">\n      <div class=\"control-group string required\">\n        <label class=\"string optional control-label\" for=\"link_text\">Link Content</label>\n        <div class=\"controls\">\n          <input class=\"span6 string optional\" id=\"link_text\" name=\"link[text]\" size=\"50\" type=\"text\">\n        </div>\n      </div>\n    </fieldset>\n\n    <fieldset>\n      <legend>Standard Links</legend>\n      <div class=\"control-group url optional\">\n        <label class=\"url optional control-label\" for=\"link_external_url\">\n          <input name=\"link_type\" type=\"radio\" value=\"external_url\" checked=\"checked\"/>URL\n        </label>\n        <div class=\"controls\">\n          <input class=\"span6 string url optional\" id=\"link_external_url\" name=\"link[external_url]\" size=\"50\" type=\"text\">\n        </div>\n      </div>\n    </fieldset>\n\n    <fieldset>\n      <legend>Index / Bookmark Links</legend>\n      <div class=\"control-group select optional\">\n        <label class=\"select optional control-label\" for=\"link_existing_bookmark\">\n          <input name=\"link_type\" type=\"radio\" value=\"existing_bookmark\"/>Existing Links\n        </label>\n        <div class=\"controls\">\n          <select class=\"select optional\" id=\"link_existing_bookmark\" name=\"link[existing_bookmark]\"></select>\n        </div>\n      </div>\n      <div class=\"control-group string optional\">\n        <label class=\"string optional control-label\" for=\"link_new_bookmark\">\n          <input name=\"link_type\" type=\"radio\" value=\"new_bookmark\"/>Bookmark\n        </label>\n        <div class=\"controls\">\n          <input class=\"string optional\" id=\"link_new_bookmark\" name=\"link[new_bookmark]\" size=\"50\" type=\"text\">\n        </div>\n      </div>\n    </fieldset>\n\n    <fieldset>\n      <legend>Options</legend>\n      <div class=\"control-group select optional\">\n        <label class=\"select optional control-label\" for=\"link_target\">Link Target</label>\n        <div class=\"controls\">\n          <select class=\"select optional\" id=\"link_target\" name=\"link[target]\">\n            <option value=\"\">Self (the same window or tab)</option>\n            <option value=\"_blank\">Blank (a new window or tab)</option>\n            <option value=\"_top\">Top (removes any frames)</option>\n            <option value=\"popup\">Popup Window (javascript new window popup)</option>\n          </select>\n        </div>\n      </div>\n      <div id=\"popup_options\" class=\"link-target-options\" style=\"display:none\">\n        <div class=\"control-group number optional\">\n          <label class=\"number optional control-label\" for=\"link_popup_width\">Popup Width</label>\n          <div class=\"controls\">\n            <input class=\"span2 number optional\" id=\"link_popup_width\" name=\"link[popup_width]\" size=\"50\" type=\"number\" value=\"960\">\n          </div>\n        </div>\n        <div class=\"control-group number optional\">\n          <label class=\"number optional control-label\" for=\"link_popup_height\">Popup Height</label>\n          <div class=\"controls\">\n            <input class=\"span2 number optional\" id=\"link_popup_height\" name=\"link[popup_height]\" size=\"50\" type=\"number\" value=\"800\">\n          </div>\n        </div>\n      </div>\n    </fieldset>\n\n  </div>\n  <div class=\"form-actions\">\n    <input class=\"btn btn-primary\" name=\"commit\" type=\"submit\" value=\"Insert Link\">\n  </div>\n</form>";
+    return "<form class=\"form-horizontal\">\n\n  <fieldset class=\"link_text_container\">\n    <div class=\"control-group string required\">\n      <label class=\"string required control-label\" for=\"link_text\">Link Content</label>\n      <div class=\"controls\">\n        <input class=\"string required\" id=\"link_text\" name=\"link[text]\" size=\"50\" type=\"text\" tabindex=\"1\">\n      </div>\n    </div>\n  </fieldset>\n\n  <fieldset>\n    <legend>Standard Links</legend>\n    <div class=\"control-group url optional\">\n      <label class=\"url optional control-label\" for=\"link_external_url\">\n        <input name=\"link_type\" type=\"radio\" value=\"external_url\" checked=\"checked\" tabindex=\"-1\"/>URL\n      </label>\n      <div class=\"controls\">\n        <input class=\"string url optional\" id=\"link_external_url\" name=\"link[external_url]\" size=\"50\" type=\"text\" tabindex=\"1\">\n      </div>\n    </div>\n  </fieldset>\n\n  <fieldset>\n    <legend>Index / Bookmark Links</legend>\n    <div class=\"control-group select optional\">\n      <label class=\"select optional control-label\" for=\"link_existing_bookmark\">\n        <input name=\"link_type\" type=\"radio\" value=\"existing_bookmark\" tabindex=\"-1\"/>Existing Links\n      </label>\n      <div class=\"controls\">\n        <select class=\"select optional\" id=\"link_existing_bookmark\" name=\"link[existing_bookmark]\" tabindex=\"1\"></select>\n      </div>\n    </div>\n    <div class=\"control-group string optional\">\n      <label class=\"string optional control-label\" for=\"link_new_bookmark\">\n        <input name=\"link_type\" type=\"radio\" value=\"new_bookmark\" tabindex=\"-1\"/>Bookmark\n      </label>\n      <div class=\"controls\">\n        <input class=\"string optional\" id=\"link_new_bookmark\" name=\"link[new_bookmark]\" type=\"text\" tabindex=\"1\">\n      </div>\n    </div>\n  </fieldset>\n\n  <fieldset>\n    <legend>Options</legend>\n    <div class=\"control-group select optional\">\n      <label class=\"select optional control-label\" for=\"link_target\">Link Target</label>\n      <div class=\"controls\">\n        <select class=\"select optional\" id=\"link_target\" name=\"link[target]\" tabindex=\"1\">\n          <option value=\"\">Self (the same window or tab)</option>\n          <option value=\"_blank\">Blank (a new window or tab)</option>\n          <option value=\"_top\">Top (removes any frames)</option>\n          <option value=\"popup\">Popup Window (javascript new window popup)</option>\n        </select>\n      </div>\n    </div>\n    <div id=\"popup_options\" class=\"link-target-options\" style=\"display:none\">\n      <div class=\"control-group number optional\">\n        <label class=\"number optional control-label\" for=\"link_popup_width\">Popup Width</label>\n        <div class=\"controls\">\n          <input class=\"span2 number optional\" id=\"link_popup_width\" name=\"link[popup_width]\" type=\"number\" value=\"960\" tabindex=\"1\">\n        </div>\n      </div>\n      <div class=\"control-group number optional\">\n        <label class=\"number optional control-label\" for=\"link_popup_height\">Popup Height</label>\n        <div class=\"controls\">\n          <input class=\"span2 number optional\" id=\"link_popup_height\" name=\"link[popup_height]\" type=\"number\" value=\"800\" tabindex=\"1\">\n        </div>\n      </div>\n    </div>\n  </fieldset>\n\n  <div class=\"form-actions\">\n    <input class=\"btn btn-primary\" name=\"commit\" type=\"submit\" value=\"Insert Link\" tabindex=\"2\">\n  </div>\n</form>";
   });
 
 }).call(this);
@@ -5224,13 +5572,22 @@ Copyright (c) 2013 Jeremy Jackson
     actions: {
       link: 'insert'
     },
+    events: {
+      'mercury:edit:media': 'showDialog',
+      'button:click': 'showDialog'
+    },
     registerButton: function() {
       return this.button.set({
         type: 'media'
       });
     },
-    onButtonClick: function() {
-      return new Plugin.Modal();
+    showDialog: function() {
+      return this.bindTo(new Plugin.Modal());
+    },
+    bindTo: function(view) {
+      return view.on('form:submitted', function(value) {
+        return console.debug(value);
+      });
     },
     insert: function() {}
   });
@@ -5245,7 +5602,7 @@ Copyright (c) 2013 Jeremy Jackson
 
     Modal.prototype.template = 'media';
 
-    Modal.prototype.className = 'mercury-media-modal';
+    Modal.prototype.className = 'mercury-media-dialog';
 
     Modal.prototype.title = 'Media Manager';
 
@@ -5258,7 +5615,7 @@ Copyright (c) 2013 Jeremy Jackson
   this.JST || (this.JST = {});
 
   JST['/mercury/templates/media'] || (JST['/mercury/templates/media'] = function() {
-    return "<form class=\"form-horizontal\">\n  <div class=\"form-inputs\">\n\n    <fieldset>\n      <legend>Images</legend>\n      <div class=\"control-group url optional\">\n        <label class=\"url optional control-label\" for=\"media_image_url\">\n          <input name=\"media_type\" type=\"radio\" value=\"image_url\" checked=\"checked\"/>URL\n        </label>\n        <div class=\"controls\">\n          <input class=\"span6 string url optional\" id=\"media_image_url\" name=\"media[image_url]\" size=\"50\" type=\"text\">\n        </div>\n      </div>\n    </fieldset>\n\n    <fieldset>\n      <legend>Videos</legend>\n      <div class=\"control-group url optional\">\n        <label class=\"url optional control-label\" for=\"media_youtube_url\">\n          <input name=\"media_type\" type=\"radio\" value=\"youtube_url\"/>YouTube URL\n        </label>\n        <div class=\"controls\">\n          <input class=\"span6 string url optional\" id=\"media_youtube_url\" name=\"media[youtube_url]\" size=\"50\" type=\"text\" placeholder=\"http://youtu.be/28tZ-S1LFok\">\n        </div>\n      </div>\n      <div class=\"control-group url optional\">\n        <label class=\"url optional control-label\" for=\"media_vimeo_url\">\n          <input name=\"media_type\" type=\"radio\" value=\"vimeo_url\"/>Vimeo URL\n        </label>\n        <div class=\"controls\">\n          <input class=\"span6 string url optional\" id=\"media_vimeo_url\" name=\"media[vimeo_url]\" size=\"50\" type=\"text\" placeholder=\"http://vimeo.com/36684976\">\n        </div>\n      </div>\n    </fieldset>\n\n    <fieldset>\n      <legend>Options</legend>\n\n      <div class=\"media-options\" id=\"image_url_options\">\n        <div class=\"control-group select optional\">\n          <label class=\"select optional control-label\" for=\"media_image_alignment\">Alignment</label>\n          <div class=\"controls\">\n            <select class=\"select optional\" id=\"media_image_alignment\" name=\"media[image_alignment]\">\n              <option value=\"\">None</option>\n              <option value=\"left\">Left</option>\n              <option value=\"right\">Right</option>\n              <option value=\"top\">Top</option>\n              <option value=\"middle\">Middle</option>\n              <option value=\"bottom\">Bottom</option>\n              <option value=\"absmiddle\">Absolute Middle</option>\n              <option value=\"absbottom\">Absolute Bottom</option>\n            </select>\n          </div>\n          <label class=\"select optional control-label\" for=\"media_image_float\">Float</label>\n          <div class=\"controls\">\n            <select class=\"select optional\" id=\"media_image_float\" name=\"media[image_float]\">\n              <option value=\"\">None</option>\n              <option value=\"left\">Left</option>\n              <option value=\"right\">Right</option>\n              <option value=\"none\">None</option>\n              <option value=\"inherit\">Inherit</option>\n            </select>\n          </div>\n        </div>\n      </div>\n\n      <div class=\"media-options\" id=\"youtube_url_options\" style=\"display:none\">\n        <div class=\"control-group number optional\">\n          <label class=\"number optional control-label\" for=\"media_youtube_width\">Width</label>\n          <div class=\"controls\">\n            <input class=\"span2 number optional\" id=\"media_youtube_width\" name=\"media[youtube_width]\" size=\"50\" type=\"number\" value=\"560\">\n          </div>\n        </div>\n        <div class=\"control-group number optional\">\n          <label class=\"number optional control-label\" for=\"media_youtube_height\">Height</label>\n          <div class=\"controls\">\n            <input class=\"span2 number optional\" id=\"media_youtube_height\" name=\"media[youtube_height]\" size=\"50\" type=\"number\" value=\"349\">\n          </div>\n        </div>\n      </div>\n\n      <div class=\"media-options\" id=\"vimeo_url_options\" style=\"display:none\">\n        <div class=\"control-group number optional\">\n          <label class=\"number optional control-label\" for=\"media_vimeo_width\">Width</label>\n          <div class=\"controls\">\n            <input class=\"span2 number optional\" id=\"media_vimeo_width\" name=\"media[vimeo_width]\" size=\"50\" type=\"number\" value=\"400\">\n          </div>\n        </div>\n        <div class=\"control-group number optional\">\n          <label class=\"number optional control-label\" for=\"media_vimeo_height\">Height</label>\n          <div class=\"controls\">\n            <input class=\"span2 number optional\" id=\"media_vimeo_height\" name=\"media[vimeo_height]\" size=\"50\" type=\"number\" value=\"225\">\n          </div>\n        </div>\n      </div>\n    </fieldset>\n\n  </div>\n  <div class=\"form-actions\">\n    <input class=\"btn btn-primary\" name=\"commit\" type=\"submit\" value=\"Insert Media\"/>\n  </div>\n</form>";
+    return "<form class=\"form-horizontal\">\n\n  <fieldset>\n    <legend>Images</legend>\n    <div class=\"control-group url optional\">\n      <label class=\"url optional control-label\" for=\"media_image_url\">\n        <input name=\"media_type\" type=\"radio\" value=\"image_url\" checked=\"checked\" tabindex=\"-1\"/>URL\n      </label>\n      <div class=\"controls\">\n        <input class=\"span6 string url optional\" id=\"media_image_url\" name=\"media[image_url]\" size=\"50\" type=\"text\" tabindex=\"1\">\n      </div>\n    </div>\n  </fieldset>\n\n  <fieldset>\n    <legend>Videos</legend>\n    <div class=\"control-group url optional\">\n      <label class=\"url optional control-label\" for=\"media_youtube_url\">\n        <input name=\"media_type\" type=\"radio\" value=\"youtube_url\" tabindex=\"-1\"/>YouTube URL\n      </label>\n      <div class=\"controls\">\n        <input class=\"span6 string url optional\" id=\"media_youtube_url\" name=\"media[youtube_url]\" size=\"50\" type=\"text\" placeholder=\"http://youtu.be/28tZ-S1LFok\" tabindex=\"1\">\n      </div>\n    </div>\n    <div class=\"control-group url optional\">\n      <label class=\"url optional control-label\" for=\"media_vimeo_url\">\n        <input name=\"media_type\" type=\"radio\" value=\"vimeo_url\" tabindex=\"-1\"/>Vimeo URL\n      </label>\n      <div class=\"controls\">\n        <input class=\"span6 string url optional\" id=\"media_vimeo_url\" name=\"media[vimeo_url]\" size=\"50\" type=\"text\" placeholder=\"http://vimeo.com/36684976\" tabindex=\"1\">\n      </div>\n    </div>\n  </fieldset>\n\n  <fieldset>\n    <legend>Options</legend>\n\n    <div class=\"media-options\" id=\"image_url_options\">\n      <div class=\"control-group select optional\">\n        <label class=\"select optional control-label\" for=\"media_image_alignment\">Alignment</label>\n        <div class=\"controls\">\n          <select class=\"select optional\" id=\"media_image_alignment\" name=\"media[image_alignment]\" tabindex=\"1\">\n            <option value=\"\">None</option>\n            <option value=\"left\">Left</option>\n            <option value=\"right\">Right</option>\n            <option value=\"top\">Top</option>\n            <option value=\"middle\">Middle</option>\n            <option value=\"bottom\">Bottom</option>\n            <option value=\"absmiddle\">Absolute Middle</option>\n            <option value=\"absbottom\">Absolute Bottom</option>\n          </select>\n        </div>\n      </div>\n      <div class=\"control-group select optional\">\n        <label class=\"select optional control-label\" for=\"media_image_float\">Float</label>\n        <div class=\"controls\">\n          <select class=\"select optional\" id=\"media_image_float\" name=\"media[image_float]\" tabindex=\"1\">\n            <option value=\"\">None</option>\n            <option value=\"left\">Left</option>\n            <option value=\"right\">Right</option>\n            <option value=\"none\">None</option>\n            <option value=\"inherit\">Inherit</option>\n          </select>\n        </div>\n      </div>\n    </div>\n\n    <div class=\"media-options\" id=\"youtube_url_options\" style=\"display:none\">\n      <div class=\"control-group number optional\">\n        <label class=\"number optional control-label\" for=\"media_youtube_width\">Width</label>\n        <div class=\"controls\">\n          <input class=\"span2 number optional\" id=\"media_youtube_width\" name=\"media[youtube_width]\" size=\"50\" type=\"number\" value=\"560\" tabindex=\"1\">\n        </div>\n      </div>\n      <div class=\"control-group number optional\">\n        <label class=\"number optional control-label\" for=\"media_youtube_height\">Height</label>\n        <div class=\"controls\">\n          <input class=\"span2 number optional\" id=\"media_youtube_height\" name=\"media[youtube_height]\" size=\"50\" type=\"number\" value=\"349\" tabindex=\"1\">\n        </div>\n      </div>\n    </div>\n\n    <div class=\"media-options\" id=\"vimeo_url_options\" style=\"display:none\">\n      <div class=\"control-group number optional\">\n        <label class=\"number optional control-label\" for=\"media_vimeo_width\">Width</label>\n        <div class=\"controls\">\n          <input class=\"span2 number optional\" id=\"media_vimeo_width\" name=\"media[vimeo_width]\" size=\"50\" type=\"number\" value=\"400\" tabindex=\"1\">\n        </div>\n      </div>\n      <div class=\"control-group number optional\">\n        <label class=\"number optional control-label\" for=\"media_vimeo_height\">Height</label>\n        <div class=\"controls\">\n          <input class=\"span2 number optional\" id=\"media_vimeo_height\" name=\"media[vimeo_height]\" size=\"50\" type=\"number\" value=\"225\" tabindex=\"1\">\n        </div>\n      </div>\n    </div>\n  </fieldset>\n\n  <div class=\"form-actions\">\n    <input class=\"btn btn-primary\" name=\"commit\" type=\"submit\" value=\"Insert Media\" tabindex=\"2\"/>\n  </div>\n</form>";
   });
 
 }).call(this);
@@ -5271,22 +5628,11 @@ Copyright (c) 2013 Jeremy Jackson
     description: 'Provides interface for reading and adding notes for the page -- requires server implementation.',
     version: '1.0.0',
     registerButton: function() {
-      this.button.set({
-        type: 'toggle'
+      return this.button.set({
+        type: 'toggle',
+        toggle: true,
+        subview: new Plugin.Panel()
       });
-      return this.bindTo(this.panel = new Plugin.Panel());
-    },
-    bindTo: function(view) {
-      var _this = this;
-      view.on('show', function() {
-        return _this.button.toggled();
-      });
-      return view.on('hide', function() {
-        return _this.button.untoggled();
-      });
-    },
-    onButtonClick: function() {
-      return this.panel.toggle();
     }
   });
 
@@ -5300,7 +5646,7 @@ Copyright (c) 2013 Jeremy Jackson
 
     Panel.prototype.template = 'notes';
 
-    Panel.prototype.className = 'mercury-notes-panel';
+    Panel.prototype.className = 'mercury-notes-dialog';
 
     Panel.prototype.title = 'Page Notes';
 
@@ -5366,7 +5712,7 @@ Copyright (c) 2013 Jeremy Jackson
 
     Select.prototype.template = 'styles';
 
-    Select.prototype.className = 'mercury-styles-select';
+    Select.prototype.className = 'mercury-styles-dialog';
 
     Select.prototype.events = {
       'click li': function(e) {
@@ -5406,13 +5752,22 @@ Copyright (c) 2013 Jeremy Jackson
     actions: {
       link: 'insert'
     },
+    events: {
+      'mercury:edit:media': 'showDialog',
+      'button:click': 'showDialog'
+    },
     registerButton: function() {
       return this.button.set({
         type: 'table'
       });
     },
-    onButtonClick: function() {
-      return new Plugin.Modal();
+    showDialog: function() {
+      return this.bindTo(new Plugin.Modal());
+    },
+    bindTo: function(view) {
+      return view.on('form:submitted', function(value) {
+        return console.debug(value);
+      });
     },
     insert: function() {}
   });
@@ -5427,7 +5782,7 @@ Copyright (c) 2013 Jeremy Jackson
 
     Modal.prototype.template = 'table';
 
-    Modal.prototype.className = 'mercury-table-modal';
+    Modal.prototype.className = 'mercury-table-dialog';
 
     Modal.prototype.title = 'Table Manager';
 

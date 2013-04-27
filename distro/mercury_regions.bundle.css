@@ -6,6 +6,14 @@ Copyright (c) 2013 Jeremy Jackson
 
 This file contains only the css required for regions, and is useful if you're sandboxing Mercury using an iframe.
 */
+/*!
+Mercury Editor is a Coffeescript and jQuery based WYSIWYG editor released under the MIT License.
+Documentation and other useful information can be found at https://github.com/jejacks0n/mercury
+
+Copyright (c) 2013 Jeremy Jackson
+
+This file contains all of the required css for the Mercury interface as well as the region css.
+*/
 .mercury-clearfix:before,.mercury-clearfix:after{content:" ";display:table}
 .mercury-clearfix:after{clear:both}
 .mercury-clearfix{*zoom:1}

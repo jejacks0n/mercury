@@ -48,11 +48,11 @@ Dependencies:
     }
 
     Plain.prototype.onDropItem = function(e) {
-      return e.preventDefault();
+      return this.prevent(e);
     };
 
     Plain.prototype.onPaste = function(e) {
-      return e.preventDefault();
+      return this.prevent(e);
     };
 
     Plain.prototype.onKeyEvent = function(e) {
@@ -63,18 +63,18 @@ Dependencies:
         return;
       }
       if (e.keyCode === 13) {
-        return e.preventDefault();
+        return this.prevent(e);
       }
       if (e.metaKey) {
         switch (e.keyCode) {
           case 66:
-            e.preventDefault();
+            this.prevent(e);
             return this.handleAction('bold');
           case 73:
-            e.preventDefault();
+            this.prevent(e);
             return this.handleAction('italic');
           case 85:
-            e.preventDefault();
+            this.prevent(e);
             return this.handleAction('underline');
         }
       }

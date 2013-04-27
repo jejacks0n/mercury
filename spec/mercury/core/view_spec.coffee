@@ -291,7 +291,7 @@ describe "Mercury.View", ->
       mock = focus: spy()
       spyOn(subject, '$', -> [mock])
       subject.focusFirstFocusable()
-      expect( subject.$ ).calledWith(':input:visible')
+      expect( subject.$ ).calledWith(':input:visible[tabindex != "-1"]')
       expect( mock.focus ).called
 
 

@@ -42,7 +42,7 @@ serialization to the server.
     };
 
     Image.prototype.onMousedown = function(e) {
-      e.preventDefault();
+      this.prevent(e);
       return this.$el.trigger('focus');
     };
 

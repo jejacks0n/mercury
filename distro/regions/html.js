@@ -30,7 +30,7 @@ Dependencies:
 
     Html.supported = Mercury.support.wysiwyg;
 
-    Html.prototype.events = {
+    Html.events = {
       'keydown': 'onKeyEvent',
       'paste': 'onPaste'
     };
@@ -75,13 +75,13 @@ Dependencies:
       if (e.metaKey) {
         switch (e.keyCode) {
           case 66:
-            e.preventDefault();
+            this.prevent(e);
             return this.handleAction('bold');
           case 73:
-            e.preventDefault();
+            this.prevent(e);
             return this.handleAction('italic');
           case 85:
-            e.preventDefault();
+            this.prevent(e);
             return this.handleAction('underline');
         }
       }

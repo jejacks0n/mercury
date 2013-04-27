@@ -115,7 +115,7 @@ Mercury?.on 'initialize', ->
 
   # Toolbar Interfaces - Custom Elements
   #
-  # Note: This example uses the "range" input, which currently isn't supported in Firefox.
+  # Note: This example uses the "range" input, which currently isn't supported in Firefox or IE.
   #
   # You may want to add more complex toolbar interactions, for instance a more advanced color picker. This is possible
   # when defining a button, and naming convention comes into play for doing this.
@@ -123,12 +123,12 @@ Mercury?.on 'initialize', ->
   # First, let's create a view that we want to utilize when a given button is clicked. We'll create a slider drop down
   # for a hypothetical image brightness control. Obviously we can't fit that much into this example, so it will only be
   # mocked. Notice how we name it ToolbarSlider -- this is important, because when we define the button we'll use
-  # "slider". We're also including the ToolbarFocusable module -- which allows event handling for inputs within the
-  # toolbar dialogs (there's other modules you can use as well.)
+  # "slider". We're also including the InterfaceFocusable module -- which allows event handling for inputs within the
+  # toolbar dialogs -- which gets complicated, and is one of the more tedious aspects to contend with. With the
+  # InterfaceFocusable module you can specify a few things that will make focusing inputs and keeping Mercury focused.
   class Mercury.ToolbarSlider extends Mercury.ToolbarPalette
-    @include Mercury.View.Modules.ToolbarFocusable                   # minimize events bubbling to button/toolbar.
-    events: 'change input': (e) ->                                   # when the input is changed.
-      Mercury.trigger('focus')                                       # we need to give focus back to mercury.
+    revertFocusOn: 'input'                                           # specify that we want focus reverted on the input.
+    events: 'change input': ->                                       # when the input is changed.
       Mercury.trigger('action', 'brightness', @$('input').val())     # trigger action.
 
   # Now we need to create a button that will tell Mercury that it should use this new view type for the buttons subview.
@@ -154,7 +154,7 @@ Mercury?.on 'initialize', ->
 
   # Toolbar Interfaces - Customized Buttons
   #
-  # Note: This example uses the "range" input, which currently isn't supported in Firefox.
+  # Note: This example uses the "range" input, which currently isn't supported in Firefox or IE.
   #
   # Now that you know how to make more complex button subviews, you may want to consider replacing buttons themselves
   # with more complex views that have additional behavior.
@@ -165,10 +165,10 @@ Mercury?.on 'initialize', ->
   # Well, we can do that, and again we can define that with the button. Also, like the previous example we need to make
   # a custom button view. We've simplified this view by building the element ourselves, and we're not using a template.
   class Mercury.ToolbarSliderButton extends Mercury.View
-    @include Mercury.View.Modules.ToolbarFocusable                 # minimize events bubbling to toolbar.
+    @include Mercury.View.Modules.InterfaceFocusable               # minimize events bubbling to toolbar.
     className: 'mercury-toolbar-slider-button'                     # for styling.
-    events: 'change input': (e) ->                                 # when the input is changed.
-      Mercury.trigger('focus')                                     # we need to give focus back to mercury.
+    revertFocusOn: 'input'                                         # selector for focus events that revert to mercury.
+    events: 'change input': ->                                     # when the input is changed.
       Mercury.trigger('action', 'brightness', @$('input').val())   # trigger action.
     build: -> @append('<input type="range"/>')                     # append the input element.
 
@@ -188,13 +188,13 @@ Mercury?.on 'initialize', ->
   #
   # Let's start by adding the toolbar button where we want it -- in this case it's the markdown region. You'll notice
   # that we've specified the plugin here as an option to the button.
-  Mercury.Region.Markdown.addToolbar 'character', character: ['Character', plugin: 'character']
+  Mercury.Region.Markdown.addToolbar 'extra', character: ['Character', plugin: 'character']
 
   # Additionally, and this is up to the plugin, options can be provided through the button. If you specify a config
   # object in the button definition this will be passed to the plugin. Here we want to change it to use a palette and
   # not the modal, so we're going to redefine the button we just added to not use a modal -- which means the button in
   # the primary toolbar will still use a modal, but the one that we've added to the markdown toolbar will use a palette.
-  Mercury.Region.Markdown.addToolbar 'character', character: ['Character', plugin: 'character', settings: {modal: false}]
+  Mercury.Region.Markdown.addToolbar 'extra', character: ['Character', plugin: 'character', settings: {modal: false}]
 
   # We can also configure the plugin globally -- much like how we can configure Mercury. Each plugin can be configured
   # independently. This is optional for this example.

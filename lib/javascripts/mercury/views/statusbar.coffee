@@ -7,14 +7,14 @@ class Mercury.Statusbar extends Mercury.View
   @className: 'mercury-statusbar'
   @template: 'statusbar'
 
-  @events:
-    'mercury:region:update': 'onRegionUpdate'
-    'mercury:interface:hide': 'hide'
-    'mercury:interface:show': 'show'
-
   @elements:
     path: '.mercury-statusbar-path'
 
+  @events:
+    'mercury:interface:hide': 'hide'
+    'mercury:interface:show': 'show'
+    'mercury:region:update': 'onRegionUpdate'
+    'mousedown': 'onMousedown'
 
   build: ->
     @setPath()
@@ -43,6 +43,12 @@ class Mercury.Statusbar extends Mercury.View
 
   height: ->
     @$el.outerHeight()
+
+
+  onMousedown: (e) ->
+    @prevent(e)
+    Mercury.trigger('dialogs:hide')
+    Mercury.trigger('focus')
 
 
   onRegionUpdate: (region) ->

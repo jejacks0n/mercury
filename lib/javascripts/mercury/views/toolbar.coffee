@@ -6,14 +6,16 @@ class Mercury.Toolbar extends Mercury.View
   @logPrefix: 'Mercury.Toolbar:'
   @className: 'mercury-toolbar'
 
+  @elements:
+    toolbar: '.mercury-toolbar-secondary-container'
+
   @events:
-    'mousedown': 'mercury:dialogs:hide'
     'mercury:interface:hide': 'hide'
     'mercury:interface:show': 'show'
     'mercury:region:focus': 'onRegionFocus'
-
-  @elements:
-    toolbar: '.mercury-toolbar-secondary-container'
+    'mousedown': 'onMousedown'
+    'mouseup': (e) -> @prevent(e, true)
+    'click': (e) -> @prevent(e, true)
 
   build: ->
     @append(new Mercury.ToolbarItem('primary', 'container', @config("toolbars:primary")))
@@ -40,6 +42,12 @@ class Mercury.Toolbar extends Mercury.View
 
   height: ->
     @$el.outerHeight()
+
+
+  onMousedown: (e) ->
+    @prevent(e)
+    Mercury.trigger('dialogs:hide')
+    Mercury.trigger('focus')
 
 
   onRegionFocus: (region) ->

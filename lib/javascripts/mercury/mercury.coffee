@@ -21,8 +21,14 @@
 #= require mercury/core/region
 #= require mercury/core/view
 #
-# Views.
+# View modules/Views.
 #------------------------------------------------------------------------------
+#= require mercury/views/modules/form_handler.coffee
+#= require mercury/views/modules/interface_focusable.coffee
+#= require mercury/views/modules/scroll_propagation.coffee
+#= require mercury/views/modules/toolbar_dialog.coffee
+#= require mercury/views/modules/visibility_toggleable.coffee
+#
 #= require mercury/views/base_interface
 #= require mercury/views/frame_interface
 #= require mercury/views/lightview

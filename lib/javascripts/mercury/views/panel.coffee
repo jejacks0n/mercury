@@ -1,17 +1,17 @@
 #= require mercury/core/view
-#= require mercury/views/modules/singleton
-#= require mercury/views/modules/toolbar_focusable
+#= require mercury/views/modules/form_handler
+#= require mercury/views/modules/interface_focusable
 #= require mercury/views/modules/scroll_propagation
 #= require mercury/views/modules/visibility_toggleable
 
 class Mercury.Panel extends Mercury.View
-  @include Mercury.View.Modules.Singleton
-  @include Mercury.View.Modules.ToolbarFocusable
+  @include Mercury.View.Modules.FormHandler
+  @include Mercury.View.Modules.InterfaceFocusable
   @include Mercury.View.Modules.ScrollPropagation
   @include Mercury.View.Modules.VisibilityToggleable
 
   @logPrefix: 'Mercury.Panel:'
-  @className: 'mercury-panel'
+  @className: 'mercury-dialog mercury-panel'
 
   @elements:
     content: '.mercury-panel-content'
@@ -20,10 +20,13 @@ class Mercury.Panel extends Mercury.View
     title: '.mercury-panel-title span'
 
   @events:
-    'click .mercury-panel-title em': 'hide'
-    'mercury:interface:hide': -> @hide(false)
+    'mercury:interface:hide': -> @hide()
     'mercury:interface:resize': (e) -> @resize(false, e)
-    'mercury:panels:hide': 'hide'
+    'mercury:panels:hide': -> @hide()
+    'mousedown .mercury-panel-title em': (e) -> @prevent(e)
+    'click .mercury-panel-title em': -> @hide()
+
+  primaryTemplate: 'panel'
 
   constructor: (@options = {}) ->
     @options.template ||= @template
@@ -33,7 +36,7 @@ class Mercury.Panel extends Mercury.View
 
   buildElement: ->
     @subTemplate = @options.template
-    @template = 'panel'
+    @template = @primaryTemplate
     super
 
 
@@ -48,7 +51,7 @@ class Mercury.Panel extends Mercury.View
     @options = $.extend({}, @options, options || {})
     @[key] = value for key, value of @options
     @subTemplate = @options.template
-    @template = 'panel'
+    @template = @primaryTemplate
     @$title.html(@title)
     @css(width: @width)
     content = @contentFromOptions()
@@ -58,6 +61,7 @@ class Mercury.Panel extends Mercury.View
     @lastContent = content
     @resize(true, Mercury.interface.dimensions())
     @show(false)
+    @refreshElements()
 
 
   resize: (animate = true, dimensions) =>
@@ -90,6 +94,7 @@ class Mercury.Panel extends Mercury.View
 
 
   show: (update = true) ->
+    return if @visible
     Mercury.trigger('panels:hide')
     @trigger('show')
     clearTimeout(@visibilityTimout)
@@ -100,10 +105,23 @@ class Mercury.Panel extends Mercury.View
       @update() if update
 
 
-  hide: ->
+  hide: (release = false) ->
+    return unless @visible
     Mercury.trigger('focus')
     @trigger('hide')
     clearTimeout(@visibilityTimout)
     @visible = false
     @css(opacity: 0)
-    @visibilityTimout = @delay(250, -> @$el.hide())
+    @visibilityTimout = @delay 250, ->
+      @$el.hide()
+      @release() if release
+
+
+  appendTo: ->
+    @log(@t('appending to mercury interface instead'))
+    super(Mercury.interface)
+
+
+  release: ->
+    return @hide(true) if @visible
+    super

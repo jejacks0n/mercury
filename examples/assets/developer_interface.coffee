@@ -7,6 +7,7 @@
 # whats possible. It has a lot of comments and is pretty easy to read.
 #
 class @DeveloperInterface extends Mercury.View
+  @include Mercury.View.Modules.InterfaceFocusable
 
   template: 'developer-interface'
   className: 'developer-interface'
@@ -14,7 +15,6 @@ class @DeveloperInterface extends Mercury.View
 
   events:
     'mousedown': 'focusMercury'                            # to keep Mercury focused we need to stop the event
-    'focusout': 'focusMercury'                             # to keep Mercury focused we need to stop the event
     'click [data-action]': 'delegateAction'                # delegate actions to Mercury with custom handling for some
 
   # Releases a given region.
@@ -52,27 +52,36 @@ class @DeveloperInterface extends Mercury.View
     target = $(e.target)
     [action, value] = [target.data('action'), target.data('value')]
     switch action
+
+      # general / top level events
       when 'save' then @save()
       when 'toggle_interface' then @toggleInterface()
       when 'reinitialize' then @reinitialize()
       when 'add_new_region' then @addNewRegion()
       when 'release' then @release()
-      when 'modal1' then @modal = new Mercury.Modal(width: 300, title: 'Short Lorem Modal', template: 'lorem_short')
-      when 'modal2' then @modal = new Mercury.Modal(width: 600, title: 'Long Lorem Modal', template: 'lorem_long')
-      when 'release_modal' then @modal?.release()
-      when 'lightview1' then @lightview = new Mercury.Lightview(width: 300, title: 'Short Lorem Lightview', template: 'lorem_short')
-      when 'lightview2' then @lightview = new Mercury.Lightview(width: 900, title: 'Long Lorem Lightview', template: 'lorem_long')
-      when 'release_lightview' then @lightview?.release()
-      when 'panel'
-        if @panel
-          @panel.show() unless @panel.visible
-        else
-          @panel = new Mercury.Panel(width: 200, title: 'Short Lorem Panel', template: 'lorem_short')
-      when 'update_panel'
-        @panel?.update(width: Math.round(Math.random() * 300) + 100, title: 'Updated Lorem Panel', template: 'lorem_long')
-      when 'release_panel'
-        @panel?.release()
-        @panel = null
+
+      # dealing with modals
+      when 'new_modal'
+        @modal?.show()
+        @modal ||= new Mercury.Modal(width: 300, title: 'Short Lorem Modal', template: 'lorem_short')
+      when 'update_modal' then @modal?.update(width: Math.round(Math.random() * 700) + 200, title: 'Updated Lorem Modal', template: 'lorem_long')
+      when 'release_modal' then @modal?.release(); delete(@modal)
+
+      # dealing with lightview (just like modals)
+      when 'new_lightview'
+        @lightview?.show()
+        @lightview ||= new Mercury.Lightview(width: 300, title: 'Short Lorem Lightview', template: 'lorem_short')
+      when 'update_lightview' then @lightview?.update(width: Math.round(Math.random() * 800) + 300, title: 'Updated Lorem Lightview', template: 'lorem_long')
+      when 'release_lightview' then @lightview?.release(); delete(@lightview)
+
+      # dealing with panels (same as modals/lightviews, but not a subclass)
+      when 'new_panel'
+        @panel?.show()
+        @panel ||= new Mercury.Panel(width: 200, title: 'Short Lorem Panel', template: 'lorem_short')
+      when 'update_panel' then @panel?.update(width: Math.round(Math.random() * 300) + 100, title: 'Updated Lorem Panel', template: 'lorem_long')
+      when 'release_panel' then @panel?.release(); delete(@panel)
+
+      # triggering actions
       when 'html'
         value = switch value
           when 'html' then '<table>\n  <tr>\n    <td>1</td>\n    <td>2</td>\n  </tr>\n</table>'
@@ -84,11 +93,15 @@ class @DeveloperInterface extends Mercury.View
 
   # Focuses Mercury.
   # If you have an interface that you don't want to effect the focused state of Mercury, you will need to handle these
-  # events yourself. By triggering the 'focus' event we're telling Mercury that it should refocus it's active region.
+  # events yourself. By preventing the event we never let Mercury lose focus, and by triggering the 'focus' event we're
+  # telling Mercury that it should refocus it's active region. Regions are responsible for reselecting/restoring state
+  # if they do not do it automatically. If you have inputs in your view you'll need to let the event go through (by not
+  # using preventDefault) and will need to refocus Mercury when it seems appropriate. You can also trigger the 'blur'
+  # event, which will blur any regions so that typing in the background isn't possible -- you can see this on modals and
+  # lightviews -- and panels do it slightly differently.
   #
   focusMercury: (e) ->
-    e.preventDefault()
-    Mercury.trigger('focus')
+#    Mercury.trigger('focus')
 
 
   # Tells Mercury to save. You can do this by calling the save method on the interface, or you can do it by triggering
@@ -127,7 +140,8 @@ class @DeveloperInterface extends Mercury.View
     @reinitialize()
 
 
-  # Release this view, and tell Mercury to clean itself up.
+  # Releases this view, and tells Mercury to clean itself up as well. This is not a typical need, but is here as a way
+  # to document it.
   #
   release: ->
     $('.region-controls').remove()
@@ -155,15 +169,15 @@ JST['/mercury/templates/developer-interface'] = (scope) ->
   <li data-action="add_new_region">add new region</li>
   <li data-action="release">release</li>
   <hr/>
-  <li data-action="modal1">modal1</li>
-  <li data-action="modal2">modal2</li>
+  <li data-action="new_modal">new modal</li>
+  <li data-action="update_modal">update modal</li>
   <li data-action="release_modal">release modal</li>
   <hr/>
-  <li data-action="lightview1">lightview1</li>
-  <li data-action="lightview2">lightview2</li>
+  <li data-action="new_lightview">new lightview</li>
+  <li data-action="update_lightview">update lightview</li>
   <li data-action="release_lightview">release lightview</li>
   <hr/>
-  <li data-action="panel">panel</li>
+  <li data-action="new_panel">new panel</li>
   <li data-action="update_panel">update panel</li>
   <li data-action="release_panel">release panel</li>
   <hr/>

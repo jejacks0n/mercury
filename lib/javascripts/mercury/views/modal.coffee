@@ -1,15 +1,17 @@
 #= require mercury/core/view
-#= require mercury/views/modules/singleton
-#= require mercury/views/modules/toolbar_focusable
+#= require mercury/views/modules/form_handler
+#= require mercury/views/modules/interface_focusable
 #= require mercury/views/modules/scroll_propagation
+#= require mercury/views/modules/visibility_toggleable
 
 class Mercury.Modal extends Mercury.View
-  @include Mercury.View.Modules.Singleton
-  @include Mercury.View.Modules.ToolbarFocusable
+  @include Mercury.View.Modules.FormHandler
+  @include Mercury.View.Modules.InterfaceFocusable
   @include Mercury.View.Modules.ScrollPropagation
+  @include Mercury.View.Modules.VisibilityToggleable
 
   @logPrefix: 'Mercury.Modal:'
-  @className: 'mercury-modal'
+  @className: 'mercury-dialog mercury-modal'
 
   @elements:
     overlay: '.mercury-modal-overlay'
@@ -20,19 +22,17 @@ class Mercury.Modal extends Mercury.View
     title: '.mercury-modal-dialog-title span'
 
   @events:
-    'click .mercury-modal-dialog-title em': 'release'
-    'click .mercury-modal-overlay': 'release'
-    'mercury:interface:hide': -> @hide(false)
-    'mercury:interface:show': -> @show(false)
-    'mercury:interface:resize': -> @resize(false)
+    'mercury:interface:hide': -> @hide()
+    'mercury:interface:resize': (dimensions) -> @resize(false, dimensions)
+    'mercury:modals:hide': -> @hide()
+    'click .mercury-modal-dialog-title em': -> @hide()
 
   primaryTemplate: 'modal'
 
   constructor: (@options = {}) ->
-    return instance if instance = @ensureSingleton(@primaryTemplate, arguments...)
     @options.template ||= @template
     super(@options)
-    @show()
+    if @hidden then @visible = false else @show()
 
 
   buildElement: ->
@@ -62,9 +62,11 @@ class Mercury.Modal extends Mercury.View
     @lastContent = content
     @resize()
     @show(false)
+    @refreshElements()
+    @delay(300, @focusFirstFocusable)
 
 
-  resize: (animate = true) ->
+  resize: (animate = true, dimensions) ->
     clearTimeout(@showContentTimeout)
     @addClass('mercury-no-animation') unless animate
     @$contentContainer.css(height: 'auto')
@@ -82,7 +84,7 @@ class Mercury.Modal extends Mercury.View
       @showContentTimeout = @delay(300, @showContent)
     else
       @showContent(false)
-    @removeClass('mercury-no-animation')
+    @delay(250, -> @removeClass('mercury-no-animation'))
 
 
   contentFromOptions: ->
@@ -101,6 +103,10 @@ class Mercury.Modal extends Mercury.View
 
 
   show: (update = true) ->
+    return if @visible
+    Mercury.trigger('blur')
+    Mercury.trigger('modals:hide')
+    @trigger('show')
     clearTimeout(@visibilityTimout)
     @visible = true
     @$el.show()
@@ -109,8 +115,10 @@ class Mercury.Modal extends Mercury.View
       @update() if update
 
 
-  hide: (release = true) ->
+  hide: (release = false) ->
+    return if !@visible && !release
     Mercury.trigger('focus')
+    @trigger('hide')
     clearTimeout(@visibilityTimout)
     @visible = false
     @css(opacity: 0)
@@ -119,7 +127,11 @@ class Mercury.Modal extends Mercury.View
       @release() if release
 
 
+  appendTo: ->
+    @log(@t('appending to mercury interface instead'))
+    super(Mercury.interface)
+
+
   release: ->
     return @hide(true) if @visible
-    @removeSingleton(@primaryTemplate)
     super

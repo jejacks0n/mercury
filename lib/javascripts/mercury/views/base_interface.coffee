@@ -6,9 +6,9 @@ class Mercury.BaseInterface extends Mercury.View
   @tag: 'mercury'
 
   @events:
-    'mousedown': 'focusActiveRegion'
-    'focusout': 'focusActiveRegion'
     'mercury:focus': 'focusActiveRegion'
+    'mercury:action': 'focusActiveRegion'
+    'mercury:blur': 'blurActiveRegion'
     'mercury:region:focus': 'onRegionFocus'
     'mercury:region:release': 'onRegionRelease'
     'mercury:reinitialize': 'reinitialize'
@@ -116,6 +116,10 @@ class Mercury.BaseInterface extends Mercury.View
   focusActiveRegion: (e) ->
     @prevent(e)
     @region?.focus()
+
+
+  blurActiveRegion: ->
+    @region?.blur()
 
 
   setMode: (mode) ->

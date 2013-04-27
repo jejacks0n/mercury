@@ -5,25 +5,35 @@ Mercury.View.Modules.VisibilityToggleable =
 
 
   buildVisibilityToggleable: ->
-    @visible ||= false
-    @hide() unless @visible
-    @delegateEvents('mercury:interface:hide': 'hide')
+    @delegateEvents('mercury:interface:hide': -> @hide())
+    if @hidden
+      @visible = true
+      @hide()
+    else
+      @show()
 
 
   toggle: ->
     if @visible then @hide() else @show()
 
 
-  hide: ->
-    clearTimeout(@visibilityTimeout)
-    @visible = false
-    @css(opacity: 0)
-    @visibilityTimeout = @delay(100, => @$el.hide())
-
-
-  show: ->
-    clearTimeout(@visibilityTimeout)
+  show: (update = true) ->
+    return if @visible
+    @trigger('show')
+    clearTimeout(@visibilityTimout)
     @visible = true
     @$el.show()
-    @position?()
-    @visibilityTimeout = @delay(1, => @css(opacity: 1))
+    @visibilityTimout = @delay 50, ->
+      @css(opacity: 1)
+      @update?() if update
+
+
+  hide: (release = false) ->
+    return unless @visible
+    @trigger('hide')
+    clearTimeout(@visibilityTimout)
+    @visible = false
+    @css(opacity: 0)
+    @visibilityTimout = @delay 250, ->
+      @$el.hide()
+      @release() if release

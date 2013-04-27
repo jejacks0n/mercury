@@ -285,6 +285,37 @@ describe "Mercury.View", ->
       expect( result ).to.eq('_ajax_template_')
 
 
+  describe "#focusFirstFocusable", ->
+
+    it "focuses the first element that can be focused", ->
+      mock = focus: spy()
+      spyOn(subject, '$', -> [mock])
+      subject.focusFirstFocusable()
+      expect( subject.$ ).calledWith(':input:visible')
+      expect( mock.focus ).called
+
+
+  describe "#prevent", ->
+
+    beforeEach ->
+      @e =
+        preventDefault: spy()
+        stopPropagation: spy()
+
+    it "calls preventDefault on the event", ->
+      subject.prevent(@e)
+      expect( @e.preventDefault ).called
+
+    it "calls stopPropagation on the event if asked", ->
+      subject.prevent(@e, true)
+      expect( @e.preventDefault ).called
+      expect( @e.stopPropagation ).called
+
+    it "does nothing if the event isn't a valid event", ->
+      subject.prevent({})
+      subject.prevent(false)
+
+
   describe "#release", ->
 
     it "triggers a release event", ->

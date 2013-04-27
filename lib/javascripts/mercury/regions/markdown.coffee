@@ -84,23 +84,23 @@ class Mercury.Region.Markdown extends Mercury.Region
 
     # unordered lists
     if val.match(/^- /)
-      e.preventDefault()
+      @prevent(e)
       if val.match(/^- ./) then @replaceSelection('\n- ') else @replaceSelectedLine(exp, '\n')
 
     # ordered lists
     else if match = val.match(/^(\d+)\. /)
-      e.preventDefault()
+      @prevent(e)
       next = parseInt(match[1], 10) + 1
       if val.match(/^\d+\. ./) then @replaceSelection("\n#{next}. ") else @replaceSelectedLine(exp, '\n')
 
     # indentation
     else if match = val.match(/^(> )+/g)
-      e.preventDefault()
+      @prevent(e)
       if val.match(/^(> )+./g) then @replaceSelection("\n#{match[0]}") else @replaceSelectedLine(exp, '\n')
 
     # pre
     else if match = val.match(/^\s{4}/g)
-      e.preventDefault()
+      @prevent(e)
       if val.match(/^\s{4}./) then @replaceSelection("\n    ") else @replaceSelectedLine(exp, '\n')
 
 

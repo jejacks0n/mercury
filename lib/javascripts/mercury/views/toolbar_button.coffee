@@ -148,8 +148,7 @@ class Mercury.ToolbarButton extends Mercury.View
     return if @isDisabled()
     if e && @subview?.visible
       @deactivate()
-      e.preventDefault()
-      e.stopPropagation()
+      @prevent(e, true)
     @addClass('mercury-button-pressed')
 
 

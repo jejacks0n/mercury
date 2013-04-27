@@ -39,6 +39,7 @@ Mercury.Region.Markdown.addToolbar 'color', color: ['Color', plugin: 'color']
 Mercury.Region.Markdown.addToolbar 'block', block: ['Block', plugin: 'blocks']
 
 # todo:
+#   migrate all toolbar button subviews into a more standard usage (show/hide, etc.)
 #   adjust all place where the uploader is instantiated to use the configuration.
 #   port jQuery.extend into module so we can use that within instances (which is where it's mostly used).
 #   provide aloha editor look alike toolbar and toolbar behavior (but better).

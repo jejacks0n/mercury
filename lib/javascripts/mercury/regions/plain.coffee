@@ -31,28 +31,28 @@ class Mercury.Region.Plain extends Mercury.Region
 
 
   onDropItem: (e) ->
-    e.preventDefault()
+    @prevent(e)
 
 
   onPaste: (e) ->
-    e.preventDefault()
+    @prevent(e)
 
 
   onKeyEvent: (e) ->
     return if e.keyCode >= 37 && e.keyCode <= 40 # arrows
     return if e.metaKey && e.keyCode == 90 # undo / redo
-    return e.preventDefault() if e.keyCode == 13 # return
+    return @prevent(e) if e.keyCode == 13 # return
 
     # common actions
     if e.metaKey then switch e.keyCode
       when 66 # b
-        e.preventDefault()
+        @prevent(e)
         return @handleAction('bold')
       when 73 # i
-        e.preventDefault()
+        @prevent(e)
         return @handleAction('italic')
       when 85 # u
-        e.preventDefault()
+        @prevent(e)
         return @handleAction('underline')
 
     @pushHistory(e.keyCode)

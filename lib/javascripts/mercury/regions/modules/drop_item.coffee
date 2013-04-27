@@ -3,7 +3,7 @@ Mercury.Region.Modules.DropItem =
   onDropItem: (e, data) ->
     [action, url] = @getActionAndUrlFromData(data)
     return unless url
-    e.preventDefault()
+    @prevent(e)
     @focus()
     @handleAction(action, url: url)
 

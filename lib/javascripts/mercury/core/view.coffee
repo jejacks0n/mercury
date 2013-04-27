@@ -158,6 +158,21 @@ class Mercury.View extends Mercury.Module
     template
 
 
+  # When setting content or refreshing elements you may want to focus the first element that's focusable. This will
+  # find the first element with a positive tab index that's visile and call focus on it.
+  #
+  focusFirstFocusable: ->
+    @$(':input:visible')[0].focus()
+
+
+  # Standard event handler that will prevent an event, and optionally stop it from propagating.
+  #
+  prevent: (e, stop = false) ->
+    return unless e && e.preventDefault
+    e.preventDefault()
+    e.stopPropagation() if stop
+
+
   # Releases the instance and triggers a release event. Releasing a view removes the element from the DOM, and removes
   # all event listeners including those that have been added externally.
   #

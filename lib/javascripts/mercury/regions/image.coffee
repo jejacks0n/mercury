@@ -24,7 +24,7 @@ class Mercury.Region.Image extends Mercury.Region
 
   onMousedown: (e) ->
     # workaround: Firefox doesn't focus an img tag when clicked.
-    e.preventDefault()
+    @prevent(e)
     @$el.trigger('focus')
 
 

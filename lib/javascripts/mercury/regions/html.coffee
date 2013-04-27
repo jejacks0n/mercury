@@ -16,7 +16,7 @@ class Mercury.Region.Html extends Mercury.Region
 
   @supported: Mercury.support.wysiwyg
 
-  events:
+  @events:
     'keydown': 'onKeyEvent'
     'paste': 'onPaste'
 
@@ -51,13 +51,13 @@ class Mercury.Region.Html extends Mercury.Region
     # common actions
     if e.metaKey then switch e.keyCode
       when 66 # b
-        e.preventDefault()
+        @prevent(e)
         return @handleAction('bold')
       when 73 # i
-        e.preventDefault()
+        @prevent(e)
         return @handleAction('italic')
       when 85 # u
-        e.preventDefault()
+        @prevent(e)
         return @handleAction('underline')
 
     @pushHistory(e.keyCode)

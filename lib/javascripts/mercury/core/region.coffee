@@ -404,7 +404,7 @@ class Mercury.Region extends Mercury.View
       keyup: => @trigger('update')
       keydown: (e) =>
         return unless e.metaKey && e.keyCode == 90
-        e.preventDefault()
+        @prevent(e)
         if e.shiftKey then @handleAction('redo') else @handleAction('undo')
 
 
@@ -420,13 +420,13 @@ class Mercury.Region extends Mercury.View
   #
   bindDropEvents: ->
     @delegateEvents @$el,
-      dragenter: (e) -> e.preventDefault()
-      dragover: (e) => e.preventDefault() unless @editableDropBehavior && Mercury.support.webkit
+      dragenter: (e) => @prevent(e)
+      dragover: (e) => @prevent(e) unless @editableDropBehavior && Mercury.support.webkit
       drop: (e) =>
         return if @previewing
         data = e.originalEvent.dataTransfer
         if data.files.length && @onDropFile
-          e.preventDefault()
+          @prevent(e)
           @onDropFile(data.files)
         else if @onDropItem
           @onDropItem(e, data)

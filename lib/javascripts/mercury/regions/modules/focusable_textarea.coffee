@@ -65,13 +65,13 @@ Mercury.Region.Modules.FocusableTextarea =
     # common actions
     if e.metaKey then switch e.keyCode
       when 66 # b
-        e.preventDefault()
+        @prevent(e)
         return @handleAction('bold')
       when 73 # i
-        e.preventDefault()
+        @prevent(e)
         return @handleAction('italic')
       when 85 # u
-        e.preventDefault()
+        @prevent(e)
         return @handleAction('underline')
 
     @resizeFocusable()

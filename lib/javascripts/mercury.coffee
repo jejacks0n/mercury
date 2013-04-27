@@ -39,21 +39,17 @@ Mercury.Region.Markdown.addToolbar 'color', color: ['Color', plugin: 'color']
 Mercury.Region.Markdown.addToolbar 'block', block: ['Block', plugin: 'blocks']
 
 # todo:
-#   migrate all toolbar button subviews into a more standard usage (show/hide, etc.)
-#   adjust all place where the uploader is instantiated to use the configuration.
+#   add better support for sizing the toolbar down / add small version / provide aloha like behavior.
+#   adjust all places where the uploader is instantiated to use the configuration.
 #   port jQuery.extend into module so we can use that within instances (which is where it's mostly used).
-#   provide aloha editor look alike toolbar and toolbar behavior (but better).
-#   spend time making sure focus is working well and dialed before moving forward.
 #   migrate existing locale content into new locales and document missing values.
 #   make region use the shadow dom if possible/configured to do so.
 #   spend some time making what's in work really well on ios.
+#   better strategy for snippet management/removal -- focusable with toolbar buttons would be nice, combined with a lesser toolbar in line? (drag handle on hover, etc?)
 #   figure out how to better integrate snippets.
 #   can we make editing content within snippets work?
 #   html/plain: when using the iframe, rangy isn't behaving the same (doesn't work because it doesn't understand the context).
 #   html: selections are a little wonky on undo/redo still, and sometimes in firefox they're not applying because the checksum doesn't validate.
-# todo interface:
-#   better strategy for snippet management/removal -- focusable with toolbar buttons would be nice, combined with a lesser toolbar in line? (drag handle on hover, etc?)
-#   add all interface elements, like modal, panel, and toolbar dialogs
 # todo regions:
 #   add list region (sort of like workflowy)
 #   add canvas region (save/load as base64 image)

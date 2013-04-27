@@ -6,7 +6,7 @@ Plugin = Mercury.registerPlugin 'table'
     link: 'insert'
 
   events:
-    'mercury:edit:media': 'showDialog'
+    'mercury:edit:table': 'showDialog'
     'button:click': 'showDialog'
 
   registerButton: ->

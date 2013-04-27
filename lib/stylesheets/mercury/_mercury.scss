@@ -31,8 +31,11 @@
 @import "mercury/core/region";
 @import "mercury/core/view";
 
-// Views.
+// View modules/views.
 //-----------------------------------------------------------------------------
+@import "mercury/views/modules/dialog_forms";
+@import "mercury/views/modules/dialog_buttons";
+
 @import "mercury/views/base_interface";
 @import "mercury/views/frame_interface";
 @import "mercury/views/lightview";

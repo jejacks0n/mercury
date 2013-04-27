@@ -1,0 +1,638 @@
+$dialog_fieldset_bg: #f6f6f6;
+$dialog_legend_color: #333;
+$dialog_legend_color_alt: #999;
+$dialog_legend_border_color: #e5e5e5;
+$dialog_input_color: #555555;
+
+.mercury-dialog {
+  form {
+    display: block;
+    padding: 0;
+    margin: 0;
+    border: 0
+  }
+  fieldset {
+    @include mercury-border-radius(7px);
+    margin: 0 0 15px;
+    padding: 10px 10px 9px;
+    border: 1px solid #ccc;
+    background: $dialog_fieldset_bg;
+  }
+  legend {
+    @include mercury-font(10pt);
+    display: block;
+    margin: 0 0 -17px 0;
+    padding: 0;
+    border: 0;
+    line-height: 36px;
+    font-weight: bold;
+    color: $dialog_legend_color;
+    & + .control-group {
+      margin-top: 0;
+      -webkit-margin-top-collapse: separate;
+    }
+    small {
+      @include mercury-font(8pt);
+      color: $dialog_legend_color_alt;
+    }
+  }
+
+  label,
+  input,
+  button,
+  select,
+  textarea {
+    @include mercury-font(10pt);
+    font-weight: normal;
+    line-height: 18px;
+  }
+
+  label {
+    display: block;
+    margin-bottom: 5px;
+    input[type=radio] {
+      margin-right: 5px;
+    }
+  }
+
+  select,
+  textarea,
+  input[type="text"],
+  input[type="password"],
+  input[type="datetime"],
+  input[type="datetime-local"],
+  input[type="date"],
+  input[type="month"],
+  input[type="time"],
+  input[type="week"],
+  input[type="number"],
+  input[type="email"],
+  input[type="url"],
+  input[type="search"],
+  input[type="tel"],
+  input[type="color"],
+  .uneditable-input {
+    @include mercury-font(10pt);
+    display: inline-block;
+    padding: 4px;
+    margin-bottom: 1px;
+    color: $dialog_input_color;
+  }
+
+  textarea,
+  input[type="text"],
+  input[type="password"],
+  input[type="datetime"],
+  input[type="datetime-local"],
+  input[type="date"],
+  input[type="month"],
+  input[type="time"],
+  input[type="week"],
+  input[type="number"],
+  input[type="email"],
+  input[type="url"],
+  input[type="search"],
+  input[type="tel"],
+  input[type="color"],
+  .uneditable-input {
+    @include mercury-border-radius(3px);
+    @include mercury-box-shadow(inset 0 1px 1px rgba(0, 0, 0, 0.075));
+    @include mercury-transition((border, box-shadow), linear, 0.2s);
+    width: 100%;
+    min-width: 100px;
+    border: 1px solid #cccccc;
+    background-color: #ffffff;
+    &:focus {
+      border-color: rgba(82, 168, 236, 0.8);
+      outline: 0;
+      outline: thin dotted \9;
+      @include mercury-box-shadow(inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(82, 168, 236, 0.6));
+    }
+  }
+
+  input[type="radio"],
+  input[type="checkbox"] {
+    margin: 3px 0;
+    *margin-top: 0;
+    line-height: normal;
+    cursor: pointer;
+  }
+
+  input[type="submit"],
+  input[type="reset"],
+  input[type="button"],
+  input[type="radio"],
+  input[type="checkbox"] {
+    width: auto;
+  }
+
+  select,
+  input[type="file"] {
+    width: auto;
+    max-width: 100%;
+    height: 25px;
+    line-height: 28px;
+  }
+
+  select {
+    max-width: 100%;
+    border: 1px solid #bbb;
+  }
+
+  select[multiple],
+  select[size] {
+    height: auto;
+  }
+
+  select:focus,
+  input[type="file"]:focus,
+  input[type="radio"]:focus,
+  input[type="checkbox"]:focus {
+    outline: thin dotted #333;
+    outline: 5px auto -webkit-focus-ring-color;
+    outline-offset: -2px;
+  }
+
+  .radio,
+  .checkbox {
+    min-height: 18px;
+    padding-left: 18px;
+    input[type="radio"],
+    input[type="checkbox"] {
+      float: left;
+      margin-left: -18px;
+    }
+    &.inline {
+      display: inline-block;
+      padding-top: 5px;
+      margin-bottom: 0;
+      vertical-align: middle;
+    }
+  }
+  .radio.inline + .radio.inline,
+  .checkbox.inline + .checkbox.inline {
+    margin-left: 10px;
+  }
+
+  .controls {
+    margin-right: 10px;
+  }
+  //.controls > .radio:first-child,
+  //.controls > .checkbox:first-child {
+  //  padding-top: 5px;
+  //}
+
+  .input-mini {
+    max-width: 60px;
+  }
+  .input-small {
+    max-width: 90px;
+  }
+  .input-medium {
+    max-width: 150px;
+  }
+  .input-large {
+    max-width: 210px;
+  }
+  .input-xlarge {
+    max-width: 270px;
+  }
+  .input-xxlarge {
+    max-width: 530px;
+  }
+
+  input,
+  textarea,
+  .uneditable-input {
+    margin-left: 0;
+  }
+
+  input[disabled],
+  select[disabled],
+  textarea[disabled],
+  input[readonly],
+  select[readonly],
+  textarea[readonly] {
+    cursor: not-allowed;
+    background-color: #eeeeee;
+    border-color: #ddd;
+  }
+
+  input[type="radio"][disabled],
+  input[type="checkbox"][disabled],
+  input[type="radio"][readonly],
+  input[type="checkbox"][readonly] {
+    background-color: transparent;
+  }
+
+  .control-group {
+    margin-bottom: 0;
+  }
+
+  .control-group.warning > label,
+  .control-group.warning .help-block,
+  .control-group.warning .help-inline {
+    color: #c09853;
+  }
+
+  .control-group.warning .checkbox,
+  .control-group.warning .radio,
+  .control-group.warning input,
+  .control-group.warning select,
+  .control-group.warning textarea {
+    color: #c09853;
+    border-color: #c09853;
+  }
+
+  .control-group.warning .checkbox:focus,
+  .control-group.warning .radio:focus,
+  .control-group.warning input:focus,
+  .control-group.warning select:focus,
+  .control-group.warning textarea:focus {
+    border-color: #a47e3c;
+    -webkit-box-shadow: 0 0 6px #dbc59e;
+    -moz-box-shadow: 0 0 6px #dbc59e;
+    box-shadow: 0 0 6px #dbc59e;
+  }
+
+  .control-group.warning .input-prepend .add-on,
+  .control-group.warning .input-append .add-on {
+    color: #c09853;
+    background-color: #fcf8e3;
+    border-color: #c09853;
+  }
+
+  .control-group.error > label,
+  .control-group.error .help-block,
+  .control-group.error .help-inline {
+    color: #b94a48;
+  }
+
+  .control-group.error .checkbox,
+  .control-group.error .radio,
+  .control-group.error input,
+  .control-group.error select,
+  .control-group.error textarea {
+    color: #b94a48;
+    border-color: #b94a48;
+  }
+
+  .control-group.error .checkbox:focus,
+  .control-group.error .radio:focus,
+  .control-group.error input:focus,
+  .control-group.error select:focus,
+  .control-group.error textarea:focus {
+    border-color: #953b39;
+    -webkit-box-shadow: 0 0 6px #d59392;
+    -moz-box-shadow: 0 0 6px #d59392;
+    box-shadow: 0 0 6px #d59392;
+  }
+
+  .control-group.error .input-prepend .add-on,
+  .control-group.error .input-append .add-on {
+    color: #b94a48;
+    background-color: #f2dede;
+    border-color: #b94a48;
+  }
+
+  .control-group.success > label,
+  .control-group.success .help-block,
+  .control-group.success .help-inline {
+    color: #468847;
+  }
+
+  .control-group.success .checkbox,
+  .control-group.success .radio,
+  .control-group.success input,
+  .control-group.success select,
+  .control-group.success textarea {
+    color: #468847;
+    border-color: #468847;
+  }
+
+  .control-group.success .checkbox:focus,
+  .control-group.success .radio:focus,
+  .control-group.success input:focus,
+  .control-group.success select:focus,
+  .control-group.success textarea:focus {
+    border-color: #356635;
+    -webkit-box-shadow: 0 0 6px #7aba7b;
+    -moz-box-shadow: 0 0 6px #7aba7b;
+    box-shadow: 0 0 6px #7aba7b;
+  }
+
+  .control-group.success .input-prepend .add-on,
+  .control-group.success .input-append .add-on {
+    color: #468847;
+    background-color: #dff0d8;
+    border-color: #468847;
+  }
+  //
+  //input:focus:required:invalid,
+  //textarea:focus:required:invalid,
+  //select:focus:required:invalid {
+  //  color: #b94a48;
+  //  border-color: #ee5f5b;
+  //}
+  //
+  //input:focus:required:invalid:focus,
+  //textarea:focus:required:invalid:focus,
+  //select:focus:required:invalid:focus {
+  //  border-color: #e9322d;
+  //  -webkit-box-shadow: 0 0 6px #f8b9b7;
+  //  -moz-box-shadow: 0 0 6px #f8b9b7;
+  //  box-shadow: 0 0 6px #f8b9b7;
+  //}
+  //
+
+
+  //
+  //.uneditable-input {
+  //  overflow: hidden;
+  //  white-space: nowrap;
+  //  cursor: not-allowed;
+  //  background-color: #ffffff;
+  //  border-color: #eee;
+  //  -webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.025);
+  //  -moz-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.025);
+  //  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.025);
+  //}
+  //
+  //:-moz-placeholder {
+  //  color: #999999;
+  //}
+  //
+  //:-ms-input-placeholder {
+  //  color: #999999;
+  //}
+  //
+  //::-webkit-input-placeholder {
+  //  color: #999999;
+  //}
+  //
+  //.help-block,
+  //.help-inline {
+  //  color: #555555;
+  //}
+  //
+  //.help-block {
+  //  display: block;
+  //  margin-bottom: 9px;
+  //}
+  //
+  //.help-inline {
+  //  display: inline-block;
+  //  *display: inline;
+  //  padding-left: 5px;
+  //  vertical-align: middle;
+  //  *zoom: 1;
+  //}
+  //
+  //.input-prepend,
+  //.input-append {
+  //  margin-bottom: 5px;
+  //}
+  //
+  //.input-prepend input,
+  //.input-append input,
+  //.input-prepend select,
+  //.input-append select,
+  //.input-prepend .uneditable-input,
+  //.input-append .uneditable-input {
+  //  position: relative;
+  //  margin-bottom: 0;
+  //  vertical-align: middle;
+  //  -webkit-border-radius: 0 3px 3px 0;
+  //  -moz-border-radius: 0 3px 3px 0;
+  //  border-radius: 0 3px 3px 0;
+  //}
+  //
+  //.input-prepend input:focus,
+  //.input-append input:focus,
+  //.input-prepend select:focus,
+  //.input-append select:focus,
+  //.input-prepend .uneditable-input:focus,
+  //.input-append .uneditable-input:focus {
+  //  z-index: 2;
+  //}
+  //
+  //.input-prepend .uneditable-input,
+  //.input-append .uneditable-input {
+  //  border-left-color: #ccc;
+  //}
+  //
+  //.input-prepend .add-on,
+  //.input-append .add-on {
+  //  display: inline-block;
+  //  width: auto;
+  //  height: 18px;
+  //  min-width: 16px;
+  //  padding: 4px 5px;
+  //  font-weight: normal;
+  //  line-height: 18px;
+  //  text-align: center;
+  //  text-shadow: 0 1px 0 #ffffff;
+  //  vertical-align: middle;
+  //  background-color: #eeeeee;
+  //  border: 1px solid #ccc;
+  //}
+  //
+  //.input-prepend .add-on,
+  //.input-append .add-on,
+  //.input-prepend .btn,
+  //.input-append .btn {
+  //  margin-left: -1px;
+  //  -webkit-border-radius: 0;
+  //  -moz-border-radius: 0;
+  //  border-radius: 0;
+  //}
+  //
+  //.input-prepend .active,
+  //.input-append .active {
+  //  background-color: #a9dba9;
+  //  border-color: #46a546;
+  //}
+  //
+  //.input-prepend .add-on,
+  //.input-prepend .btn {
+  //  margin-right: -1px;
+  //}
+  //
+  //.input-prepend .add-on:first-child,
+  //.input-prepend .btn:first-child {
+  //  -webkit-border-radius: 3px 0 0 3px;
+  //  -moz-border-radius: 3px 0 0 3px;
+  //  border-radius: 3px 0 0 3px;
+  //}
+  //
+  //.input-append input,
+  //.input-append select,
+  //.input-append .uneditable-input {
+  //  -webkit-border-radius: 3px 0 0 3px;
+  //  -moz-border-radius: 3px 0 0 3px;
+  //  border-radius: 3px 0 0 3px;
+  //}
+  //
+  //.input-append .uneditable-input {
+  //  border-right-color: #ccc;
+  //  border-left-color: #eee;
+  //}
+  //
+  //.input-append .add-on:last-child,
+  //.input-append .btn:last-child {
+  //  -webkit-border-radius: 0 3px 3px 0;
+  //  -moz-border-radius: 0 3px 3px 0;
+  //  border-radius: 0 3px 3px 0;
+  //}
+  //
+  //.input-prepend.input-append input,
+  //.input-prepend.input-append select,
+  //.input-prepend.input-append .uneditable-input {
+  //  -webkit-border-radius: 0;
+  //  -moz-border-radius: 0;
+  //  border-radius: 0;
+  //}
+  //
+  //.input-prepend.input-append .add-on:first-child,
+  //.input-prepend.input-append .btn:first-child {
+  //  margin-right: -1px;
+  //  -webkit-border-radius: 3px 0 0 3px;
+  //  -moz-border-radius: 3px 0 0 3px;
+  //  border-radius: 3px 0 0 3px;
+  //}
+  //
+  //.input-prepend.input-append .add-on:last-child,
+  //.input-prepend.input-append .btn:last-child {
+  //  margin-left: -1px;
+  //  -webkit-border-radius: 0 3px 3px 0;
+  //  -moz-border-radius: 0 3px 3px 0;
+  //  border-radius: 0 3px 3px 0;
+  //}
+  //
+  //.search-query {
+  //  padding-right: 14px;
+  //  padding-right: 4px \9;
+  //  padding-left: 14px;
+  //  padding-left: 4px \9;
+  //  /* IE7-8 doesn't have border-radius, so don't indent the padding */
+  //
+  //  margin-bottom: 0;
+  //  -webkit-border-radius: 14px;
+  //  -moz-border-radius: 14px;
+  //  border-radius: 14px;
+  //}
+  //
+  //.form-search input,
+  //.form-inline input,
+  //.form-horizontal input,
+  //.form-search textarea,
+  //.form-inline textarea,
+  //.form-horizontal textarea,
+  //.form-search select,
+  //.form-inline select,
+  //.form-horizontal select,
+  //.form-search .help-inline,
+  //.form-inline .help-inline,
+  //.form-horizontal .help-inline,
+  //.form-search .uneditable-input,
+  //.form-inline .uneditable-input,
+  //.form-horizontal .uneditable-input,
+  //.form-search .input-prepend,
+  //.form-inline .input-prepend,
+  //.form-horizontal .input-prepend,
+  //.form-search .input-append,
+  //.form-inline .input-append,
+  //.form-horizontal .input-append {
+  //  display: inline-block;
+  //  margin-bottom: 0;
+  //}
+  //
+  //.form-search .hide,
+  //.form-inline .hide,
+  //.form-horizontal .hide {
+  //  display: none;
+  //}
+  //
+  //.form-search label,
+  //.form-inline label {
+  //  display: inline-block;
+  //}
+  //
+  //.form-search .input-append,
+  //.form-inline .input-append,
+  //.form-search .input-prepend,
+  //.form-inline .input-prepend {
+  //  margin-bottom: 0;
+  //}
+  //
+  //.form-search .radio,
+  //.form-search .checkbox,
+  //.form-inline .radio,
+  //.form-inline .checkbox {
+  //  padding-left: 0;
+  //  margin-bottom: 0;
+  //  vertical-align: middle;
+  //}
+  //
+  //.form-search .radio input[type="radio"],
+  //.form-search .checkbox input[type="checkbox"],
+  //.form-inline .radio input[type="radio"],
+  //.form-inline .checkbox input[type="checkbox"] {
+  //  float: left;
+  //  margin-right: 3px;
+  //  margin-left: 0;
+  //}
+  //
+
+
+  .form-actions {
+    padding: 17px 20px 0;
+    margin: 0 -20px;
+    background-color: transparent;
+    border-top: 1px solid #e5e5e5;
+    text-align: right;
+    &:before,
+    &:after {
+      display: table;
+      content: "";
+    }
+    &:after {
+      clear: both;
+    }
+  }
+
+  .form-horizontal {
+    hr {
+      margin-left: 150px;
+      border: 0;
+      border-top: 1px solid #ccc;
+    }
+    .control-group {
+      margin-bottom: 0;
+    }
+    .control-group:before,
+    .control-group:after {
+      display: table;
+      content: "";
+    }
+    .control-group:after {
+      clear: both;
+    }
+    .control-label {
+      float: left;
+      width: 140px;
+      padding-top: 5px;
+      text-align: right;
+    }
+    .controls {
+      margin-left: 150px;
+    }
+    .help-block {
+      margin-top: 9px;
+      margin-bottom: 0;
+    }
+  }
+
+
+}
+

@@ -25,9 +25,10 @@ Mercury.Events =
   # one('event', function(e, arg1) { })          => self
   #
   one: (events, handler) ->
-    @on events, ->
-      @off(events, arguments.callee)
+    callback = ->
+      @off(events, callback)
       handler.apply(@, arguments)
+    @on events, callback
 
 
   # Unbinds a given event. If no event or handler is provided all event handlers will be removed, and if you provide an

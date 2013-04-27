@@ -627,10 +627,12 @@ Copyright (c) 2013 Jeremy Jackson
       return this;
     },
     one: function(events, handler) {
-      return this.on(events, function() {
-        this.off(events, arguments.callee);
+      var callback;
+      callback = function() {
+        this.off(events, callback);
         return handler.apply(this, arguments);
-      });
+      };
+      return this.on(events, callback);
     },
     off: function(events, handler) {
       var h, i, list, name, _i, _j, _len, _len1, _ref, _ref1;

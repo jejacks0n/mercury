@@ -47,6 +47,22 @@ initialize = ->
       @Config.set(args...)
     @one 'configure', -> @Config.set(args[0], true, args[1])
 
+  # Add interface for focusing Mercury, which will focus the current active region (most recent region). Regions are
+  # responsible for restoring selections if the region doesn't natively handle that.
+  #
+  # Mercury.focus
+  # Triggers the focus event.
+  #
+  @focus = -> @trigger('focus')
+
+  # Add interface for bluring Mercury, which can be useful externally if you want to switch to a different interface or
+  # form.
+  #
+  # Mercury.blur
+  # Triggers the blur event.
+  #
+  @blur = -> @trigger('blur')
+
   # Add global event handling/triggering.
   #
   # The event engine generally mimics jQuery style of binding and unbinding.

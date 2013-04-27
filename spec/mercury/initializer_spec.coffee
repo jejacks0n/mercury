@@ -3,7 +3,10 @@
 
 describe "Mercury", ->
 
-  Klass = MockMercury
+  Klass = null
+
+  beforeEach ->
+    Klass = $.extend({}, MockMercury)
 
   it "has the exepected version", ->
     expect( Klass.version ).to.eq('2.0.1 pre alpha')
@@ -114,3 +117,19 @@ describe "Mercury", ->
         Klass.one.yieldsOn(Klass)
         Klass.configure('foo:bar', foo: 'bar')
         expect( Klass.Config.set ).calledWith('foo:bar', true, foo: 'bar')
+
+
+  describe ".focus", ->
+
+    it "triggers a focus event", ->
+      spyOn(Klass, 'trigger')
+      Klass.focus()
+      expect( Klass.trigger ).calledWith('focus')
+
+
+  describe ".blur", ->
+
+    it "triggers a blur event", ->
+      spyOn(Klass, 'trigger')
+      Klass.blur()
+      expect( Klass.trigger ).calledWith('blur')

@@ -9,6 +9,7 @@
 # Core library / utility.
 #------------------------------------------------------------------------------
 #= require mercury/extensions/number
+#= require mercury/extensions/object
 #= require mercury/extensions/string
 #= require mercury/core/action
 #= require mercury/core/config

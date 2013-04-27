@@ -66,6 +66,7 @@ Mercury.configuration =
     uploader   : 'Uploader'                                # uploader class to use within the interface
     silent     : false                                     # set to true to disable asking about changes when leaving
     shadowed   : false                                     # puts the interface into a shadow dom when it's available
+    maskable   : false                                     # uses a mask over the document for toolbar dialogs
 
 
   # Toolbars

@@ -13,5 +13,6 @@ class Mercury.ToolbarPalette extends Mercury.View
 
   hidden: true
 
-  build: ->
-    @appendTo(@parent || Mercury.interface)
+  init: ->
+    @on('show', -> Mercury.trigger('interface:mask') unless @visible)
+    @on('hide', -> Mercury.trigger('interface:unmask') if @visible)

@@ -3,7 +3,11 @@
 class Mercury.BaseInterface extends Mercury.View
 
   @logPrefix: 'Mercury.BaseInterface:'
+  @template: 'interface'
   @tag: 'mercury'
+
+  @elements:
+    mask: '.mercury-interface-mask'
 
   @events:
     'mercury:focus': 'focusActiveRegion'
@@ -12,6 +16,11 @@ class Mercury.BaseInterface extends Mercury.View
     'mercury:region:focus': 'onRegionFocus'
     'mercury:region:release': 'onRegionRelease'
     'mercury:reinitialize': 'reinitialize'
+    'mercury:interface:mask': 'mask'
+    'mercury:interface:unmask': 'unmask'
+    'mousedown .mercury-interface-mask': (e) -> @prevent(e)
+    'mouseup .mercury-interface-mask': (e) -> @prevent(e)
+    'click .mercury-interface-mask': (e) -> @prevent(e, true); Mercury.trigger('dialogs:hide')
 
   constructor: ->
     if parent != window && parent.Mercury
@@ -49,6 +58,7 @@ class Mercury.BaseInterface extends Mercury.View
 
   initialize: ->
     @addAllRegions()
+    @bindDocumentEvents()
 
 
   reinitialize: ->
@@ -91,6 +101,10 @@ class Mercury.BaseInterface extends Mercury.View
     @delegateEvents
      'mercury:mode': (mode) -> @setMode(mode)
      'mercury:action': -> @focusActiveRegion()
+
+
+  bindDocumentEvents: ->
+    $('body', @document).on('mousedown', -> Mercury.trigger('dialogs:hide')) unless @config('interface:mask')
 
 
   focusDefaultRegion: ->
@@ -136,6 +150,15 @@ class Mercury.BaseInterface extends Mercury.View
     else
       Mercury.trigger('interface:hide')
       Mercury.trigger('mode', 'preview') unless @previewMode
+
+
+  mask: ->
+    return unless @config('interface:mask')
+    @$mask.show()
+
+
+  unmask: ->
+    @$mask.hide()
 
 
   dimensions: ->

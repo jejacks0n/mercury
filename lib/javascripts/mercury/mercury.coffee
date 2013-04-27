@@ -1,5 +1,6 @@
 # Templates (at the top so the can be removed/changed).
 #------------------------------------------------------------------------------
+#= require mercury/templates/interface
 #= require mercury/templates/lightview
 #= require mercury/templates/modal
 #= require mercury/templates/panel

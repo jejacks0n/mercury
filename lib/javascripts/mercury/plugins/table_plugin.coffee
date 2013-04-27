@@ -5,11 +5,21 @@ Plugin = Mercury.registerPlugin 'table'
   actions:
     link: 'insert'
 
+  events:
+    'mercury:edit:media': 'showDialog'
+    'button:click': 'showDialog'
+
   registerButton: ->
     @button.set(type: 'table')
 
-  onButtonClick: ->
-    new Plugin.Modal()
+
+  showDialog: ->
+    @bindTo(new Plugin.Modal())
+
+
+  bindTo: (view) ->
+    view.on('form:submitted', (value) -> console.debug(value))
+
 
   insert: ->
 

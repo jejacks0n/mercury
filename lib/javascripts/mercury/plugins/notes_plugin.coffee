@@ -3,17 +3,7 @@ Plugin = Mercury.registerPlugin 'notes'
   version: '1.0.0'
 
   registerButton: ->
-    @button.set(type: 'toggle')
-    @bindTo(@panel = new Plugin.Panel())
-
-
-  bindTo: (view) ->
-    view.on 'show', => @button.toggled()
-    view.on 'hide', => @button.untoggled()
-
-
-  onButtonClick: ->
-    @panel.toggle()
+    @button.set(type: 'toggle', toggle: true, subview: new Plugin.Panel())
 
 
 class Plugin.Panel extends Mercury.Panel

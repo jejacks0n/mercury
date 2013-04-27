@@ -43,15 +43,13 @@ Plugin = Mercury.registerPlugin 'character',
   # to the button from within this method.
   #
   registerButton: ->
-    @button.set(type: 'character')
-    return if @config('modal')
-    @button.set(subview: @bindTo(new Plugin.Palette()))
+    @button.set(type: 'character', subview: @bindTo(@view()))
 
 
-  # When a plugin is specified for a button this callback will be called when the button is clicked.
+  # Instantiate the view that we need based on configuration or setting provided with the button.
   #
-  onButtonClick: ->
-    @bindTo(new Plugin.Modal()) if @config('modal')
+  view: ->
+    if @config('modal') then new Plugin.Modal() else new Plugin.Palette()
 
 
   # We use this pattern so that when any view that we've created triggers a character:picked event we can handle it.
@@ -71,6 +69,7 @@ class Plugin.Modal extends Mercury.Modal
   template:  'character'
   className: 'mercury-character-modal'
   title:     'Character Picker'
+  hidden:    true
   events:    'click li': (e) -> @trigger('character:picked', $(e.target).data('value')) && @hide()
 
 
@@ -78,6 +77,7 @@ class Plugin.Modal extends Mercury.Modal
 class Plugin.Palette extends Mercury.ToolbarPalette
   template:  'character'
   className: 'mercury-character-palette'
+  hidden:    true
   events:    'click li': (e) -> @trigger('character:picked', $(e.target).data('value'))
 
 

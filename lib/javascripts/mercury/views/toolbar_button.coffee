@@ -44,7 +44,7 @@ class Mercury.ToolbarButton extends Mercury.View
 
 
   build: ->
-    @enablePlugin()
+    @registerPlugin()
     @attr('data-type', @type)
     @attr('data-icon', Mercury.Toolbar.icons[@icon || @name] || @icon)
     @addClass("mercury-toolbar-#{@name.toDash()}-button")
@@ -52,12 +52,26 @@ class Mercury.ToolbarButton extends Mercury.View
     @buildSubview()?.appendTo(@)
 
 
+  registerPlugin: ->
+    return unless @plugin
+    @plugin = Mercury.getPlugin(@plugin, true)
+    @plugin.buttonRegistered(@)
+
+
   buildSubview: ->
-    return @subview if @subview
+    if @subview
+      @subview.on 'show', =>
+        @toggled() if @toggle
+        @activate()
+      @subview.on 'hide', =>
+        @untoggled()
+        @deactivate()
+
+      return @subview
     if Klass = Mercury["toolbar_#{@type}".toCamelCase(true)]
       options = @options[@type]
       options = {template: options} if typeof(options) == 'string'
-      return @subview = new Klass(options)
+      return @subview = new Klass($.extend(parent: @$el, options))
 
 
   triggerAction: ->
@@ -72,12 +86,6 @@ class Mercury.ToolbarButton extends Mercury.View
     Mercury.trigger(@event) if @event
     Mercury.trigger('mode', @mode) if @mode
     Mercury.trigger('action', @action...)
-
-
-  enablePlugin: ->
-    return unless @plugin
-    @plugin = Mercury.getPlugin(@plugin, true)
-    @plugin.buttonRegistered(@)
 
 
   regionSupported: (region) ->

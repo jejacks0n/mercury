@@ -3,7 +3,7 @@ Plugin = Mercury.registerPlugin 'history'
   version: '1.0.0'
 
   registerButton: ->
-    @button.set(type: 'history', toggle: true)
+    @button.set(type: 'history')
     @bindTo(@panel = new Plugin.Panel())
 
 
@@ -18,7 +18,7 @@ Plugin = Mercury.registerPlugin 'history'
 
 class Plugin.Panel extends Mercury.Panel
   template:  'history'
-  className: 'mercury-history-panel'
+  className: 'mercury-history-dialog'
   title:     'Page Version History'
   width:     250
   hidden:    true

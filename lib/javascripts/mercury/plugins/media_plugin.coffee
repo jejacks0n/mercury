@@ -16,7 +16,7 @@ Plugin = Mercury.registerPlugin 'media'
 
 class Plugin.Modal extends Mercury.Modal
   template:  'media'
-  className: 'mercury-media-modal'
+  className: 'mercury-media-dialog'
   title:     'Media Manager'
   width:     600
 
@@ -77,6 +77,8 @@ JST['/mercury/templates/media'] ||= ->
                 <option value="absbottom">Absolute Bottom</option>
               </select>
             </div>
+          </div>
+          <div class="control-group select optional">
             <label class="select optional control-label" for="media_image_float">Float</label>
             <div class="controls">
               <select class="select optional" id="media_image_float" name="media[image_float]">

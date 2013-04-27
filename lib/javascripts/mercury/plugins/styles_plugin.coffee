@@ -28,7 +28,7 @@ Plugin = Mercury.registerPlugin 'styles'
 
 class Plugin.Select extends Mercury.ToolbarSelect
   template:  'styles'
-  className: 'mercury-styles-select'
+  className: 'mercury-styles-dialog'
   events:    'click li': (e) -> @trigger('style:picked', $(e.target).data('value'))
 
 

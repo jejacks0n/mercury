@@ -16,7 +16,7 @@ Plugin = Mercury.registerPlugin 'table'
 
 class Plugin.Modal extends Mercury.Modal
   template:  'table'
-  className: 'mercury-table-modal'
+  className: 'mercury-table-dialog'
   title:     'Table Manager'
   width:     600
 

@@ -151,6 +151,11 @@ Copyright (c) 2013 Jeremy Jackson
 }).call(this);
 (function() {
 
+  this.Mercury || (this.Mercury = {});
+
+}).call(this);
+(function() {
+
   this.JST || (this.JST = {});
 
   JST['/mercury/templates/interface'] = function() {
@@ -354,11 +359,422 @@ Copyright (c) 2013 Jeremy Jackson
 
 }).call(this);
 (function() {
+
+  Mercury.TableEditor = (function() {
+
+    function TableEditor(table, cell, cellContent) {
+      this.table = table;
+      this.cell = cell != null ? cell : null;
+      this.cellContent = cellContent != null ? cellContent : '';
+      if (this.table) {
+        this.load(this.table, this.cell, this.cellContent);
+      }
+    }
+
+    TableEditor.prototype.load = function(table, cell, cellContent) {
+      this.table = table;
+      this.cell = cell != null ? cell : null;
+      this.cellContent = cellContent != null ? cellContent : '';
+      this.cell || (this.cell = $(this.table.find('th, td')[0]));
+      this.row = this.cell.parent('tr');
+      this.columnCount = this.getColumnCount();
+      return this.rowCount = this.getRowCount();
+    };
+
+    TableEditor.prototype.addColumnBefore = function() {
+      return this.addColumn('before');
+    };
+
+    TableEditor.prototype.addColumnAfter = function() {
+      return this.addColumn('after');
+    };
+
+    TableEditor.prototype.addColumn = function(position) {
+      var i, intersecting, matchOptions, matching, newCell, row, sig, _i, _len, _ref, _results;
+      if (position == null) {
+        position = 'after';
+      }
+      sig = this.cellSignatureFor(this.cell);
+      _ref = this.table.find('tr');
+      _results = [];
+      for (i = _i = 0, _len = _ref.length; _i < _len; i = ++_i) {
+        row = _ref[i];
+        matchOptions = position === 'after' ? {
+          right: sig.right
+        } : {
+          left: sig.left
+        };
+        if (matching = this.findCellByOptionsFor(row, matchOptions)) {
+          newCell = $("<" + (matching.cell.get(0).tagName) + ">").html(this.cellContent);
+          this.setRowspanFor(newCell, matching.height);
+          if (position === 'before') {
+            matching.cell.before(newCell);
+          } else {
+            matching.cell.after(newCell);
+          }
+          _results.push(i += matching.height - 1);
+        } else if (intersecting = this.findCellByIntersectionFor(row, sig)) {
+          _results.push(this.setColspanFor(intersecting.cell, intersecting.width + 1));
+        } else {
+          _results.push(void 0);
+        }
+      }
+      return _results;
+    };
+
+    TableEditor.prototype.removeColumn = function() {
+      var adjusting, cell, i, intersecting, matching, removing, row, sig, _i, _j, _k, _len, _len1, _len2, _ref, _results;
+      sig = this.cellSignatureFor(this.cell);
+      if (sig.width > 1) {
+        return;
+      }
+      removing = [];
+      adjusting = [];
+      _ref = this.table.find('tr');
+      for (i = _i = 0, _len = _ref.length; _i < _len; i = ++_i) {
+        row = _ref[i];
+        if (matching = this.findCellByOptionsFor(row, {
+          left: sig.left,
+          width: sig.width
+        })) {
+          removing.push(matching.cell);
+          i += matching.height - 1;
+        } else if (intersecting = this.findCellByIntersectionFor(row, sig)) {
+          adjusting.push(intersecting.cell);
+        }
+      }
+      for (_j = 0, _len1 = removing.length; _j < _len1; _j++) {
+        cell = removing[_j];
+        $(cell).remove();
+      }
+      _results = [];
+      for (_k = 0, _len2 = adjusting.length; _k < _len2; _k++) {
+        cell = adjusting[_k];
+        _results.push(this.setColspanFor(cell, this.colspanFor(cell) - 1));
+      }
+      return _results;
+    };
+
+    TableEditor.prototype.addRowBefore = function() {
+      return this.addRow('before');
+    };
+
+    TableEditor.prototype.addRowAfter = function() {
+      return this.addRow('after');
+    };
+
+    TableEditor.prototype.addRow = function(position) {
+      var cell, cellCount, colspan, newCell, newRow, previousRow, rowCount, rowspan, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2;
+      if (position == null) {
+        position = 'after';
+      }
+      newRow = $('<tr>');
+      if ((rowspan = this.rowspanFor(this.cell)) > 1 && position === 'after') {
+        this.row = $(this.row.nextAll('tr')[rowspan - 2]);
+      }
+      cellCount = 0;
+      _ref = this.row.find('th, td');
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        cell = _ref[_i];
+        colspan = this.colspanFor(cell);
+        newCell = $("<" + cell.tagName + ">").html(this.cellContent);
+        this.setColspanFor(newCell, colspan);
+        cellCount += colspan;
+        if ((rowspan = this.rowspanFor(cell)) > 1 && position === 'after') {
+          this.setRowspanFor(cell, rowspan + 1);
+          continue;
+        }
+        newRow.append(newCell);
+      }
+      if (cellCount < this.columnCount) {
+        rowCount = 0;
+        _ref1 = this.row.prevAll('tr');
+        for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+          previousRow = _ref1[_j];
+          rowCount += 1;
+          _ref2 = $(previousRow).find('td[rowspan], th[rowspan]');
+          for (_k = 0, _len2 = _ref2.length; _k < _len2; _k++) {
+            cell = _ref2[_k];
+            rowspan = this.rowspanFor(cell);
+            if (rowspan - 1 >= rowCount && position === 'before') {
+              this.setRowspanFor(cell, rowspan + 1);
+            } else if (rowspan - 1 >= rowCount && position === 'after') {
+              if (rowspan - 1 === rowCount) {
+                newCell = $("<" + cell.tagName + ">").html(this.cellContent);
+                this.setColspanFor(newCell, this.colspanFor(cell));
+                newRow.append(newCell);
+              } else {
+                this.setRowspanFor(cell, rowspan + 1);
+              }
+            }
+          }
+        }
+      }
+      if (position === 'before') {
+        return this.row.before(newRow);
+      } else {
+        return this.row.after(newRow);
+      }
+    };
+
+    TableEditor.prototype.removeRow = function() {
+      var aboveRow, cell, i, match, minRowspan, prevRowspan, rowsAbove, rowspan, rowspansMatch, sig, _i, _j, _k, _l, _len, _len1, _len2, _len3, _m, _ref, _ref1, _ref2, _ref3, _ref4;
+      rowspansMatch = true;
+      prevRowspan = 0;
+      minRowspan = 0;
+      _ref = this.row.find('td, th');
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        cell = _ref[_i];
+        rowspan = this.rowspanFor(cell);
+        if (prevRowspan && rowspan !== prevRowspan) {
+          rowspansMatch = false;
+        }
+        if (rowspan < minRowspan || !minRowspan) {
+          minRowspan = rowspan;
+        }
+        prevRowspan = rowspan;
+      }
+      if (!rowspansMatch && this.rowspanFor(this.cell) > minRowspan) {
+        return;
+      }
+      if (minRowspan > 1) {
+        for (i = _j = 0, _ref1 = minRowspan - 2; 0 <= _ref1 ? _j <= _ref1 : _j >= _ref1; i = 0 <= _ref1 ? ++_j : --_j) {
+          $(this.row.nextAll('tr')[i]).remove();
+        }
+      }
+      _ref2 = this.row.find('td[rowspan], th[rowspan]');
+      for (_k = 0, _len1 = _ref2.length; _k < _len1; _k++) {
+        cell = _ref2[_k];
+        sig = this.cellSignatureFor(cell);
+        if (sig.height === minRowspan) {
+          continue;
+        }
+        if (match = this.findCellByOptionsFor(this.row.nextAll('tr')[minRowspan - 1], {
+          left: sig.left,
+          forceAdjacent: true
+        })) {
+          this.setRowspanFor(cell, this.rowspanFor(cell) - this.rowspanFor(this.cell));
+          if (match.direction === 'before') {
+            match.cell.before($(cell).clone());
+          } else {
+            match.cell.after($(cell).clone());
+          }
+        }
+      }
+      if (this.columnsFor(this.row.find('td, th')) < this.columnCount) {
+        rowsAbove = 0;
+        _ref3 = this.row.prevAll('tr');
+        for (_l = 0, _len2 = _ref3.length; _l < _len2; _l++) {
+          aboveRow = _ref3[_l];
+          rowsAbove += 1;
+          _ref4 = $(aboveRow).find('td[rowspan], th[rowspan]');
+          for (_m = 0, _len3 = _ref4.length; _m < _len3; _m++) {
+            cell = _ref4[_m];
+            rowspan = this.rowspanFor(cell);
+            if (rowspan > rowsAbove) {
+              this.setRowspanFor(cell, rowspan - this.rowspanFor(this.cell));
+            }
+          }
+        }
+      }
+      return this.row.remove();
+    };
+
+    TableEditor.prototype.increaseColspan = function() {
+      var cell;
+      cell = this.cell.next('td, th');
+      if (!cell.length) {
+        return;
+      }
+      if (this.rowspanFor(cell) !== this.rowspanFor(this.cell)) {
+        return;
+      }
+      if (this.cellIndexFor(cell) > this.cellIndexFor(this.cell) + this.colspanFor(this.cell)) {
+        return;
+      }
+      this.setColspanFor(this.cell, this.colspanFor(this.cell) + this.colspanFor(cell));
+      return cell.remove();
+    };
+
+    TableEditor.prototype.decreaseColspan = function() {
+      var newCell;
+      if (this.colspanFor(this.cell) === 1) {
+        return;
+      }
+      this.setColspanFor(this.cell, this.colspanFor(this.cell) - 1);
+      newCell = $("<" + (this.cell.get(0).tagName) + ">").html(this.cellContent);
+      this.setRowspanFor(newCell, this.rowspanFor(this.cell));
+      return this.cell.after(newCell);
+    };
+
+    TableEditor.prototype.increaseRowspan = function() {
+      var match, nextRow, sig;
+      sig = this.cellSignatureFor(this.cell);
+      nextRow = this.row.nextAll('tr')[sig.height - 1];
+      if (nextRow && (match = this.findCellByOptionsFor(nextRow, {
+        left: sig.left,
+        width: sig.width
+      }))) {
+        this.setRowspanFor(this.cell, sig.height + match.height);
+        return match.cell.remove();
+      }
+    };
+
+    TableEditor.prototype.decreaseRowspan = function() {
+      var match, newCell, nextRow, sig;
+      sig = this.cellSignatureFor(this.cell);
+      if (sig.height === 1) {
+        return;
+      }
+      nextRow = this.row.nextAll('tr')[sig.height - 2];
+      if (match = this.findCellByOptionsFor(nextRow, {
+        left: sig.left,
+        forceAdjacent: true
+      })) {
+        newCell = $("<" + (this.cell.get(0).tagName) + ">").html(this.cellContent);
+        this.setColspanFor(newCell, this.colspanFor(this.cell));
+        this.setRowspanFor(this.cell, sig.height - 1);
+        if (match.direction === 'before') {
+          return match.cell.before(newCell);
+        } else {
+          return match.cell.after(newCell);
+        }
+      }
+    };
+
+    TableEditor.prototype.getColumnCount = function() {
+      return this.columnsFor(this.table.find('thead tr:first-child, tbody tr:first-child, tfoot tr:first-child').first().find('td, th'));
+    };
+
+    TableEditor.prototype.getRowCount = function() {
+      return this.table.find('tr').length;
+    };
+
+    TableEditor.prototype.cellIndexFor = function(cell) {
+      var aboveCell, aboveRow, columns, index, row, rowsAbove, _i, _j, _len, _len1, _ref, _ref1;
+      cell = $(cell);
+      row = cell.parent('tr');
+      columns = this.columnsFor(row.find('td, th'));
+      index = this.columnsFor(cell.prevAll('td, th'));
+      if (columns < this.columnCount) {
+        rowsAbove = 0;
+        _ref = row.prevAll('tr');
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          aboveRow = _ref[_i];
+          rowsAbove += 1;
+          _ref1 = $(aboveRow).find('td[rowspan], th[rowspan]');
+          for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+            aboveCell = _ref1[_j];
+            if (this.rowspanFor(aboveCell) > rowsAbove && this.cellIndexFor(aboveCell) <= index) {
+              index += this.colspanFor(aboveCell);
+            }
+          }
+        }
+      }
+      return index;
+    };
+
+    TableEditor.prototype.cellSignatureFor = function(cell) {
+      var sig;
+      sig = {
+        cell: $(cell)
+      };
+      sig.left = this.cellIndexFor(cell);
+      sig.width = this.colspanFor(cell);
+      sig.height = this.rowspanFor(cell);
+      sig.right = sig.left + sig.width;
+      return sig;
+    };
+
+    TableEditor.prototype.findCellByOptionsFor = function(row, options) {
+      var cell, prev, sig, _i, _len, _ref;
+      _ref = $(row).find('td, th');
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        cell = _ref[_i];
+        sig = this.cellSignatureFor(cell);
+        if (typeof options.right !== 'undefined') {
+          if (sig.right === options.right) {
+            return sig;
+          }
+        }
+        if (typeof options.left !== 'undefined') {
+          if (options.width) {
+            if (sig.left === options.left && sig.width === options.width) {
+              return sig;
+            }
+          } else if (!options.forceAdjacent) {
+            if (sig.left === options.left) {
+              return sig;
+            }
+          } else if (options.forceAdjacent) {
+            if (sig.left > options.left) {
+              prev = $(cell).prev('td, th');
+              if (prev.length) {
+                sig = this.cellSignatureFor(prev);
+                sig.direction = 'after';
+              } else {
+                sig.direction = 'before';
+              }
+              return sig;
+            }
+          }
+        }
+      }
+      if (options.forceAdjacent) {
+        sig.direction = 'after';
+        return sig;
+      }
+      return null;
+    };
+
+    TableEditor.prototype.findCellByIntersectionFor = function(row, signature) {
+      var cell, sig, _i, _len, _ref;
+      _ref = $(row).find('td, th');
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        cell = _ref[_i];
+        sig = this.cellSignatureFor(cell);
+        if (sig.right - signature.left >= 0 && sig.right > signature.left) {
+          return sig;
+        }
+      }
+      return null;
+    };
+
+    TableEditor.prototype.columnsFor = function(cells) {
+      var cell, count, _i, _len;
+      count = 0;
+      for (_i = 0, _len = cells.length; _i < _len; _i++) {
+        cell = cells[_i];
+        count += this.colspanFor(cell);
+      }
+      return count;
+    };
+
+    TableEditor.prototype.colspanFor = function(cell) {
+      return parseInt($(cell).attr('colspan'), 10) || 1;
+    };
+
+    TableEditor.prototype.rowspanFor = function(cell) {
+      return parseInt($(cell).attr('rowspan'), 10) || 1;
+    };
+
+    TableEditor.prototype.setColspanFor = function(cell, value) {
+      return $(cell).attr('colspan', value > 1 ? value : null);
+    };
+
+    TableEditor.prototype.setRowspanFor = function(cell, value) {
+      return $(cell).attr('rowspan', value > 1 ? value : null);
+    };
+
+    return TableEditor;
+
+  })();
+
+}).call(this);
+(function() {
   var __slice = [].slice;
 
-  this.Mercury || (this.Mercury = {});
-
-  Mercury.I18n = {
+  (this.Mercury || (this.Mercury = {})).I18n = {
     __locales__: {},
     define: function(name, mapping) {
       return this.__locales__[name] = mapping;
@@ -404,9 +820,7 @@ Copyright (c) 2013 Jeremy Jackson
 (function() {
   var __slice = [].slice;
 
-  this.Mercury || (this.Mercury = {});
-
-  Mercury.Logger = {
+  (this.Mercury || (this.Mercury = {})).Logger = {
     logPrefix: 'Mercury:',
     log: function() {
       var args, _ref;
@@ -439,8 +853,6 @@ Copyright (c) 2013 Jeremy Jackson
 
 }).call(this);
 (function() {
-
-  this.Mercury || (this.Mercury = {});
 
   Mercury.Module = (function() {
     var moduleKeywords;
@@ -510,8 +922,6 @@ Copyright (c) 2013 Jeremy Jackson
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
     __slice = [].slice;
 
-  this.Mercury || (this.Mercury = {});
-
   Mercury.Action = (function(_super) {
 
     __extends(Action, _super);
@@ -558,9 +968,7 @@ Copyright (c) 2013 Jeremy Jackson
 (function() {
   var __slice = [].slice;
 
-  this.Mercury || (this.Mercury = {});
-
-  Mercury.Config = {
+  (this.Mercury || (this.Mercury = {})).Config = {
     get: function(path) {
       var config, part, _i, _len, _ref;
       config = Mercury.configuration || (Mercury.configuration = {});
@@ -612,9 +1020,7 @@ Copyright (c) 2013 Jeremy Jackson
 (function() {
   var __slice = [].slice;
 
-  this.Mercury || (this.Mercury = {});
-
-  Mercury.Events = {
+  (this.Mercury || (this.Mercury = {})).Events = {
     on: function(events, handler) {
       var calls, name, _i, _len;
       events = events.split(' ');
@@ -686,9 +1092,7 @@ Copyright (c) 2013 Jeremy Jackson
 }).call(this);
 (function() {
 
-  this.Mercury || (this.Mercury = {});
-
-  Mercury.Stack = {
+  (this.Mercury || (this.Mercury = {})).Stack = {
     included: function() {
       this.stackPosition = 0;
       this.maxStackLength = 200;
@@ -728,8 +1132,6 @@ Copyright (c) 2013 Jeremy Jackson
 (function() {
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
-
-  this.Mercury || (this.Mercury = {});
 
   Mercury.Model = (function(_super) {
 
@@ -937,8 +1339,6 @@ Copyright (c) 2013 Jeremy Jackson
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
     __slice = [].slice;
-
-  this.Mercury || (this.Mercury = {});
 
   registered = {};
 
@@ -1280,8 +1680,6 @@ Copyright (c) 2013 Jeremy Jackson
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
     __slice = [].slice;
 
-  this.Mercury || (this.Mercury = {});
-
   Mercury.View = (function(_super) {
 
     __extends(View, _super);
@@ -1534,8 +1932,6 @@ Copyright (c) 2013 Jeremy Jackson
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
     __slice = [].slice;
-
-  this.Mercury || (this.Mercury = {});
 
   Mercury.Region = (function(_super) {
 
@@ -5917,10 +6313,5 @@ Copyright (c) 2013 Jeremy Jackson
   JST['/mercury/templates/table'] || (JST['/mercury/templates/table'] = function() {
     return "<form class=\"form-horizontal\">\n  <div class=\"form-inputs\">\n\n    <fieldset id=\"table_display\">\n      <div class=\"control-group optional\">\n        <div class=\"controls\">\n          <table border=\"1\" cellspacing=\"0\">\n            <tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>\n            <tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>\n            <tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>\n          </table>\n        </div>\n      </div>\n    </fieldset>\n\n    <fieldset>\n      <div class=\"control-group buttons optional\">\n        <label class=\"buttons optional control-label\">Rows</label>\n        <div class=\"controls btn-group\">\n          <button class=\"btn\" data-action=\"addRowBefore\">Add Before</button>\n          <button class=\"btn\" data-action=\"addRowAfter\">Add After</button>\n          <button class=\"btn\" data-action=\"removeRow\">Remove</button>\n        </div>\n      </div>\n      <div class=\"control-group buttons optional\">\n        <label class=\"buttons optional control-label\">Columns</label>\n        <div class=\"controls btn-group\">\n          <button class=\"btn\" data-action=\"addColumnBefore\">Add Before</button>\n          <button class=\"btn\" data-action=\"addColumnAfter\">Add After</button>\n          <button class=\"btn\" data-action=\"removeColumn\">Remove</button>\n        </div>\n      </div>\n\n      <hr/>\n\n      <div class=\"control-group buttons optional\">\n        <label class=\"buttons optional control-label\">Row Span</label>\n        <div class=\"controls btn-group\">\n          <button class=\"btn\" data-action=\"increaseRowspan\">+</button>\n          <button class=\"btn\" data-action=\"decreaseRowspan\">-</button>\n        </div>\n      </div>\n      <div class=\"control-group buttons optional\">\n        <label class=\"buttons optional control-label\">Column Span</label>\n        <div class=\"controls btn-group\">\n          <button class=\"btn\" data-action=\"increaseColspan\">+</button>\n          <button class=\"btn\" data-action=\"decreaseColspan\">-</button>\n        </div>\n      </div>\n    </fieldset>\n\n    <fieldset>\n      <legend>Options</legend>\n      <div class=\"control-group select optional\">\n        <label class=\"select optional control-label\" for=\"table_alignment\">Alignment</label>\n        <div class=\"controls\">\n          <select class=\"select optional\" id=\"table_alignment\" name=\"table[alignment]\">\n            <option value=\"\">None</option>\n            <option value=\"right\">Right</option>\n            <option value=\"left\">Left</option>\n          </select>\n        </div>\n      </div>\n      <div class=\"control-group number optional\">\n        <label class=\"number optional control-label\" for=\"table_border\">Border</label>\n        <div class=\"controls\">\n          <input class=\"span1 number optional\" id=\"table_border\" name=\"table[border]\" size=\"50\" type=\"number\" value=\"1\">\n        </div>\n      </div>\n      <div class=\"control-group number optional\">\n        <label class=\"number optional control-label\" for=\"table_spacing\">Spacing</label>\n        <div class=\"controls\">\n          <input class=\"span1 number optional\" id=\"table_spacing\" name=\"table[spacing]\" size=\"50\" type=\"number\" value=\"0\">\n        </div>\n      </div>\n    </fieldset>\n\n  </div>\n  <div class=\"form-actions\">\n    <input class=\"btn btn-primary\" name=\"commit\" type=\"submit\" value=\"Insert Table\"/>\n  </div>\n</form>";
   });
-
-}).call(this);
-(function() {
-
-
 
 }).call(this);

@@ -1,4 +1,4 @@
-#= require mercury/utility/table_editor
+#= require mercury/core/utility/table_editor
 
 describe "Mercury.TableEditor", ->
 

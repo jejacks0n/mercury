@@ -1,7 +1,6 @@
 #= require mercury/core/view
 #= require mercury/core/stack
 #= require mercury/core/action
-@Mercury ||= {}
 
 class Mercury.Region extends Mercury.View
   @extend  Mercury.Config

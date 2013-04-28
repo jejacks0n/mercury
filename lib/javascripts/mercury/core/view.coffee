@@ -3,7 +3,6 @@
 #= require mercury/core/i18n
 #= require mercury/core/logger
 #= require mercury/core/module
-@Mercury ||= {}
 
 class Mercury.View extends Mercury.Module
   @include Mercury.Config

@@ -1,5 +1,5 @@
 #= require spec_helper
-#= require mercury/extensions/number
+#= require mercury/core/extensions/number
 
 describe "Number", ->
 

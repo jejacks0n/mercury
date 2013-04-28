@@ -1,3 +1,5 @@
+#= require_self
+#
 # Templates (at the top so the can be removed/changed).
 #------------------------------------------------------------------------------
 #= require mercury/templates/interface
@@ -7,11 +9,12 @@
 #= require mercury/templates/statusbar
 #= require mercury/templates/uploader
 #
-# Core library / utility.
+# Core library, extensions and utility.
 #------------------------------------------------------------------------------
-#= require mercury/extensions/number
-#= require mercury/extensions/object
-#= require mercury/extensions/string
+#= require mercury/core/extensions/number
+#= require mercury/core/extensions/object
+#= require mercury/core/extensions/string
+#= require mercury/core/utility/table_editor
 #= require mercury/core/action
 #= require mercury/core/config
 #= require mercury/core/events
@@ -23,14 +26,13 @@
 #= require mercury/core/region
 #= require mercury/core/view
 #
-# View modules/Views.
+# View modules, and views.
 #------------------------------------------------------------------------------
 #= require mercury/views/modules/form_handler.coffee
 #= require mercury/views/modules/interface_focusable.coffee
 #= require mercury/views/modules/scroll_propagation.coffee
 #= require mercury/views/modules/toolbar_dialog.coffee
 #= require mercury/views/modules/visibility_toggleable.coffee
-#
 #= require mercury/views/base_interface
 #= require mercury/views/frame_interface
 #= require mercury/views/lightview
@@ -77,3 +79,7 @@
 #= require mercury/plugins/notes_plugin
 #= require mercury/plugins/styles_plugin
 #= require mercury/plugins/table_plugin
+#
+# Define Namespace.
+#------------------------------------------------------------------------------
+@Mercury ||= {}

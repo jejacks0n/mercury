@@ -1,4 +1,4 @@
-#= require mercury/extensions/number
+#= require mercury/core/extensions/number
 #= require mercury/core/model
 
 class Mercury.Model.File extends Mercury.Model

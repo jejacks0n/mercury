@@ -1,5 +1,5 @@
 #= require spec_helper
-#= require mercury/extensions/string
+#= require mercury/core/extensions/string
 
 describe "String", ->
 

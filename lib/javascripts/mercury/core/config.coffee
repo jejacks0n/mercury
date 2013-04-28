@@ -1,6 +1,4 @@
-@Mercury ||= {}
-
-Mercury.Config =
+(@Mercury ||= {}).Config =
 
   # Get a configuration value by path. Locates a configuration property by using a colon delimited string (a path).
   # Returns undefined if nothing was found.

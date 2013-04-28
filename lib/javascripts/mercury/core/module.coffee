@@ -1,5 +1,3 @@
-@Mercury ||= {}
-
 class Mercury.Module
 
   # Reserved method names.

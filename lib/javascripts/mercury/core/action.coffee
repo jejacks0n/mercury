@@ -1,7 +1,6 @@
 #= require mercury/core/i18n
 #= require mercury/core/logger
 #= require mercury/core/module
-@Mercury ||= {}
 
 class Mercury.Action extends Mercury.Module
   @include Mercury.I18n

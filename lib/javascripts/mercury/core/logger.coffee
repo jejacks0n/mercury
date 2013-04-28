@@ -1,6 +1,4 @@
-@Mercury ||= {}
-
-Mercury.Logger =
+(@Mercury ||= {}).Logger =
 
   logPrefix: 'Mercury:'
 

@@ -1,4 +1,4 @@
-#= require mercury/extensions/number
+#= require mercury/core/extensions/number
 
 String::trim = ->
   @replace(/^\s+|\s+$/g, '')

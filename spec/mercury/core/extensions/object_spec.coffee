@@ -1,5 +1,5 @@
 #= require spec_helper
-#= require mercury/extensions/object
+#= require mercury/core/extensions/object
 
 describe "Object", ->
 

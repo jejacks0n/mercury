@@ -1,7 +1,6 @@
-#= require mercury/extensions/string
-@Mercury ||= {}
+#= require mercury/core/extensions/string
 
-Mercury.I18n =
+(@Mercury ||= {}).I18n =
 
   __locales__: {}
 

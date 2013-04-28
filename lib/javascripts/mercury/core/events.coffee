@@ -1,6 +1,4 @@
-@Mercury ||= {}
-
-Mercury.Events =
+(@Mercury ||= {}).Events =
 
   # Binds to an event. Pass an event name (or space delimited events) and a handler. In general mimicking jQuery style
   # events.

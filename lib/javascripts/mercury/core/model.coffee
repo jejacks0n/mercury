@@ -3,7 +3,6 @@
 #= require mercury/core/logger
 #= require mercury/core/stack
 #= require mercury/core/module
-@Mercury ||= {}
 
 class Mercury.Model extends Mercury.Module
   @extend  Mercury.Config

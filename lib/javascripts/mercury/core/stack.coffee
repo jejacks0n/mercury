@@ -1,6 +1,4 @@
-@Mercury ||= {}
-
-Mercury.Stack =
+(@Mercury ||= {}).Stack =
 
   # When included as a module this method is called and will setup the required instance variables. You can override the
   # maxStackLength by setting it in your constructor.

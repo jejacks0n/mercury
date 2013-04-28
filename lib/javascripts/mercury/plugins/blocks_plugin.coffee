@@ -24,11 +24,11 @@ Plugin = Mercury.registerPlugin 'blocks'
 
 
   bindTo: (view) ->
-    view.on 'block:picked', (value) => @triggerAction(value)
+    view.on('block:picked', (value) => @triggerAction(value))
 
 
   insert: (name, value) ->
-    Mercury.trigger('action', name, "#{value}")
+    Mercury.trigger('action', name, value)
 
 
 class Plugin.Select extends Mercury.ToolbarSelect

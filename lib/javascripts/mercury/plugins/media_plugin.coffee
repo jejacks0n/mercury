@@ -3,7 +3,8 @@ Plugin = Mercury.registerPlugin 'media'
   version: '1.0.0'
 
   actions:
-    link: 'insert'
+    image: 'insertImage'
+    html: 'insertHtml'
 
   events:
     'mercury:edit:media': 'showDialog'
@@ -18,10 +19,20 @@ Plugin = Mercury.registerPlugin 'media'
 
 
   bindTo: (view) ->
-    view.on('form:submitted', (value) -> console.debug(value))
+    view.on('form:submitted', (value) => @triggerAction(value))
 
 
-  insert: ->
+  insertImage: (name, value) ->
+    return @insertHtml(name, value) unless value.type == 'image'
+    Mercury.trigger('action', name, value)
+
+
+  insertHtml: (name, value) ->
+    if value.type == 'image'
+      value = """<img src="#{value.src}"/>"""
+    else
+      value = """<iframe src="#{value.src}" width="#{value.width}" height="#{value.height}" frameborder="0" allowFullScreen></iframe>"""
+    Mercury.trigger('action', 'html', value)
 
 
 class Plugin.Modal extends Mercury.Modal
@@ -29,6 +40,74 @@ class Plugin.Modal extends Mercury.Modal
   className: 'mercury-media-dialog'
   title:     'Media Manager'
   width:     600
+  events:
+    'change .control-label input': 'onLabelChecked'
+    'focus .controls [name]': 'onInputFocused'
+
+  onLabelChecked: (e) ->
+    $el = $(e.target)
+    inputId = $el.closest('.control-label').attr('for')
+    $el.closest('.control-group').find("##{inputId}").focus()
+
+
+  onInputFocused: (e) ->
+    $el = $(e.target)
+    $el.closest('.control-group').find('input[type=radio]').prop('checked', true)
+    return if $el.closest('.media-options').length
+
+    @$('.media-options').hide()
+    @$("##{$el.attr('id').replace('media_', '')}_options").show()
+    @resize(true)
+
+
+  validate: ->
+    super
+    type = @$('input[name=media_type]:checked').val()
+    $el = @$("#media_#{type}")
+    if $el.val()
+      switch type
+        when 'youtube_url' then @addInputError($el, "is invalid") unless /^https?:\/\/youtu.be\//.test($el.val())
+        when 'vimeo_url' then @addInputError($el, "is invalid") unless /^https?:\/\/youtu.be\//.test($el.val())
+    else
+      @addInputError($el, "can't be blank")
+    @resize(false)
+
+
+  onSubmit: ->
+    @validate()
+    type = @$('input[name=media_type]:checked').val()
+    $el = @$("#media_#{type}")
+    url = $el.val()
+    switch type
+      when 'youtube_url'
+        attrs =
+          type: 'youtube'
+          protocol: if /^https:/.test(url) then 'https' else 'http'
+          width: parseInt(@$('#media_youtube_width').val(), 10) || 560
+          height: parseInt(@$('#media_youtube_height').val(), 10) || 349
+          share: url
+          code: url.replace(/^https?:\/\/youtu.be\//, '')
+        attrs.src = "#{attrs.protocol}://www.youtube-nocookie.com/embed/#{attrs.code}?rel=0&wmode=transparent"
+      when 'vimeo_url'
+        attrs =
+          type: 'vimeo'
+          protocol: if /^https:/.test(url) then 'https' else 'http'
+          width: parseInt(@$('#media_vimeo_width').val(), 10) || 400
+          height: parseInt(@$('#media_vimeo_height').val(), 10) || 225
+          share: url
+          code: url.replace(/^https?:\/\/vimeo.com\//, '')
+        attrs.src = "#{attrs.protocol}://player.vimeo.com/video/#{attrs.code}?title=1&byline=1&portrait=0&color=ffffff"
+      else # image
+        attrs =
+          type: 'image'
+          protocol: if /^https:/.test(url) then 'https' else 'http'
+          src: url
+          url: url
+          align: @$('#media_image_alignment').val()
+          float: @$('#media_image_float').val()
+
+    @trigger('form:submitted', attrs)
+    @hide()
 
 
 @JST ||= {}

@@ -19,7 +19,7 @@ Plugin = Mercury.registerPlugin 'styles'
 
 
   bindTo: (view) ->
-    view.on 'style:picked', (value) => @triggerAction(value)
+    view.on('style:picked', (value) => @triggerAction(value))
 
 
   insert: (name, value) ->

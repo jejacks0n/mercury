@@ -1,18 +1,17 @@
 #= require mercury/core/plugin
 #= require_self
 #= require mercury/views/modal
-#= require mercury/views/toolbar_palette
-#= require mercury/plugins/character_plugin
+#= require mercury/plugins/media_plugin
 
 Mercury.registerPlugin ||= Mercury.Plugin.register if Mercury.Plugin
 
-describe "Mercury.Plugin.Character", ->
+describe "Mercury.Plugin.Media", ->
 
   Klass = null
   subject = null
 
   beforeEach ->
-    Klass = Mercury.Plugin.get('character')
-    subject = Mercury.Plugin.get('character', true)
+    Klass = Mercury.Plugin.get('media')
+    subject = Mercury.Plugin.get('media', true)
 
   it "needs to be tested"

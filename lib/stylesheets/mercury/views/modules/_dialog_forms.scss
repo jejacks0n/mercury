@@ -75,7 +75,7 @@ $dialog_input_color: #555555;
     @include mercury-font(10pt);
     display: inline-block;
     padding: 4px;
-    margin-bottom: 1px;
+    margin: 2px 0;
     color: $dialog_input_color;
   }
 
@@ -130,7 +130,7 @@ $dialog_input_color: #555555;
   input[type="file"] {
     width: auto;
     max-width: 100%;
-    height: 25px;
+    height: 28px;
     line-height: 28px;
   }
 

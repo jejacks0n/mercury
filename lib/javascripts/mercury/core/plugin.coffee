@@ -253,8 +253,11 @@ class Mercury.Plugin.Definition
   # it will not effect the global options. This tracks changes that may have been made to configuration along the way.
   # Returns the options as a cloned object.
   #
-  signature: ->
-    $.extend({}, @options, config: @configuration)
+  signature: (functions = true) ->
+    sig = $.extend({}, @options, config: @configuration)
+    if !functions then for name, value of sig
+      delete sig[name] if typeof(value) == 'function'
+    sig
 
 
   # Provides an interface to configuration much like the global Mercury.config. Provide a path, and the configuration

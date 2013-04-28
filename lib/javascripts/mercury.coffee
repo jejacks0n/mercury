@@ -41,7 +41,9 @@ Mercury.Region.Markdown.addToolbar 'block', block: ['Block', plugin: 'blocks']
 # todo:
 #   add better support for sizing the toolbar down / add small version / provide aloha like behavior.
 #   adjust all places where the uploader is instantiated to use the configuration.
+#   fix bug with modal/lightview not changing height on update.
 #   port jQuery.extend into module so we can use that within instances (which is where it's mostly used).
+#   start working on the mercury-rails engine so it's easier to write plugins that use a server.
 #   migrate existing locale content into new locales and document missing values.
 #   make region use the shadow dom if possible/configured to do so.
 #   spend some time making what's in work really well on ios.

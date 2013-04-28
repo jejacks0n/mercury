@@ -54,7 +54,7 @@ describe "Mercury.Plugin", ->
       @definition = Klass.register('foo', foo: 'bar')
 
     it "returns all the registered plugin definitions", ->
-      expect( Klass.all() ).to.eql(foo: @definition)
+      expect( Klass.all()['foo'] ).to.eql(@definition)
 
 
   describe ".unregister", ->
@@ -64,7 +64,7 @@ describe "Mercury.Plugin", ->
 
     it "removes the definition from the list of registered plugin definitions", ->
       Klass.unregister('foo')
-      expect( Klass.all() ).to.eql({})
+      expect( Klass.all()['foo'] ).to.be.undefined
 
     it "throws an error if there's no plugin with that name", ->
       expect(-> Klass.unregister('bar') ).to.throw('unable to locate the bar plugin')
@@ -387,7 +387,8 @@ describe "Mercury.Plugin.Definition", ->
   beforeEach ->
     Mercury.configure 'logging', true
     class Klass extends Mercury.Plugin.Definition
-    subject = new Klass(name: 'definition', config: {foo: 'bar'})
+    @func = ->
+    subject = new Klass(name: 'definition', config: {foo: 'bar'}, func: @func)
 
   describe "#constructor", ->
 
@@ -401,7 +402,8 @@ describe "Mercury.Plugin.Definition", ->
   describe "#signature", ->
 
     it "returns a clone of the @options", ->
-      expect( subject.signature() ).to.eql(name: 'definition', config: {foo: 'bar'})
+      expect( subject.signature() ).to.eql(name: 'definition', config: {foo: 'bar'}, func: @func)
+      expect( subject.signature(false) ).to.eql(name: 'definition', config: {foo: 'bar'})
 
 
   describe "#config", ->

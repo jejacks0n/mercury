@@ -36,6 +36,7 @@ class Mercury.Region.Image extends Mercury.Region
 
 
 Mercury.Region.Image.addToolbar
+
   general:
     crop:        ['Crop Image']
     resize:      ['Resize Image']

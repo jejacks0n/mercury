@@ -29,9 +29,9 @@ jQuery ->
   # (which should be provided by you and in the dom), and if the iframe isn't available the standard non-iframe
   # interface will be used.
   #
-  # For more information about the Mercury API, you might want to check the developer_toolbar in examples. It contains
+  # For more information about the Mercury API, you might want to check the developer_interface in examples. It contains
   # examples for creating / releasing / deleting dynamic regions, saving, toggling the interface, keeping Mercury
-  # focused, how you can use the Mercury Core library as a framework to build a custom interface etc.
+  # focused, how you can use the Mercury Core library as a framework to build a custom interface, and more.
   Mercury.init(frame: '#mercury_frame')
 
 
@@ -40,7 +40,6 @@ Mercury.Region.Markdown.addToolbar 'block', block: ['Block', plugin: 'blocks']
 
 # todo:
 #   add better support for sizing the toolbar down / add small version / provide aloha like behavior.
-#   adjust all places where the uploader is instantiated to use the configuration.
 #   fix bug with modal/lightview not changing height on update.
 #   port jQuery.extend into module so we can use that within instances (which is where it's mostly used).
 #   start working on the mercury-rails engine so it's easier to write plugins that use a server.

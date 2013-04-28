@@ -132,6 +132,7 @@ class Mercury.Region.Gallery extends Mercury.Region
 
 
 Mercury.Region.Gallery.addToolbar
+
   general:
     prev:       ['Previous Slide']
     next:       ['Next Slide']

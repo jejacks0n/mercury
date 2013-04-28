@@ -59,6 +59,7 @@ class Mercury.Region.Plain extends Mercury.Region
 
 
 Mercury.Region.Plain.addToolbar
+
   decoration:
     bold:          ['Bold']
     italic:        ['Italicize']

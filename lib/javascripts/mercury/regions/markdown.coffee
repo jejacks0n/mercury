@@ -105,6 +105,7 @@ class Mercury.Region.Markdown extends Mercury.Region
 
 
 Mercury.Region.Markdown.addToolbar
+
   defined:
     style:         ['Style', plugin: 'styles']
   headings:

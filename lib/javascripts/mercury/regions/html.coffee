@@ -64,6 +64,7 @@ class Mercury.Region.Html extends Mercury.Region
 
 
 Mercury.Region.Html.addToolbar
+
   defined:
     style:         ['Style', plugin: 'styles']
     sep:           ' '

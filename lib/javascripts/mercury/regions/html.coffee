@@ -29,8 +29,8 @@ class Mercury.Region.Html extends Mercury.Region
     super
 
 
-  onDropFile: (files, options) ->
-    uploader = new Mercury.Uploader(files, mimeTypes: @config('regions:html:mimeTypes'))
+  onDropFile: (files) ->
+    uploader = new Mercury[@config('interface:uploader')](files, mimeTypes: @config('regions:html:mimeTypes'))
     uploader.on 'uploaded', (file) =>
       @focus()
       @handleAction('file', file)

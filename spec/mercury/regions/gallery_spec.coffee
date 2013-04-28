@@ -12,6 +12,7 @@ describe "Mercury.Region.Gallery", ->
 
   beforeEach ->
     Mercury.configure 'regions:identifier', 'id'
+    Mercury.configure 'interface:uploader', 'Uploader'
     subject = new Klass('<div id="foo">')
 
   it "is defined correctly", ->

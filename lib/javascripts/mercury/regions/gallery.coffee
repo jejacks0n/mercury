@@ -101,7 +101,7 @@ class Mercury.Region.Gallery extends Mercury.Region
 
 
   onDropFile: (files) ->
-    uploader = new Mercury.Uploader(files, mimeTypes: @config('regions:gallery:mimeTypes'))
+    uploader = new Mercury[@config('interface:uploader')](files, mimeTypes: @config('regions:gallery:mimeTypes'))
     uploader.on 'uploaded', (file) =>
       @focus()
       @handleAction('file', file)

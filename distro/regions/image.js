@@ -49,7 +49,7 @@ serialization to the server.
     Image.prototype.onDropFile = function(files) {
       var uploader,
         _this = this;
-      uploader = new Mercury.Uploader(files, {
+      uploader = new Mercury[this.config('interface:uploader')](files, {
         mimeTypes: this.config('regions:image:mimeTypes')
       });
       return uploader.on('uploaded', function(file) {

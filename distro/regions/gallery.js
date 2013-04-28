@@ -150,7 +150,7 @@ also takes into account undo/redo support using the keyboard or buttons.
     Gallery.prototype.onDropFile = function(files) {
       var uploader,
         _this = this;
-      uploader = new Mercury.Uploader(files, {
+      uploader = new Mercury[this.config('interface:uploader')](files, {
         mimeTypes: this.config('regions:gallery:mimeTypes')
       });
       return uploader.on('uploaded', function(file) {

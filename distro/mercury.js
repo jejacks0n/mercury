@@ -1207,10 +1207,23 @@ Copyright (c) 2013 Jeremy Jackson
       registered[this.name] = this;
     }
 
-    Definition.prototype.signature = function() {
-      return $.extend({}, this.options, {
+    Definition.prototype.signature = function(functions) {
+      var name, sig, value;
+      if (functions == null) {
+        functions = true;
+      }
+      sig = $.extend({}, this.options, {
         config: this.configuration
       });
+      if (!functions) {
+        for (name in sig) {
+          value = sig[name];
+          if (typeof value === 'function') {
+            delete sig[name];
+          }
+        }
+      }
+      return sig;
     };
 
     Definition.prototype.config = function(path) {
@@ -5128,7 +5141,7 @@ Copyright (c) 2013 Jeremy Jackson
       });
     },
     insert: function(name, value) {
-      return Mercury.trigger('action', name, "" + value);
+      return Mercury.trigger('action', name, value);
     }
   });
 
@@ -5572,7 +5585,8 @@ Copyright (c) 2013 Jeremy Jackson
     description: 'Provides interface for inserting and editing media.',
     version: '1.0.0',
     actions: {
-      link: 'insert'
+      image: 'insertImage',
+      html: 'insertHtml'
     },
     events: {
       'mercury:edit:media': 'showDialog',
@@ -5587,11 +5601,25 @@ Copyright (c) 2013 Jeremy Jackson
       return this.bindTo(new Plugin.Modal());
     },
     bindTo: function(view) {
+      var _this = this;
       return view.on('form:submitted', function(value) {
-        return console.debug(value);
+        return _this.triggerAction(value);
       });
     },
-    insert: function() {}
+    insertImage: function(name, value) {
+      if (value.type !== 'image') {
+        return this.insertHtml(name, value);
+      }
+      return Mercury.trigger('action', name, value);
+    },
+    insertHtml: function(name, value) {
+      if (value.type === 'image') {
+        value = "<img src=\"" + value.src + "\"/>";
+      } else {
+        value = "<iframe src=\"" + value.src + "\" width=\"" + value.width + "\" height=\"" + value.height + "\" frameborder=\"0\" allowFullScreen></iframe>";
+      }
+      return Mercury.trigger('action', 'html', value);
+    }
   });
 
   Plugin.Modal = (function(_super) {
@@ -5609,6 +5637,96 @@ Copyright (c) 2013 Jeremy Jackson
     Modal.prototype.title = 'Media Manager';
 
     Modal.prototype.width = 600;
+
+    Modal.prototype.events = {
+      'change .control-label input': 'onLabelChecked',
+      'focus .controls [name]': 'onInputFocused'
+    };
+
+    Modal.prototype.onLabelChecked = function(e) {
+      var $el, inputId;
+      $el = $(e.target);
+      inputId = $el.closest('.control-label').attr('for');
+      return $el.closest('.control-group').find("#" + inputId).focus();
+    };
+
+    Modal.prototype.onInputFocused = function(e) {
+      var $el;
+      $el = $(e.target);
+      $el.closest('.control-group').find('input[type=radio]').prop('checked', true);
+      if ($el.closest('.media-options').length) {
+        return;
+      }
+      this.$('.media-options').hide();
+      this.$("#" + ($el.attr('id').replace('media_', '')) + "_options").show();
+      return this.resize(true);
+    };
+
+    Modal.prototype.validate = function() {
+      var $el, type;
+      Modal.__super__.validate.apply(this, arguments);
+      type = this.$('input[name=media_type]:checked').val();
+      $el = this.$("#media_" + type);
+      if ($el.val()) {
+        switch (type) {
+          case 'youtube_url':
+            if (!/^https?:\/\/youtu.be\//.test($el.val())) {
+              this.addInputError($el, "is invalid");
+            }
+            break;
+          case 'vimeo_url':
+            if (!/^https?:\/\/youtu.be\//.test($el.val())) {
+              this.addInputError($el, "is invalid");
+            }
+        }
+      } else {
+        this.addInputError($el, "can't be blank");
+      }
+      return this.resize(false);
+    };
+
+    Modal.prototype.onSubmit = function() {
+      var $el, attrs, type, url;
+      this.validate();
+      type = this.$('input[name=media_type]:checked').val();
+      $el = this.$("#media_" + type);
+      url = $el.val();
+      switch (type) {
+        case 'youtube_url':
+          attrs = {
+            type: 'youtube',
+            protocol: /^https:/.test(url) ? 'https' : 'http',
+            width: parseInt(this.$('#media_youtube_width').val(), 10) || 560,
+            height: parseInt(this.$('#media_youtube_height').val(), 10) || 349,
+            share: url,
+            code: url.replace(/^https?:\/\/youtu.be\//, '')
+          };
+          attrs.src = "" + attrs.protocol + "://www.youtube-nocookie.com/embed/" + attrs.code + "?rel=0&wmode=transparent";
+          break;
+        case 'vimeo_url':
+          attrs = {
+            type: 'vimeo',
+            protocol: /^https:/.test(url) ? 'https' : 'http',
+            width: parseInt(this.$('#media_vimeo_width').val(), 10) || 400,
+            height: parseInt(this.$('#media_vimeo_height').val(), 10) || 225,
+            share: url,
+            code: url.replace(/^https?:\/\/vimeo.com\//, '')
+          };
+          attrs.src = "" + attrs.protocol + "://player.vimeo.com/video/" + attrs.code + "?title=1&byline=1&portrait=0&color=ffffff";
+          break;
+        default:
+          attrs = {
+            type: 'image',
+            protocol: /^https:/.test(url) ? 'https' : 'http',
+            src: url,
+            url: url,
+            align: this.$('#media_image_alignment').val(),
+            float: this.$('#media_image_float').val()
+          };
+      }
+      this.trigger('form:submitted', attrs);
+      return this.hide();
+    };
 
     return Modal;
 
@@ -5755,7 +5873,7 @@ Copyright (c) 2013 Jeremy Jackson
       link: 'insert'
     },
     events: {
-      'mercury:edit:media': 'showDialog',
+      'mercury:edit:table': 'showDialog',
       'button:click': 'showDialog'
     },
     registerButton: function() {

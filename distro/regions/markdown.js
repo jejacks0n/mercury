@@ -99,7 +99,7 @@ via Ajax.
     Markdown.prototype.onDropFile = function(files) {
       var uploader,
         _this = this;
-      uploader = new Mercury.Uploader(files, {
+      uploader = new Mercury[this.config('interface:uploader')](files, {
         mimeTypes: this.config('regions:markdown:mimeTypes')
       });
       return uploader.on('uploaded', function(file) {

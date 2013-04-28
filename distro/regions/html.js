@@ -45,10 +45,10 @@ Dependencies:
       Html.__super__.constructor.apply(this, arguments);
     }
 
-    Html.prototype.onDropFile = function(files, options) {
+    Html.prototype.onDropFile = function(files) {
       var uploader,
         _this = this;
-      uploader = new Mercury.Uploader(files, {
+      uploader = new Mercury[this.config('interface:uploader')](files, {
         mimeTypes: this.config('regions:html:mimeTypes')
       });
       return uploader.on('uploaded', function(file) {

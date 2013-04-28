@@ -172,7 +172,7 @@ This file contains all of the required css for the Mercury interface as well as 
   font-size: 10pt;
   display: inline-block;
   padding: 4px;
-  margin-bottom: 1px;
+  margin: 2px 0;
   color: #555555;
 }
 /* line 97, ../../lib/stylesheets/mercury/views/modules/_dialog_forms.scss */
@@ -257,7 +257,7 @@ This file contains all of the required css for the Mercury interface as well as 
 .mercury-dialog input[type="file"] {
   width: auto;
   max-width: 100%;
-  height: 25px;
+  height: 28px;
   line-height: 28px;
 }
 /* line 137, ../../lib/stylesheets/mercury/views/modules/_dialog_forms.scss */

@@ -1,0 +1,39 @@
+mercury {
+  .mercury-toolbar .mercury-toolbar-button[data-type="table"]:before {
+    content: 'L';
+  }
+  .mercury-table-modal {
+    .form-horizontal {
+      .control-label {
+        width: 100px;
+      }
+      .controls, hr {
+        margin-left: 110px;
+      }
+    }
+    .form-actions {
+      clear: left;
+    }
+    fieldset {
+      float: left;
+      width: 350px;
+      &.table-control {
+        width: 146px;
+        height: 219px;
+        margin-right: 20px;
+        overflow: auto;
+      }
+    }
+    table {
+      width: 100%;
+      border: 1px solid #333;
+      border-collapse: collapse;
+      th, td {
+        border: 1px solid #666;
+      }
+      .selected {
+        background: $primary_color;
+      }
+    }
+  }
+}

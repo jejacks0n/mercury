@@ -37,7 +37,7 @@ Plugin = Mercury.registerPlugin 'media'
 
 class Plugin.Modal extends Mercury.Modal
   template:  'media'
-  className: 'mercury-media-dialog'
+  className: 'mercury-media-modal'
   title:     'Media Manager'
   width:     600
   events:

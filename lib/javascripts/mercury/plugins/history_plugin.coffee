@@ -8,7 +8,7 @@ Plugin = Mercury.registerPlugin 'history'
 
 class Plugin.Panel extends Mercury.Panel
   template:  'history'
-  className: 'mercury-history-dialog'
+  className: 'mercury-history-panel'
   title:     'Page Version History'
   width:     250
   hidden:    true

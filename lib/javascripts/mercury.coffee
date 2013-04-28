@@ -46,6 +46,7 @@ Mercury.Region.Markdown.addToolbar 'block', block: ['Block', plugin: 'blocks']
 #   migrate existing locale content into new locales and document missing values.
 #   make region use the shadow dom if possible/configured to do so.
 #   spend some time making what's in work really well on ios.
+#   make table/media/link plugins use custom actions.
 #   better strategy for snippet management/removal -- focusable with toolbar buttons would be nice, combined with a lesser toolbar in line? (drag handle on hover, etc?)
 #   figure out how to better integrate snippets.
 #   can we make editing content within snippets work?
@@ -53,7 +54,8 @@ Mercury.Region.Markdown.addToolbar 'block', block: ['Block', plugin: 'blocks']
 #   html: selections are a little wonky on undo/redo still, and sometimes in firefox they're not applying because the checksum doesn't validate.
 # todo regions:
 #   add list region (sort of like workflowy)
+#   add table region (sort of like a spreadsheet, but with no math -- maybe math?)
 #   add canvas region (save/load as base64 image)
 #   add more control to image region (resize, crop)
 #   finish html region
-#   polish markdown region (if you're not dead from the html reigon)
+#   polish markdown region (if you're not dead from the html region)

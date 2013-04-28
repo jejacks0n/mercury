@@ -8,7 +8,7 @@ Plugin = Mercury.registerPlugin 'notes'
 
 class Plugin.Panel extends Mercury.Panel
   template:  'notes'
-  className: 'mercury-notes-dialog'
+  className: 'mercury-notes-panel'
   title:     'Page Notes'
   width:     250
   hidden:    true

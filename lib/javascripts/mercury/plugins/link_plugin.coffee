@@ -26,7 +26,7 @@ Plugin = Mercury.registerPlugin 'link'
 
 class Plugin.Modal extends Mercury.Modal
   template:  'link'
-  className: 'mercury-link-dialog'
+  className: 'mercury-link-modal'
   title:     'Link Manager'
   width:     600
   elements:
@@ -151,13 +151,13 @@ JST['/mercury/templates/link'] ||= ->
         <div class="control-group number optional">
           <label class="number optional control-label" for="link_popup_width">Popup Width</label>
           <div class="controls">
-            <input class="span2 number optional" id="link_popup_width" name="link[popup_width]" type="number" value="960" tabindex="1">
+            <input class="number optional" id="link_popup_width" name="link[popup_width]" type="number" value="960" tabindex="1">
           </div>
         </div>
         <div class="control-group number optional">
           <label class="number optional control-label" for="link_popup_height">Popup Height</label>
           <div class="controls">
-            <input class="span2 number optional" id="link_popup_height" name="link[popup_height]" type="number" value="800" tabindex="1">
+            <input class="number optional" id="link_popup_height" name="link[popup_height]" type="number" value="800" tabindex="1">
           </div>
         </div>
       </div>

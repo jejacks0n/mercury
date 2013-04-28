@@ -1,14 +1,29 @@
 class Mercury.TableEditor
 
-  constructor: (@table, @cell = null, @cellContent = '') ->
-    @load(@table, @cell, @cellContent) if @table
+  constructor: (@table, @cellContent = '') ->
+    @load(@table) if @table
 
 
-  load: (@table, @cell = null, @cellContent = '') ->
-    @cell ||= $(@table.find('th, td')[0])
+  load: (@table, cellContent) ->
+    @cellContent = cellContent if cellContent
+    @setCell()
     @row = @cell.parent('tr')
     @columnCount = @getColumnCount()
     @rowCount = @getRowCount()
+
+
+  setCell: (@cell = null) ->
+    @table.find('.selected').removeAttr('class')
+    @cell = @cell.closest('td, th') if @cell
+    @cell ||= @table.find('th, td').first()
+    @cell.addClass('selected')
+
+
+  asHtml: (cellContent = '') ->
+    table = @table.clone()
+    table.find('.selected').removeAttr('class')
+    table.find('td, th').html(cellContent)
+    $('<div>').html(table).html().replace(/^\s+|\n/gm, '').replace(/(<\/.*?>|<table.*?>|<tbody>|<tr>)/g, '$1\n')
 
 
   addColumnBefore: ->

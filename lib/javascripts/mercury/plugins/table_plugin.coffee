@@ -3,7 +3,7 @@ Plugin = Mercury.registerPlugin 'table'
   version: '1.0.0'
 
   actions:
-    link: 'insert'
+    html: 'insert'
 
   events:
     'mercury:edit:table': 'showDialog'
@@ -18,100 +18,107 @@ Plugin = Mercury.registerPlugin 'table'
 
 
   bindTo: (view) ->
-    view.on('form:submitted', (value) -> console.debug(value))
+    view.on('form:submitted', (value) => @triggerAction(value))
 
 
-  insert: ->
+  insert: (name, value) ->
+    Mercury.trigger('action', name, value)
+
 
 
 class Plugin.Modal extends Mercury.Modal
   template:  'table'
-  className: 'mercury-table-dialog'
+  className: 'mercury-table-modal'
   title:     'Table Manager'
   width:     600
+  elements:
+    table: 'table'
+  events:
+    'click table': 'onCellClick'
+    'click [data-action]': 'onActionClick'
+
+  update: ->
+    super
+    @editor = new Mercury.TableEditor(@$table, '&nbsp;')
+
+
+  onCellClick: (e) ->
+    @editor.setCell($(e.target))
+
+
+  onActionClick: (e) ->
+    @prevent(e)
+    @editor[$(e.target).closest('[data-action]').data('action')]()
+
+
+  onSubmit: ->
+    @trigger('form:submitted', @editor.asHtml('<br/>'))
+    @hide()
 
 
 @JST ||= {}
 JST['/mercury/templates/table'] ||= ->
   """
   <form class="form-horizontal">
-    <div class="form-inputs">
 
-      <fieldset id="table_display">
-        <div class="control-group optional">
-          <div class="controls">
-            <table border="1" cellspacing="0">
-              <tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
-              <tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
-              <tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
-            </table>
-          </div>
-        </div>
-      </fieldset>
+    <fieldset class="table-control">
+      <table>
+        <tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+        <tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+        <tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+      </table>
+    </fieldset>
 
-      <fieldset>
-        <div class="control-group buttons optional">
-          <label class="buttons optional control-label">Rows</label>
-          <div class="controls btn-group">
-            <button class="btn" data-action="addRowBefore">Add Before</button>
-            <button class="btn" data-action="addRowAfter">Add After</button>
-            <button class="btn" data-action="removeRow">Remove</button>
-          </div>
+    <fieldset>
+      <div class="control-group buttons optional">
+        <label class="buttons optional control-label">Rows</label>
+        <div class="controls btn-group">
+          <button class="btn" data-action="addRowBefore">Before</button>
+          <button class="btn" data-action="addRowAfter">After</button>
+          <button class="btn" data-action="removeRow">Remove</button>
         </div>
-        <div class="control-group buttons optional">
-          <label class="buttons optional control-label">Columns</label>
-          <div class="controls btn-group">
-            <button class="btn" data-action="addColumnBefore">Add Before</button>
-            <button class="btn" data-action="addColumnAfter">Add After</button>
-            <button class="btn" data-action="removeColumn">Remove</button>
-          </div>
+      </div>
+      <div class="control-group buttons optional">
+        <label class="buttons optional control-label">Columns</label>
+        <div class="controls btn-group">
+          <button class="btn" data-action="addColumnBefore">Before</button>
+          <button class="btn" data-action="addColumnAfter">After</button>
+          <button class="btn" data-action="removeColumn">Remove</button>
         </div>
+      </div>
 
-        <hr/>
+      <hr/>
 
-        <div class="control-group buttons optional">
-          <label class="buttons optional control-label">Row Span</label>
-          <div class="controls btn-group">
-            <button class="btn" data-action="increaseRowspan">+</button>
-            <button class="btn" data-action="decreaseRowspan">-</button>
-          </div>
+      <div class="control-group buttons optional">
+        <label class="buttons optional control-label">Row Span</label>
+        <div class="controls btn-group">
+          <button class="btn" data-action="increaseRowspan">+</button>
+          <button class="btn" data-action="decreaseRowspan">-</button>
         </div>
-        <div class="control-group buttons optional">
-          <label class="buttons optional control-label">Column Span</label>
-          <div class="controls btn-group">
-            <button class="btn" data-action="increaseColspan">+</button>
-            <button class="btn" data-action="decreaseColspan">-</button>
-          </div>
+      </div>
+      <div class="control-group buttons optional">
+        <label class="buttons optional control-label">Column Span</label>
+        <div class="controls btn-group">
+          <button class="btn" data-action="increaseColspan">+</button>
+          <button class="btn" data-action="decreaseColspan">-</button>
         </div>
-      </fieldset>
+      </div>
+    </fieldset>
 
-      <fieldset>
-        <legend>Options</legend>
-        <div class="control-group select optional">
-          <label class="select optional control-label" for="table_alignment">Alignment</label>
-          <div class="controls">
-            <select class="select optional" id="table_alignment" name="table[alignment]">
-              <option value="">None</option>
-              <option value="right">Right</option>
-              <option value="left">Left</option>
-            </select>
-          </div>
+    <fieldset>
+      <legend>Options</legend>
+      <div class="control-group select optional">
+        <label class="select optional control-label" for="table_alignment">Alignment</label>
+        <div class="controls">
+          <select class="select optional" id="table_alignment" name="table[align]">
+            <option value="">None</option>
+            <option value="right">Right</option>
+            <option value="left">Left</option>
+          </select>
         </div>
-        <div class="control-group number optional">
-          <label class="number optional control-label" for="table_border">Border</label>
-          <div class="controls">
-            <input class="span1 number optional" id="table_border" name="table[border]" size="50" type="number" value="1">
-          </div>
-        </div>
-        <div class="control-group number optional">
-          <label class="number optional control-label" for="table_spacing">Spacing</label>
-          <div class="controls">
-            <input class="span1 number optional" id="table_spacing" name="table[spacing]" size="50" type="number" value="0">
-          </div>
-        </div>
-      </fieldset>
+      </div>
+    </fieldset>
 
-    </div>
     <div class="form-actions">
       <input class="btn btn-primary" name="commit" type="submit" value="Insert Table"/>
     </div>

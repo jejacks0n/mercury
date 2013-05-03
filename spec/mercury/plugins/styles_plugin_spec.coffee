@@ -1,6 +1,6 @@
 #= require mercury/core/plugin
 #= require_self
-#= require mercury/views/toolbar_palette
+#= require mercury/views/toolbar_select
 #= require mercury/plugins/styles_plugin
 
 Mercury.registerPlugin ||= Mercury.Plugin.register if Mercury.Plugin

@@ -1,19 +1,19 @@
-Mercury Editor2
-===============
+Mercury Editor 2
+================
 
-Mercury2 is a WYSIWYG editor, and takes a different approach than any editor out there. Mercury2 has the same features as it's predecessor, but is more structured, and provides a full framework in which you can more easily create complex regions and interfaces.
+Mercury Editor is a web based WYSIWYG editor, and takes a different approach than any editor out there. It provides a full framework in which you can more easily create complex regions and interfaces. In Mercury Editor regions dictate it's toolbars, buttons, and context for highlighting buttons. This simplifies the configuration, and provides more flexibility in terms of defining your own custom functionality that doesn't fit into the standard Mercury Editor features.
 
-Regions dictate toolbars, buttons, what actions they support, and context for highlighting buttons. This simplifies the configuration, and provides more flexibility in terms of defining your own custom functionality that doesn't fit into the default Mercury features. Check out the gallery region for an example of this.
+Mercury Editor also provides a comprehensive plugin architecture. Plugins makes additional functionality easier to write, test, and maintain -- and allows a more consistent way to provide it to others.
 
 
 ## Developer Notice
 
-This branch represents the future version of Mercury Editor. This iteration of Mercury Editor (Mercury2) separates the Rails portions from the Javascript portions of the project. Rails is still used for development (for a server, coffeescript, sass, build process etc.) but the Rails Engine has been moved to [mercury-rails](https://github.com/jejacks0n/mercury-rails) -- this enables more functionality, and to serve as an example of how to implement functionality like snippets and image uploading/resizing. If you're interested in integrating Mercury with your own platform, this is the best place to start.
+This branch represents the future version of Mercury Editor. This iteration of Mercury Editor (Mercury2) separates the Rails portions from the Javascript portions of the project. Rails is still used for development (for a server, coffeescript, sass, build process etc.) but the Rails Engine has been moved to [mercury-rails](https://github.com/jejacks0n/mercury-rails) -- this enables more functionality, and to serve as an example of how to implement functionality like snippets and image uploading/resizing. If you're interested in integrating Mercury2 with your own platform, this is the best place to start.
 
 
 ## Examples
 
-Mercury2 comes with several examples of how to integrate more complex features. Check the examples for usage examples and how to sandbox using an iframe, and for more complex integrations check `developer_toolbar.coffee`, which outlines many of the events and API, and `adding_functionality.coffee` which has examples of how to add your own toolbars and actions.
+There's [several examples](https://github.com/jejacks0n/mercury/tree/mercury2/examples) of how to integrate more complex features directly in the project, and the [gallery region](https://github.com/jejacks0n/mercury/blob/mercury2/lib/javascripts/mercury/regions/gallery.coffee) is a good place to start reading if you're planning on writing custom regions. There's an example for how to [sandbox using an iframe](https://github.com/jejacks0n/mercury/blob/mercury2/examples/frame.haml) and for more complex integrations check the [developer interface example](https://github.com/jejacks0n/mercury/blob/mercury2/examples/assets/developer_interface.coffee) which outlines many of the events and API, and if you're planning on adding functionality there's some examples of [how to add your own toolbars and actions, or write simple plugins](https://github.com/jejacks0n/mercury/blob/mercury2/examples/assets/adding_functionality.coffee).
 
 An example of server integration is available in the [mercury-rails](https://github.com/jejacks0n/mercury-rails) project, which outlines all of the features that are needed by the server to fully work with the default regions.
 
@@ -29,7 +29,7 @@ Mercury2 also now has support for moving it's interface into a [Shadow DOM](http
 
 ## Fonts & Graphics
 
-Mercury uses two custom fonts for all graphic elements in the interface. This allows for retina support, makes it easier to package, and allows you to modify it for your own needs.
+Mercury2 uses two custom fonts for all graphic elements in the interface. This allows for retina support, makes it easier to package, and allows you to modify it for your own needs.
 
 The primary toolbar icons and general interface elements are in mercury.ttf, which is generated using the awesome [IcoMoon project](http://icomoon.io/app/) (by [Keyamoon](https://twitter.com/keyamoon)). You can upload/import the mercury.dev.svg file that can be found in the project and add new icons for your custom buttons. If you're making a plugin you probably want to bundle these separately.
 
@@ -46,7 +46,7 @@ Translations and contributors:
 - German ([poke](https://github.com/poke))
 - Spanish ([javiercr](https://github.com/javiercr))
 - French ([adamantx](https://github.com/adamantx))
-- Italian ([gcastagneti](https://github.com/gcastagnet))
+- Italian ([gcastagneti](https://github.com/gcastagnet) / [eymengunay](https://github.com/eymengunay))
 - Korean ([dorajistyle](https://github.com/dorajistyle))
 - Dutch ([kieranklaassen](https://github.com/kieranklaassen))
 - Polish ([cintrzyk](https://github.com/cintrzyk))
@@ -59,37 +59,12 @@ Translations and contributors:
 
 ## Dependencies
 
-This version of Mercury is being built using jQuery 1.9.1/2.0, but attempts to minimize reliance on jQuery as much as is feasible, and near the end there may be a pass to remove things like $.extend. Selections in HTML regions are handled using Rangy. Each region can also have it's own dependencies, which is entirely up to the author. If you're writing a custom region it's expected to document the dependencies and version information. Check `lib/javascripts/mercury/dependencies.coffee` for a full list of dependencies.
+Mercury2 was built using jQuery 1.9.1/2.0, but attempts to minimize reliance on jQuery as much as is feasible. Selections in HTML regions are handled using Rangy. Each region can also have it's own dependencies, which is entirely up to the author. If you're writing a custom region it's expected to document the dependencies and version information. You can also check the [full list of dependencies](https://github.com/jejacks0n/mercury/blob/mercury2/lib/javascripts/mercury/dependencies.coffee).
 
 
-## Development
+## Contributing
 
-Clone using git
-```shell
-git clone https://github.com/jejacks0n/mercury
-git checkout mercury2
-```
-
-Install required gems
-```shell
-bundle install
-```
-
-Run specs / build distro on passing specs
-```shell
-bundle exec rake
-```
-
-Run specs with coverage reports
-```shell
-bundle exec teabag --coverage
-```
-
-### Contributing
-
-Awesome! Just fork the project, follow the steps above (modifying the repo to reflect your own). Write code + specs, making sure all the specs pass, push, and then submit a pull request.
-
-I'm looking to form a team or organization of like minded individuals who are willing to and can contribute to Mercury Editor and grow the community. I enjoy writing code alone, but I also enjoy the benefits of teamwork and other peoples ideas. If you're interested drop me a line, and I'll add you to the mailing list. This invitation isn't solely for developers and extends to designers, translators, support people, or anyone who thinks there's something to learn from contributing to open source. Those that contribute regularly will be invited to the mailing list and will get commit rights.
+Awesome! Please [check here](https://github.com/jejacks0n/mercury/blob/mercury2/CONTRIBUTING.md).
 
 
 ## Known issues

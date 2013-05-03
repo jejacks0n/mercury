@@ -81,11 +81,16 @@ describe "Mercury.Module", ->
       subject::__handlers__ = foo: 'bar'
       spyOn($, 'extend')
       new subject()
-      expect( $.extend ).calledWith({}, subject::__handlers__)
+      expect( $.extend ).calledWith(true, {}, subject::__handlers__)
 
     it "doesn't call init if it's not a function", ->
       subject::init = 'foo'
       new subject(1, 2, 3)
+
+    it "triggers an init event if it can", ->
+      subject::trigger = spy()
+      new subject()
+      expect( subject::trigger ).calledWith('init')
 
 
   describe "#proxy", ->

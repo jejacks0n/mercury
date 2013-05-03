@@ -14,8 +14,8 @@ class Mercury.Toolbar extends Mercury.View
     'mercury:interface:show': 'show'
     'mercury:region:focus': 'onRegionFocus'
     'mousedown': 'onMousedown'
-    'mouseup': (e) -> @prevent(e, true)
-    'click': (e) -> @prevent(e, true)
+    'mouseup': 'preventStop'
+    'click': 'preventStop'
 
   build: ->
     @append(new Mercury.ToolbarItem('primary', 'container', @config("toolbars:primary")))

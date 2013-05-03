@@ -105,6 +105,25 @@ describe "Mercury.Toolbar", ->
       expect( subject.height() ).to.eq(42)
 
 
+  describe "#onMousedown", ->
+
+    beforeEach ->
+      @e = preventDefault: spy()
+      spyOn(Mercury, 'trigger')
+
+    it "prevents the default event", ->
+      subject.onMousedown(@e)
+      expect( @e.preventDefault ).called
+
+    it "triggers a global dialogs:hide event", ->
+      subject.onMousedown(@e)
+      expect( Mercury.trigger ).calledWith('dialogs:hide')
+
+    it "triggers a global focus event", ->
+      subject.onMousedown(@e)
+      expect( Mercury.trigger ).calledWith('focus')
+
+
   describe "#onRegionFocus", ->
 
     beforeEach ->

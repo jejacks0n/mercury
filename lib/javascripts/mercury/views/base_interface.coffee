@@ -156,7 +156,7 @@ class Mercury.BaseInterface extends Mercury.View
 
 
   mask: ->
-    return unless @config('interface:mask')
+    return unless @config('interface:maskable')
     @$mask.show()
 
 

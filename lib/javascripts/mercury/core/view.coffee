@@ -172,6 +172,12 @@ class Mercury.View extends Mercury.Module
     e.stopPropagation() if stop
 
 
+  # Event handler that will prevent and stop an event from propagating. This calls through to #prevent.
+  #
+  preventStop: (e) ->
+    @prevent(e, true)
+
+
   # Releases the instance and triggers a release event. Releasing a view removes the element from the DOM, and removes
   # all event listeners including those that have been added externally.
   #

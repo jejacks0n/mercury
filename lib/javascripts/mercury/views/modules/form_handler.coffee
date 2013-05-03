@@ -5,7 +5,7 @@ Mercury.View.Modules.FormHandler =
 
 
   buildFormHandler: ->
-    @delegateEvents('submit': 'onFormSubmit')
+    @delegateEvents('submit': @onFormSubmit)
 
 
   validate: ->

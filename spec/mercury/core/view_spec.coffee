@@ -316,6 +316,14 @@ describe "Mercury.View", ->
       subject.prevent(false)
 
 
+  describe "#preventStop", ->
+
+    it "calls #prevent", ->
+      spyOn(subject, 'prevent')
+      subject.preventStop('_e_')
+      expect( subject.prevent ).calledWith('_e_', true)
+
+
   describe "#release", ->
 
     it "triggers a release event", ->

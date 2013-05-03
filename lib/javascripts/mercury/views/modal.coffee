@@ -22,12 +22,13 @@ class Mercury.Modal extends Mercury.View
     title: '.mercury-modal-dialog-title span'
 
   @events:
-    'mercury:interface:hide': -> @hide()
-    'mercury:interface:resize': (dimensions) -> @resize(false, dimensions)
-    'mercury:modals:hide': -> @hide()
-    'click .mercury-modal-dialog-title em': -> @hide()
+    'mercury:interface:hide': 'hide'
+    'mercury:interface:resize': 'resize'
+    'mercury:modals:hide': 'hide'
+    'click .mercury-modal-dialog-title em': 'hide'
 
   primaryTemplate: 'modal'
+  releaseOnHide: true
 
   constructor: (@options = {}) ->
     @options.template ||= @template
@@ -67,6 +68,9 @@ class Mercury.Modal extends Mercury.View
 
 
   resize: (animate = true, dimensions) ->
+    if typeof(animate) == 'object'
+      dimensions = animate
+      animate = false
     clearTimeout(@showContentTimeout)
     @addClass('mercury-no-animation') unless animate
     @$contentContainer.css(height: 'auto')
@@ -102,31 +106,6 @@ class Mercury.Modal extends Mercury.View
       @$content.css(opacity: 1)
 
 
-  show: (update = true) ->
-    return if @visible
-    Mercury.trigger('blur')
-    Mercury.trigger('modals:hide')
-    @trigger('show')
-    clearTimeout(@visibilityTimout)
-    @visible = true
-    @$el.show()
-    @visibilityTimout = @delay 50, ->
-      @css(opacity: 1)
-      @update() if update
-
-
-  hide: (release = false) ->
-    return if !@visible && !release
-    Mercury.trigger('focus')
-    @trigger('hide')
-    clearTimeout(@visibilityTimout)
-    @visible = false
-    @css(opacity: 0)
-    @visibilityTimout = @delay 250, ->
-      @$el.hide()
-      @release() if release
-
-
   appendTo: ->
     @log(@t('appending to mercury interface instead'))
     super(Mercury.interface)
@@ -135,3 +114,12 @@ class Mercury.Modal extends Mercury.View
   release: ->
     return @hide(true) if @visible
     super
+
+
+  onShow: ->
+    Mercury.trigger('blur')
+    Mercury.trigger('modals:hide')
+
+
+  onHide: ->
+    Mercury.trigger('focus')

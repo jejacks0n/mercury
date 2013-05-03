@@ -18,24 +18,26 @@ Mercury.View.Modules.VisibilityToggleable =
 
 
   show: (update = true) ->
-    return false if @visible
+    return if @visible
     @trigger('show')
     clearTimeout(@visibilityTimout)
+    @onShow?()
     @visible = true
     @$el.show()
     @visibilityTimout = @delay 50, ->
       @css(opacity: 1)
-      @update?() if update
-    return true
+      @update?() if update && typeof(update) == 'boolean'
 
 
-  hide: (release = false) ->
-    return false unless @visible
+  hide: (release) ->
+    return unless @visible
+    release = null unless typeof(release) == 'boolean'
+    release ?= @releaseOnHide
     @trigger('hide')
     clearTimeout(@visibilityTimout)
+    @onHide?()
     @visible = false
     @css(opacity: 0)
     @visibilityTimout = @delay 250, ->
       @$el.hide()
       @release() if release
-    return true

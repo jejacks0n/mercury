@@ -15,10 +15,10 @@ class Mercury.Lightview extends Mercury.Modal
     title: '.mercury-lightview-dialog-title span'
 
   @events:
-    'mercury:interface:hide': -> @hide()
-    'mercury:interface:resize': (dimensions) -> @resize(false, dimensions)
-    'mercury:modals:hide': -> @hide()
-    'click .mercury-lightview-dialog-title em': -> @hide()
+    'mercury:interface:hide': 'hide'
+    'mercury:interface:resize': 'resize'
+    'mercury:modals:hide': 'hide'
+    'click .mercury-lightview-dialog-title em': 'hide'
 
   primaryTemplate: 'lightview'
 
@@ -27,7 +27,10 @@ class Mercury.Lightview extends Mercury.Modal
     @$dialog.css(marginTop: ($(window).height() - 75) / 2)
 
 
-  resize: (animate = true, dimensions) ->
+  resize: (animate = true, dimensions = null) ->
+    if typeof(animate) == 'object'
+      dimensions = animate
+      animate = false
     clearTimeout(@showContentTimeout)
     @addClass('mercury-no-animation') unless animate
     @$contentContainer.css(height: 'auto')

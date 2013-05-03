@@ -15,7 +15,7 @@ Mercury.configuration =
   #
   logging:
     enabled    : false
-    notifier   : 'console'                                 # error, console, or alert.
+    notifier   : 'console'                                 # error, console, or alert
 
 
   # Localization
@@ -43,6 +43,18 @@ Mercury.configuration =
     maxSize    : 5242880                                   # max size - 5.00 Mb
 
 
+  # Saving
+  # Saving uses the Page model and can be dependent on the server API. These options are merged with the ajax options
+  # when saved, which allows configuring the ajax request per page. You can provide a custom Page.prototype.save method,
+  # or ou can adjust this configuration by using Mercury.config('saving:url', '/path/for/this/page').
+  #
+  saving:
+    enabled    : true
+    url        : '/mercury/save'                           # save url
+    method     : 'POST'                                    # save method - can be POST or PUT
+    contentType: 'application/json'                        # content type - set to null to use standard form submission
+
+
   # Templates
   # By default Mercury provides all templates as JST templates that are loaded statically, however to provide more
   # flexibility if a template isn't found locally, a synchronous ajax request will be made to the server to fetch the
@@ -50,7 +62,7 @@ Mercury.configuration =
   #
   templates:
     enabled    : true
-    prefixUrl  : '/mercury/templates'                      # ajax path prefix for fallback JST templates.
+    prefixUrl  : '/mercury/templates'                      # ajax path prefix for fallback JST templates
 
 
   # Interface
@@ -129,7 +141,7 @@ Mercury.configuration =
     #= require mercury/regions/gallery
     #
     gallery:
-      mimeTypes: ['image/jpeg']                            # file types - overrides general uploading configuration.
+      mimeTypes: ['image/jpeg']                            # file types - overrides general uploading configuration
 
     # The HTML region is a full HTML5 Content Editable region -- a true WYSIWYG experience. Effort has been made to
     # normalize, and keep things consistent, but the nature of it is complex and should be treated as such. There's an
@@ -141,7 +153,7 @@ Mercury.configuration =
     #= require mercury/regions/html
     #
     html:
-      mimeTypes: false                                     # file types - overrides general uploading to allow anything.
+      mimeTypes: false                                     # file types - overrides general uploading to allow anything
 
     # The image region is typically an image tag and what's sent back to the server on serialization is the source of
     # that image. It allows draging/dropping images onto itself, and maintains a history so you can undo/redo your
@@ -150,7 +162,7 @@ Mercury.configuration =
     #= require mercury/regions/gallery
     #
     image:
-      mimeTypes: ['image/jpeg']                            # file types - overrides general uploading configuration.
+      mimeTypes: ['image/jpeg']                            # file types - overrides general uploading configuration
 
     # Markdown provides an easy way to provide some markup abilities without the exposing the ability to edit complex
     # HTML. Use the markdown sent to the server on save to render the content when not editing, and render the markdown
@@ -160,11 +172,11 @@ Mercury.configuration =
     #= require mercury/regions/markdown
     #
     markdown:
-      autoSize : true                                      # the region will auto-resize to the content within it.
-      mimeTypes: false                                     # file types - overrides general uploading to allow anything.
-      wrapping : true                                      # enables/disables soft line wrapping.
-      sanitize : false                                     # sanitize the output - ignore any html that has been input.
-      breaks   : true                                      # enable line breaks - new lines will become line breaks.
+      autoSize : true                                      # the region will auto-resize to the content within it
+      mimeTypes: false                                     # file types - overrides general uploading to allow anything
+      wrapping : true                                      # enables/disables soft line wrapping
+      sanitize : false                                     # sanitize the output - ignore any html that has been input
+      breaks   : true                                      # enable line breaks - new lines will become line breaks
 
     # The Plain region is a simplified single line HTML5 Content Editable region. It restricts paste, drag/drop, and
     # only provides the ability to do some common actions like bold, italics, and underline. This is a useful region for
@@ -185,6 +197,6 @@ Mercury.configuration =
     #= require mercury/regions/text
     #
     text:
-      autoSize : true                                      # the region will auto-resize to the content within it.
-      stripTags: true                                      # strip html when saving/previewing (keeps it only text).
-      wrapping : false                                     # enables/disables soft line wrapping.
+      autoSize : true                                      # the region will auto-resize to the content within it
+      stripTags: true                                      # strip html when saving/previewing (keeps it only text)
+      wrapping : false                                     # enables/disables soft line wrapping

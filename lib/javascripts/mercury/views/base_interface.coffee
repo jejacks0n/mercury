@@ -1,4 +1,5 @@
 #= require mercury/core/view
+#= require mercury/models/page
 
 class Mercury.BaseInterface extends Mercury.View
 
@@ -10,6 +11,7 @@ class Mercury.BaseInterface extends Mercury.View
     mask: '.mercury-interface-mask'
 
   @events:
+    'mercury:save': 'save'
     'mercury:focus': 'focusActiveRegion'
     'mercury:action': 'focusActiveRegion'
     'mercury:blur': 'blurActiveRegion'
@@ -31,6 +33,7 @@ class Mercury.BaseInterface extends Mercury.View
 
     super
 
+    @page = new Mercury.Model.Page()
     @regions ||= []
     $(window).on('beforeunload', @onUnload)
     $(window).on('resize', @onResize)
@@ -200,14 +203,18 @@ class Mercury.BaseInterface extends Mercury.View
     @toolbar.release()
     @statusbar.release()
     $(window).off('resize', @resize)
-    while @regions.length
-      @regions.shift().release()
+    @regions.shift().release() while @regions.length
     super
 
 
-
-  save: ->
+  serialize: ->
     data = {}
     for region in @regions
       data[region.name] = region.toJSON(true)
     data
+
+
+  save: ->
+    @page.set(content: @serialize(), location: location.pathname)
+    @page.on('error', (xhr, options) => alert(@t('Mercury was unable to save to the url: %s', options.url)))
+    @page.save().always = => @delay(250, -> Mercury.trigger('save:complete'))

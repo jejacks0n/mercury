@@ -132,6 +132,14 @@ describe "Mercury.Model", ->
       expect( subject.cid ).to.eq('c1')
 
 
+  describe "#url", ->
+
+    it "calls the constructor url", ->
+      spyOn(Klass, 'url', -> '_url_')
+      expect( subject.url() ).to.eql('_url_')
+      expect( Klass.url ).calledWith(subject)
+
+
   describe "#validate", ->
 
     it "returns nothing and is a placeholder", ->
@@ -140,35 +148,51 @@ describe "Mercury.Model", ->
 
   describe "#save", ->
 
+    beforeEach ->
+      spyOn($, 'ajax')
+
+
     it "returns false if not valid", ->
       spyOn(subject, 'isValid', -> false)
       expect( subject.save() ).to.be.false
 
     it "creates an ajax request", ->
-      spyOn($, 'ajax')
       subject.save(url: '/some/path', foo: 'bar', error: null, success: null)
       expect( $.ajax ).calledWith
-        foo     : 'bar'
-        method  : 'POST'
-        url     : '/some/path'
-        accepts : 'application/json'
-        cache   : false
-        data    : {}
-        success : null
-        error   : null
+        foo: 'bar'
+        method: 'POST'
+        url: '/some/path'
+        dataType: 'json'
+        contentType: 'application/json; charset=utf-8'
+        cache: false
+        data: '{}'
+        success: null
+        error: null
+
+    it "calls the #url method", ->
+      spyOn(subject, 'url')
+      subject.save()
+      expect( subject.url ).called
 
     it "uses PUT when the record isn't new", ->
-      spyOn($, 'ajax')
       spyOn(subject, 'isNew', -> false)
       subject.save()
       expect( $.ajax.args[0][0]['method'] ).to.eq('PUT')
 
+    it "doesn't convert data to JSON if not a json request", ->
+      subject.save(dataType: 'html', data: {foo: 'bar'})
+      expect( $.ajax.args[0][0]['data'] ).to.eql(foo: 'bar')
+      subject.save(data: '_string_')
+      expect( $.ajax.args[1][0]['data'] ).to.eql('_string_')
+
     describe "on success", ->
 
       beforeEach ->
+        $.ajax.restore()
         @server = sinon.fakeServer.create()
         @server.respondWith('POST', '/foo', [200, {'Content-Type': 'application/json'}, '{"url": "/some/url/file.ext", "id": 42}'])
         @server.respondWith('POST', '/bar', [200, {'Content-Type': 'application/json'}, '{"url": "/some/url/file.ext"}'])
+        @server.respondWith('POST', '/raw', [200, {'Content-Type': 'application/html'}, '_html_'])
 
       it "sets the id and adds it to the collection", ->
         subject.save(url: '/foo', method: 'POST')
@@ -183,27 +207,34 @@ describe "Mercury.Model", ->
         expect( Klass.count() ).to.eq(2)
 
       it "calls set with the JSON", ->
-        subject.save(url: '/foo', method: 'POST')
+        subject.save(url: '/foo')
         spyOn(subject, 'set')
         @server.respond()
         expect( subject.set ).calledWith(id: 42, url: '/some/url/file.ext')
 
       it "triggers a save event", ->
-        subject.save(url: '/foo', method: 'POST')
+        subject.save(url: '/foo')
         spyOn(subject, 'trigger')
         @server.respond()
         expect( subject.trigger ).calledWith('save')
 
       it "calls @saveSuccess if it's defined", ->
-        subject.save(url: '/foo', method: 'POST')
+        subject.save(url: '/foo')
         subject.saveSuccess = spy()
         @server.respond()
         expect( subject.saveSuccess ).called
+
+      it "returns false if the json isn't an object", ->
+        subject.save(url: '/raw', dataType: 'text', contentType: null)
+        spyOn(subject, 'trigger')
+        @server.respond()
+        expect( subject.trigger ).not.called
 
 
     describe "on error", ->
 
       beforeEach ->
+        $.ajax.restore()
         @server = sinon.fakeServer.create()
         @server.respondWith('POST', '/foo', [500, {'Content-Type': 'application/json'}, ''])
         spyOn(subject, 'notify')

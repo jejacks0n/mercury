@@ -108,8 +108,9 @@ class @DeveloperInterface extends Mercury.View
   # the save event. In this case we simply console debug the value that would be saved.
   #
   save: ->
-    # Mercury.trigger('save')
-    console.debug(Mercury.interface.save())
+    #console.debug(Mercury.interface.serialize())
+    Mercury.trigger('save')
+    #Mercury.interface.save()
 
 
   # You can toggle the interface, which will make it appear as though Mercury isn't on the page. This can be useful for

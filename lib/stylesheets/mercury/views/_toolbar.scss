@@ -52,7 +52,7 @@ mercury .mercury-toolbar {
     height: 15px;
     border: 1px solid $toolbar_button_border_color;
     cursor: pointer;
-    &+ .mercury-toolbar-button{
+    &+ .mercury-toolbar-button {
       @include mercury-border-radius(0 2px 2px 0);
       margin-left: -1px;
     }
@@ -82,6 +82,9 @@ mercury .mercury-toolbar {
     }
     &[data-icon]:before {
       content: attr(data-icon);
+    }
+    &.mercury-loading-indicator {
+      @include mercury-loading-indicator;
     }
     &[data-type="select"] {
       width: auto;

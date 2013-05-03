@@ -92,6 +92,14 @@ class Mercury.Model extends Mercury.Module
     super
 
 
+  # Instance level url generator. This method is typically called from within save. This is here to provide instance
+  # level overrides and by default calls the class level url method.
+  # Returns the url.
+  #
+  url: ->
+    @constructor.url(@)
+
+
   # Validates the current attributes. It's expected that you add errors in your own models implementation by adding
   # error messages to @errors using:
   #
@@ -111,22 +119,27 @@ class Mercury.Model extends Mercury.Module
   save: (options = {}) ->
     return false unless @isValid()
     defaultOptions =
-      method  : if @isNew() then 'POST' else 'PUT'
-      url     : @constructor.url(@)
-      accepts : 'application/json'
-      cache   : false
-      data    : @toJSON()
-      success : (json) =>
+      method: if @isNew() then 'POST' else 'PUT'
+      url: @url()
+      dataType: 'json'
+      contentType: 'application/json; charset=utf-8'
+      cache: false
+      data: @toJSON()
+      success: (json) =>
+        return unless typeof(json) == 'object'
         @id = json.id
         @constructor.records[@id] = @ if @id
         @set(json)
-        @trigger('save')
+        @trigger('save', json)
         @saveSuccess?(arguments...)
-      error   : (xhr) =>
-        @trigger('error')
+      error: (xhr) =>
+        @trigger('error', xhr, options)
         @notify(@t('Unable to process response: %s', xhr.status))
         @saveError?(arguments...)
-    $.ajax($.extend(defaultOptions, options))
+    options = $.extend(defaultOptions, options)
+    if options.dataType == 'json' && typeof(options.data) != 'string'
+      options.data = JSON.stringify(options.data)
+    $.ajax(options)
 
 
   # Returns the attributes after being cloned.

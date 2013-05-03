@@ -29,6 +29,16 @@ class Mercury.ToolbarButton extends Mercury.View
     @determineTypes()
     super(@options)
 
+    @handleSpecial()
+
+
+  handleSpecial: ->
+    if @event == 'save' then @delegateEvents
+      'mercury:save': -> @addClass('mercury-loading-indicator')
+      'mercury:save:complete': -> @removeClass('mercury-loading-indicator')
+    if @mode == 'preview' then @delegateEvents
+      'mercury:interface:hide': -> @untoggled()
+
 
   determineAction: ->
     @action = @options.action || @name

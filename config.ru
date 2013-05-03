@@ -42,11 +42,23 @@ module Mercury
   end
 end
 
+# ----------------------------------------------------------------------------------------------------
+# ! IMPORTANT !
+#
+# Below this line is not intended as an example and is only used for regression testing / development.
+# Please don't do it like this.
+#-----------------------------------------------------------------------------------------------------
+
 class ApplicationController < ActionController::Base
   prepend_view_path Rails.application.root.join('examples')
 
   def page
     render template: params[:page] || 'index'
+  end
+
+  def save
+    puts params.to_json
+    render json: {message: 'saved successfully.'}
   end
 
   def upload
@@ -64,10 +76,17 @@ end
 
 Rails.application.initialize!
 Rails.application.routes.draw do
-  get '/(:page)' => 'application#page'
+  # rendering pages
+  match '/(:page)' => 'application#page', via: :get
 
-  get '/mercury/templates/*name' => 'application#template'
-  post '/mercury/uploads' => 'application#upload'
+  # saving pages
+  match '/mercury/save' => 'application#save', via: [:put, :post]
+
+  # rendering server side templates
+  match '/mercury/templates/*name' => 'application#template', via: :get
+
+  # uploading files
+  match '/mercury/uploads' => 'application#upload', via: :post
 end
 
 run Mercury::Application rescue nil

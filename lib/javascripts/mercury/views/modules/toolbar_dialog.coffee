@@ -8,6 +8,8 @@ Mercury.View.Modules.ToolbarDialog =
     @delegateEvents
       'mercury:dialogs:hide': -> @hide?()
       'mercury:interface:resize': 'positionAndResize'
+    @on('show', -> Mercury.trigger('interface:mask') unless @visible)
+    @on('hide', -> Mercury.trigger('interface:unmask') if @visible)
 
 
   positionAndResize: (dimensions) ->

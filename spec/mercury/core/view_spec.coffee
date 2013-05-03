@@ -8,6 +8,7 @@ describe "Mercury.View", ->
 
   beforeEach ->
     Mercury.configure 'logging', true
+    Mercury.configure 'templates:asyncFetch', true
     class Klass extends Mercury.View
     subject = new Klass()
 
@@ -45,6 +46,11 @@ describe "Mercury.View", ->
       Klass.attributes = attribute1: 'foo'
       subject = new Klass(attributes: {foo: 'bar'})
       expect( subject.attributes ).to.eql(attribute1: 'foo', foo: 'bar')
+
+    it "defaults @subViews to an array", ->
+      expect( subject.subviews ).to.eql([])
+      subject = new Klass(subviews: [1, 2])
+      expect( subject.subviews ).to.eql([1, 2])
 
     it "calls #build if one is defined", ->
       Klass::build = spy()
@@ -226,6 +232,38 @@ describe "Mercury.View", ->
       expect( subject.appendTo(@el) ).to.eq(subject.$el)
 
 
+  describe "#appendView", ->
+
+    beforeEach ->
+      @subview =
+        $el: '_$el_'
+        el: '_el_'
+
+    it "appends the view to the element we provide", ->
+      el = append: spy()
+      subject.appendView(el, @subview)
+      expect( el.append ).calledWith('_$el_')
+
+    it "tracks the view that was added", ->
+      el = append: spy()
+      subject.appendView(el, @subview)
+      expect( subject.subviews ).to.eql([@subview])
+
+    it "allows providing just the view (to append to @$el)", ->
+      @subview.$el = null
+      spyOn(subject.$el, 'append')
+      subject.appendView(@subview)
+      expect( subject.$el.append ).calledWith('_el_')
+
+    it "allows providing a selector", ->
+      subject.$el.append('<div class="subview">')
+      subject.appendView('.subview', @subview)
+      expect( subject.$el.find('.subview').html() ).to.eq('_$el_')
+
+    it "returns self", ->
+      expect( subject.appendView(@subview) ).to.eq(subject)
+
+
   describe "#delay", ->
 
     it "delays and then calls the method", ->
@@ -331,6 +369,11 @@ describe "Mercury.View", ->
       subject.release()
       expect( subject.trigger ).calledWith('release')
 
+    it "calls #releaseSubviews", ->
+      spyOn(subject, 'releaseSubviews')
+      subject.release()
+      expect( subject.releaseSubviews ).called
+
     it "removes the element", ->
       el = $('<div>').append(subject.$el)
       subject.release()
@@ -347,6 +390,23 @@ describe "Mercury.View", ->
       subject.release()
       expect( Mercury.off ).calledWith('foo', 'bar')
       expect( Mercury.off ).calledWith('bar', 'baz')
+
+
+  describe "#releaseSubviews", ->
+
+    beforeEach ->
+      @mock1 = release: spy()
+      @mock2 = release: spy()
+      subject.subviews = [@mock1, @mock2]
+
+    it "calls release on each of the subviews", ->
+      subject.releaseSubviews()
+      expect( @mock1.release ).called
+      expect( @mock2.release ).called
+
+    it "resets subviews back to an empty array", ->
+      subject.releaseSubviews()
+      expect( subject.subviews ).to.eql([])
 
 
   describe "#delegateEvents", ->

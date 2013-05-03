@@ -30,6 +30,7 @@ class Mercury.View extends Mercury.Module
     @elements = $.extend({}, @constructor.elements, @elements)
     @events = $.extend({}, @constructor.events, @events)
     @attributes = $.extend({}, @constructor.attributes, @attributes)
+    @subviews ||= []
 
     @refreshElements()
 
@@ -119,6 +120,19 @@ class Mercury.View extends Mercury.Module
     @$el
 
 
+  # Appends a view to a given element or selector and tracks the subviews so they can be released. The element should
+  # belong to the current view. You can pass just the subview and it will be appended to @$el.
+  #
+  appendView: (elOrView, view = null) ->
+    if arguments.length == 1
+      view = elOrView
+      elOrView = @$el
+    elOrView = @$(elOrView) if typeof(elOrView) == 'string'
+    elOrView.append(view.$el || view.el)
+    @subviews.push(view)
+    @
+
+
   # Delegates to setTimeout swapping the argument order, and calling the callback within our scope.
   # Returns the setTimeout so it can be cancelled.
   #
@@ -183,9 +197,18 @@ class Mercury.View extends Mercury.Module
   #
   release: ->
     @trigger('release')
+    @releaseSubviews()
     @$el.remove()
     Mercury.off(name, method) for name, method of @__global_handlers__ || {}
     @off()
+
+
+  # Releases and resets subviews. You can add subviews that will be cleaned up automatically by using the #appendView
+  # method.
+  #
+  releaseSubviews: ->
+    view.release() for view in @subviews
+    @subviews = []
 
 
   # Resolve events to methods, callbacks or global events.

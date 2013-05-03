@@ -65,14 +65,14 @@ mercury .mercury-toolbar {
     }
     &.mercury-button-active,
     &.mercury-button-pressed {
-      @include mercury-gradient($toolbar_button_active_bg_1, $toolbar_button_active_bg_2);
+      @include mercury-gradient($toolbar_button_active_bg_2, $toolbar_button_active_bg_1);
+      em,
       &:before {
         color: $toolbar_button_active_color;
         text-shadow: none;
       }
     }
-    &.mercury-button-pressed,
-    &.mercury-button-toggled {
+    &.mercury-button-pressed {
       &:before {
         top: 1px;
       }

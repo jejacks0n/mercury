@@ -21,7 +21,7 @@ class Mercury.ToolbarItem extends Mercury.View
       when 'object' then new Mercury.ToolbarItem(name, 'group', value)
       when 'string' then new Mercury.ToolbarItem(name, 'separator', value)
       when 'array'  then Mercury.ToolbarButton.create(name, value...)
-    @append(item) if item
+    @appendView(item) if item
 
 
   addClasses: ->

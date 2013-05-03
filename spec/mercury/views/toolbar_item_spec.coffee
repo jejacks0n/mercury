@@ -50,29 +50,29 @@ describe "Mercury.ToolbarItem", ->
   describe "#buildSubview", ->
 
     beforeEach ->
-      spyOn(subject, 'append')
+      spyOn(subject, 'appendView')
 
     it "appends a new group ToolbarItem if the value is an object", ->
       spyOn(Mercury, 'ToolbarItem', -> result: '_group_')
       subject.buildSubview('foo', foo: 'bar')
       expect( Mercury.ToolbarItem ).calledWith('foo', 'group', foo: 'bar')
-      expect( subject.append ).calledWith(result: '_group_')
+      expect( subject.appendView ).calledWith(result: '_group_')
 
     it "appends a new separator ToolbarItem if the value is a string", ->
       spyOn(Mercury, 'ToolbarItem', -> result: '_separator_')
       subject.buildSubview('foo', '_value_')
       expect( Mercury.ToolbarItem ).calledWith('foo', 'separator', '_value_')
-      expect( subject.append ).calledWith(result: '_separator_')
+      expect( subject.appendView ).calledWith(result: '_separator_')
 
     it "creates a new ToolbarButton if the value is an array", ->
       spyOn(Mercury.ToolbarButton, 'create', -> '_button_')
       subject.buildSubview('foo', [1, 2, 3])
       expect( Mercury.ToolbarButton.create ).calledWith('foo', 1, 2, 3)
-      expect( subject.append ).calledWith('_button_')
+      expect( subject.appendView ).calledWith('_button_')
 
     it "does nothing if the value is something like a number", ->
       subject.buildSubview('foo', 123)
-      expect( subject.append ).not.called
+      expect( subject.appendView ).not.called
 
 
   describe "#addClasses", ->

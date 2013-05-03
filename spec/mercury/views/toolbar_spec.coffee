@@ -32,14 +32,14 @@ describe "Mercury.Toolbar", ->
 
     beforeEach ->
       Mercury.configure 'toolbars:foo', foo: 'bar'
-      @mock = result: '_collection_', appendTo: spy()
-      spyOn(Mercury, 'ToolbarItem', => @mock)
+      spyOn(Mercury, 'ToolbarItem', -> inst: '_toolbar_item_')
 
     it "appends a collection ToolbarItem based on the name", ->
+      spyOn(subject, 'appendView')
       subject.$toolbar = '_toolbar_'
       subject.buildToolbar('foo')
       expect( Mercury.ToolbarItem ).calledWith('foo', 'collection', foo: 'bar')
-      expect( @mock.appendTo ).calledWith('_toolbar_')
+      expect( subject.appendView ).calledWith('_toolbar_', inst: '_toolbar_item_')
 
 
   describe "#show", ->
@@ -139,6 +139,11 @@ describe "Mercury.Toolbar", ->
       subject.onRegionFocus('_region_')
       expect( subject.$ ).calledWith('.mercury-toolbar-collection')
       expect( mock.remove ).called
+
+    it "calls #releaseSubviews", ->
+      spyOn(subject, 'releaseSubviews')
+      subject.onRegionFocus('_region_')
+      expect( subject.releaseSubviews ).called
 
     it "calls #buildToolbar for all the region toolbars", ->
       spyOn(subject, 'buildToolbar')

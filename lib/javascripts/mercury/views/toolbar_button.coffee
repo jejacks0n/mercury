@@ -76,8 +76,8 @@ class Mercury.ToolbarButton extends Mercury.View
       @subview.on 'hide', =>
         @untoggled()
         @deactivate()
-
       return @subview
+
     if Klass = Mercury["toolbar_#{@type}".toCamelCase(true)]
       options = @options[@type]
       options = {template: options} if typeof(options) == 'string'
@@ -96,6 +96,11 @@ class Mercury.ToolbarButton extends Mercury.View
     Mercury.trigger(@event) if @event
     Mercury.trigger('mode', @mode) if @mode
     Mercury.trigger('action', @action...)
+
+
+  release: ->
+    @subview?.release()
+    super
 
 
   regionSupported: (region) ->

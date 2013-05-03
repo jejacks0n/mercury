@@ -23,7 +23,7 @@ class Mercury.Toolbar extends Mercury.View
 
 
   buildToolbar: (name) ->
-    new Mercury.ToolbarItem(name, 'collection', @config("toolbars:#{name}")).appendTo(@$toolbar)
+    @appendView(@$toolbar, new Mercury.ToolbarItem(name, 'collection', @config("toolbars:#{name}")))
 
 
   show: ->
@@ -54,6 +54,7 @@ class Mercury.Toolbar extends Mercury.View
     return if @region == region
     @region = region
     @$('.mercury-toolbar-collection').remove()
+    @releaseSubviews()
     @buildToolbar(name) for name in region.toolbars || []
     Mercury.trigger('region:update', region)
 

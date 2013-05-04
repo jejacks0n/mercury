@@ -11,6 +11,3 @@ gem 'yui-compressor'            # css compression
 
 # Test dependencies
 gem 'teabag'
-gem 'guard-teabag'
-gem 'rb-fsevent'                # filesystem events for guard
-gem 'terminal-notifier-guard'   # osx notifications for guard

@@ -239,6 +239,12 @@ describe "Mercury.View", ->
         $el: '_$el_'
         el: '_el_'
 
+    it "calls appendTo on the view if it's available", ->
+      el = foo: 'bar'
+      @subview.appendTo = spy()
+      subject.appendView(el, @subview)
+      expect( @subview.appendTo ).calledWith(el)
+
     it "appends the view to the element we provide", ->
       el = append: spy()
       subject.appendView(el, @subview)

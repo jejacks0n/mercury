@@ -10,4 +10,7 @@ describe "Mercury.ToolbarButton", ->
     Mercury.configure 'logging:enabled', false
     subject = new Klass()
 
+  afterEach ->
+    subject.release()
+
   it "needs to be tested"

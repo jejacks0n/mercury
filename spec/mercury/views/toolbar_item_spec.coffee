@@ -10,10 +10,16 @@ describe "Mercury.ToolbarItem", ->
     Mercury.configure 'logging:enabled', false
     subject = new Klass()
 
+  afterEach ->
+    subject.release()
+
   describe "#constructor", ->
 
+    beforeEach ->
+      subject.release()
+
     it "calls super", ->
-      spyOn(Klass.__super__, 'constructor')
+      spyOn(Klass.__super__, 'constructor', false)
       subject = new Klass('_name_', '_type_', '_value_')
       expect( Klass.__super__.constructor ).calledWith()
 

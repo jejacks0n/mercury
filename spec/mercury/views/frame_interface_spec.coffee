@@ -12,6 +12,9 @@ describe "Mercury.FrameInterface", ->
     spyOn(Klass::, 'focusActiveRegion')
     subject = new Klass(frame: '<iframe>')
 
+  afterEach ->
+    subject.release()
+
   describe "#initialze", ->
 
     it "adds the classname to the frame", ->
@@ -69,7 +72,7 @@ describe "Mercury.FrameInterface", ->
   describe "#bindDocumentEvents", ->
 
     beforeEach ->
-      @mock = on: stub().yieldsOn(subject)
+      @mock = on: stub().yieldsOn(subject), off: ->
       spyOn(window, '$', => @mock)
 
     it "binds to the mouse down on the document", ->

@@ -90,13 +90,13 @@ class Mercury.BaseInterface extends Mercury.View
 
   buildToolbar: ->
     return unless klass = @config('interface:toolbar')
-    @append(@toolbar = new Mercury[klass]())
+    @toolbar = @appendView(new Mercury[klass]())
     @toolbar.hide() unless @config('interface:enabled')
 
 
   buildStatusbar: ->
     return unless klass = @config('interface:statusbar')
-    @append(@statusbar = new Mercury[klass]())
+    @statusbar = @appendView(new Mercury[klass]())
     @statusbar.hide() unless @config('interface:enabled')
 
 
@@ -200,8 +200,6 @@ class Mercury.BaseInterface extends Mercury.View
 
 
   release: ->
-    @toolbar.release()
-    @statusbar.release()
     $(window).off('resize', @resize)
     @regions.shift().release() while @regions.length
     super

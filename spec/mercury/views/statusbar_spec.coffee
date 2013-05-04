@@ -10,6 +10,9 @@ describe "Mercury.Statusbar", ->
     Mercury.configure 'logging:enabled', false
     subject = new Klass()
 
+  afterEach ->
+    subject.release()
+
   describe "#build", ->
 
     it "calls #setPath", ->

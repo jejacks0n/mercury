@@ -19,6 +19,9 @@ describe "Mercury.Uploader", ->
       {name: '_file2_', size: 2048, type: 'foo/bar'}
     ]
 
+  afterEach ->
+    subject.release()
+
   describe "#constructor", ->
 
     beforeEach ->

@@ -210,7 +210,7 @@ class Mercury.View extends Mercury.Module
   # method.
   #
   releaseSubviews: ->
-    view.release() for view in @subviews
+    view.release() for view in @subviews || []
     @subviews = []
 
 

@@ -17,9 +17,9 @@ This branch represents the future version of Mercury Editor. This iteration of M
 
 If you're using Mercury2 with Rails, you should check out the [mercury-rails](https://github.com/jejacks0n/mercury-rails) project. You should ignore these steps and use the ones provided there.
 
-If you want to use the raw assets grab them from [the distro](https://github.com/jejacks0n/mercury/tree/mercury2/distro), or download the [current version]() (not available yet) as a compressed package. Older versions are available as [compressed packages]() (not available yet).
+If you want to use the raw assets grab them from [the distro](https://github.com/jejacks0n/mercury/tree/mercury2/distro), or download the [current version]() (not available yet) as a compressed package. Older versions are available as [compressed packages]() (not available yet) as well.
 
-### Assets
+### Installation
 
 In this version, regions are broken out of the main javascript file, which allows you to use whatever you want, and not have to clutter it up with regions types you don't want.
 
@@ -31,7 +31,9 @@ Start by loading the general dependencies (changing paths as needed).
 <script src="mercury.min.js" type="text/javascript"></script>
 ```
 
-Now add any region types you want to use. Each region can have it's own dependencies which are documented at the top of each region javascript file. Let's say we need HTML and Markdown regions. The Markdown region depends on marked (a javascript markdown parser), and the HTML region depends on Rangy, so we need to add those dependencies.
+It's worth noting that if you don't use the css bundle, you'll need to update the css to point to the correct font path and have those servable as well.
+
+Now let's add some region types. Each region can have it's own dependencies which are documented at the top of each region javascript file. Let's say we want to use the HTML and Markdown regions. The Markdown region depends on marked (a javascript markdown parser), and the HTML region depends on Rangy, so we need to add those dependencies and then we can add the region javascripts.
 
 ```html
 <script src="dependencies/marked-0.2.8.js" type="text/javascript"></script>
@@ -41,6 +43,8 @@ Now add any region types you want to use. Each region can have it's own dependen
 ```
 
 Once you have the files loading, you can start to edit the configuration. The configuration is at the top of the file -- you can [read more about the configuration options here](https://github.com/jejacks0n/mercury/blob/mercury2/lib/javascripts/mercury/config.coffee). Once you've configured Mercury2 how you like you can initialize it.
+
+### Initializing
 
 You can initialize Mercury2 after the DOM is ready, or at the bottom of the document. Either way works.
 
@@ -53,7 +57,9 @@ jQuery(function() {
 
 ## Examples
 
-There's [several examples](https://github.com/jejacks0n/mercury/tree/mercury2/examples) of how to integrate more complex features directly in the project, and the [gallery region](https://github.com/jejacks0n/mercury/blob/mercury2/lib/javascripts/mercury/regions/gallery.coffee) is a good place to start reading if you're planning on writing custom regions. There's an example for how to [sandbox using an iframe](https://github.com/jejacks0n/mercury/blob/mercury2/examples/frame.haml) and for more complex integrations check the [developer interface example](https://github.com/jejacks0n/mercury/blob/mercury2/examples/assets/developer_interface.coffee) which outlines many of the events and API, and if you're planning on adding functionality there's some examples of [how to add your own toolbars and actions, or write simple plugins](https://github.com/jejacks0n/mercury/blob/mercury2/examples/assets/adding_functionality.coffee).
+There's [several examples](https://github.com/jejacks0n/mercury/tree/mercury2/examples) of how to integrate more complex features directly in the project, and the [gallery region](https://github.com/jejacks0n/mercury/blob/mercury2/lib/javascripts/mercury/regions/gallery.coffee) is a good place to start reading if you're planning on writing custom regions.
+
+There's an example for how to [sandbox using an iframe](https://github.com/jejacks0n/mercury/blob/mercury2/examples/frame.haml) and for more complex integrations check the [developer interface example](https://github.com/jejacks0n/mercury/blob/mercury2/examples/assets/developer_interface.coffee) which outlines many of the events and API, and if you're planning on adding functionality there's some examples of [how to add your own toolbars and actions, or write simple plugins](https://github.com/jejacks0n/mercury/blob/mercury2/examples/assets/adding_functionality.coffee).
 
 An example of server integration is available in the [mercury-rails](https://github.com/jejacks0n/mercury-rails) project, which outlines all of the features that are needed by the server to fully work with the default regions.
 
@@ -73,7 +79,7 @@ Mercury2 uses two custom fonts for all graphic elements in the interface. This a
 
 The primary toolbar icons and general interface elements are in mercury.ttf, which is generated using the awesome [IcoMoon project](http://icomoon.io/app/) (by [Keyamoon](https://twitter.com/keyamoon)). You can upload/import the mercury.dev.svg file that can be found in the project and add new icons for your custom buttons. If you're making a plugin you probably want to bundle these separately.
 
-The toolbar icons (bold, italics, etc.) are in toolbars.ttf, and was built using [fontstruct.com](http://fontstruct.com/). [The original font](http://fontstruct.com/fontstructions/show/797530) can be cloned and edited as needed. Fontstruct is used here because it allows for small pixel fonts but also allows for more advanced shape that scale nicely.
+The toolbar icons (bold, italics, etc.) are in toolbars.ttf, and was built using [fontstruct.com](http://fontstruct.com/). [The original font](http://fontstruct.com/fontstructions/show/797530) can be cloned and edited as needed. Fontstruct is used here because it allows for small pixel fonts but also allows for more advanced shapes that scale nicely.
 
 
 ## I18n / Translations

@@ -86,7 +86,7 @@ The toolbar icons (bold, italics, etc.) are in toolbars.ttf, and was built using
 
 ## I18n / Translations
 
-Mercury has support for the following locales.  If you'd like to contribute one, the easiest way is to fork the project, create a locale file with your translation, and submit a pull request -- that way you get full credit for your contributions.
+Mercury2 has support for the following locales.  If you'd like to contribute one, the easiest way is to fork the project, create a locale file with your translation, and submit a pull request -- that way you get full credit for your contributions.
 
 Translations and contributors:
 - Arabic ([mohamagdy](https://github.com/mohamagdy))

@@ -7,14 +7,8 @@ mercury .mercury-toolbar {
       color: inherit;
       text-shadow: none;
     }
-    &.mercury-button-active {
-      @include mercury-gradient(#e8e8e8, #cbcbcb);
-    }
-    &.mercury-button-pressed {
-      @include mercury-gradient(#bebebe, #9c9c9c);
-      &:before {
-        top: 0;
-      }
+    &.mercury-button-pressed:before {
+      top: 0;
     }
   }
   .mercury-color-palette {

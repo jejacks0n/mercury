@@ -71,14 +71,15 @@ Mercury.configuration =
   # override default functionality and interface elements.
   #
   interface:
-    enabled    : true                                      # initial visible state -- trigger 'interface:show' to show
-    class      : 'FrameInterface'                          # interface class -- used on Mercury.init()
+    enabled    : true                                      # initial visible state - trigger 'interface:show' to show
+    class      : 'FrameInterface'                          # interface class - used on Mercury.init()
     toolbar    : 'Toolbar'                                 # toolbar class to use within the interface
     statusbar  : 'Statusbar'                               # statusbar class to use within the interface
     uploader   : 'Uploader'                                # uploader class to use within the interface
     silent     : false                                     # set to true to disable asking about changes when leaving
     shadowed   : false                                     # puts the interface into a shadow dom when it's available
     maskable   : false                                     # uses a mask over the document for toolbar dialogs
+    style      : null                                      # interface style - 'small', 'flat' or 'small flat'
 
 
   # Toolbars
@@ -100,8 +101,6 @@ Mercury.configuration =
   # For more information about button options or adding your own functionality check todo: wiki url here
   #
   toolbars:
-    floating   : false                                     # make the toolbar float to the region being edited
-    style      : 'standard'                                # toolbar style - 'standard', 'small'
 
     # The primary toolbar is always built and visible (it's required). Buttons may become disabled when a region that
     # doesn't support a given action is focused, and some buttons like save, preview, snippet, will always be active as

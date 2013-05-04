@@ -194,3 +194,75 @@ mercury .mercury-toolbar {
     }
   }
 }
+
+mercury.small .mercury-toolbar {
+  // primary toolbar overrides
+  .mercury-toolbar-primary-container {
+    height: 30px;
+    .mercury-toolbar-separator,
+    .mercury-toolbar-line-separator {
+      width: 15px;
+      height: 30px;
+    }
+    .mercury-toolbar-line-separator {
+      width: 0;
+      height: 28px;
+      margin: 0 8px;
+    }
+    .mercury-toolbar-button {
+      @include mercury-icon-base(22px, 37px, 30px);
+      height: 30px;
+      min-width: 37px;
+      margin-bottom: 0;
+      &:before {
+        position: absolute;
+        margin: 0;
+        padding: 0;
+      }
+
+      em {
+        display: none;
+      }
+      &.mercury-button-toggled {
+      }
+    }
+  }
+}
+
+mercury.flat .mercury-toolbar {
+  @include mercury-box-shadow(0 1px 5px rgba(0, 0, 0, .6));
+  .mercury-toolbar-container {
+    background: #ddd;
+    border: 0;
+  }
+  .mercury-toolbar-line-separator {
+    border: 0;
+  }
+  .mercury-toolbar-button {
+    @include mercury-border-radius(0);
+    background: transparent;
+    border: 0;
+    &+ .mercury-toolbar-button {
+      @include mercury-border-radius(0);
+      margin-left: 0;
+    }
+    &:before, em {
+      text-shadow: none !important;
+    }
+    &.mercury-button-active,
+    &.mercury-button-pressed {
+      background: $primary_color;
+    }
+  }
+  // primary toolbar overrides
+  .mercury-toolbar-primary-container {
+    .mercury-toolbar-button {
+      @include mercury-border-radius(0 0 4px 4px);
+      border: 0;
+      background: transparent;
+      &.mercury-button-toggled {
+        background: $primary_color;
+      }
+    }
+  }
+}

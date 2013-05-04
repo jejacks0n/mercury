@@ -39,7 +39,7 @@ Mercury.Region.Markdown.addToolbar 'color', color: ['Color', plugin: 'color']
 Mercury.Region.Markdown.addToolbar 'block', block: ['Block', plugin: 'blocks']
 
 # todo:
-#   add better support for sizing the toolbar down / add small version / provide aloha like behavior.
+#   add better support for sizing the toolbar down / provide aloha like behavior.
 #   port jQuery.extend into module so we can use that within instances (which is where it's mostly used).
 #   start working on the mercury-rails engine so it's easier to write plugins that use a server.
 #   migrate existing locale content into new locales and document missing values.

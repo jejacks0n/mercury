@@ -49,6 +49,7 @@ class Mercury.BaseInterface extends Mercury.View
     @$el = @el = $(@tag) unless @el
     @attr(@attributes)
     @addClass(@className)
+    @addClass(@config('interface:style') || 'standard')
 
 
   init: ->

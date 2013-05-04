@@ -21,7 +21,7 @@ If you want to use the raw assets grab them from [the distro](https://github.com
 
 ### Installation
 
-Start by loading the general dependencies (changing paths as needed).
+Start by loading the general dependencies (changing paths as needed). The only required dependency is jQuery (1.8+), and in this example we'll use jQuery 2.0.
 
 ```html
 <link href="mercury.bundle.css" media="screen" rel="stylesheet" type="text/css">

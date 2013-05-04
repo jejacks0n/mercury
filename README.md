@@ -11,6 +11,46 @@ Mercury Editor also provides a comprehensive plugin architecture. Plugins makes 
 This branch represents the future version of Mercury Editor. This iteration of Mercury Editor (Mercury2) separates the Rails portions from the Javascript portions of the project. Rails is still used for development (for a server, coffeescript, sass, build process etc.) but the Rails Engine has been moved to [mercury-rails](https://github.com/jejacks0n/mercury-rails) -- this enables more functionality, and to serve as an example of how to implement functionality like snippets and image uploading/resizing. If you're interested in integrating Mercury2 with your own platform, this is the best place to start.
 
 
+## Usage
+
+**NOTE:** this is likely to change and be expanded on.
+
+If you're using Mercury2 with Rails, you should check out the [mercury-rails](https://github.com/jejacks0n/mercury-rails) project. You should ignore these steps and use the ones provided there.
+
+If you want to use the raw assets grab them from [the distro](https://github.com/jejacks0n/mercury/tree/mercury2/distro), or download the [current version]() (not available yet) as a compressed package. Older versions are available as [compressed packages]() (not available yet).
+
+### Assets
+
+In this version, regions are broken out of the main javascript file, which allows you to use whatever you want, and not have to clutter it up with regions types you don't want.
+
+Start by loading the general dependencies (changing paths as needed).
+
+```html
+<link href="mercury.bundle.css" media="screen" rel="stylesheet" type="text/css">
+<script src="dependencies/jquery-2.0.0.js" type="text/javascript"></script>
+<script src="mercury.min.js" type="text/javascript"></script>
+```
+
+Now add any region types you want to use. Each region can have it's own dependencies which are documented at the top of each region javascript file. Let's say we need HTML and Markdown regions. The Markdown region depends on marked (a javascript markdown parser), and the HTML region depends on Rangy, so we need to add those dependencies.
+
+```html
+<script src="dependencies/marked-0.2.8.js" type="text/javascript"></script>
+<script src="regions/markdown.min.js" type="text/javascript"></script>
+<script src="dependencies/rangy-core.js" type="text/javascript"></script>
+<script src="regions/html.min.js" type="text/javascript"></script>
+```
+
+Once you have the files loading, you can start to edit the configuration. The configuration is at the top of the file -- you can [read more about the configuration options here](https://github.com/jejacks0n/mercury/blob/mercury2/lib/javascripts/mercury/config.coffee). Once you've configured Mercury2 how you like you can initialize it.
+
+You can initialize Mercury2 after the DOM is ready, or at the bottom of the document. Either way works.
+
+```javascript
+jQuery(function() {
+  Mercury.init();
+})
+```
+
+
 ## Examples
 
 There's [several examples](https://github.com/jejacks0n/mercury/tree/mercury2/examples) of how to integrate more complex features directly in the project, and the [gallery region](https://github.com/jejacks0n/mercury/blob/mercury2/lib/javascripts/mercury/regions/gallery.coffee) is a good place to start reading if you're planning on writing custom regions. There's an example for how to [sandbox using an iframe](https://github.com/jejacks0n/mercury/blob/mercury2/examples/frame.haml) and for more complex integrations check the [developer interface example](https://github.com/jejacks0n/mercury/blob/mercury2/examples/assets/developer_interface.coffee) which outlines many of the events and API, and if you're planning on adding functionality there's some examples of [how to add your own toolbars and actions, or write simple plugins](https://github.com/jejacks0n/mercury/blob/mercury2/examples/assets/adding_functionality.coffee).

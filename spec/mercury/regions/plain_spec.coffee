@@ -12,7 +12,6 @@ describe "Mercury.Region.Plain", ->
 
   beforeEach ->
     Klass.supported = true
-    Mercury.configure 'regions:identifier', 'id'
     Mercury.configure 'regions:plain:actions', true
     subject = new Klass('<div id="foo">')
 

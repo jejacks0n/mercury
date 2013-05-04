@@ -7,7 +7,6 @@ describe "Mercury.View", ->
   subject = null
 
   beforeEach ->
-    Mercury.configure 'logging', true
     Mercury.configure 'templates:asyncFetch', true
     class Klass extends Mercury.View
     subject = new Klass()

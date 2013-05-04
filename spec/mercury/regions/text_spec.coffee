@@ -9,7 +9,6 @@ describe "Mercury.Region.Text", ->
   subject = null
 
   beforeEach ->
-    Mercury.configure 'regions:identifier', 'id'
     subject = new Klass('<div id="foo">')
 
   it "is defined correctly", ->

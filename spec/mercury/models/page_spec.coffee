@@ -7,7 +7,7 @@ describe "Mercury.Model.Page", ->
   subject = null
 
   beforeEach ->
-    Mercury.configure('saving', foo: 'bar')
+    Mercury.configure 'saving', foo: 'bar'
     subject = new Klass()
 
   describe "#save", ->

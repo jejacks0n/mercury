@@ -8,7 +8,6 @@ describe "Mercury.Plugin", ->
   subject = null
 
   beforeEach ->
-    Mercury.configure 'logging', true
     class Klass extends Mercury.Plugin
     subject = new Klass(name: 'name')
 
@@ -222,9 +221,9 @@ describe "Mercury.Plugin", ->
       expect( subject.config('foo:bar') ).to.eq('baz')
 
     it "falls back to Mercury.configuration", ->
-      Mercury.configure('foo:bar', '_baz_')
+      Mercury.configure 'foo:bar', '_baz_'
       expect( subject.config('foo:bar') ).to.eq('baz')
-      Mercury.configure('foo:baz', '_bar_')
+      Mercury.configure 'foo:baz', '_bar_'
       expect( subject.config('foo:baz') ).to.eq('_bar_')
       expect( subject.config({}) ).to.be.undefined
 
@@ -385,7 +384,6 @@ describe "Mercury.Plugin.Definition", ->
   subject = null
 
   beforeEach ->
-    Mercury.configure 'logging', true
     class Klass extends Mercury.Plugin.Definition
     @func = ->
     subject = new Klass(name: 'definition', config: {foo: 'bar'}, func: @func)
@@ -415,9 +413,9 @@ describe "Mercury.Plugin.Definition", ->
       expect( subject.config('foo:bar') ).to.eq('baz')
 
     it "falls back to Mercury.configuration", ->
-      Mercury.configure('foo:bar', '_baz_')
+      Mercury.configure 'foo:bar', '_baz_'
       expect( subject.config('foo:bar') ).to.eq('baz')
-      Mercury.configure('foo:baz', '_bar_')
+      Mercury.configure 'foo:baz', '_bar_'
       expect( subject.config('foo:baz') ).to.eq('_bar_')
       expect( subject.config({}) ).to.be.undefined
 

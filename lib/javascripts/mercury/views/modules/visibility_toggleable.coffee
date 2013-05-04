@@ -5,7 +5,7 @@ Mercury.View.Modules.VisibilityToggleable =
 
 
   buildVisibilityToggleable: ->
-    @delegateEvents('mercury:interface:hide': -> @hide())
+    @delegateEvents('mercury:interface:hide': 'hide')
     if @hidden
       @visible = true
       @hide()

@@ -14,7 +14,6 @@ describe "Mercury.Region.Html", ->
 
   beforeEach ->
     Klass.supported = true
-    Mercury.configure 'regions:identifier', 'id'
     subject = new Klass('<div id="foo">')
 
   it "is defined correctly", ->

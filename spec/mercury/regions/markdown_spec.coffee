@@ -14,7 +14,6 @@ describe "Mercury.Region.Markdown", ->
   subject = null
 
   beforeEach ->
-    Mercury.configure 'regions:identifier', 'id'
     Mercury.configure 'interface:uploader', 'Uploader'
     subject = new Klass('<div id="foo">')
 

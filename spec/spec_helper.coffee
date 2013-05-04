@@ -12,6 +12,8 @@ Mercury.support = webkit: true
 beforeEach ->
   Mercury.__handlers__ = {}
   Mercury.interface = $('<mercury>')
+  Mercury.configure 'logging:enabled', false
+  Mercury.configure 'regions:identifier', 'id'
 
 # allow configuration to be adjusted and restored after each test
 $.extend(Mercury, Mercury.Config.Module)

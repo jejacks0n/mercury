@@ -27,9 +27,16 @@ Copyright (c) 2013 Jeremy Jackson
       mimeTypes: ['image/jpeg', 'image/gif', 'image/png'],
       maxSize: 5242880
     },
+    saving: {
+      enabled: true,
+      url: '/mercury/save',
+      method: 'POST',
+      contentType: 'application/json'
+    },
     templates: {
       enabled: true,
-      prefixUrl: '/mercury/templates'
+      prefixUrl: '/mercury/templates',
+      asyncFetch: false
     },
     "interface": {
       enabled: true,
@@ -362,23 +369,44 @@ Copyright (c) 2013 Jeremy Jackson
 
   Mercury.TableEditor = (function() {
 
-    function TableEditor(table, cell, cellContent) {
+    function TableEditor(table, cellContent) {
       this.table = table;
-      this.cell = cell != null ? cell : null;
       this.cellContent = cellContent != null ? cellContent : '';
       if (this.table) {
-        this.load(this.table, this.cell, this.cellContent);
+        this.load(this.table);
       }
     }
 
-    TableEditor.prototype.load = function(table, cell, cellContent) {
+    TableEditor.prototype.load = function(table, cellContent) {
       this.table = table;
-      this.cell = cell != null ? cell : null;
-      this.cellContent = cellContent != null ? cellContent : '';
-      this.cell || (this.cell = $(this.table.find('th, td')[0]));
+      if (cellContent) {
+        this.cellContent = cellContent;
+      }
+      this.setCell();
       this.row = this.cell.parent('tr');
       this.columnCount = this.getColumnCount();
       return this.rowCount = this.getRowCount();
+    };
+
+    TableEditor.prototype.setCell = function(cell) {
+      this.cell = cell != null ? cell : null;
+      this.table.find('.selected').removeAttr('class');
+      if (this.cell) {
+        this.cell = this.cell.closest('td, th');
+      }
+      this.cell || (this.cell = this.table.find('th, td').first());
+      return this.cell.addClass('selected');
+    };
+
+    TableEditor.prototype.asHtml = function(cellContent) {
+      var table;
+      if (cellContent == null) {
+        cellContent = '';
+      }
+      table = this.table.clone();
+      table.find('.selected').removeAttr('class');
+      table.find('td, th').html(cellContent);
+      return $('<div>').html(table).html().replace(/^\s+|\n/gm, '').replace(/(<\/.*?>|<table.*?>|<tbody>|<tr>)/g, '$1\n');
     };
 
     TableEditor.prototype.addColumnBefore = function() {
@@ -899,9 +927,12 @@ Copyright (c) 2013 Jeremy Jackson
     };
 
     function Module() {
-      this.__handlers__ = $.extend({}, this.__handlers__);
+      this.__handlers__ = $.extend(true, {}, this.__handlers__);
       if (typeof this.init === "function") {
         this.init.apply(this, arguments);
+      }
+      if (typeof this.trigger === "function") {
+        this.trigger('init');
       }
     }
 
@@ -1230,6 +1261,10 @@ Copyright (c) 2013 Jeremy Jackson
       Model.__super__.constructor.apply(this, arguments);
     }
 
+    Model.prototype.url = function() {
+      return this.constructor.url(this);
+    };
+
     Model.prototype.validate = function() {};
 
     Model.prototype.save = function(options) {
@@ -1243,26 +1278,34 @@ Copyright (c) 2013 Jeremy Jackson
       }
       defaultOptions = {
         method: this.isNew() ? 'POST' : 'PUT',
-        url: this.constructor.url(this),
-        accepts: 'application/json',
+        url: this.url(),
+        dataType: 'json',
+        contentType: 'application/json; charset=utf-8',
         cache: false,
         data: this.toJSON(),
         success: function(json) {
+          if (typeof json !== 'object') {
+            return;
+          }
           _this.id = json.id;
           if (_this.id) {
             _this.constructor.records[_this.id] = _this;
           }
           _this.set(json);
-          _this.trigger('save');
+          _this.trigger('save', json);
           return typeof _this.saveSuccess === "function" ? _this.saveSuccess.apply(_this, arguments) : void 0;
         },
         error: function(xhr) {
-          _this.trigger('error');
+          _this.trigger('error', xhr, options);
           _this.notify(_this.t('Unable to process response: %s', xhr.status));
           return typeof _this.saveError === "function" ? _this.saveError.apply(_this, arguments) : void 0;
         }
       };
-      return $.ajax($.extend(defaultOptions, options));
+      options = $.extend(defaultOptions, options);
+      if (options.dataType === 'json' && typeof options.data !== 'string') {
+        options.data = JSON.stringify(options.data);
+      }
+      return $.ajax(options);
     };
 
     Model.prototype.toJSON = function() {
@@ -1712,6 +1755,7 @@ Copyright (c) 2013 Jeremy Jackson
       this.elements = $.extend({}, this.constructor.elements, this.elements);
       this.events = $.extend({}, this.constructor.events, this.events);
       this.attributes = $.extend({}, this.constructor.attributes, this.attributes);
+      this.subviews || (this.subviews = []);
       this.refreshElements();
       if (typeof this.build === "function") {
         this.build();
@@ -1797,6 +1841,28 @@ Copyright (c) 2013 Jeremy Jackson
       return this.$el;
     };
 
+    View.prototype.appendView = function(elOrView, view) {
+      if (view == null) {
+        view = null;
+      }
+      if (arguments.length === 1) {
+        view = elOrView;
+        elOrView = this.$el;
+      }
+      if (typeof elOrView === 'string') {
+        elOrView = this.$(elOrView);
+      }
+      if (view.appendTo) {
+        if (typeof view.appendTo === "function") {
+          view.appendTo(elOrView);
+        }
+      } else {
+        elOrView.append(view.$el || view.el);
+      }
+      this.subviews.push(view);
+      return view;
+    };
+
     View.prototype.delay = function(ms, callback) {
       var _this = this;
       return setTimeout((function() {
@@ -1861,9 +1927,14 @@ Copyright (c) 2013 Jeremy Jackson
       }
     };
 
+    View.prototype.preventStop = function(e) {
+      return this.prevent(e, true);
+    };
+
     View.prototype.release = function() {
       var method, name, _ref;
       this.trigger('release');
+      this.releaseSubviews();
       this.$el.remove();
       _ref = this.__global_handlers__ || {};
       for (name in _ref) {
@@ -1871,6 +1942,16 @@ Copyright (c) 2013 Jeremy Jackson
         Mercury.off(name, method);
       }
       return this.off();
+    };
+
+    View.prototype.releaseSubviews = function() {
+      var view, _i, _len, _ref;
+      _ref = this.subviews || [];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        view = _ref[_i];
+        view.release();
+      }
+      return this.subviews = [];
     };
 
     View.prototype.delegateEvents = function(el, events) {
@@ -2433,7 +2514,7 @@ Copyright (c) 2013 Jeremy Jackson
     },
     buildFormHandler: function() {
       return this.delegateEvents({
-        'submit': 'onFormSubmit'
+        'submit': this.onFormSubmit
       });
     },
     validate: function() {
@@ -2524,11 +2605,21 @@ Copyright (c) 2013 Jeremy Jackson
       return this.on('build', this.buildToolbarDialog);
     },
     buildToolbarDialog: function() {
-      return this.delegateEvents({
+      this.delegateEvents({
         'mercury:dialogs:hide': function() {
           return typeof this.hide === "function" ? this.hide() : void 0;
         },
         'mercury:interface:resize': 'positionAndResize'
+      });
+      this.on('show', function() {
+        if (!this.visible) {
+          return Mercury.trigger('interface:mask');
+        }
+      });
+      return this.on('hide', function() {
+        if (this.visible) {
+          return Mercury.trigger('interface:unmask');
+        }
       });
     },
     positionAndResize: function(dimensions) {
@@ -2612,44 +2703,77 @@ Copyright (c) 2013 Jeremy Jackson
         update = true;
       }
       if (this.visible) {
-        return false;
+        return;
       }
       this.trigger('show');
       clearTimeout(this.visibilityTimout);
+      if (typeof this.onShow === "function") {
+        this.onShow();
+      }
       this.visible = true;
       this.$el.show();
-      this.visibilityTimout = this.delay(50, function() {
+      return this.visibilityTimout = this.delay(50, function() {
         this.css({
           opacity: 1
         });
-        if (update) {
+        if (update && typeof update === 'boolean') {
           return typeof this.update === "function" ? this.update() : void 0;
         }
       });
-      return true;
     },
     hide: function(release) {
-      if (release == null) {
-        release = false;
-      }
       if (!this.visible) {
-        return false;
+        return;
+      }
+      if (typeof release !== 'boolean') {
+        release = null;
+      }
+      if (release == null) {
+        release = this.releaseOnHide;
       }
       this.trigger('hide');
       clearTimeout(this.visibilityTimout);
+      if (typeof this.onHide === "function") {
+        this.onHide();
+      }
       this.visible = false;
       this.css({
         opacity: 0
       });
-      this.visibilityTimout = this.delay(250, function() {
+      return this.visibilityTimout = this.delay(250, function() {
         this.$el.hide();
         if (release) {
           return this.release();
         }
       });
-      return true;
     }
   };
+
+}).call(this);
+(function() {
+  var __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+  Mercury.Model.Page = (function(_super) {
+
+    __extends(Page, _super);
+
+    function Page() {
+      return Page.__super__.constructor.apply(this, arguments);
+    }
+
+    Page.define('Mercury.Model.Page');
+
+    Page.prototype.save = function(options) {
+      if (options == null) {
+        options = {};
+      }
+      return Page.__super__.save.call(this, $.extend(this.config('saving'), options));
+    };
+
+    return Page;
+
+  })(Mercury.Model);
 
 }).call(this);
 (function() {
@@ -2672,6 +2796,7 @@ Copyright (c) 2013 Jeremy Jackson
     };
 
     BaseInterface.events = {
+      'mercury:save': 'save',
       'mercury:focus': 'focusActiveRegion',
       'mercury:action': 'focusActiveRegion',
       'mercury:blur': 'blurActiveRegion',
@@ -2702,6 +2827,7 @@ Copyright (c) 2013 Jeremy Jackson
       }
       Mercury["interface"] = this;
       BaseInterface.__super__.constructor.apply(this, arguments);
+      this.page = new Mercury.Model.Page();
       this.regions || (this.regions = []);
       $(window).on('beforeunload', this.onUnload);
       $(window).on('resize', this.onResize);
@@ -2764,7 +2890,7 @@ Copyright (c) 2013 Jeremy Jackson
       if (!(klass = this.config('interface:toolbar'))) {
         return;
       }
-      this.append(this.toolbar = new Mercury[klass]());
+      this.toolbar = this.appendView(new Mercury[klass]());
       if (!this.config('interface:enabled')) {
         return this.toolbar.hide();
       }
@@ -2775,7 +2901,7 @@ Copyright (c) 2013 Jeremy Jackson
       if (!(klass = this.config('interface:statusbar'))) {
         return;
       }
-      this.append(this.statusbar = new Mercury[klass]());
+      this.statusbar = this.appendView(new Mercury[klass]());
       if (!this.config('interface:enabled')) {
         return this.statusbar.hide();
       }
@@ -2866,7 +2992,7 @@ Copyright (c) 2013 Jeremy Jackson
     };
 
     BaseInterface.prototype.mask = function() {
-      if (!this.config('interface:mask')) {
+      if (!this.config('interface:maskable')) {
         return;
       }
       return this.$mask.show();
@@ -2929,8 +3055,6 @@ Copyright (c) 2013 Jeremy Jackson
     };
 
     BaseInterface.prototype.release = function() {
-      this.toolbar.release();
-      this.statusbar.release();
       $(window).off('resize', this.resize);
       while (this.regions.length) {
         this.regions.shift().release();
@@ -2938,7 +3062,7 @@ Copyright (c) 2013 Jeremy Jackson
       return BaseInterface.__super__.release.apply(this, arguments);
     };
 
-    BaseInterface.prototype.save = function() {
+    BaseInterface.prototype.serialize = function() {
       var data, region, _i, _len, _ref;
       data = {};
       _ref = this.regions;
@@ -2947,6 +3071,22 @@ Copyright (c) 2013 Jeremy Jackson
         data[region.name] = region.toJSON(true);
       }
       return data;
+    };
+
+    BaseInterface.prototype.save = function() {
+      var _this = this;
+      this.page.set({
+        content: this.serialize(),
+        location: location.pathname
+      });
+      this.page.on('error', function(xhr, options) {
+        return alert(_this.t('Mercury was unable to save to the url: %s', options.url));
+      });
+      return this.page.save().always = function() {
+        return _this.delay(250, function() {
+          return Mercury.trigger('save:complete');
+        });
+      };
     };
 
     return BaseInterface;
@@ -3032,6 +3172,10 @@ Copyright (c) 2013 Jeremy Jackson
 
     __extends(Modal, _super);
 
+    function Modal() {
+      return Modal.__super__.constructor.apply(this, arguments);
+    }
+
     Modal.include(Mercury.View.Modules.FormHandler);
 
     Modal.include(Mercury.View.Modules.InterfaceFocusable);
@@ -3045,7 +3189,6 @@ Copyright (c) 2013 Jeremy Jackson
     Modal.className = 'mercury-dialog mercury-modal';
 
     Modal.elements = {
-      overlay: '.mercury-modal-overlay',
       dialog: '.mercury-modal-dialog-positioner',
       content: '.mercury-modal-dialog-content',
       contentContainer: '.mercury-modal-dialog-content-container',
@@ -3054,78 +3197,76 @@ Copyright (c) 2013 Jeremy Jackson
     };
 
     Modal.events = {
-      'mercury:interface:hide': function() {
-        return this.hide();
-      },
-      'mercury:interface:resize': function(dimensions) {
-        return this.resize(false, dimensions);
-      },
-      'mercury:modals:hide': function() {
-        return this.hide();
-      },
-      'click .mercury-modal-dialog-title em': function() {
-        return this.hide();
-      }
+      'mercury:interface:hide': 'hide',
+      'mercury:interface:resize': 'resize',
+      'mercury:modals:hide': 'hide',
+      'click .mercury-modal-dialog-title em': 'hide'
     };
 
     Modal.prototype.primaryTemplate = 'modal';
 
-    function Modal(options) {
-      var _base;
-      this.options = options != null ? options : {};
-      (_base = this.options).template || (_base.template = this.template);
-      Modal.__super__.constructor.call(this, this.options);
-      if (this.hidden) {
-        this.visible = false;
-      } else {
-        this.show();
-      }
-    }
+    Modal.prototype.releaseOnHide = true;
 
     Modal.prototype.buildElement = function() {
-      this.subTemplate = this.options.template;
-      this.template = this.primaryTemplate;
+      if (this.hidden) {
+        this.releaseOnHide = false;
+      }
+      this.negotiateTemplate();
       return Modal.__super__.buildElement.apply(this, arguments);
     };
 
     Modal.prototype.build = function() {
-      this.addClass('loading');
-      this.appendTo(Mercury["interface"]);
+      this.appendTo();
       return this.preventScrollPropagation(this.$contentContainer);
     };
 
+    Modal.prototype.negotiateTemplate = function() {
+      var _base;
+      (_base = this.options).template || (_base.template = this.template);
+      this.subTemplate = this.options.template;
+      return this.template = this.primaryTemplate;
+    };
+
     Modal.prototype.update = function(options) {
-      var content, key, value, _ref;
-      if (!this.visible) {
+      if (!(this.visible && this.updateForOptions(options))) {
         return;
       }
+      this.resize();
+      this.show(false);
+      this.refreshElements();
+      return this.delay(300, this.focusFirstFocusable);
+    };
+
+    Modal.prototype.updateForOptions = function(options) {
+      var content, key, value, _ref;
       this.options = $.extend({}, this.options, options || {});
       _ref = this.options;
       for (key in _ref) {
         value = _ref[key];
         this[key] = value;
       }
-      this.subTemplate = this.options.template;
-      this.template = this.primaryTemplate;
+      this.negotiateTemplate();
       this.$title.html(this.title);
-      this.$dialog.css({
-        width: this.width
-      });
+      this.setWidth(this.width);
       content = this.contentFromOptions();
-      if (content === this.lastContent) {
-        return;
+      if (content === this.lastContent && this.width === this.lastWidth) {
+        return false;
       }
       this.addClass('loading');
+      this.lastContent = content;
+      this.lastWidth = this.width;
       this.$content.css({
         visibility: 'hidden',
         opacity: 0,
         width: this.width
       }).html(content);
-      this.lastContent = content;
-      this.resize();
-      this.show(false);
-      this.refreshElements();
-      return this.delay(300, this.focusFirstFocusable);
+      return true;
+    };
+
+    Modal.prototype.setWidth = function(width) {
+      return this.$dialog.css({
+        width: width
+      });
     };
 
     Modal.prototype.resize = function(animate, dimensions) {
@@ -3133,7 +3274,14 @@ Copyright (c) 2013 Jeremy Jackson
       if (animate == null) {
         animate = true;
       }
+      if (dimensions == null) {
+        dimensions = null;
+      }
       clearTimeout(this.showContentTimeout);
+      if (typeof animate === 'object') {
+        dimensions = animate;
+        animate = false;
+      }
       if (!animate) {
         this.addClass('mercury-no-animation');
       }
@@ -3185,7 +3333,8 @@ Copyright (c) 2013 Jeremy Jackson
       this.removeClass('loading');
       this.$content.css({
         visibility: 'visible',
-        width: 'auto'
+        width: 'auto',
+        display: 'block'
       });
       if (animate) {
         return this.contentOpacityTimeout = this.delay(50, function() {
@@ -3200,53 +3349,7 @@ Copyright (c) 2013 Jeremy Jackson
       }
     };
 
-    Modal.prototype.show = function(update) {
-      if (update == null) {
-        update = true;
-      }
-      if (this.visible) {
-        return;
-      }
-      Mercury.trigger('blur');
-      Mercury.trigger('modals:hide');
-      this.trigger('show');
-      clearTimeout(this.visibilityTimout);
-      this.visible = true;
-      this.$el.show();
-      return this.visibilityTimout = this.delay(50, function() {
-        this.css({
-          opacity: 1
-        });
-        if (update) {
-          return this.update();
-        }
-      });
-    };
-
-    Modal.prototype.hide = function(release) {
-      if (release == null) {
-        release = false;
-      }
-      if (!this.visible && !release) {
-        return;
-      }
-      Mercury.trigger('focus');
-      this.trigger('hide');
-      clearTimeout(this.visibilityTimout);
-      this.visible = false;
-      this.css({
-        opacity: 0
-      });
-      return this.visibilityTimout = this.delay(250, function() {
-        this.$el.hide();
-        if (release) {
-          return this.release();
-        }
-      });
-    };
-
     Modal.prototype.appendTo = function() {
-      this.log(this.t('appending to mercury interface instead'));
       return Modal.__super__.appendTo.call(this, Mercury["interface"]);
     };
 
@@ -3255,6 +3358,26 @@ Copyright (c) 2013 Jeremy Jackson
         return this.hide(true);
       }
       return Modal.__super__.release.apply(this, arguments);
+    };
+
+    Modal.prototype.onShow = function() {
+      Mercury.trigger('blur');
+      return Mercury.trigger('modals:hide');
+    };
+
+    Modal.prototype.onHide = function() {
+      Mercury.trigger('focus');
+      return this.delay(250, function() {
+        this.lastWidth = null;
+        this.$dialog.css({
+          height: '',
+          width: ''
+        });
+        this.$contentContainer.css({
+          height: ''
+        });
+        return this.$content.hide();
+      });
     };
 
     return Modal;
@@ -3279,7 +3402,6 @@ Copyright (c) 2013 Jeremy Jackson
     Lightview.className = 'mercury-dialog mercury-lightview';
 
     Lightview.elements = {
-      overlay: '.mercury-lightview-overlay',
       dialog: '.mercury-lightview-dialog-positioner',
       content: '.mercury-lightview-dialog-content',
       contentContainer: '.mercury-lightview-dialog-content-container',
@@ -3288,24 +3410,22 @@ Copyright (c) 2013 Jeremy Jackson
     };
 
     Lightview.events = {
-      'mercury:interface:hide': function() {
-        return this.hide();
-      },
-      'mercury:interface:resize': function(dimensions) {
-        return this.resize(false, dimensions);
-      },
-      'mercury:modals:hide': function() {
-        return this.hide();
-      },
-      'click .mercury-lightview-dialog-title em': function() {
-        return this.hide();
-      }
+      'mercury:interface:hide': 'hide',
+      'mercury:interface:resize': 'resize',
+      'mercury:modals:hide': 'hide',
+      'click .mercury-lightview-dialog-title em': 'hide'
     };
 
     Lightview.prototype.primaryTemplate = 'lightview';
 
+    Lightview.prototype.releaseOnHide = true;
+
     Lightview.prototype.build = function() {
       Lightview.__super__.build.apply(this, arguments);
+      return this.defaultPosition();
+    };
+
+    Lightview.prototype.defaultPosition = function() {
       return this.$dialog.css({
         marginTop: ($(window).height() - 75) / 2
       });
@@ -3316,7 +3436,14 @@ Copyright (c) 2013 Jeremy Jackson
       if (animate == null) {
         animate = true;
       }
+      if (dimensions == null) {
+        dimensions = null;
+      }
       clearTimeout(this.showContentTimeout);
+      if (typeof animate === 'object') {
+        dimensions = animate;
+        animate = false;
+      }
       if (!animate) {
         this.addClass('mercury-no-animation');
       }
@@ -3346,6 +3473,11 @@ Copyright (c) 2013 Jeremy Jackson
       return this.removeClass('mercury-no-animation');
     };
 
+    Lightview.prototype.onHide = function() {
+      Lightview.__super__.onHide.apply(this, arguments);
+      return this.delay(250, this.defaultPosition);
+    };
+
     return Lightview;
 
   })(Mercury.Modal);
@@ -3360,13 +3492,10 @@ Copyright (c) 2013 Jeremy Jackson
 
     __extends(Panel, _super);
 
-    Panel.include(Mercury.View.Modules.FormHandler);
-
-    Panel.include(Mercury.View.Modules.InterfaceFocusable);
-
-    Panel.include(Mercury.View.Modules.ScrollPropagation);
-
-    Panel.include(Mercury.View.Modules.VisibilityToggleable);
+    function Panel() {
+      this.resize = __bind(this.resize, this);
+      return Panel.__super__.constructor.apply(this, arguments);
+    }
 
     Panel.logPrefix = 'Mercury.Panel:';
 
@@ -3380,90 +3509,37 @@ Copyright (c) 2013 Jeremy Jackson
     };
 
     Panel.events = {
-      'mercury:interface:hide': function() {
-        return this.hide();
-      },
-      'mercury:interface:resize': function(e) {
-        return this.resize(false, e);
-      },
-      'mercury:panels:hide': function() {
-        return this.hide();
-      },
-      'mousedown .mercury-panel-title em': function(e) {
-        return this.prevent(e);
-      },
-      'click .mercury-panel-title em': function() {
-        return this.hide();
-      }
+      'mercury:interface:hide': 'hide',
+      'mercury:interface:resize': 'resize',
+      'mercury:panels:hide': 'hide',
+      'mousedown .mercury-panel-title em': 'prevent',
+      'click .mercury-panel-title em': 'hide'
     };
 
     Panel.prototype.primaryTemplate = 'panel';
 
-    function Panel(options) {
-      var _base;
-      this.options = options != null ? options : {};
-      this.resize = __bind(this.resize, this);
+    Panel.prototype.releaseOnHide = false;
 
-      (_base = this.options).template || (_base.template = this.template);
-      Panel.__super__.constructor.call(this, this.options);
-      if (this.hidden) {
-        this.visible = false;
-      } else {
-        this.show();
-      }
-    }
-
-    Panel.prototype.buildElement = function() {
-      this.subTemplate = this.options.template;
-      this.template = this.primaryTemplate;
-      return Panel.__super__.buildElement.apply(this, arguments);
-    };
-
-    Panel.prototype.build = function() {
-      this.addClass('loading');
-      this.appendTo(Mercury["interface"]);
-      return this.preventScrollPropagation(this.$contentContainer);
-    };
-
-    Panel.prototype.update = function(options) {
-      var content, key, value, _ref;
-      if (!this.visible) {
-        return;
-      }
-      this.options = $.extend({}, this.options, options || {});
-      _ref = this.options;
-      for (key in _ref) {
-        value = _ref[key];
-        this[key] = value;
-      }
-      this.subTemplate = this.options.template;
-      this.template = this.primaryTemplate;
-      this.$title.html(this.title);
-      this.css({
-        width: this.width
+    Panel.prototype.setWidth = function(width) {
+      return this.css({
+        width: width
       });
-      content = this.contentFromOptions();
-      if (content === this.lastContent) {
-        return;
-      }
-      this.addClass('loading');
-      this.$content.css({
-        visibility: 'hidden',
-        opacity: 0,
-        width: this.width
-      }).html(content);
-      this.lastContent = content;
-      this.resize(true, Mercury["interface"].dimensions());
-      this.show(false);
-      return this.refreshElements();
     };
 
     Panel.prototype.resize = function(animate, dimensions) {
-      var height, titleHeight;
+      var height, titleHeight, _ref;
       if (animate == null) {
         animate = true;
       }
+      if (dimensions == null) {
+        dimensions = null;
+      }
       clearTimeout(this.showContentTimeout);
+      if (typeof animate === 'object') {
+        dimensions = animate;
+        animate = false;
+      }
+      dimensions || (dimensions = (_ref = Mercury["interface"]) != null ? typeof _ref.dimensions === "function" ? _ref.dimensions() : void 0 : void 0);
       if (dimensions) {
         this.css({
           top: dimensions.top + 10,
@@ -3486,92 +3562,17 @@ Copyright (c) 2013 Jeremy Jackson
       return this.removeClass('mercury-no-animation');
     };
 
-    Panel.prototype.contentFromOptions = function() {
-      if (this.subTemplate) {
-        return this.renderTemplate(this.subTemplate);
-      }
-      return this.content;
+    Panel.prototype.onShow = function() {
+      return Mercury.trigger('panels:hide');
     };
 
-    Panel.prototype.showContent = function(animate) {
-      clearTimeout(this.contentOpacityTimeout);
-      this.removeClass('loading');
-      this.$content.css({
-        visibility: 'visible',
-        width: 'auto'
-      });
-      if (animate) {
-        return this.contentOpacityTimeout = this.delay(50, function() {
-          return this.$content.css({
-            opacity: 1
-          });
-        });
-      } else {
-        return this.$content.css({
-          opacity: 1
-        });
-      }
-    };
-
-    Panel.prototype.show = function(update) {
-      if (update == null) {
-        update = true;
-      }
-      if (this.visible) {
-        return;
-      }
-      Mercury.trigger('panels:hide');
-      this.trigger('show');
-      clearTimeout(this.visibilityTimout);
-      this.visible = true;
-      this.$el.show();
-      return this.visibilityTimout = this.delay(50, function() {
-        this.css({
-          opacity: 1
-        });
-        if (update) {
-          return this.update();
-        }
-      });
-    };
-
-    Panel.prototype.hide = function(release) {
-      if (release == null) {
-        release = false;
-      }
-      if (!this.visible) {
-        return;
-      }
-      Mercury.trigger('focus');
-      this.trigger('hide');
-      clearTimeout(this.visibilityTimout);
-      this.visible = false;
-      this.css({
-        opacity: 0
-      });
-      return this.visibilityTimout = this.delay(250, function() {
-        this.$el.hide();
-        if (release) {
-          return this.release();
-        }
-      });
-    };
-
-    Panel.prototype.appendTo = function() {
-      this.log(this.t('appending to mercury interface instead'));
-      return Panel.__super__.appendTo.call(this, Mercury["interface"]);
-    };
-
-    Panel.prototype.release = function() {
-      if (this.visible) {
-        return this.hide(true);
-      }
-      return Panel.__super__.release.apply(this, arguments);
+    Panel.prototype.onHide = function() {
+      return Mercury.trigger('focus');
     };
 
     return Panel;
 
-  })(Mercury.View);
+  })(Mercury.Modal);
 
 }).call(this);
 (function() {
@@ -3719,7 +3720,28 @@ Copyright (c) 2013 Jeremy Jackson
       this.determineAction();
       this.determineTypes();
       ToolbarButton.__super__.constructor.call(this, this.options);
+      this.handleSpecial();
     }
+
+    ToolbarButton.prototype.handleSpecial = function() {
+      if (this.event === 'save') {
+        this.delegateEvents({
+          'mercury:save': function() {
+            return this.addClass('mercury-loading-indicator');
+          },
+          'mercury:save:complete': function() {
+            return this.removeClass('mercury-loading-indicator');
+          }
+        });
+      }
+      if (this.mode === 'preview') {
+        return this.delegateEvents({
+          'mercury:interface:hide': function() {
+            return this.untoggled();
+          }
+        });
+      }
+    };
 
     ToolbarButton.prototype.determineAction = function() {
       this.action = this.options.action || this.name;
@@ -3824,6 +3846,14 @@ Copyright (c) 2013 Jeremy Jackson
         Mercury.trigger('mode', this.mode);
       }
       return Mercury.trigger.apply(Mercury, ['action'].concat(__slice.call(this.action)));
+    };
+
+    ToolbarButton.prototype.release = function() {
+      var _ref;
+      if ((_ref = this.subview) != null) {
+        _ref.release();
+      }
+      return ToolbarButton.__super__.release.apply(this, arguments);
     };
 
     ToolbarButton.prototype.regionSupported = function(region) {
@@ -3980,7 +4010,7 @@ Copyright (c) 2013 Jeremy Jackson
         }
       })();
       if (item) {
-        return this.append(item);
+        return this.appendView(item);
       }
     };
 
@@ -4023,12 +4053,8 @@ Copyright (c) 2013 Jeremy Jackson
       'mercury:interface:show': 'show',
       'mercury:region:focus': 'onRegionFocus',
       'mousedown': 'onMousedown',
-      'mouseup': function(e) {
-        return this.prevent(e, true);
-      },
-      'click': function(e) {
-        return this.prevent(e, true);
-      }
+      'mouseup': 'preventStop',
+      'click': 'preventStop'
     };
 
     Toolbar.prototype.build = function() {
@@ -4037,7 +4063,7 @@ Copyright (c) 2013 Jeremy Jackson
     };
 
     Toolbar.prototype.buildToolbar = function(name) {
-      return new Mercury.ToolbarItem(name, 'collection', this.config("toolbars:" + name)).appendTo(this.$toolbar);
+      return this.appendView(this.$toolbar, new Mercury.ToolbarItem(name, 'collection', this.config("toolbars:" + name)));
     };
 
     Toolbar.prototype.show = function() {
@@ -4081,6 +4107,7 @@ Copyright (c) 2013 Jeremy Jackson
       }
       this.region = region;
       this.$('.mercury-toolbar-collection').remove();
+      this.releaseSubviews();
       _ref = region.toolbars || [];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         name = _ref[_i];
@@ -4188,19 +4215,6 @@ Copyright (c) 2013 Jeremy Jackson
 
     ToolbarPalette.prototype.hidden = true;
 
-    ToolbarPalette.prototype.init = function() {
-      this.on('show', function() {
-        if (!this.visible) {
-          return Mercury.trigger('interface:mask');
-        }
-      });
-      return this.on('hide', function() {
-        if (this.visible) {
-          return Mercury.trigger('interface:unmask');
-        }
-      });
-    };
-
     return ToolbarPalette;
 
   })(Mercury.View);
@@ -4229,19 +4243,6 @@ Copyright (c) 2013 Jeremy Jackson
     ToolbarSelect.className = 'mercury-dialog mercury-toolbar-select';
 
     ToolbarSelect.prototype.hidden = true;
-
-    ToolbarSelect.prototype.init = function() {
-      this.on('show', function() {
-        if (!this.visible) {
-          return Mercury.trigger('interface:mask');
-        }
-      });
-      return this.on('hide', function() {
-        if (this.visible) {
-          return Mercury.trigger('interface:unmask');
-        }
-      });
-    };
 
     return ToolbarSelect;
 
@@ -5808,7 +5809,7 @@ Copyright (c) 2013 Jeremy Jackson
 
     Panel.prototype.template = 'history';
 
-    Panel.prototype.className = 'mercury-history-dialog';
+    Panel.prototype.className = 'mercury-history-panel';
 
     Panel.prototype.title = 'Page Version History';
 
@@ -5868,7 +5869,7 @@ Copyright (c) 2013 Jeremy Jackson
 
     Modal.prototype.template = 'link';
 
-    Modal.prototype.className = 'mercury-link-dialog';
+    Modal.prototype.className = 'mercury-link-modal';
 
     Modal.prototype.title = 'Link Manager';
 
@@ -5968,7 +5969,7 @@ Copyright (c) 2013 Jeremy Jackson
   this.JST || (this.JST = {});
 
   JST['/mercury/templates/link'] || (JST['/mercury/templates/link'] = function() {
-    return "<form class=\"form-horizontal\">\n\n  <fieldset class=\"link_text_container\">\n    <div class=\"control-group string required\">\n      <label class=\"string required control-label\" for=\"link_text\">Link Content</label>\n      <div class=\"controls\">\n        <input class=\"string required\" id=\"link_text\" name=\"link[text]\" size=\"50\" type=\"text\" tabindex=\"1\">\n      </div>\n    </div>\n  </fieldset>\n\n  <fieldset>\n    <legend>Standard Links</legend>\n    <div class=\"control-group url optional\">\n      <label class=\"url optional control-label\" for=\"link_external_url\">\n        <input name=\"link_type\" type=\"radio\" value=\"external_url\" checked=\"checked\" tabindex=\"-1\"/>URL\n      </label>\n      <div class=\"controls\">\n        <input class=\"string url optional\" id=\"link_external_url\" name=\"link[external_url]\" size=\"50\" type=\"text\" tabindex=\"1\">\n      </div>\n    </div>\n  </fieldset>\n\n  <fieldset>\n    <legend>Index / Bookmark Links</legend>\n    <div class=\"control-group select optional\">\n      <label class=\"select optional control-label\" for=\"link_existing_bookmark\">\n        <input name=\"link_type\" type=\"radio\" value=\"existing_bookmark\" tabindex=\"-1\"/>Existing Links\n      </label>\n      <div class=\"controls\">\n        <select class=\"select optional\" id=\"link_existing_bookmark\" name=\"link[existing_bookmark]\" tabindex=\"1\"></select>\n      </div>\n    </div>\n    <div class=\"control-group string optional\">\n      <label class=\"string optional control-label\" for=\"link_new_bookmark\">\n        <input name=\"link_type\" type=\"radio\" value=\"new_bookmark\" tabindex=\"-1\"/>Bookmark\n      </label>\n      <div class=\"controls\">\n        <input class=\"string optional\" id=\"link_new_bookmark\" name=\"link[new_bookmark]\" type=\"text\" tabindex=\"1\">\n      </div>\n    </div>\n  </fieldset>\n\n  <fieldset>\n    <legend>Options</legend>\n    <div class=\"control-group select optional\">\n      <label class=\"select optional control-label\" for=\"link_target\">Link Target</label>\n      <div class=\"controls\">\n        <select class=\"select optional\" id=\"link_target\" name=\"link[target]\" tabindex=\"1\">\n          <option value=\"\">Self (the same window or tab)</option>\n          <option value=\"_blank\">Blank (a new window or tab)</option>\n          <option value=\"_top\">Top (removes any frames)</option>\n          <option value=\"popup\">Popup Window (javascript new window popup)</option>\n        </select>\n      </div>\n    </div>\n    <div id=\"popup_options\" class=\"link-target-options\" style=\"display:none\">\n      <div class=\"control-group number optional\">\n        <label class=\"number optional control-label\" for=\"link_popup_width\">Popup Width</label>\n        <div class=\"controls\">\n          <input class=\"span2 number optional\" id=\"link_popup_width\" name=\"link[popup_width]\" type=\"number\" value=\"960\" tabindex=\"1\">\n        </div>\n      </div>\n      <div class=\"control-group number optional\">\n        <label class=\"number optional control-label\" for=\"link_popup_height\">Popup Height</label>\n        <div class=\"controls\">\n          <input class=\"span2 number optional\" id=\"link_popup_height\" name=\"link[popup_height]\" type=\"number\" value=\"800\" tabindex=\"1\">\n        </div>\n      </div>\n    </div>\n  </fieldset>\n\n  <div class=\"form-actions\">\n    <input class=\"btn btn-primary\" name=\"commit\" type=\"submit\" value=\"Insert Link\" tabindex=\"2\">\n  </div>\n</form>";
+    return "<form class=\"form-horizontal\">\n\n  <fieldset class=\"link_text_container\">\n    <div class=\"control-group string required\">\n      <label class=\"string required control-label\" for=\"link_text\">Link Content</label>\n      <div class=\"controls\">\n        <input class=\"string required\" id=\"link_text\" name=\"link[text]\" size=\"50\" type=\"text\" tabindex=\"1\">\n      </div>\n    </div>\n  </fieldset>\n\n  <fieldset>\n    <legend>Standard Links</legend>\n    <div class=\"control-group url optional\">\n      <label class=\"url optional control-label\" for=\"link_external_url\">\n        <input name=\"link_type\" type=\"radio\" value=\"external_url\" checked=\"checked\" tabindex=\"-1\"/>URL\n      </label>\n      <div class=\"controls\">\n        <input class=\"string url optional\" id=\"link_external_url\" name=\"link[external_url]\" size=\"50\" type=\"text\" tabindex=\"1\">\n      </div>\n    </div>\n  </fieldset>\n\n  <fieldset>\n    <legend>Index / Bookmark Links</legend>\n    <div class=\"control-group select optional\">\n      <label class=\"select optional control-label\" for=\"link_existing_bookmark\">\n        <input name=\"link_type\" type=\"radio\" value=\"existing_bookmark\" tabindex=\"-1\"/>Existing Links\n      </label>\n      <div class=\"controls\">\n        <select class=\"select optional\" id=\"link_existing_bookmark\" name=\"link[existing_bookmark]\" tabindex=\"1\"></select>\n      </div>\n    </div>\n    <div class=\"control-group string optional\">\n      <label class=\"string optional control-label\" for=\"link_new_bookmark\">\n        <input name=\"link_type\" type=\"radio\" value=\"new_bookmark\" tabindex=\"-1\"/>Bookmark\n      </label>\n      <div class=\"controls\">\n        <input class=\"string optional\" id=\"link_new_bookmark\" name=\"link[new_bookmark]\" type=\"text\" tabindex=\"1\">\n      </div>\n    </div>\n  </fieldset>\n\n  <fieldset>\n    <legend>Options</legend>\n    <div class=\"control-group select optional\">\n      <label class=\"select optional control-label\" for=\"link_target\">Link Target</label>\n      <div class=\"controls\">\n        <select class=\"select optional\" id=\"link_target\" name=\"link[target]\" tabindex=\"1\">\n          <option value=\"\">Self (the same window or tab)</option>\n          <option value=\"_blank\">Blank (a new window or tab)</option>\n          <option value=\"_top\">Top (removes any frames)</option>\n          <option value=\"popup\">Popup Window (javascript new window popup)</option>\n        </select>\n      </div>\n    </div>\n    <div id=\"popup_options\" class=\"link-target-options\" style=\"display:none\">\n      <div class=\"control-group number optional\">\n        <label class=\"number optional control-label\" for=\"link_popup_width\">Popup Width</label>\n        <div class=\"controls\">\n          <input class=\"number optional\" id=\"link_popup_width\" name=\"link[popup_width]\" type=\"number\" value=\"960\" tabindex=\"1\">\n        </div>\n      </div>\n      <div class=\"control-group number optional\">\n        <label class=\"number optional control-label\" for=\"link_popup_height\">Popup Height</label>\n        <div class=\"controls\">\n          <input class=\"number optional\" id=\"link_popup_height\" name=\"link[popup_height]\" type=\"number\" value=\"800\" tabindex=\"1\">\n        </div>\n      </div>\n    </div>\n  </fieldset>\n\n  <div class=\"form-actions\">\n    <input class=\"btn btn-primary\" name=\"commit\" type=\"submit\" value=\"Insert Link\" tabindex=\"2\">\n  </div>\n</form>";
   });
 
 }).call(this);
@@ -6028,7 +6029,7 @@ Copyright (c) 2013 Jeremy Jackson
 
     Modal.prototype.template = 'media';
 
-    Modal.prototype.className = 'mercury-media-dialog';
+    Modal.prototype.className = 'mercury-media-modal';
 
     Modal.prototype.title = 'Media Manager';
 
@@ -6162,7 +6163,7 @@ Copyright (c) 2013 Jeremy Jackson
 
     Panel.prototype.template = 'notes';
 
-    Panel.prototype.className = 'mercury-notes-dialog';
+    Panel.prototype.className = 'mercury-notes-panel';
 
     Panel.prototype.title = 'Page Notes';
 
@@ -6228,7 +6229,7 @@ Copyright (c) 2013 Jeremy Jackson
 
     Select.prototype.template = 'styles';
 
-    Select.prototype.className = 'mercury-styles-dialog';
+    Select.prototype.className = 'mercury-styles-select';
 
     Select.prototype.events = {
       'click li': function(e) {
@@ -6266,7 +6267,7 @@ Copyright (c) 2013 Jeremy Jackson
     description: 'Provides interface for inserting and editing tables.',
     version: '1.0.0',
     actions: {
-      link: 'insert'
+      html: 'insert'
     },
     events: {
       'mercury:edit:table': 'showDialog',
@@ -6281,11 +6282,14 @@ Copyright (c) 2013 Jeremy Jackson
       return this.bindTo(new Plugin.Modal());
     },
     bindTo: function(view) {
+      var _this = this;
       return view.on('form:submitted', function(value) {
-        return console.debug(value);
+        return _this.triggerAction(value);
       });
     },
-    insert: function() {}
+    insert: function(name, value) {
+      return Mercury.trigger('action', name, value);
+    }
   });
 
   Plugin.Modal = (function(_super) {
@@ -6298,11 +6302,39 @@ Copyright (c) 2013 Jeremy Jackson
 
     Modal.prototype.template = 'table';
 
-    Modal.prototype.className = 'mercury-table-dialog';
+    Modal.prototype.className = 'mercury-table-modal';
 
     Modal.prototype.title = 'Table Manager';
 
     Modal.prototype.width = 600;
+
+    Modal.prototype.elements = {
+      table: 'table'
+    };
+
+    Modal.prototype.events = {
+      'click table': 'onCellClick',
+      'click [data-action]': 'onActionClick'
+    };
+
+    Modal.prototype.update = function() {
+      Modal.__super__.update.apply(this, arguments);
+      return this.editor = new Mercury.TableEditor(this.$table, '&nbsp;');
+    };
+
+    Modal.prototype.onCellClick = function(e) {
+      return this.editor.setCell($(e.target));
+    };
+
+    Modal.prototype.onActionClick = function(e) {
+      this.prevent(e);
+      return this.editor[$(e.target).closest('[data-action]').data('action')]();
+    };
+
+    Modal.prototype.onSubmit = function() {
+      this.trigger('form:submitted', this.editor.asHtml('<br/>'));
+      return this.hide();
+    };
 
     return Modal;
 
@@ -6311,7 +6343,7 @@ Copyright (c) 2013 Jeremy Jackson
   this.JST || (this.JST = {});
 
   JST['/mercury/templates/table'] || (JST['/mercury/templates/table'] = function() {
-    return "<form class=\"form-horizontal\">\n  <div class=\"form-inputs\">\n\n    <fieldset id=\"table_display\">\n      <div class=\"control-group optional\">\n        <div class=\"controls\">\n          <table border=\"1\" cellspacing=\"0\">\n            <tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>\n            <tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>\n            <tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>\n          </table>\n        </div>\n      </div>\n    </fieldset>\n\n    <fieldset>\n      <div class=\"control-group buttons optional\">\n        <label class=\"buttons optional control-label\">Rows</label>\n        <div class=\"controls btn-group\">\n          <button class=\"btn\" data-action=\"addRowBefore\">Add Before</button>\n          <button class=\"btn\" data-action=\"addRowAfter\">Add After</button>\n          <button class=\"btn\" data-action=\"removeRow\">Remove</button>\n        </div>\n      </div>\n      <div class=\"control-group buttons optional\">\n        <label class=\"buttons optional control-label\">Columns</label>\n        <div class=\"controls btn-group\">\n          <button class=\"btn\" data-action=\"addColumnBefore\">Add Before</button>\n          <button class=\"btn\" data-action=\"addColumnAfter\">Add After</button>\n          <button class=\"btn\" data-action=\"removeColumn\">Remove</button>\n        </div>\n      </div>\n\n      <hr/>\n\n      <div class=\"control-group buttons optional\">\n        <label class=\"buttons optional control-label\">Row Span</label>\n        <div class=\"controls btn-group\">\n          <button class=\"btn\" data-action=\"increaseRowspan\">+</button>\n          <button class=\"btn\" data-action=\"decreaseRowspan\">-</button>\n        </div>\n      </div>\n      <div class=\"control-group buttons optional\">\n        <label class=\"buttons optional control-label\">Column Span</label>\n        <div class=\"controls btn-group\">\n          <button class=\"btn\" data-action=\"increaseColspan\">+</button>\n          <button class=\"btn\" data-action=\"decreaseColspan\">-</button>\n        </div>\n      </div>\n    </fieldset>\n\n    <fieldset>\n      <legend>Options</legend>\n      <div class=\"control-group select optional\">\n        <label class=\"select optional control-label\" for=\"table_alignment\">Alignment</label>\n        <div class=\"controls\">\n          <select class=\"select optional\" id=\"table_alignment\" name=\"table[alignment]\">\n            <option value=\"\">None</option>\n            <option value=\"right\">Right</option>\n            <option value=\"left\">Left</option>\n          </select>\n        </div>\n      </div>\n      <div class=\"control-group number optional\">\n        <label class=\"number optional control-label\" for=\"table_border\">Border</label>\n        <div class=\"controls\">\n          <input class=\"span1 number optional\" id=\"table_border\" name=\"table[border]\" size=\"50\" type=\"number\" value=\"1\">\n        </div>\n      </div>\n      <div class=\"control-group number optional\">\n        <label class=\"number optional control-label\" for=\"table_spacing\">Spacing</label>\n        <div class=\"controls\">\n          <input class=\"span1 number optional\" id=\"table_spacing\" name=\"table[spacing]\" size=\"50\" type=\"number\" value=\"0\">\n        </div>\n      </div>\n    </fieldset>\n\n  </div>\n  <div class=\"form-actions\">\n    <input class=\"btn btn-primary\" name=\"commit\" type=\"submit\" value=\"Insert Table\"/>\n  </div>\n</form>";
+    return "<form class=\"form-horizontal\">\n\n  <fieldset class=\"table-control\">\n    <table>\n      <tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>\n      <tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>\n      <tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>\n    </table>\n  </fieldset>\n\n  <fieldset>\n    <div class=\"control-group buttons optional\">\n      <label class=\"buttons optional control-label\">Rows</label>\n      <div class=\"controls btn-group\">\n        <button class=\"btn\" data-action=\"addRowBefore\">Before</button>\n        <button class=\"btn\" data-action=\"addRowAfter\">After</button>\n        <button class=\"btn\" data-action=\"removeRow\">Remove</button>\n      </div>\n    </div>\n    <div class=\"control-group buttons optional\">\n      <label class=\"buttons optional control-label\">Columns</label>\n      <div class=\"controls btn-group\">\n        <button class=\"btn\" data-action=\"addColumnBefore\">Before</button>\n        <button class=\"btn\" data-action=\"addColumnAfter\">After</button>\n        <button class=\"btn\" data-action=\"removeColumn\">Remove</button>\n      </div>\n    </div>\n\n    <hr/>\n\n    <div class=\"control-group buttons optional\">\n      <label class=\"buttons optional control-label\">Row Span</label>\n      <div class=\"controls btn-group\">\n        <button class=\"btn\" data-action=\"increaseRowspan\">+</button>\n        <button class=\"btn\" data-action=\"decreaseRowspan\">-</button>\n      </div>\n    </div>\n    <div class=\"control-group buttons optional\">\n      <label class=\"buttons optional control-label\">Column Span</label>\n      <div class=\"controls btn-group\">\n        <button class=\"btn\" data-action=\"increaseColspan\">+</button>\n        <button class=\"btn\" data-action=\"decreaseColspan\">-</button>\n      </div>\n    </div>\n  </fieldset>\n\n  <fieldset>\n    <legend>Options</legend>\n    <div class=\"control-group select optional\">\n      <label class=\"select optional control-label\" for=\"table_alignment\">Alignment</label>\n      <div class=\"controls\">\n        <select class=\"select optional\" id=\"table_alignment\" name=\"table[align]\">\n          <option value=\"\">None</option>\n          <option value=\"right\">Right</option>\n          <option value=\"left\">Left</option>\n        </select>\n      </div>\n    </div>\n  </fieldset>\n\n  <div class=\"form-actions\">\n    <input class=\"btn btn-primary\" name=\"commit\" type=\"submit\" value=\"Insert Table\"/>\n  </div>\n</form>";
   });
 
 }).call(this);

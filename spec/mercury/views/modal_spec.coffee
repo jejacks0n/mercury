@@ -178,6 +178,10 @@ describe "Mercury.Modal", ->
       spyOn(subject.$titleContainer, 'outerHeight', -> 6)
       spyOn(subject.$content, 'outerHeight', -> 42)
 
+    it "does nothing if not visible", ->
+      subject.visible = false
+      expect( subject.resize() ).to.be.undefined
+
     it "clears the @showContentTimeout", ->
       spyOn(window, 'clearTimeout')
       subject.showContentTimeout = '_timeout_'

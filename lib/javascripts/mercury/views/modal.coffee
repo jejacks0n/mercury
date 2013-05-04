@@ -75,6 +75,7 @@ class Mercury.Modal extends Mercury.View
 
 
   resize: (animate = true, dimensions = null) ->
+    return unless @visible
     clearTimeout(@showContentTimeout)
     if typeof(animate) == 'object'
       dimensions = animate

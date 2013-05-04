@@ -27,13 +27,14 @@ class Mercury.Panel extends Mercury.Modal
 
 
   resize: (animate = true, dimensions = null) =>
+    return unless @visible
     clearTimeout(@showContentTimeout)
     if typeof(animate) == 'object'
       dimensions = animate
       animate = false
-    dimensions ||= Mercury.interface?.dimensions?()
-    @css(top: dimensions.top + 10, bottom: dimensions.bottom + 10) if dimensions
     @addClass('mercury-no-animation') unless animate
+    if dimensions ||= Mercury.interface?.dimensions?()
+      @css(top: dimensions.top + 10, bottom: dimensions.bottom + 10)
     titleHeight = @$titleContainer.outerHeight()
     height = @$el.height()
     @$contentContainer.css(height: height - titleHeight)

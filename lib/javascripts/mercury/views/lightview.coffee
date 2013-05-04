@@ -32,6 +32,7 @@ class Mercury.Lightview extends Mercury.Modal
 
 
   resize: (animate = true, dimensions = null) ->
+    return unless @visible
     clearTimeout(@showContentTimeout)
     if typeof(animate) == 'object'
       dimensions = animate

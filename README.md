@@ -3,7 +3,7 @@ Mercury Editor 2
 
 Mercury Editor is a web based WYSIWYG editor, and takes a different approach than any editor out there. It provides a full framework in which you can more easily create complex regions and interfaces. In Mercury Editor, regions dictate it's toolbars, buttons, and context for highlighting buttons. This simplifies the configuration, and provides more flexibility in terms of defining your own custom functionality that doesn't fit into the standard Mercury Editor features.
 
-Mercury Editor also provides a comprehensive plugin architecture. Plugins makes additional functionality easier to write, test, and maintain -- and allows a more consistent way to provide it to others.
+Mercury Editor also provides a comprehensive plugin architecture. Plugins makes additional functionality easier to write, test, and maintain -- and allows for a more consistent way to provide it to others.
 
 
 ## Developer Notice
@@ -21,8 +21,6 @@ If you want to use the raw assets grab them from [the distro](https://github.com
 
 ### Installation
 
-In this version, regions are broken out of the main javascript file, which allows you to use whatever you want, and not have to clutter it up with regions types you don't want.
-
 Start by loading the general dependencies (changing paths as needed).
 
 ```html
@@ -33,7 +31,9 @@ Start by loading the general dependencies (changing paths as needed).
 
 It's worth noting that if you don't use the css bundle, you'll need to update the css to point to the correct font path and have those servable as well.
 
-Now let's add some region types. Each region can have it's own dependencies which are documented at the top of each region javascript file. Let's say we want to use the HTML and Markdown regions. The Markdown region depends on marked (a javascript markdown parser), and the HTML region depends on Rangy, so we need to add those dependencies and then we can add the region javascripts.
+Mercury2 Regions are broken out from the main javascript file which allows you to use whatever you want and not have regions you don't want cluttering things up. Each region can have it's own dependencies which are documented at the top of each region javascript.
+
+Let's say we want to use the HTML and Markdown regions. The Markdown region depends on marked (a javascript markdown parser), and the HTML region depends on Rangy (a selection library), so we'll add the dependencies and the region javascripts.
 
 ```html
 <script src="dependencies/marked-0.2.8.js" type="text/javascript"></script>
@@ -42,11 +42,13 @@ Now let's add some region types. Each region can have it's own dependencies whic
 <script src="regions/html.min.js" type="text/javascript"></script>
 ```
 
-Once you have the files loading, you can start to edit the configuration. The configuration is at the top of the file -- you can [read more about the configuration options here](https://github.com/jejacks0n/mercury/blob/mercury2/lib/javascripts/mercury/config.coffee). Once you've configured Mercury2 how you like you can initialize it.
+Check that the files are loading.
+
+The configuration is a good place to start. The configuration is at the top of the main `mercury.js` or `mercury.min.js` file -- you can [read more about the configuration options here](https://github.com/jejacks0n/mercury/blob/mercury2/lib/javascripts/mercury/config.coffee).
 
 ### Initializing
 
-You can initialize Mercury2 after the DOM is ready, or at the bottom of the document. Either way works.
+You can initialize Mercury2 any time after the DOM is ready. You can use the jQuery dom loaded callback, or initialize it at the bottom of the document. Either way works.
 
 ```javascript
 jQuery(function() {

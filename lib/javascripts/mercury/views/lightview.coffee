@@ -1,5 +1,5 @@
-#= require mercury/core/view
 #= require mercury/views/modal
+#= require mercury/templates/lightview
 
 class Mercury.Lightview extends Mercury.Modal
 
@@ -7,7 +7,6 @@ class Mercury.Lightview extends Mercury.Modal
   @className: 'mercury-dialog mercury-lightview'
 
   @elements:
-    overlay: '.mercury-lightview-overlay'
     dialog: '.mercury-lightview-dialog-positioner'
     content: '.mercury-lightview-dialog-content'
     contentContainer: '.mercury-lightview-dialog-content-container'
@@ -21,17 +20,22 @@ class Mercury.Lightview extends Mercury.Modal
     'click .mercury-lightview-dialog-title em': 'hide'
 
   primaryTemplate: 'lightview'
+  releaseOnHide: true
 
   build: ->
     super
+    @defaultPosition()
+
+
+  defaultPosition: ->
     @$dialog.css(marginTop: ($(window).height() - 75) / 2)
 
 
   resize: (animate = true, dimensions = null) ->
+    clearTimeout(@showContentTimeout)
     if typeof(animate) == 'object'
       dimensions = animate
       animate = false
-    clearTimeout(@showContentTimeout)
     @addClass('mercury-no-animation') unless animate
     @$contentContainer.css(height: 'auto')
     @$content.css(width: Math.min(@$content.outerWidth(), $(window).width()))
@@ -45,3 +49,9 @@ class Mercury.Lightview extends Mercury.Modal
     else
       @showContent(false)
     @removeClass('mercury-no-animation')
+
+
+  onHide: ->
+    super
+    @delay(250, @defaultPosition)
+

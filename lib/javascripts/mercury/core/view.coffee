@@ -128,9 +128,12 @@ class Mercury.View extends Mercury.Module
       view = elOrView
       elOrView = @$el
     elOrView = @$(elOrView) if typeof(elOrView) == 'string'
-    elOrView.append(view.$el || view.el)
+    if view.appendTo
+      view.appendTo?(elOrView)
+    else
+      elOrView.append(view.$el || view.el)
     @subviews.push(view)
-    @
+    view
 
 
   # Delegates to setTimeout swapping the argument order, and calling the callback within our scope.

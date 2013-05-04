@@ -26,7 +26,7 @@ mercury .mercury-modal {
     left: 0;
     width: 100%;
     .mercury-modal-dialog-positioner {
-      @include mercury-transition(width height);
+      @include mercury-transition((width, height));
       @include mercury-border-radius(0 0 4px 4px);
       @include mercury-box-shadow;
       min-width: 200px;

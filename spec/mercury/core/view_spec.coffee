@@ -260,8 +260,8 @@ describe "Mercury.View", ->
       subject.appendView('.subview', @subview)
       expect( subject.$el.find('.subview').html() ).to.eq('_$el_')
 
-    it "returns self", ->
-      expect( subject.appendView(@subview) ).to.eq(subject)
+    it "returns the view", ->
+      expect( subject.appendView(@subview) ).to.eq(@subview)
 
 
   describe "#delay", ->

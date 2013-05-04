@@ -3,6 +3,7 @@
 #= require mercury/views/modules/interface_focusable
 #= require mercury/views/modules/scroll_propagation
 #= require mercury/views/modules/visibility_toggleable
+#= require mercury/templates/modal
 
 class Mercury.Modal extends Mercury.View
   @include Mercury.View.Modules.FormHandler
@@ -14,7 +15,6 @@ class Mercury.Modal extends Mercury.View
   @className: 'mercury-dialog mercury-modal'
 
   @elements:
-    overlay: '.mercury-modal-overlay'
     dialog: '.mercury-modal-dialog-positioner'
     content: '.mercury-modal-dialog-content'
     contentContainer: '.mercury-modal-dialog-content-container'
@@ -30,48 +30,55 @@ class Mercury.Modal extends Mercury.View
   primaryTemplate: 'modal'
   releaseOnHide: true
 
-  constructor: (@options = {}) ->
-    @options.template ||= @template
-    super(@options)
-    if @hidden then @visible = false else @show()
-
-
   buildElement: ->
-    @subTemplate = @options.template
-    @template = @primaryTemplate
+    @releaseOnHide = false if @hidden
+    @negotiateTemplate()
     super
 
 
   build: ->
-    @addClass('loading')
-    @appendTo(Mercury.interface)
+    @appendTo() # always Mercury.interface
     @preventScrollPropagation(@$contentContainer)
 
 
-  update: (options) ->
-    return unless @visible
-    @options = $.extend({}, @options, options || {})
-    @[key] = value for key, value of @options
+  negotiateTemplate: ->
+    @options.template ||= @template
     @subTemplate = @options.template
     @template = @primaryTemplate
-    @$title.html(@title)
-    @$dialog.css(width: @width)
-    content = @contentFromOptions()
-    return if content == @lastContent
-    @addClass('loading')
-    @$content.css(visibility: 'hidden', opacity: 0, width: @width).html(content)
-    @lastContent = content
+
+
+  update: (options) ->
+    return unless @visible && @updateForOptions(options)
     @resize()
     @show(false)
     @refreshElements()
     @delay(300, @focusFirstFocusable)
 
 
-  resize: (animate = true, dimensions) ->
+  updateForOptions: (options) ->
+    @options = $.extend({}, @options, options || {})
+    @[key] = value for key, value of @options
+    @negotiateTemplate()
+    @$title.html(@title)
+    @setWidth(@width)
+    content = @contentFromOptions()
+    return false if content == @lastContent && @width == @lastWidth
+    @addClass('loading')
+    @lastContent = content
+    @lastWidth = @width
+    @$content.css(visibility: 'hidden', opacity: 0, width: @width).html(content)
+    return true
+
+
+  setWidth: (width) ->
+    @$dialog.css(width: width)
+
+
+  resize: (animate = true, dimensions = null) ->
+    clearTimeout(@showContentTimeout)
     if typeof(animate) == 'object'
       dimensions = animate
       animate = false
-    clearTimeout(@showContentTimeout)
     @addClass('mercury-no-animation') unless animate
     @$contentContainer.css(height: 'auto')
     titleHeight = @$titleContainer.outerHeight()
@@ -99,7 +106,7 @@ class Mercury.Modal extends Mercury.View
   showContent: (animate = true) ->
     clearTimeout(@contentOpacityTimeout)
     @removeClass('loading')
-    @$content.css(visibility: 'visible', width: 'auto')
+    @$content.css(visibility: 'visible', width: 'auto', display: 'block')
     if animate
       @contentOpacityTimeout = @delay(50, -> @$content.css(opacity: 1))
     else
@@ -107,7 +114,6 @@ class Mercury.Modal extends Mercury.View
 
 
   appendTo: ->
-    @log(@t('appending to mercury interface instead'))
     super(Mercury.interface)
 
 
@@ -123,3 +129,8 @@ class Mercury.Modal extends Mercury.View
 
   onHide: ->
     Mercury.trigger('focus')
+    @delay 250, ->
+      @lastWidth = null
+      @$dialog.css(height: '', width: '')
+      @$contentContainer.css(height: '')
+      @$content.hide()

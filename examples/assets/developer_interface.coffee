@@ -63,15 +63,17 @@ class @DeveloperInterface extends Mercury.View
       # dealing with modals
       when 'new_modal'
         @modal?.show()
-        @modal ||= new Mercury.Modal(width: 300, title: 'Short Lorem Modal', template: 'lorem_short')
+        @modal ||= new Mercury.Modal(width: 300, title: 'Short Lorem Modal', template: 'lorem_short', releaseOnHide: false)
       when 'update_modal' then @modal?.update(width: Math.round(Math.random() * 700) + 200, title: 'Updated Lorem Modal', template: 'lorem_long')
+      when 'size_modal' then @modal?.update(width: 600, title: 'Updated Lorem Modal')
       when 'release_modal' then @modal?.release(); delete(@modal)
 
       # dealing with lightview (just like modals)
       when 'new_lightview'
         @lightview?.show()
-        @lightview ||= new Mercury.Lightview(width: 300, title: 'Short Lorem Lightview', template: 'lorem_short')
+        @lightview ||= new Mercury.Lightview(width: 300, title: 'Short Lorem Lightview', template: 'lorem_short', releaseOnHide: false)
       when 'update_lightview' then @lightview?.update(width: Math.round(Math.random() * 800) + 300, title: 'Updated Lorem Lightview', template: 'lorem_long')
+      when 'size_lightview' then @lightview?.update(width: 600, title: 'Updated Lorem Modal')
       when 'release_lightview' then @lightview?.release(); delete(@lightview)
 
       # dealing with panels (same as modals/lightviews, but not a subclass)
@@ -101,7 +103,8 @@ class @DeveloperInterface extends Mercury.View
   # lightviews -- and panels do it slightly differently.
   #
   focusMercury: (e) ->
-#    Mercury.trigger('focus')
+    @prevent(e)
+    Mercury.trigger('focus')
 
 
   # Tells Mercury to save. You can do this by calling the save method on the interface, or you can do it by triggering
@@ -172,10 +175,12 @@ JST['/mercury/templates/developer-interface'] = (scope) ->
   <hr/>
   <li data-action="new_modal">new modal</li>
   <li data-action="update_modal">update modal</li>
+  <li data-action="size_modal">size modal</li>
   <li data-action="release_modal">release modal</li>
   <hr/>
   <li data-action="new_lightview">new lightview</li>
   <li data-action="update_lightview">update lightview</li>
+  <li data-action="size_lightview">size lightview</li>
   <li data-action="release_lightview">release lightview</li>
   <hr/>
   <li data-action="new_panel">new panel</li>

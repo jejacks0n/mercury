@@ -66,8 +66,7 @@ mercury .mercury-toolbar {
     &.mercury-button-active,
     &.mercury-button-pressed {
       @include mercury-gradient($toolbar_button_active_bg_2, $toolbar_button_active_bg_1);
-      em,
-      &:before {
+      &:before, em {
         color: $toolbar_button_active_color;
         text-shadow: none;
       }
@@ -177,6 +176,7 @@ mercury .mercury-toolbar {
       color: $toolbar_primary_button_color;
       em {
         @include mercury-font(8.5pt);
+        text-shadow: #eee 0 1px 0 !important;
         display: block;
         margin: -5px;
         height: 15px;

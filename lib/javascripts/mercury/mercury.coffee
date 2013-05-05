@@ -42,6 +42,7 @@
 #= require mercury/views/toolbar
 #= require mercury/views/toolbar_item
 #= require mercury/views/toolbar_button
+#= require mercury/views/toolbar_expander
 #= require mercury/views/toolbar_palette
 #= require mercury/views/toolbar_select
 #= require mercury/views/uploader

@@ -93,6 +93,11 @@ describe "Mercury.View.Modules.VisibilityToggleable", ->
       subject.show()
       expect( subject.$el.show ).called
 
+    it "calls #position if it's defined", ->
+      subject.position = spy()
+      subject.show()
+      expect( subject.position ).called
+
     it "creates a visibilityTimeout", ->
       subject.visibilityTimout = undefined
       subject.show()

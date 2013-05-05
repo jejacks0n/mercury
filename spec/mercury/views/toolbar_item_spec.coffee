@@ -45,6 +45,13 @@ describe "Mercury.ToolbarItem", ->
       subject.build()
       expect( subject.buildSubview ).calledWith('sep-final', '-')
 
+    it "calls #buildExpander if we're a container and want an expander", ->
+      spyOn(subject, 'buildExpander')
+      subject.expander = true
+      subject.type = 'container'
+      subject.build()
+      expect( subject.buildExpander ).called
+
     it "does nothing if @value isn't an object", ->
       subject.value = ''
       subject.type = 'group'
@@ -78,6 +85,41 @@ describe "Mercury.ToolbarItem", ->
     it "does nothing if the value is something like a number", ->
       subject.buildSubview('foo', 123)
       expect( subject.appendView ).not.called
+
+
+  describe "#buildExpander", ->
+
+    beforeEach ->
+      spyOn(Mercury, 'ToolbarExpander', -> inst: '_toolbar_expander_')
+      spyOn(subject, 'appendView')
+
+
+    it "appends a toolbar expander", ->
+      subject.buildExpander()
+      expect( subject.appendView ).calledWith(inst: '_toolbar_expander_')
+      expect( Mercury.ToolbarExpander ).calledWith(parent: subject)
+
+
+  describe "#hiddenButtons", ->
+
+    beforeEach ->
+      spyOn(subject.$el, 'height', -> 2)
+      spyOn(subject, '$', -> ['<em>', '<div><em>_title_</em></div>', '<em data-icon="_icon_">'])
+      @callCount = 0
+      spyOn($.fn, 'position', => top: 1 + @callCount++) # increase for each one
+
+    it "returns buttons that are out of view (detecting that top is more than height)", ->
+      res = subject.hiddenButtons()
+      expect( res.length ).to.eq(2)
+      console.debug res[0]
+      expect( res[0] ).to.eql
+        title: '_title_'
+        icon: undefined
+        el: res[0].el
+      expect( res[1] ).to.eql
+        title: undefined
+        icon: '_icon_'
+        el: res[1].el
 
 
   describe "#addClasses", ->

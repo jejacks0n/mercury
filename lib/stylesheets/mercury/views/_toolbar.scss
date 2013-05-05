@@ -44,15 +44,39 @@ mercury .mercury-toolbar {
     }
   }
   .mercury-toolbar-expander {
+    @include mercury-toolbar-button-base;
     position: absolute;
     top: 0;
     right: 0;
     z-index: 1;
-    width: 20px;
-    height: 20px;
-    background: red;
+    width: 11px;
+    height: 58px;
+    background: $toolbar_bg_1;
+    border-left: 1px solid $toolbar_button_border_color;
+    &:hover {
+      background: $toolbar_bg_2;
+    }
+    &:before {
+      content: 'W';
+      left: -6px;
+      top: 40px;
+      text-shadow: #eee 0 1px 0;
+    }
     .mercury-dialog {
       width: 100px;
+      li {
+        @include mercury-toolbar-button-base;
+        padding: 6px 10px 2px 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        &[data-icon]:before {
+          content: attr(data-icon);
+          float: left;
+          top: -5px;
+          line-height: 22px;
+        }
+      }
     }
   }
   .mercury-toolbar-button {

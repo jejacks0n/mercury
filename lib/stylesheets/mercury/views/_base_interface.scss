@@ -1,13 +1,12 @@
 mercury {
   &.mercury-floating {
     @include mercury-border-box;
-    @include mercury-transition((top, left));
+    @include mercury-transition((width, top, left));
     @include mercury-border-radius(2px);
     position: absolute;
     left: 0;
-    top: -300px;
-    min-width: 600px;
-    max-width: 600px;
+    top: -400px;
+    min-width: 300px;
     border: 1px solid $toolbar_button_border_color;
     .mercury-toolbar {
       position: relative;

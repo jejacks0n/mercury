@@ -20,7 +20,7 @@ class Mercury.ToolbarExpander extends Mercury.View
 
 
   onResize: ->
-    if @parent.el.scrollHeight > @parent.$el.height() then @show() else @hide()
+    if @parent.el.scrollHeight > @parent.$el.height() + 5 then @show() else @hide()
     @updateSelect() if @select.visible
 
 
@@ -48,6 +48,6 @@ class Mercury.ToolbarExpander extends Mercury.View
     @select.append('<ul>')
     ul = @select.$('ul')
     for button in @parent.hiddenButtons()
-      li = $("<li>#{button.icon} - #{button.title}</li>")
+      li = $("<li data-icon='#{button.icon}'>#{button.title}</li>")
       li.data(button: button.el)
       ul.append(li)

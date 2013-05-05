@@ -11,6 +11,9 @@ mercury.flat {
     .mercury-toolbar-line-separator {
       border: 0;
     }
+    .mercury-toolbar-expander {
+      border-bottom: 1px solid $toolbar_button_border_color;
+    }
     .mercury-toolbar-button {
       @include mercury-border-radius(0);
       background: transparent;

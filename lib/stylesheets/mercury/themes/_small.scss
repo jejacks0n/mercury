@@ -3,6 +3,12 @@ mercury.small {
     border: 1px solid #555;
   }
   .mercury-toolbar {
+    .mercury-toolbar-expander {
+      height: 30px;
+      &:before {
+        top: 13px;
+      }
+    }
     // primary toolbar overrides
     .mercury-toolbar-primary-container {
       height: 30px;

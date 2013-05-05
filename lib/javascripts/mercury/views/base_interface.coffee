@@ -185,7 +185,7 @@ class Mercury.BaseInterface extends Mercury.View
 
   onRegionFocus: (region) ->
     @region = region
-    @delay(100, @position) if @floating
+    @delay(50, -> @position(true)) if @floating
 
 
   onRegionRelease: (region) ->
@@ -229,19 +229,25 @@ class Mercury.BaseInterface extends Mercury.View
 
 
   heightForWidth: (width) ->
-    @css(width: width)
+    oldWidth = @$el.outerWidth()
+    @css(width: width, visibility: 'hidden', height: 'auto')
     height = @$el.outerHeight()
-    @css(width: @lastWidth)
+    @css(width: oldWidth, visibility: 'visible')
     return height
 
 
-  position: ->
+  position: (animate = false) ->
     return unless @floating
     return unless @region
-    pos = @region.$el.position()
-    width = @region.$el.width()
+    @addClass('mercury-no-animation')
+    pos = @region.$el.offset()
+    width = Math.max(@config('interface:floatWidth') || @region.$el.width(), 300)
     height = @heightForWidth(width)
-    @lastWidth = width
-    @css(top: pos.top - height, left: pos.left, width: width)
-    @delay(250, -> Mercury.trigger('interface:resize', @dimensions()))
-
+    callback = =>
+      @removeClass('mercury-no-animation') if animate
+      @css(top: pos.top - height, left: pos.left, width: width)
+    if animate
+      @delay(50, callback)
+      @delay(300, -> Mercury.trigger('interface:resize', @dimensions()))
+    else
+      callback()

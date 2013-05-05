@@ -30,7 +30,7 @@ Mercury.View.Modules.ToolbarDialog =
     left = -e.width + p.width if e.width + o.left > v.width          # off the right side of the viewport
     left -= o.left + left if o.left + left < 0                       # off the left side of the viewport
 
-    top = 0
+    top = p.height
     top = -e.height if e.height + o.top + p.height > v.height        # off the bottom of the viewport
     top -= o.top + top + p.height if o.top + top + p.height < 0      # off the top of the viewport
 

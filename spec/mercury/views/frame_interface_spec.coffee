@@ -7,7 +7,6 @@ describe "Mercury.FrameInterface", ->
   subject = null
 
   beforeEach ->
-    Mercury.configure 'logging:enabled', false
     spyOn($.fn, 'before')
     spyOn(Klass::, 'focusActiveRegion')
     subject = new Klass(frame: '<iframe>')

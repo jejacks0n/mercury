@@ -81,7 +81,7 @@ class Mercury.ToolbarButton extends Mercury.View
     if Klass = Mercury["toolbar_#{@type}".toCamelCase(true)]
       options = @options[@type]
       options = {template: options} if typeof(options) == 'string'
-      return @subview = new Klass($.extend(parent: @$el, options))
+      return @subview = new Klass(options)
 
 
   triggerAction: ->

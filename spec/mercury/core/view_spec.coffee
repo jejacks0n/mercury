@@ -315,6 +315,12 @@ describe "Mercury.View", ->
       expect( subject.renderTemplate('bar') ).to.be.undefined
       expect( subject.fetchTemplate ).not.called
 
+    it "allows passing a function to render", ->
+      template = spy(-> "_spy_template_#{@foo}_")
+      options = foo: 'bar'
+      expect( subject.renderTemplate(template, options) ).to.eql('_spy_template_bar_')
+      expect( template ).called
+
 
   describe "#fetchTemplate", ->
 

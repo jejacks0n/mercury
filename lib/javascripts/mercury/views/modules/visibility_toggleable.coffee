@@ -24,6 +24,7 @@ Mercury.View.Modules.VisibilityToggleable =
     @onShow?()
     @visible = true
     @$el.show()
+    @position?()
     @visibilityTimout = @delay 50, ->
       @css(opacity: 1)
       @update?() if update && typeof(update) == 'boolean'

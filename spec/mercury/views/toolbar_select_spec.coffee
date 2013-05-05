@@ -7,7 +7,6 @@ describe "Mercury.ToolbarSelect", ->
   subject = null
 
   beforeEach ->
-    Mercury.configure 'logging:enabled', false
     subject = new Klass()
 
   afterEach ->

@@ -9,7 +9,6 @@ describe "Mercury.View.Modules.FormHandler", ->
   subject = null
 
   beforeEach ->
-    Mercury.configure 'logging:enabled', false
     class Klass extends Mercury.View
       @include Module
     subject = new Klass()

@@ -74,6 +74,7 @@ class Mercury.BaseInterface extends Mercury.View
     @buildToolbar()
     @buildStatusbar()
     @focusDefaultRegion()
+    @onResize()
 
 
   addLocaleClass: ->
@@ -166,8 +167,8 @@ class Mercury.BaseInterface extends Mercury.View
 
 
   dimensions: ->
-    toolbarHeight = @toolbar.height()
-    statusbarHeight = @statusbar.height()
+    toolbarHeight = @toolbar?.height()
+    statusbarHeight = @statusbar?.height()
     top: toolbarHeight
     left: 0
     right: 0

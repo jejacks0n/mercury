@@ -3,7 +3,7 @@ Plugin = Mercury.registerPlugin 'history'
   version: '1.0.0'
 
   registerButton: ->
-    @button.set(type: 'history', toggle: true, subview: new Plugin.Panel())
+    @button.set(type: 'history', global: true, toggle: true, subview: new Plugin.Panel())
 
 
 class Plugin.Panel extends Mercury.Panel

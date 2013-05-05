@@ -121,8 +121,8 @@ Mercury.configuration =
       character: ['Character', title: 'Special Characters', plugin: 'character']
       snippets : ['Snippet', title: 'Snippet Panel']
       sep3     : ' '
-      history  : ['History', title: 'Page Version History', global: true, plugin: 'history']
-      notes    : ['Notes', title: 'Page Notes', global: true, plugin: 'notes']
+      history  : ['History', title: 'Page Version History', plugin: 'history']
+      notes    : ['Notes', title: 'Page Notes', plugin: 'notes']
 
 
   # Regions

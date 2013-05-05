@@ -34,7 +34,7 @@ jQuery ->
   # focused, how you can use the Mercury Core library as a framework to build a custom interface, and more.
   Mercury.init(frame: '#mercury_frame')
 
-Mercury.Region.Markdown.addToolbar 'history', history: ['History', plugin: 'history', global: true]
+Mercury.Region.Markdown.addToolbar 'history', history: ['History', plugin: 'history']
 Mercury.Region.Markdown.addToolbar 'color', color: ['Color', plugin: 'color']
 Mercury.Region.Markdown.addToolbar 'block', block: ['Block', plugin: 'blocks']
 

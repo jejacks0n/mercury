@@ -1,0 +1,54 @@
+mercury.flat {
+  &.mercury-floating {
+    border: 2px solid #000;
+  }
+  .mercury-toolbar {
+    @include mercury-box-shadow(0 1px 5px rgba(0, 0, 0, .6));
+    .mercury-toolbar-container {
+      background: #ddd;
+      border: 0;
+    }
+    .mercury-toolbar-line-separator {
+      border: 0;
+    }
+    .mercury-toolbar-button {
+      @include mercury-border-radius(0);
+      background: transparent;
+      border: 0;
+      &+ .mercury-toolbar-button {
+        @include mercury-border-radius(0);
+        margin-left: 0;
+      }
+      &:hover {
+        background: #eee;
+      }
+      &[data-type="select"] {
+        background: #eee;
+      }
+      &[data-type="color"] {
+        background: #333;
+      }
+      &:before, em {
+        text-shadow: none !important;
+      }
+      &.mercury-button-active,
+      &.mercury-button-pressed {
+        background: $primary_color;
+      }
+    }
+    // primary toolbar overrides
+    .mercury-toolbar-primary-container {
+      .mercury-toolbar-button {
+        @include mercury-border-radius(0 0 4px 4px);
+        border: 0;
+        background: transparent;
+        &:hover {
+          background: #eee;
+        }
+        &.mercury-button-toggled {
+          background: $primary_color;
+        }
+      }
+    }
+  }
+}

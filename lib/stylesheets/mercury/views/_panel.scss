@@ -2,7 +2,7 @@ mercury .mercury-panel {
   @include mercury-transition((opacity, width));
   @include mercury-border-radius(7px);
   position: fixed;
-  z-index: 10000;
+  z-index: 10500;
   top: 100px;
   right: 10px;
   bottom: 30px;

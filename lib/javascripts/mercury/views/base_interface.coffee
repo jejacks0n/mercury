@@ -30,6 +30,7 @@ class Mercury.BaseInterface extends Mercury.View
       return
 
     Mercury.interface = @
+    @floating ||= @config('interface:floating')
 
     super
 
@@ -50,6 +51,7 @@ class Mercury.BaseInterface extends Mercury.View
     @attr(@attributes)
     @addClass(@className)
     @addClass(@config('interface:style') || 'standard')
+    @addClass('mercury-floating') if @floating
 
 
   init: ->
@@ -167,8 +169,12 @@ class Mercury.BaseInterface extends Mercury.View
 
 
   dimensions: ->
-    toolbarHeight = @toolbar?.height()
-    statusbarHeight = @statusbar?.height()
+    if @floating
+      toolbarHeight = 0
+      statusbarHeight = 0
+    else
+      toolbarHeight = @toolbar?.height()
+      statusbarHeight = @statusbar?.height()
     top: toolbarHeight
     left: 0
     right: 0
@@ -179,6 +185,7 @@ class Mercury.BaseInterface extends Mercury.View
 
   onRegionFocus: (region) ->
     @region = region
+    @delay(100, @position) if @floating
 
 
   onRegionRelease: (region) ->
@@ -189,6 +196,7 @@ class Mercury.BaseInterface extends Mercury.View
 
   onResize: =>
     Mercury.trigger('interface:resize', @dimensions())
+    @position()
 
 
   onUnload: =>
@@ -218,3 +226,22 @@ class Mercury.BaseInterface extends Mercury.View
     @page.set(content: @serialize(), location: location.pathname)
     @page.on('error', (xhr, options) => alert(@t('Mercury was unable to save to the url: %s', options.url)))
     @page.save().always = => @delay(250, -> Mercury.trigger('save:complete'))
+
+
+  heightForWidth: (width) ->
+    @css(width: width)
+    height = @$el.outerHeight()
+    @css(width: @lastWidth)
+    return height
+
+
+  position: ->
+    return unless @floating
+    return unless @region
+    pos = @region.$el.position()
+    width = @region.$el.width()
+    height = @heightForWidth(width)
+    @lastWidth = width
+    @css(top: pos.top - height, left: pos.left, width: width)
+    @delay(250, -> Mercury.trigger('interface:resize', @dimensions()))
+

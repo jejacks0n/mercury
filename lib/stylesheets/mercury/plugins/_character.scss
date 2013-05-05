@@ -30,8 +30,8 @@ mercury {
   }
   .mercury-character-modal {
     ul {
-      max-width: 464px;
       @extend .mercury-clearfix;
+      max-width: 464px;
       list-style: none;
       margin: 0 -2px 0 0;
       padding: 5px 0 0;

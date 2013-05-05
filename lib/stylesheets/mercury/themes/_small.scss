@@ -1,0 +1,35 @@
+mercury.small {
+  &.mercury-floating {
+    border: 1px solid #555;
+  }
+  .mercury-toolbar {
+    // primary toolbar overrides
+    .mercury-toolbar-primary-container {
+      height: 30px;
+      .mercury-toolbar-separator,
+      .mercury-toolbar-line-separator {
+        width: 15px;
+        height: 30px;
+      }
+      .mercury-toolbar-line-separator {
+        width: 0;
+        height: 28px;
+        margin: 0 8px;
+      }
+      .mercury-toolbar-button {
+        @include mercury-icon-base(22px, 37px, 30px);
+        height: 30px;
+        min-width: 37px;
+        margin-bottom: 0;
+        &:before {
+          position: absolute;
+          margin: 0;
+          padding: 0;
+        }
+        em {
+          display: none;
+        }
+      }
+    }
+  }
+}

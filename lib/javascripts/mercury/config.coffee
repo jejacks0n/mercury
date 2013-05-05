@@ -80,6 +80,7 @@ Mercury.configuration =
     shadowed   : false                                     # puts the interface into a shadow dom when it's available
     maskable   : false                                     # uses a mask over the document for toolbar dialogs
     style      : null                                      # interface style - 'small', 'flat' or 'small flat'
+    floating   : true                                      # floats to the focused region (only works on page embed)
 
 
   # Toolbars

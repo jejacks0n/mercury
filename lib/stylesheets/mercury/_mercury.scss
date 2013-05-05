@@ -53,6 +53,12 @@
 @import "mercury/plugins/styles";
 @import "mercury/plugins/table";
 
+// Themes.
+//-----------------------------------------------------------------------------
+@import "mercury/themes/small";
+@import "mercury/themes/flat";
+
+
 // General setup.
 //-----------------------------------------------------------------------------
 mercury {
@@ -66,6 +72,7 @@ mercury {
 
   // disable animations while initializing/loading
   &.loading *,
+  &.mercury-no-animation,
   .mercury-no-animation,
   .mercury-no-animation * {
     -moz-transition: none !important;

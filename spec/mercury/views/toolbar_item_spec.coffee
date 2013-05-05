@@ -111,7 +111,6 @@ describe "Mercury.ToolbarItem", ->
     it "returns buttons that are out of view (detecting that top is more than height)", ->
       res = subject.hiddenButtons()
       expect( res.length ).to.eq(2)
-      console.debug res[0]
       expect( res[0] ).to.eql
         title: '_title_'
         icon: undefined

@@ -8,6 +8,7 @@ mercury .mercury-statusbar {
   width: 100%;
   white-space: nowrap;
   background: $statusbar_bg;
+  @extend .mercury-clearfix;
   .mercury-statusbar-path {
     @include mercury-font(9pt);
     overflow: hidden;
@@ -24,8 +25,7 @@ mercury .mercury-statusbar {
   }
   .mercury-statusbar-about {
     @include mercury-font(9pt);
-    position: absolute;
-    right: 0;
+    float: right;
     margin: 4px 10px;
     cursor: pointer;
     font-style: normal;

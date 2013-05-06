@@ -41,7 +41,6 @@ class Mercury.View extends Mercury.Module
     @refreshElements()
 
     super
-    @trigger('init')
 
 
   # Builds the element that this view will use -- unless one is already defined. This method can be overridden to create

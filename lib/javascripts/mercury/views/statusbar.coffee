@@ -28,6 +28,7 @@ class Mercury.Statusbar extends Mercury.View
 
 
   show: ->
+    return if @config('interface:floating')
     clearTimeout(@visibilityTimeout)
     @visible = true
     @$el.show()
@@ -35,6 +36,7 @@ class Mercury.Statusbar extends Mercury.View
 
 
   hide: ->
+    return if @config('interface:floating')
     clearTimeout(@visibilityTimeout)
     @visible = false
     @css(bottom: -@$el.height())

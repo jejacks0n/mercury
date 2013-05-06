@@ -31,9 +31,14 @@ describe "Mercury.Statusbar", ->
 
     beforeEach ->
       subject.visibilityTimeout = '_timer_'
+      spyOn(window, 'clearTimeout')
+
+    it "does nothing if the interface is floating", ->
+      Mercury.configure 'interface:floating', true
+      expect( subject.show() ).to.be.undefined
+      expect( clearTimeout ).not.called
 
     it "calls clearTimeout", ->
-      spyOn(window, 'clearTimeout')
       subject.show()
       expect( clearTimeout ).calledWith('_timer_')
 
@@ -59,9 +64,14 @@ describe "Mercury.Statusbar", ->
 
     beforeEach ->
       subject.visibilityTimeout = '_timer_'
+      spyOn(window, 'clearTimeout')
+
+    it "does nothing if the interface is floating", ->
+      Mercury.configure 'interface:floating', true
+      expect( subject.hide() ).to.be.undefined
+      expect( clearTimeout ).not.called
 
     it "calls clearTimeout", ->
-      spyOn(window, 'clearTimeout')
       subject.hide()
       expect( clearTimeout ).calledWith('_timer_')
 

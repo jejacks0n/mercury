@@ -95,3 +95,9 @@ describe "Mercury.Panel", ->
     it "triggers a global focus event", ->
       subject.onHide()
       expect( Mercury.trigger ).calledWith('focus')
+
+
+  describe "#focusFirstFocusable", ->
+
+    it "intentionally does nothing", ->
+      subject.focusFirstFocusable()

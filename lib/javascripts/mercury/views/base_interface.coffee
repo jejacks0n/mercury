@@ -17,6 +17,7 @@ class Mercury.BaseInterface extends Mercury.View
     'mercury:region:focus': 'onRegionFocus'
     'mercury:region:release': 'onRegionRelease'
     'mercury:reinitialize': 'reinitialize'
+    'mercury:interface:toggle': 'toggle'
 
   constructor: ->
     if parent != window && parent.Mercury
@@ -126,7 +127,7 @@ class Mercury.BaseInterface extends Mercury.View
   setMode: (mode) ->
     @["#{mode}Mode"] = !@["#{mode}Mode"]
     @focusActiveRegion()
-    @delay(50, -> @position(false)) if mode == 'preview'
+    @delay(50, -> @position()) if mode == 'preview'
 
 
   toggle: ->
@@ -139,6 +140,7 @@ class Mercury.BaseInterface extends Mercury.View
     Mercury.trigger('mode', 'preview') if @previewMode
     @$el.show()
     @visible = true
+    @onResize()
     @$el.stop().animate({opacity: 1}, duration: 250)
     @position()
 
@@ -148,6 +150,7 @@ class Mercury.BaseInterface extends Mercury.View
     @hiding = true
     Mercury.trigger('interface:hide')
     Mercury.trigger('mode', 'preview') unless @previewMode
+    $('body').css(position: 'relative', top: 0)
     @visible = false
     @position()
     @$el.stop().animate {opacity: 0}, duration: 250, complete: =>
@@ -215,7 +218,7 @@ class Mercury.BaseInterface extends Mercury.View
       @css(top: pos.top - height, left: pos.left, width: width)
     if animate
       @delay(20, callback)
-      Mercury.trigger('interface:resize', @dimensions())
+      @delay(300, -> Mercury.trigger('interface:resize', @dimensions()))
     else
       callback.call(@)
 
@@ -232,7 +235,10 @@ class Mercury.BaseInterface extends Mercury.View
 
 
   onResize: =>
-    Mercury.trigger('interface:resize', @dimensions()) if @visible
+    dimensions = @dimensions()
+    $('body').css(position: 'relative', top: dimensions.top)
+    return unless @visible
+    Mercury.trigger('interface:resize', dimensions)
     @position()
 
 

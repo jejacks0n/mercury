@@ -50,3 +50,6 @@ class Mercury.Panel extends Mercury.Modal
 
   onHide: ->
     Mercury.trigger('focus')
+
+
+  focusFirstFocusable: ->

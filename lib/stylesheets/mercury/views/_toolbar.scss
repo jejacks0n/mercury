@@ -45,6 +45,7 @@ mercury .mercury-toolbar {
   }
   .mercury-toolbar-expander {
     @include mercury-toolbar-button-base;
+    display: none;
     position: absolute;
     top: 0;
     right: 0;

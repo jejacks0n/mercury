@@ -70,15 +70,21 @@ mercury {
   // disable tap highlighting in webkit (ipad/iphone etc)
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 
+  &.mercury-no-animation {
+    -moz-transition: none;
+    -webkit-transition: none;
+    -o-transition: none;
+    transition: none;
+  }
+
   // disable animations while initializing/loading
   &.loading,
-  &.mercury-no-animation,
   &.loading *,
-  .mercury-no-animation,
-  .mercury-no-animation * {
+  .mercury-no-animation {
+  //.mercury-no-animation * {
     -moz-transition: none !important;
     -webkit-transition: none !important;
-    -o-transition: color 0 ease-in !important;
+    -o-transition: none !important;
     transition: none !important;
   }
 

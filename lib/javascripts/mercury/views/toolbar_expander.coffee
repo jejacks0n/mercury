@@ -6,22 +6,14 @@ class Mercury.ToolbarExpander extends Mercury.View
   @logPrefix: 'Mercury.ToolbarExpander:'
   @className: 'mercury-toolbar-expander'
 
-  events:
+  @events:
     'mercury:interface:resize': 'onResize'
     'mousedown': 'preventStop'
     'click': 'toggleExpander'
-    'click li': (e) ->
-      @prevent(e)
-      $($(e.target).closest('li').data('button')).click()
+    'click li': 'onClickForButton'
 
   build: ->
-    @visible = true
     @select = @appendView(new Mercury.ToolbarSelect())
-
-
-  onResize: ->
-    if @parent.el.scrollHeight > @parent.$el.height() + 5 then @show() else @hide()
-    @updateSelect() if @select.visible
 
 
   show: ->
@@ -44,10 +36,17 @@ class Mercury.ToolbarExpander extends Mercury.View
 
 
   updateSelect: ->
-    @select.html('')
-    @select.append('<ul>')
+    @select.html('<ul>')
     ul = @select.$('ul')
     for button in @parent.hiddenButtons()
-      li = $("<li data-icon='#{button.icon}'>#{button.title}</li>")
-      li.data(button: button.el)
-      ul.append(li)
+      ul.append($("<li data-icon='#{button.icon}'>#{button.title}</li>").data(button: button.el))
+
+
+  onClickForButton: (e) ->
+    @prevent(e)
+    $($(e.target).closest('li').data('button')).click()
+
+
+  onResize: ->
+    if @parent.el.scrollHeight > @parent.$el.height() + 10 then @show() else @hide()
+    @updateSelect() if @select.visible

@@ -36,9 +36,9 @@ class Mercury.ToolbarButton extends Mercury.View
     if @event == 'save' then @delegateEvents
       'mercury:save': -> @addClass('mercury-loading-indicator')
       'mercury:save:complete': -> @removeClass('mercury-loading-indicator')
-    if @mode == 'preview' then @delegateEvents
+    if @mode then @delegateEvents
       'mercury:mode': (mode) ->
-        return unless mode == 'preview'
+        return unless mode == @mode
         if @isToggled then @untoggled() else @toggled()
 
 
@@ -88,7 +88,7 @@ class Mercury.ToolbarButton extends Mercury.View
 
   triggerAction: ->
     return if @isDisabled()
-    if @toggle || @mode
+    if @toggle
       unless @isToggled then @toggled() else @untoggled()
     if @subview
       if @subview.visible then @deactivate() else @activate()

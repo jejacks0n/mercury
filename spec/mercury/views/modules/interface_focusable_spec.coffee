@@ -78,6 +78,8 @@ describe "Mercury.View.Modules.InterfaceFocusable", ->
       expect( @e.preventDefault ).called
       expect( $.fn.is ).calledWith(':input, [tabindex]')
       subject.focusableSelector = 'foo'
+      $.fn.is.restore()
+      spyOn($.fn, 'is', -> true)
       subject.handleFocusableEvent(@e)
       expect( $.fn.is ).calledWith('foo')
 
@@ -90,3 +92,83 @@ describe "Mercury.View.Modules.InterfaceFocusable", ->
       subject.revertInterfaceFocus()
       expect( subject.delay ).calledWith(1, sinon.match.func)
       expect( Mercury.trigger ).calledWith('focus')
+
+
+  describe "#preventFocusOut", ->
+
+    beforeEach ->
+      @el =
+        off: spy(=> @el)
+        on: spy(=> @el)
+
+    it "binds to the focusout and keydown events", ->
+      subject.preventFocusout(@el, ->)
+      expect( @el.off ).calledWith('focusout')
+      expect( @el.on ).calledWith('focusout', sinon.match.func)
+      expect( @el.on ).calledWith('keydown')
+
+    describe "focusout", ->
+
+      beforeEach ->
+        @el.on = spy(-> arguments[1]() if arguments[0] == 'focusout')
+        @handler = spy()
+        spyOn(subject, 'delay').yieldsOn(subject)
+        spyOn(subject, '_activeElementIsBody', -> false)
+
+      it "calls the handler if it's provided on focusout if the newly focused element isn't within it", ->
+        spyOn($, 'contains', -> false)
+        subject.preventFocusout(@el, @handler)
+        expect( subject.delay ).calledWith(150, sinon.match.func)
+        expect( @handler ).called
+
+      it "doesn't call the handler if the focusable is within the element", ->
+        spyOn($, 'contains', -> true)
+        subject.preventFocusout(@el, @handler)
+        expect( subject.delay ).calledWith(150, sinon.match.func)
+        expect( @handler ).not.called
+
+      it "doesn't call the handler if the focusable is the body", ->
+        subject._activeElementIsBody.restore()
+        spyOn($, 'contains', -> false)
+        subject.preventFocusout(@el, @handler)
+        expect( subject.delay ).calledWith(150, sinon.match.func)
+        expect( @handler ).not.called
+
+
+    describe "keydown", ->
+
+      beforeEach ->
+        spyOn(subject, 'prevent')
+        @el.on = spy(=> arguments[1](@e) if arguments[0] == 'keydown')
+        @el.find = spy(=> @focusables)
+        @focusables = ['_first_', '_second_', '_last_']
+        @e =
+          keyCode: 9
+          target: '_first_'
+          shiftKey: false
+
+      it "does nothing it's not a tab", ->
+        @e.keyCode = 0
+        subject.preventFocusout(@el)
+        expect( @el.find ).not.called
+
+      it "doesn't continue if there's no focusables", ->
+        @focusables = []
+        subject.preventFocusout(@el)
+        expect( @el.find ).calledWith(':input[tabindex != "-1"]')
+        expect( subject.prevent ).not.called
+
+      it "prevents the event if we're at the first focusable and using the shift key (going backwards)", ->
+        @e.shiftKey = true
+        subject.preventFocusout(@el)
+        expect( subject.prevent ).calledWith(@e, true)
+
+      it "prevents the event if we're at the last focusable and not using the shift key (going forwards)", ->
+        @e.target = '_last_'
+        subject.preventFocusout(@el)
+        expect( subject.prevent ).calledWith(@e, true)
+
+      it "doesn't prevent if it shouldn't", ->
+        @e.target = '_second_'
+        subject.preventFocusout(@el)
+        expect( subject.prevent ).not.called

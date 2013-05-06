@@ -1,11 +1,11 @@
 Mercury.View.Modules.InterfaceShadowed =
 
   included: ->
-    @on('init', @buildInterfaceShadowed) if @buildInterfaceShadowed
+    @on('init', @buildInterfaceShadowed)
 
 
   extended: ->
-    @on('init', @buildInterfaceShadowed) if @buildInterfaceShadowed
+    @on('init', @buildInterfaceShadowed)
 
 
   buildInterfaceShadowed: ->

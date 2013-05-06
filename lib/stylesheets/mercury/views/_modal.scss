@@ -80,5 +80,8 @@ mercury .mercury-modal {
     .mercury-modal-loading-indicator {
       display: block;
     }
+    .mercury-modal-dialog-content-container {
+      visibility: hidden;
+    }
   }
 }

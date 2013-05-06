@@ -60,5 +60,8 @@ mercury .mercury-panel {
     .mercury-panel-loading-indicator {
       display: block;
     }
+    .mercury-panel-content-container {
+      visibility: hidden;
+    }
   }
 }

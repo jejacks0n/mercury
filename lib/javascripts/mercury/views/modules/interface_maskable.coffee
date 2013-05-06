@@ -1,31 +1,32 @@
 Mercury.View.Modules.InterfaceMaskable =
 
   included: ->
-    @on('build', @buildInterfaceMaskable) if @buildInterfaceMaskable
+    @on('build', @buildInterfaceMaskable)
 
 
   extended: ->
-    @on('build', @buildInterfaceMaskable) if @buildInterfaceMaskable
+    @on('build', @buildInterfaceMaskable)
 
 
   buildInterfaceMaskable: ->
-    @append('<div class="mercury-interface-mask"></div>')
-    @elements['mask'] = '.mercury-interface-mask'
-    @refreshElements()
+    @$mask = $('<div class="mercury-interface-mask">')
+    @append(@$mask)
     @delegateEvents
       'mercury:interface:mask': @mask
       'mercury:interface:unmask': @unmask
       'mousedown .mercury-interface-mask': @prevent
       'mouseup .mercury-interface-mask': @prevent
-      'click .mercury-interface-mask': (e) ->
-         @prevent(e, true)
-         Mercury.trigger('dialogs:hide')
+      'click .mercury-interface-mask': @onMaskClick
 
 
   mask: ->
-    return unless @config('interface:maskable')
     @$mask.show()
 
 
   unmask: ->
     @$mask.hide()
+
+
+  onMaskClick: (e) ->
+    @prevent(e, true)
+    Mercury.trigger('dialogs:hide')

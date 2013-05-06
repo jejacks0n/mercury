@@ -81,5 +81,8 @@ mercury .mercury-lightview {
     .mercury-lightview-loading-indicator {
       display: block;
     }
+    .mercury-lightview-dialog-content-container {
+      visibility: hidden;
+    }
   }
 }

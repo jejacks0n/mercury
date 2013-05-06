@@ -68,7 +68,7 @@ Mercury.configuration =
   # Interface
   # Mercury will instantiate an interface on Mercury.init(). This configration allows you to specify which interface to
   # use, as well as the various user interface classes to instantiate, which provides a modular way to add to, or
-  # override default functionality and interface elements.
+  # override default functionality and interface elements. Other properties can be configured here as well.
   #
   interface:
     enabled    : true                                      # initial visible state - trigger 'interface:show' to show

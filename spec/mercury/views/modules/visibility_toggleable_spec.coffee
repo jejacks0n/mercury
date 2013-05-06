@@ -27,11 +27,6 @@ describe "Mercury.View.Modules.VisibilityToggleable", ->
 
   describe "#buildVisibilityToggleable", ->
 
-    it "calls #delegateEvents", ->
-      spyOn(subject, 'delegateEvents')
-      subject.buildVisibilityToggleable()
-      expect( subject.delegateEvents ).calledWith('mercury:interface:hide': 'hide')
-
     it "calls #hide and sets visibility if @hidden", ->
       subject.hidden = true
       subject.visible = false

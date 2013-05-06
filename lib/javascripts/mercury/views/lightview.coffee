@@ -14,7 +14,6 @@ class Mercury.Lightview extends Mercury.Modal
     title: '.mercury-lightview-dialog-title span'
 
   @events:
-    'mercury:interface:hide': 'hide'
     'mercury:interface:resize': 'resize'
     'mercury:modals:hide': 'hide'
     'click .mercury-lightview-dialog-title em': 'hide'

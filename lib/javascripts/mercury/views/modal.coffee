@@ -22,7 +22,6 @@ class Mercury.Modal extends Mercury.View
     title: '.mercury-modal-dialog-title span'
 
   @events:
-    'mercury:interface:hide': 'hide'
     'mercury:interface:resize': 'resize'
     'mercury:modals:hide': 'hide'
     'click .mercury-modal-dialog-title em': 'hide'
@@ -39,6 +38,7 @@ class Mercury.Modal extends Mercury.View
   build: ->
     @appendTo() # always Mercury.interface
     @preventScrollPropagation(@$contentContainer)
+    @preventFocusout(@$contentContainer, @focusFirstFocusable)
 
 
   negotiateTemplate: ->

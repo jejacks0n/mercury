@@ -27,3 +27,18 @@ Mercury.View.Modules.InterfaceFocusable =
 
   revertInterfaceFocus: ->
     @delay(1, -> Mercury.trigger('focus'))
+
+
+  preventFocusout: ($el, handler) ->
+    $el.off('focusout').on 'focusout', (e) =>
+      @delay 150, ->
+        return if $.contains($el[0], document.activeElement)
+        handler.call(@)
+
+    $el.on 'keydown', (e) =>
+      return unless e.keyCode == 9 # not tab
+      focusables = $el.find(':input[tabindex != "-1"]')
+      return unless focusables.length
+      first = focusables[0]
+      last = focusables[focusables.length - 1]
+      @prevent(e, true) if (e.shiftKey && e.target == first) || (!e.shiftKey && e.target == last)

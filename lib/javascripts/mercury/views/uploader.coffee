@@ -10,9 +10,6 @@ class Mercury.Uploader extends Mercury.View
   @className: 'mercury-uploader'
   @template: 'uploader'
 
-  @attributes:
-    style: 'opacity:0'
-
   @elements:
     status: '.mercury-uploader-progress span'
     details: '.mercury-uploader-details'

@@ -2,7 +2,6 @@
 #
 # Templates (at the top so the can be removed/changed).
 #------------------------------------------------------------------------------
-#= require mercury/templates/interface
 #= require mercury/templates/lightview
 #= require mercury/templates/modal
 #= require mercury/templates/panel
@@ -30,6 +29,8 @@
 #------------------------------------------------------------------------------
 #= require mercury/views/modules/form_handler.coffee
 #= require mercury/views/modules/interface_focusable.coffee
+#= require mercury/views/modules/interface_maskable.coffee
+#= require mercury/views/modules/interface_shadowed.coffee
 #= require mercury/views/modules/scroll_propagation.coffee
 #= require mercury/views/modules/toolbar_dialog.coffee
 #= require mercury/views/modules/visibility_toggleable.coffee

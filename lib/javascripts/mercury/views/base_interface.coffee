@@ -1,36 +1,34 @@
 #= require mercury/core/view
 #= require mercury/models/page
+#= require mercury/views/modules/interface_maskable
+#= require mercury/views/modules/interface_shadowed
 
 class Mercury.BaseInterface extends Mercury.View
+  @include Mercury.Module
 
   @logPrefix: 'Mercury.BaseInterface:'
-  @template: 'interface'
   @tag: 'mercury'
-
-  @elements:
-    mask: '.mercury-interface-mask'
 
   @events:
     'mercury:save': 'save'
     'mercury:focus': 'focusActiveRegion'
-    'mercury:action': 'focusActiveRegion'
     'mercury:blur': 'blurActiveRegion'
+    'mercury:action': 'focusActiveRegion'
     'mercury:region:focus': 'onRegionFocus'
     'mercury:region:release': 'onRegionRelease'
     'mercury:reinitialize': 'reinitialize'
-    'mercury:interface:mask': 'mask'
-    'mercury:interface:unmask': 'unmask'
-    'mousedown .mercury-interface-mask': (e) -> @prevent(e)
-    'mouseup .mercury-interface-mask': (e) -> @prevent(e)
-    'click .mercury-interface-mask': (e) -> @prevent(e, true); Mercury.trigger('dialogs:hide')
 
   constructor: ->
     if parent != window && parent.Mercury
       @log(@t('is already defined in parent frame'))
       return
 
+    @extend Mercury.View.Modules.InterfaceMaskable if @config('interface:maskable')
+    @extend Mercury.View.Modules.InterfaceShadowed if @config('interface:shadowed')
+
     Mercury.interface = @
-    @floating ||= @config('interface:floating')
+    @floating = @config('interface:floating')
+    @visible = true
 
     super
 
@@ -42,24 +40,17 @@ class Mercury.BaseInterface extends Mercury.View
     @initialize()
     @buildInterface()
     @bindDefaultEvents()
-    @removeClass('loading')
     Mercury.trigger('initialized')
 
 
   build: ->
-    @$el = @el = $(@tag) unless @el
+    @el = document.createElement(@tag || @constructor.tag) unless @el
+    @$el = $(@el)
     @attr(@attributes)
-    @addClass(@className)
-    @addClass(@config('interface:style') || 'standard')
-    @addClass('mercury-floating') if @floating
 
 
   init: ->
-    @addLocaleClass()
     $('body').before(@$el)
-    @makeShadowed()
-    @html(@renderTemplate(@template)) if @template
-    @addClass('loading')
 
 
   initialize: ->
@@ -67,61 +58,50 @@ class Mercury.BaseInterface extends Mercury.View
     @bindDocumentEvents()
 
 
-  reinitialize: ->
-    @initialize()
-    @focusActiveRegion()
-
-
-  buildInterface: ->
-    @buildToolbar()
-    @buildStatusbar()
-    @focusDefaultRegion()
-    @onResize()
-
-
-  addLocaleClass: ->
-    @addClass("locale-#{Mercury.I18n.detectLocale().join('-').toLowerCase()}")
-
-
-  makeShadowed: ->
-    return unless @config('interface:shadowed') && @el.webkitCreateShadowRoot
-    @shadow = $(@el.webkitCreateShadowRoot())
-    # todo: this is a problem in that it allows css to bleed, which isn't exactly what we want here, but getting css
-    #       to load internally isn't viable. ??
-    @shadow.get(0).applyAuthorStyles = true
-    @shadow.append(@$el = @el = $(document.createElement(@tag)))
-
-
-  buildToolbar: ->
-    return unless klass = @config('interface:toolbar')
-    @toolbar = @appendView(new Mercury[klass]())
-    @toolbar.hide() unless @config('interface:enabled')
-
-
-  buildStatusbar: ->
-    return unless klass = @config('interface:statusbar')
-    @statusbar = @appendView(new Mercury[klass]())
-    @statusbar.hide() unless @config('interface:enabled')
-
-
-  bindDefaultEvents: ->
-    @delegateEvents
-     'mercury:mode': (mode) -> @setMode(mode)
-     'mercury:action': -> @focusActiveRegion()
+  addAllRegions: ->
+    @addRegion(el) for el in @regionElements()
+    @region ||= @regions[0]
 
 
   bindDocumentEvents: ->
     $('body', @document).on('mousedown', -> Mercury.trigger('dialogs:hide')) unless @config('interface:mask')
 
 
-  focusDefaultRegion: ->
+  buildInterface: ->
+    @addClasses()
+    for subview in ['toolbar', 'statusbar']
+      continue unless klass = @config("interface:#{subview}")
+      @[subview] = @appendView(new Mercury[klass]())
+    unless @config('interface:enabled')
+      @previewMode = true
+      @hide()
+      Mercury.trigger('mode', 'preview')
+    @focusDefaultRegion()
+    @onResize()
+    @delay(500, -> @removeClass('loading'))
+
+
+  addClasses: ->
+    @addClass(@className)
+    @addClass('loading')
+    @addClass(@config('interface:style') || 'standard')
+    @addClass('mercury-floating') if @floating
+    @addClass("locale-#{Mercury.I18n.detectLocale().join('-').toLowerCase()}")
+
+
+  bindDefaultEvents: ->
+    @delegateEvents
+      'mercury:mode': (mode) -> @setMode(mode)
+      'mercury:action': -> @focusActiveRegion()
+
+
+  reinitialize: ->
+    @addAllRegions()
     @delay(100, @focusActiveRegion)
 
 
-  addAllRegions: ->
-    @addRegion(el) for el in @regionElements()
-    @region ||= @regions[0]
-    Mercury.trigger('mode', 'preview') unless @config('interface:enabled')
+  focusDefaultRegion: ->
+    @delay(100, @focusActiveRegion)
 
 
   regionElements: ->
@@ -146,26 +126,33 @@ class Mercury.BaseInterface extends Mercury.View
   setMode: (mode) ->
     @["#{mode}Mode"] = !@["#{mode}Mode"]
     @focusActiveRegion()
+    @delay(50, -> @position(false)) if mode == 'preview'
 
 
-  toggleInterface: ->
-    @interfaceHidden ?= @config('interface:enabled')
-    @interfaceHidden = !@interfaceHidden
-    if @interfaceHidden
-      Mercury.trigger('interface:show')
-      Mercury.trigger('mode', 'preview') if @previewMode
-    else
-      Mercury.trigger('interface:hide')
-      Mercury.trigger('mode', 'preview') unless @previewMode
+  toggle: ->
+    if @visible then @hide() else @show()
 
 
-  mask: ->
-    return unless @config('interface:maskable')
-    @$mask.show()
+  show: ->
+    return if @visible
+    Mercury.trigger('interface:show')
+    Mercury.trigger('mode', 'preview') if @previewMode
+    @$el.show()
+    @visible = true
+    @$el.stop().animate({opacity: 1}, duration: 250)
+    @position()
 
 
-  unmask: ->
-    @$mask.hide()
+  hide: ->
+    return unless @visible
+    @hiding = true
+    Mercury.trigger('interface:hide')
+    Mercury.trigger('mode', 'preview') unless @previewMode
+    @visible = false
+    @position()
+    @$el.stop().animate {opacity: 0}, duration: 250, complete: =>
+      @$el.hide()
+      @hiding = false
 
 
   dimensions: ->
@@ -181,27 +168,6 @@ class Mercury.BaseInterface extends Mercury.View
     bottom: statusbarHeight
     width: $(window).width()
     height: $(window).height() - toolbarHeight - statusbarHeight
-
-
-  onRegionFocus: (region) ->
-    @region = region
-    @delay(50, -> @position(true)) if @floating
-
-
-  onRegionRelease: (region) ->
-    @region = @regions[0] if region == @region
-    index = @regions.indexOf(region)
-    @regions.splice(index, 1) if index > -1
-
-
-  onResize: =>
-    Mercury.trigger('interface:resize', @dimensions())
-    @position()
-
-
-  onUnload: =>
-    return null if @config('interface:silent') || !@hasChanges()
-    return @t('You have unsaved changes.  Are you sure you want to leave without saving them first?')
 
 
   hasChanges: ->
@@ -239,15 +205,38 @@ class Mercury.BaseInterface extends Mercury.View
   position: (animate = false) ->
     return unless @floating
     return unless @region
+    return if @hiding
     @addClass('mercury-no-animation')
     pos = @region.$el.offset()
     width = Math.max(@config('interface:floatWidth') || @region.$el.width(), 300)
     height = @heightForWidth(width)
-    callback = =>
+    callback = ->
       @removeClass('mercury-no-animation') if animate
       @css(top: pos.top - height, left: pos.left, width: width)
     if animate
-      @delay(50, callback)
-      @delay(300, -> Mercury.trigger('interface:resize', @dimensions()))
+      @delay(20, callback)
+      Mercury.trigger('interface:resize', @dimensions())
     else
-      callback()
+      callback.call(@)
+
+
+  onRegionFocus: (region) ->
+    @region = region
+    @delay(50, -> @position(true)) if @floating
+
+
+  onRegionRelease: (region) ->
+    @region = @regions[0] if region == @region
+    index = @regions.indexOf(region)
+    @regions.splice(index, 1) if index > -1
+
+
+  onResize: =>
+    Mercury.trigger('interface:resize', @dimensions()) if @visible
+    @position()
+
+
+  onUnload: =>
+    return null if @config('interface:silent') || !@hasChanges()
+    return @t('You have unsaved changes.  Are you sure you want to leave without saving them first?')
+

@@ -13,7 +13,6 @@ class Mercury.Panel extends Mercury.Modal
     title: '.mercury-panel-title span'
 
   @events:
-    'mercury:interface:hide': 'hide'
     'mercury:interface:resize': 'resize'
     'mercury:panels:hide': 'hide'
     'mousedown .mercury-panel-title em': 'prevent'

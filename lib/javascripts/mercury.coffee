@@ -39,12 +39,11 @@ Mercury.Region.Markdown.addToolbar 'color', color: ['Color', plugin: 'color']
 Mercury.Region.Markdown.addToolbar 'block', block: ['Block', plugin: 'blocks']
 
 # todo:
-#   add better support for sizing the toolbar down / provide aloha like behavior.
 #   port jQuery.extend into module so we can use that within instances (which is where it's mostly used).
+#   fix scrollbar being visible on dialog resizing.
 #   start working on the mercury-rails engine so it's easier to write plugins that use a server.
 #   migrate existing locale content into new locales and document missing values.
 #   make region use the shadow dom if possible/configured to do so.
-#   spend some time making what's in work really well on ios.
 #   make table/media/link plugins use custom actions.
 #   better strategy for snippet management/removal -- focusable with toolbar buttons would be nice, combined with a lesser toolbar in line? (drag handle on hover, etc?)
 #   figure out how to better integrate snippets.

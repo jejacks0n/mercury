@@ -71,13 +71,22 @@ mercury {
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 
   // disable animations while initializing/loading
-  &.loading *,
+  &.loading,
   &.mercury-no-animation,
+  &.loading *,
   .mercury-no-animation,
   .mercury-no-animation * {
     -moz-transition: none !important;
     -webkit-transition: none !important;
     -o-transition: color 0 ease-in !important;
     transition: none !important;
+  }
+
+  a {
+    color: $primary_color !important;
+    text-decoration: none;
+    &:hover {
+      text-decoration: underline;
+    }
   }
 }

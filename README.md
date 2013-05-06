@@ -120,6 +120,12 @@ Awesome! Please [check here](https://github.com/jejacks0n/mercury/blob/mercury2/
 ### Webkit
 
 - Dropping files at the cursor position doesn't work.
+- When using the shadow dom the jQuery 'focusout' event doesn't fire so focus can be restored to a region when in a dialog / modal.
+
+### iOS
+
+- Fixed positioning doesn't work correctly, so it's advised to use the floating interface. This also sometimes effects dialogs.
+- iOS reports that it supports the shadow dom, but it doesn't.
 
 ### Gecko
 

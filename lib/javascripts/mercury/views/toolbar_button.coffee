@@ -37,7 +37,9 @@ class Mercury.ToolbarButton extends Mercury.View
       'mercury:save': -> @addClass('mercury-loading-indicator')
       'mercury:save:complete': -> @removeClass('mercury-loading-indicator')
     if @mode == 'preview' then @delegateEvents
-      'mercury:interface:hide': -> @untoggled()
+      'mercury:mode': (mode) ->
+        return unless mode == 'preview'
+        if @isToggled then @untoggled() else @toggled()
 
 
   determineAction: ->

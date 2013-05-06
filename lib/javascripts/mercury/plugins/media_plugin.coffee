@@ -66,10 +66,10 @@ class Plugin.Modal extends Mercury.Modal
     $el = @$("#media_#{type}")
     if $el.val()
       switch type
-        when 'youtube_url' then @addInputError($el, "is invalid") unless /^https?:\/\/youtu.be\//.test($el.val())
-        when 'vimeo_url' then @addInputError($el, "is invalid") unless /^https?:\/\/youtu.be\//.test($el.val())
+        when 'youtube_url' then @addInputError($el, @t('Is invalid')) unless /^https?:\/\/youtu.be\//.test($el.val())
+        when 'vimeo_url' then @addInputError($el, @t('Is invalid')) unless /^https?:\/\/youtu.be\//.test($el.val())
     else
-      @addInputError($el, "can't be blank")
+      @addInputError($el, @t("Can't be blank"))
     @resize(false)
 
 
@@ -122,7 +122,7 @@ JST['/mercury/templates/media'] ||= ->
           <input name="media_type" type="radio" value="image_url" checked="checked" tabindex="-1"/>URL
         </label>
         <div class="controls">
-          <input class="span6 string url optional" id="media_image_url" name="media[image_url]" size="50" type="text" tabindex="1">
+          <input class="string url optional" id="media_image_url" name="media[image_url]" size="50" type="text" tabindex="1">
         </div>
       </div>
     </fieldset>
@@ -134,7 +134,7 @@ JST['/mercury/templates/media'] ||= ->
           <input name="media_type" type="radio" value="youtube_url" tabindex="-1"/>YouTube URL
         </label>
         <div class="controls">
-          <input class="span6 string url optional" id="media_youtube_url" name="media[youtube_url]" size="50" type="text" placeholder="http://youtu.be/28tZ-S1LFok" tabindex="1">
+          <input class="string url optional" id="media_youtube_url" name="media[youtube_url]" size="50" type="text" placeholder="http://youtu.be/28tZ-S1LFok" tabindex="1">
         </div>
       </div>
       <div class="control-group url optional">
@@ -142,7 +142,7 @@ JST['/mercury/templates/media'] ||= ->
           <input name="media_type" type="radio" value="vimeo_url" tabindex="-1"/>Vimeo URL
         </label>
         <div class="controls">
-          <input class="span6 string url optional" id="media_vimeo_url" name="media[vimeo_url]" size="50" type="text" placeholder="http://vimeo.com/36684976" tabindex="1">
+          <input class="string url optional" id="media_vimeo_url" name="media[vimeo_url]" size="50" type="text" placeholder="http://vimeo.com/36684976" tabindex="1">
         </div>
       </div>
     </fieldset>
@@ -173,7 +173,6 @@ JST['/mercury/templates/media'] ||= ->
               <option value="">None</option>
               <option value="left">Left</option>
               <option value="right">Right</option>
-              <option value="none">None</option>
               <option value="inherit">Inherit</option>
             </select>
           </div>
@@ -184,13 +183,13 @@ JST['/mercury/templates/media'] ||= ->
         <div class="control-group number optional">
           <label class="number optional control-label" for="media_youtube_width">Width</label>
           <div class="controls">
-            <input class="span2 number optional" id="media_youtube_width" name="media[youtube_width]" size="50" type="number" value="560" tabindex="1">
+            <input class="number optional" id="media_youtube_width" name="media[youtube_width]" size="50" type="number" value="560" tabindex="1">
           </div>
         </div>
         <div class="control-group number optional">
           <label class="number optional control-label" for="media_youtube_height">Height</label>
           <div class="controls">
-            <input class="span2 number optional" id="media_youtube_height" name="media[youtube_height]" size="50" type="number" value="349" tabindex="1">
+            <input class="number optional" id="media_youtube_height" name="media[youtube_height]" size="50" type="number" value="349" tabindex="1">
           </div>
         </div>
       </div>
@@ -199,13 +198,13 @@ JST['/mercury/templates/media'] ||= ->
         <div class="control-group number optional">
           <label class="number optional control-label" for="media_vimeo_width">Width</label>
           <div class="controls">
-            <input class="span2 number optional" id="media_vimeo_width" name="media[vimeo_width]" size="50" type="number" value="400" tabindex="1">
+            <input class="number optional" id="media_vimeo_width" name="media[vimeo_width]" size="50" type="number" value="400" tabindex="1">
           </div>
         </div>
         <div class="control-group number optional">
           <label class="number optional control-label" for="media_vimeo_height">Height</label>
           <div class="controls">
-            <input class="span2 number optional" id="media_vimeo_height" name="media[vimeo_height]" size="50" type="number" value="225" tabindex="1">
+            <input class="number optional" id="media_vimeo_height" name="media[vimeo_height]" size="50" type="number" value="225" tabindex="1">
           </div>
         </div>
       </div>

@@ -17,7 +17,7 @@ class Mercury.Model.File extends Mercury.Model
 
   validate: ->
     if @get('size') >= @config('uploading:maxSize')
-      @addError('size', @t('Too large'))
+      @addError('size', @t('Too large (max %s)', @config('uploading:maxSize').toBytes()))
       return
     mimeTypes = @options['mimeTypes'] ? @config('uploading:mimeTypes')
     if mimeTypes && mimeTypes.indexOf(@get('type')) <= -1
@@ -61,4 +61,4 @@ class Mercury.Model.File extends Mercury.Model
 
 
   saveSuccess: ->
-    @notify(@t('Malformed response from server (%s)', 'no url')) unless @get('url')
+    @notify(@t('Unable to process response: %s', 'no url')) unless @get('url')

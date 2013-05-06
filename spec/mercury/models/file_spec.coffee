@@ -40,7 +40,7 @@ describe "Mercury.Model.File", ->
     it "ensures size is within allowed range", ->
       Mercury.configure 'uploading:maxSize', 0
       subject.validate()
-      expect( subject.errors.size ).to.include('Too large')
+      expect( subject.errors.size ).to.include('Too large (max 0 bytes)')
 
     it "ensures it's an allowed mimetype", ->
       subject.validate()
@@ -154,7 +154,7 @@ describe "Mercury.Model.File", ->
       spyOn(subject, 'notify')
       spyOn(subject, 't')
       subject.saveSuccess()
-      expect( subject.t ).calledWith('Malformed response from server (%s)', 'no url')
+      expect( subject.t ).calledWith('Unable to process response: %s', 'no url')
       expect( subject.notify ).called
 
     it "does nothing if the model looks good (has a url)", ->

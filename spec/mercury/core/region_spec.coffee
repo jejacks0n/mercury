@@ -76,11 +76,11 @@ describe "Mercury.Region", ->
 
     it "notifies if there was no type detected", ->
       Klass.create('<div id="test">')
-      expect( Klass.notify ).calledWith('region type not provided')
+      expect( Klass.notify ).calledWith('Region type not provided')
 
     it "notifies if we're falling back to the base region", ->
       Klass.create('<div data-mercury="bar" id="test">')
-      expect( Klass.notify ).calledWith('unknown "Bar" region type, falling back to base region')
+      expect( Klass.notify ).calledWith('Unknown Bar region type, falling back to base region')
 
 
   describe ".addAction", ->
@@ -156,7 +156,7 @@ describe "Mercury.Region", ->
     it "notifies if not supported", ->
       Klass.supported = false
       subject = new Klass()
-      expect( subject.notify ).calledWith('is unsupported in this browser')
+      expect( subject.notify ).calledWith('Is unsupported in this browser')
 
     it "merges options with the options data from the element", ->
       subject = new Klass($("""<div data-mercury-options='{"previewing": true}'">"""), foo: 'bar')
@@ -228,7 +228,7 @@ describe "Mercury.Region", ->
 
     it "notifies if we have no name", ->
       subject = new Klass('<div>')
-      expect( subject.notify ).calledWith('no name provided for the "unknown" region, falling back to random')
+      expect( subject.notify ).calledWith('No name provided for the unknown region, falling back to random')
 
     it "falls back to a random name if we have no name", ->
       spyOn(Math, 'random', -> 42)

@@ -21,7 +21,7 @@ class Mercury.BaseInterface extends Mercury.View
 
   constructor: ->
     if parent != window && parent.Mercury
-      @log(@t('is already defined in parent frame'))
+      @log(@t('Has already been defined in parent frame'))
       return
 
     @extend Mercury.View.Modules.InterfaceMaskable if @config('interface:maskable')
@@ -193,7 +193,7 @@ class Mercury.BaseInterface extends Mercury.View
 
   save: ->
     @page.set(content: @serialize(), location: location.pathname)
-    @page.on('error', (xhr, options) => alert(@t('Mercury was unable to save to the url: %s', options.url)))
+    @page.on('error', (xhr, options) => alert(@t('Unable to save to the url: %s', options.url)))
     @page.save().always = => @delay(250, -> Mercury.trigger('save:complete'))
 
 

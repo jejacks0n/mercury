@@ -17,7 +17,7 @@ Plugin = Mercury.registerPlugin 'blocks'
       h6: 'Heading 6'
       p: 'Paragraph'
       blockquote: 'Blockquote'
-      pre: 'Preformatted'
+      pre: 'Formatted'
 
   registerButton: ->
     @button.set(type: 'select', subview: @bindTo(new Plugin.Select()))

@@ -40,7 +40,6 @@ Mercury.Region.Markdown.addToolbar 'block', block: ['Block', plugin: 'blocks']
 
 # todo:
 #   port jQuery.extend into module so we can use that within instances (which is where it's mostly used).
-#   fix scrollbar being visible on dialog resizing.
 #   start working on the mercury-rails engine so it's easier to write plugins that use a server.
 #   migrate existing locale content into new locales and document missing values.
 #   make region use the shadow dom if possible/configured to do so.

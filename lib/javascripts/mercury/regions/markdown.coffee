@@ -121,7 +121,7 @@ Mercury.Region.Markdown.addToolbar
     orderedList:   ['Numbered List']
     blockquote:    ['Blockquote', action: ['block', 'blockquote']]
     sep:           ' '
-    pre:           ['Pre / Code', action: ['block', 'pre']]
+    pre:           ['Formatted', action: ['block', 'pre']]
   decoration:
     bold:          ['Bold']
     italic:        ['Italicize']

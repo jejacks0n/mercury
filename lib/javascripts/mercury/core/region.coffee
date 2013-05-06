@@ -48,10 +48,10 @@ class Mercury.Region extends Mercury.View
   @create: (el) ->
     el = $(el)
     type = el.attr(@config('regions:attribute'))
-    @notify(@t('region type not provided')) unless type
+    @notify(@t('Region type not provided')) unless type
 
     type = "#{type}".toLowerCase().toCamelCase(true)
-    @notify(@t('unknown "%s" region type, falling back to base region', type)) unless Mercury.Region[type]
+    @notify(@t('Unknown %s region type, falling back to base region', type)) unless Mercury.Region[type]
     new (Mercury.Region[type] || Mercury.Region)(el)
 
 
@@ -108,7 +108,7 @@ class Mercury.Region extends Mercury.View
   constructor: (@el, @options = {}) ->
     return false if @el && $(@el).data('region')
     unless @constructor.supported
-      @notify(@t('is unsupported in this browser'))
+      @notify(@t('Is unsupported in this browser'))
       return false
 
     @actions ||= {}
@@ -130,7 +130,7 @@ class Mercury.Region extends Mercury.View
     @$el.data(region: @)                                   # add instance reference to the element data
 
     unless @name
-      @notify(@t('no name provided for the "%s" region, falling back to random', @constructor.type))
+      @notify(@t('No name provided for the %s region, falling back to random', @constructor.type))
       @name = "#{@constructor.type}#{Math.floor(Math.random() * 10000)}"
 
     @addRegionClassname()

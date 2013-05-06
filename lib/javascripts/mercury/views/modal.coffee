@@ -59,7 +59,7 @@ class Mercury.Modal extends Mercury.View
     @options = $.extend({}, @options, options || {})
     @[key] = value for key, value of @options
     @negotiateTemplate()
-    @$title.html(@title)
+    @$title.html(@t(@title))
     @setWidth(@width)
     content = @contentFromOptions()
     return false if content == @lastContent && @width == @lastWidth

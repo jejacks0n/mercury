@@ -18,7 +18,7 @@ class Mercury.Uploader extends Mercury.View
     percent: '.mercury-uploader-indicator b'
 
   constructor: (files, @options = {}) ->
-    return @notify(@t('is unsupported in this browser')) unless @constructor.supported
+    return @notify(@t('Is unsupported in this browser')) unless @constructor.supported
     super(@options)
 
     @loaded = 0

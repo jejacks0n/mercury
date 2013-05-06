@@ -59,8 +59,9 @@ class Mercury.ToolbarButton extends Mercury.View
     @registerPlugin()
     @attr('data-type', @type)
     @attr('data-icon', Mercury.Toolbar.icons[@icon || @name] || @icon)
+    @attr('title', @t(@options.title)) if @options.title
     @addClass("mercury-toolbar-#{@name.toDash()}-button")
-    @html("<em>#{@label}</em>")
+    @html("<em>#{@t(@label)}</em>")
     @buildSubview()?.appendTo(@)
 
 

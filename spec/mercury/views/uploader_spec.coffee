@@ -33,7 +33,7 @@ describe "Mercury.Uploader", ->
     it "notifies if it's not supported", ->
       Klass.supported = false
       subject = new Klass()
-      expect( subject.notify ).calledWith('is unsupported in this browser')
+      expect( subject.notify ).calledWith('Is unsupported in this browser')
 
     it "renders the expected template", ->
       template = spyOn(JST, '/mercury/templates/uploader', -> '_template_')

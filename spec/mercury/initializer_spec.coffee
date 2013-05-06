@@ -119,17 +119,55 @@ describe "Mercury", ->
         expect( Klass.Config.set ).calledWith('foo:bar', true, foo: 'bar')
 
 
-  describe ".focus", ->
+  describe "method -> event proxies", ->
 
-    it "triggers a focus event", ->
+    beforeEach ->
       spyOn(Klass, 'trigger')
-      Klass.focus()
-      expect( Klass.trigger ).calledWith('focus')
 
+    describe ".focus", ->
 
-  describe ".blur", ->
+      it "triggers a focus event", ->
+        Klass.focus()
+        expect( Klass.trigger ).calledWith('focus')
 
-    it "triggers a blur event", ->
-      spyOn(Klass, 'trigger')
-      Klass.blur()
-      expect( Klass.trigger ).calledWith('blur')
+    describe ".blur", ->
+
+      it "triggers a blur event", ->
+        Klass.blur()
+        expect( Klass.trigger ).calledWith('blur')
+
+    describe ".save", ->
+
+      it "triggers a save event", ->
+        Klass.save()
+        expect( Klass.trigger ).calledWith('save')
+
+    describe ".initialize", ->
+
+      it "triggers a initialize event", ->
+        Klass.initialize()
+        expect( Klass.trigger ).calledWith('initialize')
+
+    describe ".reinitialize", ->
+
+      it "triggers a reinitialize event", ->
+        Klass.reinitialize()
+        expect( Klass.trigger ).calledWith('reinitialize')
+
+    describe ".toggle", ->
+
+      it "triggers a interface:toggle event", ->
+        Klass.toggle()
+        expect( Klass.trigger ).calledWith('interface:toggle')
+
+    describe ".show", ->
+
+      it "triggers a interface:show event", ->
+        Klass.show()
+        expect( Klass.trigger ).calledWith('interface:show')
+
+    describe ".hide", ->
+
+      it "triggers a interface:hide event", ->
+        Klass.hide()
+        expect( Klass.trigger ).calledWith('interface:hide')

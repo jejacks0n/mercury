@@ -47,21 +47,23 @@ initialize = ->
       @Config.set(args...)
     @one 'configure', -> @Config.set(args[0], true, args[1])
 
-  # Add interface for focusing Mercury, which will focus the current active region (most recent region). Regions are
-  # responsible for restoring selections if the region doesn't natively handle that.
+  # Add exernal interface for common api actions.
   #
-  # Mercury.focus
-  # Triggers the focus event.
+  # This adds commonly used methods to the global Mercury object. You can call these methods instead of triggering the
+  # event -- this is provided as a convenience. The following methods will be on the global object.
   #
-  @focus = -> @trigger('focus')
+  # focus         - restores focus to mercury, which will focus the active region
+  # blur          - blur mercury, which will give up focus and blur the region
+  # save          - make the save ajax request
+  # initialize    - lets mercury know that it can initialize
+  # reinitialize  - tells mercury to go find any new regions
+  # toggle        - toggles the interface
+  # show          - shows the interface if it's hidden
+  # hide          - hides the interface if it's visible
+  #
+  map = ['focus', 'blur', 'save', 'initialize', 'reinitialize', 'interface:toggle', 'interface:show', 'interface:hide']
+  (do(e) => @[e.replace('interface:', '')] = -> @trigger(e)) for e in map
 
-  # Add interface for bluring Mercury, which can be useful externally if you want to switch to a different interface or
-  # form.
-  #
-  # Mercury.blur
-  # Triggers the blur event.
-  #
-  @blur = -> @trigger('blur')
 
   # Add global event handling/triggering.
   #

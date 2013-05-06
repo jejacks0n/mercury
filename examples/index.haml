@@ -97,7 +97,7 @@
 :javascript
   // If we're in an an iframe and Mercury is present in the parent we can shortcut the load time by initializing
   // manually. This will tell Mercury that this document has loaded and it can begin looking for regions.
-  if (parent.Mercury) parent.Mercury.trigger('initialize')
+  if (parent.Mercury) parent.Mercury.initialize()
 
   // If we're editing this page let's instantiate the developer toolbar for example usage/interactions. The developer
   // toolbar has many examples of how you can interact with Mercury. Also note that if we're in an iframe or not Mercury

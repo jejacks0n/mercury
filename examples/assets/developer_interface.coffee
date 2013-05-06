@@ -104,7 +104,7 @@ class @DeveloperInterface extends Mercury.View
   #
   focusMercury: (e) ->
     @prevent(e)
-    Mercury.trigger('focus')
+    Mercury.focus() # or Mercury.trigger('focus')
 
 
   # Tells Mercury to save. You can do this by calling the save method on the interface, or you can do it by triggering
@@ -112,8 +112,7 @@ class @DeveloperInterface extends Mercury.View
   #
   save: ->
     #console.debug(Mercury.interface.serialize())
-    Mercury.trigger('save')
-    #Mercury.interface.save()
+    Mercury.save() # or Mercury.trigger('save')
 
 
   # You can toggle the interface, which will make it appear as though Mercury isn't on the page. This can be useful for
@@ -121,8 +120,7 @@ class @DeveloperInterface extends Mercury.View
   # the interface.
   #
   toggleInterface: ->
-    # Mercury.trigger('interface')
-    Mercury.interface.toggleInterface()
+    Mercury.toggle() # or Mercury.trigger('interface:toggle')
 
 
   # If you reload your page, or have added new regions you can tell Mercury to go looking for new regions by triggering
@@ -130,8 +128,7 @@ class @DeveloperInterface extends Mercury.View
   # this differently, but by default this only looks for new regions.
   #
   reinitialize: ->
-    # Mercury.trigger('reinitialize')
-    Mercury.interface.reinitialize()
+    Mercury.reinitialize() # or Mercury.trigger('reinitialize')
 
 
   # In our example we want to be able to add and remove regions as an example of how you can use Mercury to create all

@@ -65,13 +65,16 @@ class @Mercury.Snippet
     @version = 0
     @data = ''
     @wrapperTag = 'div'
+    @wrapperClass = ''
     @history = new Mercury.HistoryBuffer()
     @setOptions(options)
 
 
   getHTML: (context, callback = null) ->
+    elementClass = "#{@name}-snippet"
+    elementClass += " #{@wrapperClass}" if @wrapperClass
     element = jQuery("<#{@wrapperTag}>", {
-      class: "#{@name}-snippet"
+      class: elementClass
       contenteditable: "false"
       'data-snippet': @identity
       'data-version': @version
@@ -113,6 +116,7 @@ class @Mercury.Snippet
     delete(@options['authenticity_token'])
     delete(@options['utf8'])
     @wrapperTag = @options.wrapperTag if @options.wrapperTag
+    @wrapperClass = @options.wrapperClass if @options.wrapperClass
     @version += 1
     @history.push(@options)
 

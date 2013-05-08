@@ -65,7 +65,7 @@ class Mercury.BaseInterface extends Mercury.View
 
 
   bindDocumentEvents: ->
-    $('body', @document).on('mousedown', -> Mercury.trigger('dialogs:hide')) unless @config('interface:mask')
+    $('body', @document).on('mousedown', @hideDialogs) unless @config('interface:mask')
 
 
   buildInterface: ->
@@ -178,8 +178,13 @@ class Mercury.BaseInterface extends Mercury.View
     false
 
 
+  hideDialogs: =>
+    Mercury.trigger('dialogs:hide')
+
+
   release: ->
     $(window).off('resize', @resize)
+    $('body', @document).off('mousedown', @hideDialogs)
     @regions.shift().release() while @regions.length
     super
 
@@ -210,7 +215,7 @@ class Mercury.BaseInterface extends Mercury.View
     return unless @region
     return if @hiding
     @addClass('mercury-no-animation')
-    pos = @region.$el.offset()
+    pos = @positionForRegion()
     width = Math.max(@config('interface:floatWidth') || @region.$el.width(), 300)
     height = @heightForWidth(width)
     callback = ->
@@ -221,6 +226,10 @@ class Mercury.BaseInterface extends Mercury.View
       @delay(300, -> Mercury.trigger('interface:resize', @dimensions()))
     else
       callback.call(@)
+
+
+  positionForRegion: ->
+    @region.$el.offset()
 
 
   onRegionFocus: (region) ->
@@ -240,6 +249,7 @@ class Mercury.BaseInterface extends Mercury.View
     return unless @visible
     Mercury.trigger('interface:resize', dimensions)
     @position()
+    dimensions
 
 
   onUnload: =>

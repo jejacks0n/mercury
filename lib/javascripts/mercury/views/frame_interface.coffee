@@ -26,6 +26,11 @@ class Mercury.FrameInterface extends Mercury.BaseInterface
     super
 
 
+  bindDocumentEvents: ->
+    $(@window).on('scroll', @onScroll)
+    super
+
+
   initializeFrame: ->
     return if @initialized
     @initialized = true
@@ -38,6 +43,31 @@ class Mercury.FrameInterface extends Mercury.BaseInterface
 
 
   setupDocument: ->
-    contentWindow = @$frame.get(0).contentWindow
-    contentWindow.Mercury = Mercury
-    @document = $(contentWindow.document)
+    @window = @$frame.get(0).contentWindow
+    @window.Mercury = Mercury
+    @document = $(@window.document)
+
+
+  hide: ->
+    @$frame.css(top: 0, height: '100%')
+    super
+
+
+  positionForRegion: ->
+    offset = super
+    offset.top -= $('body', @document).scrollTop()
+    offset
+
+
+  release: ->
+    $(@window).off('scroll', @onScroll)
+    super
+
+
+  onScroll: =>
+    @position()
+
+
+  onResize: =>
+    position = super
+    @$frame.css(top: position.top, height: position.height) if position

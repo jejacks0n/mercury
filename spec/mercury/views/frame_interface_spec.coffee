@@ -71,16 +71,16 @@ describe "Mercury.FrameInterface", ->
   describe "#bindDocumentEvents", ->
 
     beforeEach ->
-      @mock = on: stub().yieldsOn(subject), off: ->
+      spyOn(Klass.__super__, 'bindDocumentEvents')
+      @mock = on: spy(), off: ->
       spyOn(window, '$', => @mock)
 
-    it "binds to the mouse down on the document", ->
-      spyOn(Mercury, 'trigger')
-      subject.document = '_document_'
+    it "binds to the scroll event on the window", ->
+      spyOn(subject, 'onScroll')
+      subject.window = '_window_'
       subject.bindDocumentEvents()
-      expect( $ ).calledWith('body', '_document_')
-      expect( @mock.on ).calledWith('mousedown', sinon.match.func)
-      expect( Mercury.trigger ).calledWith('dialogs:hide')
+      expect( $ ).calledWith('_window_')
+      expect( @mock.on ).calledWith('scroll', subject.onScroll)
 
 
   describe "#initializeFrame", ->
@@ -135,3 +135,67 @@ describe "Mercury.FrameInterface", ->
     it "exposes Mercury to the frame window", ->
       subject.setupDocument()
       expect( @contentWindow.Mercury ).to.eq(Mercury)
+
+
+  describe "#hide", ->
+
+    it "sets the frame size", ->
+      spyOn(subject.$frame, 'css')
+      subject.hide()
+      expect( subject.$frame.css ).calledWith(top: 0, height: '100%')
+
+    it "calls super", ->
+      spyOn(Klass.__super__, 'hide')
+      subject.hide()
+      expect( Klass.__super__.hide ).called
+
+
+  describe "#positionForRegion", ->
+
+    beforeEach ->
+      spyOn(Klass.__super__, 'positionForRegion', -> top: 42, left: 0)
+      @mock = scrollTop: spy(-> 20), off: ->
+      spyOn(window, '$', => @mock)
+
+    it "adjusts the top -- subtracting the current scrollTop", ->
+      subject.document = '_document_'
+      expect( subject.positionForRegion() ).to.eql(top: 22, left: 0)
+      expect( $ ).calledWith('body', '_document_')
+      expect( @mock.scrollTop ).called
+
+
+  describe "#release", ->
+
+    beforeEach ->
+      spyOn(Klass.__super__, 'release')
+      @mock = off: spy()
+      spyOn(window, '$', => @mock)
+
+    it "calls super", ->
+      subject.release()
+      expect( Klass.__super__.release ).called
+
+    it "unbinds the window scroll event", ->
+      subject.window = '_window_'
+      subject.release()
+      expect( $ ).calledWith('_window_')
+      expect( @mock.off ).calledWith('scroll', subject.onScroll)
+
+
+  describe "#onScroll", ->
+
+    it "calls #position", ->
+      spyOn(subject, 'position')
+      subject.onScroll()
+      expect( subject.position ).called
+
+
+  describe "#onResize", ->
+
+    beforeEach ->
+      spyOn(Klass.__super__, 'onResize', -> top: 42, height: 420)
+
+    it "sets the frame size", ->
+      spyOn(subject.$frame, 'css')
+      subject.onResize()
+      expect( subject.$frame.css ).calledWith(top: 42, height: 420)

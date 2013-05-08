@@ -1,6 +1,6 @@
 # Mercury dependencies.
 #------------------------------------------------------------------------------
-#= require jquery-1.9.1
+#= require jquery-2.0.0
 #= require liquidmetal-1.2.1
 #
 # HTML region depdendencies.

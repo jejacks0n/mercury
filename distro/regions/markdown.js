@@ -203,7 +203,7 @@ via Ajax.
       ],
       sep: ' ',
       pre: [
-        'Pre / Code', {
+        'Formatted', {
           action: ['block', 'pre']
         }
       ]

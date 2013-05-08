@@ -17,8 +17,8 @@ Copyright (c) 2013 Jeremy Jackson
       notifier: 'console'
     },
     localization: {
-      enabled: true,
-      preferred: 'en-US'
+      enabled: false,
+      preferred: 'swedish_chef-BORK'
     },
     uploading: {
       enabled: true,
@@ -35,8 +35,7 @@ Copyright (c) 2013 Jeremy Jackson
     },
     templates: {
       enabled: true,
-      prefixUrl: '/mercury/templates',
-      asyncFetch: false
+      prefixUrl: '/mercury/templates'
     },
     "interface": {
       enabled: true,
@@ -46,11 +45,12 @@ Copyright (c) 2013 Jeremy Jackson
       uploader: 'Uploader',
       silent: false,
       shadowed: false,
-      maskable: false
+      maskable: false,
+      style: false,
+      floating: false,
+      floatWidth: false
     },
     toolbars: {
-      floating: false,
-      style: 'standard',
       primary: {
         save: [
           'Save', {
@@ -111,14 +111,12 @@ Copyright (c) 2013 Jeremy Jackson
         history: [
           'History', {
             title: 'Page Version History',
-            global: true,
             plugin: 'history'
           }
         ],
         notes: [
           'Notes', {
             title: 'Page Notes',
-            global: true,
             plugin: 'notes'
           }
         ]
@@ -159,15 +157,6 @@ Copyright (c) 2013 Jeremy Jackson
 (function() {
 
   this.Mercury || (this.Mercury = {});
-
-}).call(this);
-(function() {
-
-  this.JST || (this.JST = {});
-
-  JST['/mercury/templates/interface'] = function() {
-    return "<div class=\"mercury-interface-mask\"></div>";
-  };
 
 }).call(this);
 (function() {
@@ -821,8 +810,15 @@ Copyright (c) 2013 Jeremy Jackson
       return this.__determined__ = [top || {}, sub || {}];
     },
     detectLocale: function() {
-      var _ref;
-      return this.__detected__ || (this.__detected__ = (this.clientLocale() || ((_ref = Mercury.configuration.localization) != null ? _ref.preferred : void 0)).split('-'));
+      var possible, _ref, _ref1;
+      if (this.__detected__) {
+        return this.__detected__;
+      }
+      possible = (this.clientLocale() || ((_ref = Mercury.configuration.localization) != null ? _ref.preferred : void 0)).split('-');
+      if (!this.__locales__[possible[0]]) {
+        possible = (((_ref1 = Mercury.configuration.localization) != null ? _ref1.preferred : void 0) || 'en-US').split('-');
+      }
+      return this.__detected__ = possible;
     },
     t: function() {
       var args, source, sub, top, translated, _ref;
@@ -1764,7 +1760,6 @@ Copyright (c) 2013 Jeremy Jackson
       this.delegateEvents(this.events);
       this.refreshElements();
       View.__super__.constructor.apply(this, arguments);
-      this.trigger('init');
     }
 
     View.prototype.buildElement = function() {
@@ -1815,6 +1810,7 @@ Copyright (c) 2013 Jeremy Jackson
         return this.$el.html();
       }
       this.$el.html((element != null ? element.$el : void 0) || (element != null ? element.el : void 0) || element);
+      this.localize(this.$el);
       this.refreshElements();
       return this.$el;
     };
@@ -1886,9 +1882,13 @@ Copyright (c) 2013 Jeremy Jackson
       if (options == null) {
         options = null;
       }
-      template = JST["/mercury/templates/" + path];
-      if (this.config('templates:enabled') && !template) {
-        template = this.fetchTemplate(path);
+      if (typeof path === 'function') {
+        template = path;
+      } else {
+        template = JST["/mercury/templates/" + path];
+        if (this.config('templates:enabled') && !template) {
+          template = this.fetchTemplate(path);
+        }
       }
       if (typeof template === 'function') {
         return template.call(options || this);
@@ -1907,6 +1907,69 @@ Copyright (c) 2013 Jeremy Jackson
         }
       });
       return template;
+    };
+
+    View.prototype.localize = function($el) {
+      var attrs, el, t, type, _i, _len, _ref, _results;
+      _ref = $el.find('*').contents();
+      _results = [];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        el = _ref[_i];
+        attrs = el.attributes;
+        if (typeof el.data === 'string' && (t = this.translationForContent(el.data))) {
+          el.data = t;
+        }
+        switch (el.nodeName) {
+          case 'IMG':
+            if (t = this.translationForAttr(attrs['src'])) {
+              _results.push($(el).attr('src', t));
+            } else {
+              _results.push(void 0);
+            }
+            break;
+          case 'A':
+            if (t = this.translationForAttr(attrs['href'])) {
+              _results.push($(el).attr('href', t));
+            } else {
+              _results.push(void 0);
+            }
+            break;
+          case 'INPUT':
+            type = attrs['type'].nodeValue.toLowerCase();
+            if (attrs['value'] && (type === 'button' || type === 'reset' || type === 'submit')) {
+              if (t = this.translationForAttr(attrs['value'])) {
+                _results.push($(el).attr('value', t));
+              } else {
+                _results.push(void 0);
+              }
+            } else {
+              _results.push(void 0);
+            }
+            break;
+        }
+      }
+      return _results;
+    };
+
+    View.prototype.translationForAttr = function(attr) {
+      if (!(attr && attr.nodeValue)) {
+        return false;
+      }
+      return this.translationForContent(attr.nodeValue);
+    };
+
+    View.prototype.translationForContent = function(content) {
+      var original, translated;
+      original = $.trim(content);
+      if (!original) {
+        return false;
+      }
+      translated = this.t(original);
+      if (translated === original) {
+        return false;
+      } else {
+        return translated;
+      }
     };
 
     View.prototype.focusFirstFocusable = function() {
@@ -2059,11 +2122,11 @@ Copyright (c) 2013 Jeremy Jackson
       el = $(el);
       type = el.attr(this.config('regions:attribute'));
       if (!type) {
-        this.notify(this.t('region type not provided'));
+        this.notify(this.t('Region type not provided'));
       }
       type = ("" + type).toLowerCase().toCamelCase(true);
       if (!Mercury.Region[type]) {
-        this.notify(this.t('unknown "%s" region type, falling back to base region', type));
+        this.notify(this.t('Unknown %s region type, falling back to base region', type));
       }
       return new (Mercury.Region[type] || Mercury.Region)(el);
     };
@@ -2122,7 +2185,7 @@ Copyright (c) 2013 Jeremy Jackson
         return false;
       }
       if (!this.constructor.supported) {
-        this.notify(this.t('is unsupported in this browser'));
+        this.notify(this.t('Is unsupported in this browser'));
         return false;
       }
       this.actions || (this.actions = {});
@@ -2154,7 +2217,7 @@ Copyright (c) 2013 Jeremy Jackson
         region: this
       });
       if (!this.name) {
-        this.notify(this.t('no name provided for the "%s" region, falling back to random', this.constructor.type));
+        this.notify(this.t('No name provided for the %s region, falling back to random', this.constructor.type));
         this.name = "" + this.constructor.type + (Math.floor(Math.random() * 10000));
       }
       this.addRegionClassname();
@@ -2549,25 +2612,17 @@ Copyright (c) 2013 Jeremy Jackson
         return;
       }
       this.delegateEvents({
-        'mousedown': 'handleFocusableEvent',
-        'mouseup': 'handleFocusableEvent',
-        'click': 'handleFocusableEvent'
+        mousedown: 'handleFocusableEvent',
+        mouseup: 'handleFocusableEvent',
+        click: 'handleFocusableEvent'
       });
       return this.delegateRevertedFocus(this.revertFocusOn);
     },
     delegateRevertedFocus: function(matcher) {
       var reverted;
       reverted = {};
-      reverted["mousedown " + matcher] = function() {
-        return this.delay(1, function() {
-          return Mercury.trigger('focus');
-        });
-      };
-      reverted["click " + matcher] = function() {
-        return this.delay(1, function() {
-          return Mercury.trigger('focus');
-        });
-      };
+      reverted["mousedown " + matcher] = 'revertInterfaceFocus';
+      reverted["click " + matcher] = 'revertInterfaceFocus';
       return this.delegateEvents(reverted);
     },
     handleFocusableEvent: function(e) {
@@ -2575,6 +2630,109 @@ Copyright (c) 2013 Jeremy Jackson
       if (!$(e.target).is(this.focusableSelector || ':input, [tabindex]')) {
         return this.prevent(e);
       }
+    },
+    revertInterfaceFocus: function() {
+      return this.delay(1, function() {
+        return Mercury.trigger('focus');
+      });
+    },
+    preventFocusout: function($el, handler) {
+      var _this = this;
+      this.on('release', function() {
+        return _this.clearFocusoutTimeout();
+      });
+      this.on('hide', function() {
+        return _this.clearFocusoutTimeout();
+      });
+      if (handler) {
+        $el.off('focusout').on('focusout', function() {
+          return _this.preventFocusoutTimeout = _this.delay(150, function() {
+            if (this._activeElementIsBody()) {
+              return;
+            }
+            if ($.contains($el[0], document.activeElement)) {
+              return;
+            }
+            return handler.call(this);
+          });
+        });
+      }
+      return $el.on('keydown', function(e) {
+        var first, focusables, last;
+        if (e.keyCode !== 9) {
+          return;
+        }
+        focusables = $el.find(':input[tabindex != "-1"]');
+        if (!focusables.length) {
+          return;
+        }
+        first = focusables[0];
+        last = focusables[focusables.length - 1];
+        if ((e.shiftKey && e.target === first) || (!e.shiftKey && e.target === last)) {
+          return _this.prevent(e, true);
+        }
+      });
+    },
+    clearFocusoutTimeout: function() {
+      return clearTimeout(this.preventFocusoutTimeout);
+    },
+    _activeElementIsBody: function() {
+      return document.activeElement === document.body;
+    }
+  };
+
+}).call(this);
+(function() {
+
+  Mercury.View.Modules.InterfaceMaskable = {
+    included: function() {
+      return this.on('build', this.buildInterfaceMaskable);
+    },
+    extended: function() {
+      return this.on('build', this.buildInterfaceMaskable);
+    },
+    buildInterfaceMaskable: function() {
+      this.$mask = $('<div class="mercury-interface-mask">');
+      this.append(this.$mask);
+      return this.delegateEvents({
+        'mercury:interface:mask': this.mask,
+        'mercury:interface:unmask': this.unmask,
+        'mousedown .mercury-interface-mask': this.prevent,
+        'mouseup .mercury-interface-mask': this.prevent,
+        'click .mercury-interface-mask': this.onMaskClick
+      });
+    },
+    mask: function() {
+      return this.$mask.show();
+    },
+    unmask: function() {
+      return this.$mask.hide();
+    },
+    onMaskClick: function(e) {
+      this.prevent(e, true);
+      return Mercury.trigger('dialogs:hide');
+    }
+  };
+
+}).call(this);
+(function() {
+
+  Mercury.View.Modules.InterfaceShadowed = {
+    included: function() {
+      return this.on('init', this.buildInterfaceShadowed);
+    },
+    extended: function() {
+      return this.on('init', this.buildInterfaceShadowed);
+    },
+    buildInterfaceShadowed: function() {
+      if (!this.el.webkitCreateShadowRoot) {
+        return;
+      }
+      this.shadow = $(this.el.webkitCreateShadowRoot());
+      this.el = document.createElement(this.tag || this.constructor.tag);
+      this.$el = $(this.el);
+      this.shadow.get(0).applyAuthorStyles = true;
+      return this.shadow.append(this.el);
     }
   };
 
@@ -2582,14 +2740,14 @@ Copyright (c) 2013 Jeremy Jackson
 (function() {
 
   Mercury.View.Modules.ScrollPropagation = {
-    preventScrollPropagation: function(el) {
-      return el.on('mousewheel DOMMouseScroll', function(e) {
+    preventScrollPropagation: function($el) {
+      return $el.on('mousewheel DOMMouseScroll', function(e) {
         var delta, scrollTop, _ref;
-        _ref = [e.originalEvent.wheelDelta || -e.originalEvent.detail, el.scrollTop()], delta = _ref[0], scrollTop = _ref[1];
+        _ref = [e.originalEvent.wheelDelta || -e.originalEvent.detail, $el.scrollTop()], delta = _ref[0], scrollTop = _ref[1];
         if (delta > 0 && scrollTop <= 0) {
           return false;
         }
-        if (delta < 0 && scrollTop >= el.get(0).scrollHeight - el.height()) {
+        if (delta < 0 && scrollTop >= $el.get(0).scrollHeight - $el.height()) {
           return false;
         }
         return true;
@@ -2627,24 +2785,26 @@ Copyright (c) 2013 Jeremy Jackson
       return this.resize(false, dimensions);
     },
     position: function(dimensions) {
-      var e, left, o, p, top, v;
+      var e, left, o, p, par, top, v, win;
       this.css({
-        left: 0,
-        top: 0
+        top: 0,
+        left: 0
       });
+      par = this.$el.parent();
+      win = $(window);
       v = {
-        width: $(window).width(),
-        height: $(window).height()
+        width: win.width(),
+        height: win.height()
       };
       e = {
         width: this.$el.outerWidth(),
         height: this.$el.outerHeight()
       };
       p = {
-        width: this.$el.parent().outerWidth(),
-        height: this.$el.parent().outerHeight()
+        width: par.outerWidth(),
+        height: par.outerHeight()
       };
-      o = this.$el.parent().position();
+      o = par.position();
       left = 0;
       if (e.width + o.left > v.width) {
         left = -e.width + p.width;
@@ -2652,7 +2812,7 @@ Copyright (c) 2013 Jeremy Jackson
       if (o.left + left < 0) {
         left -= o.left + left;
       }
-      top = 0;
+      top = p.height;
       if (e.height + o.top + p.height > v.height) {
         top = -e.height;
       }
@@ -2664,11 +2824,7 @@ Copyright (c) 2013 Jeremy Jackson
         left: left
       });
     },
-    resize: function(animate, dimensions) {
-      if (animate == null) {
-        animate = true;
-      }
-    }
+    resize: function() {}
   };
 
 }).call(this);
@@ -2679,11 +2835,6 @@ Copyright (c) 2013 Jeremy Jackson
       return this.on('build', this.buildVisibilityToggleable);
     },
     buildVisibilityToggleable: function() {
-      this.delegateEvents({
-        'mercury:interface:hide': function() {
-          return this.hide();
-        }
-      });
       if (this.hidden) {
         this.visible = true;
         return this.hide();
@@ -2712,6 +2863,9 @@ Copyright (c) 2013 Jeremy Jackson
       }
       this.visible = true;
       this.$el.show();
+      if (typeof this.position === "function") {
+        this.position();
+      }
       return this.visibilityTimout = this.delay(50, function() {
         this.css({
           opacity: 1
@@ -2785,47 +2939,42 @@ Copyright (c) 2013 Jeremy Jackson
 
     __extends(BaseInterface, _super);
 
+    BaseInterface.include(Mercury.Module);
+
     BaseInterface.logPrefix = 'Mercury.BaseInterface:';
 
-    BaseInterface.template = 'interface';
-
     BaseInterface.tag = 'mercury';
-
-    BaseInterface.elements = {
-      mask: '.mercury-interface-mask'
-    };
 
     BaseInterface.events = {
       'mercury:save': 'save',
       'mercury:focus': 'focusActiveRegion',
-      'mercury:action': 'focusActiveRegion',
       'mercury:blur': 'blurActiveRegion',
+      'mercury:action': 'focusActiveRegion',
       'mercury:region:focus': 'onRegionFocus',
       'mercury:region:release': 'onRegionRelease',
       'mercury:reinitialize': 'reinitialize',
-      'mercury:interface:mask': 'mask',
-      'mercury:interface:unmask': 'unmask',
-      'mousedown .mercury-interface-mask': function(e) {
-        return this.prevent(e);
-      },
-      'mouseup .mercury-interface-mask': function(e) {
-        return this.prevent(e);
-      },
-      'click .mercury-interface-mask': function(e) {
-        this.prevent(e, true);
-        return Mercury.trigger('dialogs:hide');
-      }
+      'mercury:interface:toggle': 'toggle'
     };
 
     function BaseInterface() {
       this.onUnload = __bind(this.onUnload, this);
 
       this.onResize = __bind(this.onResize, this);
+
+      this.hideDialogs = __bind(this.hideDialogs, this);
       if (parent !== window && parent.Mercury) {
-        this.log(this.t('is already defined in parent frame'));
+        this.log(this.t('Has already been defined in parent frame'));
         return;
       }
+      if (this.config('interface:maskable')) {
+        this.extend(Mercury.View.Modules.InterfaceMaskable);
+      }
+      if (this.config('interface:shadowed')) {
+        this.extend(Mercury.View.Modules.InterfaceShadowed);
+      }
       Mercury["interface"] = this;
+      this.floating = this.config('interface:floating');
+      this.visible = true;
       BaseInterface.__super__.constructor.apply(this, arguments);
       this.page = new Mercury.Model.Page();
       this.regions || (this.regions = []);
@@ -2834,26 +2983,19 @@ Copyright (c) 2013 Jeremy Jackson
       this.initialize();
       this.buildInterface();
       this.bindDefaultEvents();
-      this.removeClass('loading');
       Mercury.trigger('initialized');
     }
 
     BaseInterface.prototype.build = function() {
       if (!this.el) {
-        this.$el = this.el = $(this.tag);
+        this.el = document.createElement(this.tag || this.constructor.tag);
       }
-      this.attr(this.attributes);
-      return this.addClass(this.className);
+      this.$el = $(this.el);
+      return this.attr(this.attributes);
     };
 
     BaseInterface.prototype.init = function() {
-      this.addLocaleClass();
-      $('body').before(this.$el);
-      this.makeShadowed();
-      if (this.template) {
-        this.html(this.renderTemplate(this.template));
-      }
-      return this.addClass('loading');
+      return $('body').before(this.$el);
     };
 
     BaseInterface.prototype.initialize = function() {
@@ -2861,50 +3003,53 @@ Copyright (c) 2013 Jeremy Jackson
       return this.bindDocumentEvents();
     };
 
-    BaseInterface.prototype.reinitialize = function() {
-      this.initialize();
-      return this.focusActiveRegion();
+    BaseInterface.prototype.addAllRegions = function() {
+      var el, _i, _len, _ref;
+      _ref = this.regionElements();
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        el = _ref[_i];
+        this.addRegion(el);
+      }
+      return this.region || (this.region = this.regions[0]);
+    };
+
+    BaseInterface.prototype.bindDocumentEvents = function() {
+      if (!this.config('interface:mask')) {
+        return $('body', this.document).on('mousedown', this.hideDialogs);
+      }
     };
 
     BaseInterface.prototype.buildInterface = function() {
-      this.buildToolbar();
-      this.buildStatusbar();
-      return this.focusDefaultRegion();
+      var klass, subview, _i, _len, _ref;
+      this.addClasses();
+      _ref = ['toolbar', 'statusbar'];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        subview = _ref[_i];
+        if (!(klass = this.config("interface:" + subview))) {
+          continue;
+        }
+        this[subview] = this.appendView(new Mercury[klass]());
+      }
+      if (!this.config('interface:enabled')) {
+        this.previewMode = true;
+        this.hide();
+        Mercury.trigger('mode', 'preview');
+      }
+      this.focusDefaultRegion();
+      this.onResize();
+      return this.delay(500, function() {
+        return this.removeClass('loading');
+      });
     };
 
-    BaseInterface.prototype.addLocaleClass = function() {
+    BaseInterface.prototype.addClasses = function() {
+      this.addClass(this.className);
+      this.addClass('loading');
+      this.addClass(this.config('interface:style') || 'standard');
+      if (this.floating) {
+        this.addClass('mercury-floating');
+      }
       return this.addClass("locale-" + (Mercury.I18n.detectLocale().join('-').toLowerCase()));
-    };
-
-    BaseInterface.prototype.makeShadowed = function() {
-      if (!(this.config('interface:shadowed') && this.el.webkitCreateShadowRoot)) {
-        return;
-      }
-      this.shadow = $(this.el.webkitCreateShadowRoot());
-      this.shadow.get(0).applyAuthorStyles = true;
-      return this.shadow.append(this.$el = this.el = $(document.createElement(this.tag)));
-    };
-
-    BaseInterface.prototype.buildToolbar = function() {
-      var klass;
-      if (!(klass = this.config('interface:toolbar'))) {
-        return;
-      }
-      this.toolbar = this.appendView(new Mercury[klass]());
-      if (!this.config('interface:enabled')) {
-        return this.toolbar.hide();
-      }
-    };
-
-    BaseInterface.prototype.buildStatusbar = function() {
-      var klass;
-      if (!(klass = this.config('interface:statusbar'))) {
-        return;
-      }
-      this.statusbar = this.appendView(new Mercury[klass]());
-      if (!this.config('interface:enabled')) {
-        return this.statusbar.hide();
-      }
     };
 
     BaseInterface.prototype.bindDefaultEvents = function() {
@@ -2918,29 +3063,13 @@ Copyright (c) 2013 Jeremy Jackson
       });
     };
 
-    BaseInterface.prototype.bindDocumentEvents = function() {
-      if (!this.config('interface:mask')) {
-        return $('body', this.document).on('mousedown', function() {
-          return Mercury.trigger('dialogs:hide');
-        });
-      }
+    BaseInterface.prototype.reinitialize = function() {
+      this.addAllRegions();
+      return this.delay(100, this.focusActiveRegion);
     };
 
     BaseInterface.prototype.focusDefaultRegion = function() {
       return this.delay(100, this.focusActiveRegion);
-    };
-
-    BaseInterface.prototype.addAllRegions = function() {
-      var el, _i, _len, _ref;
-      _ref = this.regionElements();
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        el = _ref[_i];
-        this.addRegion(el);
-      }
-      this.region || (this.region = this.regions[0]);
-      if (!this.config('interface:enabled')) {
-        return Mercury.trigger('mode', 'preview');
-      }
     };
 
     BaseInterface.prototype.regionElements = function() {
@@ -2969,43 +3098,77 @@ Copyright (c) 2013 Jeremy Jackson
 
     BaseInterface.prototype.setMode = function(mode) {
       this["" + mode + "Mode"] = !this["" + mode + "Mode"];
-      return this.focusActiveRegion();
+      this.focusActiveRegion();
+      if (mode === 'preview') {
+        return this.delay(50, function() {
+          return this.position();
+        });
+      }
     };
 
-    BaseInterface.prototype.toggleInterface = function() {
-      var _ref;
-      if ((_ref = this.interfaceHidden) == null) {
-        this.interfaceHidden = this.config('interface:enabled');
-      }
-      this.interfaceHidden = !this.interfaceHidden;
-      if (this.interfaceHidden) {
-        Mercury.trigger('interface:show');
-        if (this.previewMode) {
-          return Mercury.trigger('mode', 'preview');
-        }
+    BaseInterface.prototype.toggle = function() {
+      if (this.visible) {
+        return this.hide();
       } else {
-        Mercury.trigger('interface:hide');
-        if (!this.previewMode) {
-          return Mercury.trigger('mode', 'preview');
-        }
+        return this.show();
       }
     };
 
-    BaseInterface.prototype.mask = function() {
-      if (!this.config('interface:maskable')) {
+    BaseInterface.prototype.show = function() {
+      if (this.visible) {
         return;
       }
-      return this.$mask.show();
+      Mercury.trigger('interface:show');
+      if (this.previewMode) {
+        Mercury.trigger('mode', 'preview');
+      }
+      this.$el.show();
+      this.visible = true;
+      this.onResize();
+      this.$el.stop().animate({
+        opacity: 1
+      }, {
+        duration: 250
+      });
+      return this.position();
     };
 
-    BaseInterface.prototype.unmask = function() {
-      return this.$mask.hide();
+    BaseInterface.prototype.hide = function() {
+      var _this = this;
+      if (!this.visible) {
+        return;
+      }
+      this.hiding = true;
+      Mercury.trigger('interface:hide');
+      if (!this.previewMode) {
+        Mercury.trigger('mode', 'preview');
+      }
+      $('body').css({
+        position: 'relative',
+        top: 0
+      });
+      this.visible = false;
+      this.position();
+      return this.$el.stop().animate({
+        opacity: 0
+      }, {
+        duration: 250,
+        complete: function() {
+          _this.$el.hide();
+          return _this.hiding = false;
+        }
+      });
     };
 
     BaseInterface.prototype.dimensions = function() {
-      var statusbarHeight, toolbarHeight;
-      toolbarHeight = this.toolbar.height();
-      statusbarHeight = this.statusbar.height();
+      var statusbarHeight, toolbarHeight, _ref, _ref1;
+      if (this.floating) {
+        toolbarHeight = 0;
+        statusbarHeight = 0;
+      } else {
+        toolbarHeight = (_ref = this.toolbar) != null ? _ref.height() : void 0;
+        statusbarHeight = (_ref1 = this.statusbar) != null ? _ref1.height() : void 0;
+      }
       return {
         top: toolbarHeight,
         left: 0,
@@ -3014,32 +3177,6 @@ Copyright (c) 2013 Jeremy Jackson
         width: $(window).width(),
         height: $(window).height() - toolbarHeight - statusbarHeight
       };
-    };
-
-    BaseInterface.prototype.onRegionFocus = function(region) {
-      return this.region = region;
-    };
-
-    BaseInterface.prototype.onRegionRelease = function(region) {
-      var index;
-      if (region === this.region) {
-        this.region = this.regions[0];
-      }
-      index = this.regions.indexOf(region);
-      if (index > -1) {
-        return this.regions.splice(index, 1);
-      }
-    };
-
-    BaseInterface.prototype.onResize = function() {
-      return Mercury.trigger('interface:resize', this.dimensions());
-    };
-
-    BaseInterface.prototype.onUnload = function() {
-      if (this.config('interface:silent') || !this.hasChanges()) {
-        return null;
-      }
-      return this.t('You have unsaved changes.  Are you sure you want to leave without saving them first?');
     };
 
     BaseInterface.prototype.hasChanges = function() {
@@ -3054,8 +3191,13 @@ Copyright (c) 2013 Jeremy Jackson
       return false;
     };
 
+    BaseInterface.prototype.hideDialogs = function() {
+      return Mercury.trigger('dialogs:hide');
+    };
+
     BaseInterface.prototype.release = function() {
       $(window).off('resize', this.resize);
+      $('body', this.document).off('mousedown', this.hideDialogs);
       while (this.regions.length) {
         this.regions.shift().release();
       }
@@ -3080,7 +3222,7 @@ Copyright (c) 2013 Jeremy Jackson
         location: location.pathname
       });
       this.page.on('error', function(xhr, options) {
-        return alert(_this.t('Mercury was unable to save to the url: %s', options.url));
+        return alert(_this.t('Unable to save to the url: %s', options.url));
       });
       return this.page.save().always = function() {
         return _this.delay(250, function() {
@@ -3089,13 +3231,114 @@ Copyright (c) 2013 Jeremy Jackson
       };
     };
 
+    BaseInterface.prototype.heightForWidth = function(width) {
+      var height, oldWidth;
+      oldWidth = this.$el.outerWidth();
+      this.css({
+        width: width,
+        visibility: 'hidden',
+        height: 'auto'
+      });
+      height = this.$el.outerHeight();
+      this.css({
+        width: oldWidth,
+        visibility: 'visible'
+      });
+      return height;
+    };
+
+    BaseInterface.prototype.position = function(animate) {
+      var callback, height, pos, width;
+      if (animate == null) {
+        animate = false;
+      }
+      if (!this.floating) {
+        return;
+      }
+      if (!this.region) {
+        return;
+      }
+      if (this.hiding) {
+        return;
+      }
+      this.addClass('mercury-no-animation');
+      pos = this.positionForRegion();
+      width = Math.max(this.config('interface:floatWidth') || this.region.$el.width(), 300);
+      height = this.heightForWidth(width);
+      callback = function() {
+        if (animate) {
+          this.removeClass('mercury-no-animation');
+        }
+        return this.css({
+          top: pos.top - height,
+          left: pos.left,
+          width: width
+        });
+      };
+      if (animate) {
+        this.delay(20, callback);
+        return this.delay(300, function() {
+          return Mercury.trigger('interface:resize', this.dimensions());
+        });
+      } else {
+        return callback.call(this);
+      }
+    };
+
+    BaseInterface.prototype.positionForRegion = function() {
+      return this.region.$el.offset();
+    };
+
+    BaseInterface.prototype.onRegionFocus = function(region) {
+      this.region = region;
+      if (this.floating) {
+        return this.delay(50, function() {
+          return this.position(true);
+        });
+      }
+    };
+
+    BaseInterface.prototype.onRegionRelease = function(region) {
+      var index;
+      if (region === this.region) {
+        this.region = this.regions[0];
+      }
+      index = this.regions.indexOf(region);
+      if (index > -1) {
+        return this.regions.splice(index, 1);
+      }
+    };
+
+    BaseInterface.prototype.onResize = function() {
+      var dimensions;
+      dimensions = this.dimensions();
+      $('body').css({
+        position: 'relative',
+        top: dimensions.top
+      });
+      if (!this.visible) {
+        return;
+      }
+      Mercury.trigger('interface:resize', dimensions);
+      this.position();
+      return dimensions;
+    };
+
+    BaseInterface.prototype.onUnload = function() {
+      if (this.config('interface:silent') || !this.hasChanges()) {
+        return null;
+      }
+      return this.t('You have unsaved changes.  Are you sure you want to leave without saving them first?');
+    };
+
     return BaseInterface;
 
   })(Mercury.View);
 
 }).call(this);
 (function() {
-  var __hasProp = {}.hasOwnProperty,
+  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+    __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
   Mercury.FrameInterface = (function(_super) {
@@ -3103,6 +3346,9 @@ Copyright (c) 2013 Jeremy Jackson
     __extends(FrameInterface, _super);
 
     function FrameInterface() {
+      this.onResize = __bind(this.onResize, this);
+
+      this.onScroll = __bind(this.onScroll, this);
       return FrameInterface.__super__.constructor.apply(this, arguments);
     }
 
@@ -3140,6 +3386,11 @@ Copyright (c) 2013 Jeremy Jackson
       return FrameInterface.__super__.bindDefaultEvents.apply(this, arguments);
     };
 
+    FrameInterface.prototype.bindDocumentEvents = function() {
+      $(this.window).on('scroll', this.onScroll);
+      return FrameInterface.__super__.bindDocumentEvents.apply(this, arguments);
+    };
+
     FrameInterface.prototype.initializeFrame = function() {
       if (this.initialized) {
         return;
@@ -3153,10 +3404,44 @@ Copyright (c) 2013 Jeremy Jackson
     };
 
     FrameInterface.prototype.setupDocument = function() {
-      var contentWindow;
-      contentWindow = this.$frame.get(0).contentWindow;
-      contentWindow.Mercury = Mercury;
-      return this.document = $(contentWindow.document);
+      this.window = this.$frame.get(0).contentWindow;
+      this.window.Mercury = Mercury;
+      return this.document = $(this.window.document);
+    };
+
+    FrameInterface.prototype.hide = function() {
+      this.$frame.css({
+        top: 0,
+        height: '100%'
+      });
+      return FrameInterface.__super__.hide.apply(this, arguments);
+    };
+
+    FrameInterface.prototype.positionForRegion = function() {
+      var offset;
+      offset = FrameInterface.__super__.positionForRegion.apply(this, arguments);
+      offset.top -= $('body', this.document).scrollTop();
+      return offset;
+    };
+
+    FrameInterface.prototype.release = function() {
+      $(this.window).off('scroll', this.onScroll);
+      return FrameInterface.__super__.release.apply(this, arguments);
+    };
+
+    FrameInterface.prototype.onScroll = function() {
+      return this.position();
+    };
+
+    FrameInterface.prototype.onResize = function() {
+      var position;
+      position = FrameInterface.__super__.onResize.apply(this, arguments);
+      if (position) {
+        return this.$frame.css({
+          top: position.top,
+          height: position.height
+        });
+      }
     };
 
     return FrameInterface;
@@ -3197,7 +3482,6 @@ Copyright (c) 2013 Jeremy Jackson
     };
 
     Modal.events = {
-      'mercury:interface:hide': 'hide',
       'mercury:interface:resize': 'resize',
       'mercury:modals:hide': 'hide',
       'click .mercury-modal-dialog-title em': 'hide'
@@ -3217,7 +3501,8 @@ Copyright (c) 2013 Jeremy Jackson
 
     Modal.prototype.build = function() {
       this.appendTo();
-      return this.preventScrollPropagation(this.$contentContainer);
+      this.preventScrollPropagation(this.$contentContainer);
+      return this.preventFocusout(this.$contentContainer, this.focusFirstFocusable);
     };
 
     Modal.prototype.negotiateTemplate = function() {
@@ -3246,7 +3531,7 @@ Copyright (c) 2013 Jeremy Jackson
         this[key] = value;
       }
       this.negotiateTemplate();
-      this.$title.html(this.title);
+      this.$title.html(this.t(this.title));
       this.setWidth(this.width);
       content = this.contentFromOptions();
       if (content === this.lastContent && this.width === this.lastWidth) {
@@ -3260,6 +3545,7 @@ Copyright (c) 2013 Jeremy Jackson
         opacity: 0,
         width: this.width
       }).html(content);
+      this.localize(this.$content);
       return true;
     };
 
@@ -3276,6 +3562,9 @@ Copyright (c) 2013 Jeremy Jackson
       }
       if (dimensions == null) {
         dimensions = null;
+      }
+      if (!this.visible) {
+        return;
       }
       clearTimeout(this.showContentTimeout);
       if (typeof animate === 'object') {
@@ -3410,7 +3699,6 @@ Copyright (c) 2013 Jeremy Jackson
     };
 
     Lightview.events = {
-      'mercury:interface:hide': 'hide',
       'mercury:interface:resize': 'resize',
       'mercury:modals:hide': 'hide',
       'click .mercury-lightview-dialog-title em': 'hide'
@@ -3438,6 +3726,9 @@ Copyright (c) 2013 Jeremy Jackson
       }
       if (dimensions == null) {
         dimensions = null;
+      }
+      if (!this.visible) {
+        return;
       }
       clearTimeout(this.showContentTimeout);
       if (typeof animate === 'object') {
@@ -3509,7 +3800,6 @@ Copyright (c) 2013 Jeremy Jackson
     };
 
     Panel.events = {
-      'mercury:interface:hide': 'hide',
       'mercury:interface:resize': 'resize',
       'mercury:panels:hide': 'hide',
       'mousedown .mercury-panel-title em': 'prevent',
@@ -3534,20 +3824,22 @@ Copyright (c) 2013 Jeremy Jackson
       if (dimensions == null) {
         dimensions = null;
       }
+      if (!this.visible) {
+        return;
+      }
       clearTimeout(this.showContentTimeout);
       if (typeof animate === 'object') {
         dimensions = animate;
         animate = false;
       }
-      dimensions || (dimensions = (_ref = Mercury["interface"]) != null ? typeof _ref.dimensions === "function" ? _ref.dimensions() : void 0 : void 0);
-      if (dimensions) {
+      if (!animate) {
+        this.addClass('mercury-no-animation');
+      }
+      if (dimensions || (dimensions = (_ref = Mercury["interface"]) != null ? typeof _ref.dimensions === "function" ? _ref.dimensions() : void 0 : void 0)) {
         this.css({
           top: dimensions.top + 10,
           bottom: dimensions.bottom + 10
         });
-      }
-      if (!animate) {
-        this.addClass('mercury-no-animation');
       }
       titleHeight = this.$titleContainer.outerHeight();
       height = this.$el.height();
@@ -3569,6 +3861,8 @@ Copyright (c) 2013 Jeremy Jackson
     Panel.prototype.onHide = function() {
       return Mercury.trigger('focus');
     };
+
+    Panel.prototype.focusFirstFocusable = function() {};
 
     return Panel;
 
@@ -3629,6 +3923,9 @@ Copyright (c) 2013 Jeremy Jackson
 
     Statusbar.prototype.show = function() {
       var _this = this;
+      if (this.config('interface:floating')) {
+        return;
+      }
       clearTimeout(this.visibilityTimeout);
       this.visible = true;
       this.$el.show();
@@ -3641,6 +3938,9 @@ Copyright (c) 2013 Jeremy Jackson
 
     Statusbar.prototype.hide = function() {
       var _this = this;
+      if (this.config('interface:floating')) {
+        return;
+      }
       clearTimeout(this.visibilityTimeout);
       this.visible = false;
       this.css({
@@ -3734,10 +4034,17 @@ Copyright (c) 2013 Jeremy Jackson
           }
         });
       }
-      if (this.mode === 'preview') {
+      if (this.mode) {
         return this.delegateEvents({
-          'mercury:interface:hide': function() {
-            return this.untoggled();
+          'mercury:mode': function(mode) {
+            if (mode !== this.mode) {
+              return;
+            }
+            if (this.isToggled) {
+              return this.untoggled();
+            } else {
+              return this.toggled();
+            }
           }
         });
       }
@@ -3772,8 +4079,11 @@ Copyright (c) 2013 Jeremy Jackson
       this.registerPlugin();
       this.attr('data-type', this.type);
       this.attr('data-icon', Mercury.Toolbar.icons[this.icon || this.name] || this.icon);
+      if (this.options.title) {
+        this.attr('title', this.t(this.options.title));
+      }
       this.addClass("mercury-toolbar-" + (this.name.toDash()) + "-button");
-      this.html("<em>" + this.label + "</em>");
+      this.html("<em>" + (this.t(this.label)) + "</em>");
       return (_ref = this.buildSubview()) != null ? _ref.appendTo(this) : void 0;
     };
 
@@ -3808,9 +4118,7 @@ Copyright (c) 2013 Jeremy Jackson
             template: options
           };
         }
-        return this.subview = new Klass($.extend({
-          parent: this.$el
-        }, options));
+        return this.subview = new Klass(options);
       }
     };
 
@@ -3818,7 +4126,7 @@ Copyright (c) 2013 Jeremy Jackson
       if (this.isDisabled()) {
         return;
       }
-      if (this.toggle || this.mode) {
+      if (this.toggle) {
         if (!this.isToggled) {
           this.toggled();
         } else {
@@ -3964,6 +4272,123 @@ Copyright (c) 2013 Jeremy Jackson
 }).call(this);
 (function() {
   var __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+  Mercury.ToolbarSelect = (function(_super) {
+
+    __extends(ToolbarSelect, _super);
+
+    function ToolbarSelect() {
+      return ToolbarSelect.__super__.constructor.apply(this, arguments);
+    }
+
+    ToolbarSelect.include(Mercury.View.Modules.InterfaceFocusable);
+
+    ToolbarSelect.include(Mercury.View.Modules.ToolbarDialog);
+
+    ToolbarSelect.include(Mercury.View.Modules.VisibilityToggleable);
+
+    ToolbarSelect.logPrefix = 'Mercury.ToolbarSelect:';
+
+    ToolbarSelect.className = 'mercury-dialog mercury-toolbar-select';
+
+    ToolbarSelect.prototype.hidden = true;
+
+    return ToolbarSelect;
+
+  })(Mercury.View);
+
+}).call(this);
+(function() {
+  var __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+  Mercury.ToolbarExpander = (function(_super) {
+
+    __extends(ToolbarExpander, _super);
+
+    function ToolbarExpander() {
+      return ToolbarExpander.__super__.constructor.apply(this, arguments);
+    }
+
+    ToolbarExpander.logPrefix = 'Mercury.ToolbarExpander:';
+
+    ToolbarExpander.className = 'mercury-toolbar-expander';
+
+    ToolbarExpander.events = {
+      'mercury:interface:resize': 'onResize',
+      'mousedown': 'preventStop',
+      'click': 'toggleExpander',
+      'click li': 'onClickForButton'
+    };
+
+    ToolbarExpander.prototype.build = function() {
+      return this.select = this.appendView(new Mercury.ToolbarSelect());
+    };
+
+    ToolbarExpander.prototype.show = function() {
+      if (this.visible) {
+        return;
+      }
+      this.visible = true;
+      return this.$el.show();
+    };
+
+    ToolbarExpander.prototype.hide = function() {
+      if (!this.visible) {
+        return;
+      }
+      this.visible = false;
+      return this.$el.hide();
+    };
+
+    ToolbarExpander.prototype.toggleExpander = function(e) {
+      if (!this.visible) {
+        return;
+      }
+      this.prevent(e, true);
+      this.updateSelect();
+      return this.select.toggle();
+    };
+
+    ToolbarExpander.prototype.updateSelect = function() {
+      var button, ul, _i, _len, _ref, _results;
+      this.select.html('<ul>');
+      ul = this.select.$('ul');
+      _ref = this.parent.hiddenButtons();
+      _results = [];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        button = _ref[_i];
+        _results.push(ul.append($("<li data-icon='" + button.icon + "'>" + button.title + "</li>").data({
+          button: button.el
+        })));
+      }
+      return _results;
+    };
+
+    ToolbarExpander.prototype.onClickForButton = function(e) {
+      this.prevent(e);
+      return $($(e.target).closest('li').data('button')).click();
+    };
+
+    ToolbarExpander.prototype.onResize = function() {
+      if (this.parent.el.scrollHeight > this.parent.$el.height() + 10) {
+        this.show();
+      } else {
+        this.hide();
+      }
+      if (this.select.visible) {
+        return this.updateSelect();
+      }
+    };
+
+    return ToolbarExpander;
+
+  })(Mercury.View);
+
+}).call(this);
+(function() {
+  var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
     __slice = [].slice;
 
@@ -3973,10 +4398,11 @@ Copyright (c) 2013 Jeremy Jackson
 
     ToolbarItem.logPrefix = 'Mercury.ToolbarItem:';
 
-    function ToolbarItem(name, type, value) {
+    function ToolbarItem(name, type, value, expander) {
       this.name = name != null ? name : 'unknown';
       this.type = type != null ? type : 'unknown';
       this.value = value != null ? value : null;
+      this.expander = expander != null ? expander : false;
       ToolbarItem.__super__.constructor.call(this);
     }
 
@@ -3992,7 +4418,10 @@ Copyright (c) 2013 Jeremy Jackson
         this.buildSubview(name, value);
       }
       if (this.type === 'group') {
-        return this.buildSubview('sep-final', '-');
+        this.buildSubview('sep-final', '-');
+      }
+      if (this.type === 'container' && this.expander) {
+        return this.buildExpander();
       }
     };
 
@@ -4014,6 +4443,12 @@ Copyright (c) 2013 Jeremy Jackson
       }
     };
 
+    ToolbarItem.prototype.buildExpander = function() {
+      return this.appendView(new Mercury.ToolbarExpander({
+        parent: this
+      }));
+    };
+
     ToolbarItem.prototype.addClasses = function() {
       var extraClass;
       extraClass = "mercury-toolbar-" + (this.type.toDash());
@@ -4021,6 +4456,26 @@ Copyright (c) 2013 Jeremy Jackson
         extraClass = "mercury-toolbar-line-" + (this.type.toDash());
       }
       return this.addClass(["mercury-toolbar-" + (this.name.toDash()) + "-" + (this.type.toDash()), extraClass].join(' '));
+    };
+
+    ToolbarItem.prototype.hiddenButtons = function() {
+      var button, buttons, el, height, top, _i, _len, _ref;
+      height = this.$el.height();
+      buttons = [];
+      _ref = this.$('.mercury-toolbar-button');
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        button = _ref[_i];
+        el = $(button);
+        top = el.position().top;
+        if (top >= height) {
+          buttons.push({
+            title: el.find('em').html(),
+            icon: el.data('icon'),
+            el: el
+          });
+        }
+      }
+      return buttons;
     };
 
     return ToolbarItem;
@@ -4058,7 +4513,7 @@ Copyright (c) 2013 Jeremy Jackson
     };
 
     Toolbar.prototype.build = function() {
-      this.append(new Mercury.ToolbarItem('primary', 'container', this.config("toolbars:primary")));
+      this.append(new Mercury.ToolbarItem('primary', 'container', this.config('toolbars:primary'), true));
       return this.append(new Mercury.ToolbarItem('secondary', 'container', {}));
     };
 
@@ -4068,6 +4523,9 @@ Copyright (c) 2013 Jeremy Jackson
 
     Toolbar.prototype.show = function() {
       var _this = this;
+      if (this.config('interface:floating')) {
+        return;
+      }
       clearTimeout(this.visibilityTimeout);
       this.visible = true;
       this.$el.show();
@@ -4080,6 +4538,9 @@ Copyright (c) 2013 Jeremy Jackson
 
     Toolbar.prototype.hide = function() {
       var _this = this;
+      if (this.config('interface:floating')) {
+        return;
+      }
       clearTimeout(this.visibilityTimeout);
       this.visible = false;
       this.css({
@@ -4224,35 +4685,6 @@ Copyright (c) 2013 Jeremy Jackson
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  Mercury.ToolbarSelect = (function(_super) {
-
-    __extends(ToolbarSelect, _super);
-
-    function ToolbarSelect() {
-      return ToolbarSelect.__super__.constructor.apply(this, arguments);
-    }
-
-    ToolbarSelect.include(Mercury.View.Modules.InterfaceFocusable);
-
-    ToolbarSelect.include(Mercury.View.Modules.ToolbarDialog);
-
-    ToolbarSelect.include(Mercury.View.Modules.VisibilityToggleable);
-
-    ToolbarSelect.logPrefix = 'Mercury.ToolbarSelect:';
-
-    ToolbarSelect.className = 'mercury-dialog mercury-toolbar-select';
-
-    ToolbarSelect.prototype.hidden = true;
-
-    return ToolbarSelect;
-
-  })(Mercury.View);
-
-}).call(this);
-(function() {
-  var __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
-
   Mercury.Model.File = (function(_super) {
 
     __extends(File, _super);
@@ -4277,7 +4709,7 @@ Copyright (c) 2013 Jeremy Jackson
     File.prototype.validate = function() {
       var mimeTypes, _ref;
       if (this.get('size') >= this.config('uploading:maxSize')) {
-        this.addError('size', this.t('Too large'));
+        this.addError('size', this.t('Too large (max %s)', this.config('uploading:maxSize').toBytes()));
         return;
       }
       mimeTypes = (_ref = this.options['mimeTypes']) != null ? _ref : this.config('uploading:mimeTypes');
@@ -4317,6 +4749,7 @@ Copyright (c) 2013 Jeremy Jackson
         data: this.toFormData(),
         processData: false,
         contentType: false,
+        dataType: false,
         xhr: function() {
           var event, handler, xhr, _fn, _ref;
           xhr = $.ajaxSettings.xhr();
@@ -4346,7 +4779,7 @@ Copyright (c) 2013 Jeremy Jackson
 
     File.prototype.saveSuccess = function() {
       if (!this.get('url')) {
-        return this.notify(this.t('Malformed response from server (%s)', 'no url'));
+        return this.notify(this.t('Unable to process response: %s', 'no url'));
       }
     };
 
@@ -4371,10 +4804,6 @@ Copyright (c) 2013 Jeremy Jackson
 
     Uploader.template = 'uploader';
 
-    Uploader.attributes = {
-      style: 'opacity:0'
-    };
-
     Uploader.elements = {
       status: '.mercury-uploader-progress span',
       details: '.mercury-uploader-details',
@@ -4386,7 +4815,7 @@ Copyright (c) 2013 Jeremy Jackson
     function Uploader(files, options) {
       this.options = options != null ? options : {};
       if (!this.constructor.supported) {
-        return this.notify(this.t('is unsupported in this browser'));
+        return this.notify(this.t('Is unsupported in this browser'));
       }
       Uploader.__super__.constructor.call(this, this.options);
       this.loaded = 0;
@@ -5443,7 +5872,8 @@ Copyright (c) 2013 Jeremy Jackson
     __slice = [].slice;
 
   initialize = function() {
-    var isIE;
+    var e, isIE, map, _fn, _i, _len,
+      _this = this;
     this.version = '2.0.1 pre alpha';
     this.init = function(options) {
       if (options == null) {
@@ -5476,12 +5906,16 @@ Copyright (c) 2013 Jeremy Jackson
         return this.Config.set(args[0], true, args[1]);
       });
     };
-    this.focus = function() {
-      return this.trigger('focus');
+    map = ['focus', 'blur', 'save', 'initialize', 'reinitialize', 'interface:toggle', 'interface:show', 'interface:hide'];
+    _fn = function(e) {
+      return _this[e.replace('interface:', '')] = function() {
+        return this.trigger(e);
+      };
     };
-    this.blur = function() {
-      return this.trigger('blur');
-    };
+    for (_i = 0, _len = map.length; _i < _len; _i++) {
+      e = map[_i];
+      _fn(e);
+    }
     this.Module.extend.call(this, this.Events);
     this.Module.extend.call(this, this.I18n);
     this.Module.extend.call(this, this.Logger);
@@ -5522,7 +5956,7 @@ Copyright (c) 2013 Jeremy Jackson
         h6: 'Heading 6',
         p: 'Paragraph',
         blockquote: 'Blockquote',
-        pre: 'Preformatted'
+        pre: 'Formatted'
       }
     },
     registerButton: function() {
@@ -5793,6 +6227,7 @@ Copyright (c) 2013 Jeremy Jackson
     registerButton: function() {
       return this.button.set({
         type: 'history',
+        global: true,
         toggle: true,
         subview: new Plugin.Panel()
       });
@@ -6068,16 +6503,16 @@ Copyright (c) 2013 Jeremy Jackson
         switch (type) {
           case 'youtube_url':
             if (!/^https?:\/\/youtu.be\//.test($el.val())) {
-              this.addInputError($el, "is invalid");
+              this.addInputError($el, this.t('Is invalid'));
             }
             break;
           case 'vimeo_url':
             if (!/^https?:\/\/youtu.be\//.test($el.val())) {
-              this.addInputError($el, "is invalid");
+              this.addInputError($el, this.t('Is invalid'));
             }
         }
       } else {
-        this.addInputError($el, "can't be blank");
+        this.addInputError($el, this.t("Can't be blank"));
       }
       return this.resize(false);
     };
@@ -6132,7 +6567,7 @@ Copyright (c) 2013 Jeremy Jackson
   this.JST || (this.JST = {});
 
   JST['/mercury/templates/media'] || (JST['/mercury/templates/media'] = function() {
-    return "<form class=\"form-horizontal\">\n\n  <fieldset>\n    <legend>Images</legend>\n    <div class=\"control-group url optional\">\n      <label class=\"url optional control-label\" for=\"media_image_url\">\n        <input name=\"media_type\" type=\"radio\" value=\"image_url\" checked=\"checked\" tabindex=\"-1\"/>URL\n      </label>\n      <div class=\"controls\">\n        <input class=\"span6 string url optional\" id=\"media_image_url\" name=\"media[image_url]\" size=\"50\" type=\"text\" tabindex=\"1\">\n      </div>\n    </div>\n  </fieldset>\n\n  <fieldset>\n    <legend>Videos</legend>\n    <div class=\"control-group url optional\">\n      <label class=\"url optional control-label\" for=\"media_youtube_url\">\n        <input name=\"media_type\" type=\"radio\" value=\"youtube_url\" tabindex=\"-1\"/>YouTube URL\n      </label>\n      <div class=\"controls\">\n        <input class=\"span6 string url optional\" id=\"media_youtube_url\" name=\"media[youtube_url]\" size=\"50\" type=\"text\" placeholder=\"http://youtu.be/28tZ-S1LFok\" tabindex=\"1\">\n      </div>\n    </div>\n    <div class=\"control-group url optional\">\n      <label class=\"url optional control-label\" for=\"media_vimeo_url\">\n        <input name=\"media_type\" type=\"radio\" value=\"vimeo_url\" tabindex=\"-1\"/>Vimeo URL\n      </label>\n      <div class=\"controls\">\n        <input class=\"span6 string url optional\" id=\"media_vimeo_url\" name=\"media[vimeo_url]\" size=\"50\" type=\"text\" placeholder=\"http://vimeo.com/36684976\" tabindex=\"1\">\n      </div>\n    </div>\n  </fieldset>\n\n  <fieldset>\n    <legend>Options</legend>\n\n    <div class=\"media-options\" id=\"image_url_options\">\n      <div class=\"control-group select optional\">\n        <label class=\"select optional control-label\" for=\"media_image_alignment\">Alignment</label>\n        <div class=\"controls\">\n          <select class=\"select optional\" id=\"media_image_alignment\" name=\"media[image_alignment]\" tabindex=\"1\">\n            <option value=\"\">None</option>\n            <option value=\"left\">Left</option>\n            <option value=\"right\">Right</option>\n            <option value=\"top\">Top</option>\n            <option value=\"middle\">Middle</option>\n            <option value=\"bottom\">Bottom</option>\n            <option value=\"absmiddle\">Absolute Middle</option>\n            <option value=\"absbottom\">Absolute Bottom</option>\n          </select>\n        </div>\n      </div>\n      <div class=\"control-group select optional\">\n        <label class=\"select optional control-label\" for=\"media_image_float\">Float</label>\n        <div class=\"controls\">\n          <select class=\"select optional\" id=\"media_image_float\" name=\"media[image_float]\" tabindex=\"1\">\n            <option value=\"\">None</option>\n            <option value=\"left\">Left</option>\n            <option value=\"right\">Right</option>\n            <option value=\"none\">None</option>\n            <option value=\"inherit\">Inherit</option>\n          </select>\n        </div>\n      </div>\n    </div>\n\n    <div class=\"media-options\" id=\"youtube_url_options\" style=\"display:none\">\n      <div class=\"control-group number optional\">\n        <label class=\"number optional control-label\" for=\"media_youtube_width\">Width</label>\n        <div class=\"controls\">\n          <input class=\"span2 number optional\" id=\"media_youtube_width\" name=\"media[youtube_width]\" size=\"50\" type=\"number\" value=\"560\" tabindex=\"1\">\n        </div>\n      </div>\n      <div class=\"control-group number optional\">\n        <label class=\"number optional control-label\" for=\"media_youtube_height\">Height</label>\n        <div class=\"controls\">\n          <input class=\"span2 number optional\" id=\"media_youtube_height\" name=\"media[youtube_height]\" size=\"50\" type=\"number\" value=\"349\" tabindex=\"1\">\n        </div>\n      </div>\n    </div>\n\n    <div class=\"media-options\" id=\"vimeo_url_options\" style=\"display:none\">\n      <div class=\"control-group number optional\">\n        <label class=\"number optional control-label\" for=\"media_vimeo_width\">Width</label>\n        <div class=\"controls\">\n          <input class=\"span2 number optional\" id=\"media_vimeo_width\" name=\"media[vimeo_width]\" size=\"50\" type=\"number\" value=\"400\" tabindex=\"1\">\n        </div>\n      </div>\n      <div class=\"control-group number optional\">\n        <label class=\"number optional control-label\" for=\"media_vimeo_height\">Height</label>\n        <div class=\"controls\">\n          <input class=\"span2 number optional\" id=\"media_vimeo_height\" name=\"media[vimeo_height]\" size=\"50\" type=\"number\" value=\"225\" tabindex=\"1\">\n        </div>\n      </div>\n    </div>\n  </fieldset>\n\n  <div class=\"form-actions\">\n    <input class=\"btn btn-primary\" name=\"commit\" type=\"submit\" value=\"Insert Media\" tabindex=\"2\"/>\n  </div>\n</form>";
+    return "<form class=\"form-horizontal\">\n\n  <fieldset>\n    <legend>Images</legend>\n    <div class=\"control-group url optional\">\n      <label class=\"url optional control-label\" for=\"media_image_url\">\n        <input name=\"media_type\" type=\"radio\" value=\"image_url\" checked=\"checked\" tabindex=\"-1\"/>URL\n      </label>\n      <div class=\"controls\">\n        <input class=\"string url optional\" id=\"media_image_url\" name=\"media[image_url]\" size=\"50\" type=\"text\" tabindex=\"1\">\n      </div>\n    </div>\n  </fieldset>\n\n  <fieldset>\n    <legend>Videos</legend>\n    <div class=\"control-group url optional\">\n      <label class=\"url optional control-label\" for=\"media_youtube_url\">\n        <input name=\"media_type\" type=\"radio\" value=\"youtube_url\" tabindex=\"-1\"/>YouTube URL\n      </label>\n      <div class=\"controls\">\n        <input class=\"string url optional\" id=\"media_youtube_url\" name=\"media[youtube_url]\" size=\"50\" type=\"text\" placeholder=\"http://youtu.be/28tZ-S1LFok\" tabindex=\"1\">\n      </div>\n    </div>\n    <div class=\"control-group url optional\">\n      <label class=\"url optional control-label\" for=\"media_vimeo_url\">\n        <input name=\"media_type\" type=\"radio\" value=\"vimeo_url\" tabindex=\"-1\"/>Vimeo URL\n      </label>\n      <div class=\"controls\">\n        <input class=\"string url optional\" id=\"media_vimeo_url\" name=\"media[vimeo_url]\" size=\"50\" type=\"text\" placeholder=\"http://vimeo.com/36684976\" tabindex=\"1\">\n      </div>\n    </div>\n  </fieldset>\n\n  <fieldset>\n    <legend>Options</legend>\n\n    <div class=\"media-options\" id=\"image_url_options\">\n      <div class=\"control-group select optional\">\n        <label class=\"select optional control-label\" for=\"media_image_alignment\">Alignment</label>\n        <div class=\"controls\">\n          <select class=\"select optional\" id=\"media_image_alignment\" name=\"media[image_alignment]\" tabindex=\"1\">\n            <option value=\"\">None</option>\n            <option value=\"left\">Left</option>\n            <option value=\"right\">Right</option>\n            <option value=\"top\">Top</option>\n            <option value=\"middle\">Middle</option>\n            <option value=\"bottom\">Bottom</option>\n            <option value=\"absmiddle\">Absolute Middle</option>\n            <option value=\"absbottom\">Absolute Bottom</option>\n          </select>\n        </div>\n      </div>\n      <div class=\"control-group select optional\">\n        <label class=\"select optional control-label\" for=\"media_image_float\">Float</label>\n        <div class=\"controls\">\n          <select class=\"select optional\" id=\"media_image_float\" name=\"media[image_float]\" tabindex=\"1\">\n            <option value=\"\">None</option>\n            <option value=\"left\">Left</option>\n            <option value=\"right\">Right</option>\n            <option value=\"inherit\">Inherit</option>\n          </select>\n        </div>\n      </div>\n    </div>\n\n    <div class=\"media-options\" id=\"youtube_url_options\" style=\"display:none\">\n      <div class=\"control-group number optional\">\n        <label class=\"number optional control-label\" for=\"media_youtube_width\">Width</label>\n        <div class=\"controls\">\n          <input class=\"number optional\" id=\"media_youtube_width\" name=\"media[youtube_width]\" size=\"50\" type=\"number\" value=\"560\" tabindex=\"1\">\n        </div>\n      </div>\n      <div class=\"control-group number optional\">\n        <label class=\"number optional control-label\" for=\"media_youtube_height\">Height</label>\n        <div class=\"controls\">\n          <input class=\"number optional\" id=\"media_youtube_height\" name=\"media[youtube_height]\" size=\"50\" type=\"number\" value=\"349\" tabindex=\"1\">\n        </div>\n      </div>\n    </div>\n\n    <div class=\"media-options\" id=\"vimeo_url_options\" style=\"display:none\">\n      <div class=\"control-group number optional\">\n        <label class=\"number optional control-label\" for=\"media_vimeo_width\">Width</label>\n        <div class=\"controls\">\n          <input class=\"number optional\" id=\"media_vimeo_width\" name=\"media[vimeo_width]\" size=\"50\" type=\"number\" value=\"400\" tabindex=\"1\">\n        </div>\n      </div>\n      <div class=\"control-group number optional\">\n        <label class=\"number optional control-label\" for=\"media_vimeo_height\">Height</label>\n        <div class=\"controls\">\n          <input class=\"number optional\" id=\"media_vimeo_height\" name=\"media[vimeo_height]\" size=\"50\" type=\"number\" value=\"225\" tabindex=\"1\">\n        </div>\n      </div>\n    </div>\n  </fieldset>\n\n  <div class=\"form-actions\">\n    <input class=\"btn btn-primary\" name=\"commit\" type=\"submit\" value=\"Insert Media\" tabindex=\"2\"/>\n  </div>\n</form>";
   });
 
 }).call(this);
@@ -6146,7 +6581,8 @@ Copyright (c) 2013 Jeremy Jackson
     version: '1.0.0',
     registerButton: function() {
       return this.button.set({
-        type: 'toggle',
+        type: 'notes',
+        global: true,
         toggle: true,
         subview: new Plugin.Panel()
       });

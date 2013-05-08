@@ -344,7 +344,9 @@ describe "Mercury.View", ->
   describe "#localize", ->
 
     beforeEach ->
-      spyOn(subject, 'translationForContent', (s) -> "translated_#{s}" if $.trim(s))
+      spyOn subject, 'translationForContent', (s) ->
+        content = $.trim(s)
+        "translated_#{s}" if content && content != 'submit_value'
       fixture.load('localize.html')
 
     it "changes the expected strings into their localized versions", ->
@@ -356,7 +358,7 @@ describe "Mercury.View", ->
       expect( html ).to.contain('translated_anchor')
       expect( html ).to.contain('value="translated_button_value"')
       expect( html ).to.contain('value="translated_reset_value"')
-      expect( html ).to.contain('value="translated_submit_value"')
+      expect( html ).to.contain('value="submit_value"')
       expect( html ).to.contain('value="text_value"')
       expect( html ).to.contain('translated_button')
 

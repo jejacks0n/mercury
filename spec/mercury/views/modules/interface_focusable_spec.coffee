@@ -17,7 +17,7 @@ describe "Mercury.View.Modules.InterfaceFocusable", ->
 
     beforeEach ->
       @mock =
-        on: spy(),
+        on: spy()
         buildInterfaceFocusable: ->
 
     it "binds to the build event", ->
@@ -101,6 +101,14 @@ describe "Mercury.View.Modules.InterfaceFocusable", ->
         off: spy(=> @el)
         on: spy(=> @el)
 
+    it "binds to the release and hide events", ->
+      spyOn(subject, 'clearFocusoutTimeout')
+      spyOn(subject, 'on').yieldsOn(subject)
+      subject.preventFocusout(@el)
+      expect( subject.on ).calledWith('release', sinon.match.func)
+      expect( subject.on ).calledWith('hide', sinon.match.func)
+      expect( subject.clearFocusoutTimeout ).calledTwice
+
     it "binds to the focusout and keydown events", ->
       subject.preventFocusout(@el, ->)
       expect( @el.off ).calledWith('focusout')
@@ -172,3 +180,12 @@ describe "Mercury.View.Modules.InterfaceFocusable", ->
         @e.target = '_second_'
         subject.preventFocusout(@el)
         expect( subject.prevent ).not.called
+
+
+  describe "#clearFocusoutTimeout", ->
+
+    it "clears the @preventFocusoutTimeout", ->
+      spyOn(window, 'clearTimeout')
+      subject.preventFocusoutTimeout = '_prevent_focusout_timeout_'
+      subject.clearFocusoutTimeout()
+      expect( clearTimeout ).calledWith('_prevent_focusout_timeout_')

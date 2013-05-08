@@ -30,8 +30,11 @@ Mercury.View.Modules.InterfaceFocusable =
 
 
   preventFocusout: ($el, handler) ->
+    @on('release', => @clearFocusoutTimeout())
+    @on('hide', => @clearFocusoutTimeout())
+
     if handler then $el.off('focusout').on 'focusout', =>
-      @delay 150, ->
+      @preventFocusoutTimeout = @delay 150, ->
         return if @_activeElementIsBody()
         return if $.contains($el[0], document.activeElement)
         handler.call(@)
@@ -43,6 +46,10 @@ Mercury.View.Modules.InterfaceFocusable =
       first = focusables[0]
       last = focusables[focusables.length - 1]
       @prevent(e, true) if (e.shiftKey && e.target == first) || (!e.shiftKey && e.target == last)
+
+
+  clearFocusoutTimeout: ->
+    clearTimeout(@preventFocusoutTimeout)
 
 
   _activeElementIsBody: ->

@@ -45,6 +45,7 @@ class Mercury.Model.File extends Mercury.Model
       data        : @toFormData()
       processData : false
       contentType : false
+      dataType    : false
       xhr         : ->
         xhr = $.ajaxSettings.xhr()
         for event, handler of options.uploadEvents || {}

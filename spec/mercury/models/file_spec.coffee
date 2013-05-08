@@ -110,6 +110,7 @@ describe "Mercury.Model.File", ->
         data        : '_data_'
         processData : false
         contentType : false
+        dataType    : false
         xhr         : sinon.match.any
 
     it "passes options on to super", ->
@@ -119,6 +120,7 @@ describe "Mercury.Model.File", ->
         data        : '_data_'
         processData : false
         contentType : false
+        dataType    : false
         xhr         : sinon.match.any
 
     it "sets a custom xml that will add upload events", ->

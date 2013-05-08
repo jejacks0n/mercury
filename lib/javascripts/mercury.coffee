@@ -39,13 +39,15 @@ Mercury.Region.Markdown.addToolbar 'color', color: ['Color', plugin: 'color']
 Mercury.Region.Markdown.addToolbar 'block', block: ['Block', plugin: 'blocks']
 
 # todo:
-#   start working on the mercury-rails engine so it's easier to write plugins that use a server.
 #   make table/media/link plugins use custom actions.
 #   better strategy for snippet management/removal -- focusable with toolbar buttons would be nice, combined with a lesser toolbar in line? (drag handle on hover, etc?)
 #   figure out how to better integrate snippets.
 #   can we make editing content within snippets work?
 #   html/plain: when using the iframe, rangy isn't behaving the same (doesn't work because it doesn't understand the context).
 #   html: selections are a little wonky on undo/redo still, and sometimes in firefox they're not applying because the checksum doesn't validate.
+#   make floating toolbar have a pin / drag interface.
+#   finish the mercury-rails engine.
+#   ask/invite translators to revisit their translations.
 # todo regions:
 #   add list region (sort of like workflowy)
 #   add table region (sort of like a spreadsheet, but with no math -- maybe math?)

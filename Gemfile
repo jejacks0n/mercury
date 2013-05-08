@@ -10,4 +10,4 @@ gem 'uglifier'                  # javascript compression
 gem 'yui-compressor'            # css compression
 
 # Test dependencies
-gem 'teabag'
+gem 'teabag', '>= 0.7.2'

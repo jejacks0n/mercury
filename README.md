@@ -45,6 +45,7 @@ but there aren't plans currently for adding support for alternate implementation
 
 Supported Browsers:
 
+- Internet Explorer 10+
 - Chrome 10+
 - Firefox 4+
 - Safari 5+

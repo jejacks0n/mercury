@@ -67,6 +67,7 @@ class Mercury.Modal extends Mercury.View
     @lastContent = content
     @lastWidth = @width
     @$content.css(visibility: 'hidden', opacity: 0, width: @width).html(content)
+    @localize(@$content)
     return true
 
 

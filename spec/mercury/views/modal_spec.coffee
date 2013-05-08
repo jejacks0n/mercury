@@ -163,6 +163,11 @@ describe "Mercury.Modal", ->
       expect( subject.updateForOptions() ).to.be.true
       expect( subject.lastContent ).to.eq('_content_')
 
+    it "calls localize on the content element", ->
+      spyOn(subject, 'localize')
+      subject.updateForOptions()
+      expect( subject.localize ).calledWith(subject.$content)
+
 
   describe "#setWidth", ->
 

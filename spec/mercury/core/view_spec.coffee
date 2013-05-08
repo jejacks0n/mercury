@@ -1,6 +1,8 @@
 #= require spec_helper
 #= require mercury/core/view
 
+fixture.preload('localize.html')
+
 describe "Mercury.View", ->
 
   Klass = ->
@@ -181,6 +183,11 @@ describe "Mercury.View", ->
       subject.html(el: html)
       expect( subject.$el.html() ).to.eq(html)
 
+    it "calls #localize", ->
+      spyOn(subject, 'localize')
+      subject.html('')
+      expect( subject.localize ).calledWith(subject.$el)
+
     it "calls #refreshElements", ->
       spyOn(subject, 'refreshElements')
       subject.html('')
@@ -332,6 +339,60 @@ describe "Mercury.View", ->
     it "makes an ajax call for the template", ->
       result = subject.fetchTemplate('baz')
       expect( result ).to.eq('_ajax_template_')
+
+
+  describe "#localize", ->
+
+    beforeEach ->
+      spyOn(subject, 'translationForContent', (s) -> "translated_#{s}" if $.trim(s))
+      fixture.load('localize.html')
+
+    it "changes the expected strings into their localized versions", ->
+      subject.localize(fixture.$el)
+      html = fixture.$el.html()
+      expect( html ).to.contain('div title="title"')
+      expect( html ).to.contain('src="translated_image.gif"')
+      expect( html ).to.contain('href="translated_href"')
+      expect( html ).to.contain('translated_anchor')
+      expect( html ).to.contain('value="translated_button_value"')
+      expect( html ).to.contain('value="translated_reset_value"')
+      expect( html ).to.contain('value="translated_submit_value"')
+      expect( html ).to.contain('value="text_value"')
+      expect( html ).to.contain('translated_button')
+
+
+  describe "#translationForAttr", ->
+
+    beforeEach ->
+      spyOn(subject, 'translationForContent', -> '_translated_')
+
+    it "returns false if no attribute or nodeValue", ->
+      expect( subject.translationForAttr() ).to.be.false
+      expect( subject.translationForAttr({}) ).to.be.false
+
+    it "calls through to #translationForContent", ->
+      expect( subject.translationForAttr(nodeValue: '_content_') ).to.eq('_translated_')
+
+
+  describe "#translationForContent", ->
+
+    beforeEach ->
+      spyOn(subject, 't', -> '_translated_')
+
+    it "calls $.trim on the content", ->
+      spyOn($, 'trim')
+      subject.translationForContent('_content_')
+      expect( $.trim ).calledWith('_content_')
+
+    it "returns the translated content", ->
+      expect( subject.translationForContent('_content_') ).to.eq('_translated_')
+
+    it "returns false if the translation is the same as the original", ->
+      expect( subject.translationForContent('_translated_') ).to.be.false
+
+    it "returns false if the content was empty", ->
+      expect( subject.translationForContent('') ).to.be.false
+      expect( subject.translationForContent() ).to.be.false
 
 
   describe "#focusFirstFocusable", ->

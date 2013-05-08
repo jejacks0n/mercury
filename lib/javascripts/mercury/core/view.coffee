@@ -96,6 +96,7 @@ class Mercury.View extends Mercury.Module
   html: (element) ->
     return @$el.html() unless arguments.length
     @$el.html(element?.$el || element?.el || element)
+    @localize(@$el)
     @refreshElements()
     @$el
 
@@ -174,6 +175,42 @@ class Mercury.View extends Mercury.Module
       async: false
       success: (content) -> template = content
     template
+
+
+  # When loading templates, or putting content into your view you may want to apply localizations. This method allows
+  # passing a specific element to it, and will find any localizable content and apply translations. This is an expensive
+  # operation.
+  #
+  localize: ($el) ->
+    for el in $el.find('*').contents()
+      attrs = el.attributes
+      el.data = t if typeof(el.data) == 'string' && t = @translationForContent(el.data)
+      switch el.nodeName
+        when 'IMG' then $(el).attr('src', t) if t = @translationForAttr(attrs['src'])
+        when 'A' then $(el).attr('href', t) if t = @translationForAttr(attrs['href'])
+        when 'INPUT'
+          type = attrs['type'].nodeValue.toLowerCase()
+          if attrs['value'] && (type == 'button' || type == 'reset' || type == 'submit')
+            $(el).attr('value', t) if t = @translationForAttr(attrs['value'])
+        else # nothing
+
+
+  # Allows translating html attributes.
+  # Return translation or false if not localizable.
+  #
+  translationForAttr: (attr) ->
+    return false unless attr && attr.nodeValue
+    @translationForContent(attr.nodeValue)
+
+
+  # Allows translating any content, and unlike #t will return false if the original was empty or untranslated.
+  # Return translation or false if not localizable.
+  #
+  translationForContent: (content) ->
+    original = $.trim(content)
+    return false unless original
+    translated = @t(original)
+    return if translated == original then false else translated
 
 
   # When setting content or refreshing elements you may want to focus the first element that's focusable. This will

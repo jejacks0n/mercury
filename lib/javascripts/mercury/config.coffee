@@ -26,8 +26,8 @@ Mercury.configuration =
   #= require mercury/locales/swedish_chef
   #
   localization:
-    enabled    : true
-    preferred  : 'en-US'                                   # preferred locale - if the client locale isn't supported
+    enabled    : false
+    preferred  : 'swedish_chef-BORK'                       # preferred locale - if the client locale isn't supported
 
 
   # Uploading

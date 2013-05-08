@@ -47,7 +47,7 @@ Mercury.I18n.define 'ex',
   "Heading 6": ""
   "Paragraph": ""
   "Blockquote": ""
-  "Preformatted": ""
+  "Formatted": ""
 
   # Mercury.Plugin.Character
   # ---------------------------------------------------------------------------
@@ -151,6 +151,7 @@ Mercury.I18n.define 'ex',
   # Mercury.Region.Html
   # ---------------------------------------------------------------------------
   "Style": ""
+  "Block": ""
   "Block Format": ""
   "Background Color": ""
   "Text Color": ""
@@ -201,4 +202,3 @@ Mercury.I18n.define 'ex',
   # Mercury.Region.Markdown
   # ---------------------------------------------------------------------------
   "No Heading": ""
-  "Pre / Code": ""

@@ -39,10 +39,7 @@ Mercury.Region.Markdown.addToolbar 'color', color: ['Color', plugin: 'color']
 Mercury.Region.Markdown.addToolbar 'block', block: ['Block', plugin: 'blocks']
 
 # todo:
-#   port jQuery.extend into module so we can use that within instances (which is where it's mostly used).
 #   start working on the mercury-rails engine so it's easier to write plugins that use a server.
-#   migrate existing locale content into new locales and document missing values.
-#   make region use the shadow dom if possible/configured to do so.
 #   make table/media/link plugins use custom actions.
 #   better strategy for snippet management/removal -- focusable with toolbar buttons would be nice, combined with a lesser toolbar in line? (drag handle on hover, etc?)
 #   figure out how to better integrate snippets.
@@ -56,3 +53,6 @@ Mercury.Region.Markdown.addToolbar 'block', block: ['Block', plugin: 'blocks']
 #   add more control to image region (resize, crop)
 #   finish html region
 #   polish markdown region (if you're not dead from the html region)
+# ideas:
+#   make region use the shadow dom if possible/configured to do so.
+#   port jQuery.extend into module so we can use that within instances (which is where it's mostly used).

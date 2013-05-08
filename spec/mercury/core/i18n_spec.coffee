@@ -51,6 +51,7 @@ describe "Mercury.I18n", ->
       expect( sub ).to.be.empty
 
     it "returns empty information if not no translations were found", ->
+      Mercury.configure 'localization:preferred', false
       spyOn(subject, 'clientLocale', -> 'missing')
       expect( subject.locale() ).to.eql([{}, {}])
 
@@ -68,6 +69,10 @@ describe "Mercury.I18n", ->
       [top, sub] = subject.detectLocale()
       expect( top ).to.eq('swedish_chef')
       expect( sub ).to.eq('BORK')
+
+    it "falls back to the preferred if the detected isn't supported", ->
+      spyOn(subject, 'clientLocale', -> 'no')
+      expect( subject.detectLocale() ).to.eql(['swedish_chef', 'BORK'])
 
 
   describe ".t", ->

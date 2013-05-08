@@ -32,7 +32,10 @@
   # Returns array containing the top and sub locales.
   #
   detectLocale: ->
-    @__detected__ ||= (@clientLocale() || Mercury.configuration.localization?.preferred).split('-')
+    return @__detected__ if @__detected__
+    possible = (@clientLocale() || Mercury.configuration.localization?.preferred).split('-')
+    possible = (Mercury.configuration.localization?.preferred || 'en-US').split('-') unless @.__locales__[possible[0]]
+    @__detected__ = possible
 
 
   # Translates a given string with printf-like variable replacement using the determined translation. Check

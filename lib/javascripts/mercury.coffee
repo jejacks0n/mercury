@@ -40,6 +40,7 @@ Mercury.Region.Markdown.addToolbar 'block', block: ['Block', plugin: 'blocks']
 
 # todo:
 #   make table/media/link plugins use custom actions.
+#   do we need to hijack links in the frame interface -- I would rather do an origin check and clean up if you leave the expected site -- are the bugs that required hijacking links fixed in firefox?
 #   better strategy for snippet management/removal -- focusable with toolbar buttons would be nice, combined with a lesser toolbar in line? (drag handle on hover, etc?)
 #   figure out how to better integrate snippets.
 #   can we make editing content within snippets work?
@@ -55,6 +56,8 @@ Mercury.Region.Markdown.addToolbar 'block', block: ['Block', plugin: 'blocks']
 #   add more control to image region (resize, crop)
 #   finish html region
 #   polish markdown region (if you're not dead from the html region)
-# ideas:
+#   provide way to override tags that are used for different actions -- like markdown wrappers.
+#   allow providing a placeholder to textarea regions.
+# todo ideas:
 #   make region use the shadow dom if possible/configured to do so.
 #   port jQuery.extend into module so we can use that within instances (which is where it's mostly used).

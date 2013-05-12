@@ -109,8 +109,24 @@ describe "Mercury.View.Modules.InterfaceFocusable", ->
       expect( subject.on ).calledWith('hide', sinon.match.func)
       expect( subject.clearFocusoutTimeout ).calledTwice
 
+    it "calls #createFocusableKeeper and appends that element to the top element", ->
+      @mock = appendTo: spy(=> @mock), on: spy()
+      spyOn(subject, 'createFocusableKeeper', => @mock)
+      subject.preventFocusout(@el)
+      expect( subject.createFocusableKeeper ).called
+      expect( @mock.appendTo ).calledWith(subject.$el)
+
+    it "binds to the blur event of the focusable keeper", ->
+      @mock = appendTo: spy(=> @mock), on: ->
+      spyOn(@mock, 'on').yieldsOn(subject)
+      spyOn(subject, 'createFocusableKeeper', => @mock)
+      spyOn(subject, 'keepFocusConstrained')
+      subject.preventFocusout(@el)
+      expect( @mock.on ).calledWith('blur', sinon.match.func)
+      expect( subject.keepFocusConstrained ).calledWith(@mock, @el)
+
     it "binds to the focusout and keydown events", ->
-      subject.preventFocusout(@el, ->)
+      subject.preventFocusout(@el)
       expect( @el.off ).calledWith('focusout')
       expect( @el.on ).calledWith('focusout', sinon.match.func)
       expect( @el.on ).calledWith('keydown')
@@ -119,29 +135,13 @@ describe "Mercury.View.Modules.InterfaceFocusable", ->
 
       beforeEach ->
         @el.on = spy(-> arguments[1]() if arguments[0] == 'focusout')
-        @handler = spy()
-        spyOn(subject, 'delay').yieldsOn(subject)
-        spyOn(subject, '_activeElementIsBody', -> false)
+        spyOn(subject, 'keepFocusConstrained')
+        @mock = appendTo: spy(=> @mock), on: spy()
+        spyOn(subject, 'createFocusableKeeper', => @mock)
 
-      it "calls the handler if it's provided on focusout if the newly focused element isn't within it", ->
-        spyOn($, 'contains', -> false)
-        subject.preventFocusout(@el, @handler)
-        expect( subject.delay ).calledWith(150, sinon.match.func)
-        expect( @handler ).called
-
-      it "doesn't call the handler if the focusable is within the element", ->
-        spyOn($, 'contains', -> true)
-        subject.preventFocusout(@el, @handler)
-        expect( subject.delay ).calledWith(150, sinon.match.func)
-        expect( @handler ).not.called
-
-      it "doesn't call the handler if the focusable is the body", ->
-        subject._activeElementIsBody.restore()
-        spyOn($, 'contains', -> false)
-        subject.preventFocusout(@el, @handler)
-        expect( subject.delay ).calledWith(150, sinon.match.func)
-        expect( @handler ).not.called
-
+      it "calls #keepFocusConstrained", ->
+        subject.preventFocusout(@el)
+        expect( subject.keepFocusConstrained ).calledWith(@mock, @el)
 
     describe "keydown", ->
 
@@ -180,6 +180,39 @@ describe "Mercury.View.Modules.InterfaceFocusable", ->
         @e.target = '_second_'
         subject.preventFocusout(@el)
         expect( subject.prevent ).not.called
+
+
+  describe "#createFocusableKeeper", ->
+
+    it "creates an input that will be hidden-ish that can retain focus", ->
+      spyOn(window, '$')
+      subject.createFocusableKeeper()
+      expect( $ ).calledWith('<input style="position:fixed;top:-10000px;left:100%;width:10px;height:5px" tabindex="-1">')
+
+
+  describe "#keepFocusConstrained", ->
+
+    beforeEach ->
+      spyOn(subject, 'delay').yieldsOn(subject)
+      @focus = focus: spy()
+
+    it "focuses a focusable element if the newly focused element isn't within a constraining element", ->
+      spyOn($, 'contains', -> false)
+      subject.keepFocusConstrained(@focus, [])
+      expect( subject.delay ).calledWith(1, sinon.match.func)
+      expect( @focus.focus ).called
+
+    it "doesn't call the handler if the focused element is within the constraining element", ->
+      spyOn($, 'contains', -> true)
+      subject.keepFocusConstrained(@focus, [])
+      expect( subject.delay ).calledWith(1, sinon.match.func)
+      expect( @focus.focus ).not.called
+
+    it "assigns the timeout to @preventFocusoutTimeout", ->
+      subject.delay.restore()
+      spyOn(subject, 'delay', -> '_delay_')
+      subject.keepFocusConstrained(@focus, [])
+      expect( subject.preventFocusoutTimeout ).to.eq('_delay_')
 
 
   describe "#clearFocusoutTimeout", ->

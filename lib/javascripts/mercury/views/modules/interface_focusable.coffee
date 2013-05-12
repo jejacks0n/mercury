@@ -29,28 +29,31 @@ Mercury.View.Modules.InterfaceFocusable =
     @delay(1, -> Mercury.trigger('focus'))
 
 
-  preventFocusout: ($el, handler) ->
+  preventFocusout: ($constrain) ->
     @on('release', => @clearFocusoutTimeout())
     @on('hide', => @clearFocusoutTimeout())
 
-    if handler then $el.off('focusout').on 'focusout', =>
-      @preventFocusoutTimeout = @delay 150, ->
-        return if @_activeElementIsBody()
-        return if $.contains($el[0], document.activeElement)
-        handler.call(@)
-
-    $el.on 'keydown', (e) =>
+    $focus = @createFocusableKeeper().appendTo(@$el)
+    $focus.on('blur', => @keepFocusConstrained($focus, $constrain))
+    $constrain.off('focusout').on('focusout', => @keepFocusConstrained($focus, $constrain))
+    $constrain.on 'keydown', (e) =>
       return unless e.keyCode == 9 # not tab
-      focusables = $el.find(':input[tabindex != "-1"]')
+      focusables = $constrain.find(':input[tabindex != "-1"]')
       return unless focusables.length
       first = focusables[0]
       last = focusables[focusables.length - 1]
       @prevent(e, true) if (e.shiftKey && e.target == first) || (!e.shiftKey && e.target == last)
 
 
+  createFocusableKeeper: ->
+    $('<input style="position:fixed;top:-10000px;left:100%;width:10px;height:5px" tabindex="-1">')
+
+
+  keepFocusConstrained: ($focus, $constrain) ->
+    @preventFocusoutTimeout = @delay 1, =>
+      return if $.contains($constrain[0], document.activeElement)
+      $focus.focus()
+
+
   clearFocusoutTimeout: ->
     clearTimeout(@preventFocusoutTimeout)
-
-
-  _activeElementIsBody: ->
-    document.activeElement == document.body

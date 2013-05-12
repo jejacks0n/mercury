@@ -53,3 +53,6 @@ class Mercury.Panel extends Mercury.Modal
 
 
   focusFirstFocusable: ->
+
+
+  keepFocusConstrained: ->

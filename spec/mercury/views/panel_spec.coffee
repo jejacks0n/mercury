@@ -101,3 +101,9 @@ describe "Mercury.Panel", ->
 
     it "intentionally does nothing", ->
       subject.focusFirstFocusable()
+
+
+  describe "#keepFocusConstrained", ->
+
+    it "intentionally does nothing", ->
+      subject.keepFocusConstrained()

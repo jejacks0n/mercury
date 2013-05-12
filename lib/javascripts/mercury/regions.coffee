@@ -5,4 +5,5 @@
 #= require mercury/regions/image
 #= require mercury/regions/markdown
 #= require mercury/regions/plain
+#= require mercury/regions/snippet
 #= require mercury/regions/text

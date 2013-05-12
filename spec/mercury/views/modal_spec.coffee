@@ -92,6 +92,11 @@ describe "Mercury.Modal", ->
       subject.update()
       expect( subject.refreshElements ).called
 
+    it "triggers an update event", ->
+      spyOn(subject, 'trigger')
+      subject.update()
+      expect( subject.trigger ).calledWith('update')
+
     it "focuses the first focusable element it can find after a delay", ->
       spyOn(subject, 'delay')
       subject.update()

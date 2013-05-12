@@ -74,6 +74,11 @@ mercury .mercury-modal {
       @include mercury-transition(opacity, ease-out, 0.1s);
       @include mercury-border-box;
       padding: 20px;
+      h3 {
+        @include mercury-font(12px);
+        margin: 0 0 10px;
+        text-shadow: 1px 1px #fff;
+      }
     }
   }
   &.loading {

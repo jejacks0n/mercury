@@ -52,6 +52,7 @@ class Mercury.Modal extends Mercury.View
     @resize()
     @show(false)
     @refreshElements()
+    @trigger('update')
     @delay(300, @focusFirstFocusable)
 
 

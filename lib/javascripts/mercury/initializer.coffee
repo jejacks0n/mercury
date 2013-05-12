@@ -64,7 +64,6 @@ initialize = ->
   map = ['focus', 'blur', 'save', 'initialize', 'reinitialize', 'interface:toggle', 'interface:show', 'interface:hide']
   (do(e) => @[e.replace('interface:', '')] = -> @trigger(e)) for e in map
 
-
   # Add global event handling/triggering.
   #
   # The event engine generally mimics jQuery style of binding and unbinding.

@@ -39,25 +39,26 @@ Mercury.Region.Markdown.addToolbar 'color', color: ['Color', plugin: 'color']
 Mercury.Region.Markdown.addToolbar 'block', block: ['Block', plugin: 'blocks']
 
 # todo:
+#   figure out how to better integrate snippets.
+#   can we make editing content within snippets work?
+#   markdown region is throwing two focus events.
 #   make table/media/link plugins use custom actions.
 #   do we need to hijack links in the frame interface -- I would rather do an origin check and clean up if you leave the expected site -- are the bugs that required hijacking links fixed in firefox?
 #   better strategy for snippet management/removal -- focusable with toolbar buttons would be nice, combined with a lesser toolbar in line? (drag handle on hover, etc?)
-#   figure out how to better integrate snippets.
-#   can we make editing content within snippets work?
-#   html/plain: when using the iframe, rangy isn't behaving the same (doesn't work because it doesn't understand the context).
-#   html: selections are a little wonky on undo/redo still, and sometimes in firefox they're not applying because the checksum doesn't validate.
 #   make floating toolbar have a pin / drag interface.
 #   finish the mercury-rails engine.
 #   ask/invite translators to revisit their translations.
 # todo regions:
-#   add list region (sort of like workflowy)
-#   add table region (sort of like a spreadsheet, but with no math -- maybe math?)
-#   add canvas region (save/load as base64 image)
-#   add more control to image region (resize, crop)
-#   finish html region
-#   polish markdown region (if you're not dead from the html region)
-#   provide way to override tags that are used for different actions -- like markdown wrappers.
-#   allow providing a placeholder to textarea regions.
+#   allow providing a placeholder for regions (maybe a tooltip as well?).
+#   html: when using the iframe, rangy isn't behaving the same (doesn't work because it doesn't understand the context).
+#   html: selections are a little wonky on undo/redo still, and sometimes in firefox they're not applying because the checksum doesn't validate.
+#   html: finish it.
+#   html: provide way to override tags that are used for different actions -- like markdown wrappers.
+#   image: add more control to image region (resize, crop).
+#   list: add list region -- sort of like workflowy.
+#   table: add table region -- sort of like a spreadsheet, but with no math -- maybe math?
+#   canvas: add canvas region -- save/load as base64 image
+#   markdown: polish it a bit more -- mostly selections when wrapping is off.
 # todo ideas:
 #   make region use the shadow dom if possible/configured to do so.
 #   port jQuery.extend into module so we can use that within instances (which is where it's mostly used).

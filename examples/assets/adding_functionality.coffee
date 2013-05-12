@@ -203,15 +203,3 @@ Mercury?.on 'initialize', ->
   # As a final step we might want to remove the existing button (that's in the primary toolbar by default). This is
   # optional for this example.
   #Mercury.configure('toolbars:primary:character', false)
-
-
-  # Advanced Integration - Defining Plugins
-  #
-  # Mercury provides a plugin architecture that allows you to define and register a plugin that enables adding more
-  # advanced functionality. In this example we'll expand on one of the previous examples so you can see how to integrate
-  # more advanced features with plugins.
-
-
-  # You now have all the information to mold Mercury into what you need it to be. Anything beyond this level of
-  # documentation requires a solid understanding of how Javascript, CSS, and how the browser works. Just go reading
-  # through the Mercury code, and review the specs to learn more about how you can modify Mercury to suit your needs.

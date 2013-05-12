@@ -316,6 +316,14 @@ class Mercury.Region extends Mercury.View
     @fromStack(@redoStack())
 
 
+  # Handler for when items (anything being dragged from the browser in general) is dropped on a region. Simple delegate
+  # for #onDropItem, and is exposed as an override possibility, but in general it's expected subclasses implement an
+  # #onDropItem instead.
+  #
+  onItemDropped: (e, data) ->
+    @onDropItem?(e, data)
+
+
   # Provides a mechinism for overriding what goes into the stack. By default this just returns the region serialized
   # into JSON.
   #
@@ -419,16 +427,16 @@ class Mercury.Region extends Mercury.View
   #
   bindDropEvents: ->
     @delegateEvents @$el,
-      dragenter: (e) => @prevent(e)
-      dragover: (e) => @prevent(e) unless @editableDropBehavior && Mercury.support.webkit
+      dragenter: (e) => @prevent(e) unless @previewing
+      dragover: (e) => @prevent(e) unless @previewing || (@editableDropBehavior && Mercury.support.webkit && !Mercury.dragHack)
       drop: (e) =>
         return if @previewing
         data = e.originalEvent.dataTransfer
         if data.files.length && @onDropFile
           @prevent(e)
           @onDropFile(data.files)
-        else if @onDropItem
-          @onDropItem(e, data)
+        else
+          @onItemDropped(e, data)
 
 
   # This works much like Mercury.View.delegateEvents, but instead of binding events to the element we're just resolving

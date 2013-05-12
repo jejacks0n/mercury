@@ -539,6 +539,15 @@ describe "Mercury.Region", ->
       expect( subject.fromStack ).calledWith('_undo_stack_')
 
 
+  describe "#onItemDropped", ->
+
+    it "calls #onDropItem if it's defined", ->
+      subject.onItemDropped('_e_', '_data_')
+      subject.onDropItem = spy()
+      subject.onItemDropped('_e_', '_data_')
+      expect( subject.onDropItem ).calledWith('_e_', '_data_')
+
+
   describe "#onRedo", ->
 
     it "calls #value with the value returned from #redoStack", ->
@@ -854,6 +863,7 @@ describe "Mercury.Region", ->
     describe "drop", ->
 
       beforeEach ->
+        Mercury.dragHack = false
         subject.bindDropEvents()
         subject.onDropFile = spy()
         @e = originalEvent: {dataTransfer: {files: ['_file1_', '_file2_']}}, preventDefault: spy()
@@ -863,12 +873,26 @@ describe "Mercury.Region", ->
         @events.dragover(@e)
         expect( @e.preventDefault ).calledTwice
 
-      it "doesn't call preventDefault for all preemptive event if @editableDropBehavior", ->
+      it "doesn't prevent the enter/over events if we're previewing", ->
+        subject.previewing = true
+        @events.dragenter(@e)
+        @events.dragover(@e)
+        expect( @e.preventDefault ).not.called
+
+      it "doesn't call preventDefault for all preemptive events if @editableDropBehavior", ->
         subject.editableDropBehavior = true
         subject.bindDropEvents()
         @events.dragenter(@e)
         @events.dragover(@e)
         expect( @e.preventDefault ).calledOnce
+
+      it "calls preventDefault for all preemptive events if Mercury.dragHack is set (regardless of @editableDropBehavior)", ->
+        subject.editableDropBehavior = true
+        Mercury.dragHack = true
+        subject.bindDropEvents()
+        @events.dragenter(@e)
+        @events.dragover(@e)
+        expect( @e.preventDefault ).calledTwice
 
       it "calls #onDropFile with the expected array when files are dropped", ->
         @events.drop(@e)
@@ -881,11 +905,11 @@ describe "Mercury.Region", ->
         expect( @e.preventDefault ).not.called
         expect( subject.onDropFile ).not.called
 
-      it "calls #onDropItem if there are no files, and we have the method defined", ->
-        subject.onDropItem = spy()
+      it "calls #onItemDropped if there are no files", ->
+        spyOn(subject, 'onItemDropped')
         @e.originalEvent.dataTransfer.files = []
         @events.drop(@e)
-        expect( subject.onDropItem ).calledWith(@e, @e.originalEvent.dataTransfer)
+        expect( subject.onItemDropped ).calledWith(@e, @e.originalEvent.dataTransfer)
 
       it "does nothing if we're previewing", ->
         subject.previewing = true

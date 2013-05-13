@@ -39,6 +39,7 @@ Mercury.Region.Markdown.addToolbar 'color', color: ['Color', plugin: 'color']
 Mercury.Region.Markdown.addToolbar 'block', block: ['Block', plugin: 'blocks']
 
 # todo:
+#   is there a way to serialize snippets directly in line so no server is needed for some snippets?
 #   figure out how to better integrate snippets.
 #   can we make editing content within snippets work?
 #   markdown region is throwing two focus events.

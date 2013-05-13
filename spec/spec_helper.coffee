@@ -57,6 +57,8 @@ afterEach ->
   Config: {}
   I18n: {}
   Logger: {}
+  Plugin: {}
+  Snippet: {}
   Interface: ->
   trigger: ->
   off: ->

@@ -23,6 +23,7 @@
 #= require mercury/core/module
 #= require mercury/core/plugin
 #= require mercury/core/region
+#= require mercury/core/snippet
 #= require mercury/core/view
 #
 # View modules, and views.
@@ -65,6 +66,7 @@
 #= require mercury/regions/modules/focusable_textarea
 #= require mercury/regions/modules/html_selection
 #= require mercury/regions/modules/selection_value
+#= require mercury/regions/modules/snippet_droppable
 #= require mercury/regions/modules/text_selection
 #
 # Initializer/boot script.
@@ -80,6 +82,7 @@
 #= require mercury/plugins/link_plugin
 #= require mercury/plugins/media_plugin
 #= require mercury/plugins/notes_plugin
+#= require mercury/plugins/snippets_plugin
 #= require mercury/plugins/styles_plugin
 #= require mercury/plugins/table_plugin
 #

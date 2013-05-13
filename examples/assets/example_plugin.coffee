@@ -22,13 +22,14 @@
 # instance. This allows for plugins to be specific to buttons, but also allows for a more general case plugin
 # architecture as well. If you're interested in how plugins work you should look at the core/plugin.coffee file.
 #
-# If you want to use this plugin instead of the existing color plugin you can change the name to 'color', or adjust the
-# color toolbar buttons to use this one instead (in general this is how you can change buttons):
+# If you want to use this plugin instead of the existing color plugin you can change the name from 'advanced_color', to
+# 'color' (where it's being registered), or adjust the color toolbar buttons to use this one instead (in general this is
+# how you can change buttons):
 #
-#Mercury.configure('toolbars:html:color:color', ['Text Color', plugin: 'advanced_color'])
-#Mercury.configure('toolbars:html:color:bgcolor', ['Background Color', plugin: 'advanced_color'])
+#Mercury.configure('toolbars:html:color:color', ['Text Color', plugin: 'advancedColor'])
+#Mercury.configure('toolbars:html:color:bgcolor', ['Background Color', plugin: 'advancedColor'])
 #
-Plugin = Mercury.registerPlugin 'advanced_color'
+Plugin = Mercury.registerPlugin 'advancedColor'
   description: 'Provides a more advanced interface for selecting colors.'
   version: '1.0.0'
 

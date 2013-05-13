@@ -245,6 +245,8 @@ class Mercury.Plugin.Definition
   constructor: (@options = {}) ->
     @configuration = @options.config
     @name = @options.name
+    @description = @options.description
+    @version = @options.version
     registered[@name] = @
 
 

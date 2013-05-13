@@ -111,6 +111,19 @@ initialize = ->
   #
   @Module.extend.call(@, @Plugin)
 
+  # Add global snippet registration.
+  #
+  # This provides the means to register your snippets dynamically (in the same way as plugins), as well as to get them
+  # easily.
+  #
+  # Mercury.registerSnippet
+  # Define a snippet and register it so it can be configured and used.
+  #
+  # Mercury.getSnippet
+  # Allows getting a snippet by name.
+  #
+  @Module.extend.call(@, @Snippet)
+
   # Do some detection.
   #
   # We need to detect various support, and as nice as it would be to feature detection for all of this, some of the more

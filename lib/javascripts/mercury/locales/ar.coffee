@@ -137,7 +137,7 @@ Mercury.I18n.define 'ex',
   "Insert Table": "إدراج جدول"
   "Character": "حرف"
   "Special Characters": "حرف مميز "
-  "Snippet": "قصاصة"
+  "Snippets": false
   "Snippet Panel": "لوحة قصاصات"
   "History": "سجل"
   "Notes": "ملاحظات"

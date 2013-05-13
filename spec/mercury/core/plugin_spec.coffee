@@ -390,7 +390,11 @@ describe "Mercury.Plugin.Definition", ->
 
   describe "#constructor", ->
 
-    it "sets @configuration and @name from the options", ->
+    it "sets @name, @description, @version, and @configuration from the options", ->
+      subject = new Klass(name: '_name_', description: '_description_', version: '_version_', config: {foo: 'bar'})
+      expect( subject.name ).to.eql('_name_')
+      expect( subject.description ).to.eql('_description_')
+      expect( subject.version ).to.eql('_version_')
       expect( subject.configuration ).to.eql(foo: 'bar')
 
     it "registers the definition", ->

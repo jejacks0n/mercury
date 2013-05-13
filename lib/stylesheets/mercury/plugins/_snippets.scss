@@ -1,0 +1,41 @@
+mercury {
+  .mercury-toolbar .mercury-toolbar-button[data-type="snippets"]:before {
+    content: 'N';
+  }
+  .mercury-snippets-panel {
+    ul {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      li {
+        @extend .mercury-clearfix;
+        @include mercury-border-radius(4px);
+        -webkit-user-drag: element;
+        -webkit-user-select: none;
+        padding: 15px;
+        background: rgba(80, 80, 80, .5);
+        margin-bottom: 10px;
+        text-shadow: 1px 1px #000;
+        color: #fff;
+        cursor: move;
+        cursor: drag;
+        em {
+          display: block;
+          margin-top: 5px;
+          font-size: 80%;
+          font-style: normal;
+          color: #ddd;
+        }
+        .mercury-snippet-actions {
+          margin: 0 -10px -8px;
+          font-size: 80%;
+          text-align: right;
+          line-height: 20px;
+          input {
+            padding: 1px 5px;
+          }
+        }
+      }
+    }
+  }
+}

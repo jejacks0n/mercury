@@ -103,7 +103,7 @@ class Mercury.Model extends Mercury.Module
   # Validates the current attributes. It's expected that you add errors in your own models implementation by adding
   # error messages to @errors using:
   #
-  # @addErrors('attrName', 'error message')
+  # @addError('attrName', 'error message')
   #
   validate: ->
 

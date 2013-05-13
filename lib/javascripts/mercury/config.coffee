@@ -119,7 +119,7 @@ Mercury.configuration =
       file     : ['Media', title: 'Insert Media and Files (images, videos, etc.)', plugin: 'media']
       table    : ['Table', title: 'Insert Table', plugin: 'table']
       character: ['Character', title: 'Special Characters', plugin: 'character']
-      snippets : ['Snippet', title: 'Snippet Panel']
+      snippets : ['Snippets', title: 'Snippet Panel', plugin: 'snippets']
       sep3     : ' '
       history  : ['History', title: 'Page Version History', plugin: 'history']
       notes    : ['Notes', title: 'Page Notes', plugin: 'notes']

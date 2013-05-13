@@ -30,8 +30,12 @@ Mercury.View.Modules.FormHandler =
 
 
   serializeModel: ->
+    @clearInputErrors()
     @model.set(@$('form').serializeObject())
-    @hide() if @hideOnValidSubmit && @model.isValid()
+    if @model.isValid()
+      @hide() if @hideOnValidSubmit
+    else
+      @addInputError(@$("[name=#{attr}]"), message.join(', ')) for attr, message of @model.errors
 
 
   onFormSubmit: (e) ->

@@ -2,6 +2,8 @@
 
 ###
 class Mercury.Region.Snippet extends Mercury.Region
+  @include Mercury.Region.Modules.SnippetDroppable
+
   @define 'Mercury.Region.Snippet', 'snippet'
 
   @supported: true
@@ -13,9 +15,8 @@ class Mercury.Region.Snippet extends Mercury.Region
       @attr('src', value)
 
 
-  # todo: cleanup how the drop behavior is being added, this shouldn't be here
-  onDropItem: ->
-
+  actions:
+    snippet: (snippet) -> @append(snippet.render(@))
 
 
 Mercury.Region.Snippet.addToolbar

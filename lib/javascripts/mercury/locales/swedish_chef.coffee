@@ -136,7 +136,7 @@ Mercury.I18n.define 'swedish_chef',
   "Insert Table": "Insert Teble-a"
   "Character": "Cherecter"
   "Special Characters": "Speceeel Cherecters"
-  "Snippet": "Sneeppet"
+  "Snippets": "Sneeppets-a"
   "Snippet Panel": "Sneeppet Punel"
   "History": "Heestury"
   "Notes": "Nutes"

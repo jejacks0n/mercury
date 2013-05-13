@@ -136,7 +136,7 @@ Mercury.I18n.define 'ex',
   "Insert Table": ""
   "Character": ""
   "Special Characters": ""
-  "Snippet": ""
+  "Snippets": ""
   "Snippet Panel": ""
   "History": ""
   "Notes": ""

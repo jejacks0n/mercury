@@ -3,7 +3,10 @@
   %head
     = csrf_meta_tag
     = stylesheet_link_tag "mercury", "developer_interface"
-    = javascript_include_tag "mercury", "developer_interface", "adding_functionality", "example_plugin"
+    = javascript_include_tag "mercury", "developer_interface", "adding_functionality", "example_snippet", "example_plugin"
+
+    = javascript_include_tag "http://widgets.twimg.com/j/1/widget.js"
+    = stylesheet_link_tag "http://widgets.twimg.com/j/1/widget.css"
     %meta(name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no")
   %body
     %h1 Mercury2 <a href="/teabag">Specs</a>

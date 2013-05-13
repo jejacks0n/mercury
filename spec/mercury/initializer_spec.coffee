@@ -24,6 +24,12 @@ describe "Mercury", ->
   it "extends Logger", ->
     expect( Klass.Module.extend ).calledWith(Klass.Logger)
 
+  it "extends Plugin", ->
+    expect( Klass.Module.extend ).calledWith(Klass.Plugin)
+
+  it "extends Snippet", ->
+    expect( Klass.Module.extend ).calledWith(Klass.Snippet)
+
   it "detects various browser for support purposes", ->
     expect( Klass.support ).to.have.keys(['webkit', 'gecko', 'trident', 'chrome', 'safari', 'ie10', 'wysiwyg'])
 

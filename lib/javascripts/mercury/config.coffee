@@ -199,5 +199,4 @@ Mercury.configuration =
     #
     text:
       autoSize : true                                      # the region will auto-resize to the content within it
-      stripTags: true                                      # strip html when saving/previewing (keeps it only text)
       wrapping : false                                     # enables/disables soft line wrapping

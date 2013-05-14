@@ -19,6 +19,7 @@ Mercury.Region.Modules.DropIndicator =
 
 
   dropIndicatorPosition: ->
+    # todo: margins throw a kink into positioning this -- how would we handle auto/percents?
     pos = @$el.position()
     top: pos.top + @$el.outerHeight() / 2
     left: pos.left + @$el.outerWidth() / 2
@@ -26,14 +27,20 @@ Mercury.Region.Modules.DropIndicator =
 
 
   showDropIndicator: ->
+    clearTimeout(@dropIndicatorTimeout)
     return if @previewing || @dropIndicatorVisible
+    return if Mercury.dragHack && !@onDropSnippet
+    return if !Mercury.dragHack && !@onDropItem && !@onDropFile
     @dropIndicatorVisible = true
-    clearTimeout(@dropIndicatorTimer)
     @$dropIndicator.css(@dropIndicatorPosition())
+    @$dropIndicator.removeClass('mercury-region-snippet-drop-indicator')
+    @$dropIndicator.addClass('mercury-region-snippet-drop-indicator') if Mercury.dragHack
     @delay(50, => @$dropIndicator.css(opacity: 1))
 
 
   hideDropIndicator: ->
-    @dropIndicatorVisible = false
-    @$dropIndicator.css(opacity: 0)
-    @dropIndicatorTimer = @delay(500, => @$dropIndicator.hide())
+    clearTimeout(@dropIndicatorTimeout)
+    @dropIndicatorTimeout = @delay 250, ->
+      @dropIndicatorVisible = false
+      @$dropIndicator.css(opacity: 0)
+      @dropIndicatorTimeout = @delay(251, => @$dropIndicator.hide())

@@ -66,7 +66,6 @@
 #= require mercury/regions/modules/focusable_textarea
 #= require mercury/regions/modules/html_selection
 #= require mercury/regions/modules/selection_value
-#= require mercury/regions/modules/snippet_droppable
 #= require mercury/regions/modules/text_selection
 #
 # Initializer/boot script.

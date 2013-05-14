@@ -9,3 +9,6 @@ class Mercury.Region.Text extends Mercury.Region
   @include Mercury.Region.Modules.SelectionValue
 
   @supported: true
+
+  originalContent: ->
+    @html().replace('&gt;', '>').replace('&lt;', '<').trim().replace(/<br\s*\/?>/gi, '\n')

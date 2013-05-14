@@ -2,13 +2,20 @@
 
 ###
 class Mercury.Region.Snippet extends Mercury.Region
-  @include Mercury.Region.Modules.SnippetDroppable
+  @include Mercury.Region.Modules.DropIndicator
 
   @define 'Mercury.Region.Snippet', 'snippet'
 
   @supported: true
 
   skipHistoryOn: ['undo', 'redo']
+
+
+  onDropSnippet: (snippet) ->
+    snippet.on 'insert', =>
+      @focus()
+      @handleAction('snippet', snippet)
+
 
   actions:
     snippet: (snippet) ->

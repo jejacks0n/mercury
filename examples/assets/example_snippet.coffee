@@ -120,7 +120,7 @@ JST['/mercury/templates/snippets/twitter/form'] = ->
     </fieldset>
 
     <div class="form-actions">
-      <input class="btn btn-primary" name="commit" type="submit" value="Insert Example Snippet" tabindex="2">
+      <input class="btn btn-primary" name="commit" type="submit" value="Insert Twitter Snippet" tabindex="2">
     </div>
   </form>
   """

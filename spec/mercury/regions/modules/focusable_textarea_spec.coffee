@@ -42,9 +42,9 @@ describe "Mercury.Region.Modules.FocusableTextarea", ->
       expect( subject.$el.empty ).called
 
     it "sets the value and css for the focusable element", ->
-      spyOn(subject, 'html', -> ' _&lt;html&gt;_ ')
+      spyOn(subject, 'originalContent', -> '_original_content_')
       subject.buildFocusable()
-      expect( subject.$focusable.val() ).to.eq('_<html>_')
+      expect( subject.$focusable.val() ).to.eq('_original_content_')
       expect( subject.$focusable.css('width') ).to.eq('100%')
       expect( subject.$focusable.css('height') ).to.eq('20px')
       expect( subject.$focusable.css('resize') ).to.eq('vertical')
@@ -62,6 +62,13 @@ describe "Mercury.Region.Modules.FocusableTextarea", ->
       spyOn(subject, 'delegateEvents')
       subject.buildFocusable()
       expect( subject.delegateEvents ).called
+
+
+  describe "#originalContent", ->
+
+    it "returns the expected content", ->
+      spyOn(subject, 'html', -> ' _&lt;html&gt;_ ')
+      expect( subject.originalContent() ).to.eql('_<html>_')
 
 
   describe "#releaseFocusable (via the release event)", ->

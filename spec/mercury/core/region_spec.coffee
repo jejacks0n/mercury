@@ -235,10 +235,10 @@ describe "Mercury.Region", ->
       subject = new Klass('<div>')
       expect( subject.name ).to.eq('unknown420000')
 
-    it "calls #addRegionClassname", ->
-      spyOn(Klass::, 'addRegionClassname')
+    it "calls #addRegionAttrs", ->
+      spyOn(Klass::, 'addRegionAttrs')
       subject = new Klass('<div>')
-      expect( subject.addRegionClassname ).called
+      expect( subject.addRegionAttrs ).called
 
     it "calls #pushHistory", ->
       spyOn(Klass::, 'pushHistory')
@@ -257,12 +257,13 @@ describe "Mercury.Region", ->
       expect( subject.bindDefaultEvents ).called
 
 
-  describe "#addRegionClassname", ->
+  describe "#addRegionAttrs", ->
 
     it "adds a class to the element", ->
       subject.$el.removeAttr('class')
-      subject.addRegionClassname()
+      subject.addRegionAttrs()
       expect( subject.$el.attr('class') ).to.eq('mercury-unknown-region')
+      expect( subject.$focusable.attr('data-mercury-region') ).to.eq('true')
 
 
   describe "#trigger", ->
@@ -384,6 +385,11 @@ describe "Mercury.Region", ->
         subject.togglePreview()
         expect( subject.$focusable.attr('tabindex') ).to.be.undefined
 
+      it "removes the data attribute used for styling", ->
+        subject.$focusable.attr('data-mercury-region', true)
+        subject.togglePreview()
+        expect( subject.$focusable.attr('data-mercury-region') ).to.be.undefined
+
     describe "when not previewing", ->
 
       beforeEach ->
@@ -393,6 +399,11 @@ describe "Mercury.Region", ->
         subject.$focusable.removeAttr('tabindex')
         subject.togglePreview()
         expect( subject.$focusable.attr('tabindex') ).to.eq('0')
+
+      it "adds the data attribute used for styling", ->
+        subject.$focusable.removeAttr('data-mercury-region')
+        subject.togglePreview()
+        expect( subject.$focusable.attr('data-mercury-region') ).to.eq('true')
 
 
   describe "#pushHistory", ->
@@ -437,6 +448,10 @@ describe "Mercury.Region", ->
       spyOn(subject.$el, 'focus')
       subject.focus()
       expect( subject.$el.focus ).called
+
+    it "sets the scrollTop back to what it was before focus", ->
+      subject.focus(true)
+      subject.focus()
 
     it "calls @onFocus if it's defined", ->
       subject.onFocus = spy()
@@ -483,16 +498,16 @@ describe "Mercury.Region", ->
 
     it "sets the element data", ->
       expect( subject.data(foo: 'bar') ).to.eq(subject.$el)
-      expect( subject.$el.data() ).to.eql(foo: 'bar', mercury: 'foo', region: subject)
+      expect( subject.$el.data() ).to.eql(mercury: "foo", region: subject, mercuryRegion: true, foo: 'bar')
       subject.data('bar', 'baz')
-      expect( subject.$el.data() ).to.eql(foo: 'bar', mercury: 'foo', bar: 'baz', region: subject)
+      expect( subject.$el.data() ).to.eql(mercury: 'foo', region: subject, mercuryRegion: true, foo: 'bar', bar: 'baz')
 
 
   describe "#setData", ->
 
     it "sets the data to the element", ->
       subject.setData(foo: 'bar')
-      expect( subject.$el.data() ).to.eql(foo: 'bar', mercury: 'foo', region: subject)
+      expect( subject.$el.data() ).to.eql(mercury: 'foo', region: subject, mercuryRegion: true, foo: 'bar')
 
     it "calls any data attr handlers that are defined", ->
       subject.dataAttrs.foo = spy()
@@ -541,11 +556,49 @@ describe "Mercury.Region", ->
 
   describe "#onItemDropped", ->
 
+    beforeEach ->
+      spyOn(subject, 'focus')
+      @e = originalEvent: {dataTransfer: {files: [], getData: ->}}, preventDefault: spy()
+
+    it "calls #focus", ->
+      subject.onItemDropped(@e)
+      expect( subject.focus ).called
+
+    it "prevents the event and calls #onDropFile with the expected array when files are dropped", ->
+      subject.onDropFile = spy()
+      @e.originalEvent.dataTransfer.files = ['_file1_', '_file2_']
+      subject.onItemDropped(@e)
+      expect( @e.preventDefault ).called
+      expect( subject.onDropFile ).calledWith(['_file1_', '_file2_'])
+
+    it "doesn't prevent the event if there's no #onDropFile handler", ->
+      @e.originalEvent.dataTransfer.files = ['_file1_', '_file2_']
+      subject.onItemDropped(@e)
+      expect( @e.preventDefault ).not.called
+
+    it "calls #onDropSnippet with the snippet if it's defined and it looks like a snippet was dropped", ->
+      subject.onDropSnippet = spy()
+      spyOn(@e.originalEvent.dataTransfer, 'getData', -> '_snippet_name_')
+      spyOn(Mercury.Snippet, 'get', -> '_snippet_')
+      subject.onItemDropped(@e)
+      expect( Mercury.Snippet.get ).calledWith('_snippet_name_', true)
+      expect( subject.onDropSnippet ).calledWith('_snippet_')
+
+    it "doesn't call #onDragSnippet if it doesn't look like a snippet was dropped", ->
+      subject.onDropSnippet = spy()
+      subject.onItemDropped(@e)
+      expect( subject.onDropSnippet ).not.called
+
     it "calls #onDropItem if it's defined", ->
-      subject.onItemDropped('_e_', '_data_')
+      subject.onItemDropped(@e)
       subject.onDropItem = spy()
-      subject.onItemDropped('_e_', '_data_')
-      expect( subject.onDropItem ).calledWith('_e_', '_data_')
+      subject.onItemDropped(@e)
+      expect( subject.onDropItem ).calledWith(@e, @e.originalEvent.dataTransfer)
+
+    it "does nothing if we're previewing", ->
+      subject.previewing = true
+      subject.onItemDropped(@e)
+      expect( subject.focus ).not.called
 
 
   describe "#onRedo", ->
@@ -605,6 +658,12 @@ describe "Mercury.Region", ->
     it "sets the value if present", ->
       subject.fromJSON({})
       expect( subject.value ).not.called
+      subject.fromJSON(value: null)
+      expect( subject.value ).not.called
+      subject.fromJSON(value: undefined)
+      expect( subject.value ).not.called
+      subject.fromJSON(value: '')
+      expect( subject.value ).calledWith('')
       subject.fromJSON(value: '_value_')
       expect( subject.value ).calledWith('_value_')
 
@@ -632,13 +691,18 @@ describe "Mercury.Region", ->
       subject.release()
       expect( subject.$focusable.attr('tabindex') ).to.be.undefined
 
+    it "removes the data-mercury-region attribute from @$focusable", ->
+      expect( subject.$focusable.attr('data-mercury-region') ).to.eq('true')
+      subject.release()
+      expect( subject.$focusable.attr('data-mercury-region') ).to.be.undefined
+
     it "triggers a release event", ->
       spyOn(subject, 'trigger')
       subject.release()
       expect( subject.trigger ).calledWith('release')
 
     it "calls @$el.off and @$focusable.off", ->
-      subject.$focusable = off: spy(), removeAttr: spy(), blur: spy()
+      subject.$focusable = off: spy(), removeAttr: spy(-> subject.$focusable), blur: spy()
       spyOn(subject.$el, 'off')
       subject.release()
       expect( subject.$el.off ).called
@@ -711,14 +775,7 @@ describe "Mercury.Region", ->
       subject.bindDefaultEvents()
       expect( subject.bindMouseEvents ).called
 
-    it "calls #bindDropEvents if there's an #onDropFile/#opDropItem method defined", ->
-      subject.bindDefaultEvents()
-      expect( subject.bindDropEvents ).not.called
-      subject.onDropFile = ->
-      subject.bindDefaultEvents()
-      expect( subject.bindDropEvents ).called
-      subject.onDropFile = null
-      subject.onDropItem = ->
+    it "calls #bindDropEvents", ->
       subject.bindDefaultEvents()
       expect( subject.bindDropEvents ).called
 
@@ -852,70 +909,60 @@ describe "Mercury.Region", ->
     beforeEach ->
       @events = {}
       spyOn(subject, 'delegateEvents', => @events = arguments[1])
+      subject.onDropFile = true
+      subject.onDropItem = true
+      subject.onDropSnippet = true
 
     it "calls #delegateEvents with the expected events on @$focusable", ->
       subject.bindDropEvents()
       expect( subject.delegateEvents ).calledWith subject.$focusable,
         dragenter: sinon.match.func
         dragover: sinon.match.func
-        drop: sinon.match.func
+        drop: 'onItemDropped'
 
-    describe "drop", ->
+    it "does nothing if there's no #onDropFile, #onDropItem or #onDropSnippet methods", ->
+      subject.onDropFile = false
+      subject.onDropItem = false
+      subject.onDropSnippet = false
+      subject.bindDropEvents()
+      expect( subject.delegateEvents ).not.called
+
+    describe "dragenter", ->
 
       beforeEach ->
-        Mercury.dragHack = false
         subject.bindDropEvents()
-        subject.onDropFile = spy()
-        @e = originalEvent: {dataTransfer: {files: ['_file1_', '_file2_']}}, preventDefault: spy()
+        @e = preventDefault: spy()
 
       it "calls preventDefault for all preemptive events", ->
         @events.dragenter(@e)
-        @events.dragover(@e)
-        expect( @e.preventDefault ).calledTwice
+        expect( @e.preventDefault ).called
 
-      it "doesn't prevent the enter/over events if we're previewing", ->
+      it "doesn't prevent the event if @previewing", ->
         subject.previewing = true
         @events.dragenter(@e)
+        expect( @e.preventDefault ).not.called
+
+    describe "dragover", ->
+
+      beforeEach ->
+        subject.bindDropEvents()
+        @e = preventDefault: spy()
+
+      it "doesn't prevent the event if @previewing", ->
+        subject.previewing = true
         @events.dragover(@e)
         expect( @e.preventDefault ).not.called
 
       it "doesn't call preventDefault for all preemptive events if @editableDropBehavior", ->
         subject.editableDropBehavior = true
-        subject.bindDropEvents()
-        @events.dragenter(@e)
         @events.dragover(@e)
-        expect( @e.preventDefault ).calledOnce
+        expect( @e.preventDefault ).not.called
 
-      it "calls preventDefault for all preemptive events if Mercury.dragHack is set (regardless of @editableDropBehavior)", ->
+      it "calls preventDefault if Mercury.dragHack is set (regardless of @editableDropBehavior)", ->
         subject.editableDropBehavior = true
         Mercury.dragHack = true
-        subject.bindDropEvents()
-        @events.dragenter(@e)
         @events.dragover(@e)
-        expect( @e.preventDefault ).calledTwice
-
-      it "calls #onDropFile with the expected array when files are dropped", ->
-        @events.drop(@e)
-        expect( @e.preventDefault ).calledOnce
-        expect( subject.onDropFile ).calledWith(['_file1_', '_file2_'])
-
-      it "does nothing if there's no files", ->
-        @e.originalEvent.dataTransfer.files = []
-        @events.drop(@e)
-        expect( @e.preventDefault ).not.called
-        expect( subject.onDropFile ).not.called
-
-      it "calls #onItemDropped if there are no files", ->
-        spyOn(subject, 'onItemDropped')
-        @e.originalEvent.dataTransfer.files = []
-        @events.drop(@e)
-        expect( subject.onItemDropped ).calledWith(@e, @e.originalEvent.dataTransfer)
-
-      it "does nothing if we're previewing", ->
-        subject.previewing = true
-        @events.drop(@e)
-        expect( @e.preventDefault ).not.called
-        expect( subject.onDropFile ).not.called
+        expect( @e.preventDefault ).called
 
 
   describe "#delegateActions", ->

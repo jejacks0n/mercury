@@ -1,5 +1,6 @@
 @mixin mercury-region-outline {
   &:focus {
+    outline-offset: 0;
     outline: none;
     -webkit-box-shadow: 0 0 7px $focus_color, 0 0 2px $focus_color / 3;
     -moz-box-shadow: 0 0 7px $focus_color, 0 0 2px $focus_color / 3;
@@ -24,6 +25,11 @@
   color: $region_drop_indicator_color;
   pointer-events: none;
   &:before {
-    content: 'X'
+    content: 'X';
+  }
+  &.mercury-region-snippet-drop-indicator {
+    &:before {
+      content: 'N';
+    }
   }
 }

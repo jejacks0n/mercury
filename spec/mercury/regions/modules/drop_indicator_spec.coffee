@@ -55,57 +55,97 @@ describe "Mercury.Region.Modules.DropIndicator", ->
 
   describe "#showDropIndicator (via dragenter/dragover)", ->
 
+    beforeEach ->
+      subject.previewing = false
+      Mercury.dragHack = false
+      subject.onDropItem = true
+      subject.onDropFile = true
+      spyOn(subject, 'delay').yieldsOn(subject)
+
     it "clears the timeout", ->
-      subject.dropIndicatorTimer = '_timer_'
       spyOn(window, 'clearTimeout')
+      subject.dropIndicatorTimeout = '_timer_'
       subject.$el.trigger('dragenter')
       expect( clearTimeout ).calledWith('_timer_')
 
     it "tracks that it's visible", ->
       subject.dropIndicatorVisible = false
-      subject.$el.trigger('dragover')
+      subject.$el.trigger('dragenter')
       expect( subject.dropIndicatorVisible ).to.be.true
 
     it "positions the indicator", ->
       spyOn(subject, 'dropIndicatorPosition', -> '_css_')
       spyOn(subject.$dropIndicator, 'css')
-      subject.$el.trigger('dragover')
+      subject.$el.trigger('dragenter')
       expect( subject.$dropIndicator.css ).calledWith('_css_')
 
+    it "removes the mercury-region-snippet-drop-indicator classname", ->
+      spyOn(subject.$dropIndicator, 'removeClass')
+      subject.$el.trigger('dragover')
+      expect( subject.$dropIndicator.removeClass ).calledWith('mercury-region-snippet-drop-indicator')
+
+    it "adds a classname if it looks like we're dragging a snippet", ->
+      subject.onDropSnippet = true
+      Mercury.dragHack = true
+      spyOn(subject.$dropIndicator, 'addClass')
+      subject.$el.trigger('dragover')
+      expect( subject.$dropIndicator.addClass ).calledWith('mercury-region-snippet-drop-indicator')
+
     it "delays setting the opacity", ->
-      spyOn(subject, 'delay').yieldsOn(subject)
       subject.$el.trigger('dragenter')
       expect( subject.delay ).calledWith(50, sinon.match.func)
       expect( subject.$dropIndicator.css('opacity') ).to.eq('1')
 
     it "does nothing if we're previewing", ->
       subject.previewing = true
-      spyOn(window, 'clearTimeout')
       subject.$el.trigger('dragenter')
-      expect( clearTimeout ).not.called
+      expect( subject.delay ).not.called
 
     it "does nothing if it's already visible", ->
       subject.dropIndicatorVisible = true
-      spyOn(window, 'clearTimeout')
       subject.$el.trigger('dragover')
-      expect( clearTimeout ).not.called
+      expect( subject.delay ).not.called
+
+    it "does nothing if we're dragging a snippet and we don't have an onDropSnippet handler", ->
+      Mercury.dragHack = true
+      subject.onDropSnippet = false
+      subject.$el.trigger('dragover')
+      expect( subject.delay ).not.called
+
+    it "does nothing if we aren't handling onDropItem and onDropFile", ->
+      subject.onDropItem = false
+      subject.onDropFile = false
+      subject.$el.trigger('dragover')
+      expect( subject.delay ).not.called
 
 
   describe "#hideDropIndicator (via dragleave/drop)", ->
 
-    it "sets the opacity to 0", ->
-      subject.$dropIndicator.css(opacity: 1)
+    beforeEach ->
+      spyOn(subject, 'delay').yieldsOn(subject)
+
+    it "clears the timeout", ->
+      spyOn(window, 'clearTimeout')
+      subject.dropIndicatorTimeout = '_timer_'
       subject.$el.trigger('dragleave')
-      expect( subject.$dropIndicator.css('opacity') ).to.eq('0')
+      expect( clearTimeout ).calledWith('_timer_')
+
+    it "delays hiding the indicator", ->
+      subject.$el.trigger('dragleave')
+      expect( subject.delay ).calledWith(250, sinon.match.func)
 
     it "tracks that it's not visible", ->
       subject.dropIndicatorVisible = true
       subject.$el.trigger('dragleave')
       expect( subject.dropIndicatorVisible ).to.be.false
 
+    it "sets the opacity to 0", ->
+      subject.$dropIndicator.css(opacity: 1)
+      subject.$el.trigger('drop')
+      expect( subject.$dropIndicator.css('opacity') ).to.eq('0')
+
     it "sets a timer to fully hide the indicator", ->
-      spyOn(subject, 'delay').yieldsOn(subject)
       spyOn(subject.$dropIndicator, 'hide')
       subject.$el.trigger('drop')
-      expect( subject.delay ).calledWith(500, sinon.match.func)
+      expect( subject.delay ).calledWith(251, sinon.match.func)
       expect( subject.$dropIndicator.hide ).called

@@ -11,7 +11,7 @@ Mercury.Region.Modules.FocusableTextarea =
     @editableDropBehavior ?= true
     @autoSize ?= @config("regions:#{@constructor.type}:autoSize")
 
-    value = @html().replace('&gt;', '>').replace('&lt;', '<').trim()
+    value = @originalContent()
     resize = if @autoSize then 'none' else 'vertical'
 
     @$preview = $("""<div class="mercury-#{@constructor.type}-region-preview">""")
@@ -25,6 +25,10 @@ Mercury.Region.Modules.FocusableTextarea =
 
     @delegateEvents
       'keydown textarea': 'handleKeyEvent'
+
+
+  originalContent: ->
+    @html().replace('&gt;', '>').replace('&lt;', '<').trim()
 
 
   releaseFocusable: ->

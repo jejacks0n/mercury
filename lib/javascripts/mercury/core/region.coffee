@@ -1,6 +1,7 @@
 #= require mercury/core/view
 #= require mercury/core/stack
 #= require mercury/core/action
+#= require mercury/core/snippet
 
 class Mercury.Region extends Mercury.View
   @extend  Mercury.Config
@@ -133,7 +134,7 @@ class Mercury.Region extends Mercury.View
       @notify(@t('No name provided for the %s region, falling back to random', @constructor.type))
       @name = "#{@constructor.type}#{Math.floor(Math.random() * 10000)}"
 
-    @addRegionClassname()
+    @addRegionAttrs()
     @pushHistory() unless @skipHistoryOnInitialize
     @bindDefaultEvents()
     @initialValue = JSON.stringify(@toJSON())
@@ -149,10 +150,11 @@ class Mercury.Region extends Mercury.View
       @data(obj)
 
 
-  # Adds the classname based on the constructor type to the element.
+  # Adds the classname based on the constructor type to the element, and the region data attribute.
   #
-  addRegionClassname: ->
+  addRegionAttrs: ->
     @addClass("mercury-#{@constructor.type}-region")
+    @$focusable.attr('data-mercury-region', true)
 
 
   # Override trigger to trigger the event at a global level.
@@ -205,9 +207,9 @@ class Mercury.Region extends Mercury.View
     @trigger('preview', @previewing)
     if @previewing
       @blur()
-      @$focusable.removeAttr('tabindex')
+      @$focusable.removeAttr('tabindex').removeAttr('data-mercury-region')
     else
-      @$focusable.attr(tabindex: 0)
+      @$focusable.attr(tabindex: 0).attr('data-mercury-region', true)
     @onTogglePreview?()
 
 
@@ -232,9 +234,12 @@ class Mercury.Region extends Mercury.View
   # Focuses the region, which will call focus on the element and an onFocus method if the subclass implements one. Used
   # externally to manually focus a region (so regions can retain focus with various actions.)
   #
-  focus: ->
+  focus: (scroll = false) ->
     @focused = true
+    x = window.scrollX
+    y = window.scrollY
     @$focusable.focus()
+    window.scrollTo(x, y) unless scroll
     @onFocus?()
 
 
@@ -267,6 +272,7 @@ class Mercury.Region extends Mercury.View
         data = $.extend({}, data)
         delete(data.region)
         delete(data.mercury)
+        delete(data.mercuryRegion)
       return data ? null
     obj = key
     (obj = {}; obj[key] = value) if typeof(key) == 'string'
@@ -320,8 +326,18 @@ class Mercury.Region extends Mercury.View
   # for #onDropItem, and is exposed as an override possibility, but in general it's expected subclasses implement an
   # #onDropItem instead.
   #
-  onItemDropped: (e, data) ->
-    @onDropItem?(e, data)
+  onItemDropped: (e) ->
+    return if @previewing
+    data = e.originalEvent.dataTransfer
+    @focus()
+    if data.files.length && @onDropFile
+      @prevent(e)
+      @onDropFile(data.files)
+    else if @onDropSnippet && snippetName = data.getData('snippet')
+      snippet = Mercury.Snippet.get(snippetName, true)
+      @onDropSnippet(snippet)
+    else
+      @onDropItem?(e, data)
 
 
   # Provides a mechinism for overriding what goes into the stack. By default this just returns the region serialized
@@ -353,7 +369,7 @@ class Mercury.Region extends Mercury.View
   #
   fromJSON: (json) ->
     json = JSON.parse(json) if typeof(json) == 'string'
-    @value(json.value) if json.value
+    @value(json.value) unless json.value == null || typeof(json.value) == 'undefined'
     @data(json.data) if json.data
 
 
@@ -363,7 +379,7 @@ class Mercury.Region extends Mercury.View
   release: ->
     @$el.data(region: null)
     @removeClass("mercury-#{@constructor.type}-region")
-    @$focusable.removeAttr('tabindex')
+    @$focusable.removeAttr('tabindex').removeAttr('data-mercury-region')
     @trigger('release')
     @$el.off()
     @$focusable.off()
@@ -387,7 +403,7 @@ class Mercury.Region extends Mercury.View
     @bindFocusEvents()                                          # binds focus/blur events
     @bindKeyEvents()                                            # binds undo/redo events
     @bindMouseEvents()                                          # binds various mouse events
-    @bindDropEvents() if @onDropFile || @onDropItem             # binds drag/drop events for file/item dropping
+    @bindDropEvents()                                           # binds drag/drop events for file/item/snippet dropping
 
 
   # Binds to focus/blur events on focusable so we can track the focused state.
@@ -426,17 +442,11 @@ class Mercury.Region extends Mercury.View
   # element. Will call an onDropFile method with the files that were dropped if your subclass implements that method.
   #
   bindDropEvents: ->
+    return unless @onDropFile || @onDropItem || @onDropSnippet
     @delegateEvents @$el,
       dragenter: (e) => @prevent(e) unless @previewing
       dragover: (e) => @prevent(e) unless @previewing || (@editableDropBehavior && Mercury.support.webkit && !Mercury.dragHack)
-      drop: (e) =>
-        return if @previewing
-        data = e.originalEvent.dataTransfer
-        if data.files.length && @onDropFile
-          @prevent(e)
-          @onDropFile(data.files)
-        else
-          @onItemDropped(e, data)
+      drop: 'onItemDropped'
 
 
   # This works much like Mercury.View.delegateEvents, but instead of binding events to the element we're just resolving

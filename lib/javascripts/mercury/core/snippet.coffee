@@ -47,7 +47,7 @@ class Mercury.Snippet extends Mercury.Model
 
   displayForm: ->
     view = new (@Modal || Mercury.Modal)(title: @get('title'), template: @form, width: 600, model: @, hideOnValidSubmit: true)
-    view.on('hide', => @trigger('insert'))
+    view.on('form:success', => @trigger('insert'))
     view
 
 

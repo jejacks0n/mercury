@@ -33,6 +33,7 @@ Mercury.View.Modules.FormHandler =
     @clearInputErrors()
     @model.set(@$('form').serializeObject())
     if @model.isValid()
+      @trigger('form:success')
       @hide() if @hideOnValidSubmit
     else
       @addInputError(@$("[name=#{attr}]"), message.join(', ')) for attr, message of @model.errors

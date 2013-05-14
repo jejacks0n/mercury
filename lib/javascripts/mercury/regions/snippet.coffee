@@ -8,15 +8,12 @@ class Mercury.Region.Snippet extends Mercury.Region
 
   @supported: true
 
-  value: (value) ->
-    if value == null || typeof(value) == 'undefined'
-      @attr('src')
-    else
-      @attr('src', value)
-
+  skipHistoryOn: ['undo', 'redo']
 
   actions:
-    snippet: (snippet) -> @append(snippet.render(@))
+    snippet: (snippet) ->
+      @append(snippet.render(@))
+      @pushHistory()
 
 
 Mercury.Region.Snippet.addToolbar

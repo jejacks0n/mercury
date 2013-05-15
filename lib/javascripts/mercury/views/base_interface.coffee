@@ -115,8 +115,7 @@ class Mercury.BaseInterface extends Mercury.View
     @regions.push(region)
 
 
-  focusActiveRegion: (e) ->
-    @prevent(e)
+  focusActiveRegion: ->
     @region?.focus()
 
 

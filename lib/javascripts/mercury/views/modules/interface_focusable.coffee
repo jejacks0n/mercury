@@ -30,10 +30,9 @@ Mercury.View.Modules.InterfaceFocusable =
 
 
   preventFocusout: ($constrain) ->
-    @on('release', => @clearFocusoutTimeout())
-    @on('hide', => @clearFocusoutTimeout())
-
-    $focus = @createFocusableKeeper().appendTo(@$el)
+    $focus = $(@createFocusableKeeper().appendTo(@$el)[0])
+    @on 'release', => @clearFocusout($focus, $constrain)
+    @on 'hide', => @clearFocusout($focus, $constrain)
     $focus.on('blur', => @keepFocusConstrained($focus, $constrain))
     $constrain.off('focusout').on('focusout', => @keepFocusConstrained($focus, $constrain))
     $constrain.on 'keydown', (e) =>
@@ -46,7 +45,7 @@ Mercury.View.Modules.InterfaceFocusable =
 
 
   createFocusableKeeper: ->
-    $('<input style="position:fixed;top:-10000px;left:100%;width:10px;height:5px" tabindex="-1">')
+    $('<input style="position:fixed;left:100%" tabindex="-1"/><input style="position:fixed;left:100%;top:20px"/>')
 
 
   keepFocusConstrained: ($focus, $constrain) ->
@@ -55,5 +54,7 @@ Mercury.View.Modules.InterfaceFocusable =
       $focus.focus()
 
 
-  clearFocusoutTimeout: ->
+  clearFocusout: ($focus, $constrain) ->
     clearTimeout(@preventFocusoutTimeout)
+    $focus.off()
+    $constrain.off('keydown').off('focusout')

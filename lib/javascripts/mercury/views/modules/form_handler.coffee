@@ -26,7 +26,7 @@ Mercury.View.Modules.FormHandler =
 
 
   applySerializedModel: ->
-    @$('form').applySerializedObject(@model.toJSON())
+    @$('form').applySerializedObject(@model.toJSON()) if @model
 
 
   serializeModel: ->

@@ -97,88 +97,82 @@ describe "Mercury.View.Modules.InterfaceFocusable", ->
   describe "#preventFocusOut", ->
 
     beforeEach ->
-      @el =
-        off: spy(=> @el)
-        on: spy(=> @el)
-
-    it "binds to the release and hide events", ->
-      spyOn(subject, 'clearFocusoutTimeout')
-      spyOn(subject, 'on').yieldsOn(subject)
-      subject.preventFocusout(@el)
-      expect( subject.on ).calledWith('release', sinon.match.func)
-      expect( subject.on ).calledWith('hide', sinon.match.func)
-      expect( subject.clearFocusoutTimeout ).calledTwice
+      @focus = appendTo: spy(=> [@focus]), on: spy()
+      @constrain = on: spy(=> @constrain), off: spy(=> @constrain)
+      spyOn(subject, 'createFocusableKeeper', => @focus)
+      spyOn(window, '$', => @focus)
 
     it "calls #createFocusableKeeper and appends that element to the top element", ->
-      @mock = appendTo: spy(=> @mock), on: spy()
-      spyOn(subject, 'createFocusableKeeper', => @mock)
-      subject.preventFocusout(@el)
+      subject.preventFocusout(@constrain)
       expect( subject.createFocusableKeeper ).called
-      expect( @mock.appendTo ).calledWith(subject.$el)
+      expect( @focus.appendTo ).calledWith(subject.$el)
+
+    it "binds to the release and hide events", ->
+      spyOn(subject, 'clearFocusout')
+      spyOn(subject, 'on').yieldsOn(subject)
+      subject.preventFocusout(@constrain)
+      expect( subject.on ).calledWith('release', sinon.match.func)
+      expect( subject.on ).calledWith('hide', sinon.match.func)
+      expect( subject.clearFocusout ).calledTwice
+      expect( subject.clearFocusout ).calledWith(sinon.match.any, @constrain)
 
     it "binds to the blur event of the focusable keeper", ->
-      @mock = appendTo: spy(=> @mock), on: ->
-      spyOn(@mock, 'on').yieldsOn(subject)
-      spyOn(subject, 'createFocusableKeeper', => @mock)
+      @focus.on = ->
+      spyOn(@focus, 'on').yieldsOn(subject)
       spyOn(subject, 'keepFocusConstrained')
-      subject.preventFocusout(@el)
-      expect( @mock.on ).calledWith('blur', sinon.match.func)
-      expect( subject.keepFocusConstrained ).calledWith(@mock, @el)
+      subject.preventFocusout(@constrain)
+      expect( @focus.on ).calledWith('blur', sinon.match.func)
+      expect( subject.keepFocusConstrained ).calledWith(@focus)
 
     it "binds to the focusout and keydown events", ->
-      subject.preventFocusout(@el)
-      expect( @el.off ).calledWith('focusout')
-      expect( @el.on ).calledWith('focusout', sinon.match.func)
-      expect( @el.on ).calledWith('keydown')
+      subject.preventFocusout(@constrain)
+      expect( @constrain.off ).calledWith('focusout')
+      expect( @constrain.on ).calledWith('focusout', sinon.match.func)
+      expect( @constrain.on ).calledWith('keydown')
 
     describe "focusout", ->
 
       beforeEach ->
-        @el.on = spy(-> arguments[1]() if arguments[0] == 'focusout')
+        @constrain.on = spy(-> arguments[1]() if arguments[0] == 'focusout')
         spyOn(subject, 'keepFocusConstrained')
-        @mock = appendTo: spy(=> @mock), on: spy()
-        spyOn(subject, 'createFocusableKeeper', => @mock)
 
       it "calls #keepFocusConstrained", ->
-        subject.preventFocusout(@el)
-        expect( subject.keepFocusConstrained ).calledWith(@mock, @el)
+        subject.preventFocusout(@constrain)
+        expect( subject.keepFocusConstrained ).calledWith(@focus, @constrain)
 
     describe "keydown", ->
 
       beforeEach ->
         spyOn(subject, 'prevent')
-        @el.on = spy(=> arguments[1](@e) if arguments[0] == 'keydown')
-        @el.find = spy(=> @focusables)
         @focusables = ['_first_', '_second_', '_last_']
-        @e =
-          keyCode: 9
-          target: '_first_'
-          shiftKey: false
+        @constrain.find = spy(=> @focusables)
+        @constrain.on = spy(=> arguments[1](@e) if arguments[0] == 'keydown')
+        @e = keyCode: 9, target: '_first_', shiftKey: false
 
-      it "does nothing it's not a tab", ->
+      it "does nothing if it's not a tab", ->
         @e.keyCode = 0
-        subject.preventFocusout(@el)
-        expect( @el.find ).not.called
+        subject.preventFocusout(@constrain)
+        expect( @constrain.find ).not.called
 
       it "doesn't continue if there's no focusables", ->
         @focusables = []
-        subject.preventFocusout(@el)
-        expect( @el.find ).calledWith(':input[tabindex != "-1"]')
+        subject.preventFocusout(@constrain)
+        expect( @constrain.find ).calledWith(':input[tabindex != "-1"]')
         expect( subject.prevent ).not.called
 
       it "prevents the event if we're at the first focusable and using the shift key (going backwards)", ->
         @e.shiftKey = true
-        subject.preventFocusout(@el)
+        subject.preventFocusout(@constrain)
         expect( subject.prevent ).calledWith(@e, true)
 
       it "prevents the event if we're at the last focusable and not using the shift key (going forwards)", ->
         @e.target = '_last_'
-        subject.preventFocusout(@el)
+        subject.preventFocusout(@constrain)
         expect( subject.prevent ).calledWith(@e, true)
 
       it "doesn't prevent if it shouldn't", ->
         @e.target = '_second_'
-        subject.preventFocusout(@el)
+        subject.preventFocusout(@constrain)
         expect( subject.prevent ).not.called
 
 
@@ -187,7 +181,7 @@ describe "Mercury.View.Modules.InterfaceFocusable", ->
     it "creates an input that will be hidden-ish that can retain focus", ->
       spyOn(window, '$')
       subject.createFocusableKeeper()
-      expect( $ ).calledWith('<input style="position:fixed;top:-10000px;left:100%;width:10px;height:5px" tabindex="-1">')
+      expect( $ ).calledWith('<input style="position:fixed;left:100%" tabindex="-1"/><input style="position:fixed;left:100%;top:20px"/>')
 
 
   describe "#keepFocusConstrained", ->
@@ -215,10 +209,20 @@ describe "Mercury.View.Modules.InterfaceFocusable", ->
       expect( subject.preventFocusoutTimeout ).to.eq('_delay_')
 
 
-  describe "#clearFocusoutTimeout", ->
+  describe "#clearFocusout", ->
+
+    beforeEach ->
+      @focus = off: spy()
+      @constrain = off: spy(=> @constrain)
 
     it "clears the @preventFocusoutTimeout", ->
       spyOn(window, 'clearTimeout')
       subject.preventFocusoutTimeout = '_prevent_focusout_timeout_'
-      subject.clearFocusoutTimeout()
+      subject.clearFocusout(@focus, @constrain)
       expect( clearTimeout ).calledWith('_prevent_focusout_timeout_')
+
+    it "calls off on the focus element, and off keydown and focusout on the constrain", ->
+      subject.clearFocusout(@focus, @constrain)
+      expect( @focus.off ).called
+      expect( @constrain.off ).calledWith('keydown')
+      expect( @constrain.off ).calledWith('focusout')

@@ -8,7 +8,7 @@
     = javascript_include_tag "http://widgets.twimg.com/j/1/widget.js"
     = stylesheet_link_tag "http://widgets.twimg.com/j/1/widget.css"
     %meta(name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no")
-  %body
+  %body.mercury-transitions
     %h1 Mercury2 <a href="/teabag">Specs</a>
 
     %p
@@ -99,6 +99,8 @@
       .slides
         .slide= image_tag('http://goo.gl/yBRji')
         .slide= image_tag('http://goo.gl/iKIkP')
+
+    EOF
 
 :scss
   .red {

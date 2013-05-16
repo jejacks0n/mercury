@@ -168,3 +168,8 @@ Mercury.registerSnippet 'beer',
   #
   renderOptions:
     dataType: 'html'
+
+  # Here's a bonus example that shows how you can make the modal be some other class -- in this case we're using a
+  # Lightview instead of a Modal.
+  #
+  Modal: Mercury.Lightview

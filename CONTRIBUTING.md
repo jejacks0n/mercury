@@ -39,6 +39,11 @@ Install the required gems (you may have to run `gem install bundler`).
 bundle install
 ```
 
+You can start the server and browse to http://localhost:9292 to do regression testing and see how the application works.
+```
+rackup
+```
+
 Run specs / build distro (on passing specs).
 ```shell
 bundle exec rake

@@ -178,11 +178,13 @@ describe "Mercury.Model", ->
       subject.save()
       expect( $.ajax.args[0][0]['method'] ).to.eq('PUT')
 
-    it "doesn't convert data to JSON if already a string", ->
+    it "doesn't convert data to JSON if we don't have a dataType or it's already a string", ->
       subject.save(data: {foo: 'bar'})
       expect( $.ajax.args[0][0]['data'] ).to.eql('{"foo":"bar"}')
+      subject.save(data: {foo: 'bar'}, dataType: null)
+      expect( $.ajax.args[1][0]['data'] ).to.eql({foo: 'bar'})
       subject.save(data: '_string_')
-      expect( $.ajax.args[1][0]['data'] ).to.eql('_string_')
+      expect( $.ajax.args[2][0]['data'] ).to.eql('_string_')
 
     describe "on success", ->
 

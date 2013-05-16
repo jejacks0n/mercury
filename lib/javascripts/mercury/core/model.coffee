@@ -137,7 +137,7 @@ class Mercury.Model extends Mercury.Module
         @notify(@t('Unable to process response: %s', xhr.status))
         @saveError?(arguments...)
     options = $.extend(defaultOptions, options)
-    options.data = JSON.stringify(options.data) if typeof(options.data) != 'string'
+    options.data = JSON.stringify(options.data) if options.dataType && typeof(options.data) != 'string'
     $.ajax(options)
 
 

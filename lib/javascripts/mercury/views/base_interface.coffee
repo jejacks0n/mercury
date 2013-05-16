@@ -233,7 +233,7 @@ class Mercury.BaseInterface extends Mercury.View
 
   onRegionFocus: (region) ->
     @region = region
-    @delay(50, -> @position(true)) if @floating
+    @delay(50, -> if @floating then @position(true) else @onResize())
 
 
   onRegionRelease: (region) ->

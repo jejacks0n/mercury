@@ -3,7 +3,7 @@
   %head
     = csrf_meta_tag
     = stylesheet_link_tag "mercury.bundle"
-    = javascript_include_tag "dependencies/jquery-1.9.1",
+    = javascript_include_tag "dependencies/jquery-2.0.0",
                              "dependencies/rangy-core",
                              "dependencies/rangy-cssclassapplier",
                              "dependencies/rangy-serializer",
@@ -14,6 +14,7 @@
                              "regions/image.min",
                              "regions/markdown.min",
                              "regions/plain.min",
+                             "regions/snippet.min",
                              "regions/text.min"
     %script jQuery(function() { Mercury.init({frame: '#mercury_frame'}) })
   %body

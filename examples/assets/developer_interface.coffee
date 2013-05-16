@@ -151,7 +151,7 @@ class @DeveloperInterface extends Mercury.View
 
 
 @JST ||= {}
-JST['/mercury/templates/new-region'] = (scope) ->
+JST['/mercury/templates/new-region'] = ->
   """
   <div class="region">
     <div data-mercury="markdown" id="new_region_#{Math.floor(Math.random() * 10000)}">Lorem ipsum</div>
@@ -161,8 +161,7 @@ JST['/mercury/templates/new-region'] = (scope) ->
     </div>
   </div>
   """
-
-JST['/mercury/templates/developer-interface'] = (scope) ->
+JST['/mercury/templates/developer-interface'] = ->
   """
   <li data-action="save">save</li>
   <li data-action="toggle_interface">toggle interface</li>
@@ -194,13 +193,11 @@ JST['/mercury/templates/developer-interface'] = (scope) ->
   <hr/>
   <li><input type="text"/></li>
   """
-@JST ||= {}
-JST['/mercury/templates/lorem_short'] = (scope) ->
+top.JST['/mercury/templates/lorem_short'] = ->
   """
   Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
   """
-
-JST['/mercury/templates/lorem_long'] = (scope) ->
+top.JST['/mercury/templates/lorem_long'] = ->
   """
   Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.<br/><br/>
   Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.<br/><br/>

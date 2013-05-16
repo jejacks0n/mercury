@@ -77,16 +77,16 @@ Copyright (c) 2013 Jeremy Jackson
 This file contains all of the required css for the Mercury interface as well as the region css.
 */
 /* line 2, ../../lib/stylesheets/mercury/core/_general.scss */
-.mercury-clearfix:before, mercury .mercury-statusbar:before, mercury .mercury-toolbar:before, mercury .mercury-toolbar .mercury-toolbar-palette ul:before, mercury .mercury-character-modal ul:before, .mercury-clearfix:after, mercury .mercury-statusbar:after, mercury .mercury-toolbar:after, mercury .mercury-toolbar .mercury-toolbar-palette ul:after, mercury .mercury-character-modal ul:after {
+.mercury-clearfix:before, mercury .mercury-statusbar:before, mercury .mercury-toolbar:before, mercury .mercury-toolbar .mercury-toolbar-palette ul:before, mercury .mercury-character-modal ul:before, mercury .mercury-snippets-panel ul li:before, .mercury-clearfix:after, mercury .mercury-statusbar:after, mercury .mercury-toolbar:after, mercury .mercury-toolbar .mercury-toolbar-palette ul:after, mercury .mercury-character-modal ul:after, mercury .mercury-snippets-panel ul li:after {
   content: " ";
   display: table;
 }
 /* line 6, ../../lib/stylesheets/mercury/core/_general.scss */
-.mercury-clearfix:after, mercury .mercury-statusbar:after, mercury .mercury-toolbar:after, mercury .mercury-toolbar .mercury-toolbar-palette ul:after, mercury .mercury-character-modal ul:after {
+.mercury-clearfix:after, mercury .mercury-statusbar:after, mercury .mercury-toolbar:after, mercury .mercury-toolbar .mercury-toolbar-palette ul:after, mercury .mercury-character-modal ul:after, mercury .mercury-snippets-panel ul li:after {
   clear: both;
 }
 /* line 9, ../../lib/stylesheets/mercury/core/_general.scss */
-.mercury-clearfix, mercury .mercury-statusbar, mercury .mercury-toolbar, mercury .mercury-toolbar .mercury-toolbar-palette ul, mercury .mercury-character-modal ul {
+.mercury-clearfix, mercury .mercury-statusbar, mercury .mercury-toolbar, mercury .mercury-toolbar .mercury-toolbar-palette ul, mercury .mercury-character-modal ul, mercury .mercury-snippets-panel ul li {
   *zoom: 1;
 }
 
@@ -1405,11 +1405,18 @@ mercury .mercury-modal .mercury-modal-dialog .mercury-modal-dialog-content {
   box-sizing: border-box;
   padding: 20px;
 }
-/* line 80, ../../lib/stylesheets/mercury/views/_modal.scss */
+/* line 77, ../../lib/stylesheets/mercury/views/_modal.scss */
+mercury .mercury-modal .mercury-modal-dialog .mercury-modal-dialog-content h3 {
+  font-family: Helvetica, Tahoma, Arial, sans-serif;
+  font-size: 12px;
+  margin: 0 0 10px;
+  text-shadow: 1px 1px white;
+}
+/* line 85, ../../lib/stylesheets/mercury/views/_modal.scss */
 mercury .mercury-modal.loading .mercury-modal-loading-indicator {
   display: block;
 }
-/* line 83, ../../lib/stylesheets/mercury/views/_modal.scss */
+/* line 88, ../../lib/stylesheets/mercury/views/_modal.scss */
 mercury .mercury-modal.loading .mercury-modal-dialog-content-container {
   visibility: hidden;
 }
@@ -1620,7 +1627,7 @@ mercury .mercury-toolbar {
   transition-duration: 0.25s;
   transition-timing-function: ease-in-out;
   position: fixed;
-  z-index: 10200;
+  z-index: 10600;
   top: 0;
   left: 0;
   width: 100%;
@@ -2039,6 +2046,11 @@ mercury .mercury-toolbar .mercury-toolbar-primary-container .mercury-toolbar-but
   background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAA6CAMAAADFsvruAAABL1BMVEVra2tsbGxtbW1vb29xcXFycnJzc3N0dHR1dXV3d3d4eHh6enp7e3t+fn5/f3+AgICBgYGCgoKDg4OFhYWGhoaHh4eIiIiJiYmLi4uMjIyNjY2Ojo6Pj4+SkpKUlJSVlZWWlpaXl5eYmJiZmZmbm5ucnJydnZ2enp6fn5+goKChoaGioqKjo6OlpaWmpqanp6eoqKipqamqqqqrq6usrKytra2urq6vr6+wsLCxsbGysrKzs7O0tLS1tbW2tra3t7e4uLi5ubm6urq7u7u8vLy9vb2+vr6/v7/AwMDBwcHCwsLDw8PExMTFxcXGxsbHx8fIyMjJycnKysrLy8vMzMzNzc3Ozs7Pz8/Q0NDR0dHS0tLT09PU1NTV1dXW1tbX19fY2NjZ2dna2trb2dvb2ttejuwmAAAC4ElEQVRIDQXBQYIkRQIEMXlUwnx0/3+FpivDVtr/AAAAAAAAPAEAAAAAAHiuTo3O5QgAaI3WtDh5tGuxTA2AMGTGGvF8t2ztHQEuWM7Lyfu5C5Oeu8PF7u5RMID35La9uw3t3ufnr3u0e7rrZgAMv06Los5dv8+P82G9REAA4wZrl3u9P8/budBAAwBoADi33+f3z/dAgADQ4E7Wmq73+7y/nzIBQGBluCDX+P0+v/c9AiwAwC4Ai3q/z395NY1GMADIGmD6fX7eG7XL7gTAssAuhs7787zvC0QyCDR3QhNS7/f5fksDAICmATTYvd9zbwwgAJimEIjU8+/7HZNpDQSWZddau3PH7z/P/RbYBQAAu2C5LN/7tIAAAICAQK2e77csAwAAgKw15H3e93auRWuBAbTWkGqu931+7ytaYACIBWBhff973jcXoAEAAABO9z73Jg1NAmANMgDXe58ETRAYsNaA1tD1Pt/3PXet1hoQ0Got48La+z5vvRRpFwCsJAJW9T69NwAAAGgAsN2euwYAAADTZMA97vECAAAQGBuhdT079xOADACKQSNwdrZTVAQAYAYGGHs+O2IwawDAtAZgds4RAAEAYAaEjs+ZLoAZAAIBDK49OwcLAAADAxZ2zznnUwiGAQDAEOS25/M5CzAMACyWLSx2znHWGNgGAIRYELPnfG6yMBUAgAHA2faciVhhAQC0Vljc2fM5G4stHAiA5eRoba3P53mOERYEAy2ilWVZex7WTLCAwMLEYtBxnnPG2rBOYACj0zpNxj57ptVkMBCwMmaNNdWe59hgbAIHYDqa0ay15/nrzDCdzABgDIPhtOfPc84xMGMAABhg2PHsCAAAoKHRAPfjnL9tgAAAFg0U+PR5ns0AAwAwBjMAn+fv5wgLa8FAAADL/HkeQGANAGCCCew8n3OPyZANAJY1sMa5zp75XA3ZWgCAtFiLDjvdlC1uLgCW1WK7bqVb/wcH6CaFZ6FslQAAAABJRU5ErkJggg==);
 }
 
+/* line 233, ../../lib/stylesheets/mercury/views/_toolbar.scss */
+mercury.mercury-floating .mercury-toolbar {
+  z-index: 10200;
+}
+
 /* line 1, ../../lib/stylesheets/mercury/views/_uploader.scss */
 mercury .mercury-uploader {
   -webkit-transition-property: opacity;
@@ -2336,6 +2348,71 @@ mercury .mercury-toolbar .mercury-color-palette li.last-picked:hover {
   margin: 1px 0 -1px -1px;
 }
 
+/* line 2, ../../lib/stylesheets/mercury/plugins/_history.scss */
+mercury .mercury-toolbar .mercury-toolbar-button[data-type="history"]:before {
+  content: 'O';
+}
+
+/* line 2, ../../lib/stylesheets/mercury/plugins/_link.scss */
+mercury .mercury-toolbar .mercury-toolbar-button[data-type="link"]:before {
+  content: 'J';
+}
+
+/* line 2, ../../lib/stylesheets/mercury/plugins/_media.scss */
+mercury .mercury-toolbar .mercury-toolbar-button[data-type="media"]:before {
+  content: 'K';
+}
+
+/* line 2, ../../lib/stylesheets/mercury/plugins/_notes.scss */
+mercury .mercury-toolbar .mercury-toolbar-button[data-type="notes"]:before {
+  content: 'P';
+}
+
+/* line 2, ../../lib/stylesheets/mercury/plugins/_snippets.scss */
+mercury .mercury-toolbar .mercury-toolbar-button[data-type="snippets"]:before {
+  content: 'N';
+}
+/* line 6, ../../lib/stylesheets/mercury/plugins/_snippets.scss */
+mercury .mercury-snippets-panel ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+/* line 10, ../../lib/stylesheets/mercury/plugins/_snippets.scss */
+mercury .mercury-snippets-panel ul li {
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  -webkit-user-drag: element;
+  -webkit-user-select: none;
+  padding: 15px;
+  background: rgba(80, 80, 80, 0.5);
+  margin-bottom: 10px;
+  text-shadow: 1px 1px black;
+  color: #fff;
+  cursor: move;
+  cursor: drag;
+}
+/* line 22, ../../lib/stylesheets/mercury/plugins/_snippets.scss */
+mercury .mercury-snippets-panel ul li em {
+  display: block;
+  margin-top: 5px;
+  font-size: 80%;
+  font-style: normal;
+  color: #ddd;
+}
+/* line 29, ../../lib/stylesheets/mercury/plugins/_snippets.scss */
+mercury .mercury-snippets-panel ul li .mercury-snippet-actions {
+  margin: 0 -10px -8px;
+  font-size: 80%;
+  text-align: right;
+  line-height: 20px;
+}
+/* line 34, ../../lib/stylesheets/mercury/plugins/_snippets.scss */
+mercury .mercury-snippets-panel ul li .mercury-snippet-actions input {
+  padding: 1px 5px;
+}
+
 /* line 1, ../../lib/stylesheets/mercury/plugins/_styles.scss */
 mercury .mercury-toolbar .mercury-styles-select {
   white-space: nowrap;
@@ -2527,21 +2604,21 @@ mercury.flat .mercury-toolbar .mercury-toolbar-primary-container .mercury-toolba
   background: #00bce5;
 }
 
-/* line 64, ../../lib/stylesheets/mercury/_mercury.scss */
+/* line 69, ../../lib/stylesheets/mercury/_mercury.scss */
 mercury {
   -webkit-text-size-adjust: none;
   position: absolute;
   z-index: 10000;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
-/* line 73, ../../lib/stylesheets/mercury/_mercury.scss */
+/* line 78, ../../lib/stylesheets/mercury/_mercury.scss */
 mercury.mercury-no-animation {
   -moz-transition: none;
   -webkit-transition: none;
   -o-transition: none;
   transition: none;
 }
-/* line 83, ../../lib/stylesheets/mercury/_mercury.scss */
+/* line 88, ../../lib/stylesheets/mercury/_mercury.scss */
 mercury.loading, mercury.loading *,
 mercury .mercury-no-animation {
   -moz-transition: none !important;
@@ -2549,14 +2626,27 @@ mercury .mercury-no-animation {
   -o-transition: none !important;
   transition: none !important;
 }
-/* line 91, ../../lib/stylesheets/mercury/_mercury.scss */
+/* line 96, ../../lib/stylesheets/mercury/_mercury.scss */
 mercury a {
   color: #00bce5 !important;
   text-decoration: none;
 }
-/* line 94, ../../lib/stylesheets/mercury/_mercury.scss */
+/* line 99, ../../lib/stylesheets/mercury/_mercury.scss */
 mercury a:hover {
   text-decoration: underline;
+}
+
+/* line 105, ../../lib/stylesheets/mercury/_mercury.scss */
+body.mercury-transitions {
+  -webkit-transition-property: top;
+  -webkit-transition-duration: 0.25s;
+  -webkit-transition-timing-function: ease-in-out;
+  -moz-transition-property: top;
+  -moz-transition-duration: 0.25s;
+  -moz-transition-timing-function: ease-in-out;
+  transition-property: top;
+  transition-duration: 0.25s;
+  transition-timing-function: ease-in-out;
 }
 
 /* line 1, ../../lib/stylesheets/mercury/regions/_gallery.scss */
@@ -2568,6 +2658,7 @@ mercury a:hover {
 }
 /* line 2, ../../lib/stylesheets/mercury/core/_region.scss */
 .mercury-gallery-region:focus {
+  outline-offset: 0;
   outline: none;
   -webkit-box-shadow: 0 0 7px #00bce5, 0 0 2px #003e4c;
   -moz-box-shadow: 0 0 7px #00bce5, 0 0 2px #003e4c;
@@ -2616,9 +2707,13 @@ mercury a:hover {
   speak: none;
   -webkit-font-smoothing: antialiased;
 }
-/* line 26, ../../lib/stylesheets/mercury/core/_region.scss */
+/* line 27, ../../lib/stylesheets/mercury/core/_region.scss */
 .mercury-gallery-region + .mercury-region-drop-indicator:before {
-  content: "X";
+  content: 'X';
+}
+/* line 31, ../../lib/stylesheets/mercury/core/_region.scss */
+.mercury-gallery-region + .mercury-region-drop-indicator.mercury-region-snippet-drop-indicator:before {
+  content: 'N';
 }
 /* line 11, ../../lib/stylesheets/mercury/regions/_gallery.scss */
 .mercury-gallery-region .mercury-gallery-region-controls {
@@ -2720,6 +2815,7 @@ mercury a:hover {
 }
 /* line 2, ../../lib/stylesheets/mercury/core/_region.scss */
 .mercury-html-region:focus {
+  outline-offset: 0;
   outline: none;
   -webkit-box-shadow: 0 0 7px #00bce5, 0 0 2px #003e4c;
   -moz-box-shadow: 0 0 7px #00bce5, 0 0 2px #003e4c;
@@ -2768,9 +2864,13 @@ mercury a:hover {
   speak: none;
   -webkit-font-smoothing: antialiased;
 }
-/* line 26, ../../lib/stylesheets/mercury/core/_region.scss */
+/* line 27, ../../lib/stylesheets/mercury/core/_region.scss */
 .mercury-html-region + .mercury-region-drop-indicator:before {
-  content: "X";
+  content: 'X';
+}
+/* line 31, ../../lib/stylesheets/mercury/core/_region.scss */
+.mercury-html-region + .mercury-region-drop-indicator.mercury-region-snippet-drop-indicator:before {
+  content: 'N';
 }
 
 /* line 1, ../../lib/stylesheets/mercury/regions/_image.scss */
@@ -2780,6 +2880,7 @@ mercury a:hover {
 }
 /* line 2, ../../lib/stylesheets/mercury/core/_region.scss */
 .mercury-image-region:focus {
+  outline-offset: 0;
   outline: none;
   -webkit-box-shadow: 0 0 7px #00bce5, 0 0 2px #003e4c;
   -moz-box-shadow: 0 0 7px #00bce5, 0 0 2px #003e4c;
@@ -2828,9 +2929,13 @@ mercury a:hover {
   speak: none;
   -webkit-font-smoothing: antialiased;
 }
-/* line 26, ../../lib/stylesheets/mercury/core/_region.scss */
+/* line 27, ../../lib/stylesheets/mercury/core/_region.scss */
 .mercury-image-region + .mercury-region-drop-indicator:before {
-  content: "X";
+  content: 'X';
+}
+/* line 31, ../../lib/stylesheets/mercury/core/_region.scss */
+.mercury-image-region + .mercury-region-drop-indicator.mercury-region-snippet-drop-indicator:before {
+  content: 'N';
 }
 
 /* line 2, ../../lib/stylesheets/mercury/regions/_markdown.scss */
@@ -2876,9 +2981,13 @@ mercury a:hover {
   speak: none;
   -webkit-font-smoothing: antialiased;
 }
-/* line 26, ../../lib/stylesheets/mercury/core/_region.scss */
+/* line 27, ../../lib/stylesheets/mercury/core/_region.scss */
 .mercury-markdown-region + .mercury-region-drop-indicator:before {
-  content: "X";
+  content: 'X';
+}
+/* line 31, ../../lib/stylesheets/mercury/core/_region.scss */
+.mercury-markdown-region + .mercury-region-drop-indicator.mercury-region-snippet-drop-indicator:before {
+  content: 'N';
 }
 /* line 5, ../../lib/stylesheets/mercury/regions/_markdown.scss */
 .mercury-markdown-region textarea.mercury-markdown-region-textarea {
@@ -2897,6 +3006,7 @@ mercury a:hover {
 }
 /* line 2, ../../lib/stylesheets/mercury/core/_region.scss */
 .mercury-markdown-region textarea.mercury-markdown-region-textarea:focus {
+  outline-offset: 0;
   outline: none;
   -webkit-box-shadow: 0 0 7px #00bce5, 0 0 2px #003e4c;
   -moz-box-shadow: 0 0 7px #00bce5, 0 0 2px #003e4c;
@@ -2910,10 +3020,76 @@ mercury a:hover {
 }
 /* line 2, ../../lib/stylesheets/mercury/core/_region.scss */
 .mercury-plain-region:focus {
+  outline-offset: 0;
   outline: none;
   -webkit-box-shadow: 0 0 7px #00bce5, 0 0 2px #003e4c;
   -moz-box-shadow: 0 0 7px #00bce5, 0 0 2px #003e4c;
   box-shadow: 0 0 7px #00bce5, 0 0 2px #003e4c;
+}
+
+/* line 1, ../../lib/stylesheets/mercury/regions/_snippet.scss */
+.mercury-snippet-region {
+  min-height: 20px;
+  min-width: 5px;
+}
+/* line 2, ../../lib/stylesheets/mercury/core/_region.scss */
+.mercury-snippet-region:focus {
+  outline-offset: 0;
+  outline: none;
+  -webkit-box-shadow: 0 0 7px #00bce5, 0 0 2px #003e4c;
+  -moz-box-shadow: 0 0 7px #00bce5, 0 0 2px #003e4c;
+  box-shadow: 0 0 7px #00bce5, 0 0 2px #003e4c;
+}
+/* line 5, ../../lib/stylesheets/mercury/regions/_snippet.scss */
+.mercury-snippet-region + .mercury-region-drop-indicator {
+  -webkit-transition-property: opacity;
+  -webkit-transition-duration: 0.25s;
+  -webkit-transition-timing-function: ease-in-out;
+  -moz-transition-property: opacity;
+  -moz-transition-duration: 0.25s;
+  -moz-transition-timing-function: ease-in-out;
+  transition-property: opacity;
+  transition-duration: 0.25s;
+  transition-timing-function: ease-in-out;
+  -webkit-backface-visibility: hidden;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+  display: none;
+  opacity: 0;
+  position: absolute;
+  z-index: 20;
+  top: 30px;
+  left: 30px;
+  width: 60px;
+  height: 60px;
+  margin: -30px;
+  background: rgba(0, 0, 0, 0.75);
+  color: rgba(255, 255, 255, 0.85);
+  pointer-events: none;
+}
+/* line 2, ../../lib/stylesheets/mercury/core/_fonts.scss */
+.mercury-snippet-region + .mercury-region-drop-indicator:before {
+  display: inline-block;
+  font-family: "mercury";
+  width: 60px;
+  height: 60px;
+  font-size: 32px;
+  line-height: 60px;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  text-align: center;
+  speak: none;
+  -webkit-font-smoothing: antialiased;
+}
+/* line 27, ../../lib/stylesheets/mercury/core/_region.scss */
+.mercury-snippet-region + .mercury-region-drop-indicator:before {
+  content: 'X';
+}
+/* line 31, ../../lib/stylesheets/mercury/core/_region.scss */
+.mercury-snippet-region + .mercury-region-drop-indicator.mercury-region-snippet-drop-indicator:before {
+  content: 'N';
 }
 
 /* line 2, ../../lib/stylesheets/mercury/regions/_text.scss */
@@ -2932,6 +3108,7 @@ mercury a:hover {
 }
 /* line 2, ../../lib/stylesheets/mercury/core/_region.scss */
 .mercury-text-region textarea.mercury-text-region-textarea:focus {
+  outline-offset: 0;
   outline: none;
   -webkit-box-shadow: 0 0 7px #00bce5, 0 0 2px #003e4c;
   -moz-box-shadow: 0 0 7px #00bce5, 0 0 2px #003e4c;

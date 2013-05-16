@@ -1,15 +1,14 @@
 
 /*!
 The Markdown region utilizes the Markdown syntax (http://en.wikipedia.org/wiki/Markdown) to generate an html preview.
-When saved this region will return the markdown content (unprocessed). This content can be used by your server to render
-html content to a user, or to serve the markdown when editing. The default converter uses Github Flavored Markdown, so
-your server should also implement the same thing.
+When saved this region will serialize the unprocessed markdown content as well as the processed/converted html content.
+This can be used by your server to render html, or to serve the markdown when editing -- it's up to you how you
+accomplish this.
+
+The default converter uses Github Flavored Markdown, so your server should implement the same thing.
 
 Dependencies:
   marked - https://github.com/chjj/marked
-
-This is still experimental and could be changed later to provide a way to fetch the markdown content for a given region
-via Ajax.
 */
 
 

@@ -103,8 +103,9 @@ Copyright (c) 2013 Jeremy Jackson
           }
         ],
         snippets: [
-          'Snippet', {
-            title: 'Snippet Panel'
+          'Snippets', {
+            title: 'Snippet Panel',
+            plugin: 'snippets'
           }
         ],
         sep3: ' ',
@@ -147,7 +148,6 @@ Copyright (c) 2013 Jeremy Jackson
       },
       text: {
         autoSize: true,
-        stripTags: true,
         wrapping: false
       }
     }
@@ -1280,16 +1280,15 @@ Copyright (c) 2013 Jeremy Jackson
         cache: false,
         data: this.toJSON(),
         success: function(json) {
-          if (typeof json !== 'object') {
-            return;
+          if (typeof json === 'object') {
+            _this.id = json.id;
+            if (_this.id) {
+              _this.constructor.records[_this.id] = _this;
+            }
+            _this.set(json);
+            _this.trigger('save', json);
           }
-          _this.id = json.id;
-          if (_this.id) {
-            _this.constructor.records[_this.id] = _this;
-          }
-          _this.set(json);
-          _this.trigger('save', json);
-          return typeof _this.saveSuccess === "function" ? _this.saveSuccess.apply(_this, arguments) : void 0;
+          return typeof _this.saveSuccess === "function" ? _this.saveSuccess(json) : void 0;
         },
         error: function(xhr) {
           _this.trigger('error', xhr, options);
@@ -1298,7 +1297,7 @@ Copyright (c) 2013 Jeremy Jackson
         }
       };
       options = $.extend(defaultOptions, options);
-      if (options.dataType === 'json' && typeof options.data !== 'string') {
+      if (typeof options.data !== 'string') {
         options.data = JSON.stringify(options.data);
       }
       return $.ajax(options);
@@ -1384,10 +1383,6 @@ Copyright (c) 2013 Jeremy Jackson
   Mercury.Plugin = (function(_super) {
 
     __extends(Plugin, _super);
-
-    Plugin.extend(Mercury.Logger);
-
-    Plugin.extend(Mercury.I18n);
 
     Plugin.include(Mercury.Config);
 
@@ -1641,8 +1636,13 @@ Copyright (c) 2013 Jeremy Jackson
 
     function Definition(options) {
       this.options = options != null ? options : {};
-      this.configuration = this.options.config;
       this.name = this.options.name;
+      if (!this.name) {
+        throw new Error('must provide a name for plugins');
+      }
+      this.configuration = this.options.config;
+      this.description = this.options.description;
+      this.version = this.options.version;
       registered[this.name] = this;
     }
 
@@ -2073,6 +2073,769 @@ Copyright (c) 2013 Jeremy Jackson
 
 }).call(this);
 (function() {
+
+  Mercury.View.Modules.FormHandler = {
+    included: function() {
+      return this.on('build', this.buildFormHandler);
+    },
+    buildFormHandler: function() {
+      this.delegateEvents({
+        'submit': this.onFormSubmit
+      });
+      if (this.model) {
+        return this.on('update', this.applySerializedModel);
+      }
+    },
+    validate: function() {
+      return this.clearInputErrors();
+    },
+    addInputError: function(input, message) {
+      input.after("<span class=\"help-inline error-message\">" + message + "</span>").closest('.control-group').addClass('error');
+      return this.valid = false;
+    },
+    clearInputErrors: function() {
+      this.$('.control-group.error').removeClass('error').find('.error-message').remove();
+      return this.valid = true;
+    },
+    applySerializedModel: function() {
+      if (this.model) {
+        return this.$('form').applySerializedObject(this.model.toJSON());
+      }
+    },
+    serializeModel: function() {
+      var attr, message, _ref, _results;
+      this.clearInputErrors();
+      this.model.set(this.$('form').serializeObject());
+      if (this.model.isValid()) {
+        this.trigger('form:success');
+        if (this.hideOnValidSubmit) {
+          return this.hide();
+        }
+      } else {
+        _ref = this.model.errors;
+        _results = [];
+        for (attr in _ref) {
+          message = _ref[attr];
+          _results.push(this.addInputError(this.$("[name=" + attr + "]"), message.join(', ')));
+        }
+        return _results;
+      }
+    },
+    onFormSubmit: function(e) {
+      this.prevent(e);
+      this.validate();
+      if (this.model) {
+        this.serializeModel();
+      }
+      if (this.valid) {
+        return typeof this.onSubmit === "function" ? this.onSubmit() : void 0;
+      }
+    }
+  };
+
+  
+/*
+ * jQuery serializeObject Plugin: https://github.com/fojas/jQuery-serializeObject
+ *
+ */
+!function($){
+  $.serializeObject = function(obj){
+    var o={},lookup=o,a = obj;
+    $.each(a,function(){
+      var named = this.name.replace(/\[([^\]]+)?\]/g,',$1').split(','),
+          cap = named.length - 1,
+          i = 0;
+      for(;i<cap;i++) {
+        // move down the tree - create objects or array if necessary
+        if(lookup.push){ // this is an array, add values instead of setting them
+          // push an object if this is an empty array or we are about to overwrite a value
+          if( !lookup[lookup.length -1] // this is an empty array
+              || lookup[lookup.length -1].constructor !== Object //current value is not a hash
+              || lookup[lookup.length -1][named[i+1]] !== undefined //current item is already set
+          ){
+            lookup.push({});
+          }
+          lookup = lookup[lookup.length -1];
+        } else {
+          lookup = lookup[named[i]] = lookup[named[i]] || (named[i+1]==""?[]:{});
+        }
+      }
+      if(lookup.push){
+        lookup.push(this.value);
+      }else{
+        lookup[named[cap]]=this.value;
+      }
+      lookup = o;
+    });
+    return o;
+  };
+
+  $.deserializeObject = function deserializeObject(json,arr,prefix){
+    var i,j,thisPrefix,objType;
+    arr = arr || [];
+    if(Object.prototype.toString.call(json) ==='[object Object]'){
+      for(i in json){
+        thisPrefix = prefix ? [prefix,'[',i,']'].join('') : i;
+        if(json.hasOwnProperty(i)){
+          objType = Object.prototype.toString.call(json[i])
+          if(objType === '[object Array]'){
+            for(j = 0,jsonLen = json[i].length;j<jsonLen;j++){
+              deserializeObject(json[i][j],arr,thisPrefix+'[]');
+            }
+          }else if(objType === '[object Object]'){
+              deserializeObject(json[i],arr,thisPrefix);
+          }else {
+            arr.push({
+              name : thisPrefix,
+              value : json[i]
+            });
+          }
+        }
+      }
+    } else {
+      arr.push({
+        name : prefix,
+        value : json
+      });
+    }
+    return arr;
+  }
+
+  var check = function(){
+    // older versions of jQuery do not have prop
+    var propExists = !!$.fn.prop;
+    return function(obj,checked){
+      if(propExists) obj.prop('checked',checked);
+      else obj.attr('checked', (checked ? 'checked' : null ));
+    };
+  }();
+
+  $.applySerializedArray = function(form,obj){
+    var $form = $(form).find('input,select,textarea'), el;
+    check($form.filter(':checked'),false)
+    for(var i = obj.length;i--;){
+      el = $form.filter("[name='"+obj[i].name+"']");
+      if(el.filter(':checkbox').length){
+        if(el.val() == obj[i].value) check(el.filter(':checkbox'),true);
+      }else if(el.filter(':radio').length){
+        check(el.filter("[value='"+obj[i].value+"']"),true)
+      } else {
+        el.val(obj[i].value);
+      }
+    }
+  };
+
+  $.applySerializedObject = function(form, obj){
+    $.applySerializedArray(form,$.deserializeObject(obj));
+  };
+
+  $.fn.serializeObject = $.fn.serializeObject || function(){
+    return $.serializeObject(this.serializeArray());
+  };
+
+  $.fn.applySerializedObject = function(obj){
+    $.applySerializedObject(this,obj);
+    return this;
+  };
+
+  $.fn.applySerializedArray = function(obj){
+    $.applySerializedArray(this,obj);
+    return this;
+  };
+}(jQuery);
+;
+
+
+}).call(this);
+(function() {
+
+  Mercury.View.Modules.InterfaceFocusable = {
+    included: function() {
+      return this.on('build', this.buildInterfaceFocusable);
+    },
+    buildInterfaceFocusable: function() {
+      if (!this.revertFocusOn) {
+        return;
+      }
+      this.delegateEvents({
+        mousedown: 'handleFocusableEvent',
+        mouseup: 'handleFocusableEvent',
+        click: 'handleFocusableEvent'
+      });
+      return this.delegateRevertedFocus(this.revertFocusOn);
+    },
+    delegateRevertedFocus: function(matcher) {
+      var reverted;
+      reverted = {};
+      reverted["mousedown " + matcher] = 'revertInterfaceFocus';
+      reverted["click " + matcher] = 'revertInterfaceFocus';
+      return this.delegateEvents(reverted);
+    },
+    handleFocusableEvent: function(e) {
+      e.stopPropagation();
+      if (!$(e.target).is(this.focusableSelector || ':input, [tabindex]')) {
+        return this.prevent(e);
+      }
+    },
+    revertInterfaceFocus: function() {
+      return this.delay(1, function() {
+        return Mercury.trigger('focus');
+      });
+    },
+    preventFocusout: function($constrain) {
+      var $focus,
+        _this = this;
+      $focus = $(this.createFocusableKeeper().appendTo(this.$el)[0]);
+      this.on('release', function() {
+        return _this.clearFocusout($focus, $constrain);
+      });
+      this.on('hide', function() {
+        return _this.clearFocusout($focus, $constrain);
+      });
+      $focus.on('blur', function() {
+        return _this.keepFocusConstrained($focus, $constrain);
+      });
+      $constrain.off('focusout').on('focusout', function() {
+        return _this.keepFocusConstrained($focus, $constrain);
+      });
+      return $constrain.on('keydown', function(e) {
+        var first, focusables, last;
+        if (e.keyCode !== 9) {
+          return;
+        }
+        focusables = $constrain.find(':input[tabindex != "-1"]');
+        if (!focusables.length) {
+          return;
+        }
+        first = focusables[0];
+        last = focusables[focusables.length - 1];
+        if ((e.shiftKey && e.target === first) || (!e.shiftKey && e.target === last)) {
+          return _this.prevent(e, true);
+        }
+      });
+    },
+    createFocusableKeeper: function() {
+      return $('<input style="position:fixed;left:100%" tabindex="-1"/><input style="position:fixed;left:100%;top:20px"/>');
+    },
+    keepFocusConstrained: function($focus, $constrain) {
+      var _this = this;
+      return this.preventFocusoutTimeout = this.delay(1, function() {
+        if ($.contains($constrain[0], document.activeElement)) {
+          return;
+        }
+        return $focus.focus();
+      });
+    },
+    clearFocusout: function($focus, $constrain) {
+      clearTimeout(this.preventFocusoutTimeout);
+      $focus.off();
+      return $constrain.off('keydown').off('focusout');
+    }
+  };
+
+}).call(this);
+(function() {
+
+  Mercury.View.Modules.ScrollPropagation = {
+    preventScrollPropagation: function($el) {
+      return $el.on('mousewheel DOMMouseScroll', function(e) {
+        var delta, scrollTop, _ref;
+        _ref = [e.originalEvent.wheelDelta || -e.originalEvent.detail, $el.scrollTop()], delta = _ref[0], scrollTop = _ref[1];
+        if (delta > 0 && scrollTop <= 0) {
+          return false;
+        }
+        if (delta < 0 && scrollTop >= $el.get(0).scrollHeight - $el.height()) {
+          return false;
+        }
+        return true;
+      });
+    }
+  };
+
+}).call(this);
+(function() {
+
+  Mercury.View.Modules.VisibilityToggleable = {
+    included: function() {
+      return this.on('build', this.buildVisibilityToggleable);
+    },
+    buildVisibilityToggleable: function() {
+      if (this.hidden) {
+        this.visible = true;
+        return this.hide();
+      } else {
+        return this.show();
+      }
+    },
+    toggle: function() {
+      if (this.visible) {
+        return this.hide();
+      } else {
+        return this.show();
+      }
+    },
+    show: function(update) {
+      if (update == null) {
+        update = true;
+      }
+      if (this.visible) {
+        return;
+      }
+      this.trigger('show');
+      clearTimeout(this.visibilityTimout);
+      if (typeof this.onShow === "function") {
+        this.onShow();
+      }
+      this.visible = true;
+      this.$el.show();
+      if (typeof this.position === "function") {
+        this.position();
+      }
+      return this.visibilityTimout = this.delay(50, function() {
+        this.css({
+          opacity: 1
+        });
+        if (update && typeof update === 'boolean') {
+          return typeof this.update === "function" ? this.update() : void 0;
+        }
+      });
+    },
+    hide: function(release) {
+      if (!this.visible) {
+        return;
+      }
+      if (typeof release !== 'boolean') {
+        release = null;
+      }
+      if (release == null) {
+        release = this.releaseOnHide;
+      }
+      this.trigger('hide');
+      clearTimeout(this.visibilityTimout);
+      if (typeof this.onHide === "function") {
+        this.onHide();
+      }
+      this.visible = false;
+      this.css({
+        opacity: 0
+      });
+      return this.visibilityTimout = this.delay(250, function() {
+        this.$el.hide();
+        if (release) {
+          return this.release();
+        }
+      });
+    }
+  };
+
+}).call(this);
+(function() {
+  var __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+  Mercury.Modal = (function(_super) {
+
+    __extends(Modal, _super);
+
+    function Modal() {
+      return Modal.__super__.constructor.apply(this, arguments);
+    }
+
+    Modal.include(Mercury.View.Modules.FormHandler);
+
+    Modal.include(Mercury.View.Modules.InterfaceFocusable);
+
+    Modal.include(Mercury.View.Modules.ScrollPropagation);
+
+    Modal.include(Mercury.View.Modules.VisibilityToggleable);
+
+    Modal.logPrefix = 'Mercury.Modal:';
+
+    Modal.className = 'mercury-dialog mercury-modal';
+
+    Modal.elements = {
+      dialog: '.mercury-modal-dialog-positioner',
+      content: '.mercury-modal-dialog-content',
+      contentContainer: '.mercury-modal-dialog-content-container',
+      titleContainer: '.mercury-modal-dialog-title',
+      title: '.mercury-modal-dialog-title span'
+    };
+
+    Modal.events = {
+      'mercury:interface:resize': 'resize',
+      'mercury:modals:hide': 'hide',
+      'click .mercury-modal-dialog-title em': 'hide'
+    };
+
+    Modal.prototype.primaryTemplate = 'modal';
+
+    Modal.prototype.releaseOnHide = true;
+
+    Modal.prototype.buildElement = function() {
+      if (this.hidden) {
+        this.releaseOnHide = false;
+      }
+      this.negotiateTemplate();
+      return Modal.__super__.buildElement.apply(this, arguments);
+    };
+
+    Modal.prototype.build = function() {
+      this.appendTo();
+      this.preventScrollPropagation(this.$contentContainer);
+      return this.preventFocusout(this.$contentContainer, this.focusFirstFocusable);
+    };
+
+    Modal.prototype.negotiateTemplate = function() {
+      var _base;
+      (_base = this.options).template || (_base.template = this.template);
+      this.subTemplate = this.options.template;
+      return this.template = this.primaryTemplate;
+    };
+
+    Modal.prototype.update = function(options) {
+      if (!(this.visible && this.updateForOptions(options))) {
+        return;
+      }
+      this.resize();
+      this.show(false);
+      this.refreshElements();
+      this.trigger('update');
+      return this.delay(300, this.focusFirstFocusable);
+    };
+
+    Modal.prototype.updateForOptions = function(options) {
+      var content, key, value, _ref;
+      this.options = $.extend({}, this.options, options || {});
+      _ref = this.options;
+      for (key in _ref) {
+        value = _ref[key];
+        this[key] = value;
+      }
+      this.negotiateTemplate();
+      this.$title.html(this.t(this.title));
+      this.setWidth(this.width);
+      content = this.contentFromOptions();
+      if (content === this.lastContent && this.width === this.lastWidth) {
+        return false;
+      }
+      this.addClass('loading');
+      this.lastContent = content;
+      this.lastWidth = this.width;
+      this.$content.css({
+        visibility: 'hidden',
+        opacity: 0,
+        width: this.width
+      }).html(content);
+      this.localize(this.$content);
+      return true;
+    };
+
+    Modal.prototype.setWidth = function(width) {
+      return this.$dialog.css({
+        width: width
+      });
+    };
+
+    Modal.prototype.resize = function(animate, dimensions) {
+      var height, titleHeight, width;
+      if (animate == null) {
+        animate = true;
+      }
+      if (dimensions == null) {
+        dimensions = null;
+      }
+      if (!this.visible) {
+        return;
+      }
+      clearTimeout(this.showContentTimeout);
+      if (typeof animate === 'object') {
+        dimensions = animate;
+        animate = false;
+      }
+      if (!animate) {
+        this.addClass('mercury-no-animation');
+      }
+      this.$contentContainer.css({
+        height: 'auto'
+      });
+      titleHeight = this.$titleContainer.outerHeight();
+      if (!this.width) {
+        this.$content.css({
+          position: 'absolute'
+        });
+        width = this.$content.outerWidth();
+        height = Math.min(this.$content.outerHeight() + titleHeight, $(window).height() - 10);
+        this.$content.css({
+          position: 'static'
+        });
+      } else {
+        height = Math.min(this.$content.outerHeight() + titleHeight, $(window).height() - 10);
+      }
+      this.$dialog.css({
+        height: height,
+        width: width || this.width
+      });
+      this.$contentContainer.css({
+        height: height - titleHeight
+      });
+      if (animate) {
+        this.showContentTimeout = this.delay(300, this.showContent);
+      } else {
+        this.showContent(false);
+      }
+      return this.delay(250, function() {
+        return this.removeClass('mercury-no-animation');
+      });
+    };
+
+    Modal.prototype.contentFromOptions = function() {
+      if (this.subTemplate) {
+        return this.renderTemplate(this.subTemplate);
+      }
+      return this.content;
+    };
+
+    Modal.prototype.showContent = function(animate) {
+      if (animate == null) {
+        animate = true;
+      }
+      clearTimeout(this.contentOpacityTimeout);
+      this.removeClass('loading');
+      this.$content.css({
+        visibility: 'visible',
+        width: 'auto',
+        display: 'block'
+      });
+      if (animate) {
+        return this.contentOpacityTimeout = this.delay(50, function() {
+          return this.$content.css({
+            opacity: 1
+          });
+        });
+      } else {
+        return this.$content.css({
+          opacity: 1
+        });
+      }
+    };
+
+    Modal.prototype.appendTo = function() {
+      return Modal.__super__.appendTo.call(this, Mercury["interface"]);
+    };
+
+    Modal.prototype.release = function() {
+      if (this.visible) {
+        return this.hide(true);
+      }
+      return Modal.__super__.release.apply(this, arguments);
+    };
+
+    Modal.prototype.onShow = function() {
+      Mercury.trigger('blur');
+      return Mercury.trigger('modals:hide');
+    };
+
+    Modal.prototype.onHide = function() {
+      Mercury.trigger('focus');
+      return this.delay(250, function() {
+        this.lastWidth = null;
+        this.$dialog.css({
+          height: '',
+          width: ''
+        });
+        this.$contentContainer.css({
+          height: ''
+        });
+        return this.$content.hide();
+      });
+    };
+
+    return Modal;
+
+  })(Mercury.View);
+
+}).call(this);
+(function() {
+  var registered,
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+  registered = {};
+
+  Mercury.Snippet = (function(_super) {
+
+    __extends(Snippet, _super);
+
+    Snippet.logPrefix = 'Mercury.Snippet:';
+
+    Snippet.register = function(name, options) {
+      options.name = name;
+      return new Mercury.Snippet.Definition(options);
+    };
+
+    Snippet.get = function(name, instance) {
+      var definition;
+      if (instance == null) {
+        instance = false;
+      }
+      definition = registered[name];
+      if (!definition) {
+        throw new Error("unable to locate the " + name + " snippet");
+      }
+      if (instance) {
+        return new Mercury.Snippet(definition.signature());
+      } else {
+        return definition;
+      }
+    };
+
+    Snippet.all = function() {
+      return registered;
+    };
+
+    Snippet.unregister = function(name) {
+      var definition;
+      definition = registered[name];
+      if (!definition) {
+        throw new Error("unable to locate the " + name + " snippet");
+      }
+      return delete registered[name];
+    };
+
+    function Snippet(options) {
+      var key, value, _ref;
+      this.options = options != null ? options : {};
+      this.configuration = this.options.config || {};
+      _ref = this.options;
+      for (key in _ref) {
+        value = _ref[key];
+        if (key !== 'config') {
+          this[key] = value;
+        }
+      }
+      if (!this.name) {
+        throw new Error('must provide a name for snippets');
+      }
+      Snippet.__super__.constructor.call(this, this.defaults || {});
+    }
+
+    Snippet.prototype.initialize = function(region) {
+      this.region = region;
+      if (this.form) {
+        return this.displayForm();
+      }
+      return this.render();
+    };
+
+    Snippet.prototype.displayForm = function(form) {
+      var view,
+        _this = this;
+      view = new (this.Modal || Mercury.Modal)({
+        title: this.get('title'),
+        template: this.templateClosure(form || this.form),
+        width: 600,
+        model: this,
+        hideOnValidSubmit: true
+      });
+      return view.on('form:success', function() {
+        return _this.render();
+      });
+    };
+
+    Snippet.prototype.render = function(options) {
+      if (options == null) {
+        options = {};
+      }
+      options = $.extend({}, this.renderOptions, options);
+      if (this.url() && !this.renderedView) {
+        return this.save(options);
+      }
+      return this.renderView(options.template);
+    };
+
+    Snippet.prototype.renderView = function(template) {
+      this.renderedView = this.view(this.templateClosure(template || this.template));
+      return this.trigger('rendered', this.renderedView);
+    };
+
+    Snippet.prototype.view = function(template) {
+      return new Mercury.View({
+        template: template,
+        className: "mercury-" + this.name + "-snippet"
+      });
+    };
+
+    Snippet.prototype.saveSuccess = function(content) {
+      var _this = this;
+      return this.renderView(function() {
+        return _this.get('preview') || content;
+      });
+    };
+
+    Snippet.prototype.templateClosure = function(template) {
+      var closure,
+        _this = this;
+      if (typeof template === 'function') {
+        closure = (function() {
+          return template.apply(null, arguments);
+        });
+      }
+      return closure || template;
+    };
+
+    Snippet.prototype.getRenderedView = function(region) {
+      return this.renderedView;
+    };
+
+    return Snippet;
+
+  })(Mercury.Model);
+
+  Mercury.Snippet.Module = {
+    registerSnippet: Mercury.Snippet.register,
+    getSnippet: Mercury.Snippet.get
+  };
+
+  Mercury.Snippet.Definition = (function() {
+
+    function Definition(options) {
+      this.options = options != null ? options : {};
+      this.name = this.options.name;
+      if (!this.name) {
+        throw new Error('must provide a name for snippets');
+      }
+      this.configuration = this.options.config;
+      this.title = this.options.title;
+      this.description = this.options.description;
+      this.version = this.options.version;
+      registered[this.name] = this;
+    }
+
+    Definition.prototype.signature = function(functions) {
+      var name, sig, value;
+      if (functions == null) {
+        functions = true;
+      }
+      sig = $.extend({}, this.options, {
+        config: this.configuration
+      });
+      if (!functions) {
+        for (name in sig) {
+          value = sig[name];
+          if (typeof value === 'function') {
+            delete sig[name];
+          }
+        }
+      }
+      return sig;
+    };
+
+    return Definition;
+
+  })();
+
+}).call(this);
+(function() {
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
     __slice = [].slice;
@@ -2220,7 +2983,7 @@ Copyright (c) 2013 Jeremy Jackson
         this.notify(this.t('No name provided for the %s region, falling back to random', this.constructor.type));
         this.name = "" + this.constructor.type + (Math.floor(Math.random() * 10000));
       }
-      this.addRegionClassname();
+      this.addRegionAttrs();
       if (!this.skipHistoryOnInitialize) {
         this.pushHistory();
       }
@@ -2241,8 +3004,9 @@ Copyright (c) 2013 Jeremy Jackson
       return _results;
     };
 
-    Region.prototype.addRegionClassname = function() {
-      return this.addClass("mercury-" + this.constructor.type + "-region");
+    Region.prototype.addRegionAttrs = function() {
+      this.addClass("mercury-" + this.constructor.type + "-region");
+      return this.$focusable.attr('data-mercury-region', true);
     };
 
     Region.prototype.trigger = function(event) {
@@ -2300,11 +3064,11 @@ Copyright (c) 2013 Jeremy Jackson
       this.trigger('preview', this.previewing);
       if (this.previewing) {
         this.blur();
-        this.$focusable.removeAttr('tabindex');
+        this.$focusable.removeAttr('tabindex').removeAttr('data-mercury-region');
       } else {
         this.$focusable.attr({
           tabindex: 0
-        });
+        }).attr('data-mercury-region', true);
       }
       return typeof this.onTogglePreview === "function" ? this.onTogglePreview() : void 0;
     };
@@ -2332,9 +3096,18 @@ Copyright (c) 2013 Jeremy Jackson
       }
     };
 
-    Region.prototype.focus = function() {
+    Region.prototype.focus = function(scroll) {
+      var x, y;
+      if (scroll == null) {
+        scroll = false;
+      }
       this.focused = true;
+      x = window.scrollX;
+      y = window.scrollY;
       this.$focusable.focus();
+      if (!scroll) {
+        window.scrollTo(x, y);
+      }
       return typeof this.onFocus === "function" ? this.onFocus() : void 0;
     };
 
@@ -2363,6 +3136,7 @@ Copyright (c) 2013 Jeremy Jackson
           data = $.extend({}, data);
           delete data.region;
           delete data.mercury;
+          delete data.mercuryRegion;
         }
         return data != null ? data : null;
       }
@@ -2407,6 +3181,24 @@ Copyright (c) 2013 Jeremy Jackson
       return this.fromStack(this.redoStack());
     };
 
+    Region.prototype.onItemDropped = function(e) {
+      var data, snippet, snippetName;
+      if (this.previewing) {
+        return;
+      }
+      data = e.originalEvent.dataTransfer;
+      this.focus();
+      if (data.files.length && this.onDropFile) {
+        this.prevent(e);
+        return this.onDropFile(data.files);
+      } else if (this.onDropSnippet && (snippetName = data.getData('snippet'))) {
+        this.onDropSnippet(snippet = Mercury.Snippet.get(snippetName, true));
+        return snippet.initialize(this);
+      } else {
+        return typeof this.onDropItem === "function" ? this.onDropItem(e, data) : void 0;
+      }
+    };
+
     Region.prototype.toStack = function() {
       return this.toJSON();
     };
@@ -2434,7 +3226,7 @@ Copyright (c) 2013 Jeremy Jackson
       if (typeof json === 'string') {
         json = JSON.parse(json);
       }
-      if (json.value) {
+      if (!(json.value === null || typeof json.value === 'undefined')) {
         this.value(json.value);
       }
       if (json.data) {
@@ -2447,7 +3239,7 @@ Copyright (c) 2013 Jeremy Jackson
         region: null
       });
       this.removeClass("mercury-" + this.constructor.type + "-region");
-      this.$focusable.removeAttr('tabindex');
+      this.$focusable.removeAttr('tabindex').removeAttr('data-mercury-region');
       this.trigger('release');
       this.$el.off();
       this.$focusable.off();
@@ -2471,9 +3263,7 @@ Copyright (c) 2013 Jeremy Jackson
       this.bindFocusEvents();
       this.bindKeyEvents();
       this.bindMouseEvents();
-      if (this.onDropFile || this.onDropItem) {
-        return this.bindDropEvents();
-      }
+      return this.bindDropEvents();
     };
 
     Region.prototype.bindFocusEvents = function() {
@@ -2523,28 +3313,21 @@ Copyright (c) 2013 Jeremy Jackson
 
     Region.prototype.bindDropEvents = function() {
       var _this = this;
+      if (!(this.onDropFile || this.onDropItem || this.onDropSnippet)) {
+        return;
+      }
       return this.delegateEvents(this.$el, {
         dragenter: function(e) {
-          return _this.prevent(e);
-        },
-        dragover: function(e) {
-          if (!(_this.editableDropBehavior && Mercury.support.webkit)) {
+          if (!_this.previewing) {
             return _this.prevent(e);
           }
         },
-        drop: function(e) {
-          var data;
-          if (_this.previewing) {
-            return;
+        dragover: function(e) {
+          if (!(_this.previewing || (_this.editableDropBehavior && Mercury.support.webkit && !Mercury.dragHack))) {
+            return _this.prevent(e);
           }
-          data = e.originalEvent.dataTransfer;
-          if (data.files.length && _this.onDropFile) {
-            _this.prevent(e);
-            return _this.onDropFile(data.files);
-          } else if (_this.onDropItem) {
-            return _this.onDropItem(e, data);
-          }
-        }
+        },
+        drop: 'onItemDropped'
       });
     };
 
@@ -2567,119 +3350,6 @@ Copyright (c) 2013 Jeremy Jackson
     return Region;
 
   })(Mercury.View);
-
-}).call(this);
-(function() {
-
-  Mercury.View.Modules.FormHandler = {
-    included: function() {
-      return this.on('build', this.buildFormHandler);
-    },
-    buildFormHandler: function() {
-      return this.delegateEvents({
-        'submit': this.onFormSubmit
-      });
-    },
-    validate: function() {
-      return this.clearInputErrors();
-    },
-    addInputError: function(input, message) {
-      input.after("<span class=\"help-inline error-message\">" + message + "</span>").closest('.control-group').addClass('error');
-      return this.valid = false;
-    },
-    clearInputErrors: function() {
-      this.$('.control-group.error').removeClass('error').find('.error-message').remove();
-      return this.valid = true;
-    },
-    onFormSubmit: function(e) {
-      this.prevent(e);
-      this.validate();
-      if (this.valid) {
-        return typeof this.onSubmit === "function" ? this.onSubmit() : void 0;
-      }
-    }
-  };
-
-}).call(this);
-(function() {
-
-  Mercury.View.Modules.InterfaceFocusable = {
-    included: function() {
-      return this.on('build', this.buildInterfaceFocusable);
-    },
-    buildInterfaceFocusable: function() {
-      if (!this.revertFocusOn) {
-        return;
-      }
-      this.delegateEvents({
-        mousedown: 'handleFocusableEvent',
-        mouseup: 'handleFocusableEvent',
-        click: 'handleFocusableEvent'
-      });
-      return this.delegateRevertedFocus(this.revertFocusOn);
-    },
-    delegateRevertedFocus: function(matcher) {
-      var reverted;
-      reverted = {};
-      reverted["mousedown " + matcher] = 'revertInterfaceFocus';
-      reverted["click " + matcher] = 'revertInterfaceFocus';
-      return this.delegateEvents(reverted);
-    },
-    handleFocusableEvent: function(e) {
-      e.stopPropagation();
-      if (!$(e.target).is(this.focusableSelector || ':input, [tabindex]')) {
-        return this.prevent(e);
-      }
-    },
-    revertInterfaceFocus: function() {
-      return this.delay(1, function() {
-        return Mercury.trigger('focus');
-      });
-    },
-    preventFocusout: function($el, handler) {
-      var _this = this;
-      this.on('release', function() {
-        return _this.clearFocusoutTimeout();
-      });
-      this.on('hide', function() {
-        return _this.clearFocusoutTimeout();
-      });
-      if (handler) {
-        $el.off('focusout').on('focusout', function() {
-          return _this.preventFocusoutTimeout = _this.delay(150, function() {
-            if (this._activeElementIsBody()) {
-              return;
-            }
-            if ($.contains($el[0], document.activeElement)) {
-              return;
-            }
-            return handler.call(this);
-          });
-        });
-      }
-      return $el.on('keydown', function(e) {
-        var first, focusables, last;
-        if (e.keyCode !== 9) {
-          return;
-        }
-        focusables = $el.find(':input[tabindex != "-1"]');
-        if (!focusables.length) {
-          return;
-        }
-        first = focusables[0];
-        last = focusables[focusables.length - 1];
-        if ((e.shiftKey && e.target === first) || (!e.shiftKey && e.target === last)) {
-          return _this.prevent(e, true);
-        }
-      });
-    },
-    clearFocusoutTimeout: function() {
-      return clearTimeout(this.preventFocusoutTimeout);
-    },
-    _activeElementIsBody: function() {
-      return document.activeElement === document.body;
-    }
-  };
 
 }).call(this);
 (function() {
@@ -2733,25 +3403,6 @@ Copyright (c) 2013 Jeremy Jackson
       this.$el = $(this.el);
       this.shadow.get(0).applyAuthorStyles = true;
       return this.shadow.append(this.el);
-    }
-  };
-
-}).call(this);
-(function() {
-
-  Mercury.View.Modules.ScrollPropagation = {
-    preventScrollPropagation: function($el) {
-      return $el.on('mousewheel DOMMouseScroll', function(e) {
-        var delta, scrollTop, _ref;
-        _ref = [e.originalEvent.wheelDelta || -e.originalEvent.detail, $el.scrollTop()], delta = _ref[0], scrollTop = _ref[1];
-        if (delta > 0 && scrollTop <= 0) {
-          return false;
-        }
-        if (delta < 0 && scrollTop >= $el.get(0).scrollHeight - $el.height()) {
-          return false;
-        }
-        return true;
-      });
     }
   };
 
@@ -2825,82 +3476,6 @@ Copyright (c) 2013 Jeremy Jackson
       });
     },
     resize: function() {}
-  };
-
-}).call(this);
-(function() {
-
-  Mercury.View.Modules.VisibilityToggleable = {
-    included: function() {
-      return this.on('build', this.buildVisibilityToggleable);
-    },
-    buildVisibilityToggleable: function() {
-      if (this.hidden) {
-        this.visible = true;
-        return this.hide();
-      } else {
-        return this.show();
-      }
-    },
-    toggle: function() {
-      if (this.visible) {
-        return this.hide();
-      } else {
-        return this.show();
-      }
-    },
-    show: function(update) {
-      if (update == null) {
-        update = true;
-      }
-      if (this.visible) {
-        return;
-      }
-      this.trigger('show');
-      clearTimeout(this.visibilityTimout);
-      if (typeof this.onShow === "function") {
-        this.onShow();
-      }
-      this.visible = true;
-      this.$el.show();
-      if (typeof this.position === "function") {
-        this.position();
-      }
-      return this.visibilityTimout = this.delay(50, function() {
-        this.css({
-          opacity: 1
-        });
-        if (update && typeof update === 'boolean') {
-          return typeof this.update === "function" ? this.update() : void 0;
-        }
-      });
-    },
-    hide: function(release) {
-      if (!this.visible) {
-        return;
-      }
-      if (typeof release !== 'boolean') {
-        release = null;
-      }
-      if (release == null) {
-        release = this.releaseOnHide;
-      }
-      this.trigger('hide');
-      clearTimeout(this.visibilityTimout);
-      if (typeof this.onHide === "function") {
-        this.onHide();
-      }
-      this.visible = false;
-      this.css({
-        opacity: 0
-      });
-      return this.visibilityTimout = this.delay(250, function() {
-        this.$el.hide();
-        if (release) {
-          return this.release();
-        }
-      });
-    }
   };
 
 }).call(this);
@@ -3085,9 +3660,8 @@ Copyright (c) 2013 Jeremy Jackson
       return this.regions.push(region);
     };
 
-    BaseInterface.prototype.focusActiveRegion = function(e) {
+    BaseInterface.prototype.focusActiveRegion = function() {
       var _ref;
-      this.prevent(e);
       return (_ref = this.region) != null ? _ref.focus() : void 0;
     };
 
@@ -3291,11 +3865,13 @@ Copyright (c) 2013 Jeremy Jackson
 
     BaseInterface.prototype.onRegionFocus = function(region) {
       this.region = region;
-      if (this.floating) {
-        return this.delay(50, function() {
+      return this.delay(50, function() {
+        if (this.floating) {
           return this.position(true);
-        });
-      }
+        } else {
+          return this.onResize();
+        }
+      });
     };
 
     BaseInterface.prototype.onRegionRelease = function(region) {
@@ -3447,231 +4023,6 @@ Copyright (c) 2013 Jeremy Jackson
     return FrameInterface;
 
   })(Mercury.BaseInterface);
-
-}).call(this);
-(function() {
-  var __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
-
-  Mercury.Modal = (function(_super) {
-
-    __extends(Modal, _super);
-
-    function Modal() {
-      return Modal.__super__.constructor.apply(this, arguments);
-    }
-
-    Modal.include(Mercury.View.Modules.FormHandler);
-
-    Modal.include(Mercury.View.Modules.InterfaceFocusable);
-
-    Modal.include(Mercury.View.Modules.ScrollPropagation);
-
-    Modal.include(Mercury.View.Modules.VisibilityToggleable);
-
-    Modal.logPrefix = 'Mercury.Modal:';
-
-    Modal.className = 'mercury-dialog mercury-modal';
-
-    Modal.elements = {
-      dialog: '.mercury-modal-dialog-positioner',
-      content: '.mercury-modal-dialog-content',
-      contentContainer: '.mercury-modal-dialog-content-container',
-      titleContainer: '.mercury-modal-dialog-title',
-      title: '.mercury-modal-dialog-title span'
-    };
-
-    Modal.events = {
-      'mercury:interface:resize': 'resize',
-      'mercury:modals:hide': 'hide',
-      'click .mercury-modal-dialog-title em': 'hide'
-    };
-
-    Modal.prototype.primaryTemplate = 'modal';
-
-    Modal.prototype.releaseOnHide = true;
-
-    Modal.prototype.buildElement = function() {
-      if (this.hidden) {
-        this.releaseOnHide = false;
-      }
-      this.negotiateTemplate();
-      return Modal.__super__.buildElement.apply(this, arguments);
-    };
-
-    Modal.prototype.build = function() {
-      this.appendTo();
-      this.preventScrollPropagation(this.$contentContainer);
-      return this.preventFocusout(this.$contentContainer, this.focusFirstFocusable);
-    };
-
-    Modal.prototype.negotiateTemplate = function() {
-      var _base;
-      (_base = this.options).template || (_base.template = this.template);
-      this.subTemplate = this.options.template;
-      return this.template = this.primaryTemplate;
-    };
-
-    Modal.prototype.update = function(options) {
-      if (!(this.visible && this.updateForOptions(options))) {
-        return;
-      }
-      this.resize();
-      this.show(false);
-      this.refreshElements();
-      return this.delay(300, this.focusFirstFocusable);
-    };
-
-    Modal.prototype.updateForOptions = function(options) {
-      var content, key, value, _ref;
-      this.options = $.extend({}, this.options, options || {});
-      _ref = this.options;
-      for (key in _ref) {
-        value = _ref[key];
-        this[key] = value;
-      }
-      this.negotiateTemplate();
-      this.$title.html(this.t(this.title));
-      this.setWidth(this.width);
-      content = this.contentFromOptions();
-      if (content === this.lastContent && this.width === this.lastWidth) {
-        return false;
-      }
-      this.addClass('loading');
-      this.lastContent = content;
-      this.lastWidth = this.width;
-      this.$content.css({
-        visibility: 'hidden',
-        opacity: 0,
-        width: this.width
-      }).html(content);
-      this.localize(this.$content);
-      return true;
-    };
-
-    Modal.prototype.setWidth = function(width) {
-      return this.$dialog.css({
-        width: width
-      });
-    };
-
-    Modal.prototype.resize = function(animate, dimensions) {
-      var height, titleHeight, width;
-      if (animate == null) {
-        animate = true;
-      }
-      if (dimensions == null) {
-        dimensions = null;
-      }
-      if (!this.visible) {
-        return;
-      }
-      clearTimeout(this.showContentTimeout);
-      if (typeof animate === 'object') {
-        dimensions = animate;
-        animate = false;
-      }
-      if (!animate) {
-        this.addClass('mercury-no-animation');
-      }
-      this.$contentContainer.css({
-        height: 'auto'
-      });
-      titleHeight = this.$titleContainer.outerHeight();
-      if (!this.width) {
-        this.$content.css({
-          position: 'absolute'
-        });
-        width = this.$content.outerWidth();
-        height = Math.min(this.$content.outerHeight() + titleHeight, $(window).height() - 10);
-        this.$content.css({
-          position: 'static'
-        });
-      } else {
-        height = Math.min(this.$content.outerHeight() + titleHeight, $(window).height() - 10);
-      }
-      this.$dialog.css({
-        height: height,
-        width: width || this.width
-      });
-      this.$contentContainer.css({
-        height: height - titleHeight
-      });
-      if (animate) {
-        this.showContentTimeout = this.delay(300, this.showContent);
-      } else {
-        this.showContent(false);
-      }
-      return this.delay(250, function() {
-        return this.removeClass('mercury-no-animation');
-      });
-    };
-
-    Modal.prototype.contentFromOptions = function() {
-      if (this.subTemplate) {
-        return this.renderTemplate(this.subTemplate);
-      }
-      return this.content;
-    };
-
-    Modal.prototype.showContent = function(animate) {
-      if (animate == null) {
-        animate = true;
-      }
-      clearTimeout(this.contentOpacityTimeout);
-      this.removeClass('loading');
-      this.$content.css({
-        visibility: 'visible',
-        width: 'auto',
-        display: 'block'
-      });
-      if (animate) {
-        return this.contentOpacityTimeout = this.delay(50, function() {
-          return this.$content.css({
-            opacity: 1
-          });
-        });
-      } else {
-        return this.$content.css({
-          opacity: 1
-        });
-      }
-    };
-
-    Modal.prototype.appendTo = function() {
-      return Modal.__super__.appendTo.call(this, Mercury["interface"]);
-    };
-
-    Modal.prototype.release = function() {
-      if (this.visible) {
-        return this.hide(true);
-      }
-      return Modal.__super__.release.apply(this, arguments);
-    };
-
-    Modal.prototype.onShow = function() {
-      Mercury.trigger('blur');
-      return Mercury.trigger('modals:hide');
-    };
-
-    Modal.prototype.onHide = function() {
-      Mercury.trigger('focus');
-      return this.delay(250, function() {
-        this.lastWidth = null;
-        this.$dialog.css({
-          height: '',
-          width: ''
-        });
-        this.$contentContainer.css({
-          height: ''
-        });
-        return this.$content.hide();
-      });
-    };
-
-    return Modal;
-
-  })(Mercury.View);
 
 }).call(this);
 (function() {
@@ -3863,6 +4214,8 @@ Copyright (c) 2013 Jeremy Jackson
     };
 
     Panel.prototype.focusFirstFocusable = function() {};
+
+    Panel.prototype.keepFocusConstrained = function() {};
 
     return Panel;
 
@@ -5066,12 +5419,22 @@ Copyright (c) 2013 Jeremy Jackson
     },
     showDropIndicator: function() {
       var _this = this;
+      clearTimeout(this.dropIndicatorTimeout);
       if (this.previewing || this.dropIndicatorVisible) {
         return;
       }
+      if (Mercury.dragHack && !this.onDropSnippet) {
+        return;
+      }
+      if (!Mercury.dragHack && !this.onDropItem && !this.onDropFile) {
+        return;
+      }
       this.dropIndicatorVisible = true;
-      clearTimeout(this.dropIndicatorTimer);
       this.$dropIndicator.css(this.dropIndicatorPosition());
+      this.$dropIndicator.removeClass('mercury-region-snippet-drop-indicator');
+      if (Mercury.dragHack) {
+        this.$dropIndicator.addClass('mercury-region-snippet-drop-indicator');
+      }
       return this.delay(50, function() {
         return _this.$dropIndicator.css({
           opacity: 1
@@ -5079,13 +5442,16 @@ Copyright (c) 2013 Jeremy Jackson
       });
     },
     hideDropIndicator: function() {
-      var _this = this;
-      this.dropIndicatorVisible = false;
-      this.$dropIndicator.css({
-        opacity: 0
-      });
-      return this.dropIndicatorTimer = this.delay(500, function() {
-        return _this.$dropIndicator.hide();
+      clearTimeout(this.dropIndicatorTimeout);
+      return this.dropIndicatorTimeout = this.delay(250, function() {
+        var _this = this;
+        this.dropIndicatorVisible = false;
+        this.$dropIndicator.css({
+          opacity: 0
+        });
+        return this.dropIndicatorTimeout = this.delay(251, function() {
+          return _this.$dropIndicator.hide();
+        });
       });
     }
   };
@@ -5137,7 +5503,7 @@ Copyright (c) 2013 Jeremy Jackson
       if ((_ref1 = this.autoSize) == null) {
         this.autoSize = this.config("regions:" + this.constructor.type + ":autoSize");
       }
-      value = this.html().replace('&gt;', '>').replace('&lt;', '<').trim();
+      value = this.originalContent();
       resize = this.autoSize ? 'none' : 'vertical';
       this.$preview = $("<div class=\"mercury-" + this.constructor.type + "-region-preview\">");
       this.$focusable = $("<textarea class=\"mercury-" + this.constructor.type + "-region-textarea\">");
@@ -5157,6 +5523,9 @@ Copyright (c) 2013 Jeremy Jackson
       return this.delegateEvents({
         'keydown textarea': 'handleKeyEvent'
       });
+    },
+    originalContent: function() {
+      return this.html().replace('&gt;', '>').replace('&lt;', '<').trim();
     },
     releaseFocusable: function() {
       var _ref;
@@ -5920,6 +6289,7 @@ Copyright (c) 2013 Jeremy Jackson
     this.Module.extend.call(this, this.I18n);
     this.Module.extend.call(this, this.Logger);
     this.Module.extend.call(this, this.Plugin);
+    this.Module.extend.call(this, this.Snippet);
     this.support = {
       webkit: navigator.userAgent.indexOf('WebKit') > 0,
       safari: navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') === -1,
@@ -6615,6 +6985,119 @@ Copyright (c) 2013 Jeremy Jackson
 
   JST['/mercury/templates/notes'] = function() {
     return "<p>The Notes Plugin expects a server implementation.</p>\n<p>Since this is a demo, it wasn't included, but you can check the <a href=\"https://github.com/jejacks0n/mercury-rails\">mercury-rails project</a> on github for examples of how to integrate it with your server technology.</p>";
+  };
+
+}).call(this);
+(function() {
+  var Plugin,
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+  Plugin = Mercury.registerPlugin('snippets', {
+    description: 'Provides interface for adding snippets to various regions -- may require server implementation.',
+    version: '1.0.0',
+    actions: {
+      snippet: 'insert'
+    },
+    registerButton: function() {
+      return this.button.set({
+        type: 'snippets',
+        global: true,
+        toggle: true,
+        subview: this.bindTo(new Plugin.Panel())
+      });
+    },
+    bindTo: function(view) {
+      var _this = this;
+      return view.on('insert:snippet', function(value) {
+        return _this.triggerAction(value);
+      });
+    },
+    insert: function(name, snippetName) {
+      var snippet;
+      snippet = Mercury.getSnippet(snippetName, true).on('rendered', function(view) {
+        return Mercury.trigger('action', name, snippet, view);
+      });
+      return snippet.initialize(this.region);
+    }
+  });
+
+  Plugin.Panel = (function(_super) {
+
+    __extends(Panel, _super);
+
+    function Panel() {
+      return Panel.__super__.constructor.apply(this, arguments);
+    }
+
+    Panel.prototype.template = 'snippets';
+
+    Panel.prototype.className = 'mercury-snippets-panel';
+
+    Panel.prototype.title = 'Snippets Panel';
+
+    Panel.prototype.width = 300;
+
+    Panel.prototype.hidden = true;
+
+    Panel.prototype.events = {
+      'click input': function(e) {
+        return this.trigger('insert:snippet', $(e.target).closest('[data-value]').data('value'));
+      },
+      'mousedown': function() {
+        this.revertInterfaceFocus();
+        return Mercury.trigger('dialogs:hide');
+      }
+    };
+
+    Panel.prototype.update = function() {
+      var items;
+      Panel.__super__.update.apply(this, arguments);
+      items = this.$('li');
+      return items.on('dragend', function() {
+        return Mercury.dragHack = false;
+      }).on('dragstart', function(e) {
+        Mercury.dragHack = true;
+        return e.originalEvent.dataTransfer.setData('snippet', $(e.target).data('value'));
+      });
+    };
+
+    return Panel;
+
+  })(Mercury.Panel);
+
+  Plugin.Modal = (function(_super) {
+
+    __extends(Modal, _super);
+
+    function Modal() {
+      return Modal.__super__.constructor.apply(this, arguments);
+    }
+
+    Modal.prototype.template = false;
+
+    Modal.prototype.className = 'mercury-snippet-modal';
+
+    Modal.prototype.title = 'Snippet Options';
+
+    Modal.prototype.width = 600;
+
+    return Modal;
+
+  })(Mercury.Modal);
+
+  this.JST || (this.JST = {});
+
+  JST['/mercury/templates/snippets'] = function() {
+    var controls, name, ret, snippet, _ref;
+    controls = "<div class=\"mercury-snippet-actions\">Drag or <input type=\"button\" value=\"Insert\" class=\"btn\"></div>";
+    ret = '<ul>';
+    _ref = Mercury.Snippet.all();
+    for (name in _ref) {
+      snippet = _ref[name];
+      ret += "<li data-value=\"" + name + "\">" + snippet.title + "<em>" + snippet.description + "</em>" + controls + "</li>";
+    }
+    return ret + '</ul>';
   };
 
 }).call(this);

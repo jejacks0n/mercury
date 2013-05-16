@@ -149,6 +149,4 @@ class Plugin.Palette extends Mercury.ToolbarPalette
   # the core/view.coffee file if you want to know more about how templates are handled.
   #
   template:  ->
-    """
-      asdasd asdasdasdasdasd
-    """
+    """asdasd"""

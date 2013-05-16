@@ -21,33 +21,14 @@ them when you render the content.
 
     Text.include(Mercury.Region.Modules.FocusableTextarea);
 
+    Text.include(Mercury.Region.Modules.TextSelection);
+
+    Text.include(Mercury.Region.Modules.SelectionValue);
+
     Text.supported = true;
 
-    Text.prototype.value = function(value) {
-      var _ref, _ref1;
-      if (value == null) {
-        value = null;
-      }
-      if (value === null || typeof value === 'undefined') {
-        if (!this.config('regions:text:stripTags')) {
-          return this.$focusable.val();
-        }
-        return this.sanitizedValue();
-      }
-      if (this.config('regions:text:stripTags')) {
-        this.$focusable.val($('<div>').html(((_ref = value.val) != null ? _ref : value).replace(/<br\/?>/g, '\n').trim()).text());
-      } else {
-        this.$focusable.val((_ref1 = value.val) != null ? _ref1 : value);
-      }
-      if (value.sel) {
-        return this.setSerializedSelection(value.sel);
-      }
-    };
-
-    Text.prototype.sanitizedValue = function() {
-      var div;
-      div = $('<div>').html(this.$focusable.val().trim().replace(/\n/g, '<span>[!!!br!!!]</span>'));
-      return div.text().replace(/\[!!!br!!!\]/g, '<br>');
+    Text.prototype.originalContent = function() {
+      return this.html().replace('&gt;', '>').replace('&lt;', '<').trim().replace(/<br\s*\/?>/gi, '\n');
     };
 
     return Text;

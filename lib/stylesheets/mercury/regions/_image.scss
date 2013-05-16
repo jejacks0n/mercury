@@ -1,7 +1,9 @@
 .mercury-image-region {
   @include mercury-region-outline;
-  min-width: 20px;
-  min-height: 20px;
+  &[data-mercury-region] {
+    min-width: 20px;
+    min-height: 20px;
+  }
   &+ .mercury-region-drop-indicator {
     @include mercury-region-drop-indicator;
   }

@@ -1,7 +1,9 @@
 .mercury-snippet-region {
   @include mercury-region-outline;
-  min-height: 20px;
-  min-width: 5px;
+  &[data-mercury-region] {
+    min-height: 20px;
+    min-width: 5px;
+  }
   &+ .mercury-region-drop-indicator {
     @include mercury-region-drop-indicator;
   }

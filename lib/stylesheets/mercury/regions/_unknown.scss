@@ -1,4 +1,8 @@
 .mercury-unknown-region {
+  &[data-mercury-region] {
+    min-height: 20px;
+    min-width: 5px;
+  }
   &:focus {
     outline: none;
     -webkit-box-shadow: 0 0 7px red, 0 0 2px red / 3;

@@ -2,8 +2,10 @@
   @include mercury-region-outline;
   position: relative;
   width: 100%;
-  min-height: 300px;
   background: $gallery_region_bg;
+  &[data-mercury-region] {
+    min-height: 300px;
+  }
   &+ .mercury-region-drop-indicator {
     @include mercury-region-drop-indicator;
   }

@@ -1,10 +1,10 @@
 #= require mercury/core/model
+#= require mercury/core/view
 #= require mercury/views/modal
 
 registered = {}
 
 class Mercury.Snippet extends Mercury.Model
-  @extend Mercury.I18n
 
   @logPrefix: 'Mercury.Snippet:'
 
@@ -33,28 +33,26 @@ class Mercury.Snippet extends Mercury.Model
 
 
   constructor: (@options = {}) ->
+    @configuration = @options.config || {}
     @[key] = value for key, value of @options when key not in ['config']
     throw new Error('must provide a name for snippets') unless @name
-    super(@options.defaults)
+
+    super(@defaults || {})
 
 
-  initialize: ->
-    if @form
-      @displayForm()
-    else
-      @render()
+  initialize: (@region) ->
+    return @displayForm() if @form
+    @render()
 
 
-  displayForm: ->
-    form = @form
-    form = (=> @form(arguments)) if typeof(form) == 'function'
-    view = new (@Modal || Mercury.Modal)(title: @get('title'), template: form, width: 600, model: @, hideOnValidSubmit: true)
+  displayForm: (form) ->
+    view = new (@Modal || Mercury.Modal)
+      title: @get('title')
+      template: @templateClosure(form || @form)
+      width: 600
+      model: @
+      hideOnValidSubmit: true
     view.on('form:success', => @render())
-    view
-
-
-  view: (template) ->
-    new Mercury.View(template: template, className: "mercury-#{@name}-snippet")
 
 
   render: (options = {}) ->
@@ -64,14 +62,21 @@ class Mercury.Snippet extends Mercury.Model
 
 
   renderView: (template) ->
-    template ||= @template
-    closure = (=> template(arguments)) if typeof(template) == 'function'
-    @renderedView = @view(closure || template)
+    @renderedView = @view(@templateClosure(template || @template))
     @trigger('rendered', @renderedView)
+
+
+  view: (template) ->
+    new Mercury.View(template: template, className: "mercury-#{@name}-snippet")
 
 
   saveSuccess: (content) ->
     @renderView(=> @get('preview') || content)
+
+
+  templateClosure: (template) ->
+    closure = (=> template(arguments...)) if typeof(template) == 'function'
+    closure || template
 
 
   getRenderedView: (region) ->
@@ -87,7 +92,12 @@ Mercury.Snippet.Module =
 class Mercury.Snippet.Definition
 
   constructor: (@options = {}) ->
-    $.extend(@, @options)
+    @name = @options.name
+    throw new Error('must provide a name for snippets') unless @name
+    @configuration = @options.config
+    @title = @options.title
+    @description = @options.description
+    @version = @options.version
     registered[@name] = @
 
 

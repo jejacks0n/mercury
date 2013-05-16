@@ -7,8 +7,6 @@
 registered = {}
 
 class Mercury.Plugin extends Mercury.Module
-  @extend  Mercury.Logger
-  @extend  Mercury.I18n
   @include Mercury.Config
   @include Mercury.Events
   @include Mercury.I18n
@@ -243,8 +241,9 @@ class Mercury.Plugin.Definition
   # a plugin.
   #
   constructor: (@options = {}) ->
-    @configuration = @options.config
     @name = @options.name
+    throw new Error('must provide a name for plugins') unless @name
+    @configuration = @options.config
     @description = @options.description
     @version = @options.version
     registered[@name] = @

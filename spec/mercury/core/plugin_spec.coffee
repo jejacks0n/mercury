@@ -14,8 +14,6 @@ describe "Mercury.Plugin", ->
   describe "Modules", ->
 
     it "includes in the expected modules", ->
-      expect( Klass.log ).to.be.a('Function')
-      expect( Klass.t ).to.be.a('Function')
       expect( subject.config ).to.be.a('Function')
       expect( subject.on ).to.be.a('Function')
       expect( subject.t ).to.be.a('Function')
@@ -106,9 +104,9 @@ describe "Mercury.Plugin", ->
       expect( subject.appendActions ).calledWith(foo: 'bar')
 
     it "calls super", ->
-      spyOn(Klass.__super__, 'constructor')
+      spyOn(Mercury.Plugin.__super__, 'constructor')
       subject = new Klass(name: 'foo')
-      expect( Klass.__super__.constructor ).called
+      expect( Mercury.Plugin.__super__.constructor ).called
 
 
   describe "#buttonRegistered", ->
@@ -399,6 +397,9 @@ describe "Mercury.Plugin.Definition", ->
 
     it "registers the definition", ->
       expect( Mercury.Plugin.get('definition') ).to.eq(subject)
+
+    it "throws an error if there's no name", ->
+      expect(-> new Klass() ).to.throw('must provide a name for plugins')
 
 
   describe "#signature", ->

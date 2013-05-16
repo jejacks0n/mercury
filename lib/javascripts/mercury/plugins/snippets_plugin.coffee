@@ -14,8 +14,8 @@ Plugin = Mercury.registerPlugin 'snippets'
 
 
   insert: (name, snippetName) ->
-    snippet = Mercury.getSnippet(snippetName, true)
-    snippet.on('insert', -> Mercury.trigger('action', name, snippet))
+    snippet = Mercury.getSnippet(snippetName, true).on('rendered', (view) -> Mercury.trigger('action', name, snippet, view))
+    snippet.initialize(@region)
 
 
 class Plugin.Panel extends Mercury.Panel

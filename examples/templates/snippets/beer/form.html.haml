@@ -1,0 +1,19 @@
+%h3 This template is being served by the server.
+%hr/
+%form.form-horizontal
+  %fieldset
+    .control-group.string.required
+      %label.string.required.control-label(for="name") Name
+      .controls
+        %input#name.string.required(name="name" size="50" type="text" tabindex="1")
+    .control-group.string.required
+      %label.string.required.control-label(for="beer") Favorite Beer
+      .controls
+        %select#beer.string.required(name="beer" tabindex="1")
+          %option(value="Belgian-Style Flanders Oud Bruin or Oud Red Ales") Belgian-Style Flanders Oud Bruin or Oud Red Ales
+          %option(value="French & Belgian-Style Saison") French & Belgian-Style Saison
+          %option(value="German-Style Heller Bock/Maibock") German-Style Heller Bock/Maibock
+          %option(value="Specialty Honey Lager or Ale") Specialty Honey Lager or Ale
+
+  .form-actions
+    %input.btn.btn-primary(name="commit" type="submit" value="Insert Snippet" tabindex="2")

@@ -38,22 +38,44 @@ class Mercury.Snippet extends Mercury.Model
     super(@options.defaults)
 
 
-  init: ->
+  initialize: ->
     if @form
       @displayForm()
     else
-      setTimeout((=> @trigger('insert')), 50)
+      @render()
 
 
   displayForm: ->
-    view = new (@Modal || Mercury.Modal)(title: @get('title'), template: @form, width: 600, model: @, hideOnValidSubmit: true)
-    view.on('form:success', => @trigger('insert'))
+    form = @form
+    form = (=> @form(arguments)) if typeof(form) == 'function'
+    view = new (@Modal || Mercury.Modal)(title: @get('title'), template: form, width: 600, model: @, hideOnValidSubmit: true)
+    view.on('form:success', => @render())
     view
 
 
-  render: (region) ->
-    return @view() if @view
-    return new Mercury.View(template: @template, className: "mercury-#{@name}-snippet")
+  view: (template) ->
+    new Mercury.View(template: template, className: "mercury-#{@name}-snippet")
+
+
+  render: (options = {}) ->
+    options = $.extend({}, @renderOptions, options)
+    return @save(options) if @url() && !@renderedView
+    @renderView(options.template)
+
+
+  renderView: (template) ->
+    template ||= @template
+    closure = (=> template(arguments)) if typeof(template) == 'function'
+    @renderedView = @view(closure || template)
+    @trigger('rendered', @renderedView)
+
+
+  saveSuccess: (content) ->
+    @renderView(=> @get('preview') || content)
+
+
+  getRenderedView: (region) ->
+    @renderedView
 
 
 Mercury.Snippet.Module =

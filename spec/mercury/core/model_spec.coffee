@@ -151,7 +151,6 @@ describe "Mercury.Model", ->
     beforeEach ->
       spyOn($, 'ajax')
 
-
     it "returns false if not valid", ->
       spyOn(subject, 'isValid', -> false)
       expect( subject.save() ).to.be.false
@@ -179,9 +178,9 @@ describe "Mercury.Model", ->
       subject.save()
       expect( $.ajax.args[0][0]['method'] ).to.eq('PUT')
 
-    it "doesn't convert data to JSON if not a json request", ->
-      subject.save(dataType: 'html', data: {foo: 'bar'})
-      expect( $.ajax.args[0][0]['data'] ).to.eql(foo: 'bar')
+    it "doesn't convert data to JSON if already a string", ->
+      subject.save(data: {foo: 'bar'})
+      expect( $.ajax.args[0][0]['data'] ).to.eql('{"foo":"bar"}')
       subject.save(data: '_string_')
       expect( $.ajax.args[1][0]['data'] ).to.eql('_string_')
 

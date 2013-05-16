@@ -70,7 +70,9 @@ class ApplicationController < ActionController::Base
   end
 
   def template
-    render text: "missing template #{params[:name]}"
+    render template: "templates/#{params[:template]}"
+  rescue
+    render text: "missing template #{params[:template]}"
   end
 end
 
@@ -83,7 +85,7 @@ Rails.application.routes.draw do
   match '/mercury/save' => 'application#save', via: [:put, :post]
 
   # rendering server side templates
-  match '/mercury/templates/*name' => 'application#template', via: :get
+  match '/mercury/templates/*template' => 'application#template', via: [:get, :post]
 
   # uploading files
   match '/mercury/uploads' => 'application#upload', via: :post

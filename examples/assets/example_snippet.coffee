@@ -60,24 +60,24 @@ Mercury.registerSnippet 'plugins',
 #
 # This example might be considered a green or blue run. It includes a form to collect a twitter username, has validation
 # and default values, but it doesn't rely on a server implementation. It also has a custom view that will be used when
-# the snippet is rendered. This custom view could do all sorts of complex view things.
+# the snippet is rendered -- which could do all sorts of complex view things if you needed it to.
 #
-Snippet = Mercury.registerSnippet 'twitter',
+TwitterSnippet = Mercury.registerSnippet 'twitter',
   title: 'Twitter Snippet'
   description: 'Twitter feed example (client side only, no server implementation needed).'
   version: '1.0.0'
 
+  form: 'snippets/twitter/form'
+
   defaults:
     username: 'modeset_'
 
-  validate: ->
-    @addError('username', "can't be blank") unless @get('username')
+  validate: -> @addError('username', "can't be blank") unless @get('username')
 
-  form: 'snippets/twitter/form'
-  view: -> new Snippet.View(snippet: @)
+  view: -> new TwitterSnippet.View(snippet: @)
 
 
-class Snippet.View extends Mercury.View
+class TwitterSnippet.View extends Mercury.View
   className: 'mercury-example-snippet'
   template: ->
     """
@@ -126,3 +126,45 @@ JST['/mercury/templates/snippets/twitter/form'] = ->
   """
 
 
+# Server backed snippet example.
+#
+# This example might be considered a blue run. It includes a server based form to collect a name, and your favorive type
+# of beer (limited selection, sorry). This example doesn't have a concept of validation, and if you want more
+# information about how a server can be used for this example check out the mercury-rails project on github.
+#
+Mercury.registerSnippet 'beer',
+  title: 'Beer Snippet'
+  description: 'Server backed snippet example. It requests a form from the server.'
+  version: '1.0.0'
+
+  # We haven't specified this template anywhere in JST, so an ajax request will be sent to the server, which is expected
+  # to respond to this path (GET). To utilize this you need to ensure that this works you may need to adjust the
+  # template configuration.
+  #
+  # The form that's returned could use a ujs handler to submit/get the response back as well, but in our case we're not
+  # worrying about validation on the server, so we just need the server to render the form for us.
+  #
+  form: 'snippets/beer/form'
+
+  # Like the above examples, we can still specify defaults -- or the server can do that for us too, but this shows that
+  # it doesn't really matter.
+  #
+  defaults:
+    name: 'jejacks0n'
+
+  # If you want the snippet to save to the server you can provide a url for it. This allows you to take the attributes
+  # from the snippet (after the form has been submitted) and pass them to the server. It's up to you how you implement
+  # the server portion, but it's expected that the server return a JSON object with a preview attribute set.
+  #
+  url: -> '/mercury/templates/snippets/beer/template'
+
+  # While having the server respond with JSON (with the preview attribute set) is a good solution for sane people, we
+  # like breaking rules, so we're not going to return JSON from the server with the preview attribute. Nope, we're going
+  # to modify the renderOptions to specify that we accept html back. This is actually to keep the server in this project
+  # simple, but it's nice to pretend you're a rule breaking badass sometimes.
+  #
+  # renderOptions are passed to save, and are also used during the rendering process, but here we're just modifying the
+  # ajax options.
+  #
+  renderOptions:
+    dataType: 'html'

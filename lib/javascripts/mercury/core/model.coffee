@@ -126,19 +126,18 @@ class Mercury.Model extends Mercury.Module
       cache: false
       data: @toJSON()
       success: (json) =>
-        return unless typeof(json) == 'object'
-        @id = json.id
-        @constructor.records[@id] = @ if @id
-        @set(json)
-        @trigger('save', json)
-        @saveSuccess?(arguments...)
+        if typeof(json) == 'object'
+          @id = json.id
+          @constructor.records[@id] = @ if @id
+          @set(json)
+          @trigger('save', json)
+        @saveSuccess?(json)
       error: (xhr) =>
         @trigger('error', xhr, options)
         @notify(@t('Unable to process response: %s', xhr.status))
         @saveError?(arguments...)
     options = $.extend(defaultOptions, options)
-    if options.dataType == 'json' && typeof(options.data) != 'string'
-      options.data = JSON.stringify(options.data)
+    options.data = JSON.stringify(options.data) if typeof(options.data) != 'string'
     $.ajax(options)
 
 

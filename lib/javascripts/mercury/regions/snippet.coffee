@@ -12,15 +12,9 @@ class Mercury.Region.Snippet extends Mercury.Region
 
 
   onDropSnippet: (snippet) ->
-    snippet.on 'insert', =>
+    snippet.on 'rendered', (view) =>
       @focus()
-      @handleAction('snippet', snippet)
-
-
-  actions:
-    snippet: (snippet) ->
-      @append(snippet.render(@))
-      @pushHistory()
+      @handleAction('snippet', snippet, view)
 
 
 Mercury.Region.Snippet.addToolbar
@@ -32,4 +26,7 @@ Mercury.Region.Snippet.addToolbar
 Mercury.Region.Snippet.addAction
 
   remove:      -> console.debug('remove')
-  snippet:     -> console.debug('snippet', arguments)
+
+  snippet: (snippet) ->
+    @append(snippet.getRenderedView(@))
+    @pushHistory()

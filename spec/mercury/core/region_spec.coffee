@@ -579,10 +579,12 @@ describe "Mercury.Region", ->
     it "calls #onDropSnippet with the snippet if it's defined and it looks like a snippet was dropped", ->
       subject.onDropSnippet = spy()
       spyOn(@e.originalEvent.dataTransfer, 'getData', -> '_snippet_name_')
-      spyOn(Mercury.Snippet, 'get', -> '_snippet_')
+      mock = initialize: spy()
+      spyOn(Mercury.Snippet, 'get', -> mock)
       subject.onItemDropped(@e)
       expect( Mercury.Snippet.get ).calledWith('_snippet_name_', true)
-      expect( subject.onDropSnippet ).calledWith('_snippet_')
+      expect( subject.onDropSnippet ).calledWith(mock)
+      expect( mock.initialize ).calledWith(subject)
 
     it "doesn't call #onDragSnippet if it doesn't look like a snippet was dropped", ->
       subject.onDropSnippet = spy()

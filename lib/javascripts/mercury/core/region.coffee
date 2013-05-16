@@ -334,8 +334,8 @@ class Mercury.Region extends Mercury.View
       @prevent(e)
       @onDropFile(data.files)
     else if @onDropSnippet && snippetName = data.getData('snippet')
-      snippet = Mercury.Snippet.get(snippetName, true)
-      @onDropSnippet(snippet)
+      @onDropSnippet(snippet = Mercury.Snippet.get(snippetName, true))
+      snippet.initialize(@)
     else
       @onDropItem?(e, data)
 

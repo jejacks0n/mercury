@@ -17,8 +17,9 @@ This file contains all of the required css for the Mercury interface as well as 
 .mercury-clearfix:before,.mercury-clearfix:after{content:" ";display:table}
 .mercury-clearfix:after{clear:both}
 .mercury-clearfix{*zoom:1}
-.mercury-gallery-region{position:relative;width:100%;min-height:300px;background:black}
+.mercury-gallery-region{position:relative;width:100%;background:black}
 .mercury-gallery-region:focus{outline-offset:0;outline:none;-webkit-box-shadow:0 0 7px #00bce5,0 0 2px #003e4c;-moz-box-shadow:0 0 7px #00bce5,0 0 2px #003e4c;box-shadow:0 0 7px #00bce5,0 0 2px #003e4c}
+.mercury-gallery-region[data-mercury-region]{min-height:300px}
 .mercury-gallery-region+.mercury-region-drop-indicator{-webkit-transition-property:opacity;-webkit-transition-duration:.25s;-webkit-transition-timing-function:ease-in-out;-moz-transition-property:opacity;-moz-transition-duration:.25s;-moz-transition-timing-function:ease-in-out;transition-property:opacity;transition-duration:.25s;transition-timing-function:ease-in-out;-webkit-backface-visibility:hidden;-webkit-border-radius:10px;-moz-border-radius:10px;border-radius:10px;display:none;opacity:0;position:absolute;z-index:20;top:30px;left:30px;width:60px;height:60px;margin:-30px;background:rgba(0,0,0,0.75);color:rgba(255,255,255,0.85);pointer-events:none}
 .mercury-gallery-region+.mercury-region-drop-indicator:before{display:inline-block;font-family:"mercury";width:60px;height:60px;font-size:32px;line-height:60px;font-weight:normal;font-variant:normal;text-transform:none;text-align:center;speak:none;-webkit-font-smoothing:antialiased}
 .mercury-gallery-region+.mercury-region-drop-indicator:before{content:'X'}
@@ -33,32 +34,34 @@ This file contains all of the required css for the Mercury interface as well as 
 .mercury-gallery-region .paginator{position:absolute;z-index:19;bottom:5px;width:100%;text-align:center}
 .mercury-gallery-region .paginator span{margin:0 8px;text-shadow:0 0 3px black;font-size:30px;color:#666}
 .mercury-gallery-region .paginator .active{color:white}
-.mercury-html-region{min-height:20px;min-width:5px}
 .mercury-html-region:focus{outline-offset:0;outline:none;-webkit-box-shadow:0 0 7px #00bce5,0 0 2px #003e4c;-moz-box-shadow:0 0 7px #00bce5,0 0 2px #003e4c;box-shadow:0 0 7px #00bce5,0 0 2px #003e4c}
+.mercury-html-region[data-mercury-region]{min-height:20px;min-width:5px}
 .mercury-html-region+.mercury-region-drop-indicator{-webkit-transition-property:opacity;-webkit-transition-duration:.25s;-webkit-transition-timing-function:ease-in-out;-moz-transition-property:opacity;-moz-transition-duration:.25s;-moz-transition-timing-function:ease-in-out;transition-property:opacity;transition-duration:.25s;transition-timing-function:ease-in-out;-webkit-backface-visibility:hidden;-webkit-border-radius:10px;-moz-border-radius:10px;border-radius:10px;display:none;opacity:0;position:absolute;z-index:20;top:30px;left:30px;width:60px;height:60px;margin:-30px;background:rgba(0,0,0,0.75);color:rgba(255,255,255,0.85);pointer-events:none}
 .mercury-html-region+.mercury-region-drop-indicator:before{display:inline-block;font-family:"mercury";width:60px;height:60px;font-size:32px;line-height:60px;font-weight:normal;font-variant:normal;text-transform:none;text-align:center;speak:none;-webkit-font-smoothing:antialiased}
 .mercury-html-region+.mercury-region-drop-indicator:before{content:'X'}
 .mercury-html-region+.mercury-region-drop-indicator.mercury-region-snippet-drop-indicator:before{content:'N'}
-.mercury-image-region{min-width:20px;min-height:20px}
 .mercury-image-region:focus{outline-offset:0;outline:none;-webkit-box-shadow:0 0 7px #00bce5,0 0 2px #003e4c;-moz-box-shadow:0 0 7px #00bce5,0 0 2px #003e4c;box-shadow:0 0 7px #00bce5,0 0 2px #003e4c}
+.mercury-image-region[data-mercury-region]{min-width:20px;min-height:20px}
 .mercury-image-region+.mercury-region-drop-indicator{-webkit-transition-property:opacity;-webkit-transition-duration:.25s;-webkit-transition-timing-function:ease-in-out;-moz-transition-property:opacity;-moz-transition-duration:.25s;-moz-transition-timing-function:ease-in-out;transition-property:opacity;transition-duration:.25s;transition-timing-function:ease-in-out;-webkit-backface-visibility:hidden;-webkit-border-radius:10px;-moz-border-radius:10px;border-radius:10px;display:none;opacity:0;position:absolute;z-index:20;top:30px;left:30px;width:60px;height:60px;margin:-30px;background:rgba(0,0,0,0.75);color:rgba(255,255,255,0.85);pointer-events:none}
 .mercury-image-region+.mercury-region-drop-indicator:before{display:inline-block;font-family:"mercury";width:60px;height:60px;font-size:32px;line-height:60px;font-weight:normal;font-variant:normal;text-transform:none;text-align:center;speak:none;-webkit-font-smoothing:antialiased}
 .mercury-image-region+.mercury-region-drop-indicator:before{content:'X'}
 .mercury-image-region+.mercury-region-drop-indicator.mercury-region-snippet-drop-indicator:before{content:'N'}
+.mercury-markdown-region[data-mercury-region]{min-height:20px;min-width:5px}
 .mercury-markdown-region+.mercury-region-drop-indicator{-webkit-transition-property:opacity;-webkit-transition-duration:.25s;-webkit-transition-timing-function:ease-in-out;-moz-transition-property:opacity;-moz-transition-duration:.25s;-moz-transition-timing-function:ease-in-out;transition-property:opacity;transition-duration:.25s;transition-timing-function:ease-in-out;-webkit-backface-visibility:hidden;-webkit-border-radius:10px;-moz-border-radius:10px;border-radius:10px;display:none;opacity:0;position:absolute;z-index:20;top:30px;left:30px;width:60px;height:60px;margin:-30px;background:rgba(0,0,0,0.75);color:rgba(255,255,255,0.85);pointer-events:none}
 .mercury-markdown-region+.mercury-region-drop-indicator:before{display:inline-block;font-family:"mercury";width:60px;height:60px;font-size:32px;line-height:60px;font-weight:normal;font-variant:normal;text-transform:none;text-align:center;speak:none;-webkit-font-smoothing:antialiased}
 .mercury-markdown-region+.mercury-region-drop-indicator:before{content:'X'}
 .mercury-markdown-region+.mercury-region-drop-indicator.mercury-region-snippet-drop-indicator:before{content:'N'}
 .mercury-markdown-region textarea.mercury-markdown-region-textarea{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;outline:0;border:none;margin:0;white-space:pre;background:transparent;font-family:Monaco,"Bitstream Vera Sans Mono","Lucida Console",monospace;font-size:12px;line-height:13px;resize:vertical}
 .mercury-markdown-region textarea.mercury-markdown-region-textarea:focus{outline-offset:0;outline:none;-webkit-box-shadow:0 0 7px #00bce5,0 0 2px #003e4c;-moz-box-shadow:0 0 7px #00bce5,0 0 2px #003e4c;box-shadow:0 0 7px #00bce5,0 0 2px #003e4c}
-.mercury-plain-region{min-height:20px;min-width:5px}
 .mercury-plain-region:focus{outline-offset:0;outline:none;-webkit-box-shadow:0 0 7px #00bce5,0 0 2px #003e4c;-moz-box-shadow:0 0 7px #00bce5,0 0 2px #003e4c;box-shadow:0 0 7px #00bce5,0 0 2px #003e4c}
-.mercury-snippet-region{min-height:20px;min-width:5px}
+.mercury-plain-region[data-mercury-region]{min-height:20px;min-width:5px}
 .mercury-snippet-region:focus{outline-offset:0;outline:none;-webkit-box-shadow:0 0 7px #00bce5,0 0 2px #003e4c;-moz-box-shadow:0 0 7px #00bce5,0 0 2px #003e4c;box-shadow:0 0 7px #00bce5,0 0 2px #003e4c}
+.mercury-snippet-region[data-mercury-region]{min-height:20px;min-width:5px}
 .mercury-snippet-region+.mercury-region-drop-indicator{-webkit-transition-property:opacity;-webkit-transition-duration:.25s;-webkit-transition-timing-function:ease-in-out;-moz-transition-property:opacity;-moz-transition-duration:.25s;-moz-transition-timing-function:ease-in-out;transition-property:opacity;transition-duration:.25s;transition-timing-function:ease-in-out;-webkit-backface-visibility:hidden;-webkit-border-radius:10px;-moz-border-radius:10px;border-radius:10px;display:none;opacity:0;position:absolute;z-index:20;top:30px;left:30px;width:60px;height:60px;margin:-30px;background:rgba(0,0,0,0.75);color:rgba(255,255,255,0.85);pointer-events:none}
 .mercury-snippet-region+.mercury-region-drop-indicator:before{display:inline-block;font-family:"mercury";width:60px;height:60px;font-size:32px;line-height:60px;font-weight:normal;font-variant:normal;text-transform:none;text-align:center;speak:none;-webkit-font-smoothing:antialiased}
 .mercury-snippet-region+.mercury-region-drop-indicator:before{content:'X'}
 .mercury-snippet-region+.mercury-region-drop-indicator.mercury-region-snippet-drop-indicator:before{content:'N'}
 .mercury-text-region textarea.mercury-text-region-textarea{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;outline:0;border:none;margin:0;white-space:pre;background:transparent;font-size:12px;line-height:13px;resize:vertical}
 .mercury-text-region textarea.mercury-text-region-textarea:focus{outline-offset:0;outline:none;-webkit-box-shadow:0 0 7px #00bce5,0 0 2px #003e4c;-moz-box-shadow:0 0 7px #00bce5,0 0 2px #003e4c;box-shadow:0 0 7px #00bce5,0 0 2px #003e4c}
+.mercury-unknown-region[data-mercury-region]{min-height:20px;min-width:5px}
 .mercury-unknown-region:focus{outline:none;-webkit-box-shadow:0 0 7px red,0 0 2px #500;-moz-box-shadow:0 0 7px red,0 0 2px #500;box-shadow:0 0 7px red,0 0 2px #500}

@@ -1297,7 +1297,7 @@ Copyright (c) 2013 Jeremy Jackson
         }
       };
       options = $.extend(defaultOptions, options);
-      if (typeof options.data !== 'string') {
+      if (options.dataType && typeof options.data !== 'string') {
         options.data = JSON.stringify(options.data);
       }
       return $.ajax(options);

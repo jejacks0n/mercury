@@ -2653,7 +2653,6 @@ body.mercury-transitions {
 .mercury-gallery-region {
   position: relative;
   width: 100%;
-  min-height: 300px;
   background: black;
 }
 /* line 2, ../../lib/stylesheets/mercury/core/_region.scss */
@@ -2664,7 +2663,11 @@ body.mercury-transitions {
   -moz-box-shadow: 0 0 7px #00bce5, 0 0 2px #003e4c;
   box-shadow: 0 0 7px #00bce5, 0 0 2px #003e4c;
 }
-/* line 7, ../../lib/stylesheets/mercury/regions/_gallery.scss */
+/* line 6, ../../lib/stylesheets/mercury/regions/_gallery.scss */
+.mercury-gallery-region[data-mercury-region] {
+  min-height: 300px;
+}
+/* line 9, ../../lib/stylesheets/mercury/regions/_gallery.scss */
 .mercury-gallery-region + .mercury-region-drop-indicator {
   -webkit-transition-property: opacity;
   -webkit-transition-duration: 0.25s;
@@ -2715,7 +2718,7 @@ body.mercury-transitions {
 .mercury-gallery-region + .mercury-region-drop-indicator.mercury-region-snippet-drop-indicator:before {
   content: 'N';
 }
-/* line 11, ../../lib/stylesheets/mercury/regions/_gallery.scss */
+/* line 13, ../../lib/stylesheets/mercury/regions/_gallery.scss */
 .mercury-gallery-region .mercury-gallery-region-controls {
   -webkit-user-select: none;
   -moz-user-select: none;
@@ -2737,7 +2740,7 @@ body.mercury-transitions {
   text-align: center;
   font-size: 0;
 }
-/* line 28, ../../lib/stylesheets/mercury/regions/_gallery.scss */
+/* line 30, ../../lib/stylesheets/mercury/regions/_gallery.scss */
 .mercury-gallery-region .mercury-gallery-region-controls li {
   position: relative;
   height: 60px;
@@ -2745,13 +2748,13 @@ body.mercury-transitions {
   background: rgba(255, 255, 255, 0.4);
   text-align: center;
 }
-/* line 35, ../../lib/stylesheets/mercury/regions/_gallery.scss */
+/* line 37, ../../lib/stylesheets/mercury/regions/_gallery.scss */
 .mercury-gallery-region .mercury-gallery-region-controls img {
   max-width: 100px;
   max-height: 60px;
   cursor: pointer;
 }
-/* line 40, ../../lib/stylesheets/mercury/regions/_gallery.scss */
+/* line 42, ../../lib/stylesheets/mercury/regions/_gallery.scss */
 .mercury-gallery-region .mercury-gallery-region-controls em {
   position: absolute;
   display: block;
@@ -2768,7 +2771,7 @@ body.mercury-transitions {
   color: #ddd;
   cursor: pointer;
 }
-/* line 58, ../../lib/stylesheets/mercury/regions/_gallery.scss */
+/* line 60, ../../lib/stylesheets/mercury/regions/_gallery.scss */
 .mercury-gallery-region .slides {
   position: relative;
   width: 100%;
@@ -2777,18 +2780,18 @@ body.mercury-transitions {
   overflow: hidden;
   font-size: 0;
 }
-/* line 65, ../../lib/stylesheets/mercury/regions/_gallery.scss */
+/* line 67, ../../lib/stylesheets/mercury/regions/_gallery.scss */
 .mercury-gallery-region .slides .slide {
   width: 100%;
   height: 100%;
   background: black;
   text-align: center;
 }
-/* line 70, ../../lib/stylesheets/mercury/regions/_gallery.scss */
+/* line 72, ../../lib/stylesheets/mercury/regions/_gallery.scss */
 .mercury-gallery-region .slides .slide img {
   height: 600px;
 }
-/* line 75, ../../lib/stylesheets/mercury/regions/_gallery.scss */
+/* line 77, ../../lib/stylesheets/mercury/regions/_gallery.scss */
 .mercury-gallery-region .paginator {
   position: absolute;
   z-index: 19;
@@ -2796,23 +2799,18 @@ body.mercury-transitions {
   width: 100%;
   text-align: center;
 }
-/* line 81, ../../lib/stylesheets/mercury/regions/_gallery.scss */
+/* line 83, ../../lib/stylesheets/mercury/regions/_gallery.scss */
 .mercury-gallery-region .paginator span {
   margin: 0 8px;
   text-shadow: 0 0 3px black;
   font-size: 30px;
   color: #666666;
 }
-/* line 87, ../../lib/stylesheets/mercury/regions/_gallery.scss */
+/* line 89, ../../lib/stylesheets/mercury/regions/_gallery.scss */
 .mercury-gallery-region .paginator .active {
   color: white;
 }
 
-/* line 1, ../../lib/stylesheets/mercury/regions/_html.scss */
-.mercury-html-region {
-  min-height: 20px;
-  min-width: 5px;
-}
 /* line 2, ../../lib/stylesheets/mercury/core/_region.scss */
 .mercury-html-region:focus {
   outline-offset: 0;
@@ -2821,7 +2819,12 @@ body.mercury-transitions {
   -moz-box-shadow: 0 0 7px #00bce5, 0 0 2px #003e4c;
   box-shadow: 0 0 7px #00bce5, 0 0 2px #003e4c;
 }
-/* line 5, ../../lib/stylesheets/mercury/regions/_html.scss */
+/* line 3, ../../lib/stylesheets/mercury/regions/_html.scss */
+.mercury-html-region[data-mercury-region] {
+  min-height: 20px;
+  min-width: 5px;
+}
+/* line 7, ../../lib/stylesheets/mercury/regions/_html.scss */
 .mercury-html-region + .mercury-region-drop-indicator {
   -webkit-transition-property: opacity;
   -webkit-transition-duration: 0.25s;
@@ -2873,11 +2876,6 @@ body.mercury-transitions {
   content: 'N';
 }
 
-/* line 1, ../../lib/stylesheets/mercury/regions/_image.scss */
-.mercury-image-region {
-  min-width: 20px;
-  min-height: 20px;
-}
 /* line 2, ../../lib/stylesheets/mercury/core/_region.scss */
 .mercury-image-region:focus {
   outline-offset: 0;
@@ -2886,7 +2884,12 @@ body.mercury-transitions {
   -moz-box-shadow: 0 0 7px #00bce5, 0 0 2px #003e4c;
   box-shadow: 0 0 7px #00bce5, 0 0 2px #003e4c;
 }
-/* line 5, ../../lib/stylesheets/mercury/regions/_image.scss */
+/* line 3, ../../lib/stylesheets/mercury/regions/_image.scss */
+.mercury-image-region[data-mercury-region] {
+  min-width: 20px;
+  min-height: 20px;
+}
+/* line 7, ../../lib/stylesheets/mercury/regions/_image.scss */
 .mercury-image-region + .mercury-region-drop-indicator {
   -webkit-transition-property: opacity;
   -webkit-transition-duration: 0.25s;
@@ -2939,6 +2942,11 @@ body.mercury-transitions {
 }
 
 /* line 2, ../../lib/stylesheets/mercury/regions/_markdown.scss */
+.mercury-markdown-region[data-mercury-region] {
+  min-height: 20px;
+  min-width: 5px;
+}
+/* line 6, ../../lib/stylesheets/mercury/regions/_markdown.scss */
 .mercury-markdown-region + .mercury-region-drop-indicator {
   -webkit-transition-property: opacity;
   -webkit-transition-duration: 0.25s;
@@ -2989,7 +2997,7 @@ body.mercury-transitions {
 .mercury-markdown-region + .mercury-region-drop-indicator.mercury-region-snippet-drop-indicator:before {
   content: 'N';
 }
-/* line 5, ../../lib/stylesheets/mercury/regions/_markdown.scss */
+/* line 9, ../../lib/stylesheets/mercury/regions/_markdown.scss */
 .mercury-markdown-region textarea.mercury-markdown-region-textarea {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -3013,11 +3021,6 @@ body.mercury-transitions {
   box-shadow: 0 0 7px #00bce5, 0 0 2px #003e4c;
 }
 
-/* line 1, ../../lib/stylesheets/mercury/regions/_plain.scss */
-.mercury-plain-region {
-  min-height: 20px;
-  min-width: 5px;
-}
 /* line 2, ../../lib/stylesheets/mercury/core/_region.scss */
 .mercury-plain-region:focus {
   outline-offset: 0;
@@ -3026,12 +3029,12 @@ body.mercury-transitions {
   -moz-box-shadow: 0 0 7px #00bce5, 0 0 2px #003e4c;
   box-shadow: 0 0 7px #00bce5, 0 0 2px #003e4c;
 }
-
-/* line 1, ../../lib/stylesheets/mercury/regions/_snippet.scss */
-.mercury-snippet-region {
+/* line 3, ../../lib/stylesheets/mercury/regions/_plain.scss */
+.mercury-plain-region[data-mercury-region] {
   min-height: 20px;
   min-width: 5px;
 }
+
 /* line 2, ../../lib/stylesheets/mercury/core/_region.scss */
 .mercury-snippet-region:focus {
   outline-offset: 0;
@@ -3040,7 +3043,12 @@ body.mercury-transitions {
   -moz-box-shadow: 0 0 7px #00bce5, 0 0 2px #003e4c;
   box-shadow: 0 0 7px #00bce5, 0 0 2px #003e4c;
 }
-/* line 5, ../../lib/stylesheets/mercury/regions/_snippet.scss */
+/* line 3, ../../lib/stylesheets/mercury/regions/_snippet.scss */
+.mercury-snippet-region[data-mercury-region] {
+  min-height: 20px;
+  min-width: 5px;
+}
+/* line 7, ../../lib/stylesheets/mercury/regions/_snippet.scss */
 .mercury-snippet-region + .mercury-region-drop-indicator {
   -webkit-transition-property: opacity;
   -webkit-transition-duration: 0.25s;
@@ -3116,6 +3124,11 @@ body.mercury-transitions {
 }
 
 /* line 2, ../../lib/stylesheets/mercury/regions/_unknown.scss */
+.mercury-unknown-region[data-mercury-region] {
+  min-height: 20px;
+  min-width: 5px;
+}
+/* line 6, ../../lib/stylesheets/mercury/regions/_unknown.scss */
 .mercury-unknown-region:focus {
   outline: none;
   -webkit-box-shadow: 0 0 7px red, 0 0 2px #550000;

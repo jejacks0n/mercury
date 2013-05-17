@@ -150,3 +150,51 @@ class Plugin.Palette extends Mercury.ToolbarPalette
   #
   template:  ->
     """asdasd"""
+
+
+# In this example we'll be brief. This example is useful for snippet regions, and instead of using the snippet panel
+# we're going to provide a dropdown where snippets can be selected and inserted. It works the same as the panel, but
+# might be easier for some users. Who knows, it's an example.
+#
+SnippetsPlugin = Mercury.registerPlugin 'snippetsSelect'
+  description: 'Provides interface for adding snippets by using a dropdown.'
+  version: '1.0.0'
+
+  actions:
+    snippet: 'insert'
+
+  # You can use "type: 'select'" if you wanted it to look more like a dropdown and less like a button.
+  #
+  registerButton: ->
+    @button.set(type: 'snippets', subview: @bindTo(new SnippetsPlugin.Select()))
+
+
+  # Typical bindTo pattern used here -- and throughout the examples.
+  bindTo: (view) ->
+    view.on('insert:snippet', (value) => @triggerAction(value))
+
+
+  # Inserting a snippet is a little more complex than other things, because it might need to render a form (typically in
+  # a modal) to collect information from the user before inserting the modal. For this we have a similar architecture to
+  # plugins, but if you're interested in snippets, you should be reading example_snippet.coffee.
+  #
+  insert: (name, snippetName) ->
+    snippet = Mercury.getSnippet(snippetName, true).on('rendered', (view) -> Mercury.trigger('action', name, snippet, view))
+    snippet.initialize(@region)
+
+
+class SnippetsPlugin.Select extends Mercury.ToolbarSelect
+  template:   'snippets_select'
+  className:  'mercury-snippets-select'
+  events:     'click [data-value]': (e) -> @trigger('insert:snippet', $(e.target).closest('[data-value]').data('value'))
+  attributes: style: 'width:200px'
+
+
+JST['/mercury/templates/snippets_select'] = ->
+  """<ul>#{("<li data-value='#{name}'><b>#{snippet.title}</b><br/><em>#{snippet.description}</em></li>" for name, snippet of Mercury.Snippet.all()).join('')}</ul>"""
+
+
+# Now we add this plugin to the snippet region. We could now remove the snippet button in the primary region and
+# snippets would only be allowed in the snippet region.
+#
+Mercury.Region.Snippet.addToolbar 'snippets', snippet: ['Snippet', plugin: 'snippetsSelect']

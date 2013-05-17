@@ -47,7 +47,7 @@ class Mercury.Plugin extends Mercury.Module
     registered
 
 
-  # Unregister a plugin be providing a name. This will remove the plugin from the registered plugins.
+  # Unregister a plugin by providing a name. This will remove the plugin from the registered plugins.
   #
   @unregister: (name) ->
     definition = registered[name]
@@ -57,7 +57,7 @@ class Mercury.Plugin extends Mercury.Module
 
   # The plugin constructor expects a name, and one should always be passed in the options. It will throw an error if no
   # name was provided. All options will be assigned as instance variables (and if they're functions their scope will be
-  # correct.
+  # correct, but super will not be available.
   #
   constructor: (@options = {}) ->
     @configuration = @options.config || {}

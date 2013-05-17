@@ -113,7 +113,7 @@ mercury .mercury-toolbar {
         top: 1px;
       }
     }
-    em {
+    > em {
       display: none;
     }
     &[data-icon]:before {
@@ -129,7 +129,7 @@ mercury .mercury-toolbar {
         float: right;
         width: 18px;
       }
-      em {
+      > em {
         @include mercury-font(8pt);
         display: block;
         float: left;

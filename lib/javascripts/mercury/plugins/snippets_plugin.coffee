@@ -59,14 +59,6 @@ class Plugin.Panel extends Mercury.Panel
       e.originalEvent.dataTransfer.setData('snippet', $(e.target).data('value'))
 
 
-class Plugin.Modal extends Mercury.Modal
-  template:  false
-  className: 'mercury-snippet-modal'
-  title:     'Snippet Options'
-  width:     600
-
-
-@JST ||= {}
 JST['/mercury/templates/snippets'] = ->
   controls = """<div class="mercury-snippet-actions">Drag or <input type="button" value="Insert" class="btn"></div>"""
   ret = '<ul>'

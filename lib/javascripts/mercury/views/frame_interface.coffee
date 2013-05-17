@@ -55,7 +55,7 @@ class Mercury.FrameInterface extends Mercury.BaseInterface
 
   positionForRegion: ->
     offset = super
-    offset.top -= $('body', @document).scrollTop()
+    offset.top -= $('body', @document).scrollTop() if @$frame.length
     offset
 
 

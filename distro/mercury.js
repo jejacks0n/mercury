@@ -2716,11 +2716,15 @@ Copyright (c) 2013 Jeremy Jackson
       if (!this.name) {
         throw new Error('must provide a name for snippets');
       }
+      this.supportedRegions || (this.supportedRegions = 'all');
       Snippet.__super__.constructor.call(this, this.defaults || {});
     }
 
     Snippet.prototype.initialize = function(region) {
       this.region = region;
+      if (this.supportedRegions !== 'all' && this.supportedRegions.indexOf(this.region.type()) === -1) {
+        return alert(this.t("Unable to use the " + this.name + " snippet in that region. Supported regions: " + (this.supportedRegions.join(', '))));
+      }
       if (this.form) {
         return this.displayForm();
       }
@@ -2980,8 +2984,8 @@ Copyright (c) 2013 Jeremy Jackson
         region: this
       });
       if (!this.name) {
-        this.notify(this.t('No name provided for the %s region, falling back to random', this.constructor.type));
-        this.name = "" + this.constructor.type + (Math.floor(Math.random() * 10000));
+        this.notify(this.t('No name provided for the %s region, falling back to random', this.type()));
+        this.name = "" + (this.type()) + (Math.floor(Math.random() * 10000));
       }
       this.addRegionAttrs();
       if (!this.skipHistoryOnInitialize) {
@@ -3005,8 +3009,12 @@ Copyright (c) 2013 Jeremy Jackson
     };
 
     Region.prototype.addRegionAttrs = function() {
-      this.addClass("mercury-" + this.constructor.type + "-region");
+      this.addClass("mercury-" + (this.type()) + "-region");
       return this.$focusable.attr('data-mercury-region', true);
+    };
+
+    Region.prototype.type = function() {
+      return this.constructor.type;
     };
 
     Region.prototype.trigger = function(event) {
@@ -3215,7 +3223,7 @@ Copyright (c) 2013 Jeremy Jackson
       }
       return {
         name: this.name,
-        type: this.constructor.type,
+        type: this.type(),
         value: this.value(),
         data: this.data(),
         snippets: this.snippets()
@@ -3238,7 +3246,7 @@ Copyright (c) 2013 Jeremy Jackson
       this.$el.data({
         region: null
       });
-      this.removeClass("mercury-" + this.constructor.type + "-region");
+      this.removeClass("mercury-" + (this.type()) + "-region");
       this.$focusable.removeAttr('tabindex').removeAttr('data-mercury-region');
       this.trigger('release');
       this.$el.off();
@@ -3643,6 +3651,32 @@ Copyright (c) 2013 Jeremy Jackson
       return this.delay(100, this.focusActiveRegion);
     };
 
+    BaseInterface.prototype.setInterface = function(type) {
+      if (type === 'float') {
+        type = 'mercury-floating';
+        this.floating = true;
+        if ($('body').hasClass('mercury-transitions')) {
+          $('body').removeClass('mercury-transitions').addClass('mercury-no-transitions');
+        }
+      }
+      this.addClass(type);
+      this.position();
+      return this.onResize();
+    };
+
+    BaseInterface.prototype.removeInterface = function(type) {
+      if (type === 'float') {
+        type = 'mercury-floating';
+        this.floating = false;
+        if ($('body').hasClass('mercury-no-transitions')) {
+          $('body').removeClass('mercury-no-transitions').addClass('mercury-transitions');
+        }
+      }
+      this.removeClass(type);
+      this.position();
+      return this.onResize();
+    };
+
     BaseInterface.prototype.focusDefaultRegion = function() {
       return this.delay(100, this.focusActiveRegion);
     };
@@ -3996,7 +4030,9 @@ Copyright (c) 2013 Jeremy Jackson
     FrameInterface.prototype.positionForRegion = function() {
       var offset;
       offset = FrameInterface.__super__.positionForRegion.apply(this, arguments);
-      offset.top -= $('body', this.document).scrollTop();
+      if (this.$frame.length) {
+        offset.top -= $('body', this.document).scrollTop();
+      }
       return offset;
     };
 
@@ -6244,6 +6280,7 @@ Copyright (c) 2013 Jeremy Jackson
     var e, isIE, map, _fn, _i, _len,
       _this = this;
     this.version = '2.0.1 pre alpha';
+    this.JST = window.JST || {};
     this.init = function(options) {
       if (options == null) {
         options = {};
@@ -6996,6 +7033,9 @@ Copyright (c) 2013 Jeremy Jackson
   Plugin = Mercury.registerPlugin('snippets', {
     description: 'Provides interface for adding snippets to various regions -- may require server implementation.',
     version: '1.0.0',
+    config: {
+      toggleOnSnippetRegion: false
+    },
     actions: {
       snippet: 'insert'
     },
@@ -7004,7 +7044,7 @@ Copyright (c) 2013 Jeremy Jackson
         type: 'snippets',
         global: true,
         toggle: true,
-        subview: this.bindTo(new Plugin.Panel())
+        subview: this.bindTo(this.panel = new Plugin.Panel())
       });
     },
     bindTo: function(view) {
@@ -7019,6 +7059,31 @@ Copyright (c) 2013 Jeremy Jackson
         return Mercury.trigger('action', name, snippet, view);
       });
       return snippet.initialize(this.region);
+    },
+    onRegionFocus: function(region) {
+      this.region = region;
+      if (!this.config('toggleOnSnippetRegion')) {
+        return;
+      }
+      if (this.region === this.lastRegion) {
+        return;
+      }
+      this.lastRegion = this.region;
+      return this.togglePanelByRegion();
+    },
+    togglePanelByRegion: function() {
+      if (!this.panel) {
+        return;
+      }
+      if (this.region.type() === 'snippet') {
+        if (!this.panel.visible) {
+          this.shownByRegion = true;
+        }
+        return this.panel.show();
+      } else if (this.shownByRegion) {
+        this.panel.hide();
+        return this.shownByRegion = false;
+      }
     }
   });
 

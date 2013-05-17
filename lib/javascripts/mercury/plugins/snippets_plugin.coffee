@@ -2,11 +2,14 @@ Plugin = Mercury.registerPlugin 'snippets'
   description: 'Provides interface for adding snippets to various regions -- may require server implementation.'
   version: '1.0.0'
 
+  config:
+    toggleOnSnippetRegion: false
+
   actions:
     snippet: 'insert'
 
   registerButton: ->
-    @button.set(type: 'snippets', global: true, toggle: true, subview: @bindTo(new Plugin.Panel()))
+    @button.set(type: 'snippets', global: true, toggle: true, subview: @bindTo(@panel = new Plugin.Panel()))
 
 
   bindTo: (view) ->
@@ -16,6 +19,23 @@ Plugin = Mercury.registerPlugin 'snippets'
   insert: (name, snippetName) ->
     snippet = Mercury.getSnippet(snippetName, true).on('rendered', (view) -> Mercury.trigger('action', name, snippet, view))
     snippet.initialize(@region)
+
+
+  onRegionFocus: (@region) ->
+    return unless @config('toggleOnSnippetRegion')
+    return if @region == @lastRegion
+    @lastRegion = @region
+    @togglePanelByRegion()
+
+
+  togglePanelByRegion: ->
+    return unless @panel
+    if @region.type() == 'snippet'
+      @shownByRegion = true unless @panel.visible
+      @panel.show()
+    else if @shownByRegion
+      @panel.hide()
+      @shownByRegion = false
 
 
 class Plugin.Panel extends Mercury.Panel

@@ -43,7 +43,6 @@ class Plugin.Palette extends Mercury.ToolbarPalette
     @trigger('color:picked', value)
 
 
-@JST ||= {}
 JST['/mercury/templates/color'] = ->
   """
   <ul>

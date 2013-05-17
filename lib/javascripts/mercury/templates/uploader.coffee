@@ -1,4 +1,3 @@
-@JST ||= {}
 JST['/mercury/templates/uploader'] = ->
   """
   <div class="mercury-uploader-dialog">

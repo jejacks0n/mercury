@@ -1,4 +1,3 @@
-@JST ||= {}
 JST['/mercury/templates/statusbar'] = ->
   """
   <div class="mercury-statusbar-about">

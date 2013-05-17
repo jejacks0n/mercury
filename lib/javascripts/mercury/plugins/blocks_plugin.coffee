@@ -37,6 +37,5 @@ class Plugin.Select extends Mercury.ToolbarSelect
   events:    'click [data-value]': (e) -> @trigger('block:picked', $(e.target).closest('li').data('value'))
 
 
-@JST ||= {}
 JST['/mercury/templates/blocks'] = ->
   """<ul>#{("<li data-value='#{block}'><#{block}>#{text}</#{block}></li>" for block, text of Plugin.config('blocks')).join('')}</ul>"""

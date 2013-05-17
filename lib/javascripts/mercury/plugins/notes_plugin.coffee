@@ -14,7 +14,6 @@ class Plugin.Panel extends Mercury.Panel
   hidden:    true
 
 
-@JST ||= {}
 JST['/mercury/templates/notes'] = ->
   """
   <p>The Notes Plugin expects a server implementation.</p>

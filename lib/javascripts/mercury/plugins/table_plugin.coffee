@@ -56,7 +56,6 @@ class Plugin.Modal extends Mercury.Modal
     @hide()
 
 
-@JST ||= {}
 JST['/mercury/templates/table'] ||= ->
   """
   <form class="form-horizontal">

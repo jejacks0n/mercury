@@ -32,6 +32,5 @@ class Plugin.Select extends Mercury.ToolbarSelect
   events:    'click li': (e) -> @trigger('style:picked', $(e.target).data('value'))
 
 
-@JST ||= {}
 JST['/mercury/templates/styles'] = ->
   """<ul>#{("<li data-value='#{style}' class='#{style}'>#{text}</li>" for style, text of Plugin.config('styles')).join('')}</ul>"""

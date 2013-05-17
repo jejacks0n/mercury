@@ -1,4 +1,3 @@
-@JST ||= {}
 JST['/mercury/templates/panel'] = ->
   """
   <div class="mercury-panel-title"><em>&times;</em><span>Test Panel</span></div>

@@ -1,4 +1,3 @@
-@JST ||= {}
 JST['/mercury/templates/modal'] = ->
   """
   <div class="mercury-modal-overlay"></div>

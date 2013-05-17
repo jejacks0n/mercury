@@ -1,4 +1,3 @@
-@JST ||= {}
 JST['/mercury/templates/lightview'] = ->
   """
   <div class="mercury-lightview-overlay"></div>

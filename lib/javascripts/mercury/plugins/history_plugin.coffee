@@ -14,7 +14,6 @@ class Plugin.Panel extends Mercury.Panel
   hidden:    true
 
 
-@JST ||= {}
 JST['/mercury/templates/history'] ||= ->
   """
   <input type="text" class="search-input"/>

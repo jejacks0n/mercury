@@ -131,8 +131,8 @@ class Mercury.Region extends Mercury.View
     @$el.data(region: @)                                   # add instance reference to the element data
 
     unless @name
-      @notify(@t('No name provided for the %s region, falling back to random', @constructor.type))
-      @name = "#{@constructor.type}#{Math.floor(Math.random() * 10000)}"
+      @notify(@t('No name provided for the %s region, falling back to random', @type()))
+      @name = "#{@type()}#{Math.floor(Math.random() * 10000)}"
 
     @addRegionAttrs()
     @pushHistory() unless @skipHistoryOnInitialize
@@ -153,8 +153,14 @@ class Mercury.Region extends Mercury.View
   # Adds the classname based on the constructor type to the element, and the region data attribute.
   #
   addRegionAttrs: ->
-    @addClass("mercury-#{@constructor.type}-region")
+    @addClass("mercury-#{@type()}-region")
     @$focusable.attr('data-mercury-region', true)
+
+
+  # Provides a way to ask a region what type it is. Returns the constructor.type.
+  #
+  type: ->
+    @constructor.type
 
 
   # Override trigger to trigger the event at a global level.
@@ -359,7 +365,7 @@ class Mercury.Region extends Mercury.View
   #
   toJSON: (forSave = false) ->
     name: @name
-    type: @constructor.type
+    type: @type()
     value: @value()
     data: @data()
     snippets: @snippets()
@@ -378,7 +384,7 @@ class Mercury.Region extends Mercury.View
   #
   release: ->
     @$el.data(region: null)
-    @removeClass("mercury-#{@constructor.type}-region")
+    @removeClass("mercury-#{@type()}-region")
     @$focusable.removeAttr('tabindex').removeAttr('data-mercury-region')
     @trigger('release')
     @$el.off()

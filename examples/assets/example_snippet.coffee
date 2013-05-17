@@ -139,7 +139,7 @@ Mercury.registerSnippet 'beer',
 
   # We haven't specified this template anywhere in JST, so an ajax request will be sent to the server, which is expected
   # to respond to this path (GET). To utilize this you need to ensure that this works you may need to adjust the
-  # template configuration.
+  # template configuration. This file is located in examples/templates/snippets/beer/form.haml.
   #
   # The form that's returned could use a ujs handler to submit/get the response back as well, but in our case we're not
   # worrying about validation on the server, so we just need the server to render the form for us.
@@ -154,7 +154,8 @@ Mercury.registerSnippet 'beer',
 
   # If you want the snippet to save to the server you can provide a url for it. This allows you to take the attributes
   # from the snippet (after the form has been submitted) and pass them to the server. It's up to you how you implement
-  # the server portion, but it's expected that the server return a JSON object with a preview attribute set.
+  # the server portion, but it's expected that the server return a JSON object with a preview attribute set. This file
+  # is located in examples/templates/snippets/beer/template.haml.
   #
   url: -> '/mercury/templates/snippets/beer/template'
 

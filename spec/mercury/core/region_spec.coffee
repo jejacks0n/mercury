@@ -266,6 +266,12 @@ describe "Mercury.Region", ->
       expect( subject.$focusable.attr('data-mercury-region') ).to.eq('true')
 
 
+  describe "#type", ->
+
+    it "returns the constructor.type", ->
+      expect( subject.type() ).to.eq('unknown')
+
+
   describe "#trigger", ->
 
     it "calls super", ->

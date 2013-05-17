@@ -101,6 +101,28 @@ class Mercury.BaseInterface extends Mercury.View
     @delay(100, @focusActiveRegion)
 
 
+  setInterface: (type) ->
+    if type == 'float'
+      type = 'mercury-floating'
+      @floating = true
+      if $('body').hasClass('mercury-transitions')
+        $('body').removeClass('mercury-transitions').addClass('mercury-no-transitions')
+    @addClass(type)
+    @position()
+    @onResize()
+
+
+  removeInterface: (type) ->
+    if type == 'float'
+      type = 'mercury-floating'
+      @floating = false
+      if $('body').hasClass('mercury-no-transitions')
+        $('body').removeClass('mercury-no-transitions').addClass('mercury-transitions')
+    @removeClass(type)
+    @position()
+    @onResize()
+
+
   focusDefaultRegion: ->
     @delay(100, @focusActiveRegion)
 

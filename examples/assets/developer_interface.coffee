@@ -6,7 +6,11 @@
 # We can use the Mercury Core library to create things like views, models, regions, etc. Dive into the code to check out
 # whats possible. It has a lot of comments and is pretty easy to read.
 #
-class @DeveloperInterface extends Mercury.View
+# We assign window.Mercury to parent.Mercury in case we're being loaded in an iframe where Mercury isn't being loaded.
+#
+@Mercury ||= parent.Mercury
+
+class Mercury.DeveloperInterface extends Mercury.View
   @include Mercury.View.Modules.InterfaceFocusable
 
   template: 'developer-interface'
@@ -60,6 +64,10 @@ class @DeveloperInterface extends Mercury.View
       when 'add_new_region' then @addNewRegion()
       when 'release' then @release()
 
+      when 'toggle_small' then @toggleSmall()
+      when 'toggle_flat' then @toggleFlat()
+      when 'toggle_float' then @toggleFloat()
+
       # dealing with modals
       when 'new_modal'
         @modal?.show()
@@ -82,15 +90,6 @@ class @DeveloperInterface extends Mercury.View
         @panel ||= new Mercury.Panel(width: 200, title: 'Short Lorem Panel', template: 'lorem_short')
       when 'update_panel' then @panel?.update(width: Math.round(Math.random() * 300) + 100, title: 'Updated Lorem Panel', template: 'lorem_long')
       when 'release_panel' then @panel?.release(); delete(@panel)
-
-      # triggering actions
-      when 'html'
-        value = switch value
-          when 'html' then '<table>\n  <tr>\n    <td>1</td>\n    <td>2</td>\n  </tr>\n</table>'
-          when 'el' then $('<section class="foo"><h1>testing</h1></section>').get(0)
-          when 'jquery' then $('<section class="foo"><h1>testing</h1></section>')
-        Mercury.trigger('action', action, value)
-      else Mercury.trigger('action', action, value)
 
 
   # Focuses Mercury.
@@ -123,6 +122,34 @@ class @DeveloperInterface extends Mercury.View
     Mercury.toggle() # or Mercury.trigger('interface:toggle')
 
 
+  # Mercury has various interface styles, and you can set/remove these by calling #setInterface/#removeInterface. This
+  # shrinks the primary toolbar into a smaller version and removes the button labels.
+  #
+  toggleSmall: ->
+    if @interfaceSmall = !@interfaceSmall
+      Mercury.interface.setInterface('small')
+    else
+      Mercury.interface.removeInterface('small')
+
+
+  # Another interface. The flat interface removes gradients and changes the interface to be a more flat style.
+  #
+  toggleFlat: ->
+    if @interfaceFlat = !@interfaceFlat
+      Mercury.interface.setInterface('flat')
+    else
+      Mercury.interface.removeInterface('flat')
+
+
+  # Mercury has the concept of a floating toolbar that will move to the region that's being edited.
+  #
+  toggleFloat: ->
+    if @interfaceFloat = !@interfaceFloat
+      Mercury.interface.setInterface('float')
+    else
+      Mercury.interface.removeInterface('float')
+
+
   # If you reload your page, or have added new regions you can tell Mercury to go looking for new regions by triggering
   # the 'reinitialize' method or by calling the reinitialize method on the interface. Each interface class can implement
   # this differently, but by default this only looks for new regions.
@@ -149,9 +176,13 @@ class @DeveloperInterface extends Mercury.View
     Mercury.release()
     super
 
-
-@JST ||= {}
-JST['/mercury/templates/new-region'] = ->
+# Defining / Overriding templates.
+#
+# Note that templates that will be used within Mercury need to be defined within the scope of Mercury (if you're using
+# an iframe this is important.) So Mercury provides the concept of it's JST -- a reference to JST in it's window, so you
+# can always use that to ensure things will work.
+#
+Mercury.JST['/mercury/templates/new-region'] = ->
   """
   <div class="region">
     <div data-mercury="markdown" id="new_region_#{Math.floor(Math.random() * 10000)}">Lorem ipsum</div>
@@ -161,13 +192,17 @@ JST['/mercury/templates/new-region'] = ->
     </div>
   </div>
   """
-JST['/mercury/templates/developer-interface'] = ->
+Mercury.JST['/mercury/templates/developer-interface'] = ->
   """
   <li data-action="save">save</li>
   <li data-action="toggle_interface">toggle interface</li>
   <li data-action="reinitialize">reinitialize</li>
   <li data-action="add_new_region">add new region</li>
   <li data-action="release">release</li>
+  <hr/>
+  <li data-action="toggle_small">toggle small interface</li>
+  <li data-action="toggle_flat">toggle flat interface</li>
+  <li data-action="toggle_float">toggle floating interface</li>
   <hr/>
   <li data-action="new_modal">new modal</li>
   <li data-action="update_modal">update modal</li>
@@ -182,22 +217,12 @@ JST['/mercury/templates/developer-interface'] = ->
   <li data-action="new_panel">new panel</li>
   <li data-action="update_panel">update panel</li>
   <li data-action="release_panel">release panel</li>
-  <hr/>
-  <li data-action="style" data-value="border:1px solid red">style</li>
-  <li data-action="style" data-value="foo">class</li>
-  <li data-action="html" data-value="html">html (with html)</li>
-  <li data-action="html" data-value="el">html (with element)</li>
-  <li data-action="html" data-value="jquery">html (with jQuery)</li>
-  <li data-action="link" data-value='{"url": "https://github.com/jejacks0n/mercury", "text": "Project Home"}'>link</li>
-  <li data-action="image" data-value='{"url": "http://goo.gl/sZb1K", "text": "Test Image"}'>image</li>
-  <hr/>
-  <li><input type="text"/></li>
   """
-top.JST['/mercury/templates/lorem_short'] = ->
+Mercury.JST['/mercury/templates/lorem_short'] = ->
   """
   Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
   """
-top.JST['/mercury/templates/lorem_long'] = ->
+Mercury.JST['/mercury/templates/lorem_long'] = ->
   """
   Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.<br/><br/>
   Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.<br/><br/>

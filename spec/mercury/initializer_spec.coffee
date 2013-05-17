@@ -11,6 +11,9 @@ describe "Mercury", ->
   it "has the exepected version", ->
     expect( Klass.version ).to.eq('2.0.1 pre alpha')
 
+  it "provides a reference to JST", ->
+    expect( Klass.JST ).to.eq(JST)
+
   it "extends Config and adds the .configure method", ->
     expect( Klass.Module.extend ).calledWith(Klass.Config)
     expect( Klass.configure ).to.be.a('function')

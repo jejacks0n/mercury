@@ -11,6 +11,9 @@ initialize = ->
 
   @version = '2.0.1 pre alpha'
 
+  # Provides a reference to JST that is window independent.
+  @JST = window.JST || {}
+
   # Provides global method to initialize.
   #
   # This is the standard means to instantiate Mercury Editor. If you need more custom behavior check the configuration,

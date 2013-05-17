@@ -64,7 +64,7 @@ class Mercury.Snippet extends Mercury.Model
   # it will first display a form (if there's one), otherwise it calls through to #render.
   #
   initialize: (@region) ->
-    if @supportedRegions != 'all' && (@supportedRegions || []).indexOf(@region.type()) == -1
+    if @supportedRegions != 'all' && @supportedRegions.indexOf(@region.type()) == -1
       return alert(@t("Unable to use the #{@name} snippet in that region. Supported regions: #{@supportedRegions.join(', ')}"))
     return @displayForm() if @form
     @render()

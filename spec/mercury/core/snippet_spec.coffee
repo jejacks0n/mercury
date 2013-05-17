@@ -76,6 +76,23 @@ describe "Mercury.Snippet", ->
 
   describe "#initialize", ->
 
+    beforeEach ->
+      @mock = type: spy(-> 'bar')
+      spyOn(window, 'alert')
+
+    it "assigns @region", ->
+      subject.initialize(@mock)
+      expect( subject.region ).to.eq(@mock)
+
+    it "alerts if the region isn't supported", ->
+      subject.supportedRegions = ['foo']
+      subject.initialize(@mock)
+      expect( alert ).calledWith('Unable to use the name snippet in that region. Supported regions: foo')
+
+    it "allows all regions by default", ->
+      subject.initialize(@mock)
+      expect( alert ).not.called
+
     it "calls #displayForm if there's a form to display", ->
       spyOn(subject, 'displayForm')
       subject.form = true

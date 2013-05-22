@@ -244,7 +244,7 @@ class Mercury.Region extends Mercury.View
     @focused = true
     x = window.scrollX
     y = window.scrollY
-    @$focusable.focus()
+    @$focusable.focus() unless @$focusable.is(':focus')
     window.scrollTo(x, y) unless scroll
     @onFocus?()
 

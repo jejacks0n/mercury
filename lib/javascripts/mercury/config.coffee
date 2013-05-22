@@ -82,6 +82,7 @@ Mercury.configuration =
     style      : false                                     # interface style - 'small', 'flat' or 'small flat'
     floating   : false                                     # floats to the focused region
     floatWidth : false                                     # fixed width for floating interface (pixel value - eg. 520)
+    nohijack   : ['mercury-ignored']                       # classnames of anchors/forms that shouldn't be hijacked
 
 
   # Toolbars

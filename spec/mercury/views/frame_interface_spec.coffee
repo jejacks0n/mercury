@@ -44,7 +44,7 @@ describe "Mercury.FrameInterface", ->
     describe "with fallback", ->
 
       it "calls super", ->
-        subject.$frame = []
+        subject.$frame = $()
         spyOn(Klass.__super__, 'reinitialize')
         subject.reinitialize()
         expect( Klass.__super__.reinitialize ).called
@@ -52,15 +52,18 @@ describe "Mercury.FrameInterface", ->
 
   describe "#bindDefaultEvents", ->
 
-    it "binds to @frame.load", ->
+    beforeEach ->
+      spyOn(subject, 'reinitializeFrame')
       spyOn(subject, 'initializeFrame')
+
+    it "binds to @frame.load", ->
       spyOn(subject.$frame, 'on').yieldsOn(subject)
       subject.bindDefaultEvents()
       expect( subject.$frame.on ).calledWith('load', sinon.match.func)
       expect( subject.initializeFrame ).called
+      expect( subject.reinitializeFrame ).called
 
     it "binds to initialize", ->
-      spyOn(subject, 'initializeFrame')
       spyOn(Mercury, 'on')
       subject.bindDefaultEvents()
       expect( Mercury.on ).calledWith('initialize', sinon.match.func)
@@ -90,6 +93,10 @@ describe "Mercury.FrameInterface", ->
       spyOn(subject, 'addAllRegions')
       spyOn(subject, 'bindDocumentEvents')
       spyOn(subject, 'delay')
+
+    it "sets @regions", ->
+      subject.initializeFrame()
+      expect( subject.regions ).to.eql([])
 
     it "calls #setupDocument", ->
       subject.initializeFrame()
@@ -122,19 +129,59 @@ describe "Mercury.FrameInterface", ->
       expect( Mercury.trigger ).not.called
 
 
+  describe "#reinitializeFrame", ->
+
+    beforeEach ->
+      spyOn(subject, 'release')
+      spyOn(subject, 'initializeFrame')
+
+    it "reinitializes if there's a location (frame location isn't available when it's not our domain)", ->
+      spyOn(subject, 'frameLocation', -> 'http://foo.bar')
+      subject.reinitializeFrame()
+      expect( subject.initialized ).to.be.false
+      expect( subject.regions ).to.eql([])
+      expect( subject.initializeFrame ).called
+
+    it "alerts and then releases if we're not editing a page on our domain", ->
+      spyOn(subject, 'frameLocation', -> false)
+      spyOn(window, 'alert')
+      subject.reinitializeFrame()
+      expect( alert ).calledWith("You've left editing the page you were on, please refresh the page.")
+      expect( subject.release ).called
+      subject.release.restore()
+
+
+  describe "#frameLocation", ->
+
+    afterEach ->
+      subject.$frame.get.restore()
+
+    it "returns the location.href of the frame", ->
+      spyOn(subject.$frame, 'get', -> contentWindow: {location: href: '_href_'})
+      expect( subject.frameLocation() ).to.eq('_href_')
+
+
   describe "#setupDocument", ->
 
     beforeEach ->
       @contentWindow = document: '<div class="test-document">'
-      subject.$frame = get: => contentWindow: @contentWindow
+      subject.$frame = css: spy(), get: => contentWindow: @contentWindow
+
+    it "sets @window", ->
+      subject.setupDocument()
+      expect( subject.window ).to.eq(@contentWindow)
+
+    it "sets @window.Mercury if it's not defined", ->
+      subject.setupDocument()
+      expect( subject.window.Mercury ).to.eq(Mercury)
+
+    it "sets @window.Mercury.interface", ->
+      subject.setupDocument()
+      expect( subject.window.Mercury.interface ).to.eq(subject)
 
     it "sets @document", ->
       subject.setupDocument()
       expect( subject.document.is('.test-document') ).to.be.true
-
-    it "exposes Mercury to the frame window", ->
-      subject.setupDocument()
-      expect( @contentWindow.Mercury ).to.eq(Mercury)
 
 
   describe "#hide", ->
@@ -164,9 +211,15 @@ describe "Mercury.FrameInterface", ->
       expect( @mock.scrollTop ).called
 
 
+  describe "#hijackLinksAndForms", ->
+
+    it "needs to be tested"
+
+
   describe "#release", ->
 
     beforeEach ->
+      spyOn(subject, 'frameLocation', -> false)
       spyOn(Klass.__super__, 'release')
       @mock = off: spy()
       spyOn(window, '$', => @mock)

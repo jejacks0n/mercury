@@ -28,7 +28,7 @@ class Mercury.BaseInterface extends Mercury.View
     @extend Mercury.View.Modules.InterfaceMaskable if @config('interface:maskable')
     @extend Mercury.View.Modules.InterfaceShadowed if @config('interface:shadowed')
 
-    Mercury.interface = @
+    Mercury.interface ||= @
     @floating = @config('interface:floating')
     @visible = true
 
@@ -240,9 +240,12 @@ class Mercury.BaseInterface extends Mercury.View
     pos = @positionForRegion()
     width = Math.max(@config('interface:floatWidth') || @region.$el.width(), 300)
     height = @heightForWidth(width)
+    left = pos.left
+    viewport = $(window).width()
+    left -= left + width - viewport if left + width > viewport
     callback = ->
       @removeClass('mercury-no-animation') if animate
-      @css(top: pos.top - height, left: pos.left, width: width)
+      @css(top: pos.top - height, left: left, width: width)
     if animate
       @delay(20, callback)
       @delay(300, -> Mercury.trigger('interface:resize', @dimensions()))
@@ -254,8 +257,7 @@ class Mercury.BaseInterface extends Mercury.View
     @region.$el.offset()
 
 
-  onRegionFocus: (region) ->
-    @region = region
+  onRegionFocus: (@region) ->
     @delay(50, -> if @floating then @position(true) else @onResize())
 
 

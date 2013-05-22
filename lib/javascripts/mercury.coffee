@@ -42,9 +42,7 @@ Mercury.Region.Markdown.addToolbar 'block', block: ['Block', plugin: 'blocks']
 #   is there a way to serialize snippets directly in line so no server is needed for some snippets?
 #   figure out how to better integrate snippets.
 #   can we make editing content within snippets work?
-#   markdown region is throwing two focus events.
 #   make table/media/link plugins use custom actions.
-#   do we need to hijack links in the frame interface -- I would rather do an origin check and clean up if you leave the expected site -- are the bugs that required hijacking links fixed in firefox?
 #   better strategy for snippet management/removal -- focusable with toolbar buttons would be nice, combined with a lesser toolbar in line? (drag handle on hover, etc?)
 #   make floating toolbar have a pin / drag interface.
 #   finish the mercury-rails engine.

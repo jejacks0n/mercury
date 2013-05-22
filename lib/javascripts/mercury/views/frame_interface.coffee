@@ -21,7 +21,9 @@ class Mercury.FrameInterface extends Mercury.BaseInterface
 
 
   bindDefaultEvents: ->
-    @$frame.on('load', => @initializeFrame())
+    @$frame.on 'load', =>
+      @initializeFrame()
+      @$frame.off('load').on('load', => @reinitializeFrame())
     @delegateEvents('mercury:initialize': -> @initializeFrame())
     super
 
@@ -34,17 +36,34 @@ class Mercury.FrameInterface extends Mercury.BaseInterface
   initializeFrame: ->
     return if @initialized
     @initialized = true
+    @regions ||= []
 
     @setupDocument()
     @bindDocumentEvents()
     @addAllRegions()
+    @hijackLinksAndForms()
     Mercury.trigger('initialized')
     @delay(100, @focusDefaultRegion)
 
 
+  reinitializeFrame: ->
+    if @frameLocation() # same domain
+      @initialized = false
+      @regions = []
+      @initializeFrame()
+    else # you've navigated elsewhere.. sorry.
+      alert(@t("You've left editing the page you were on, please refresh the page."))
+      @release()
+
+
+  frameLocation: ->
+    @$frame.get(0)?.contentWindow?.location.href
+
+
   setupDocument: ->
     @window = @$frame.get(0).contentWindow
-    @window.Mercury = Mercury
+    @window.Mercury ||= Mercury
+    @window.Mercury.interface = @
     @document = $(@window.document)
 
 
@@ -59,9 +78,26 @@ class Mercury.FrameInterface extends Mercury.BaseInterface
     offset
 
 
+  hijackLinksAndForms: ->
+    nonHijackableClasses = @config('interface:nohijack') || []
+    regionSelector = "[#{@config('regions:attribute')}]"
+    for el in $('a, form', @document)
+      $el = $(el)
+      ignored = false
+      for classname in nonHijackableClasses
+        if $el.hasClass(classname)
+          ignored = true
+          continue
+      if !ignored && (el.target == '' || el.target == '_self') && !$el.closest(regionSelector).length
+        $el.attr('target', '_parent')
+
+
   release: ->
+    @$frame.css(top: 0)
     $(@window).off('scroll', @onScroll)
     super
+    try
+      window.location.href = frameLocation if frameLocation = @frameLocation()
 
 
   onScroll: =>

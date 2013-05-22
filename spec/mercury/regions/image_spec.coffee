@@ -32,21 +32,6 @@ describe "Mercury.Region.Image", ->
       expect( subject.value() ).to.eq('/teabag/fixtures/image.gif')
 
 
-  describe "#setData", ->
-
-    beforeEach ->
-      spyOn(subject, 'attr')
-
-    it "calls super", ->
-      spyOn(Klass.__super__, 'setData')
-      subject.setData()
-      expect( Klass.__super__.setData ).called
-
-    it "sets the align attribute", ->
-      subject.setData(align: 'left')
-      expect( subject.attr ).calledWith(align: 'left')
-
-
   describe "#onMousedown", ->
 
     beforeEach ->
@@ -88,6 +73,11 @@ describe "Mercury.Region.Image", ->
       it "sets the align attribute", ->
         subject.data(align: 'right')
         expect( subject.$el.attr('align') ).to.eq('right')
+
+      it "triggers a global resize event", ->
+        spyOn(Mercury, 'trigger')
+        subject.data(align: 'right')
+        expect( Mercury.trigger ).calledWith('resize')
 
 
   describe "actions", ->

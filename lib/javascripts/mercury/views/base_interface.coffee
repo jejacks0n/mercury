@@ -13,6 +13,7 @@ class Mercury.BaseInterface extends Mercury.View
     'mercury:save': 'save'
     'mercury:focus': 'focusActiveRegion'
     'mercury:blur': 'blurActiveRegion'
+    'mercury:resize': 'onResize'
     'mercury:action': 'focusActiveRegion'
     'mercury:region:focus': 'onRegionFocus'
     'mercury:region:release': 'onRegionRelease'

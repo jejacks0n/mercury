@@ -51,7 +51,9 @@ Mercury.Region.Image.addToolbar
 
 Mercury.Region.Image.addData
 
-  align: (val) -> @attr(align: val)
+  align: (val) ->
+    @attr(align: val)
+    Mercury.trigger('resize')
 
 
 Mercury.Region.Image.addAction

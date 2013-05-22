@@ -210,7 +210,7 @@ mercury .mercury-toolbar {
       text-align: center;
       white-space: nowrap;
       color: $toolbar_primary_button_color;
-      em {
+      > em {
         @include mercury-font(8.5pt);
         text-shadow: #eee 0 1px 0 !important;
         display: block;

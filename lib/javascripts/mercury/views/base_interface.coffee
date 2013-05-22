@@ -99,7 +99,7 @@ class Mercury.BaseInterface extends Mercury.View
 
   reinitialize: ->
     @addAllRegions()
-    @delay(100, @focusActiveRegion)
+    @focusDefaultRegion()
 
 
   setInterface: (type) ->
@@ -139,7 +139,7 @@ class Mercury.BaseInterface extends Mercury.View
 
 
   focusActiveRegion: ->
-    @region?.focus()
+    @region?.focus(false, true)
 
 
   blurActiveRegion: ->

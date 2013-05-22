@@ -240,11 +240,11 @@ class Mercury.Region extends Mercury.View
   # Focuses the region, which will call focus on the element and an onFocus method if the subclass implements one. Used
   # externally to manually focus a region (so regions can retain focus with various actions.)
   #
-  focus: (scroll = false) ->
+  focus: (scroll = false, force = false) ->
     @focused = true
     x = window.scrollX
     y = window.scrollY
-    @$focusable.focus() unless @$focusable.is(':focus')
+    @$focusable.focus() if force || !@$focusable.is(':focus')
     window.scrollTo(x, y) unless scroll
     @onFocus?()
 

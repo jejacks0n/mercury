@@ -40,3 +40,41 @@
     }
   }
 }
+
+.button {
+  border: 2px solid black;
+  border-radius: 6px;
+  font-size: 20px;
+  text-align: center;
+  padding: 5px 10px;
+  float: left;
+}
+
+// Override how mercury regions look on this page.
+[data-mercury] {
+  margin: 10px 0;
+}
+[data-mercury-region] {
+  outline: 5px solid #ccc !important;
+  min-height: 20px;
+  min-width: 5px;
+  &:focus {
+    outline: 5px solid #00bce5 !important;
+  }
+}
+
+// Custom region style overrides.
+.mercury-button-region[data-mercury-region] {
+  outline: none !important;
+}
+
+// Styles that are defined in the base styles plugin.
+.red {
+  color: red;
+}
+.blue {
+  color: blue;
+}
+.highlight {
+  background: yellow;
+}

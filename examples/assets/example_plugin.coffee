@@ -190,7 +190,7 @@ class SnippetsPlugin.Select extends Mercury.ToolbarSelect
   attributes: style: 'width:200px'
 
 
-JST['/mercury/templates/snippets_select'] = ->
+Mercury.JST['/mercury/templates/snippets_select'] = ->
   """<ul>#{("<li data-value='#{name}'><b>#{snippet.title}</b><br/><em>#{snippet.description}</em></li>" for name, snippet of Mercury.Snippet.all()).join('')}</ul>"""
 
 

@@ -140,7 +140,7 @@ Mercury.Region.Image.addToolbar 'filters', brightness: ['Brightness', icon: 'bri
 # To finish up the ToolbarSlider view we need to define the template that we're telling the ToolbarSlider to use. We
 # can define this in the JST namespace, or we can have our server respond -- which is configurable. But for the demo
 # we're just going to define a simple string with a slider input.
-JST['/mercury/templates/brightness_slider'] = -> '<input type="range"/>'
+Mercury.JST['/mercury/templates/brightness_slider'] = -> '<input type="range"/>'
 
 # At this point we have the button, the subview and everything we need. If you were to check, the button would still
 # be disabled -- because the image region doesn't know what to do with brightness yet. Now we just need to tie it all

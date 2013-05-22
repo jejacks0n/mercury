@@ -10,7 +10,7 @@
 #
 @Mercury ||= parent.Mercury
 
-class Mercury.DeveloperInterface extends Mercury.View
+if Mercury then class Mercury.DeveloperInterface extends Mercury.View
   @include Mercury.View.Modules.InterfaceFocusable
 
   template: 'developer-interface'
@@ -182,6 +182,7 @@ class Mercury.DeveloperInterface extends Mercury.View
 # an iframe this is important.) So Mercury provides the concept of it's JST -- a reference to JST in it's window, so you
 # can always use that to ensure things will work.
 #
+@Mercury ||= JST: {}
 Mercury.JST['/mercury/templates/new-region'] = ->
   """
   <div class="region">

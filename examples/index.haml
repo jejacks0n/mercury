@@ -2,8 +2,11 @@
 %html
   %head
     = csrf_meta_tag
-    = stylesheet_link_tag "mercury", "developer_interface"
-    = javascript_include_tag "mercury", "developer_interface", "adding_functionality", "example_snippet", "example_plugin"
+    = stylesheet_link_tag "mercury"
+    = javascript_include_tag "mercury"
+
+    = stylesheet_link_tag "styles/examples"
+    = javascript_include_tag "developer_interface", "example_snippet", "example_plugin", "example_region", "functionality_adding", "functionality_overriding"
 
     = javascript_include_tag "http://widgets.twimg.com/j/1/widget.js"
     = stylesheet_link_tag "http://widgets.twimg.com/j/1/widget.css"
@@ -16,7 +19,10 @@
       <br/>
       %img(src="http://goo.gl/ZoJd4")
       <br/>
-      = link_to('Google Link', 'http://google.com')
+      = link_to 'Google Link', 'http://google.com'
+      = link_to 'DailyJS', 'http://dailyjs.com/'
+      = link_to 'DailyJS', 'http://dailyjs.com/', class: 'mercury-ignored'
+      = link_to 'Plain Page', '/plain', class: 'mercury-ignored'
 
     %hr
     -# -----------------------------------------------------------------------------------------------------------------
@@ -57,7 +63,7 @@
 
     #html1(data-mercury="html") Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy
     %section#html2(data-mercury="html") section
-    %p#html3(data-mercury="html") paragraph
+    %p#html3(data-mercury="html" style="width:200px;float:right") paragraph
     %span#html4(data-mercury="html") span
 
     %ul
@@ -93,6 +99,12 @@
 
     %hr
     -# -----------------------------------------------------------------------------------------------------------------
+    %h2#new_regions Custom Regions
+
+    #button1.button(data-mercury="button") Text Value
+
+    %hr{style: 'clear:both'}
+    -# -----------------------------------------------------------------------------------------------------------------
     %h2 Gallery Region
 
     #gallery1(data-mercury="gallery")
@@ -101,26 +113,6 @@
         .slide= image_tag('http://goo.gl/iKIkP')
 
     EOF
-
-:scss
-  .red {
-    color: red;
-  }
-  .blue {
-    color: blue;
-  }
-  .highlight {
-    background: yellow;
-  }
-  [data-mercury] {
-    margin: 10px 0;
-  }
-  [data-mercury-region] {
-    outline: 5px solid #ccc !important;
-    &:focus {
-      outline: 5px solid #00bce5 !important;
-    }
-  }
 
 :javascript
   // If we're in an an iframe and Mercury is present in the parent we can shortcut the load time by initializing

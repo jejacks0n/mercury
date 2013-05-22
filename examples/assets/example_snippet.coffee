@@ -105,7 +105,7 @@ class TwitterSnippet.View extends Mercury.View
     """
 
 
-JST['/mercury/templates/snippets/twitter/form'] = ->
+Mercury.JST['/mercury/templates/snippets/twitter/form'] = ->
   """
   <h3>This snippet allows specifying a twitter username and when inserted will display tweets from that user. Note that it has to be an active twitter account and only tweets within the past 5 days will be displayed (this is due to how twitter exposes search).</h3>
   <hr/>

@@ -4,5 +4,8 @@
     = csrf_meta_tag
     = stylesheet_link_tag "mercury"
     = javascript_include_tag "mercury"
+
+    = javascript_include_tag "http://widgets.twimg.com/j/1/widget.js"
+    = stylesheet_link_tag "http://widgets.twimg.com/j/1/widget.css"
   %body
     %iframe(id="mercury_frame" frameborder="0" src="/plain.html")

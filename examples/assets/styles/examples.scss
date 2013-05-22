@@ -48,6 +48,11 @@
   text-align: center;
   padding: 5px 10px;
   float: left;
+  cursor: pointer;
+}
+
+hr {
+  clear: both;
 }
 
 // Override how mercury regions look on this page.
@@ -66,6 +71,7 @@
 // Custom region style overrides.
 .mercury-button-region[data-mercury-region] {
   outline: none !important;
+  cursor: text;
 }
 
 // Styles that are defined in the base styles plugin.

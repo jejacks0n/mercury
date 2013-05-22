@@ -119,7 +119,7 @@ class Mercury.ToolbarButton extends Mercury.View
     @deactivate() unless @subview?.visible
     if @global || @regionSupported(region)
       @enable()
-      @activate() if region.hasContext(@name)
+      @activate() if region.hasContext(@name, true) == true
     else
       @disable()
 

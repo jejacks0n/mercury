@@ -213,7 +213,48 @@ describe "Mercury.FrameInterface", ->
 
   describe "#hijackLinksAndForms", ->
 
-    it "needs to be tested"
+    beforeEach ->
+      Mercury.configure 'interface:nohijack', ['nohijack']
+      Mercury.configure 'regions:attribute', 'custom-region-attribute'
+      fixture.load('link_hijacking.html')
+      @el = subject.document = fixture.$el
+      subject.hijackLinksAndForms()
+
+    it "doesn't change the targets of anchors/forms that are within a region", ->
+      expect( @el.find('#anchor1region').attr('target') ).to.eql('_top')
+      expect( @el.find('#anchor2region').attr('target') ).to.eql('_blank')
+      expect( @el.find('#anchor3region').attr('target') ).to.eql('_self')
+      expect( @el.find('#anchor4region').attr('target') ).to.eql('foo')
+      expect( @el.find('#anchor5region').attr('target') ).to.be.undefined
+      expect( @el.find('#form1region').attr('target') ).to.eql('_top')
+      expect( @el.find('#form2region').attr('target') ).to.eql('_blank')
+      expect( @el.find('#form3region').attr('target') ).to.eql('_self')
+      expect( @el.find('#form4region').attr('target') ).to.eql('foo')
+      expect( @el.find('#form5region').attr('target') ).to.be.undefined
+
+    it "sets the targets on links and forms to top if it should", ->
+      expect( @el.find('#anchor1').attr('target') ).to.eql('_top')
+      expect( @el.find('#anchor2').attr('target') ).to.eql('_blank')
+      expect( @el.find('#anchor3').attr('target') ).to.eql('_parent')
+      expect( @el.find('#anchor4').attr('target') ).to.eql('foo')
+      expect( @el.find('#anchor5').attr('target') ).to.eql('_parent')
+      expect( @el.find('#anchor6').attr('target') ).to.eql('_top')
+      expect( @el.find('#anchor7').attr('target') ).to.eql('_blank')
+      expect( @el.find('#anchor8').attr('target') ).to.eql('_self')
+      expect( @el.find('#anchor9').attr('target') ).to.eql('foo')
+      expect( @el.find('#anchorA').attr('target') ).to.be.undefined
+
+    it "doesn't change anchors/forms that are ignored", ->
+      expect( @el.find('#form1').attr('target') ).to.eql('_top')
+      expect( @el.find('#form2').attr('target') ).to.eql('_blank')
+      expect( @el.find('#form3').attr('target') ).to.eql('_parent')
+      expect( @el.find('#form4').attr('target') ).to.eql('foo')
+      expect( @el.find('#form5').attr('target') ).to.eql('_parent')
+      expect( @el.find('#form6').attr('target') ).to.eql('_top')
+      expect( @el.find('#form7').attr('target') ).to.eql('_blank')
+      expect( @el.find('#form8').attr('target') ).to.eql('_self')
+      expect( @el.find('#form9').attr('target') ).to.eql('foo')
+      expect( @el.find('#formA').attr('target') ).to.be.undefined
 
 
   describe "#release", ->

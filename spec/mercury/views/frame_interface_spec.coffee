@@ -1,6 +1,8 @@
 #= require spec_helper
 #= require mercury/views/frame_interface
 
+fixture.preload('link_hijacking.html')
+
 describe "Mercury.FrameInterface", ->
 
   Klass = Mercury.FrameInterface

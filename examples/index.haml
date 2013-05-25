@@ -32,7 +32,7 @@
     -# -----------------------------------------------------------------------------------------------------------------
     %h2 Snippet Regions
 
-    #snippet1(data-mercury="snippet")
+    #snippet1(data-mercury="snippet" data-region-options='{"placeholder": "Drop a snippet on me"}')
 
     %section#snippet2(data-mercury="snippet" style="position:relative;width:50%")
 
@@ -40,7 +40,7 @@
     -# -----------------------------------------------------------------------------------------------------------------
     %h2 Markdown Regions
 
-    #markdown1(data-mercury="markdown" data-region-options='{"name": "markdown_region_1", "allowDirection": true}')
+    #markdown1(data-mercury="markdown" data-region-options='{"name": "markdown_region_1", "allowDirection": true, "placeholder": "This is a placeholder"}')
       :preserve
         1
         **something here**
@@ -64,7 +64,7 @@
     #html1(data-mercury="html") Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy
     %section#html2(data-mercury="html") section
     %p#html3(data-mercury="html" style="width:200px;float:right") paragraph
-    %span#html4(data-mercury="html") span
+    %span#html4(data-mercury="html" data-region-options='{"placeholder": "Drop a snippet on me"}') span
 
     %ul
       %li#html5(data-mercury="html") list item
@@ -86,7 +86,7 @@
     -# -----------------------------------------------------------------------------------------------------------------
     %h2 Text Regions
 
-    %h1#text1(data-mercury="text") Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy
+    %h3#text1(data-mercury="text") Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy
     #text2(data-mercury="text" data-region-options='{"height": 100, "autoSize": false}') Lorem<br/><br/>Testing
     #text_empty(data-mercury="text")
 

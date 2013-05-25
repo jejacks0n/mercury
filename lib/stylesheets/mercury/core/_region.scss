@@ -33,3 +33,11 @@
     }
   }
 }
+
+@mixin mercury-region-placeholder {
+  &[data-mercury-region]:empty:before {
+    overflow: hidden;
+    content: attr(data-placeholder);
+    color: #bbb;
+  }
+}

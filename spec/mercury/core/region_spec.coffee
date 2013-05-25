@@ -176,6 +176,10 @@ describe "Mercury.Region", ->
       subject = new Klass('<div>')
       expect( subject.dataAttrs ).to.eql(foo: 'bar', bar: 'baz')
 
+    it "sets @placeholder", ->
+      subject = new Klass($("""<div data-mercury-options='{"placeholder":"Test placeholder"}'">"""), foo: 'bar')
+      expect( subject.placeholder ).to.eq('Test placeholder')
+
     it "calls #beforeBuild if it's defined", ->
       Klass::beforeBuild = spy()
       subject = new Klass('<div>')
@@ -225,6 +229,10 @@ describe "Mercury.Region", ->
     it "sets data-region to the instance", ->
       subject = new Klass('<div>')
       expect( subject.$el.data('region') ).to.eq(subject)
+
+    it "sets data-placehoder", ->
+      subject = new Klass('<div>', placeholder: 'Test placeholder')
+      expect( subject.$focusable.data('placeholder') ).to.eq('Test placeholder')
 
     it "notifies if we have no name", ->
       subject = new Klass('<div>')
@@ -504,16 +512,16 @@ describe "Mercury.Region", ->
 
     it "sets the element data", ->
       expect( subject.data(foo: 'bar') ).to.eq(subject.$el)
-      expect( subject.$el.data() ).to.eql(mercury: "foo", region: subject, mercuryRegion: true, foo: 'bar')
+      expect( subject.$el.data() ).to.eql(mercury: "foo", region: subject, mercuryRegion: true, foo: 'bar', placeholder: '')
       subject.data('bar', 'baz')
-      expect( subject.$el.data() ).to.eql(mercury: 'foo', region: subject, mercuryRegion: true, foo: 'bar', bar: 'baz')
+      expect( subject.$el.data() ).to.eql(mercury: 'foo', region: subject, mercuryRegion: true, foo: 'bar', bar: 'baz', placeholder: '')
 
 
   describe "#setData", ->
 
     it "sets the data to the element", ->
       subject.setData(foo: 'bar')
-      expect( subject.$el.data() ).to.eql(mercury: 'foo', region: subject, mercuryRegion: true, foo: 'bar')
+      expect( subject.$el.data() ).to.eql(mercury: 'foo', region: subject, mercuryRegion: true, foo: 'bar', placeholder: '')
 
     it "calls any data attr handlers that are defined", ->
       subject.dataAttrs.foo = spy()

@@ -117,6 +117,7 @@ class Mercury.Region extends Mercury.View
     @dataAttrs = $.extend({}, @constructor.dataAttrs, @dataAttrs)
     @options = $.extend(JSON.parse($(@el).attr(attr) || '{}'), @options) if @el && attr = @config('regions:options')
 
+    @placeholder ||= @options.placeholder || ''            # sets the default placeholder to an empty string
     @beforeBuild?()                                        # call the beforeBuild method if it's defined
     super(@options)                                        # let the view do it's thing
     @attr(tabindex: 0) unless @$focusable                  # make the element focusable (unless we've set one ourselves)
@@ -129,6 +130,7 @@ class Mercury.Region extends Mercury.View
     @setInitialData()                                      # setup the initial data attributes from dataAttrs
     @afterBuild?()                                         # call the afterBuild method if it's defined
     @$el.data(region: @)                                   # add instance reference to the element data
+    @$focusable.attr('data-placeholder': @placeholder)     # add the placeholder as data so it can be styled
 
     unless @name
       @notify(@t('No name provided for the %s region, falling back to random', @type()))
@@ -279,6 +281,7 @@ class Mercury.Region extends Mercury.View
         delete(data.region)
         delete(data.mercury)
         delete(data.mercuryRegion)
+        delete(data.placeholder)
       return data ? null
     obj = key
     (obj = {}; obj[key] = value) if typeof(key) == 'string'

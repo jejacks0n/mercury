@@ -53,9 +53,11 @@ describe "Mercury.Region.Modules.FocusableTextarea", ->
       expect( subject.$preview.parent().get(0) ).to.eql(subject.$el.get(0))
       expect( subject.$focusable.parent().get(0) ).to.eql(subject.$el.get(0))
 
-    it "calls #resizeFocusable", ->
+    it "delays calling #resizeFocusable", ->
+      spyOn(subject, 'delay').yieldsOn(subject)
       spyOn(subject, 'resizeFocusable')
       subject.buildFocusable()
+      expect( subject.delay ).calledWith(1, subject.resizeFocusable)
       expect( subject.resizeFocusable ).called
 
     it "calls #delegateEvents", ->

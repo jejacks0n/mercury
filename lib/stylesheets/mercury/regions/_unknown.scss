@@ -1,7 +1,8 @@
 .mercury-unknown-region {
+  @include mercury-region-placeholder;
   &[data-mercury-region] {
-    min-height: 20px;
     min-width: 5px;
+    min-height: 20px;
   }
   &:focus {
     outline: none;

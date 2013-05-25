@@ -10,7 +10,6 @@ class Mercury.Region.Snippet extends Mercury.Region
 
   skipHistoryOn: ['undo', 'redo']
 
-
   onDropSnippet: (snippet) ->
     snippet.on 'rendered', (view) =>
       @focus()

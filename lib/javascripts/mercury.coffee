@@ -52,11 +52,9 @@ Mercury.Region.Markdown.addToolbar 'block', block: ['Block', plugin: 'blocks']
 #   can we make editing content within snippets work?
 #   better strategy for snippet management/removal -- focusable with toolbar buttons would be nice, combined with a lesser toolbar in line? (drag handle on hover, etc?)
 #   make table/media/link plugins use custom actions.
-#   make floating toolbar have a pin / drag interface.
 #   finish the mercury-rails engine.
 #   ask/invite translators to revisit their translations.
 # todo regions:
-#   allow providing a placeholder for regions (maybe a tooltip as well?).
 #   html: when using the iframe, rangy isn't behaving the same (doesn't work because it doesn't understand the context).
 #   html: selections are a little wonky on undo/redo still, and sometimes in firefox they're not applying because the checksum doesn't validate.
 #   html: finish it.

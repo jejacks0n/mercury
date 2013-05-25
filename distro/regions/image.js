@@ -79,9 +79,10 @@ serialization to the server.
 
   Mercury.Region.Image.addData({
     align: function(val) {
-      return this.attr({
+      this.attr({
         align: val
       });
+      return Mercury.trigger('resize');
     }
   });
 

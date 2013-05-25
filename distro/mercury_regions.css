@@ -200,8 +200,8 @@ This file contains all of the required css for the Mercury interface as well as 
 }
 /* line 3, ../../lib/stylesheets/mercury/regions/_html.scss */
 .mercury-html-region[data-mercury-region] {
-  min-height: 20px;
   min-width: 5px;
+  min-height: 20px;
 }
 /* line 7, ../../lib/stylesheets/mercury/regions/_html.scss */
 .mercury-html-region + .mercury-region-drop-indicator {
@@ -322,8 +322,8 @@ This file contains all of the required css for the Mercury interface as well as 
 
 /* line 2, ../../lib/stylesheets/mercury/regions/_markdown.scss */
 .mercury-markdown-region[data-mercury-region] {
-  min-height: 20px;
   min-width: 5px;
+  min-height: 20px;
 }
 /* line 6, ../../lib/stylesheets/mercury/regions/_markdown.scss */
 .mercury-markdown-region + .mercury-region-drop-indicator {
@@ -386,9 +386,11 @@ This file contains all of the required css for the Mercury interface as well as 
   margin: 0;
   white-space: pre;
   background: transparent;
-  font-family: Monaco, "Bitstream Vera Sans Mono", "Lucida Console", monospace;
-  font-size: 12px;
-  line-height: 13px;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+  color: inherit;
   resize: vertical;
 }
 /* line 2, ../../lib/stylesheets/mercury/core/_region.scss */
@@ -410,8 +412,8 @@ This file contains all of the required css for the Mercury interface as well as 
 }
 /* line 3, ../../lib/stylesheets/mercury/regions/_plain.scss */
 .mercury-plain-region[data-mercury-region] {
-  min-height: 20px;
   min-width: 5px;
+  min-height: 20px;
 }
 
 /* line 2, ../../lib/stylesheets/mercury/core/_region.scss */
@@ -422,12 +424,18 @@ This file contains all of the required css for the Mercury interface as well as 
   -moz-box-shadow: 0 0 7px #00bce5, 0 0 2px #003e4c;
   box-shadow: 0 0 7px #00bce5, 0 0 2px #003e4c;
 }
-/* line 3, ../../lib/stylesheets/mercury/regions/_snippet.scss */
-.mercury-snippet-region[data-mercury-region] {
-  min-height: 20px;
-  min-width: 5px;
+/* line 38, ../../lib/stylesheets/mercury/core/_region.scss */
+.mercury-snippet-region[data-mercury-region]:empty:before {
+  overflow: hidden;
+  content: attr(data-placeholder);
+  color: #bbb;
 }
-/* line 7, ../../lib/stylesheets/mercury/regions/_snippet.scss */
+/* line 4, ../../lib/stylesheets/mercury/regions/_snippet.scss */
+.mercury-snippet-region[data-mercury-region] {
+  min-width: 5px;
+  min-height: 20px;
+}
+/* line 8, ../../lib/stylesheets/mercury/regions/_snippet.scss */
 .mercury-snippet-region + .mercury-region-drop-indicator {
   -webkit-transition-property: opacity;
   -webkit-transition-duration: 0.25s;
@@ -489,8 +497,11 @@ This file contains all of the required css for the Mercury interface as well as 
   margin: 0;
   white-space: pre;
   background: transparent;
-  font-size: 12px;
-  line-height: 13px;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+  color: inherit;
   resize: vertical;
 }
 /* line 2, ../../lib/stylesheets/mercury/core/_region.scss */
@@ -502,12 +513,18 @@ This file contains all of the required css for the Mercury interface as well as 
   box-shadow: 0 0 7px #00bce5, 0 0 2px #003e4c;
 }
 
-/* line 2, ../../lib/stylesheets/mercury/regions/_unknown.scss */
-.mercury-unknown-region[data-mercury-region] {
-  min-height: 20px;
-  min-width: 5px;
+/* line 38, ../../lib/stylesheets/mercury/core/_region.scss */
+.mercury-unknown-region[data-mercury-region]:empty:before {
+  overflow: hidden;
+  content: attr(data-placeholder);
+  color: #bbb;
 }
-/* line 6, ../../lib/stylesheets/mercury/regions/_unknown.scss */
+/* line 3, ../../lib/stylesheets/mercury/regions/_unknown.scss */
+.mercury-unknown-region[data-mercury-region] {
+  min-width: 5px;
+  min-height: 20px;
+}
+/* line 7, ../../lib/stylesheets/mercury/regions/_unknown.scss */
 .mercury-unknown-region:focus {
   outline: none;
   -webkit-box-shadow: 0 0 7px red, 0 0 2px #550000;

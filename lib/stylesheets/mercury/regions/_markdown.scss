@@ -1,7 +1,7 @@
 .mercury-markdown-region {
   &[data-mercury-region] {
-    min-height: 20px;
     min-width: 5px;
+    min-height: 20px;
   }
   &+ .mercury-region-drop-indicator {
     @include mercury-region-drop-indicator;
@@ -14,9 +14,11 @@
     margin: 0;
     white-space: pre;
     background: transparent;
-    font-family: Monaco, "Bitstream Vera Sans Mono", "Lucida Console", monospace;
-    font-size: 12px;
-    line-height: 13px;
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: inherit;
+    line-height: inherit;
+    color: inherit;
     resize: vertical;
   }
 }

@@ -1,8 +1,8 @@
 .mercury-html-region {
   @include mercury-region-outline;
   &[data-mercury-region] {
-    min-height: 20px;
     min-width: 5px;
+    min-height: 20px;
   }
   &+ .mercury-region-drop-indicator {
     @include mercury-region-drop-indicator;

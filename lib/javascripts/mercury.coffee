@@ -55,6 +55,7 @@ Mercury.Region.Markdown.addToolbar 'block', block: ['Block', plugin: 'blocks']
 #   finish the mercury-rails engine.
 #   ask/invite translators to revisit their translations.
 # todo regions:
+#   plain: allow pasting, but sanitize to text.
 #   html: when using the iframe, rangy isn't behaving the same (doesn't work because it doesn't understand the context).
 #   html: selections are a little wonky on undo/redo still, and sometimes in firefox they're not applying because the checksum doesn't validate.
 #   html: finish it.

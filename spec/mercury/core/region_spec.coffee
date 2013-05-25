@@ -242,6 +242,7 @@ describe "Mercury.Region", ->
       spyOn(Math, 'random', -> 42)
       subject = new Klass('<div>')
       expect( subject.name ).to.eq('unknown420000')
+      expect( subject.$el.attr('id') ).to.eq('unknown420000')
 
     it "calls #addRegionAttrs", ->
       spyOn(Klass::, 'addRegionAttrs')
@@ -536,8 +537,14 @@ describe "Mercury.Region", ->
 
   describe "#snippets", ->
 
-    it "returns an object", ->
-      expect( subject.snippets() ).to.eql({})
+    beforeEach ->
+      @snippetModel = cid: '_cid_', toJSON: -> {snippet: '_snippet_'}
+      @snippetView = $('<div data-mercury-snippet="_snippet_name_">').data(snippet: @snippetModel)
+      subject.html(@snippetView)
+
+    it "returns an object with the snippets", ->
+      expect( subject.snippets() ).to.eql
+        _cid_: {snippet: '_snippet_'}
 
 
   describe "#hasChanges", ->

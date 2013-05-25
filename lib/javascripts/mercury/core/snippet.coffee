@@ -70,6 +70,13 @@ class Mercury.Snippet extends Mercury.Model
     @render()
 
 
+  # Delegates to setTimeout swapping the argument order, and calling the callback within our scope.
+  # Returns the setTimeout so it can be cancelled.
+  #
+  delay: (ms, callback) ->
+    setTimeout((=> callback.call(@)), ms)
+
+
   # Displays a modal with the configured form template. You can change which view class that's instantiated by
   # specifying a @Modal attribute. The #render method will be called when form:success is triggered from the view.
   #
@@ -97,13 +104,21 @@ class Mercury.Snippet extends Mercury.Model
   renderView: (template) ->
     @renderedView = @view(@templateClosure(template || @template))
     @trigger('rendered', @renderedView)
+    @delay(1, @afterRender)
+
+
+  # This method is called directly after the snippet is rendered into a region. You can do post insertion processing
+  # with this if needed.
+  #
+  afterRender: ->
+    Mercury.trigger('reinitialize')
 
 
   # Provides the view that will be instantiated when the snippet is rendered for a region. Can be overridden if a custom
   # view is needed.
   #
   view: (template) ->
-    new Mercury.View(template: template, className: "mercury-#{@name}-snippet")
+    new Mercury.Snippet.View(template: template, snippet: @)
 
 
   # When a save request is made, and is successful, we assume it's responded with either html content, or JSON.
@@ -159,3 +174,14 @@ class Mercury.Snippet.Definition
     if !functions then for name, value of sig
       delete sig[name] if typeof(value) == 'function'
     sig
+
+
+class Mercury.Snippet.View extends Mercury.View
+
+  # The base snippet view provides the default classname, and data attributes to be able to select and get a reference
+  # to the snippet model.
+  #
+  build: ->
+    @addClass("mercury-#{@snippet.name}-snippet")
+    @attr('data-mercury-snippet': @snippet.name)
+    @$el.data('snippet': @snippet)

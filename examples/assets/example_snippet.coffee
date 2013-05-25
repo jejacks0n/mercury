@@ -77,7 +77,7 @@ TwitterSnippet = Mercury.registerSnippet 'twitter',
   view: -> new TwitterSnippet.View(snippet: @)
 
 
-class TwitterSnippet.View extends Mercury.View
+class TwitterSnippet.View extends Mercury.Snippet.View
   className: 'mercury-example-snippet'
   template: ->
     """
@@ -174,3 +174,53 @@ Mercury.registerSnippet 'beer',
   # Lightview instead of a Modal.
   #
   Modal: Mercury.Lightview
+
+
+# Editable regions within a snippet.
+#
+# I'd guess this is sort of a green run, but you're going down that run with explosives strapped to your body. This is a
+# commonly asked for feature however, and though I strongly disagree with it because it's just asking to be abused and
+# misunderstood, I've provide an example of how you could potentially shoot yourself in the foot -- with the hope that
+# you can detmine when to use this and when not to. Good luck with that.
+#
+# It should be noted that this is only tested with a snippet in the snippet region using markdown and plain regions as
+# the sub regions. Markdown and other "textarea" types of regions can't support nested regions because they're textareas
+# and thus don't support nested elements.
+#
+Mercury.registerSnippet 'editable',
+  title: 'Editable Snippet'
+  description: "Example snippet with editable regions within it. This isn't a good idea, so use it wisely."
+  version: '1.0.0'
+
+  # Like the previous examples we have a simple template, but we've added a markdown and an html region. Notice we don't
+  # put names on these regions, because it's dynamic (there could be many of these snippets throughout the page), so
+  # there's not an easy way in this example to give them a unique name -- which means you may have to resolve some
+  # things manually on the server when saving/rerendering the content. It's important to note that you get the raw
+  # region element/content -- including all data attributes and whatever else the region has done to the element in the
+  # value -- the regions themselves are serialized as a value of the snippet.
+  #
+  template: ->
+    """
+    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+    <blockquote>
+      <div data-mercury="markdown">Markdown Region</div>
+      <div data-mercury="plain">Plain Region</div>
+    </blockquote>
+    Ad amet architecto eius eligendi eos inventore minus, necessitatibus nobis nulla officiis optio quam quas qui quis quos repellat, sapiente tempore veritatis?
+    """
+
+  # We probably want to serialize the content from the region, and we do that here by setting the content attribute by
+  # finding the element, getting the region instance, and asking for it to serialize.
+  #
+  toJSON: ->
+    $.extend(true, {}, @attributes, {regions: @subRegions()})
+
+  # Provides a way to serialize the regions into the snippet data. This example should handle any level of nested sub
+  # regions -- provided they behave correctly and can allow snippets with editable regions etc.
+  #
+  subRegions: ->
+    regions = {}
+    for el in @renderedView?.$('[data-mercury]') || []
+      continue unless region = $(el).data('region')
+      regions[region.name] = region.toJSON(true)
+    regions

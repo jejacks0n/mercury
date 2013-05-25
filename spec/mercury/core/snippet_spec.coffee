@@ -105,6 +105,17 @@ describe "Mercury.Snippet", ->
       expect( subject.render ).called
 
 
+  describe "#delay", ->
+
+    it "delays and then calls the method", ->
+      spyOn(window, 'setTimeout')
+      window.setTimeout.yields()
+      callback = spy()
+      subject.delay(1, callback)
+      expect( window.setTimeout ).called
+      expect( callback ).calledOn(subject)
+
+
   describe "#displayForm", ->
 
     beforeEach ->
@@ -173,13 +184,26 @@ describe "Mercury.Snippet", ->
       subject.renderView()
       expect( subject.trigger ).calledWith('rendered', subject.renderedView)
 
+    it "delays a call to #afterRender", ->
+      spyOn(subject, 'delay').yieldsOn(subject)
+      subject.renderView()
+      expect( subject.delay ).calledWith(1, subject.afterRender)
+
+
+  describe "#afterRender", ->
+
+    it "triggers a reinitialize event", ->
+      spyOn(Mercury, 'trigger')
+      subject.afterRender()
+      expect( Mercury.trigger ).calledWith('reinitialize')
+
 
   describe "#view", ->
 
     it "creates a new view", ->
-      spyOn(Mercury, 'View', -> inst: '_view_')
+      spyOn(Mercury.Snippet, 'View', -> inst: '_view_')
       subject.view('_template_')
-      expect( Mercury.View ).calledWith(template: '_template_', className: 'mercury-name-snippet')
+      expect( Mercury.Snippet.View ).calledWith(template: '_template_', snippet: subject)
 
 
   describe "#saveSuccess", ->
@@ -250,3 +274,26 @@ describe "Mercury.Snippet.Definition", ->
     it "returns a clone of the @options", ->
       expect( subject.signature() ).to.eql(name: 'definition', config: {foo: 'bar'}, func: @func)
       expect( subject.signature(false) ).to.eql(name: 'definition', config: {foo: 'bar'})
+
+
+describe "Mercury.Snippet.View", ->
+
+  Klass = ->
+  subject = null
+
+  beforeEach ->
+    class Klass extends Mercury.Snippet.View
+    subject = new Klass(snippet: {name: 'mock'})
+
+  describe "#build", ->
+
+    it "adds the snippet classname", ->
+      spyOn(subject, 'addClass')
+      subject.build()
+      expect( subject.addClass ).calledWith('mercury-mock-snippet')
+
+    it "adds the data attribute so we can select it", ->
+      expect( subject.$el.attr('data-mercury-snippet') ).to.eq('mock')
+
+    it "adds a data reference to the snippet model instance", ->
+      expect( subject.$el.data('snippet') ).to.eql(name: 'mock')

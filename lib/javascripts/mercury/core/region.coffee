@@ -135,6 +135,7 @@ class Mercury.Region extends Mercury.View
     unless @name
       @notify(@t('No name provided for the %s region, falling back to random', @type()))
       @name = "#{@type()}#{Math.floor(Math.random() * 10000)}"
+      @$el.attr(@config('regions:identifier'), @name)
 
     @addRegionAttrs()
     @pushHistory() unless @skipHistoryOnInitialize
@@ -302,7 +303,11 @@ class Mercury.Region extends Mercury.View
   # Returns the snippets as an object for serializing.
   #
   snippets: ->
-    {}
+    snippets = {}
+    for el in @$('[data-mercury-snippet]')
+      snippet = $(el).data('snippet')
+      snippets[snippet.cid] = snippet.toJSON()
+    snippets
 
 
   # Track if changes have been made since the last save. This method can be overridden to specify change conditions that

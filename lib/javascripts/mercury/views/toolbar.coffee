@@ -14,7 +14,6 @@ class Mercury.Toolbar extends Mercury.View
     'mercury:interface:show': 'show'
     'mercury:region:focus': 'onRegionFocus'
     'mousedown': 'onMousedown'
-    'mouseup': 'preventStop'
     'click': 'preventStop'
 
   build: ->
@@ -27,7 +26,7 @@ class Mercury.Toolbar extends Mercury.View
 
 
   show: ->
-    return if @config('interface:floating')
+    return if Mercury.interface.floating && @visible
     clearTimeout(@visibilityTimeout)
     @visible = true
     @$el.show()
@@ -35,7 +34,7 @@ class Mercury.Toolbar extends Mercury.View
 
 
   hide: ->
-    return if @config('interface:floating')
+    return if Mercury.interface.floating
     clearTimeout(@visibilityTimeout)
     @visible = false
     @css(top: -@$el.height())
@@ -43,7 +42,7 @@ class Mercury.Toolbar extends Mercury.View
 
 
   height: ->
-    @$el.outerHeight()
+    if Mercury.interface.visible then @$el.outerHeight() else 0
 
 
   onMousedown: (e) ->

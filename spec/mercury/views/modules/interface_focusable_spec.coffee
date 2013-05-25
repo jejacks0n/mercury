@@ -181,7 +181,7 @@ describe "Mercury.View.Modules.InterfaceFocusable", ->
     it "creates an input that will be hidden-ish that can retain focus", ->
       spyOn(window, '$')
       subject.createFocusableKeeper()
-      expect( $ ).calledWith('<input style="position:fixed;left:100%" tabindex="-1"/><input style="position:fixed;left:100%;top:20px"/>')
+      expect( $ ).calledWith('<input style="position:fixed;left:100%;top:20px" tabindex="-1"/><input style="position:fixed;left:100%;top:20px"/>')
 
 
   describe "#keepFocusConstrained", ->

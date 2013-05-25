@@ -82,6 +82,11 @@ describe "Mercury.Panel", ->
     beforeEach ->
       spyOn(Mercury, 'trigger')
 
+    it "delays a resize", ->
+      spyOn(subject, 'delay').yieldsOn(subject)
+      subject.onShow()
+      expect( subject.delay ).calledWith(1, subject.resize)
+
     it "triggers a global panels:hide event", ->
       subject.onShow()
       expect( Mercury.trigger ).calledWith('panels:hide')

@@ -8,8 +8,12 @@ Mercury.View.Modules.ToolbarDialog =
     @delegateEvents
       'mercury:dialogs:hide': -> @hide?()
       'mercury:interface:resize': 'positionAndResize'
-    @on('show', -> Mercury.trigger('interface:mask') unless @visible)
-    @on('hide', -> Mercury.trigger('interface:unmask') if @visible)
+    @on 'show', ->
+      Mercury.trigger('interface:mask') unless @visible
+      true
+    @on 'hide', ->
+      Mercury.trigger('interface:unmask') if @visible
+      true
 
 
   positionAndResize: (dimensions) ->
@@ -24,7 +28,9 @@ Mercury.View.Modules.ToolbarDialog =
     v = width: win.width(), height: win.height()
     e = width: @$el.outerWidth(), height: @$el.outerHeight()
     p = width: par.outerWidth(), height: par.outerHeight()
-    o = par.position()
+    o = par.offset()
+    o.left -= window.scrollX
+    o.top -= window.scrollY
 
     left = 0
     left = -e.width + p.width if e.width + o.left > v.width          # off the right side of the viewport

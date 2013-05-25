@@ -52,7 +52,7 @@ class Mercury.BaseInterface extends Mercury.View
     @el = document.createElement(@tag || @constructor.tag) unless @el
     @$el = $(@el)
     @attr(@attributes)
-    @append('<div class="mercury-drag-handle"/>')
+    @append('<div class="mercury-drag-handle"/>') if @config('interface:floatDrag')
 
 
   init: ->
@@ -212,6 +212,7 @@ class Mercury.BaseInterface extends Mercury.View
 
   release: ->
     $(window).off('resize', @resize)
+    $('body').css(position: '', top: '')
     $('body', @document).off('mousedown', @hideDialogs)
     @regions.shift().release() while @regions.length
     super
@@ -245,7 +246,7 @@ class Mercury.BaseInterface extends Mercury.View
     return if @hiding
     @addClass('mercury-no-animation')
     pos = @positionForRegion()
-    width = Math.max(@config('interface:floatWidth') || @region.$el.width(), 300)
+    @width = width = Math.max(@config('interface:floatWidth') || @region.$el.width(), 300)
     height = @heightForWidth(width)
     left = pos.left
     viewport = $(window).width()
@@ -264,6 +265,10 @@ class Mercury.BaseInterface extends Mercury.View
     @region.$el.offset()
 
 
+  onDragStart: ->
+    Mercury.trigger('dialogs:hide')
+
+
   setPositionOnDrag: (x, y) ->
     unless @placed
       @placed = true
@@ -278,6 +283,7 @@ class Mercury.BaseInterface extends Mercury.View
     x = @viewportSize.width - 50 if x > @viewportSize.width - 50
     y = @viewportSize.height - 50 if y > @viewportSize.height - 50
     @css(top: y, left: x)
+    @onResize() unless @width
 
 
   onRegionFocus: (@region) ->

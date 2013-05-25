@@ -77,7 +77,7 @@ describe "Mercury.FrameInterface", ->
 
     beforeEach ->
       spyOn(Klass.__super__, 'bindDocumentEvents')
-      @mock = on: spy(), off: ->
+      @mock = on: spy(), css: spy(), off: ->
       spyOn(window, '$', => @mock)
 
     it "binds to the scroll event on the window", ->
@@ -203,7 +203,7 @@ describe "Mercury.FrameInterface", ->
 
     beforeEach ->
       spyOn(Klass.__super__, 'positionForRegion', -> top: 42, left: 0)
-      @mock = scrollTop: spy(-> 20), off: ->
+      @mock = scrollTop: spy(-> 20), css: spy(), off: ->
       spyOn(window, '$', => @mock)
 
     it "adjusts the top -- subtracting the current scrollTop", ->
@@ -264,7 +264,7 @@ describe "Mercury.FrameInterface", ->
     beforeEach ->
       spyOn(subject, 'frameLocation', -> false)
       spyOn(Klass.__super__, 'release')
-      @mock = off: spy()
+      @mock = off: spy(), css: spy()
       spyOn(window, '$', => @mock)
 
     it "calls super", ->

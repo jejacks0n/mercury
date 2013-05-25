@@ -45,7 +45,7 @@ Mercury.View.Modules.InterfaceFocusable =
 
 
   createFocusableKeeper: ->
-    $('<input style="position:fixed;left:100%" tabindex="-1"/><input style="position:fixed;left:100%;top:20px"/>')
+    $('<input style="position:fixed;left:100%;top:20px" tabindex="-1"/><input style="position:fixed;left:100%;top:20px"/>')
 
 
   keepFocusConstrained: ($focus, $constrain) ->

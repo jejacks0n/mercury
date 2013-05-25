@@ -87,7 +87,7 @@ describe "Mercury.View.Modules.ToolbarDialog", ->
       @parent =
         outerWidth: -> 10
         outerHeight: -> 20
-        position: -> top: 100, left: 200
+        offset: -> top: 100, left: 200
       subject.$el =
         parent: => @parent
         outerWidth: -> 200
@@ -105,7 +105,7 @@ describe "Mercury.View.Modules.ToolbarDialog", ->
       spyOn($.fn, 'height', -> 0)
       subject.position()
       expect( subject.css ).calledWith(top: -120, left: -190)
-      spyOn(@parent, 'position', -> top: -100, left: -200)
+      spyOn(@parent, 'offset', -> top: -100, left: -200)
       subject.position()
       expect( subject.css ).calledWith(top: 80, left: 200)
 

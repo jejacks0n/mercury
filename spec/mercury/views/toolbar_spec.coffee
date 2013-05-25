@@ -50,8 +50,9 @@ describe "Mercury.Toolbar", ->
       subject.visibilityTimeout = '_timer_'
       spyOn(window, 'clearTimeout')
 
-    it "does nothing if the interface is floating", ->
-      Mercury.configure 'interface:floating', true
+    it "does nothing if the interface is floating and is already visible", ->
+      Mercury.interface.floating = true
+      subject.visible = true
       expect( subject.show() ).to.be.undefined
       expect( clearTimeout ).not.called
 
@@ -84,7 +85,7 @@ describe "Mercury.Toolbar", ->
       spyOn(window, 'clearTimeout')
 
     it "does nothing if the interface is floating", ->
-      Mercury.configure 'interface:floating', true
+      Mercury.interface.floating = true
       expect( subject.hide() ).to.be.undefined
       expect( clearTimeout ).not.called
 
@@ -112,7 +113,11 @@ describe "Mercury.Toolbar", ->
 
   describe "#height", ->
 
+    it "returns 0 if the interface isn't visible", ->
+      expect( subject.height() ).to.eq(0)
+
     it "returns the element height", ->
+      Mercury.interface.visible = true
       spyOn(subject.$el, 'outerHeight', -> 42)
       expect( subject.height() ).to.eq(42)
 

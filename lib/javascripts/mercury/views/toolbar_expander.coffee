@@ -32,6 +32,7 @@ class Mercury.ToolbarExpander extends Mercury.View
     return unless @visible
     @prevent(e, true)
     @updateSelect()
+    Mercury.trigger('dialogs:hide') unless @select.visible
     @select.toggle()
 
 

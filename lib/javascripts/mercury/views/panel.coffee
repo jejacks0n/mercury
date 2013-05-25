@@ -45,6 +45,7 @@ class Mercury.Panel extends Mercury.Modal
 
 
   onShow: ->
+    @delay(1, @resize)
     Mercury.trigger('panels:hide')
 
 

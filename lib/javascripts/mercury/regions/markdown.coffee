@@ -1,5 +1,8 @@
 ###!
-The Markdown region utilizes the Markdown syntax (http://en.wikipedia.org/wiki/Markdown) to generate an html preview.
+Markdown provides an easy way to provide some markup abilities without the exposing the ability to edit complex HTML.
+Use the markdown sent to the server on save to render the content when not editing, and render the markdown when
+editing. Some options are for the converter - more here: https://github.com/chjj/marked
+
 When saved this region will serialize the unprocessed markdown content as well as the processed/converted html content.
 This can be used by your server to render html, or to serve the markdown when editing -- it's up to you how you
 accomplish this.
@@ -8,6 +11,14 @@ The default converter uses Github Flavored Markdown, so your server should imple
 
 Dependencies:
   marked - https://github.com/chjj/marked
+
+Configuration:
+  regions:markdown:
+    autoSize : true                                      # the region will auto-resize to the content within it
+    mimeTypes: false                                     # file types - overrides general uploading to allow anything
+    wrapping : true                                      # enables/disables soft line wrapping
+    sanitize : false                                     # sanitize the output - ignore any html that has been input
+    breaks   : true                                      # enable line breaks - new lines will become line breaks
 ###
 class Mercury.Region.Markdown extends Mercury.Region
   @define 'Mercury.Region.Markdown', 'markdown'

@@ -160,7 +160,7 @@ Mercury.configuration =
 
     # The image region is typically an image tag and what's sent back to the server on serialization is the source of
     # that image. It allows draging/dropping images onto itself, and maintains a history so you can undo/redo your
-    # changes.
+    # changes. Also allows setting image alignment.
     #
     #= require mercury/regions/gallery
     #
@@ -201,4 +201,4 @@ Mercury.configuration =
     #
     text:
       autoSize : true                                      # the region will auto-resize to the content within it
-      wrapping : false                                     # enables/disables soft line wrapping
+      wrapping : true                                      # enables/disables soft line wrapping

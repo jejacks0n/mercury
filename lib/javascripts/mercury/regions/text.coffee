@@ -1,6 +1,11 @@
 ###!
-The Text region is a simple multiline textarea region. It's up to you to put <br> tags in as line breaks if you want
-them when you render the content.
+The Text region is a multiline plain text input. This region can be used to collect only text in cases when you don't
+want to allow more complex HTML. It's up to you to render <br> tags when displaying the content within the page.
+
+Configuration:
+  regions:text:
+    autoSize : true                                      # the region will auto-resize to the content within it
+    wrapping : true                                      # enables/disables soft line wrapping
 ###
 class Mercury.Region.Text extends Mercury.Region
   @define 'Mercury.Region.Text', 'text'

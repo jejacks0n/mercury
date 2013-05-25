@@ -1,8 +1,11 @@
 ###!
-The Image region allows you to have a replaceable image region on your page. It provided the ability to drag/drop images
-from the desktop -- which will get uploaded (and probably processed by your server) and will then replace the existing
-image with the one that was uploaded. You can change the image alignment, which will be provided in the data on
-serialization to the server.
+The image region is typically an image tag and what's sent back to the server on serialization is the source of that
+image. It allows draging/dropping images onto itself, and maintains a history so you can undo/redo your changes. Also
+allows setting the image alignment.
+
+Configuration:
+  regions:image:
+    mimeTypes: ['image/jpeg']                            # file types - overrides general uploading configuration
 ###
 class Mercury.Region.Image extends Mercury.Region
   @define 'Mercury.Region.Image', 'image'

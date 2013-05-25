@@ -1,11 +1,16 @@
 ###!
-The HTML region utilizes the full HTML5 ContentEditable featureset and adds some layers on top of that to normalize it
-between browsers and to make it nicer to use.
+The HTML region is a full HTML5 Content Editable region -- a true WYSIWYG experience. Effort has been made to normalize,
+and keep things consistent, but the nature of it is complex and should be treated as such. There's an expectation that
+users who are exposed to this region understand HTML.
 
 Dependencies:
   rangy-core - https://code.google.com/p/rangy/
   rangy-serializer
   rangy-cssclassapplier
+
+Configuration:
+  regions:html:
+    mimeTypes: false                                     # file types - overrides general uploading to allow anything
 ###
 class Mercury.Region.Html extends Mercury.Region
   @define 'Mercury.Region.Html', 'html'

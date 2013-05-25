@@ -343,6 +343,11 @@ describe "Mercury.Region", ->
       subject.handleAction('foo')
       expect( subject.trigger ).calledWith('action', '_action_')
 
+    it "triggers an update event", ->
+      spyOn(subject, 'trigger')
+      subject.handleAction('foo')
+      expect( subject.trigger ).calledWith('update')
+
     it "doesn't call the action we've delegated if not focused", ->
       subject.focused = false
       subject.previewing = false

@@ -197,6 +197,7 @@ class Mercury.Region extends Mercury.View
     action = Mercury.Action.create(name, options)
     @actions[name]?.call(@, action)
     @trigger('action', action)
+    @trigger('update')
     return true
 
 

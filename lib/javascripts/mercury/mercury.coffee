@@ -28,6 +28,7 @@
 #
 # View modules, and views.
 #------------------------------------------------------------------------------
+#= require mercury/views/modules/draggable.coffee
 #= require mercury/views/modules/form_handler.coffee
 #= require mercury/views/modules/interface_focusable.coffee
 #= require mercury/views/modules/interface_maskable.coffee

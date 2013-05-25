@@ -1,6 +1,11 @@
 mercury.small {
   &.mercury-floating {
     border: 1px solid #555;
+    .mercury-drag-handle {
+      top: 4px;
+      width: 9px;
+      height: 23px;
+    }
   }
   .mercury-toolbar {
     .mercury-toolbar-expander {

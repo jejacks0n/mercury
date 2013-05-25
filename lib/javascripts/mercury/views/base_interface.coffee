@@ -1,10 +1,12 @@
 #= require mercury/core/view
 #= require mercury/models/page
+#= require mercury/views/modules/draggable
 #= require mercury/views/modules/interface_maskable
 #= require mercury/views/modules/interface_shadowed
 
 class Mercury.BaseInterface extends Mercury.View
   @include Mercury.Module
+  @include Mercury.View.Modules.Draggable
 
   @logPrefix: 'Mercury.BaseInterface:'
   @tag: 'mercury'
@@ -19,6 +21,7 @@ class Mercury.BaseInterface extends Mercury.View
     'mercury:region:release': 'onRegionRelease'
     'mercury:reinitialize': 'reinitialize'
     'mercury:interface:toggle': 'toggle'
+    'mousedown .mercury-drag-handle': 'startDrag'
 
   constructor: ->
     if parent != window && parent.Mercury
@@ -29,7 +32,7 @@ class Mercury.BaseInterface extends Mercury.View
     @extend Mercury.View.Modules.InterfaceShadowed if @config('interface:shadowed')
 
     Mercury.interface ||= @
-    @floating = @config('interface:floating')
+    @floating ||= @config('interface:floating')
     @visible = true
 
     super
@@ -49,6 +52,7 @@ class Mercury.BaseInterface extends Mercury.View
     @el = document.createElement(@tag || @constructor.tag) unless @el
     @$el = $(@el)
     @attr(@attributes)
+    @append('<div class="mercury-drag-handle"/>')
 
 
   init: ->
@@ -117,8 +121,10 @@ class Mercury.BaseInterface extends Mercury.View
     if type == 'float'
       type = 'mercury-floating'
       @floating = false
-      if $('body').hasClass('mercury-no-transitions')
-        $('body').removeClass('mercury-no-transitions').addClass('mercury-transitions')
+      @placed = false
+      @css(position: '')
+    if $('body').hasClass('mercury-no-transitions')
+      $('body').removeClass('mercury-no-transitions').addClass('mercury-transitions')
     @removeClass(type)
     @position()
     @onResize()
@@ -235,6 +241,7 @@ class Mercury.BaseInterface extends Mercury.View
   position: (animate = false) ->
     return unless @floating
     return unless @region
+    return if @placed
     return if @hiding
     @addClass('mercury-no-animation')
     pos = @positionForRegion()
@@ -255,6 +262,22 @@ class Mercury.BaseInterface extends Mercury.View
 
   positionForRegion: ->
     @region.$el.offset()
+
+
+  setPositionOnDrag: (x, y) ->
+    unless @placed
+      @placed = true
+      @startPosition.x += window.scrollX
+      @startPosition.y += window.scrollY
+      x -= window.scrollX
+      y -= window.scrollY
+      @lastPosition = {x: x, y: y}
+      @css(position: 'fixed', top: y, left: x)
+    y = 0 if y < 0
+    x = 0 if x < 0
+    x = @viewportSize.width - 50 if x > @viewportSize.width - 50
+    y = @viewportSize.height - 50 if y > @viewportSize.height - 50
+    @css(top: y, left: x)
 
 
   onRegionFocus: (@region) ->

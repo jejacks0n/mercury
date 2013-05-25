@@ -15,6 +15,17 @@ mercury {
       position: relative;
       top: 0;
     }
+    .mercury-drag-handle {
+      position: absolute;
+      top: 5px;
+      width: 9px;
+      height: 48px;
+      z-index: 10201;
+      background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAGCAYAAADkOT91AAAAFUlEQVQIW2PwDQz8zwAFyGw8gHQtAAk4B7muJz+wAAAAAElFTkSuQmCC');
+      background-repeat: repeat-y;
+      background-position: center;
+      cursor: move;
+    }
   }
 
   .mercury-interface-mask {

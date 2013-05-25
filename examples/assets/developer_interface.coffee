@@ -188,8 +188,8 @@ Mercury.JST['/mercury/templates/new-region'] = ->
   <div class="region">
     <div data-mercury="markdown" id="new_region_#{Math.floor(Math.random() * 10000)}">Lorem ipsum</div>
     <div class="region-controls">
-      <a class="delete" onclick="DeveloperInterface.deleteRegion(this)">delete</a>|
-      <a class="release" onclick="DeveloperInterface.releaseRegion(this)">release</a>
+      <a class="delete" onclick="Mercury.DeveloperInterface.deleteRegion(this)">delete</a>|
+      <a class="release" onclick="Mercury.DeveloperInterface.releaseRegion(this)">release</a>
     </div>
   </div>
   """

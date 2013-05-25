@@ -21,18 +21,26 @@
 #
 # Initialize Mercury.
 jQuery ->
-  # First do anything nessicary for Ajax requests to be successful -- in our case we need the csrf token for Rails.
+  # First do anything necessary for Ajax requests to be successful -- in our case we need the csrf token for Rails.
+  #
   $.ajaxSetup headers: {'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')}
 
   # To initialize Mercury call Mercury.init. This will use the interface configuration and instantiate the configured
   # interface, which in turn instantiates the interface elements and regions. In our demo we allow using an iframe
-  # (which should be provided by you and in the dom), and if the iframe isn't available the standard non-iframe
+  # (which should be provided by you and in the DOM), and if the iframe isn't available the standard non-iframe
   # interface will be used.
   #
   # For more information about the Mercury API, you might want to check the developer_interface in examples. It contains
   # examples for creating / releasing / deleting dynamic regions, saving, toggling the interface, keeping Mercury
-  # focused, how you can use the Mercury Core library as a framework to build a custom interface, and more.
+  # focused, how you can use the Mercury Core library as a framework to build a custom interface, and more. There are
+  # other useful examples in there as well -- for all development levels.
+  #
   Mercury.init(frame: '#mercury_frame')
+
+  # If you wanted to do some custom behaviors (this is limited, and configuration is recommended), you can provide many
+  # of the options to the interface. Here we're making it a fixed floating interface that has a set width and location.
+  #
+  #Mercury.init(frame: '#mercury_frame', floating: true, placed: true, attributes: {style: 'position:fixed;top:10px;left:10px;width:520px'})
 
 Mercury.Region.Markdown.addToolbar 'history', history: ['History', plugin: 'history']
 Mercury.Region.Markdown.addToolbar 'color', color: ['Color', plugin: 'color']
@@ -40,10 +48,10 @@ Mercury.Region.Markdown.addToolbar 'block', block: ['Block', plugin: 'blocks']
 
 # todo:
 #   is there a way to serialize snippets directly in line so no server is needed for some snippets?
-#   figure out how to better integrate snippets.
+#   make loading/editing snippets work (should we support fetching snippets?)
 #   can we make editing content within snippets work?
-#   make table/media/link plugins use custom actions.
 #   better strategy for snippet management/removal -- focusable with toolbar buttons would be nice, combined with a lesser toolbar in line? (drag handle on hover, etc?)
+#   make table/media/link plugins use custom actions.
 #   make floating toolbar have a pin / drag interface.
 #   finish the mercury-rails engine.
 #   ask/invite translators to revisit their translations.

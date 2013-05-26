@@ -88,7 +88,11 @@ class Mercury.Model extends Mercury.Module
     @attributes = {}
     @errors = {}
     @set(attrs)
-    @cid = @constructor.uid('c')
+
+    @cid ||= @constructor.uid('c')
+    @constructor.records ||= {}
+    @constructor.records[@cid] = @
+
     super
 
 

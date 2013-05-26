@@ -74,13 +74,14 @@ describe "Mercury.Model", ->
   describe ".all", ->
 
     it "returns the records as an array", ->
-      expect( Klass.all() ).to.eql([{id: '5'}, {id: 'c4'}])
+      console.debug(Klass.all())
+      expect( Klass.all() ).to.eql([{id: '5'}, {id: 'c4'}, subject])
 
 
   describe ".count", ->
 
     it "returns the count of the records", ->
-      expect( Klass.count() ).to.eq(2)
+      expect( Klass.count() ).to.eq(3)
 
 
   describe ".toJSON", ->
@@ -105,16 +106,16 @@ describe "Mercury.Model", ->
       Klass.idCounter = 1
 
     it "generates a unique id", ->
-      expect( Klass.uid() ).to.eq('1')
       expect( Klass.uid() ).to.eq('2')
       expect( Klass.uid() ).to.eq('3')
       expect( Klass.uid() ).to.eq('6')
+      expect( Klass.uid() ).to.eq('7')
 
     it "uses a prefix if provided", ->
-      expect( Klass.uid('c') ).to.eq('c1')
       expect( Klass.uid('c') ).to.eq('c2')
       expect( Klass.uid('c') ).to.eq('c3')
       expect( Klass.uid('c') ).to.eq('c5')
+      expect( Klass.uid('c') ).to.eq('c6')
 
 
   describe "#constructor", ->
@@ -130,6 +131,11 @@ describe "Mercury.Model", ->
 
     it "generates a cid", ->
       expect( subject.cid ).to.eq('c1')
+
+    it "adds itself to the global collection", ->
+      Klass.records = null
+      subject = new Klass()
+      expect( Klass.records[subject.cid] ).to.eq(subject)
 
 
   describe "#url", ->
@@ -205,7 +211,7 @@ describe "Mercury.Model", ->
         subject.save(url: '/bar', method: 'POST')
         @server.respond()
         expect( subject.id ).to.be.undefined
-        expect( Klass.count() ).to.eq(2)
+        expect( Klass.count() ).to.eq(3)
 
       it "calls set with the JSON", ->
         subject.save(url: '/foo')

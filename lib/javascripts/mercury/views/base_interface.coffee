@@ -288,8 +288,8 @@ class Mercury.BaseInterface extends Mercury.View
       y -= window.scrollY
       @lastPosition = {x: x, y: y}
       @css(position: 'fixed', top: y, left: x)
-    y = 0 if y < 0
     x = 0 if x < 0
+    y = 0 if y < 0
     x = @viewportSize.width - 50 if x > @viewportSize.width - 50
     y = @viewportSize.height - 50 if y > @viewportSize.height - 50
     @css(top: y, left: x)

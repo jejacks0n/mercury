@@ -1,7 +1,9 @@
 #= require mercury/views/modal
+#= require mercury/views/modules/draggable
 #= require mercury/templates/panel
 
 class Mercury.Panel extends Mercury.Modal
+  @include Mercury.View.Modules.Draggable
 
   @logPrefix: 'Mercury.Panel:'
   @className: 'mercury-dialog mercury-panel'
@@ -16,6 +18,7 @@ class Mercury.Panel extends Mercury.Modal
     'mercury:interface:resize': 'resize'
     'mercury:panels:hide': 'hide'
     'mousedown .mercury-panel-title em': 'prevent'
+    'mousedown .mercury-panel-title': 'startDrag'
     'click .mercury-panel-title em': 'hide'
 
   primaryTemplate: 'panel'
@@ -34,6 +37,7 @@ class Mercury.Panel extends Mercury.Modal
     @addClass('mercury-no-animation') unless animate
     if dimensions ||= Mercury.interface?.dimensions?()
       @css(top: dimensions.top + 10, bottom: dimensions.bottom + 10)
+      @css(left: '') if @$el.outerWidth() + @$el.offset().left >= dimensions.width - 10
     titleHeight = @$titleContainer.outerHeight()
     height = @$el.height()
     @$contentContainer.css(height: height - titleHeight)
@@ -57,3 +61,9 @@ class Mercury.Panel extends Mercury.Modal
 
 
   keepFocusConstrained: ->
+
+
+  setPositionOnDrag: (x) ->
+    x = 10 if x < 10
+    return @css(left: '') if x >= @viewportSize.width - @$el.outerWidth() - 10
+    @css(left: x)

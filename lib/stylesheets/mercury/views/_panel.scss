@@ -27,6 +27,7 @@ mercury .mercury-panel {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    cursor: move;
     span {
       color: $panel_title_color;
       text-shadow: #000 1px 1px 0;

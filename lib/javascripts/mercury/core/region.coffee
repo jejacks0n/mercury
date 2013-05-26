@@ -284,6 +284,7 @@ class Mercury.Region extends Mercury.View
         delete(data.mercury)
         delete(data.mercuryRegion)
         delete(data.placeholder)
+        delete(data.regionOptions)
       return data ? null
     obj = key
     (obj = {}; obj[key] = value) if typeof(key) == 'string'

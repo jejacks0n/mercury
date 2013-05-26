@@ -32,9 +32,9 @@
     -# -----------------------------------------------------------------------------------------------------------------
     %h2 Snippet Regions
 
-    #snippet1(data-mercury="snippet" data-region-options='{"placeholder": "Drop a snippet on me"}')
+    #snippet1(data-mercury="snippet" data-region-options='{"placeholder": "Drop a snippet on me"}' style="float:left;width:49%")
 
-    %section#snippet2(data-mercury="snippet" style="position:relative;width:50%")
+    %section#snippet2(data-mercury="snippet" style="position:relative;float:right;width:49%")
 
     %hr
     -# -----------------------------------------------------------------------------------------------------------------
@@ -62,8 +62,11 @@
     %h2 HTML Regions
 
     #html1(data-mercury="html") Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy
+
     %section#html2(data-mercury="html") section
+
     %p#html3(data-mercury="html" style="width:200px;float:right") paragraph
+
     %span#html4(data-mercury="html" data-region-options='{"placeholder": "Drop a snippet on me"}') span
 
     %ul
@@ -87,7 +90,9 @@
     %h2 Text Regions
 
     %h3#text1(data-mercury="text" data-region-options='{"wrapping": false}') Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy
+
     #text2(data-mercury="text" data-region-options='{"height": 100, "autoSize": false}') Lorem<br/><br/>Testing
+
     #text_empty(data-mercury="text")
 
     %hr
@@ -95,6 +100,7 @@
     %h2 Image Regions
 
     %img#image1(data-mercury="image" src="http://goo.gl/CgyJj" width="200")
+
     %img#image2(data-mercury="image" src="http://goo.gl/CgyJj" width="200")
 
     %hr
@@ -116,10 +122,15 @@
 
 :javascript
   // If we're in an an iframe and Mercury is present in the parent we can shortcut the load time by initializing
-  // manually. This will tell Mercury that this document has loaded and it can begin looking for regions.
-  if (parent.Mercury) parent.Mercury.initialize()
+  // manually. This will tell Mercury that this document has loaded and it can begin looking for regions. It has to be
+  // at the end of the document, or in a dom:loaded handler.
+  if (parent.Mercury) {
+    parent.Mercury.initialize()
+    window.Mercury = parent.Mercury
+  }
 
   // If we're editing this page let's instantiate the developer toolbar for example usage/interactions. The developer
   // toolbar has many examples of how you can interact with Mercury. Also note that if we're in an iframe or not Mercury
   // will be exposed to us after it's been initialized.
-  if (Mercury) new Mercury.DeveloperInterface()
+  new Mercury.DeveloperInterface()
+

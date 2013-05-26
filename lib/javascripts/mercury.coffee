@@ -47,9 +47,7 @@ Mercury.Region.Markdown.addToolbar 'color', color: ['Color', plugin: 'color']
 Mercury.Region.Markdown.addToolbar 'block', block: ['Block', plugin: 'blocks']
 
 # todo:
-#   is there a way to serialize snippets directly in line so no server is needed for some snippets?
-#   make loading/editing snippets work (should we support fetching snippets?)
-#   can we make editing content within snippets work?
+#   remove snippet contents per snippet or let them be serialized as direct content / make sure that works.
 #   better strategy for snippet management/removal -- focusable with toolbar buttons would be nice, combined with a lesser toolbar in line? (drag handle on hover, etc?)
 #   make table/media/link plugins use custom actions.
 #   finish the mercury-rails engine.
@@ -68,3 +66,4 @@ Mercury.Region.Markdown.addToolbar 'block', block: ['Block', plugin: 'blocks']
 # todo ideas:
 #   make region use the shadow dom if possible/configured to do so.
 #   port jQuery.extend into module so we can use that within instances (which is where it's mostly used).
+

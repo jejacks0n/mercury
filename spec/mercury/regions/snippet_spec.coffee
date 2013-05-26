@@ -1,6 +1,7 @@
 #= require spec_helper
 #= require mercury/core/region
 #= require mercury/regions/modules/drop_indicator
+#= require mercury/regions/modules/snippetable
 #= require mercury/regions/snippet
 
 describe "Mercury.Region.Snippet", ->

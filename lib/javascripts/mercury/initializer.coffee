@@ -23,6 +23,19 @@ initialize = ->
     return if @interface
     @trigger('configure')
     @interface = new @[@config('interface:class')](options)
+    @load(@loadedJSON || {})
+    @interface
+
+  # Provides global way to load snippets and other data back into Mercury.
+  #
+  # This allows you to load snippet options back into snippets/the regions they're in, as well as providing an API to
+  # load other data. Pass it the JSON hash that was saved and it should be able to handle the rest.
+  #
+  @load = (json = {}) ->
+    @loadedJSON = json
+    return unless @interface
+    @interface.load(@loadedJSON)
+    delete(@loadedJSON)
 
   # Provides global method to release.
   #

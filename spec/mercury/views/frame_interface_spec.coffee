@@ -28,6 +28,21 @@ describe "Mercury.FrameInterface", ->
       expect( Klass.__super__.initialize ).called
 
 
+  describe "#load", ->
+
+    beforeEach ->
+      spyOn(Klass.__super__, 'load')
+
+    it "sets @loadedJSON to whatever was passed in", ->
+      subject.load(foo: 'bar')
+      expect( subject.loadedJSON ).to.eql(foo: 'bar')
+
+    it "calls super if we're initialized", ->
+      subject.initialized = true
+      subject.load(foo: 'bar')
+      expect( Klass.__super__.load ).calledWith(foo: 'bar')
+
+
   describe "#reinitialze", ->
 
     describe "with frame", ->
@@ -57,12 +72,15 @@ describe "Mercury.FrameInterface", ->
     beforeEach ->
       spyOn(subject, 'reinitializeFrame')
       spyOn(subject, 'initializeFrame')
+      spyOn(subject, 'load')
 
     it "binds to @frame.load", ->
+      subject.loadedJSON = foo: 'bar'
       spyOn(subject.$frame, 'on').yieldsOn(subject)
       subject.bindDefaultEvents()
       expect( subject.$frame.on ).calledWith('load', sinon.match.func)
       expect( subject.initializeFrame ).called
+      expect( subject.load ).calledWith(foo: 'bar')
       expect( subject.reinitializeFrame ).called
 
     it "binds to initialize", ->
@@ -113,9 +131,11 @@ describe "Mercury.FrameInterface", ->
       expect( subject.addAllRegions ).called
 
     it "triggers initialized", ->
+      spyOn(subject, 'trigger')
       spyOn(Mercury, 'trigger')
       subject.initializeFrame()
       expect( Mercury.trigger ).calledWith('initialized')
+      expect( subject.trigger ).calledWith('initialized')
 
     it "delays a call to #focusDefaultRegion", ->
       spyOn(subject, 'focusDefaultRegion')
@@ -136,13 +156,16 @@ describe "Mercury.FrameInterface", ->
     beforeEach ->
       spyOn(subject, 'release')
       spyOn(subject, 'initializeFrame')
+      spyOn(subject, 'load')
 
     it "reinitializes if there's a location (frame location isn't available when it's not our domain)", ->
+      subject.loadedJSON = foo: 'bar'
       spyOn(subject, 'frameLocation', -> 'http://foo.bar')
       subject.reinitializeFrame()
       expect( subject.initialized ).to.be.false
       expect( subject.regions ).to.eql([])
       expect( subject.initializeFrame ).called
+      expect( subject.load ).calledWith(foo: 'bar')
 
     it "alerts and then releases if we're not editing a page on our domain", ->
       spyOn(subject, 'frameLocation', -> false)

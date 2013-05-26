@@ -537,14 +537,8 @@ describe "Mercury.Region", ->
 
   describe "#snippets", ->
 
-    beforeEach ->
-      @snippetModel = cid: '_cid_', toJSON: -> {snippet: '_snippet_'}
-      @snippetView = $('<div data-mercury-snippet="_snippet_name_">').data(snippet: @snippetModel)
-      subject.html(@snippetView)
-
-    it "returns an object with the snippets", ->
-      expect( subject.snippets() ).to.eql
-        _cid_: {snippet: '_snippet_'}
+    it "returns an empty object", ->
+      expect( subject.snippets() ).to.eql({})
 
 
   describe "#hasChanges", ->
@@ -700,6 +694,23 @@ describe "Mercury.Region", ->
       expect( subject.data ).not.called
       subject.fromJSON(data: '_data_')
       expect( subject.data ).calledWith('_data_')
+
+
+  describe "#load", ->
+
+    beforeEach ->
+      spyOn(subject, 'fromJSON')
+
+    it "calls #fromJSON", ->
+      subject.load(foo: 'bar')
+      expect( subject.fromJSON ).calledWith(foo: 'bar')
+
+    it "calls #loadSnippets if it's available", ->
+      subject.loadSnippets = spy()
+      subject.load(foo: 'bar', snippets: {bar: 'baz'})
+      expect( subject.loadSnippets ).calledWith(bar: 'baz')
+      subject.load({})
+      expect( subject.loadSnippets ).calledWith({})
 
 
   describe "#release", ->

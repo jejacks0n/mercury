@@ -31,6 +31,16 @@ class Mercury.Snippet extends Mercury.Model
       definition
 
 
+  # Provides a way to get a snippet instance, based on the snippet type with it's attributes set and cid that matches
+  # what was serialized.
+  #
+  @fromSerializedJSON: (json) ->
+    instance = @get(json.name, true)
+    instance.cid = json.cid
+    instance.set(json.attributes)
+    instance
+
+
   # Returns all registered snippets as an object.
   #
   @all: ->
@@ -57,6 +67,14 @@ class Mercury.Snippet extends Mercury.Model
     @supportedRegions ||= 'all'
 
     super(@defaults || {})
+
+
+  # Returns the attributes after being cloned as well as the snippet name, and cid.
+  #
+  toSerializedJSON: ->
+    cid: @cid
+    name: @name
+    attributes: @toJSON()
 
 
   # This method is called by the snippet plugin, or elsewhere when a snippet is being inserted. The region should be
@@ -111,7 +129,6 @@ class Mercury.Snippet extends Mercury.Model
   # with this if needed.
   #
   afterRender: ->
-    Mercury.trigger('reinitialize')
 
 
   # Provides the view that will be instantiated when the snippet is rendered for a region. Can be overridden if a custom
@@ -142,6 +159,26 @@ class Mercury.Snippet extends Mercury.Model
   #
   getRenderedView: (region) ->
     @renderedView
+
+
+  # Public API method for replacing a given jQuery element with the rendered views element which restores disconnected
+  # markup back to our rendered view. This is called from within regions when it's determined that an element is no
+  # longer connected to the snippet's view, which can happen on undo/redo.
+  #
+  replaceWithView: ($el) ->
+    $el.replaceWith(@renderedView.$el)
+    @afterRender()
+
+
+  # Public API method, similar to #replaceWithView. Takes the entire render process into account and will call a
+  # callback if one is provided. This is called from within regions when snippets are being loaded in initially to
+  # restore saved state.
+  #
+  renderAndReplaceWithView: ($el, callback = null) ->
+    @one 'rendered', (view) ->
+      $el.replaceWith(view.$el)
+      callback?($el, view)
+    @render()
 
 
 Mercury.Snippet.Module =
@@ -183,5 +220,14 @@ class Mercury.Snippet.View extends Mercury.View
   #
   build: ->
     @addClass("mercury-#{@snippet.name}-snippet")
-    @attr('data-mercury-snippet': @snippet.name)
+    @attr('data-mercury-snippet': @snippet.cid)
+
+    # This is only to be used to determine if the snippet markup is tied to a snippet. When a user inserts a snippet and
+    # then uses undo/redo it removes and then re-adds the snippet markup back into the region, but the view is no longer
+    # tied to the markup -- in this case it has to be replaced with the snippet view again. This data attribute goes
+    # missing in those cases, so it's only used to tell if we need to replace that markup with the snippet view again.
+    # This is done because replacing a snippet every time something happens in a region is not optimal or friendly to a
+    # users experience. Because this data attribute is ephemeral, it's adviced not to be used for anything else -- in
+    # stead find the snippet by it's cid using Mercury.Snippet.find(snippetEl.data('mercury-snippet')), as that data
+    # attribute is written directly into the markup and can't be lost.
     @$el.data('snippet': @snippet)

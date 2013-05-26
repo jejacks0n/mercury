@@ -5,6 +5,7 @@ providing complex elements that might need more tailoring than regular html allo
 ###
 class Mercury.Region.Snippet extends Mercury.Region
   @include Mercury.Region.Modules.DropIndicator
+  @include Mercury.Region.Modules.Snippetable
 
   @define 'Mercury.Region.Snippet', 'snippet'
 

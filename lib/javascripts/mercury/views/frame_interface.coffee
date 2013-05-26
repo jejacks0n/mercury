@@ -12,6 +12,12 @@ class Mercury.FrameInterface extends Mercury.BaseInterface
       return super
 
 
+  load: (json) ->
+    @loadedJSON = json
+    return unless @initialized
+    super
+
+
   reinitialize: ->
     if @$frame.length
       @initialized = false
@@ -23,6 +29,7 @@ class Mercury.FrameInterface extends Mercury.BaseInterface
   bindDefaultEvents: ->
     @$frame.on 'load', =>
       @initializeFrame()
+      @load(@loadedJSON)
       @$frame.off('load').on('load', => @reinitializeFrame())
     @delegateEvents('mercury:initialize': -> @initializeFrame())
     super
@@ -42,6 +49,7 @@ class Mercury.FrameInterface extends Mercury.BaseInterface
     @bindDocumentEvents()
     @addAllRegions()
     @hijackLinksAndForms()
+    @trigger('initialized')
     Mercury.trigger('initialized')
     @delay(100, @focusDefaultRegion)
 
@@ -51,6 +59,7 @@ class Mercury.FrameInterface extends Mercury.BaseInterface
       @initialized = false
       @regions = []
       @initializeFrame()
+      @load(@loadedJSON)
     else # you've navigated elsewhere.. sorry.
       alert(@t("You've left editing the page you were on, please refresh the page."))
       @release()

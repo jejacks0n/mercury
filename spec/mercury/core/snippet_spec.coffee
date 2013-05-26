@@ -36,6 +36,26 @@ describe "Mercury.Snippet", ->
       expect(-> Klass.get('bar') ).to.throw('unable to locate the bar snippet')
 
 
+  describe ".fromSerializedJSON", ->
+
+    beforeEach ->
+      @args = name: '_name_', cid: '_cid_', attributes: {foo: 'bar'}
+      @mock = set: spy()
+      spyOn(Klass, 'get', => @mock)
+
+    it "gets a new instance of the snippet", ->
+      Klass.fromSerializedJSON(@args)
+      expect( Klass.get ).calledWith('_name_', true)
+
+    it "sets cid and attributes on the new snippet instance", ->
+      Klass.fromSerializedJSON(@args)
+      expect( @mock.cid ).to.eq('_cid_')
+      expect( @mock.set ).calledWith(foo: 'bar')
+
+    it "returns the new instance", ->
+      expect( Klass.fromSerializedJSON(@args) ).to.eq(@mock)
+
+
   describe ".all", ->
 
     beforeEach ->
@@ -72,6 +92,18 @@ describe "Mercury.Snippet", ->
       spyOn(Mercury.Snippet.__super__, 'constructor')
       subject = new Klass(name: 'foo', defaults: {foo: 'bar'})
       expect( Mercury.Snippet.__super__.constructor ).calledWith(foo: 'bar')
+
+
+  describe "#toSerializedJSON", ->
+
+    it "returns an object with our cid, name, and attributes", ->
+      subject.cid = '_cid_'
+      spyOn(subject, 'toJSON', -> foo: 'bar')
+      expect( subject.toSerializedJSON() ).to.eql
+        cid: '_cid_'
+        name: 'name'
+        attributes: {foo: 'bar'}
+      expect( subject.toJSON ).called
 
 
   describe "#initialize", ->
@@ -192,10 +224,8 @@ describe "Mercury.Snippet", ->
 
   describe "#afterRender", ->
 
-    it "triggers a reinitialize event", ->
-      spyOn(Mercury, 'trigger')
+    it "does nothing by default", ->
       subject.afterRender()
-      expect( Mercury.trigger ).calledWith('reinitialize')
 
 
   describe "#view", ->
@@ -233,6 +263,40 @@ describe "Mercury.Snippet", ->
     it "returns the @renderedView", ->
       subject.renderedView = '_rendered_'
       expect( subject.getRenderedView() ).to.eq('_rendered_')
+
+
+  describe "#replaceWithView", ->
+
+    beforeEach ->
+      @$el = replaceWith: spy()
+      subject.renderedView = $el: $('<section>')
+
+    it "replaces the element with our renderedView element", ->
+      subject.replaceWithView(@$el)
+      expect( @$el.replaceWith ).calledWith(subject.renderedView.$el)
+
+    it "calls #afterRender", ->
+      spyOn(subject, 'afterRender')
+      subject.replaceWithView(@$el)
+      expect( subject.afterRender ).called
+
+
+  describe "#renderAndReplaceWithView", ->
+
+    beforeEach ->
+      @$el = replaceWith: spy()
+      @view = $el: $('<section>')
+      spyOn(subject, 'render', => subject.trigger('rendered', @view))
+
+    it "calls render", ->
+      subject.renderAndReplaceWithView(@$el)
+      expect( subject.render ).called
+
+    it "binds to the rendered event and replaces the element / calls the callback provided", ->
+      callback = spy()
+      subject.renderAndReplaceWithView(@$el, callback)
+      expect( @$el.replaceWith ).calledWith(@view.$el)
+      expect( callback ).calledWith(@$el, @view)
 
 
   describe "Module", ->
@@ -283,7 +347,8 @@ describe "Mercury.Snippet.View", ->
 
   beforeEach ->
     class Klass extends Mercury.Snippet.View
-    subject = new Klass(snippet: {name: 'mock'})
+    @mock = {name: 'mock', cid: 'c42'}
+    subject = new Klass(snippet: @mock)
 
   describe "#build", ->
 
@@ -293,7 +358,7 @@ describe "Mercury.Snippet.View", ->
       expect( subject.addClass ).calledWith('mercury-mock-snippet')
 
     it "adds the data attribute so we can select it", ->
-      expect( subject.$el.attr('data-mercury-snippet') ).to.eq('mock')
+      expect( subject.$el.attr('data-mercury-snippet') ).to.eq('c42')
 
     it "adds a data reference to the snippet model instance", ->
-      expect( subject.$el.data('snippet') ).to.eql(name: 'mock')
+      expect( subject.$el.data('snippet') ).to.eq(@mock)

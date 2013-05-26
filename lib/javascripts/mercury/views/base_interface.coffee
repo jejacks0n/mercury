@@ -64,6 +64,16 @@ class Mercury.BaseInterface extends Mercury.View
     @bindDocumentEvents()
 
 
+  load: (json) ->
+    @findRegionByName(name)?.load(data) for name, data of json.contents || json
+
+
+  findRegionByName: (name) ->
+    for region in @regions || []
+      return region if region.name == name
+    null
+
+
   addAllRegions: ->
     @addRegion(el) for el in @regionElements()
     @region ||= @regions[0]

@@ -209,6 +209,20 @@ Mercury.registerSnippet 'editable',
     Ad amet architecto eius eligendi eos inventore minus, necessitatibus nobis nulla officiis optio quam quas qui quis quos repellat, sapiente tempore veritatis?
     """
 
+  # The afterRender method is provided for this exact type of thing, and again, is a great way to shoot yourself in the
+  # foot. If you're putting regions into your snippets you'll need a deep understanding of each region type, and in our
+  # case we have an embedded markdown region, which does some things to the element -- namely replacing it's content
+  # with a textarea a preview div. Since we want to keep the value on undo/redo we find any of the textarea elements and
+  # reset their parent values so the content can be restored properly.
+  #
+  # After we've assured that all regions can in fact be loaded we tell Mercury to reinitialize itself to find any new
+  # regions -- specifically the ones we know were just added.
+  #
+  afterRender: ->
+    textarea = @renderedView.$('textarea[data-mercury-region]')   # handling for textarea regions -- eg. text/markdown
+    textarea.parent().html(textarea.val())
+    Mercury.trigger('reinitialize')                               # tell mercury that we have new regions to initialize.
+
   # We probably want to serialize the content from the region, and we do that here by setting the content attribute by
   # finding the element, getting the region instance, and asking for it to serialize.
   #
@@ -224,3 +238,4 @@ Mercury.registerSnippet 'editable',
       continue unless region = $(el).data('region')
       regions[region.name] = region.toJSON(true)
     regions
+

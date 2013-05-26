@@ -304,11 +304,7 @@ class Mercury.Region extends Mercury.View
   # Returns the snippets as an object for serializing.
   #
   snippets: ->
-    snippets = {}
-    for el in @$('[data-mercury-snippet]')
-      snippet = $(el).data('snippet')
-      snippets[snippet.cid] = snippet.toJSON()
-    snippets
+    {}
 
 
   # Track if changes have been made since the last save. This method can be overridden to specify change conditions that
@@ -387,6 +383,14 @@ class Mercury.Region extends Mercury.View
     json = JSON.parse(json) if typeof(json) == 'string'
     @value(json.value) unless json.value == null || typeof(json.value) == 'undefined'
     @data(json.data) if json.data
+
+
+  # Loads data, value, and snippets from serialized JSON. This is expected to be called only once during the global
+  # initialization process and can blow away the undo history.
+  #
+  load: (json) ->
+    @fromJSON(json)
+    @loadSnippets?(json.snippets || {})
 
 
   # Releases the instance and triggers a release event. Releasing a region doesn't remove the element, but does remove

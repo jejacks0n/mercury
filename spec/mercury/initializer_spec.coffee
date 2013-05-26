@@ -39,11 +39,13 @@ describe "Mercury", ->
   it "defines the .init method", ->
     expect( Klass.init ).to.be.a('function')
 
+
   describe ".init", ->
 
     beforeEach ->
       Klass.interface = false
       spyOn(Klass, 'Interface')
+      spyOn(Klass, 'load')
       Klass.config = stub().returns('Interface')
 
     it "sets @initialized", ->
@@ -59,10 +61,30 @@ describe "Mercury", ->
       Klass.init(foo: 'bar')
       expect( Klass.Interface ).calledWith(foo: 'bar')
 
+    it "calls #load", ->
+      Klass.loadedJSON = foo: 'bar'
+      Klass.init()
+      expect( Klass.load ).calledWith(foo: 'bar')
+
     it "does nothing if already initialized", ->
       Klass.interface = {}
       Klass.init()
       expect( Klass.Interface ).not.called
+
+
+  describe ".load", ->
+
+    it "sets @loadedJSON to the passed argument", ->
+      Klass.load()
+      expect( Klass.loadedJSON ).to.eql({})
+      Klass.load(foo: 'bar')
+      expect( Klass.loadedJSON ).to.eql(foo: 'bar')
+
+    it "calls load on the interface if we have one (and removes the loadedJSON)", ->
+      Klass.interface = load: spy()
+      Klass.load(foo: 'bar')
+      expect( Klass.interface.load ).calledWith(foo: 'bar')
+      expect( Klass.loadedJSON ).to.be.undefined
 
 
   describe ".release", ->

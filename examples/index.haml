@@ -134,3 +134,32 @@
   // will be exposed to us after it's been initialized.
   new Mercury.DeveloperInterface()
 
+  // To load snippet options and potentially other information back into mercury for editing you can simply provide the
+  // JSON that the server saved. This can be wordy, so you may want to filter some things out of it, but it should work
+  // if you don't sanitize the data before loading it back in. This can happen before or after calling Mercury.init and
+  // is expected to only happen once.
+  //
+  // This example shows what can be loaded back into Mercury. Value doesn't need to be provided if you're already
+  // rendering it into the page on the server.
+  //
+  // You'll notice the data-mercury-snippet attribute directly correlates to the snippet cid in the snippets object.
+  Mercury.load({
+    snippet2: {                                             // the region identifier
+      data: {},                                             // you can provide data back to regions
+      snippets: {                                           // snippets that this region serialized on save
+        c1: {
+          cid: 'c1',                                        // cid for the snippet when serialized (same as key)
+          name: 'beer',                                     // name of the snippet (type)
+          attributes: {                                     // serialized snippet attributes
+            name: 'jejacks0n',
+            beer: 'French & Belgian-Style Saison'
+          }
+        },
+        c2: {
+          cid: 'c2',
+          name: 'plugins'
+        }
+      },
+      value: "<div class=\"mercury-beer-snippet\" data-mercury-snippet=\"c1\"><h3>jejacks0n's favorite type of beer is French &amp; Belgian-Style Saison</h3>\n<p>\n  Beers in this category are golden to deep amber in color. There may be quite a variety of characters within this style. Generally: They are light to medium in body. Malt aroma is low to medium-low. Esters are medium to high in aroma, while, complex alcohols, herbs, spices, low Brettanomyces character and even clove and smoke-like phenolics may or may not be evident in the overall balanced beer. Hop aroma and flavor may be at low to medium levels. Malt flavor is low but provides foundation for the overall balance. Hop bitterness is moderate to moderately assertive. Herb and/or spice flavors, including black pepper-like notes, may or may not be evident. Fruitiness from fermentation is generally in character. A balanced small amount of sour or acidic flavors is acceptable when in balance with other components. Earthy, cellar-like, musty aromas are okay. Diacetyl should not be perceived. Chill or slight yeast haze is okay. Often bottle conditioned with some yeast character and high carbonation. French &amp; Belgian-Style Saison may have Brettanomyces characters that are slightly acidity, fruity, horsey, goaty and/or leather-like.\n</p>\n</div><div class=\"mercury-plugin-snippet\" data-mercury-snippet=\"c2\"></div>"
+    }
+  })

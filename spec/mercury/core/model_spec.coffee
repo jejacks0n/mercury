@@ -74,7 +74,6 @@ describe "Mercury.Model", ->
   describe ".all", ->
 
     it "returns the records as an array", ->
-      console.debug(Klass.all())
       expect( Klass.all() ).to.eql([{id: '5'}, {id: 'c4'}, subject])
 
 

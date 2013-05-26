@@ -43,3 +43,10 @@
     return null if @stackPosition >= @stack.length - 1
     @stackPosition += 1
     return @stack[@stackPosition]
+
+
+  # Resets the stack to the original state.
+  #
+  clearStack: ->
+    @stackPosition = 0
+    @stack = []

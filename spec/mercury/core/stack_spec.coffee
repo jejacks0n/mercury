@@ -105,3 +105,15 @@ describe "Mercury.Stack", ->
       expect( subject.redoStack() ).to.eq('c')
       expect( subject.redoStack() ).to.eq('d')
       expect( subject.redoStack() ).to.eq('e')
+
+
+  describe "#clearStack", ->
+
+    beforeEach ->
+      subject.stack = ['a', 'b', 'c', 'd', 'e']
+      subject.stackPosition = 5
+
+    it "clears the stack and resets the position", ->
+      subject.clearStack()
+      expect( subject.stack ).to.eql([])
+      expect( subject.stackPosition ).to.eq(0)

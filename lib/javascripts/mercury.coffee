@@ -52,6 +52,7 @@ Mercury.Region.Markdown.addToolbar 'block', block: ['Block', plugin: 'blocks']
 #   make table/media/link plugins use custom actions.
 #   finish the mercury-rails engine.
 #   ask/invite translators to revisit their translations.
+#   add better touch support to various aspects (draggable module specifically)
 # todo regions:
 #   plain: allow pasting, but sanitize to text.
 #   html: when using the iframe, rangy isn't behaving the same (doesn't work because it doesn't understand the context).
@@ -66,4 +67,4 @@ Mercury.Region.Markdown.addToolbar 'block', block: ['Block', plugin: 'blocks']
 # todo ideas:
 #   make region use the shadow dom if possible/configured to do so.
 #   port jQuery.extend into module so we can use that within instances (which is where it's mostly used).
-
+#   port the jQuery form -> object code to coffeescript and make that part of the form_handler module.

@@ -6,14 +6,13 @@ Plugin = Mercury.registerPlugin 'link'
     link: 'insert'
 
   events:
-    'mercury:edit:link': 'showDialog'
-    'button:click': 'showDialog'
+    'mercury:edit:link': 'onButtonClick'
 
   registerButton: ->
     @button.set(type: 'link')
 
 
-  showDialog: ->
+  onButtonClick: ->
     @bindTo(new Plugin.Modal())
 
 

@@ -32,16 +32,6 @@ class Mercury.ToolbarButton extends Mercury.View
     @handleSpecial()
 
 
-  handleSpecial: ->
-    if @event == 'save' then @delegateEvents
-      'mercury:save': -> @addClass('mercury-loading-indicator')
-      'mercury:save:complete': -> @removeClass('mercury-loading-indicator')
-    if @mode then @delegateEvents
-      'mercury:mode': (mode) ->
-        return unless mode == @mode
-        if @isToggled then @untoggled() else @toggled()
-
-
   determineAction: ->
     @action = @options.action || @name
     @action = [@action] if typeof(@action) == 'string'
@@ -51,7 +41,8 @@ class Mercury.ToolbarButton extends Mercury.View
   determineTypes: ->
     @types = []
     return @types = [@options.type] if @options.type
-    @types.push(type) for type, value of @options when type not in @standardOptions
+    for type, value of @options
+      @types.push(type) if @standardOptions.indexOf(type) == -1
     @type = @types[0]
 
 
@@ -63,6 +54,24 @@ class Mercury.ToolbarButton extends Mercury.View
     @addClass("mercury-toolbar-#{@name.toDash()}-button")
     @html("<em>#{@t(@label)}</em>")
     @buildSubview()?.appendTo(@)
+
+
+  handleSpecial: ->
+    @makeSaveButton() if @event == 'save'
+    @makeModeButton() if @mode
+
+
+  makeSaveButton: ->
+    @delegateEvents
+      'mercury:save': -> @addClass('mercury-loading-indicator')
+      'mercury:save:complete': -> @removeClass('mercury-loading-indicator')
+
+
+  makeModeButton: ->
+    @delegateEvents
+      'mercury:mode': (mode) ->
+        return unless mode == @mode
+        if @isToggled then @untoggled() else @toggled()
 
 
   registerPlugin: ->
@@ -90,12 +99,12 @@ class Mercury.ToolbarButton extends Mercury.View
   triggerAction: ->
     return if @isDisabled()
     if @toggle
-      unless @isToggled then @toggled() else @untoggled()
+      if @isToggled then @untoggled() else @toggled()
     if @subview
       if @subview.visible then @deactivate() else @activate()
       @subview.toggle()
-    return @plugin.trigger('button:click') if @plugin
-    return if @subview
+    @trigger('click')
+    return if @plugin || @subview
     Mercury.trigger(@event) if @event
     Mercury.trigger('mode', @mode) if @mode
     Mercury.trigger('action', @action...)
@@ -166,12 +175,8 @@ class Mercury.ToolbarButton extends Mercury.View
     @addClass('mercury-button-disabled')
 
 
-  isDisabled: ->
-    @isEnabled == false || @$el.closest('.mercury-button-disabled').length
-
-
   indicate: (e) ->
-    @isIndicated = false
+    @isIndicated = true
     return if @isDisabled()
     if e && @subview?.visible
       @deactivate()
@@ -180,5 +185,9 @@ class Mercury.ToolbarButton extends Mercury.View
 
 
   deindicate: ->
-    @isIndicated = true
+    @isIndicated = false
     @removeClass('mercury-button-pressed')
+
+
+  isDisabled: ->
+    !!(@isEnabled == false || @$el.closest('.mercury-button-disabled').length)

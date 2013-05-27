@@ -16,7 +16,6 @@ class Mercury.Plugin extends Mercury.Module
 
   @events:
     'mercury:region:focus': 'onRegionFocus'
-    'button:click': 'onButtonClick'
 
   # Register a plugin be providing a name, and options that will be used when instantiating the Mercury.Plugin class.
   # The options are first instantiated as a Definition, which are later used to create plugin instances. This method
@@ -78,6 +77,7 @@ class Mercury.Plugin extends Mercury.Module
   #
   buttonRegistered: (@button) ->
     @configuration = $.extend({}, @configuration, @button.get('settings'))
+    @button.on('click', => @onButtonClick())
     if @prependButtonAction
       @context = @button.get('actionName')
       @prependAction(@context, @prependButtonAction)

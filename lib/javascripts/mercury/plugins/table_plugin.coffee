@@ -6,14 +6,13 @@ Plugin = Mercury.registerPlugin 'table'
     html: 'insert'
 
   events:
-    'mercury:edit:table': 'showDialog'
-    'button:click': 'showDialog'
+    'mercury:edit:table': 'onButtonClick'
 
   registerButton: ->
     @button.set(type: 'table')
 
 
-  showDialog: ->
+  onButtonClick: ->
     @bindTo(new Plugin.Modal())
 
 

@@ -96,7 +96,6 @@ describe "Mercury.Plugin", ->
       expect( subject.delegateEvents ).calledWith
         foo: 'bar'
         'mercury:region:focus': 'onRegionFocus'
-        'button:click': 'onButtonClick'
 
     it "calls #appendActions", ->
       spyOn(Klass::, 'appendActions')
@@ -112,9 +111,11 @@ describe "Mercury.Plugin", ->
   describe "#buttonRegistered", ->
 
     beforeEach ->
-      @mock = get: (prop) ->
-        return foo: 'baz', bar: 'foo' if prop == 'settings'
-        return '_action_' if prop == 'actionName'
+      @mock =
+        get: (prop) ->
+          return foo: 'baz', bar: 'foo' if prop == 'settings'
+          return '_action_' if prop == 'actionName'
+        on: ->
 
     it "assigns @button", ->
       subject.buttonRegistered(@mock)
@@ -125,6 +126,13 @@ describe "Mercury.Plugin", ->
       subject.buttonRegistered(@mock)
       expect( subject.configuration.foo ).to.eq('baz')
       expect( subject.configuration.bar ).to.eq('foo')
+
+    it "binds to the button click event", ->
+      spyOn(@mock, 'on').yieldsOn(subject)
+      spyOn(subject, 'onButtonClick')
+      subject.buttonRegistered(@mock)
+      expect( @mock.on ).calledWith('click', sinon.match.func)
+      expect( subject.onButtonClick ).called
 
     it "prepends the button action if @prependButtonAction is set", ->
       spyOn(subject, 'prependAction')

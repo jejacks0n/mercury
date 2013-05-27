@@ -7,14 +7,13 @@ Plugin = Mercury.registerPlugin 'media'
     html: 'insertHtml'
 
   events:
-    'mercury:edit:media': 'showDialog'
-    'button:click': 'showDialog'
+    'mercury:edit:media': 'onButtonClick'
 
   registerButton: ->
     @button.set(type: 'media')
 
 
-  showDialog: ->
+  onButtonClick: ->
     @bindTo(new Plugin.Modal())
 
 

@@ -221,6 +221,7 @@ class Mercury.Snippet.View extends Mercury.View
   build: ->
     @addClass("mercury-#{@snippet.name}-snippet")
     @attr('data-mercury-snippet': @snippet.cid)
+    @attr('contenteditable', false)
 
     # This is only to be used to determine if the snippet markup is tied to a snippet. When a user inserts a snippet and
     # then uses undo/redo it removes and then re-adds the snippet markup back into the region, but the view is no longer

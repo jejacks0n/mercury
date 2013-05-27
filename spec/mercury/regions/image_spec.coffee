@@ -50,7 +50,7 @@ describe "Mercury.Region.Image", ->
   describe "#onDropFile", ->
 
     beforeEach ->
-      Mercury.configure 'regions:image:mimeTypes', ['image/foo']
+      subject.options.mimeTypes = ['image/foo']
 
     it "instantiates a new uploader", ->
       spyOn(Mercury, 'Uploader', -> on: spy())

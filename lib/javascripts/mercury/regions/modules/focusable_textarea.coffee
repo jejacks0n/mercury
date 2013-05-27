@@ -9,14 +9,13 @@ Mercury.Region.Modules.FocusableTextarea =
 
   buildFocusable: ->
     @editableDropBehavior ?= true
-    @autoSize ?= @config("regions:#{@constructor.type}:autoSize")
 
     value = @originalContent()
-    resize = if @autoSize then 'none' else 'vertical'
+    resize = if @options.autoSize then 'none' else 'vertical'
 
     @$preview = $("""<div class="mercury-#{@constructor.type}-region-preview">""")
     @$focusable = $("""<textarea class="mercury-#{@constructor.type}-region-textarea" placeholder="#{@placeholder}">""")
-    @$focusable.attr(wrap: 'off') unless @config("regions:#{@constructor.type}:wrapping")
+    @$focusable.attr(wrap: 'off') unless @options.wrapping
 
     @$el.empty()
     @append(@$preview, @$focusable.css(width: '100%', height: @$el.height() || @height || 20, resize: resize))
@@ -42,7 +41,7 @@ Mercury.Region.Modules.FocusableTextarea =
 
 
   resizeFocusable: ->
-    return unless @autoSize
+    return unless @options.autoSize
     focusable = @$focusable.get(0)
     body = $('body', @el.ownerDocument)
     current = body.scrollTop()

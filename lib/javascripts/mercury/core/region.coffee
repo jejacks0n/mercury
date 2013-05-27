@@ -115,7 +115,8 @@ class Mercury.Region extends Mercury.View
     @actions ||= {}
     @context = $.extend({}, @constructor.context, @context)
     @dataAttrs = $.extend({}, @constructor.dataAttrs, @dataAttrs)
-    @options = $.extend(JSON.parse($(@el).attr(attr) || '{}'), @options) if @el && attr = @config('regions:options')
+    @options = $.extend({}, @options, @config("regions:#{@type()}"))
+    @options = $.extend(@options, JSON.parse($(@el).attr(attr) || '{}')) if @el && attr = @config('regions:options')
 
     @placeholder ||= @options.placeholder || ''            # sets the default placeholder to an empty string
     @beforeBuild?()                                        # call the beforeBuild method if it's defined

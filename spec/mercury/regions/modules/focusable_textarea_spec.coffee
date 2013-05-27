@@ -24,11 +24,6 @@ describe "Mercury.Region.Modules.FocusableTextarea", ->
 
   describe "#buildFocusable (via the build event)", ->
 
-    it "determines if we should auto size", ->
-      Mercury.configure 'regions:unknown:autoSize', true
-      subject.buildFocusable()
-      expect( subject.autoSize ).to.be.true
-
     it "sets @editableDropBehavior", ->
       subject.trigger('build')
       expect( subject.editableDropBehavior ).to.be.true
@@ -110,7 +105,7 @@ describe "Mercury.Region.Modules.FocusableTextarea", ->
   describe "#resizeFocusable (via the action event)", ->
 
     beforeEach ->
-      subject.autoSize = true
+      subject.options.autoSize = true
 
     it "sets the height on the focusable element", ->
       spyOn(subject.$focusable, 'css', -> subject.$focusable)
@@ -124,7 +119,7 @@ describe "Mercury.Region.Modules.FocusableTextarea", ->
       expect( $.fn.scrollTop ).calledWith(42)
 
     it "does nothing if we aren't autosizing", ->
-      subject.autoSize = false
+      subject.options.autoSize = false
       spyOn($.fn, 'scrollTop', -> 42)
       subject.resizeFocusable()
       expect( $.fn.scrollTop ).not.called

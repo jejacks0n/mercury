@@ -158,11 +158,19 @@ describe "Mercury.Region", ->
       subject = new Klass()
       expect( subject.notify ).calledWith('Is unsupported in this browser')
 
+    it "merges options with the region configuration", ->
+      Mercury.configure 'regions:unknown', foo: 'bar'
+      subject = new Klass('<div>', bar: 'baz')
+      expect( subject.options ).to.eql(foo: 'bar', bar: 'baz')
+
     it "merges options with the options data from the element", ->
-      subject = new Klass($("""<div data-mercury-options='{"previewing": true}'">"""), foo: 'bar')
+      Mercury.configure 'regions:unknown', foo: 'bar', bar: 'baz'
+      subject = new Klass($("""<div data-mercury-options='{"previewing": true, "bar": "foo"}'">"""), foo: 'baz')
       expect( subject.options.previewing ).to.be.true
       expect( subject.options.foo ).to.eq('bar')
       expect( subject.foo ).to.eq('bar')
+      expect( subject.options.bar ).to.eq('foo')
+      expect( subject.bar ).to.eq('foo')
 
     it "merges context with constructor.context", ->
       Klass.context = foo: 'bar'

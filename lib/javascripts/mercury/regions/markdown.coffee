@@ -67,7 +67,7 @@ class Mercury.Region.Markdown extends Mercury.Region
 
 
   setupConverter: ->
-    @converter.setOptions(@config('regions:markdown') || {})
+    @converter.setOptions(@options)
 
 
   convertedValue: ->
@@ -82,7 +82,7 @@ class Mercury.Region.Markdown extends Mercury.Region
 
 
   onDropFile: (files) ->
-    uploader = new Mercury[@config('interface:uploader')](files, mimeTypes: @config('regions:markdown:mimeTypes'))
+    uploader = new Mercury[@config('interface:uploader')](files, mimeTypes: @options.mimeTypes)
     uploader.on 'uploaded', (file) =>
       @focus()
       @handleAction('file', file)

@@ -1,5 +1,8 @@
 
 /*!
+The snippet region isn't editable per se, and only allows placing snippets within it. Snippets can then be edited,
+reordered or removed. This region provides a lot of controlled functionality and is especially useful if you're
+providing complex elements that might need more tailoring than regular html allows.
 */
 
 
@@ -16,6 +19,8 @@
     }
 
     Snippet.include(Mercury.Region.Modules.DropIndicator);
+
+    Snippet.include(Mercury.Region.Modules.Snippetable);
 
     Snippet.define('Mercury.Region.Snippet', 'snippet');
 

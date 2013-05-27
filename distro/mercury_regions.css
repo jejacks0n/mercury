@@ -384,6 +384,7 @@ This file contains all of the required css for the Mercury interface as well as 
   outline: 0;
   border: none;
   margin: 0;
+  padding: 0;
   white-space: pre;
   background: transparent;
   font-family: inherit;
@@ -495,6 +496,7 @@ This file contains all of the required css for the Mercury interface as well as 
   outline: 0;
   border: none;
   margin: 0;
+  padding: 0;
   white-space: pre;
   background: transparent;
   font-family: inherit;

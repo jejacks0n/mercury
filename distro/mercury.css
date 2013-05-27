@@ -1505,13 +1505,14 @@ mercury .mercury-panel .mercury-panel-title {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  cursor: move;
 }
-/* line 30, ../../lib/stylesheets/mercury/views/_panel.scss */
+/* line 31, ../../lib/stylesheets/mercury/views/_panel.scss */
 mercury .mercury-panel .mercury-panel-title span {
   color: #eeeeee;
   text-shadow: black 1px 1px 0;
 }
-/* line 34, ../../lib/stylesheets/mercury/views/_panel.scss */
+/* line 35, ../../lib/stylesheets/mercury/views/_panel.scss */
 mercury .mercury-panel .mercury-panel-title em {
   position: relative;
   z-index: 1;
@@ -1520,18 +1521,18 @@ mercury .mercury-panel .mercury-panel-title em {
   color: #dddddd;
   cursor: pointer;
 }
-/* line 41, ../../lib/stylesheets/mercury/views/_panel.scss */
+/* line 42, ../../lib/stylesheets/mercury/views/_panel.scss */
 mercury .mercury-panel .mercury-panel-title em:hover {
   color: #eeeeee;
 }
-/* line 46, ../../lib/stylesheets/mercury/views/_panel.scss */
+/* line 47, ../../lib/stylesheets/mercury/views/_panel.scss */
 mercury .mercury-panel .mercury-panel-content-container {
   float: left;
   overflow: auto;
   -webkit-overflow-scrolling: touch;
   min-width: 100%;
 }
-/* line 52, ../../lib/stylesheets/mercury/views/_panel.scss */
+/* line 53, ../../lib/stylesheets/mercury/views/_panel.scss */
 mercury .mercury-panel .mercury-panel-content {
   -webkit-transition-property: opacity;
   -webkit-transition-duration: 0.1s;
@@ -1551,11 +1552,11 @@ mercury .mercury-panel .mercury-panel-content {
   padding: 20px;
   color: #cccccc;
 }
-/* line 60, ../../lib/stylesheets/mercury/views/_panel.scss */
+/* line 61, ../../lib/stylesheets/mercury/views/_panel.scss */
 mercury .mercury-panel.loading .mercury-panel-loading-indicator {
   display: block;
 }
-/* line 63, ../../lib/stylesheets/mercury/views/_panel.scss */
+/* line 64, ../../lib/stylesheets/mercury/views/_panel.scss */
 mercury .mercury-panel.loading .mercury-panel-content-container {
   visibility: hidden;
 }
@@ -3023,6 +3024,7 @@ body.mercury-transitions {
   outline: 0;
   border: none;
   margin: 0;
+  padding: 0;
   white-space: pre;
   background: transparent;
   font-family: inherit;
@@ -3134,6 +3136,7 @@ body.mercury-transitions {
   outline: 0;
   border: none;
   margin: 0;
+  padding: 0;
   white-space: pre;
   background: transparent;
   font-family: inherit;

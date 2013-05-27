@@ -194,7 +194,7 @@ mercury .mercury-panel{-webkit-transition-property:opacity,width;-webkit-transit
 mercury .mercury-panel .mercury-panel-loading-indicator{text-align:center;display:none;padding:10px 20px}
 mercury .mercury-panel .mercury-panel-loading-indicator:before{display:inline-block;font-family:"mercury";width:28px;height:28px;font-size:28px;line-height:28px;font-weight:normal;font-variant:normal;text-transform:none;text-align:center;speak:none;-webkit-font-smoothing:antialiased}
 mercury .mercury-panel .mercury-panel-loading-indicator:before{-webkit-animation:mercury-loading-indicator 1s linear infinite;-moz-animation:mercury-loading-indicator 1s linear infinite;animation:mercury-loading-indicator 1s linear infinite;color:#ccc;content:"Z"}
-mercury .mercury-panel .mercury-panel-title{-webkit-user-select:none;-moz-user-select:none;user-select:none;cursor:default;-webkit-border-radius:7px 7px 0 0;-moz-border-radius:7px 7px 0 0;border-radius:7px 7px 0 0;font-family:Helvetica,Tahoma,Arial,sans-serif;font-size:14px;padding:2px 10px 0 10px;background:#222;line-height:23px;font-weight:normal;border-bottom:1px solid #555;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+mercury .mercury-panel .mercury-panel-title{-webkit-user-select:none;-moz-user-select:none;user-select:none;cursor:default;-webkit-border-radius:7px 7px 0 0;-moz-border-radius:7px 7px 0 0;border-radius:7px 7px 0 0;font-family:Helvetica,Tahoma,Arial,sans-serif;font-size:14px;padding:2px 10px 0 10px;background:#222;line-height:23px;font-weight:normal;border-bottom:1px solid #555;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:move}
 mercury .mercury-panel .mercury-panel-title span{color:#eee;text-shadow:black 1px 1px 0}
 mercury .mercury-panel .mercury-panel-title em{position:relative;z-index:1;float:right;font-style:normal;color:#ddd;cursor:pointer}
 mercury .mercury-panel .mercury-panel-title em:hover{color:#eee}
@@ -372,7 +372,7 @@ body.mercury-transitions{-webkit-transition-property:top;-webkit-transition-dura
 .mercury-markdown-region+.mercury-region-drop-indicator:before{display:inline-block;font-family:"mercury";width:60px;height:60px;font-size:32px;line-height:60px;font-weight:normal;font-variant:normal;text-transform:none;text-align:center;speak:none;-webkit-font-smoothing:antialiased}
 .mercury-markdown-region+.mercury-region-drop-indicator:before{content:'X'}
 .mercury-markdown-region+.mercury-region-drop-indicator.mercury-region-snippet-drop-indicator:before{content:'N'}
-.mercury-markdown-region textarea.mercury-markdown-region-textarea{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;outline:0;border:none;margin:0;white-space:pre;background:transparent;font-family:inherit;font-size:inherit;font-weight:inherit;line-height:inherit;color:inherit;resize:vertical}
+.mercury-markdown-region textarea.mercury-markdown-region-textarea{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;outline:0;border:none;margin:0;padding:0;white-space:pre;background:transparent;font-family:inherit;font-size:inherit;font-weight:inherit;line-height:inherit;color:inherit;resize:vertical}
 .mercury-markdown-region textarea.mercury-markdown-region-textarea:focus{outline-offset:0;outline:none;-webkit-box-shadow:0 0 7px #00bce5,0 0 2px #003e4c;-moz-box-shadow:0 0 7px #00bce5,0 0 2px #003e4c;box-shadow:0 0 7px #00bce5,0 0 2px #003e4c}
 .mercury-plain-region:focus{outline-offset:0;outline:none;-webkit-box-shadow:0 0 7px #00bce5,0 0 2px #003e4c;-moz-box-shadow:0 0 7px #00bce5,0 0 2px #003e4c;box-shadow:0 0 7px #00bce5,0 0 2px #003e4c}
 .mercury-plain-region[data-mercury-region]{min-width:5px;min-height:20px}
@@ -383,7 +383,7 @@ body.mercury-transitions{-webkit-transition-property:top;-webkit-transition-dura
 .mercury-snippet-region+.mercury-region-drop-indicator:before{display:inline-block;font-family:"mercury";width:60px;height:60px;font-size:32px;line-height:60px;font-weight:normal;font-variant:normal;text-transform:none;text-align:center;speak:none;-webkit-font-smoothing:antialiased}
 .mercury-snippet-region+.mercury-region-drop-indicator:before{content:'X'}
 .mercury-snippet-region+.mercury-region-drop-indicator.mercury-region-snippet-drop-indicator:before{content:'N'}
-.mercury-text-region textarea.mercury-text-region-textarea{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;outline:0;border:none;margin:0;white-space:pre;background:transparent;font-family:inherit;font-size:inherit;font-weight:inherit;line-height:inherit;color:inherit;resize:vertical}
+.mercury-text-region textarea.mercury-text-region-textarea{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;outline:0;border:none;margin:0;padding:0;white-space:pre;background:transparent;font-family:inherit;font-size:inherit;font-weight:inherit;line-height:inherit;color:inherit;resize:vertical}
 .mercury-text-region textarea.mercury-text-region-textarea:focus{outline-offset:0;outline:none;-webkit-box-shadow:0 0 7px #00bce5,0 0 2px #003e4c;-moz-box-shadow:0 0 7px #00bce5,0 0 2px #003e4c;box-shadow:0 0 7px #00bce5,0 0 2px #003e4c}
 .mercury-unknown-region[data-mercury-region]:empty:before{overflow:hidden;content:attr(data-placeholder);color:#bbb}
 .mercury-unknown-region[data-mercury-region]{min-width:5px;min-height:20px}

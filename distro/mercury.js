@@ -150,7 +150,7 @@ Copyright (c) 2013 Jeremy Jackson
       },
       text: {
         autoSize: true,
-        wrapping: false
+        wrapping: true
       }
     }
   };
@@ -1146,6 +1146,10 @@ Copyright (c) 2013 Jeremy Jackson
       }
       this.stackPosition += 1;
       return this.stack[this.stackPosition];
+    },
+    clearStack: function() {
+      this.stackPosition = 0;
+      return this.stack = [];
     }
   };
 
@@ -1241,13 +1245,16 @@ Copyright (c) 2013 Jeremy Jackson
     };
 
     function Model(attrs) {
+      var _base;
       if (attrs == null) {
         attrs = {};
       }
       this.attributes = {};
       this.errors = {};
       this.set(attrs);
-      this.cid = this.constructor.uid('c');
+      this.cid || (this.cid = this.constructor.uid('c'));
+      (_base = this.constructor).records || (_base.records = {});
+      this.constructor.records[this.cid] = this;
       Model.__super__.constructor.apply(this, arguments);
     }
 
@@ -1389,8 +1396,7 @@ Copyright (c) 2013 Jeremy Jackson
     Plugin.logPrefix = 'Mercury.Plugin:';
 
     Plugin.events = {
-      'mercury:region:focus': 'onRegionFocus',
-      'button:click': 'onButtonClick'
+      'mercury:region:focus': 'onRegionFocus'
     };
 
     Plugin.register = function(name, options) {
@@ -1450,8 +1456,12 @@ Copyright (c) 2013 Jeremy Jackson
     }
 
     Plugin.prototype.buttonRegistered = function(button) {
+      var _this = this;
       this.button = button;
       this.configuration = $.extend({}, this.configuration, this.button.get('settings'));
+      this.button.on('click', function() {
+        return _this.onButtonClick();
+      });
       if (this.prependButtonAction) {
         this.context = this.button.get('actionName');
         this.prependAction(this.context, this.prependButtonAction);
@@ -2683,6 +2693,14 @@ Copyright (c) 2013 Jeremy Jackson
       }
     };
 
+    Snippet.fromSerializedJSON = function(json) {
+      var instance;
+      instance = this.get(json.name, true);
+      instance.cid = json.cid;
+      instance.set(json.attributes);
+      return instance;
+    };
+
     Snippet.all = function() {
       return registered;
     };
@@ -2714,6 +2732,14 @@ Copyright (c) 2013 Jeremy Jackson
       Snippet.__super__.constructor.call(this, this.defaults || {});
     }
 
+    Snippet.prototype.toSerializedJSON = function() {
+      return {
+        cid: this.cid,
+        name: this.name,
+        attributes: this.toJSON()
+      };
+    };
+
     Snippet.prototype.initialize = function(region) {
       this.region = region;
       if (this.supportedRegions !== 'all' && this.supportedRegions.indexOf(this.region.type()) === -1) {
@@ -2723,6 +2749,13 @@ Copyright (c) 2013 Jeremy Jackson
         return this.displayForm();
       }
       return this.render();
+    };
+
+    Snippet.prototype.delay = function(ms, callback) {
+      var _this = this;
+      return setTimeout((function() {
+        return callback.call(_this);
+      }), ms);
     };
 
     Snippet.prototype.displayForm = function(form) {
@@ -2753,13 +2786,16 @@ Copyright (c) 2013 Jeremy Jackson
 
     Snippet.prototype.renderView = function(template) {
       this.renderedView = this.view(this.templateClosure(template || this.template));
-      return this.trigger('rendered', this.renderedView);
+      this.trigger('rendered', this.renderedView);
+      return this.delay(1, this.afterRender);
     };
 
+    Snippet.prototype.afterRender = function() {};
+
     Snippet.prototype.view = function(template) {
-      return new Mercury.View({
+      return new Mercury.Snippet.View({
         template: template,
-        className: "mercury-" + this.name + "-snippet"
+        snippet: this
       });
     };
 
@@ -2783,6 +2819,22 @@ Copyright (c) 2013 Jeremy Jackson
 
     Snippet.prototype.getRenderedView = function(region) {
       return this.renderedView;
+    };
+
+    Snippet.prototype.replaceWithView = function($el) {
+      $el.replaceWith(this.renderedView.$el);
+      return this.afterRender();
+    };
+
+    Snippet.prototype.renderAndReplaceWithView = function($el, callback) {
+      if (callback == null) {
+        callback = null;
+      }
+      this.one('rendered', function(view) {
+        $el.replaceWith(view.$el);
+        return typeof callback === "function" ? callback($el, view) : void 0;
+      });
+      return this.render();
     };
 
     return Snippet;
@@ -2831,6 +2883,28 @@ Copyright (c) 2013 Jeremy Jackson
     return Definition;
 
   })();
+
+  Mercury.Snippet.View = (function(_super) {
+
+    __extends(View, _super);
+
+    function View() {
+      return View.__super__.constructor.apply(this, arguments);
+    }
+
+    View.prototype.build = function() {
+      this.addClass("mercury-" + this.snippet.name + "-snippet");
+      this.attr({
+        'data-mercury-snippet': this.snippet.cid
+      });
+      return this.$el.data({
+        'snippet': this.snippet
+      });
+    };
+
+    return View;
+
+  })(Mercury.View);
 
 }).call(this);
 (function() {
@@ -2984,6 +3058,7 @@ Copyright (c) 2013 Jeremy Jackson
       if (!this.name) {
         this.notify(this.t('No name provided for the %s region, falling back to random', this.type()));
         this.name = "" + (this.type()) + (Math.floor(Math.random() * 10000));
+        this.$el.attr(this.config('regions:identifier'), this.name);
       }
       this.addRegionAttrs();
       if (!this.skipHistoryOnInitialize) {
@@ -3150,6 +3225,7 @@ Copyright (c) 2013 Jeremy Jackson
           delete data.mercury;
           delete data.mercuryRegion;
           delete data.placeholder;
+          delete data.regionOptions;
         }
         return data != null ? data : null;
       }
@@ -3245,6 +3321,11 @@ Copyright (c) 2013 Jeremy Jackson
       if (json.data) {
         return this.data(json.data);
       }
+    };
+
+    Region.prototype.load = function(json) {
+      this.fromJSON(json);
+      return typeof this.loadSnippets === "function" ? this.loadSnippets(json.snippets || {}) : void 0;
     };
 
     Region.prototype.release = function() {
@@ -3369,10 +3450,11 @@ Copyright (c) 2013 Jeremy Jackson
 
   Mercury.View.Modules.Draggable = {
     startDrag: function(e) {
-      var position, x, y;
+      var position;
       if (e.button > 1) {
         return;
       }
+      this.prevent(e);
       this.viewportSize = {
         width: $(window).width(),
         height: $(window).height()
@@ -3382,10 +3464,7 @@ Copyright (c) 2013 Jeremy Jackson
         x: position.left * -1,
         y: position.top * -1
       };
-      x = e.pageX;
-      y = e.pageY;
-      e.preventDefault();
-      return this.potentialDragStart(x, y);
+      return this.potentialDragStart(e.pageX, e.pageY);
     },
     potentialDragStart: function(x, y) {
       this.startPosition = {
@@ -3397,9 +3476,12 @@ Copyright (c) 2013 Jeremy Jackson
         y: y
       };
       this.potentiallyDragging = true;
-      return this.bindDocumentDragEvents();
+      this.bindDocumentDragEvents(document);
+      if (Mercury["interface"].document && Mercury["interface"].document !== document) {
+        return this.bindDocumentDragEvents(Mercury["interface"].document);
+      }
     },
-    startDragging: function(x, y) {
+    onStartDragging: function(x, y) {
       this.addClass('mercury-no-animation');
       this.dragging = true;
       this.initialPosition = {
@@ -3408,27 +3490,24 @@ Copyright (c) 2013 Jeremy Jackson
       };
       return typeof this.onDragStart === "function" ? this.onDragStart() : void 0;
     },
-    drag: function(e) {
+    onDrag: function(e) {
       var currentX, currentY, x, y;
-      e.preventDefault();
+      this.prevent(e);
       x = e.pageX;
       y = e.pageY;
-      if (!this.dragging) {
-        if (Math.abs(this.initialPosition.x - x) >= 6 || Math.abs(this.initialPosition.y - y) >= 6) {
-          return this.startDragging(x, y);
-        }
-      } else {
-        this.lastPosition = this.dragPosition;
-        currentX = (this.startPosition.x - x + this.initialPosition.x) * -1;
-        currentY = (this.startPosition.y - y + this.initialPosition.y) * -1;
-        this.dragPosition = {
-          x: currentX,
-          y: currentY
-        };
-        return this.setPositionOnDrag(currentX, currentY);
+      if (!this.dragging && (Math.abs(this.initialPosition.x - x) > 5 || Math.abs(this.initialPosition.y - y) > 5)) {
+        return this.onStartDragging(x, y);
       }
+      this.lastPosition = this.dragPosition;
+      currentX = (this.startPosition.x - x + this.initialPosition.x) * -1;
+      currentY = (this.startPosition.y - y + this.initialPosition.y) * -1;
+      this.dragPosition = {
+        x: currentX,
+        y: currentY
+      };
+      return this.setPositionOnDrag(currentX, currentY);
     },
-    endDragging: function(e) {
+    onEndDragging: function(e) {
       if (this.dragging === true) {
         if (typeof this.onDragEnd === "function") {
           this.onDragEnd(e);
@@ -3436,31 +3515,24 @@ Copyright (c) 2013 Jeremy Jackson
       }
       this.dragging = false;
       this.potentiallyDragging = false;
-      this.unbindDocumentDragEvents();
+      this.unbindDocumentDragEvents(document);
+      if (Mercury["interface"].document && Mercury["interface"].document !== document) {
+        this.unbindDocumentDragEvents(Mercury["interface"].document);
+      }
       return this.delay(250, function() {
         return this.removeClass('mercury-no-animation');
       });
     },
-    unbindDocumentDragEvents: function() {
-      $(document).off('mousemove', this.dragHandler).off('mouseup', this.endDraggingHandler);
-      if (this.document && this.document !== document) {
-        return $(this.document).off('mousemove', this.otherDragHandler).off('mouseup', this.otherEndDraggingHandler);
-      }
-    },
-    bindDocumentDragEvents: function() {
+    bindDocumentDragEvents: function(el) {
       var _this = this;
-      $(document).on('mousemove', this.dragHandler = function(e) {
-        return _this.drag(e);
-      }).on('mouseup', this.endDraggingHandler = function(e) {
-        return _this.endDragging(e);
+      return $(el).on('mousemove', this.onDragHandler = function(e) {
+        return _this.onDrag(e);
+      }).on('mouseup', this.onEndDraggingHandler = function(e) {
+        return _this.onEndDragging(e);
       });
-      if (this.document && this.document !== document) {
-        return $(this.document).on('mousemove', this.otherDragHandler = function(e) {
-          return _this.drag(e);
-        }).on('mouseup', this.otherEndDraggingHandler = function(e) {
-          return _this.endDragging(e);
-        });
-      }
+    },
+    unbindDocumentDragEvents: function(el) {
+      return $(el).off('mousemove', this.onDragHandler).off('mouseup', this.onEndDraggingHandler);
     },
     setPositionOnDrag: function(x, y) {
       return this.css({
@@ -3706,6 +3778,29 @@ Copyright (c) 2013 Jeremy Jackson
     BaseInterface.prototype.initialize = function() {
       this.addAllRegions();
       return this.bindDocumentEvents();
+    };
+
+    BaseInterface.prototype.load = function(json) {
+      var data, name, _ref, _ref1, _results;
+      _ref = json.contents || json;
+      _results = [];
+      for (name in _ref) {
+        data = _ref[name];
+        _results.push((_ref1 = this.findRegionByName(name)) != null ? _ref1.load(data) : void 0);
+      }
+      return _results;
+    };
+
+    BaseInterface.prototype.findRegionByName = function(name) {
+      var region, _i, _len, _ref;
+      _ref = this.regions || [];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        region = _ref[_i];
+        if (region.name === name) {
+          return region;
+        }
+      }
+      return null;
     };
 
     BaseInterface.prototype.addAllRegions = function() {
@@ -4056,11 +4151,11 @@ Copyright (c) 2013 Jeremy Jackson
           left: x
         });
       }
-      if (y < 0) {
-        y = 0;
-      }
       if (x < 0) {
         x = 0;
+      }
+      if (y < 0) {
+        y = 0;
       }
       if (x > this.viewportSize.width - 50) {
         x = this.viewportSize.width - 50;
@@ -4154,6 +4249,14 @@ Copyright (c) 2013 Jeremy Jackson
       }
     };
 
+    FrameInterface.prototype.load = function(json) {
+      this.loadedJSON = json;
+      if (!this.initialized) {
+        return;
+      }
+      return FrameInterface.__super__.load.apply(this, arguments);
+    };
+
     FrameInterface.prototype.reinitialize = function() {
       if (this.$frame.length) {
         this.initialized = false;
@@ -4167,6 +4270,7 @@ Copyright (c) 2013 Jeremy Jackson
       var _this = this;
       this.$frame.on('load', function() {
         _this.initializeFrame();
+        _this.load(_this.loadedJSON);
         return _this.$frame.off('load').on('load', function() {
           return _this.reinitializeFrame();
         });
@@ -4194,6 +4298,7 @@ Copyright (c) 2013 Jeremy Jackson
       this.bindDocumentEvents();
       this.addAllRegions();
       this.hijackLinksAndForms();
+      this.trigger('initialized');
       Mercury.trigger('initialized');
       return this.delay(100, this.focusDefaultRegion);
     };
@@ -4202,7 +4307,8 @@ Copyright (c) 2013 Jeremy Jackson
       if (this.frameLocation()) {
         this.initialized = false;
         this.regions = [];
-        return this.initializeFrame();
+        this.initializeFrame();
+        return this.load(this.loadedJSON);
       } else {
         alert(this.t("You've left editing the page you were on, please refresh the page."));
         return this.release();
@@ -4413,6 +4519,8 @@ Copyright (c) 2013 Jeremy Jackson
       return Panel.__super__.constructor.apply(this, arguments);
     }
 
+    Panel.include(Mercury.View.Modules.Draggable);
+
     Panel.logPrefix = 'Mercury.Panel:';
 
     Panel.className = 'mercury-dialog mercury-panel';
@@ -4428,6 +4536,7 @@ Copyright (c) 2013 Jeremy Jackson
       'mercury:interface:resize': 'resize',
       'mercury:panels:hide': 'hide',
       'mousedown .mercury-panel-title em': 'prevent',
+      'mousedown .mercury-panel-title': 'startDrag',
       'click .mercury-panel-title em': 'hide'
     };
 
@@ -4465,6 +4574,11 @@ Copyright (c) 2013 Jeremy Jackson
           top: dimensions.top + 10,
           bottom: dimensions.bottom + 10
         });
+        if (this.$el.outerWidth() + this.$el.offset().left >= dimensions.width - 10) {
+          this.css({
+            left: ''
+          });
+        }
       }
       titleHeight = this.$titleContainer.outerHeight();
       height = this.$el.height();
@@ -4491,6 +4605,20 @@ Copyright (c) 2013 Jeremy Jackson
     Panel.prototype.focusFirstFocusable = function() {};
 
     Panel.prototype.keepFocusConstrained = function() {};
+
+    Panel.prototype.setPositionOnDrag = function(x) {
+      if (x < 10) {
+        x = 10;
+      }
+      if (x >= this.viewportSize.width - this.$el.outerWidth() - 10) {
+        return this.css({
+          left: ''
+        });
+      }
+      return this.css({
+        left: x
+      });
+    };
 
     return Panel;
 
@@ -4604,7 +4732,6 @@ Copyright (c) 2013 Jeremy Jackson
 (function() {
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-    __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; },
     __slice = [].slice;
 
   Mercury.ToolbarButton = (function(_super) {
@@ -4651,33 +4778,6 @@ Copyright (c) 2013 Jeremy Jackson
       this.handleSpecial();
     }
 
-    ToolbarButton.prototype.handleSpecial = function() {
-      if (this.event === 'save') {
-        this.delegateEvents({
-          'mercury:save': function() {
-            return this.addClass('mercury-loading-indicator');
-          },
-          'mercury:save:complete': function() {
-            return this.removeClass('mercury-loading-indicator');
-          }
-        });
-      }
-      if (this.mode) {
-        return this.delegateEvents({
-          'mercury:mode': function(mode) {
-            if (mode !== this.mode) {
-              return;
-            }
-            if (this.isToggled) {
-              return this.untoggled();
-            } else {
-              return this.toggled();
-            }
-          }
-        });
-      }
-    };
-
     ToolbarButton.prototype.determineAction = function() {
       this.action = this.options.action || this.name;
       if (typeof this.action === 'string') {
@@ -4695,7 +4795,7 @@ Copyright (c) 2013 Jeremy Jackson
       _ref = this.options;
       for (type in _ref) {
         value = _ref[type];
-        if (__indexOf.call(this.standardOptions, type) < 0) {
+        if (this.standardOptions.indexOf(type) === -1) {
           this.types.push(type);
         }
       }
@@ -4713,6 +4813,41 @@ Copyright (c) 2013 Jeremy Jackson
       this.addClass("mercury-toolbar-" + (this.name.toDash()) + "-button");
       this.html("<em>" + (this.t(this.label)) + "</em>");
       return (_ref = this.buildSubview()) != null ? _ref.appendTo(this) : void 0;
+    };
+
+    ToolbarButton.prototype.handleSpecial = function() {
+      if (this.event === 'save') {
+        this.makeSaveButton();
+      }
+      if (this.mode) {
+        return this.makeModeButton();
+      }
+    };
+
+    ToolbarButton.prototype.makeSaveButton = function() {
+      return this.delegateEvents({
+        'mercury:save': function() {
+          return this.addClass('mercury-loading-indicator');
+        },
+        'mercury:save:complete': function() {
+          return this.removeClass('mercury-loading-indicator');
+        }
+      });
+    };
+
+    ToolbarButton.prototype.makeModeButton = function() {
+      return this.delegateEvents({
+        'mercury:mode': function(mode) {
+          if (mode !== this.mode) {
+            return;
+          }
+          if (this.isToggled) {
+            return this.untoggled();
+          } else {
+            return this.toggled();
+          }
+        }
+      });
     };
 
     ToolbarButton.prototype.registerPlugin = function() {
@@ -4755,10 +4890,10 @@ Copyright (c) 2013 Jeremy Jackson
         return;
       }
       if (this.toggle) {
-        if (!this.isToggled) {
-          this.toggled();
-        } else {
+        if (this.isToggled) {
           this.untoggled();
+        } else {
+          this.toggled();
         }
       }
       if (this.subview) {
@@ -4769,10 +4904,8 @@ Copyright (c) 2013 Jeremy Jackson
         }
         this.subview.toggle();
       }
-      if (this.plugin) {
-        return this.plugin.trigger('button:click');
-      }
-      if (this.subview) {
+      this.trigger('click');
+      if (this.plugin || this.subview) {
         return;
       }
       if (this.event) {
@@ -4808,6 +4941,9 @@ Copyright (c) 2013 Jeremy Jackson
 
     ToolbarButton.prototype.onRegionUpdate = function(region) {
       var _ref;
+      if (region !== Mercury["interface"].region) {
+        return;
+      }
       if (!((_ref = this.subview) != null ? _ref.visible : void 0)) {
         this.deactivate();
       }
@@ -4871,13 +5007,9 @@ Copyright (c) 2013 Jeremy Jackson
       return this.addClass('mercury-button-disabled');
     };
 
-    ToolbarButton.prototype.isDisabled = function() {
-      return this.isEnabled === false || this.$el.closest('.mercury-button-disabled').length;
-    };
-
     ToolbarButton.prototype.indicate = function(e) {
       var _ref;
-      this.isIndicated = false;
+      this.isIndicated = true;
       if (this.isDisabled()) {
         return;
       }
@@ -4889,8 +5021,12 @@ Copyright (c) 2013 Jeremy Jackson
     };
 
     ToolbarButton.prototype.deindicate = function() {
-      this.isIndicated = true;
+      this.isIndicated = false;
       return this.removeClass('mercury-button-pressed');
+    };
+
+    ToolbarButton.prototype.isDisabled = function() {
+      return !!(this.isEnabled === false || this.$el.closest('.mercury-button-disabled').length);
     };
 
     return ToolbarButton;
@@ -5952,6 +6088,64 @@ Copyright (c) 2013 Jeremy Jackson
 
 }).call(this);
 (function() {
+
+  Mercury.Region.Modules.Snippetable = {
+    included: function() {
+      return this.on('action', this.restoreSnippets);
+    },
+    restoreSnippets: function() {
+      var $el, el, _i, _len, _ref, _results;
+      _ref = this.$("[data-mercury-snippet]");
+      _results = [];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        el = _ref[_i];
+        $el = $(el);
+        debugger;
+        if (!$el.data('snippet')) {
+          _results.push(Mercury.Snippet.find($el.data('mercury-snippet')).replaceWithView($el));
+        } else {
+          _results.push(void 0);
+        }
+      }
+      return _results;
+    },
+    snippets: function() {
+      var el, snippet, snippets, _i, _len, _ref;
+      snippets = {};
+      _ref = this.$('[data-mercury-snippet]');
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        el = _ref[_i];
+        snippet = Mercury.Snippet.find($(el).data('mercury-snippet'));
+        snippets[snippet.cid] = snippet.toJSON();
+      }
+      return snippets;
+    },
+    loadSnippets: function(json) {
+      var cid, data, _results;
+      if (json == null) {
+        json = {};
+      }
+      this.clearStack();
+      _results = [];
+      for (cid in json) {
+        data = json[cid];
+        _results.push(this.loadSnippet(cid, data));
+      }
+      return _results;
+    },
+    loadSnippet: function(cid, data) {
+      var _this = this;
+      return Mercury.Snippet.fromSerializedJSON(data).renderAndReplaceWithView(this.$("[data-mercury-snippet=" + cid + "]"), function() {
+        try {
+          _this.initialValue = JSON.stringify(_this.toJSON());
+          return _this.pushHistory();
+        } catch (_error) {}
+      });
+    }
+  };
+
+}).call(this);
+(function() {
   var __slice = [].slice;
 
   Mercury.Region.Modules.TextSelection = {
@@ -6534,7 +6728,20 @@ Copyright (c) 2013 Jeremy Jackson
         return;
       }
       this.trigger('configure');
-      return this["interface"] = new this[this.config('interface:class')](options);
+      this["interface"] = new this[this.config('interface:class')](options);
+      this.load(this.loadedJSON || {});
+      return this["interface"];
+    };
+    this.load = function(json) {
+      if (json == null) {
+        json = {};
+      }
+      this.loadedJSON = json;
+      if (!this["interface"]) {
+        return;
+      }
+      this["interface"].load(this.loadedJSON);
+      return delete this.loadedJSON;
     };
     this.release = function() {
       if (!this["interface"]) {
@@ -6919,15 +7126,14 @@ Copyright (c) 2013 Jeremy Jackson
       link: 'insert'
     },
     events: {
-      'mercury:edit:link': 'showDialog',
-      'button:click': 'showDialog'
+      'mercury:edit:link': 'onButtonClick'
     },
     registerButton: function() {
       return this.button.set({
         type: 'link'
       });
     },
-    showDialog: function() {
+    onButtonClick: function() {
       return this.bindTo(new Plugin.Modal());
     },
     bindTo: function(view) {
@@ -7063,15 +7269,14 @@ Copyright (c) 2013 Jeremy Jackson
       html: 'insertHtml'
     },
     events: {
-      'mercury:edit:media': 'showDialog',
-      'button:click': 'showDialog'
+      'mercury:edit:media': 'onButtonClick'
     },
     registerButton: function() {
       return this.button.set({
         type: 'media'
       });
     },
-    showDialog: function() {
+    onButtonClick: function() {
       return this.bindTo(new Plugin.Modal());
     },
     bindTo: function(view) {
@@ -7461,15 +7666,14 @@ Copyright (c) 2013 Jeremy Jackson
       html: 'insert'
     },
     events: {
-      'mercury:edit:table': 'showDialog',
-      'button:click': 'showDialog'
+      'mercury:edit:table': 'onButtonClick'
     },
     registerButton: function() {
       return this.button.set({
         type: 'table'
       });
     },
-    showDialog: function() {
+    onButtonClick: function() {
       return this.bindTo(new Plugin.Modal());
     },
     bindTo: function(view) {

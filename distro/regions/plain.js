@@ -2,12 +2,16 @@
 /*!
 The Plain region is a simplified single line HTML5 Content Editable region. It restricts paste, drag/drop, and only
 provides the ability to do some common actions like bold, italics, and underline. This is a useful region for headings
- and other single line areas.
+and other single line areas.
 
 Dependencies:
   rangy-core - https://code.google.com/p/rangy/
   rangy-serializer
   rangy-cssclassapplier
+
+Configuration:
+  regions:plain:
+    actions  : true                                      # allow the common actions (bold/italic/underline)
 */
 
 

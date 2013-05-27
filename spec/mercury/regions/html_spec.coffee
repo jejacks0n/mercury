@@ -5,6 +5,7 @@
 #= require mercury/regions/modules/drop_indicator
 #= require mercury/regions/modules/html_selection
 #= require mercury/regions/modules/selection_value
+#= require mercury/regions/modules/snippetable
 #= require mercury/regions/html
 
 describe "Mercury.Region.Html", ->

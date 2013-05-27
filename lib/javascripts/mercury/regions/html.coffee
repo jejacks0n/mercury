@@ -18,6 +18,7 @@ class Mercury.Region.Html extends Mercury.Region
   @include Mercury.Region.Modules.HtmlSelection
   @include Mercury.Region.Modules.SelectionValue
   @include Mercury.Region.Modules.ContentEditable
+  @include Mercury.Region.Modules.Snippetable
 
   @supported: Mercury.support.wysiwyg
 

@@ -316,6 +316,6 @@ class Mercury.BaseInterface extends Mercury.View
 
 
   onUnload: =>
-    return null if @config('interface:silent') || !@hasChanges()
+    return if @config('interface:silent') || !@hasChanges()
     return @t('You have unsaved changes.  Are you sure you want to leave without saving them first?')
 

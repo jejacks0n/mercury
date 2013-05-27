@@ -61,9 +61,8 @@ Mercury.Region.Markdown.addToolbar 'block', block: ['Block', plugin: 'blocks']
 #   table: add table region -- sort of like a spreadsheet, but with no math -- maybe math?
 #   canvas: add canvas region -- save/load as base64 image.
 #   markdown: polish it a bit more -- mostly selections when wrapping is off.
+#   cayman: make an image region with more advanced support (http://camanjs.com/ -- resize?, crop?)
 # todo ideas:
-#   make region use the shadow dom if possible/configured to do so.
 #   port jQuery.extend into module so we can use that within instances (which is where it's mostly used).
 #   port the jQuery form -> object code to coffeescript and make that part of the form_handler module.
 #   add better touch support to various aspects (draggable module specifically).
-#   add more control to image region (resize?, crop? -- finish off the brightness example?).

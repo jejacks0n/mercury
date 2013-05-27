@@ -155,5 +155,6 @@ initialize = ->
   @support.wysiwyg = (document.designMode) &&                                    # we have designMode
                      (!@support.trident || @support.ie10) &&                     # we're in IE10+
                      (window.rangy && window.rangy.supported)                    # rangy is loaded and supported
+  @support.wysiwyg = false if @support.gecko && parseFloat(navigator.userAgent.match(/Firefox\/([\d|\.]+)/)[1], 10) < 22
 
 initialize.call(@MockMercury || @Mercury)

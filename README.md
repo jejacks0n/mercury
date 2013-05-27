@@ -13,6 +13,20 @@ Mercury Editor also provides a comprehensive plugin architecture. Plugins makes 
 This branch represents the future version of Mercury Editor. This iteration of Mercury Editor (Mercury2) separates the Rails portions from the Javascript portions of the project. Rails is still used for development (for a server, coffeescript, sass, build process etc.) but the Rails Engine has been moved to [mercury-rails](https://github.com/jejacks0n/mercury-rails) -- this enables more functionality, and to serve as an example of how to implement functionality like snippets and image uploading/resizing. If you're interested in integrating Mercury2 with your own platform, this is the best place to start.
 
 
+## Browser Support
+
+Mercury has been written for the future, and thus doesn't support legacy browsers or browsers that don't follow the W3C specifications for content editing. Any browser will be supported if they support the W3C specification in the future, but there aren't plans currently for adding support for alternate implementations at this time.
+
+Supported Browsers:
+
+- Chrome 27
+- Firefox 22 (currently in beta)
+- Opera 12
+- Safari 6.0.4
+- Mobile Safari
+- IE10? (need a VM with Win7/IE10 to check -- can't install my DVD copy on my Macbook Pro because it doesn't have a DVD drive)
+
+
 ## Usage
 
 **NOTE:** this is likely to change and be expanded on.
@@ -50,7 +64,7 @@ The configuration is a good place to start. The configuration is at the top of t
 
 ### Initializing
 
-You can initialize Mercury2 any time after the DOM is ready. You can use the jQuery dom loaded callback, or initialize it at the bottom of the document. Either way works.
+You can initialize Mercury2 any time after the DOM is ready. You can use the jQuery dom loaded callback, or initialize it at the bottom of the document. The `Mercury.init` method takes options that are passed directly to the interface class that you've configured (Mercury.FrameInterface by default).
 
 ```javascript
 jQuery(function() {
@@ -132,6 +146,11 @@ Awesome! Please [check here](https://github.com/jejacks0n/mercury/blob/mercury2/
 ### Gecko
 
 - Dropping files doesn't display cursor position, and thus dropping at that place isn't applicable.
+
+### Opera
+
+- onBeforeUnload doesn't work properly (isn't able to ask before navigation after changes have been made).
+- Outline styles obscure the mercury interface (problem with z-index+position:fixed+outline css)
 
 
 ## Consulting

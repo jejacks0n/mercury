@@ -42,10 +42,12 @@ class Mercury.Region.Plain extends Mercury.Region
 
   onPaste: (e) ->
     @prevent(e)
-    # todo: does this work in firefox like it should yet?
-    text = e.originalEvent.clipboardData.getData('text/plain')
-    text = text.replace('\n', ' ') unless @options.newlines
-    document.execCommand('insertHTML', false, text) # todo: this is just a stub for now
+    @insertContent(e.originalEvent.clipboardData.getData('text/plain'))
+
+
+  insertContent: (content) ->
+    content = if @options.newlines then content.replace('\n', '<br>') else content.replace('\n', ' ')
+    document.execCommand('insertHTML', null, content || ' ') # todo: this is just a stub for now
 
 
   onKeyEvent: (e) ->

@@ -64,6 +64,7 @@ hr {
   min-height: 20px;
   min-width: 5px;
   &:focus {
+    box-shadow: none !important;
     outline: 5px solid #00bce5 !important;
   }
 }

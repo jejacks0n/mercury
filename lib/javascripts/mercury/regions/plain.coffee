@@ -1,7 +1,7 @@
 ###!
-The Plain region is a simplified single line HTML5 Content Editable region. It restricts paste, drag/drop, and only
-provides the ability to do some common actions like bold, italics, and underline. This is a useful region for headings
-and other single line areas.
+The Plain region is a simplified single line HTML5 Content Editable region. It restricts drag/drop, can restrict paste
+and line feeds and only provides the ability to do some common actions like bold, italics, and underline. This is a
+useful region for headings and other single line areas.
 
 Dependencies:
   rangy-core - https://code.google.com/p/rangy/
@@ -11,6 +11,8 @@ Dependencies:
 Configuration:
   regions:plain:
     actions  : true                                      # allow the common actions (bold/italic/underline)
+    pasting  : true                                      # allow pasting -- always sanitized to text
+    newlines : false                                     # allow line feeds (on enter and paste)
 ###
 class Mercury.Region.Plain extends Mercury.Region
   @define 'Mercury.Region.Plain', 'plain'
@@ -40,12 +42,16 @@ class Mercury.Region.Plain extends Mercury.Region
 
   onPaste: (e) ->
     @prevent(e)
+    # todo: does this work in firefox like it should yet?
+    text = e.originalEvent.clipboardData.getData('text/plain')
+    text = text.replace('\n', ' ') unless @options.newlines
+    document.execCommand('insertHTML', false, text) # todo: this is just a stub for now
 
 
   onKeyEvent: (e) ->
     return if e.keyCode >= 37 && e.keyCode <= 40 # arrows
     return if e.metaKey && e.keyCode == 90 # undo / redo
-    return @prevent(e) if e.keyCode == 13 # return
+    return @prevent(e) if e.keyCode == 13 && !@options.newlines # return
 
     # common actions
     if e.metaKey then switch e.keyCode

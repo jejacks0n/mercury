@@ -48,23 +48,22 @@ Mercury.Region.Markdown.addToolbar 'block', block: ['Block', plugin: 'blocks']
 
 # todo:
 #   remove snippet contents per snippet or let them be serialized as direct content / make sure that works.
+#   do snippet regions work better if they serialize their entire element structure in the history (or does this cause massive memory leaks/lingering events that might be bad?)
 #   better strategy for snippet management/removal -- focusable with toolbar buttons would be nice, combined with a lesser toolbar in line? (drag handle on hover, etc?)
 #   make table/media/link plugins use custom actions.
-#   finish the mercury-rails engine.
 #   ask/invite translators to revisit their translations.
-#   add better touch support to various aspects (draggable module specifically)
 # todo regions:
-#   plain: allow pasting, but sanitize to text.
 #   html: when using the iframe, rangy isn't behaving the same (doesn't work because it doesn't understand the context).
 #   html: selections are a little wonky on undo/redo still, and sometimes in firefox they're not applying because the checksum doesn't validate.
 #   html: finish it.
 #   html: provide way to override tags that are used for different actions -- like markdown wrappers.
-#   image: add more control to image region (resize, crop).
 #   list: add list region -- sort of like workflowy.
 #   table: add table region -- sort of like a spreadsheet, but with no math -- maybe math?
-#   canvas: add canvas region -- save/load as base64 image
+#   canvas: add canvas region -- save/load as base64 image.
 #   markdown: polish it a bit more -- mostly selections when wrapping is off.
 # todo ideas:
 #   make region use the shadow dom if possible/configured to do so.
 #   port jQuery.extend into module so we can use that within instances (which is where it's mostly used).
 #   port the jQuery form -> object code to coffeescript and make that part of the form_handler module.
+#   add better touch support to various aspects (draggable module specifically).
+#   add more control to image region (resize?, crop? -- finish off the brightness example?).

@@ -531,6 +531,23 @@ describe "Mercury.Region", ->
       expect( subject.$el.data() ).to.eql(mercury: 'foo', region: subject, mercuryRegion: true, foo: 'bar', bar: 'baz', placeholder: '')
 
 
+  describe "#cleanData", ->
+
+    beforeEach ->
+      @data =
+        region: '_region_',
+        mercury: '_mercury_',
+        mercuryRegion: '_mercuryRegion_',
+        placeholder: '_placeholder_',
+        regionOptions: '_regionOptions'
+
+
+    it "removes unwanted data from an object", ->
+      @data.foo = 'bar'
+      subject.cleanData(@data)
+      expect( @data ).to.eql(foo: 'bar')
+
+
   describe "#setData", ->
 
     it "sets the data to the element", ->

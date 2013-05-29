@@ -281,16 +281,24 @@ class Mercury.Region extends Mercury.View
       data = @$el.data(key)
       if arguments.length == 0
         data = $.extend({}, data)
-        delete(data.region)
-        delete(data.mercury)
-        delete(data.mercuryRegion)
-        delete(data.placeholder)
-        delete(data.regionOptions)
+        @cleanData(data)
       return data ? null
     obj = key
     (obj = {}; obj[key] = value) if typeof(key) == 'string'
     @setData(obj)
     @$el
+
+
+  # Provides a way to remove data that shouldn't be serialized when pushing to the undo stack (to mitigate circular
+  # reference issues), as well as information that should not be sent to the server. This method basically removes
+  # any data that may be ephemeral.
+  #
+  cleanData: (data) ->
+    delete(data.region)
+    delete(data.mercury)
+    delete(data.mercuryRegion)
+    delete(data.placeholder)
+    delete(data.regionOptions)
 
 
   # When setting data via the #data method, this is called. It's provided so it can be overridden and adjusted for when

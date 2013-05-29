@@ -7,8 +7,8 @@ Mercury.Region.Modules.Snippetable =
   restoreSnippets: ->
     for el in @$("[data-mercury-snippet]")
       $el = $(el)
-      debugger
       Mercury.Snippet.find($el.data('mercury-snippet')).replaceWithView($el) unless $el.data('snippet')
+    @onLoadSnippet?()
 
 
   snippets: ->
@@ -28,3 +28,4 @@ Mercury.Region.Modules.Snippetable =
     Mercury.Snippet.fromSerializedJSON(data).renderAndReplaceWithView @$("[data-mercury-snippet=#{cid}]"), => try
       @initialValue = JSON.stringify(@toJSON())
       @pushHistory()
+      @onLoadSnippet?()

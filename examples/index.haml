@@ -125,14 +125,14 @@
   // manually. This will tell Mercury that this document has loaded and it can begin looking for regions. It has to be
   // at the end of the document, or in a dom:loaded handler.
   if (parent.Mercury) {
-    parent.Mercury.initialize()
-    window.Mercury = parent.Mercury
+    parent.Mercury.initialize();
+    window.Mercury = parent.Mercury;
   }
 
   // If we're editing this page let's instantiate the developer toolbar for example usage/interactions. The developer
   // toolbar has many examples of how you can interact with Mercury. Also note that if we're in an iframe or not Mercury
   // will be exposed to us after it's been initialized.
-  new Mercury.DeveloperInterface()
+  new Mercury.DeveloperInterface();
 
   // To load snippet options and potentially other information back into mercury for editing you can simply provide the
   // JSON that the server saved. This can be wordy, so you may want to filter some things out of it, but it should work
@@ -171,4 +171,4 @@
       },
       value: "<div class=\"mercury-plugin-snippet\" data-mercury-snippet=\"c3\"></div>"
     }
-  })
+  });

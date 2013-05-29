@@ -49,23 +49,7 @@ describe "Mercury.Region.Plain", ->
 
   describe "#onPaste", ->
 
-    beforeEach ->
-      @e = preventDefault: spy(), originalEvent: {clipboardData: {getData: spy(-> 'text\nlines')}}
-      spyOn(document, 'execCommand')
-
-    it "calls preventDevault on the event", ->
-      subject.onPaste(@e)
-      expect( @e.preventDefault ).called
-
-    it "gets the text from the clipboard and executes the command", ->
-      subject.onPaste(@e)
-      expect( @e.originalEvent.clipboardData.getData ).calledWith('text/plain')
-      expect( document.execCommand ).calledWith('insertHTML', false, 'text lines')
-
-    it "leaves new lines from the pasted content if it should", ->
-      subject.options.newlines = true
-      subject.onPaste(@e)
-      expect( document.execCommand ).calledWith('insertHTML', false, 'text\nlines')
+    it "needs to be re-tested"
 
 
   describe "#onKeyEvent", ->

@@ -56,6 +56,7 @@ FilterPlugin = Mercury.registerPlugin 'canan-filter'
 
   config:
     filters:
+      '': 'No Filter'
       vintage: 'Vintage'
       lomo: 'Lomo'
       clarity: 'Clarity'

@@ -6,7 +6,7 @@
     = javascript_include_tag "mercury"
 
     = stylesheet_link_tag "styles/examples"
-    = javascript_include_tag "developer_interface", "example_snippet", "example_plugin", "example_region", "functionality_adding", "functionality_overriding"
+    = javascript_include_tag "developer_interface", "example_snippet", "example_plugin", "example_region", "functionality_adding", "functionality_overriding", "advanced/caman_region"
 
     = javascript_include_tag "http://widgets.twimg.com/j/1/widget.js"
     = stylesheet_link_tag "http://widgets.twimg.com/j/1/widget.css"
@@ -19,7 +19,7 @@
       <br/>
       %img(src="http://goo.gl/ZoJd4")
       <br/>
-      = link_to 'Google Link', 'http://google.com'
+      = link_to 'Google Link', 'http://google.com', class: 'mercury-ignored'
       = link_to 'DailyJS', 'http://dailyjs.com/'
       = link_to 'DailyJS', 'http://dailyjs.com/', class: 'mercury-ignored'
       = link_to 'Plain Page', '/plain', class: 'mercury-ignored'
@@ -27,6 +27,13 @@
     %hr
     -# -----------------------------------------------------------------------------------------------------------------
     %h2#new_regions New Regions
+
+    %hr
+    -# -----------------------------------------------------------------------------------------------------------------
+    %h2 Caman Image Regions
+
+    %img#caman1(data-mercury="caman-image" src="/assets/advanced/caman-example.jpg")
+
 
     %hr
     -# -----------------------------------------------------------------------------------------------------------------

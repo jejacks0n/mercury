@@ -49,6 +49,9 @@
   padding: 5px 10px;
   float: left;
   cursor: pointer;
+  transition-property: background-color, color;
+  transition-duration: 0.5s;
+  transition-timing-function: ease-in-out;
 }
 
 hr {

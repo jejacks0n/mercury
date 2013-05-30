@@ -19,7 +19,7 @@ describe "Mercury.Config", ->
           prop1: '_value1_'
           prop2: '_value2_'
 
-    it "returns the configuration if not path was provided", ->
+    it "returns the configuration if no path was provided", ->
       expect( subject.get() ).to.eq(Mercury.configuration)
 
     it "returns the expected value from the configuration", ->

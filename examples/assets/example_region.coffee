@@ -74,5 +74,5 @@ Mercury.Region.Button.addData
 #
 Mercury.Region.Button.addContext
 
-  color:     -> @css('color')
-  bgcolor:   -> @css('backgroundColor')
+  color:     -> @data('color')
+  bgcolor:   -> @data('bgcolor')

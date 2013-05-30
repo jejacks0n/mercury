@@ -191,7 +191,7 @@ Mercury.configuration =
     #= require mercury/regions/html
     #
     plain:
-      actions  : true                                      # allow the common actions (bold/italic/underline)
+      allowActs: true                                      # allow the common actions (bold/italic/underline)
       pasting  : true                                      # allow pasting -- always sanitized to text
       newlines : false                                     # allow line feeds (on enter and paste)
 

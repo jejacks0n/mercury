@@ -33,7 +33,7 @@ class Mercury.Region.Plain extends Mercury.Region
       return false
 
     super
-    @actions = {} unless @options.actions
+    @actions = false if @options.allowActs == false
 
 
   onDropItem: (e) ->

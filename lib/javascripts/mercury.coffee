@@ -47,6 +47,7 @@ Mercury.Region.Markdown.addToolbar 'color', color: ['Color', plugin: 'color']
 Mercury.Region.Markdown.addToolbar 'block', block: ['Block', plugin: 'blocks']
 
 # todo:
+#   seems to be a bug with undo when setting data?
 #   remove snippet contents per snippet or let them be serialized as direct content / make sure that works.
 #   do snippet regions work better if they serialize their entire element structure in the history (or does this cause massive memory leaks/lingering events that might be bad?)
 #   better strategy for snippet management/removal -- focusable with toolbar buttons would be nice, combined with a lesser toolbar in line? (drag handle on hover, etc?)
@@ -61,7 +62,6 @@ Mercury.Region.Markdown.addToolbar 'block', block: ['Block', plugin: 'blocks']
 #   table: add table region -- sort of like a spreadsheet, but with no math -- maybe math?
 #   canvas: add canvas region -- save/load as base64 image.
 #   markdown: polish it a bit more -- mostly selections when wrapping is off.
-#   cayman: make an image region with more advanced support (http://camanjs.com/ -- resize?, crop?)
 # todo ideas:
 #   port jQuery.extend into module so we can use that within instances (which is where it's mostly used).
 #   port the jQuery form -> object code to coffeescript and make that part of the form_handler module.

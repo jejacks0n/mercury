@@ -32,7 +32,7 @@ describe "Mercury.Region.Plain", ->
       expect( Klass::notify ).calledWith('requires Rangy')
 
     it "clears the actions if we don't allow actions", ->
-      Mercury.configure 'regions:plain:actions', false
+      Mercury.configure 'regions:plain:allowActs', false
       subject = new Klass('<div id="foo">')
       expect( subject.actions ).to.eql({})
 

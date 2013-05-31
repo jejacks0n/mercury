@@ -57,6 +57,9 @@ if Mercury then class Mercury.DeveloperInterface extends Mercury.View
     [action, value] = [target.data('action'), target.data('value')]
     switch action
 
+      # toggle dev interface
+      when 'toggle' then @toggleDeveloperInterface()
+
       # general / top level events
       when 'save' then @save()
       when 'toggle_interface' then @toggleInterface()
@@ -149,6 +152,17 @@ if Mercury then class Mercury.DeveloperInterface extends Mercury.View
     else
       Mercury.interface.removeInterface('float')
 
+  # Toggle the developer interface
+  #
+  toggleDeveloperInterface: ->
+    if @hiddenGui
+      @hiddenGui = false
+      $('.developer-interface').css('height','auto')
+    else
+      @hiddenGui = true
+      $('.developer-interface').css('height','1em')
+
+
 
   # If you reload your page, or have added new regions you can tell Mercury to go looking for new regions by triggering
   # the 'reinitialize' method or by calling the reinitialize method on the interface. Each interface class can implement
@@ -195,6 +209,8 @@ Mercury.JST['/mercury/templates/new-region'] = ->
   """
 Mercury.JST['/mercury/templates/developer-interface'] = ->
   """
+  <li data-action="toggle">toggle</li>
+  <hr/>
   <li data-action="save">save</li>
   <li data-action="toggle_interface">toggle interface</li>
   <li data-action="reinitialize">reinitialize</li>

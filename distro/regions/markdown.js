@@ -86,7 +86,7 @@ Configuration:
     }
 
     Markdown.prototype.setupConverter = function() {
-      return this.converter.setOptions(this.config('regions:markdown') || {});
+      return this.converter.setOptions(this.options);
     };
 
     Markdown.prototype.convertedValue = function() {
@@ -110,7 +110,7 @@ Configuration:
       var uploader,
         _this = this;
       uploader = new Mercury[this.config('interface:uploader')](files, {
-        mimeTypes: this.config('regions:markdown:mimeTypes')
+        mimeTypes: this.options.mimeTypes
       });
       return uploader.on('uploaded', function(file) {
         _this.focus();

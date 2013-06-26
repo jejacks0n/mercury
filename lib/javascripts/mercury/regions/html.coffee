@@ -125,3 +125,4 @@ Mercury.Region.Html.addAction
   underline:     -> @toggleWrapSelectedWordsInClass('blue')
   rule:          -> @replaceSelection('<hr/>')
   style:         ->
+  link:          (linkAction) -> @replaceSelection(linkAction.asHtml())

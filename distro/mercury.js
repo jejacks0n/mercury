@@ -146,7 +146,9 @@ Copyright (c) 2013 Jeremy Jackson
         breaks: true
       },
       plain: {
-        actions: true
+        allowActs: true,
+        pasting: true,
+        newlines: false
       },
       text: {
         autoSize: true,
@@ -2897,6 +2899,7 @@ Copyright (c) 2013 Jeremy Jackson
       this.attr({
         'data-mercury-snippet': this.snippet.cid
       });
+      this.attr('contenteditable', false);
       return this.$el.data({
         'snippet': this.snippet
       });
@@ -3026,8 +3029,9 @@ Copyright (c) 2013 Jeremy Jackson
       this.actions || (this.actions = {});
       this.context = $.extend({}, this.constructor.context, this.context);
       this.dataAttrs = $.extend({}, this.constructor.dataAttrs, this.dataAttrs);
+      this.options = $.extend({}, this.options, this.config("regions:" + (this.type())));
       if (this.el && (attr = this.config('regions:options'))) {
-        this.options = $.extend(JSON.parse($(this.el).attr(attr) || '{}'), this.options);
+        this.options = $.extend(this.options, JSON.parse($(this.el).attr(attr) || '{}'));
       }
       this.placeholder || (this.placeholder = this.options.placeholder || '');
       if (typeof this.beforeBuild === "function") {
@@ -3221,11 +3225,7 @@ Copyright (c) 2013 Jeremy Jackson
         data = this.$el.data(key);
         if (arguments.length === 0) {
           data = $.extend({}, data);
-          delete data.region;
-          delete data.mercury;
-          delete data.mercuryRegion;
-          delete data.placeholder;
-          delete data.regionOptions;
+          this.cleanData(data);
         }
         return data != null ? data : null;
       }
@@ -3236,6 +3236,14 @@ Copyright (c) 2013 Jeremy Jackson
       }
       this.setData(obj);
       return this.$el;
+    };
+
+    Region.prototype.cleanData = function(data) {
+      delete data.region;
+      delete data.mercury;
+      delete data.mercuryRegion;
+      delete data.placeholder;
+      return delete data.regionOptions;
     };
 
     Region.prototype.setData = function(obj) {
@@ -4211,7 +4219,7 @@ Copyright (c) 2013 Jeremy Jackson
 
     BaseInterface.prototype.onUnload = function() {
       if (this.config('interface:silent') || !this.hasChanges()) {
-        return null;
+        return;
       }
       return this.t('You have unsaved changes.  Are you sure you want to leave without saving them first?');
     };
@@ -5913,18 +5921,15 @@ Copyright (c) 2013 Jeremy Jackson
       return this.on('release', this.releaseFocusable);
     },
     buildFocusable: function() {
-      var resize, value, _ref, _ref1;
+      var resize, value, _ref;
       if ((_ref = this.editableDropBehavior) == null) {
         this.editableDropBehavior = true;
       }
-      if ((_ref1 = this.autoSize) == null) {
-        this.autoSize = this.config("regions:" + this.constructor.type + ":autoSize");
-      }
       value = this.originalContent();
-      resize = this.autoSize ? 'none' : 'vertical';
+      resize = this.options.autoSize ? 'none' : 'vertical';
       this.$preview = $("<div class=\"mercury-" + this.constructor.type + "-region-preview\">");
       this.$focusable = $("<textarea class=\"mercury-" + this.constructor.type + "-region-textarea\" placeholder=\"" + this.placeholder + "\">");
-      if (!this.config("regions:" + this.constructor.type + ":wrapping")) {
+      if (!this.options.wrapping) {
         this.$focusable.attr({
           wrap: 'off'
         });
@@ -5963,7 +5968,7 @@ Copyright (c) 2013 Jeremy Jackson
     },
     resizeFocusable: function() {
       var body, current, focusable;
-      if (!this.autoSize) {
+      if (!this.options.autoSize) {
         return;
       }
       focusable = this.$focusable.get(0);
@@ -6094,20 +6099,16 @@ Copyright (c) 2013 Jeremy Jackson
       return this.on('action', this.restoreSnippets);
     },
     restoreSnippets: function() {
-      var $el, el, _i, _len, _ref, _results;
+      var $el, el, _i, _len, _ref;
       _ref = this.$("[data-mercury-snippet]");
-      _results = [];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         el = _ref[_i];
         $el = $(el);
-        debugger;
         if (!$el.data('snippet')) {
-          _results.push(Mercury.Snippet.find($el.data('mercury-snippet')).replaceWithView($el));
-        } else {
-          _results.push(void 0);
+          Mercury.Snippet.find($el.data('mercury-snippet')).replaceWithView($el);
         }
       }
-      return _results;
+      return typeof this.onLoadSnippet === "function" ? this.onLoadSnippet() : void 0;
     },
     snippets: function() {
       var el, snippet, snippets, _i, _len, _ref;
@@ -6138,7 +6139,8 @@ Copyright (c) 2013 Jeremy Jackson
       return Mercury.Snippet.fromSerializedJSON(data).renderAndReplaceWithView(this.$("[data-mercury-snippet=" + cid + "]"), function() {
         try {
           _this.initialValue = JSON.stringify(_this.toJSON());
-          return _this.pushHistory();
+          _this.pushHistory();
+          return typeof _this.onLoadSnippet === "function" ? _this.onLoadSnippet() : void 0;
         } catch (_error) {}
       });
     }
@@ -6787,7 +6789,10 @@ Copyright (c) 2013 Jeremy Jackson
       trident: navigator.userAgent.indexOf('MSIE') > 0,
       ie10: (isIE = navigator.userAgent.match(/MSIE\s([\d|\.]+)/)) ? parseFloat(isIE[1], 10) >= 10 : false
     };
-    return this.support.wysiwyg = document.designMode && (!this.support.trident || this.support.ie10) && (window.rangy && window.rangy.supported);
+    this.support.wysiwyg = document.designMode && (!this.support.trident || this.support.ie10) && (window.rangy && window.rangy.supported);
+    if (this.support.gecko && parseFloat(navigator.userAgent.match(/Firefox\/([\d|\.]+)/)[1], 10) < 22) {
+      return this.support.wysiwyg = false;
+    }
   };
 
   initialize.call(this.MockMercury || this.Mercury);
@@ -7137,11 +7142,14 @@ Copyright (c) 2013 Jeremy Jackson
       return this.bindTo(new Plugin.Modal());
     },
     bindTo: function(view) {
+      var _this = this;
       return view.on('form:submitted', function(value) {
-        return console.debug(value);
+        return _this.triggerAction(value);
       });
     },
-    insert: function() {}
+    insert: function(name, value) {
+      return Mercury.trigger('action', 'link', value);
+    }
   });
 
   Plugin.Modal = (function(_super) {
@@ -7214,7 +7222,7 @@ Copyright (c) 2013 Jeremy Jackson
       switch (type) {
         case 'existing_bookmark':
           attrs = {
-            href: "#" + (this.$('#link_existing_bookmark').val())
+            url: "#" + (this.$('#link_existing_bookmark').val())
           };
           break;
         case 'new_bookmark':
@@ -7224,7 +7232,7 @@ Copyright (c) 2013 Jeremy Jackson
           break;
         default:
           attrs = {
-            href: this.$("#link_" + type).val()
+            url: this.$("#link_" + type).val()
           };
       }
       switch (target) {
@@ -7235,14 +7243,14 @@ Copyright (c) 2013 Jeremy Jackson
             menubar: 'no',
             toolbar: 'no'
           };
-          attrs['href'] = "javascript:void(window.open('" + attrs['href'] + "','popup_window','" + (Object.toParams(args).replace(/&/g, ',')) + "'))";
+          attrs['url'] = "javascript:void(window.open('" + attrs['url'] + "','popup_window','" + (Object.toParams(args).replace(/&/g, ',')) + "'))";
           break;
         default:
           if (target) {
             attrs['target'] = target;
           }
       }
-      attrs['content'] = this.content || content;
+      attrs['text'] = this.content || content;
       this.trigger('form:submitted', attrs);
       return this.hide();
     };

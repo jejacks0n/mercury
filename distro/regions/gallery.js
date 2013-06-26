@@ -157,7 +157,7 @@ also takes into account undo/redo support using the keyboard or buttons.
       var uploader,
         _this = this;
       uploader = new Mercury[this.config('interface:uploader')](files, {
-        mimeTypes: this.config('regions:gallery:mimeTypes')
+        mimeTypes: this.options.mimeTypes
       });
       return uploader.on('uploaded', function(file) {
         _this.focus();

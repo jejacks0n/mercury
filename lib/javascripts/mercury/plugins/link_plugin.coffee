@@ -17,10 +17,11 @@ Plugin = Mercury.registerPlugin 'link'
 
 
   bindTo: (view) ->
-    view.on('form:submitted', (value) -> console.debug(value))
+    view.on('form:submitted', (value) => @triggerAction(value))
 
 
-  insert: ->
+  insert: (name, value) ->
+    Mercury.trigger('action', name, value)
 
 
 class Plugin.Modal extends Mercury.Modal
@@ -68,9 +69,9 @@ class Plugin.Modal extends Mercury.Modal
     target = @$target.val()
     type = @$('input[name=link_type]:checked').val()
     switch type
-      when 'existing_bookmark' then attrs = href: "##{@$('#link_existing_bookmark').val()}"
+      when 'existing_bookmark' then attrs = url: "##{@$('#link_existing_bookmark').val()}"
       when 'new_bookmark' then attrs = name: "#{@$('#link_new_bookmark').val()}"
-      else attrs = href: @$("#link_#{type}").val()
+      else attrs = url: @$("#link_#{type}").val()
     switch target
       when 'popup'
         args =
@@ -78,10 +79,10 @@ class Plugin.Modal extends Mercury.Modal
           height: parseInt(@$('#link_popup_height').val(), 10) || 500
           menubar: 'no'
           toolbar: 'no'
-        attrs['href'] = "javascript:void(window.open('#{attrs['href']}','popup_window','#{Object.toParams(args).replace(/&/g, ',')}'))"
+        attrs['url'] = "javascript:void(window.open('#{attrs['url']}','popup_window','#{Object.toParams(args).replace(/&/g, ',')}'))"
       else
-        attrs['target'] = target if target
-    attrs['content'] = @content || content
+        attrs['target'] = target or "self"
+    attrs['text'] = @content || content
 
     @trigger('form:submitted', attrs)
     @hide()

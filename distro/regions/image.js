@@ -53,7 +53,7 @@ Configuration:
       var uploader,
         _this = this;
       uploader = new Mercury[this.config('interface:uploader')](files, {
-        mimeTypes: this.config('regions:image:mimeTypes')
+        mimeTypes: this.options.mimeTypes
       });
       return uploader.on('uploaded', function(file) {
         _this.focus();

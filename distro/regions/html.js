@@ -33,6 +33,8 @@ Configuration:
 
     Html.include(Mercury.Region.Modules.ContentEditable);
 
+    Html.include(Mercury.Region.Modules.Snippetable);
+
     Html.supported = Mercury.support.wysiwyg;
 
     Html.events = {
@@ -54,7 +56,7 @@ Configuration:
       var uploader,
         _this = this;
       uploader = new Mercury[this.config('interface:uploader')](files, {
-        mimeTypes: this.config('regions:html:mimeTypes')
+        mimeTypes: this.options.mimeTypes
       });
       return uploader.on('uploaded', function(file) {
         _this.focus();

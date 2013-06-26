@@ -197,8 +197,7 @@ Mercury.Region.Markdown.addAction
     @handleAction(action, url: file.get('url'), text: file.get('name'))
 
   link: (link) ->
-    text = link.get('text')
-    @wrapSelected(@processWrapper('link', [link.get('url'), text]), text: text, select: 'end')
+    @replaceSelection(link.asMarkdown())
 
   image: (image) ->
     text = image.get('text')

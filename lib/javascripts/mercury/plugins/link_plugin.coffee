@@ -21,7 +21,7 @@ Plugin = Mercury.registerPlugin 'link'
 
 
   insert: (name, value) ->
-    Mercury.trigger('action', 'link', value)
+    Mercury.trigger('action', name, value)
 
 
 class Plugin.Modal extends Mercury.Modal
@@ -81,7 +81,7 @@ class Plugin.Modal extends Mercury.Modal
           toolbar: 'no'
         attrs['url'] = "javascript:void(window.open('#{attrs['url']}','popup_window','#{Object.toParams(args).replace(/&/g, ',')}'))"
       else
-        attrs['target'] = target if target
+        attrs['target'] = target or "self"
     attrs['text'] = @content || content
 
     @trigger('form:submitted', attrs)

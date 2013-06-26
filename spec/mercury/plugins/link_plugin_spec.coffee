@@ -43,6 +43,6 @@ describe "Mercury.Plugin.Link", ->
   describe "#insert", ->
 
     it "triggers an action event", ->
-      apyOn(Mercury, 'trigger')
+      spyOn(Mercury, 'trigger')
       subject.insert('foo', '_value_')
       expect( Mercury.trigger ).calledWith('action', 'foo', '_value_')

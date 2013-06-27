@@ -38,3 +38,13 @@ class Mercury.Action extends Mercury.Module
   #
   get: (key) ->
     @attributes[key]
+
+
+  # Setter for attributes. You should always set attributes using the constructor, or #set, which allows for a
+  # consistent api that matches Model.
+  # Accepts either a key and value, or an object of key value pairs.
+  #
+  set: (key, value) ->
+    attrs = {}
+    if typeof(key) == 'object' then attrs = key else attrs[key] = value
+    @attributes[key] = value for key, value of attrs

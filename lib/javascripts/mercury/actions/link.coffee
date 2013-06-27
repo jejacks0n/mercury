@@ -7,6 +7,7 @@ class Mercury.Action.Link extends Mercury.Action
   asMarkdown: ->
     """[#{@get('text')}](#{@get('url')})"""
 
+
   asHtml: ->
-    target = if @get('target') then """target="#{@get('target')}" """ else ""
-    """<a href="#{@get('url')}" #{target}>#{@get('text')}</a>"""
+    target = if @get('target') then " target=\"#{@get('target')}\"" else ''
+    """<a href="#{@get('url')}"#{target}>#{@get('text')}</a>"""

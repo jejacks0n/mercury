@@ -56,3 +56,16 @@ describe "Mercury.Action", ->
     it "returns the value from the attributes", ->
       expect( subject.get('foo') ).to.eq('bar')
 
+
+  describe "#set", ->
+
+    beforeEach ->
+      subject.attributes = {foo: 'bar'}
+
+    it "sets the attributes", ->
+      subject.set('foo', 'baz')
+      expect( subject.attributes.foo ).to.eq('baz')
+
+    it "allows passing an object instead of key/value", ->
+      subject.set(foo: 'baz')
+      expect( subject.attributes.foo ).to.eq('baz')

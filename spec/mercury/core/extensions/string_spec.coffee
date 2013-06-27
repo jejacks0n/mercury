@@ -64,3 +64,9 @@ describe "String", ->
       expect( 'a %% b'.printf() ).to.eq('a % b')
       expect( 'a %% %d'.printf(2.1) ).to.eq('a % 2')
       expect( '%d\n%s'.printf(2.1, 'string') ).to.eq('2\nstring')
+
+
+  describe "#htmlReduce", ->
+
+    it "strips new lines and more than a single space out", ->
+      expect( '<test>some content</test>\n   with more\n content'.htmlReduce() ).to.eq('<test>some content</test>with more content')

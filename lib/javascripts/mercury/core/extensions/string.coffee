@@ -54,3 +54,7 @@ String::printf = ->
       when 'f' then result += parseFloat(arg)
     result += p[2]
   result
+
+
+String::htmlReduce = ->
+  @replace(/\n|\s\s+/g, '')

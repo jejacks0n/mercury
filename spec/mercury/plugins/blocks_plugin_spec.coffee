@@ -58,3 +58,46 @@ describe "Mercury.Plugin.Blocks", ->
       spyOn(Mercury, 'trigger')
       subject.insert('foo', '_value_')
       expect( Mercury.trigger ).calledWith('action', 'foo', '_value_')
+
+
+  describe "Select", ->
+
+    Klass = null
+    subject = null
+
+    beforeEach ->
+      Klass = Mercury.Plugin.get('blocks').Select
+      subject = new Klass()
+
+    describe "#constructor", ->
+
+      it "calls super", ->
+        spyOn(Klass.__super__, 'constructor')
+        subject = new Klass()
+        expect( Klass.__super__.constructor ).called
+
+    describe "events", ->
+
+      describe "click [data-value]", ->
+
+        it "triggers a block:picked event", ->
+          spyOn(subject, 'trigger')
+          subject.$('[data-value=h1]').click()
+          expect( subject.trigger ).calledWith('block:picked', 'h1')
+
+    describe "template", ->
+
+      it "renders the expected output", ->
+        expect( subject.renderTemplate(subject.template) ).to.eq """
+          <ul>
+            <li data-value='h1'><h1>Heading 1</h1></li>
+            <li data-value='h2'><h2>Heading 2</h2></li>
+            <li data-value='h3'><h3>Heading 3</h3></li>
+            <li data-value='h4'><h4>Heading 4</h4></li>
+            <li data-value='h5'><h5>Heading 5</h5></li>
+            <li data-value='h6'><h6>Heading 6</h6></li>
+            <li data-value='p'><p>Paragraph</p></li>
+            <li data-value='blockquote'><blockquote>Blockquote</blockquote></li>
+            <li data-value='pre'><pre>Formatted</pre></li>
+          </ul>
+          """.htmlReduce()

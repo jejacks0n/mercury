@@ -21,7 +21,7 @@
     msg = "#{@constructor.logPrefix || @logPrefix} #{msg}" if @logPrefix || @constructor.logPrefix
 
     if Mercury.configuration.logging?.notifier == 'console'
-      try return console.error(msg) catch e # intentionally do nothing
+      try return console.error(msg)
     else if Mercury.configuration.logging?.notifier == 'alert'
       return alert(msg)
 

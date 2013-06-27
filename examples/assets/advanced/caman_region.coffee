@@ -48,7 +48,7 @@ Mercury.Region.CamanImage.addData
 # We can pat ourselves on the back because it's going to be awesome. But... we need to make some interfaces so we can
 # select which filter to apply, and use sliders for other adjustments. So, let's do that.
 
-FilterPlugin = Mercury.registerPlugin 'canan-filter'
+FilterPlugin = Mercury.registerPlugin 'canan-filter',
   description: 'Provides interface for selecting predefined caman filters.'
   version: '1.0.0'
 
@@ -95,7 +95,7 @@ class FilterPlugin.Select extends Mercury.ToolbarSelect
 
 
 # Create the panel with the various adjustment/manipulation sliders.
-PanelPlugin = Mercury.registerPlugin 'caman-panel'
+PanelPlugin = Mercury.registerPlugin 'caman-panel',
   description: 'Provides interface for advanced image filter manipulation.'
   version: '1.0.0'
 

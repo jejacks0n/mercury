@@ -1,4 +1,3 @@
-
 /*!
 Markdown provides an easy way to provide some markup abilities without the exposing the ability to edit complex HTML.
 Use the markdown sent to the server on save to render the content when not editing, and render the markdown when
@@ -28,7 +27,6 @@ Configuration:
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
   Mercury.Region.Markdown = (function(_super) {
-
     __extends(Markdown, _super);
 
     Markdown.define('Mercury.Region.Markdown', 'markdown');
@@ -74,6 +72,7 @@ Configuration:
 
     function Markdown(el, options) {
       var _ref;
+
       this.el = el;
       this.options = options != null ? options : {};
       this.converter = (_ref = this.options.converter) != null ? _ref : window.marked;
@@ -95,6 +94,7 @@ Configuration:
 
     Markdown.prototype.toJSON = function(forSave) {
       var obj;
+
       if (forSave == null) {
         forSave = false;
       }
@@ -109,6 +109,7 @@ Configuration:
     Markdown.prototype.onDropFile = function(files) {
       var uploader,
         _this = this;
+
       uploader = new Mercury[this.config('interface:uploader')](files, {
         mimeTypes: this.options.mimeTypes
       });
@@ -120,6 +121,7 @@ Configuration:
 
     Markdown.prototype.onReturnKey = function(e) {
       var exp, match, next, val;
+
       exp = this.expandSelectionToLines(this.getSelection());
       val = exp.text;
       if (val.match(/^- /)) {
@@ -271,6 +273,7 @@ Configuration:
     },
     orderedList: function() {
       var wrapper, _i, _len, _ref;
+
       _ref = ['blockquote', 'unorderedList'];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         wrapper = _ref[_i];
@@ -282,6 +285,7 @@ Configuration:
     },
     unorderedList: function() {
       var wrapper, _i, _len, _ref;
+
       _ref = ['blockquote', 'orderedList'];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         wrapper = _ref[_i];
@@ -293,6 +297,7 @@ Configuration:
     },
     style: function(value) {
       var wrapper;
+
       wrapper = (value || '').indexOf(':') > -1 ? 'style' : 'class';
       this.unwrapSelectedWords(wrapper === 'style' ? 'class' : 'style');
       return this.toggleWrapSelectedWords(this.processWrapper(wrapper, [value]));
@@ -302,6 +307,7 @@ Configuration:
     },
     block: function(format) {
       var wrapper, _i, _j, _len, _len1, _ref, _ref1;
+
       if (format === 'blockquote') {
         _ref = ['orderedList', 'unorderedList'];
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -340,6 +346,7 @@ Configuration:
     },
     file: function(file) {
       var action;
+
       action = file.isImage() ? 'image' : 'link';
       return this.handleAction(action, {
         url: file.get('url'),
@@ -347,15 +354,11 @@ Configuration:
       });
     },
     link: function(link) {
-      var text;
-      text = link.get('text');
-      return this.wrapSelected(this.processWrapper('link', [link.get('url'), text]), {
-        text: text,
-        select: 'end'
-      });
+      return this.replaceSelection(link.asMarkdown());
     },
     image: function(image) {
       var text;
+
       text = image.get('text');
       return this.wrapSelected(this.processWrapper('image', [image.get('url'), text]), {
         text: text,

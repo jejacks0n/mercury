@@ -215,8 +215,8 @@ describe "Mercury.Uploader", ->
     it "loads a preview if the file is an image", ->
       subject.file.isImage = -> true
       subject.loadDetails()
-      subject.file.readAsDataURL.callArg(0, '/teabag/fixtures/image.gif')
-      expect( subject.$preview.html() ).to.eq('<img src="/teabag/fixtures/image.gif">')
+      subject.file.readAsDataURL.callArg(0, '/teaspoon/fixtures/image.gif')
+      expect( subject.$preview.html() ).to.eq('<img src="/teaspoon/fixtures/image.gif">')
 
 
   describe "#success", ->

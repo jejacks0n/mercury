@@ -1,4 +1,4 @@
-Plugin = Mercury.registerPlugin 'notes'
+Plugin = Mercury.registerPlugin 'notes',
   description: 'Provides interface for reading and adding notes for the page -- requires server implementation.'
   version: '1.0.0'
 

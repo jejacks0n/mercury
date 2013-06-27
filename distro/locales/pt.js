@@ -1,5 +1,4 @@
 (function() {
-
   Mercury.I18n.define('pt', {
     "You have unsaved changes.  Are you sure you want to leave without saving them first?": "",
     "Error uploading %s: %s": "",

@@ -51,7 +51,7 @@ bundle exec rake
 
 Run specs with coverage reports.
 ```shell
-bundle exec teabag --coverage
+bundle exec teaspoon --coverage
 ```
 
 

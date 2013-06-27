@@ -1,4 +1,4 @@
-Plugin = Mercury.registerPlugin 'link'
+Plugin = Mercury.registerPlugin 'link',
   description: 'Provides interface for inserting and editing links.'
   version: '1.0.0'
 

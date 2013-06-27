@@ -1,4 +1,4 @@
-Plugin = Mercury.registerPlugin 'color'
+Plugin = Mercury.registerPlugin 'color',
   description: 'Provides interface for selecting colors.'
   version: '1.0.0'
 

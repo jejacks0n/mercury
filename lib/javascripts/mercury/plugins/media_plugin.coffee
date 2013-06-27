@@ -1,4 +1,4 @@
-Plugin = Mercury.registerPlugin 'media'
+Plugin = Mercury.registerPlugin 'media',
   description: 'Provides interface for inserting and editing media.'
   version: '1.0.0'
 

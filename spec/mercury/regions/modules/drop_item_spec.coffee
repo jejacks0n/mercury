@@ -60,9 +60,9 @@ describe "Mercury.Region.Modules.DropItem", ->
     it "checks to see if there's an image in the link", ->
       # todo: what should we do if an image is wrapped in a link?
       data = getData: (format) ->
-        return '<meta><img src="/teabag/fixtures/image.gif"/>' if format == 'text/html'
+        return '<meta><img src="/teaspoon/fixtures/image.gif"/>' if format == 'text/html'
         return '_url_' if format == 'text/uri-list'
-      expect( subject.getActionAndUrlFromData(data) ).to.eql(['image', '/teabag/fixtures/image.gif'])
+      expect( subject.getActionAndUrlFromData(data) ).to.eql(['image', '/teaspoon/fixtures/image.gif'])
 
     describe "with safari", ->
 

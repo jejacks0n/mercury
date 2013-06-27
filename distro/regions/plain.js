@@ -1,4 +1,3 @@
-
 /*!
 The Plain region is a simplified single line HTML5 Content Editable region. It restricts drag/drop, can restrict paste
 and line feeds and only provides the ability to do some common actions like bold, italics, and underline. This is a
@@ -22,7 +21,6 @@ Configuration:
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
   Mercury.Region.Plain = (function(_super) {
-
     __extends(Plain, _super);
 
     Plain.define('Mercury.Region.Plain', 'plain');
@@ -41,9 +39,12 @@ Configuration:
     };
 
     function Plain() {
+      var e;
+
       try {
         window.rangy.init();
-      } catch (e) {
+      } catch (_error) {
+        e = _error;
         this.notify(this.t('requires Rangy'));
         return false;
       }

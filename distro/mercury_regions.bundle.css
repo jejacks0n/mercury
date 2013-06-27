@@ -66,4 +66,4 @@ This file contains all of the required css for the Mercury interface as well as 
 .mercury-text-region textarea.mercury-text-region-textarea:focus{outline-offset:0;outline:none;-webkit-box-shadow:0 0 7px #00bce5,0 0 2px #003e4c;-moz-box-shadow:0 0 7px #00bce5,0 0 2px #003e4c;box-shadow:0 0 7px #00bce5,0 0 2px #003e4c}
 .mercury-unknown-region[data-mercury-region]:empty:before{overflow:hidden;content:attr(data-placeholder);color:#bbb}
 .mercury-unknown-region[data-mercury-region]{min-width:5px;min-height:20px}
-.mercury-unknown-region:focus{outline:none;-webkit-box-shadow:0 0 7px red,0 0 2px #500;-moz-box-shadow:0 0 7px red,0 0 2px #500;box-shadow:0 0 7px red,0 0 2px #500}
+.mercury-unknown-region:focus{outline:none;-webkit-box-shadow:0 0 7px red,0 0 2px red / 3;-moz-box-shadow:0 0 7px red,0 0 2px red / 3;box-shadow:0 0 7px red,0 0 2px red / 3}

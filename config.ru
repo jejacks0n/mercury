@@ -12,6 +12,7 @@ module Mercury
     config.active_support.deprecation = :log
     config.consider_all_requests_local = true
     config.encoding = 'utf-8'
+    config.eager_load = false
 
     config.assets.enabled = true
     config.assets.version = '1.0'
@@ -28,7 +29,7 @@ module Mercury
     config.assets.paths << 'examples/assets'
   end
 
-  Teabag.setup do |config|
+  Teaspoon.setup do |config|
     config.asset_paths      = ['spec']
     config.fixture_path     = 'spec/fixtures'
     config.coverage_reports = 'text,html,cobertura'
@@ -36,7 +37,7 @@ module Mercury
     config.suite do |suite|
       suite.matcher      = 'spec/**/*_spec.{js,js.coffee,coffee}'
       suite.helper       = 'spec_helper'
-      suite.javascripts  = ['teabag-mocha', 'support/chai', 'support/sinon', 'support/sinon-chai']
+      suite.javascripts  = ['teaspoon-mocha', 'support/chai', 'support/sinon', 'support/sinon-chai']
       suite.no_coverage << %r(/dependencies|/templates)
     end
   end

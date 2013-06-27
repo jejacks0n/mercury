@@ -90,7 +90,7 @@ describe "Mercury.ToolbarButton", ->
       expect( subject.types ).to.eql(['_type_'])
 
     it "adds types for all the unknown options", ->
-      subject.options = title: '_title_', icon: '_icon_', action: '_action_', global: false, button: '_button_', settings: '_settings_', foo: 'bar', bar: 'baz',
+      subject.options = title: '_title_', icon: '_icon_', action: '_action_', global: false, button: '_button_', settings: '_settings_', foo: 'bar', bar: 'baz'
       subject.determineTypes()
       expect( subject.types ).to.eql(['foo', 'bar'])
       expect( subject.type ).to.eql('foo')

@@ -17,4 +17,4 @@
 #
 # Snippet region dependencies.
 #------------------------------------------------------------------------------
-#= require jquery-ui-1.10.3.custom.js
+# require jquery-ui-1.10.3.custom.js

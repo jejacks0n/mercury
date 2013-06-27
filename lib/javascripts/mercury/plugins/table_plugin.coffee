@@ -1,4 +1,4 @@
-Plugin = Mercury.registerPlugin 'table'
+Plugin = Mercury.registerPlugin 'table',
   description: 'Provides interface for inserting and editing tables.'
   version: '1.0.0'
 

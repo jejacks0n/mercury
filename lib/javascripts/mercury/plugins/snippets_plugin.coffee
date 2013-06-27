@@ -1,4 +1,4 @@
-Plugin = Mercury.registerPlugin 'snippets'
+Plugin = Mercury.registerPlugin 'snippets',
   description: 'Provides interface for adding snippets to various regions -- may require server implementation.'
   version: '1.0.0'
 

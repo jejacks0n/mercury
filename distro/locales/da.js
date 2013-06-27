@@ -1,5 +1,4 @@
 (function() {
-
   Mercury.I18n.define('da', {
     "You have unsaved changes.  Are you sure you want to leave without saving them first?": "Du har ændringer der ikke er blevet gemt. Er du sikker på, at du vil forlade siden uden først at gemme dem?",
     "Error uploading %s: %s": "Fejl uploader %s: %s",

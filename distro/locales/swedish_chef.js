@@ -1,5 +1,4 @@
 (function() {
-
   Mercury.I18n.define('swedish_chef', {
     "Unable to process response: %s": "Uneble-a tu prucess respunse-a: %s",
     "Is unsupported in this browser": "Is unsooppurted in thees brooser",

@@ -29,7 +29,7 @@
 #Mercury.configure('toolbars:html:color:color', ['Text Color', plugin: 'advancedColor'])
 #Mercury.configure('toolbars:html:color:bgcolor', ['Background Color', plugin: 'advancedColor'])
 #
-Plugin = Mercury.registerPlugin 'advancedColor'
+Plugin = Mercury.registerPlugin 'advancedColor',
   description: 'Provides a more advanced interface for selecting colors.'
   version: '1.0.0'
 
@@ -156,7 +156,7 @@ class Plugin.Palette extends Mercury.ToolbarPalette
 # we're going to provide a dropdown where snippets can be selected and inserted. It works the same as the panel, but
 # might be easier for some users. Who knows, it's an example.
 #
-SnippetsPlugin = Mercury.registerPlugin 'snippetsSelect'
+SnippetsPlugin = Mercury.registerPlugin 'snippetsSelect',
   description: 'Provides interface for adding snippets by using a dropdown.'
   version: '1.0.0'
 

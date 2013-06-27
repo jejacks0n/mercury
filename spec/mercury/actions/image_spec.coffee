@@ -7,10 +7,10 @@ describe "Mercury.Action.Image", ->
   subject = null
 
   beforeEach ->
-    @image = url: '/teabag/fixtures/image.gif'
+    @image = url: '/teaspoon/fixtures/image.gif'
     subject = new Klass('image', @image)
 
   describe "#asHtml", ->
 
     it "returns the expected html", ->
-      expect( subject.asHtml() ).to.eq('<img src="/teabag/fixtures/image.gif">')
+      expect( subject.asHtml() ).to.eq('<img src="/teaspoon/fixtures/image.gif">')

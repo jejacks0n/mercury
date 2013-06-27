@@ -141,8 +141,8 @@ describe "Mercury.Region.Gallery", ->
 
     beforeEach ->
       subject.images = [
-        '<div class="slide"><img src="/teabag/fixtures/image.gif"></div>'
-        '<div class="slide"><img src="/teabag/fixtures/foo.gif"></div>'
+        '<div class="slide"><img src="/teaspoon/fixtures/image.gif"></div>'
+        '<div class="slide"><img src="/teaspoon/fixtures/foo.gif"></div>'
       ]
 
     it "removes the controls element", ->
@@ -387,8 +387,8 @@ describe "Mercury.Region.Gallery", ->
 
       it "calls the image action", ->
         spyOn(subject, 'handleAction', false)
-        subject.handleAction('file', new Mercury.Model.File(url: '/teabag/fixtures/image.gif', type: 'image/jpeg'))
-        expect( subject.handleAction ).calledWith('image', url: '/teabag/fixtures/image.gif')
+        subject.handleAction('file', new Mercury.Model.File(url: '/teaspoon/fixtures/image.gif', type: 'image/jpeg'))
+        expect( subject.handleAction ).calledWith('image', url: '/teaspoon/fixtures/image.gif')
 
       it "does nothing if the file isn't an image", ->
         spyOn(subject, 'handleAction', false)

@@ -24,12 +24,12 @@ describe "Mercury.Region.Image", ->
   describe "#value", ->
 
     it "sets the value if the value isn't null or undefined", ->
-      subject.value('/teabag/fixtures/foo.gif')
-      expect( subject.$el.attr('src') ).to.eq('/teabag/fixtures/foo.gif')
+      subject.value('/teaspoon/fixtures/foo.gif')
+      expect( subject.$el.attr('src') ).to.eq('/teaspoon/fixtures/foo.gif')
 
     it "returns the value if the value wasn't provided", ->
-      subject.$el.attr(src: '/teabag/fixtures/image.gif')
-      expect( subject.value() ).to.eq('/teabag/fixtures/image.gif')
+      subject.$el.attr(src: '/teaspoon/fixtures/image.gif')
+      expect( subject.value() ).to.eq('/teaspoon/fixtures/image.gif')
 
 
   describe "#onMousedown", ->
@@ -126,8 +126,8 @@ describe "Mercury.Region.Image", ->
 
       it "calls the image action", ->
         spyOn(subject, 'handleAction', false)
-        subject.handleAction('file', new Mercury.Model.File(url: '/teabag/fixtures/image.gif', type: 'image/jpeg'))
-        expect( subject.handleAction ).calledWith('image', url: '/teabag/fixtures/image.gif')
+        subject.handleAction('file', new Mercury.Model.File(url: '/teaspoon/fixtures/image.gif', type: 'image/jpeg'))
+        expect( subject.handleAction ).calledWith('image', url: '/teaspoon/fixtures/image.gif')
 
       it "does nothing if the file isn't an image", ->
         spyOn(subject, 'handleAction', false)

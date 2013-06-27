@@ -1,4 +1,4 @@
-Plugin = Mercury.registerPlugin 'blocks'
+Plugin = Mercury.registerPlugin 'blocks',
   description: 'Provides interface for selecting common block elements.'
   version: '1.0.0'
 

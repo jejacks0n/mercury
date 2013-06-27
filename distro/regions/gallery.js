@@ -1,4 +1,3 @@
-
 /*!
 The gallery region is provided an an example of how you can easily (generally speaking) create your own regions. It
 allows drag/drop of images and provides a simple implementation of a slide show with the ability to remove items. You
@@ -18,15 +17,16 @@ also takes into account undo/redo support using the keyboard or buttons.
 
 
 (function() {
-  var __hasProp = {}.hasOwnProperty,
+  var _ref,
+    __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
   Mercury.Region.Gallery = (function(_super) {
-
     __extends(Gallery, _super);
 
     function Gallery() {
-      return Gallery.__super__.constructor.apply(this, arguments);
+      _ref = Gallery.__super__.constructor.apply(this, arguments);
+      return _ref;
     }
 
     Gallery.define('Mercury.Region.Gallery', 'gallery');
@@ -50,10 +50,11 @@ also takes into account undo/redo support using the keyboard or buttons.
     Gallery.prototype.skipHistoryOn = ['undo', 'redo', 'next', 'prev', 'togglePlay'];
 
     Gallery.prototype.init = function() {
-      var _ref;
+      var _ref1;
+
       this.speed || (this.speed = 3000);
       this.index = 0;
-      if ((_ref = this.playing) == null) {
+      if ((_ref1 = this.playing) == null) {
         this.playing = true;
       }
       return this.refresh(true);
@@ -70,6 +71,7 @@ also takes into account undo/redo support using the keyboard or buttons.
 
     Gallery.prototype.value = function(value) {
       var el;
+
       if (value === null || typeof value === 'undefined') {
         el = $('<div>').html(this.html());
         el.find('.mercury-gallery-region-controls').remove();
@@ -82,6 +84,7 @@ also takes into account undo/redo support using the keyboard or buttons.
 
     Gallery.prototype.refresh = function(controls) {
       var _this = this;
+
       if (controls == null) {
         controls = false;
       }
@@ -111,12 +114,13 @@ also takes into account undo/redo support using the keyboard or buttons.
     };
 
     Gallery.prototype.refreshControls = function() {
-      var slide, src, _i, _len, _ref;
+      var slide, src, _i, _len, _ref1;
+
       this.$controls.remove();
       this.append('<ul class="mercury-gallery-region-controls"></ul>');
-      _ref = this.images;
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        slide = _ref[_i];
+      _ref1 = this.images;
+      for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+        slide = _ref1[_i];
         src = $(slide).find('img').attr('src');
         this.$controls.append($("<li><img src=\"" + src + "\"/></li>"));
       }
@@ -156,6 +160,7 @@ also takes into account undo/redo support using the keyboard or buttons.
     Gallery.prototype.onDropFile = function(files) {
       var uploader,
         _this = this;
+
       uploader = new Mercury[this.config('interface:uploader')](files, {
         mimeTypes: this.options.mimeTypes
       });

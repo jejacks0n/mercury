@@ -1,4 +1,4 @@
-Plugin = Mercury.registerPlugin 'history'
+Plugin = Mercury.registerPlugin 'history',
   description: 'Provides interface for selecting saved versions -- requires server implementation.'
   version: '1.0.0'
 

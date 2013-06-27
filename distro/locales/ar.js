@@ -1,5 +1,4 @@
 (function() {
-
   Mercury.I18n.define('ex', {
     "Unable to process response: %s": "غير قادر على معالجة الرد: %s",
     "Is unsupported in this browser": false,

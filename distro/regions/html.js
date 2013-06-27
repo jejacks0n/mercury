@@ -1,4 +1,3 @@
-
 /*!
 The HTML region is a full HTML5 Content Editable region -- a true WYSIWYG experience. Effort has been made to normalize,
 and keep things consistent, but the nature of it is complex and should be treated as such. There's an expectation that
@@ -20,7 +19,6 @@ Configuration:
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
   Mercury.Region.Html = (function(_super) {
-
     __extends(Html, _super);
 
     Html.define('Mercury.Region.Html', 'html');
@@ -43,9 +41,12 @@ Configuration:
     };
 
     function Html() {
+      var e;
+
       try {
         window.rangy.init();
-      } catch (e) {
+      } catch (_error) {
+        e = _error;
         this.notify(this.t('requires Rangy'));
         return false;
       }
@@ -55,6 +56,7 @@ Configuration:
     Html.prototype.onDropFile = function(files) {
       var uploader,
         _this = this;
+
       uploader = new Mercury[this.config('interface:uploader')](files, {
         mimeTypes: this.options.mimeTypes
       });
@@ -238,7 +240,10 @@ Configuration:
     rule: function() {
       return this.replaceSelection('<hr/>');
     },
-    style: function() {}
+    style: function() {},
+    link: function(linkAction) {
+      return this.replaceSelection(linkAction.asHtml());
+    }
   });
 
 }).call(this);

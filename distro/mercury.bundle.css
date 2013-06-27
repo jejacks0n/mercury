@@ -111,7 +111,7 @@ mercury .mercury-dialog .btn-success:active,mercury .mercury-dialog .btn-success
 mercury .mercury-dialog .btn-info{background-color:#49afcd;*background-color:#2f96b4;background-image:-ms-linear-gradient(top,#5bc0de,#2f96b4);background-image:-webkit-gradient(linear,0 0,0 100%,from(#5bc0de),to(#2f96b4));background-image:-webkit-linear-gradient(top,#5bc0de,#2f96b4);background-image:-o-linear-gradient(top,#5bc0de,#2f96b4);background-image:-moz-linear-gradient(top,#5bc0de,#2f96b4);background-image:linear-gradient(top,#5bc0de,#2f96b4);background-repeat:repeat-x;border-color:#2f96b4 #2f96b4 #1f6377;border-color:rgba(0,0,0,0.1) rgba(0,0,0,0.1) rgba(0,0,0,0.25);filter:progid:dximagetransform.microsoft.gradient(startColorstr='#5bc0de',endColorstr='#2f96b4',GradientType=0);filter:progid:dximagetransform.microsoft.gradient(enabled=false)}
 mercury .mercury-dialog .btn-info:hover,mercury .mercury-dialog .btn-info:active,mercury .mercury-dialog .btn-info.active,mercury .mercury-dialog .btn-info.disabled,mercury .mercury-dialog .btn-info[disabled]{background-color:#2f96b4;*background-color:#2a85a0}
 mercury .mercury-dialog .btn-info:active,mercury .mercury-dialog .btn-info.active{background-color:#24748c \9}
-mercury .mercury-dialog .btn-inverse{background-color:#414141;*background-color:#222;background-image:-ms-linear-gradient(top,#555,#222);background-image:-webkit-gradient(linear,0 0,0 100%,from(#555),to(#222));background-image:-webkit-linear-gradient(top,#555,#222);background-image:-o-linear-gradient(top,#555,#222);background-image:-moz-linear-gradient(top,#555,#222);background-image:linear-gradient(top,#555,#222);background-repeat:repeat-x;border-color:#222 #222222 black;border-color:rgba(0,0,0,0.1) rgba(0,0,0,0.1) rgba(0,0,0,0.25);filter:progid:dximagetransform.microsoft.gradient(startColorstr='#555555',endColorstr='#222222',GradientType=0);filter:progid:dximagetransform.microsoft.gradient(enabled=false)}
+mercury .mercury-dialog .btn-inverse{background-color:#414141;*background-color:#222;background-image:-ms-linear-gradient(top,#555,#222);background-image:-webkit-gradient(linear,0 0,0 100%,from(#555),to(#222));background-image:-webkit-linear-gradient(top,#555,#222);background-image:-o-linear-gradient(top,#555,#222);background-image:-moz-linear-gradient(top,#555,#222);background-image:linear-gradient(top,#555,#222);background-repeat:repeat-x;border-color:#222 #222222 #000;border-color:rgba(0,0,0,0.1) rgba(0,0,0,0.1) rgba(0,0,0,0.25);filter:progid:dximagetransform.microsoft.gradient(startColorstr='#555555',endColorstr='#222222',GradientType=0);filter:progid:dximagetransform.microsoft.gradient(enabled=false)}
 mercury .mercury-dialog .btn-inverse:hover,mercury .mercury-dialog .btn-inverse:active,mercury .mercury-dialog .btn-inverse.active,mercury .mercury-dialog .btn-inverse.disabled,mercury .mercury-dialog .btn-inverse[disabled]{background-color:#222;*background-color:#151515}
 mercury .mercury-dialog .btn-inverse:active,mercury .mercury-dialog .btn-inverse.active{background-color:#080808 \9}
 mercury .mercury-dialog button.btn,mercury .mercury-dialog input[type="submit"].btn{*padding-top:2px;*padding-bottom:2px}
@@ -150,7 +150,7 @@ mercury .mercury-dialog .btn:hover .caret,mercury .mercury-dialog .open.btn-grou
 mercury .mercury-dialog .btn-mini .caret{margin-top:5px}
 mercury .mercury-dialog .btn-small .caret{margin-top:6px}
 mercury .mercury-dialog .btn-large .caret{margin-top:6px;border-top-width:5px;border-right-width:5px;border-left-width:5px}
-mercury .mercury-dialog .dropup .btn-large .caret{border-top:0;border-bottom:5px solid black}
+mercury .mercury-dialog .dropup .btn-large .caret{border-top:0;border-bottom:5px solid #000}
 mercury .mercury-dialog .btn-primary .caret,mercury .mercury-dialog .btn-warning .caret,mercury .mercury-dialog .btn-danger .caret,mercury .mercury-dialog .btn-info .caret,mercury .mercury-dialog .btn-success .caret,mercury .mercury-dialog .btn-inverse .caret{border-top-color:#fff;border-bottom-color:#fff;opacity:.75;filter:alpha(opacity=75)}
 mercury .mercury-dialog .btn-group>.btn{margin-right:0}
 mercury.mercury-floating{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;-webkit-transition-property:width,top,left;-webkit-transition-duration:.25s;-webkit-transition-timing-function:ease-in-out;-moz-transition-property:width,top,left;-moz-transition-duration:.25s;-moz-transition-timing-function:ease-in-out;transition-property:width,top,left;transition-duration:.25s;transition-timing-function:ease-in-out;-webkit-border-radius:2px;-moz-border-radius:2px;border-radius:2px;position:absolute;left:0;top:-400px;min-width:300px;border:1px solid #707070}
@@ -187,7 +187,7 @@ mercury .mercury-modal .mercury-modal-dialog .mercury-modal-dialog-title em{floa
 mercury .mercury-modal .mercury-modal-dialog .mercury-modal-dialog-title em:hover{color:#333}
 mercury .mercury-modal .mercury-modal-dialog .mercury-modal-dialog-content-container{float:left;overflow:auto;-webkit-overflow-scrolling:touch;min-width:100%}
 mercury .mercury-modal .mercury-modal-dialog .mercury-modal-dialog-content{-webkit-transition-property:opacity;-webkit-transition-duration:.1s;-webkit-transition-timing-function:ease-out;-moz-transition-property:opacity;-moz-transition-duration:.1s;-moz-transition-timing-function:ease-out;transition-property:opacity;transition-duration:.1s;transition-timing-function:ease-out;-webkit-backface-visibility:hidden;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;padding:20px}
-mercury .mercury-modal .mercury-modal-dialog .mercury-modal-dialog-content h3{font-family:Helvetica,Tahoma,Arial,sans-serif;font-size:12px;margin:0 0 10px;text-shadow:1px 1px white}
+mercury .mercury-modal .mercury-modal-dialog .mercury-modal-dialog-content h3{font-family:Helvetica,Tahoma,Arial,sans-serif;font-size:12px;margin:0 0 10px;text-shadow:1px 1px #fff}
 mercury .mercury-modal.loading .mercury-modal-loading-indicator{display:block}
 mercury .mercury-modal.loading .mercury-modal-dialog-content-container{visibility:hidden}
 mercury .mercury-panel{-webkit-transition-property:opacity,width;-webkit-transition-duration:.25s;-webkit-transition-timing-function:ease-in-out;-moz-transition-property:opacity,width;-moz-transition-duration:.25s;-moz-transition-timing-function:ease-in-out;transition-property:opacity,width;transition-duration:.25s;transition-timing-function:ease-in-out;-webkit-border-radius:7px;-moz-border-radius:7px;border-radius:7px;position:fixed;z-index:10500;top:100px;right:10px;bottom:30px;width:30px;display:none;opacity:0;background:rgba(0,0,0,0.8)}
@@ -195,7 +195,7 @@ mercury .mercury-panel .mercury-panel-loading-indicator{text-align:center;displa
 mercury .mercury-panel .mercury-panel-loading-indicator:before{display:inline-block;font-family:"mercury";width:28px;height:28px;font-size:28px;line-height:28px;font-weight:normal;font-variant:normal;text-transform:none;text-align:center;speak:none;-webkit-font-smoothing:antialiased}
 mercury .mercury-panel .mercury-panel-loading-indicator:before{-webkit-animation:mercury-loading-indicator 1s linear infinite;-moz-animation:mercury-loading-indicator 1s linear infinite;animation:mercury-loading-indicator 1s linear infinite;color:#ccc;content:"Z"}
 mercury .mercury-panel .mercury-panel-title{-webkit-user-select:none;-moz-user-select:none;user-select:none;cursor:default;-webkit-border-radius:7px 7px 0 0;-moz-border-radius:7px 7px 0 0;border-radius:7px 7px 0 0;font-family:Helvetica,Tahoma,Arial,sans-serif;font-size:14px;padding:2px 10px 0 10px;background:#222;line-height:23px;font-weight:normal;border-bottom:1px solid #555;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:move}
-mercury .mercury-panel .mercury-panel-title span{color:#eee;text-shadow:black 1px 1px 0}
+mercury .mercury-panel .mercury-panel-title span{color:#eee;text-shadow:#000 1px 1px 0}
 mercury .mercury-panel .mercury-panel-title em{position:relative;z-index:1;float:right;font-style:normal;color:#ddd;cursor:pointer}
 mercury .mercury-panel .mercury-panel-title em:hover{color:#eee}
 mercury .mercury-panel .mercury-panel-content-container{float:left;overflow:auto;-webkit-overflow-scrolling:touch;min-width:100%}
@@ -206,7 +206,7 @@ mercury .mercury-statusbar{-webkit-user-select:none;-moz-user-select:none;user-s
 mercury .mercury-statusbar .mercury-statusbar-path{font-family:Helvetica,Tahoma,Arial,sans-serif;font-size:9pt;overflow:hidden;margin:4px 160px 3px 7px;text-overflow:ellipsis;color:#aaa}
 mercury .mercury-statusbar .mercury-statusbar-path a,mercury .mercury-statusbar .mercury-statusbar-path b{font-family:Helvetica,Tahoma,Arial,sans-serif;font-size:9pt;font-weight:normal}
 mercury .mercury-statusbar .mercury-statusbar-path a{color:#ddd}
-mercury .mercury-statusbar .mercury-statusbar-about{font-family:Helvetica,Tahoma,Arial,sans-serif;font-size:9pt;float:right;margin:4px 10px;cursor:pointer;font-style:normal;text-shadow:black 0 1px 0}
+mercury .mercury-statusbar .mercury-statusbar-about{font-family:Helvetica,Tahoma,Arial,sans-serif;font-size:9pt;float:right;margin:4px 10px;cursor:pointer;font-style:normal;text-shadow:#000 0 1px 0}
 mercury .mercury-statusbar .mercury-statusbar-about a{color:#aaa;text-decoration:none;outline:none}
 mercury .mercury-statusbar .mercury-statusbar-about a:hover,mercury .mercury-statusbar .mercury-statusbar-about a:focus{color:#00bce5}
 mercury .mercury-toolbar{-webkit-user-select:none;-moz-user-select:none;user-select:none;cursor:default;-webkit-transition-property:top;-webkit-transition-duration:.25s;-webkit-transition-timing-function:ease-in-out;-moz-transition-property:top;-moz-transition-duration:.25s;-moz-transition-timing-function:ease-in-out;transition-property:top;transition-duration:.25s;transition-timing-function:ease-in-out;position:fixed;z-index:10600;top:0;left:0;width:100%;cursor:default}
@@ -291,7 +291,7 @@ mercury .mercury-toolbar .mercury-toolbar-button[data-type="media"]:before{conte
 mercury .mercury-toolbar .mercury-toolbar-button[data-type="notes"]:before{content:'P'}
 mercury .mercury-toolbar .mercury-toolbar-button[data-type="snippets"]:before{content:'N'}
 mercury .mercury-snippets-panel ul{margin:0;padding:0;list-style:none}
-mercury .mercury-snippets-panel ul li{-webkit-border-radius:4px;-moz-border-radius:4px;border-radius:4px;-webkit-user-drag:element;-webkit-user-select:none;padding:15px;background:rgba(80,80,80,0.5);margin-bottom:10px;text-shadow:1px 1px black;color:#fff;cursor:move;cursor:drag}
+mercury .mercury-snippets-panel ul li{-webkit-border-radius:4px;-moz-border-radius:4px;border-radius:4px;-webkit-user-drag:element;-webkit-user-select:none;padding:15px;background:rgba(80,80,80,0.5);margin-bottom:10px;text-shadow:1px 1px #000;color:#fff;cursor:move;cursor:drag}
 mercury .mercury-snippets-panel ul li em{display:block;margin-top:5px;font-size:80%;font-style:normal;color:#ddd}
 mercury .mercury-snippets-panel ul li .mercury-snippet-actions{margin:0 -10px -8px;font-size:80%;text-align:right;line-height:20px}
 mercury .mercury-snippets-panel ul li .mercury-snippet-actions input{padding:1px 5px}
@@ -317,7 +317,7 @@ mercury.small .mercury-toolbar .mercury-toolbar-primary-container .mercury-toolb
 mercury.small .mercury-toolbar .mercury-toolbar-primary-container .mercury-toolbar-button:before{display:inline-block;font-family:"mercury";width:37px;height:30px;font-size:22px;line-height:30px;font-weight:normal;font-variant:normal;text-transform:none;text-align:center;speak:none;-webkit-font-smoothing:antialiased}
 mercury.small .mercury-toolbar .mercury-toolbar-primary-container .mercury-toolbar-button:before{position:absolute;margin:0;padding:0}
 mercury.small .mercury-toolbar .mercury-toolbar-primary-container .mercury-toolbar-button em{display:none}
-mercury.flat.mercury-floating{border:2px solid black}
+mercury.flat.mercury-floating{border:2px solid #000}
 mercury.flat .mercury-toolbar{-webkit-box-shadow:0 1px 5px rgba(0,0,0,0.6);-moz-box-shadow:0 1px 5px rgba(0,0,0,0.6);box-shadow:0 1px 5px rgba(0,0,0,0.6)}
 mercury.flat .mercury-toolbar .mercury-toolbar-container{background:#ddd;border:0;padding-left:4px}
 mercury.flat .mercury-toolbar .mercury-toolbar-line-separator{border:0}
@@ -387,4 +387,4 @@ body.mercury-transitions{-webkit-transition-property:top;-webkit-transition-dura
 .mercury-text-region textarea.mercury-text-region-textarea:focus{outline-offset:0;outline:none;-webkit-box-shadow:0 0 7px #00bce5,0 0 2px #003e4c;-moz-box-shadow:0 0 7px #00bce5,0 0 2px #003e4c;box-shadow:0 0 7px #00bce5,0 0 2px #003e4c}
 .mercury-unknown-region[data-mercury-region]:empty:before{overflow:hidden;content:attr(data-placeholder);color:#bbb}
 .mercury-unknown-region[data-mercury-region]{min-width:5px;min-height:20px}
-.mercury-unknown-region:focus{outline:none;-webkit-box-shadow:0 0 7px red,0 0 2px #500;-moz-box-shadow:0 0 7px red,0 0 2px #500;box-shadow:0 0 7px red,0 0 2px #500}
+.mercury-unknown-region:focus{outline:none;-webkit-box-shadow:0 0 7px red,0 0 2px red / 3;-moz-box-shadow:0 0 7px red,0 0 2px red / 3;box-shadow:0 0 7px red,0 0 2px red / 3}

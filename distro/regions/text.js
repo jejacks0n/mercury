@@ -1,4 +1,3 @@
-
 /*!
 The Text region is a multiline plain text input. This region can be used to collect only text in cases when you don't
 want to allow more complex HTML. It's up to you to render <br> tags when displaying the content within the page.
@@ -11,15 +10,16 @@ Configuration:
 
 
 (function() {
-  var __hasProp = {}.hasOwnProperty,
+  var _ref,
+    __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
   Mercury.Region.Text = (function(_super) {
-
     __extends(Text, _super);
 
     function Text() {
-      return Text.__super__.constructor.apply(this, arguments);
+      _ref = Text.__super__.constructor.apply(this, arguments);
+      return _ref;
     }
 
     Text.define('Mercury.Region.Text', 'text');

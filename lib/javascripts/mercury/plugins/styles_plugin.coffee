@@ -1,4 +1,4 @@
-Plugin = Mercury.registerPlugin 'styles'
+Plugin = Mercury.registerPlugin 'styles',
   description: 'Provides interface for selecting predefined styles / classes.'
   version: '1.0.0'
 

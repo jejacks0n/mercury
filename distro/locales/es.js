@@ -1,5 +1,4 @@
 (function() {
-
   Mercury.I18n.define('es', {
     "You have unsaved changes.  Are you sure you want to leave without saving them first?": "Has hecho cambios que no han sido guardados. ¿Estás seguro de que quieres salir sin guardar estos cambios?",
     "Error uploading %s: %s": "Error subiendo %s: %s",

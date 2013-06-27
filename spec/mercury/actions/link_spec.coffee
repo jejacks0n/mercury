@@ -16,7 +16,6 @@ describe "Mercury.Action.Link", ->
 
     it "returns the expected html with a target tag", ->
       subject.set(target: '_blank')
-      console.debug(subject.asHtml())
       expect( subject.asHtml() ).to.eq('<a href="/link/to/resource" target="_blank">name</a>')
 
 

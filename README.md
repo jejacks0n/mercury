@@ -3,6 +3,8 @@ Mercury Editor 2
 
 ![logo](https://pbs.twimg.com/media/BK_SVKdCYAAFXT1.jpg:large)
 
+[![Build Status](https://travis-ci.org/jejacks0n/mercury.png?branch=mercury2)](https://travis-ci.org/jejacks0n/mercury)
+
 Mercury Editor is a web based WYSIWYG editor, and takes a different approach than any editor out there. It provides a full framework in which you can more easily create complex regions and interfaces. In Mercury Editor, regions dictate it's toolbars, buttons, and context for highlighting buttons. This simplifies the configuration, and provides more flexibility in terms of defining your own custom functionality that doesn't fit into the standard Mercury Editor features.
 
 Mercury Editor also provides a comprehensive plugin architecture. Plugins makes additional functionality easier to write, test, and maintain -- and allows for a more consistent way to provide it to others.

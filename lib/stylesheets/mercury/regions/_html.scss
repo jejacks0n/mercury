@@ -7,4 +7,13 @@
   &+ .mercury-region-drop-indicator {
     @include mercury-region-drop-indicator;
   }
+
+  table {
+    border: 1px solid #333;
+    border-collapse: collapse;
+    th, td {
+      min-width: 10px;
+      border: 1px solid #666;
+    }
+  }
 }

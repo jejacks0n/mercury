@@ -47,7 +47,10 @@ Mercury.Region.Markdown.addToolbar 'color', color: ['Color', plugin: 'color']
 Mercury.Region.Markdown.addToolbar 'block', block: ['Block', plugin: 'blocks']
 
 # todo:
+#   html region doesn't init?
+#   markdown / text doesn't wrap properly (the same as other elements).
 #   seems to be a bug with undo when setting data?
+#   toolbar doesn't switch back to caman region.
 #   remove snippet contents per snippet or let them be serialized as direct content / make sure that works.
 #   do snippet regions work better if they serialize their entire element structure in the history (or does this cause massive memory leaks/lingering events that might be bad?)
 #   better strategy for snippet management/removal -- focusable with toolbar buttons would be nice, combined with a lesser toolbar in line? (drag handle on hover, etc?)

@@ -84,6 +84,49 @@ There's an example for how to [sandbox using an iframe](https://github.com/jejac
 An example of server integration is available in the [mercury-rails](https://github.com/jejacks0n/mercury-rails) project, which outlines all of the features that are needed by the server to fully work with the default regions.
 
 
+## Standard Events
+
+Since Mercury2 has a basic framework this list only includes the core events. Additional events could be added by plugins, custom regions, and views.
+
+To bind to global events use `Mercury.on` or `Mercury.one`, eg. `Mercury.on('focus', function() { alert('Mercury was focused') })`. If you're binding to view, model, or snippet events you should use the `instance.on` method to bind to events. All region events are triggered both on the region instance, but also globally as `region:[eventname]` with the first argument being the region instance -- this allows you to bind to all region events should you need to.
+
+### Public Events
+- **focus** - focuses mercury, which will refocus the last region to have focus
+- **blur** - blurs mercury
+- **save** - initializes the save process (eg. calls Mercury.interface.save)
+- **initialize** - tells mercury that the document is ready to be initialized (build interface/find regions)
+- **reinitialize** - tells mercury that new regions might have been added and to find them
+- **toggle** - toggles the interface
+- **show** - shows the interface (does nothing if the interface is showing)
+- **hide** - hides the interface (does nothing if the interface is hidden)
+- **mode** - toggles a given mode (modes: preview -- eg. Mercury.trigger('mode', 'preview'))
+- **action** - provides an action for Mercury -- typically processed by the focused region
+
+### Global Events
+- **configure** - triggered on Mercury.init and Mercury.configure
+- **released** - triggered on Mercury.release
+- **save:complete** - triggered on successful save ajax request
+
+### Model Events
+- **init** - triggered when a model is initialized
+- **save** - triggered when the model save ajax request is successful
+- **error** - triggered when the model save ajax request fails
+
+### Snippet Events
+- **rendered** - triggered when a snippet is rendered (can happen on undo/redo actions)
+
+### View Events
+- **build** - triggered when building / initializing
+
+### Region Events
+- **action** - triggered when an action is handled (global: region:action)
+- **update** - triggered whenever a possible change could be made within in a region (includes focus - global: region:update)
+- **preview** - triggered when the region is going into or coming out of preview mode (global: region:preview)
+- **release** - triggered when the region is being released (global: region:release)
+- **focus** - triggered when the region is focused (call instance.focus to manually focus a region - global: region:focus)
+- **blur** - triggered then the region is blurred (call instance.blur to manually blur a region - global: region:blur)
+
+
 ## Sandboxing & The Shadow Dom
 
 Mercury2 allows sandboxing content within an iframe or it can load directly on the page you're editing. This has been a complication in the past, so this version simplifies that while also retaining the ability to sandbox itself to mimimize conflicts with javascript libraries and css.

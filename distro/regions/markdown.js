@@ -342,7 +342,7 @@ Configuration:
       return this.handleAction('html', html);
     },
     table: function(table) {
-      return this.handleAction('html', table.get('html'));
+      return this.handleAction('html', table.asHtml());
     },
     file: function(file) {
       var action;

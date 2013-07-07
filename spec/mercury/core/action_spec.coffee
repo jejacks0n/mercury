@@ -7,16 +7,16 @@ describe "Mercury.Action", ->
   subject = null
 
   beforeEach ->
-    class @Model
+    class @Model extends Mercury.Model
     class Klass extends Mercury.Action
     subject = new Klass('unknown', foo: 'bar')
 
   describe ".create", ->
 
-    describe "when plain object", ->
+    beforeEach ->
+      Mercury.Action.Foo = null
 
-      beforeEach ->
-        Mercury.Action.Foo = null
+    describe "when plain object", ->
 
       it "instantiates a matching action", ->
         Mercury.Action.Foo = spy()
@@ -33,7 +33,13 @@ describe "Mercury.Action", ->
 
     describe "model instance", ->
 
-      it "returns the model", ->
+      it "instantiates a matching action", ->
+        Mercury.Action.Foo = spy()
+        model = new @Model()
+        expect( Klass.create('foo', model) ).to.eq(model)
+
+
+      it "falls back to the base action", ->
         model = new @Model()
         expect( Klass.create('foo', model) ).to.eq(model)
 

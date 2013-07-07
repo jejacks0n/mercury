@@ -2198,6 +2198,12 @@ body.mercury-transitions {
     content: 'X'; }
   .mercury-html-region + .mercury-region-drop-indicator.mercury-region-snippet-drop-indicator:before {
     content: 'N'; }
+.mercury-html-region table {
+  border: 1px solid #333;
+  border-collapse: collapse; }
+  .mercury-html-region table th, .mercury-html-region table td {
+    min-width: 10px;
+    border: 1px solid #666; }
 
 .mercury-image-region:focus {
   outline-offset: 0;

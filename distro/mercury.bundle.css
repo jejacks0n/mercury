@@ -361,6 +361,8 @@ body.mercury-transitions{-webkit-transition-property:top;-webkit-transition-dura
 .mercury-html-region+.mercury-region-drop-indicator:before{display:inline-block;font-family:"mercury";width:60px;height:60px;font-size:32px;line-height:60px;font-weight:normal;font-variant:normal;text-transform:none;text-align:center;speak:none;-webkit-font-smoothing:antialiased}
 .mercury-html-region+.mercury-region-drop-indicator:before{content:'X'}
 .mercury-html-region+.mercury-region-drop-indicator.mercury-region-snippet-drop-indicator:before{content:'N'}
+.mercury-html-region table{border:1px solid #333;border-collapse:collapse}
+.mercury-html-region table th,.mercury-html-region table td{min-width:10px;border:1px solid #666}
 .mercury-image-region:focus{outline-offset:0;outline:none;-webkit-box-shadow:0 0 7px #00bce5,0 0 2px #003e4c;-moz-box-shadow:0 0 7px #00bce5,0 0 2px #003e4c;box-shadow:0 0 7px #00bce5,0 0 2px #003e4c}
 .mercury-image-region[data-mercury-region]{min-width:20px;min-height:20px}
 .mercury-image-region+.mercury-region-drop-indicator{-webkit-transition-property:opacity;-webkit-transition-duration:.25s;-webkit-transition-timing-function:ease-in-out;-moz-transition-property:opacity;-moz-transition-duration:.25s;-moz-transition-timing-function:ease-in-out;transition-property:opacity;transition-duration:.25s;transition-timing-function:ease-in-out;-webkit-backface-visibility:hidden;-webkit-border-radius:10px;-moz-border-radius:10px;border-radius:10px;display:none;opacity:0;position:absolute;z-index:20;top:30px;left:30px;width:60px;height:60px;margin:-30px;background:rgba(0,0,0,0.75);color:rgba(255,255,255,0.85);pointer-events:none}

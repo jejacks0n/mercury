@@ -190,7 +190,7 @@ Mercury.Region.Markdown.addAction
     @handleAction('html', html)
 
   table: (table) ->
-    @handleAction('html', table.get('html'))
+    @handleAction('html', table.asHtml())
 
   file: (file) ->
     action = if file.isImage() then 'image' else 'link'

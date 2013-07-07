@@ -242,7 +242,10 @@ Configuration:
     },
     style: function() {},
     link: function(linkAction) {
-      return this.replaceSelection(linkAction.asHtml());
+      return this.html(linkAction.asHtml());
+    },
+    table: function(tableAction) {
+      return this.replaceSelection(tableAction.asHtml());
     }
   });
 

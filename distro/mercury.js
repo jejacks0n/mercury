@@ -978,15 +978,14 @@ Copyright (c) 2013 Jeremy Jackson
       if (attrsOrOther == null) {
         attrsOrOther = {};
       }
-      if ($.isPlainObject(attrsOrOther)) {
-        klass = name.toCamelCase(true);
-        if (Mercury.Action[klass]) {
-          return new Mercury.Action[klass](attrsOrOther);
-        }
-        return new Mercury.Action(name, attrsOrOther);
-      } else {
+      if (attrsOrOther instanceof Mercury.Model) {
         return attrsOrOther;
       }
+      klass = name.toCamelCase(true);
+      if (Mercury.Action[klass]) {
+        return new Mercury.Action[klass](attrsOrOther);
+      }
+      return new Mercury.Action(name, attrsOrOther);
     };
 
     function Action() {
@@ -5948,6 +5947,33 @@ Copyright (c) 2013 Jeremy Jackson
 
 }).call(this);
 (function() {
+  var _ref,
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+  Mercury.Action.Table = (function(_super) {
+    __extends(Table, _super);
+
+    function Table() {
+      _ref = Table.__super__.constructor.apply(this, arguments);
+      return _ref;
+    }
+
+    Table.prototype.name = 'table';
+
+    Table.prototype.asHtml = function() {
+      var editor;
+
+      editor = this.attributes;
+      return editor.asHtml('<br />');
+    };
+
+    return Table;
+
+  })(Mercury.Action);
+
+}).call(this);
+(function() {
   Mercury.Region.Modules.ContentEditable = {
     included: function() {
       this.on('build', this.buildContentEditable);
@@ -7931,7 +7957,7 @@ Copyright (c) 2013 Jeremy Jackson
     description: 'Provides interface for inserting and editing tables.',
     version: '1.0.0',
     actions: {
-      html: 'insert'
+      table: 'insertTable'
     },
     events: {
       'mercury:edit:table': 'onButtonClick'
@@ -7951,8 +7977,8 @@ Copyright (c) 2013 Jeremy Jackson
         return _this.triggerAction(value);
       });
     },
-    insert: function(name, value) {
-      return Mercury.trigger('action', name, value);
+    insertTable: function(name, editor) {
+      return Mercury.trigger('action', name, editor);
     }
   });
 
@@ -7996,7 +8022,7 @@ Copyright (c) 2013 Jeremy Jackson
     };
 
     Modal.prototype.onSubmit = function() {
-      this.trigger('form:submitted', this.editor.asHtml('<br/>'));
+      this.trigger('form:submitted', this.editor);
       return this.hide();
     };
 

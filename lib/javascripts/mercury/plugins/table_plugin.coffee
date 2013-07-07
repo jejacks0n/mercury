@@ -3,7 +3,7 @@ Plugin = Mercury.registerPlugin 'table',
   version: '1.0.0'
 
   actions:
-    html: 'insert'
+    table: 'insert'
 
   events:
     'mercury:edit:table': 'onButtonClick'
@@ -20,9 +20,8 @@ Plugin = Mercury.registerPlugin 'table',
     view.on('form:submitted', (value) => @triggerAction(value))
 
 
-  insert: (name, value) ->
-    Mercury.trigger('action', name, value)
-
+  insert: (name, editor) ->
+    Mercury.trigger('action', name, editor)
 
 
 class Plugin.Modal extends Mercury.Modal
@@ -51,7 +50,7 @@ class Plugin.Modal extends Mercury.Modal
 
 
   onSubmit: ->
-    @trigger('form:submitted', @editor.asHtml('<br/>'))
+    @trigger('form:submitted', @editor)
     @hide()
 
 

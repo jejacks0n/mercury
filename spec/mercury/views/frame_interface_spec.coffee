@@ -235,6 +235,10 @@ describe "Mercury.FrameInterface", ->
       expect( $ ).calledWith('body', '_document_')
       expect( @mock.scrollTop ).called
 
+    it "adds the frame left to the offset calculated", ->
+      subject.$frame = offset: spy(-> top: 0, left: 20), css: spy(), length: 1
+      expect( subject.positionForRegion() ).to.eql(top: 22, left: 20)
+
 
   describe "#hijackLinksAndForms", ->
 

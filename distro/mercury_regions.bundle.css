@@ -64,7 +64,7 @@ This file contains all of the required css for the Mercury interface as well as 
 .mercury-snippet-region+.mercury-region-drop-indicator:before{display:inline-block;font-family:"mercury";width:60px;height:60px;font-size:32px;line-height:60px;font-weight:normal;font-variant:normal;text-transform:none;text-align:center;speak:none;-webkit-font-smoothing:antialiased}
 .mercury-snippet-region+.mercury-region-drop-indicator:before{content:'X'}
 .mercury-snippet-region+.mercury-region-drop-indicator.mercury-region-snippet-drop-indicator:before{content:'N'}
-.mercury-text-region textarea.mercury-text-region-textarea{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;outline:0;border:none;margin:0;padding:0;white-space:pre;background:transparent;font-family:inherit;font-size:inherit;font-weight:inherit;line-height:inherit;color:inherit;resize:vertical}
+.mercury-text-region textarea.mercury-text-region-textarea{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;outline:0;border:none;margin:0;padding:0;background:transparent;font-family:inherit;font-size:inherit;font-weight:inherit;line-height:inherit;color:inherit;resize:vertical}
 .mercury-text-region textarea.mercury-text-region-textarea:focus{outline-offset:0;outline:none;-webkit-box-shadow:0 0 7px #00bce5,0 0 2px #003e4c;-moz-box-shadow:0 0 7px #00bce5,0 0 2px #003e4c;box-shadow:0 0 7px #00bce5,0 0 2px #003e4c}
 .mercury-unknown-region[data-mercury-region]:empty:before{overflow:hidden;content:attr(data-placeholder);color:#bbb}
 .mercury-unknown-region[data-mercury-region]{min-width:5px;min-height:20px}

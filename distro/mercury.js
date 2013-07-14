@@ -346,6 +346,10 @@ Copyright (c) 2013 Jeremy Jackson
     return result;
   };
 
+  String.prototype.htmlReduce = function() {
+    return this.replace(/\n|\s\s+/g, '');
+  };
+
 }).call(this);
 (function() {
   Mercury.TableEditor = (function() {
@@ -868,7 +872,7 @@ Copyright (c) 2013 Jeremy Jackson
       return typeof console !== "undefined" && console !== null ? typeof console.debug === "function" ? console.debug.apply(console, args) : void 0 : void 0;
     },
     notify: function(msg) {
-      var e, _ref, _ref1;
+      var _ref, _ref1;
 
       if (this.logPrefix || this.constructor.logPrefix) {
         msg = "" + (this.constructor.logPrefix || this.logPrefix) + " " + msg;
@@ -876,9 +880,7 @@ Copyright (c) 2013 Jeremy Jackson
       if (((_ref = Mercury.configuration.logging) != null ? _ref.notifier : void 0) === 'console') {
         try {
           return console.error(msg);
-        } catch (_error) {
-          e = _error;
-        }
+        } catch (_error) {}
       } else if (((_ref1 = Mercury.configuration.logging) != null ? _ref1.notifier : void 0) === 'alert') {
         return alert(msg);
       }
@@ -4468,11 +4470,13 @@ Copyright (c) 2013 Jeremy Jackson
     };
 
     FrameInterface.prototype.positionForRegion = function() {
-      var offset;
+      var frameOffset, offset;
 
       offset = FrameInterface.__super__.positionForRegion.apply(this, arguments);
       if (this.$frame.length) {
+        frameOffset = this.$frame.offset();
         offset.top -= $('body', this.document).scrollTop();
+        offset.left += frameOffset.left;
       }
       return offset;
     };
@@ -5969,6 +5973,44 @@ Copyright (c) 2013 Jeremy Jackson
     };
 
     return Table;
+
+  })(Mercury.Action);
+
+}).call(this);
+(function() {
+  var _ref,
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+  Mercury.Action.Media = (function(_super) {
+    __extends(Media, _super);
+
+    function Media() {
+      _ref = Media.__super__.constructor.apply(this, arguments);
+      return _ref;
+    }
+
+    Media.prototype.name = 'media';
+
+    Media.prototype.asMarkdown = function() {
+      if (!!this.get('width') || !!this.get('height') || this.get('type') !== 'image') {
+        console.log(this.get('width'));
+        return this.asHtml();
+      } else {
+        return "![](" + (this.get('src')) + ")";
+      }
+    };
+
+    Media.prototype.asHtml = function() {
+      debugger;      console.log("asHTML", this);
+      if (this.get('type') === 'image') {
+        return "<img src=\"" + (this.get('src')) + "\" align=\"" + (this.get('align')) + "\" width=\"" + (this.get('width')) + "\" height=\"" + (this.get('height')) + "\"></img>";
+      } else {
+        return "<iframe src=\"" + (this.get('src')) + "\" width=\"" + (this.get('width')) + "\" height=\"" + (this.get('height')) + "\" frameborder=\"0\" allowFullScreen></iframe>";
+      }
+    };
+
+    return Media;
 
   })(Mercury.Action);
 
@@ -7547,8 +7589,7 @@ Copyright (c) 2013 Jeremy Jackson
     description: 'Provides interface for inserting and editing media.',
     version: '1.0.0',
     actions: {
-      image: 'insertImage',
-      html: 'insertHtml'
+      media: 'insert'
     },
     events: {
       'mercury:edit:media': 'onButtonClick'
@@ -7568,19 +7609,8 @@ Copyright (c) 2013 Jeremy Jackson
         return _this.triggerAction(value);
       });
     },
-    insertImage: function(name, value) {
-      if (value.type !== 'image') {
-        return this.insertHtml(name, value);
-      }
+    insert: function(name, value) {
       return Mercury.trigger('action', name, value);
-    },
-    insertHtml: function(name, value) {
-      if (value.type === 'image') {
-        value = "<img src=\"" + value.src + "\"/>";
-      } else {
-        value = "<iframe src=\"" + value.src + "\" width=\"" + value.width + "\" height=\"" + value.height + "\" frameborder=\"0\" allowFullScreen></iframe>";
-      }
-      return Mercury.trigger('action', 'html', value);
     }
   });
 
@@ -7686,6 +7716,8 @@ Copyright (c) 2013 Jeremy Jackson
             protocol: /^https:/.test(url) ? 'https' : 'http',
             src: url,
             url: url,
+            width: parseInt(this.$('#media_image_width').val(), 10) || "",
+            height: parseInt(this.$('#media_image_height').val(), 10) || "",
             align: this.$('#media_image_alignment').val(),
             float: this.$('#media_image_float').val()
           };
@@ -7699,7 +7731,7 @@ Copyright (c) 2013 Jeremy Jackson
   })(Mercury.Modal);
 
   JST['/mercury/templates/media'] || (JST['/mercury/templates/media'] = function() {
-    return "<form class=\"form-horizontal\">\n\n  <fieldset>\n    <legend>Images</legend>\n    <div class=\"control-group url optional\">\n      <label class=\"url optional control-label\" for=\"media_image_url\">\n        <input name=\"media_type\" type=\"radio\" value=\"image_url\" checked=\"checked\" tabindex=\"-1\"/>URL\n      </label>\n      <div class=\"controls\">\n        <input class=\"string url optional\" id=\"media_image_url\" name=\"media[image_url]\" size=\"50\" type=\"text\" tabindex=\"1\">\n      </div>\n    </div>\n  </fieldset>\n\n  <fieldset>\n    <legend>Videos</legend>\n    <div class=\"control-group url optional\">\n      <label class=\"url optional control-label\" for=\"media_youtube_url\">\n        <input name=\"media_type\" type=\"radio\" value=\"youtube_url\" tabindex=\"-1\"/>YouTube URL\n      </label>\n      <div class=\"controls\">\n        <input class=\"string url optional\" id=\"media_youtube_url\" name=\"media[youtube_url]\" size=\"50\" type=\"text\" placeholder=\"http://youtu.be/28tZ-S1LFok\" tabindex=\"1\">\n      </div>\n    </div>\n    <div class=\"control-group url optional\">\n      <label class=\"url optional control-label\" for=\"media_vimeo_url\">\n        <input name=\"media_type\" type=\"radio\" value=\"vimeo_url\" tabindex=\"-1\"/>Vimeo URL\n      </label>\n      <div class=\"controls\">\n        <input class=\"string url optional\" id=\"media_vimeo_url\" name=\"media[vimeo_url]\" size=\"50\" type=\"text\" placeholder=\"http://vimeo.com/36684976\" tabindex=\"1\">\n      </div>\n    </div>\n  </fieldset>\n\n  <fieldset>\n    <legend>Options</legend>\n\n    <div class=\"media-options\" id=\"image_url_options\">\n      <div class=\"control-group select optional\">\n        <label class=\"select optional control-label\" for=\"media_image_alignment\">Alignment</label>\n        <div class=\"controls\">\n          <select class=\"select optional\" id=\"media_image_alignment\" name=\"media[image_alignment]\" tabindex=\"1\">\n            <option value=\"\">None</option>\n            <option value=\"left\">Left</option>\n            <option value=\"right\">Right</option>\n            <option value=\"top\">Top</option>\n            <option value=\"middle\">Middle</option>\n            <option value=\"bottom\">Bottom</option>\n            <option value=\"absmiddle\">Absolute Middle</option>\n            <option value=\"absbottom\">Absolute Bottom</option>\n          </select>\n        </div>\n      </div>\n      <div class=\"control-group select optional\">\n        <label class=\"select optional control-label\" for=\"media_image_float\">Float</label>\n        <div class=\"controls\">\n          <select class=\"select optional\" id=\"media_image_float\" name=\"media[image_float]\" tabindex=\"1\">\n            <option value=\"\">None</option>\n            <option value=\"left\">Left</option>\n            <option value=\"right\">Right</option>\n            <option value=\"inherit\">Inherit</option>\n          </select>\n        </div>\n      </div>\n    </div>\n\n    <div class=\"media-options\" id=\"youtube_url_options\" style=\"display:none\">\n      <div class=\"control-group number optional\">\n        <label class=\"number optional control-label\" for=\"media_youtube_width\">Width</label>\n        <div class=\"controls\">\n          <input class=\"number optional\" id=\"media_youtube_width\" name=\"media[youtube_width]\" size=\"50\" type=\"number\" value=\"560\" tabindex=\"1\">\n        </div>\n      </div>\n      <div class=\"control-group number optional\">\n        <label class=\"number optional control-label\" for=\"media_youtube_height\">Height</label>\n        <div class=\"controls\">\n          <input class=\"number optional\" id=\"media_youtube_height\" name=\"media[youtube_height]\" size=\"50\" type=\"number\" value=\"349\" tabindex=\"1\">\n        </div>\n      </div>\n    </div>\n\n    <div class=\"media-options\" id=\"vimeo_url_options\" style=\"display:none\">\n      <div class=\"control-group number optional\">\n        <label class=\"number optional control-label\" for=\"media_vimeo_width\">Width</label>\n        <div class=\"controls\">\n          <input class=\"number optional\" id=\"media_vimeo_width\" name=\"media[vimeo_width]\" size=\"50\" type=\"number\" value=\"400\" tabindex=\"1\">\n        </div>\n      </div>\n      <div class=\"control-group number optional\">\n        <label class=\"number optional control-label\" for=\"media_vimeo_height\">Height</label>\n        <div class=\"controls\">\n          <input class=\"number optional\" id=\"media_vimeo_height\" name=\"media[vimeo_height]\" size=\"50\" type=\"number\" value=\"225\" tabindex=\"1\">\n        </div>\n      </div>\n    </div>\n  </fieldset>\n\n  <div class=\"form-actions\">\n    <input class=\"btn btn-primary\" name=\"commit\" type=\"submit\" value=\"Insert Media\" tabindex=\"2\"/>\n  </div>\n</form>";
+    return "<form class=\"form-horizontal\">\n\n  <fieldset>\n    <legend>Images</legend>\n    <div class=\"control-group url optional\">\n      <label class=\"url optional control-label\" for=\"media_image_url\">\n        <input name=\"media_type\" type=\"radio\" value=\"image_url\" checked=\"checked\" tabindex=\"-1\"/>URL\n      </label>\n      <div class=\"controls\">\n        <input class=\"string url optional\" id=\"media_image_url\" name=\"media[image_url]\" size=\"50\" type=\"text\" tabindex=\"1\">\n      </div>\n    </div>\n  </fieldset>\n\n  <fieldset>\n    <legend>Videos</legend>\n    <div class=\"control-group url optional\">\n      <label class=\"url optional control-label\" for=\"media_youtube_url\">\n        <input name=\"media_type\" type=\"radio\" value=\"youtube_url\" tabindex=\"-1\"/>YouTube URL\n      </label>\n      <div class=\"controls\">\n        <input class=\"string url optional\" id=\"media_youtube_url\" name=\"media[youtube_url]\" size=\"50\" type=\"text\" placeholder=\"http://youtu.be/28tZ-S1LFok\" tabindex=\"1\">\n      </div>\n    </div>\n    <div class=\"control-group url optional\">\n      <label class=\"url optional control-label\" for=\"media_vimeo_url\">\n        <input name=\"media_type\" type=\"radio\" value=\"vimeo_url\" tabindex=\"-1\"/>Vimeo URL\n      </label>\n      <div class=\"controls\">\n        <input class=\"string url optional\" id=\"media_vimeo_url\" name=\"media[vimeo_url]\" size=\"50\" type=\"text\" placeholder=\"http://vimeo.com/36684976\" tabindex=\"1\">\n      </div>\n    </div>\n  </fieldset>\n\n  <fieldset>\n    <legend>Options</legend>\n\n    <div class=\"media-options\" id=\"image_url_options\">\n      <div class=\"control-group number optional\">\n        <label class=\"number optional control-label\" for=\"media_image_width\">Width</label>\n        <div class=\"controls\">\n          <input class=\"number optional\" id=\"media_image_width\" name=\"media[image_width]\" size=\"50\" type=\"number\" value=\"\" tabindex=\"1\">\n        </div>\n      </div>\n      <div class=\"control-group number optional\">\n        <label class=\"number optional control-label\" for=\"media_image_height\">Height</label>\n        <div class=\"controls\">\n          <input class=\"number optional\" id=\"media_image_height\" name=\"media[image_height]\" size=\"50\" type=\"number\" value=\"\" tabindex=\"1\">\n        </div>\n      </div>\n      <div class=\"control-group select optional\">\n        <label class=\"select optional control-label\" for=\"media_image_alignment\">Alignment</label>\n        <div class=\"controls\">\n          <select class=\"select optional\" id=\"media_image_alignment\" name=\"media[image_alignment]\" tabindex=\"1\">\n            <option value=\"\">None</option>\n            <option value=\"left\">Left</option>\n            <option value=\"right\">Right</option>\n            <option value=\"top\">Top</option>\n            <option value=\"middle\">Middle</option>\n            <option value=\"bottom\">Bottom</option>\n            <option value=\"absmiddle\">Absolute Middle</option>\n            <option value=\"absbottom\">Absolute Bottom</option>\n          </select>\n        </div>\n      </div>\n      <div class=\"control-group select optional\">\n        <label class=\"select optional control-label\" for=\"media_image_float\">Float</label>\n        <div class=\"controls\">\n          <select class=\"select optional\" id=\"media_image_float\" name=\"media[image_float]\" tabindex=\"1\">\n            <option value=\"\">None</option>\n            <option value=\"left\">Left</option>\n            <option value=\"right\">Right</option>\n            <option value=\"inherit\">Inherit</option>\n          </select>\n        </div>\n      </div>\n    </div>\n\n    <div class=\"media-options\" id=\"youtube_url_options\" style=\"display:none\">\n      <div class=\"control-group number optional\">\n        <label class=\"number optional control-label\" for=\"media_youtube_width\">Width</label>\n        <div class=\"controls\">\n          <input class=\"number optional\" id=\"media_youtube_width\" name=\"media[youtube_width]\" size=\"50\" type=\"number\" value=\"560\" tabindex=\"1\">\n        </div>\n      </div>\n      <div class=\"control-group number optional\">\n        <label class=\"number optional control-label\" for=\"media_youtube_height\">Height</label>\n        <div class=\"controls\">\n          <input class=\"number optional\" id=\"media_youtube_height\" name=\"media[youtube_height]\" size=\"50\" type=\"number\" value=\"349\" tabindex=\"1\">\n        </div>\n      </div>\n    </div>\n\n    <div class=\"media-options\" id=\"vimeo_url_options\" style=\"display:none\">\n      <div class=\"control-group number optional\">\n        <label class=\"number optional control-label\" for=\"media_vimeo_width\">Width</label>\n        <div class=\"controls\">\n          <input class=\"number optional\" id=\"media_vimeo_width\" name=\"media[vimeo_width]\" size=\"50\" type=\"number\" value=\"400\" tabindex=\"1\">\n        </div>\n      </div>\n      <div class=\"control-group number optional\">\n        <label class=\"number optional control-label\" for=\"media_vimeo_height\">Height</label>\n        <div class=\"controls\">\n          <input class=\"number optional\" id=\"media_vimeo_height\" name=\"media[vimeo_height]\" size=\"50\" type=\"number\" value=\"225\" tabindex=\"1\">\n        </div>\n      </div>\n    </div>\n  </fieldset>\n\n  <div class=\"form-actions\">\n    <input class=\"btn btn-primary\" name=\"commit\" type=\"submit\" value=\"Insert Media\" tabindex=\"2\"/>\n  </div>\n</form>";
   });
 
 }).call(this);
@@ -7957,7 +7989,7 @@ Copyright (c) 2013 Jeremy Jackson
     description: 'Provides interface for inserting and editing tables.',
     version: '1.0.0',
     actions: {
-      table: 'insertTable'
+      table: 'insert'
     },
     events: {
       'mercury:edit:table': 'onButtonClick'
@@ -7977,7 +8009,7 @@ Copyright (c) 2013 Jeremy Jackson
         return _this.triggerAction(value);
       });
     },
-    insertTable: function(name, editor) {
+    insert: function(name, editor) {
       return Mercury.trigger('action', name, editor);
     }
   });

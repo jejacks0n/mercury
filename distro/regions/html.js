@@ -246,6 +246,9 @@ Configuration:
     },
     table: function(tableAction) {
       return this.replaceSelection(tableAction.asHtml());
+    },
+    media: function(mediaAction) {
+      return this.replaceSelection(mediaAction.asHtml());
     }
   });
 

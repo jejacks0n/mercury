@@ -199,9 +199,8 @@ Mercury.Region.Markdown.addAction
   link: (link) ->
     @replaceSelection(link.asMarkdown())
 
-  image: (image) ->
-    text = image.get('text')
-    @wrapSelected(@processWrapper('image', [image.get('url'), text]), text: text, select: 'end')
+  media: (media) ->
+    @replaceSelection(media.asMarkdown())
 
 
 Mercury.Region.Markdown.addContext

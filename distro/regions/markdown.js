@@ -356,14 +356,8 @@ Configuration:
     link: function(link) {
       return this.replaceSelection(link.asMarkdown());
     },
-    image: function(image) {
-      var text;
-
-      text = image.get('text');
-      return this.wrapSelected(this.processWrapper('image', [image.get('url'), text]), {
-        text: text,
-        select: 'end'
-      });
+    media: function(media) {
+      return this.replaceSelection(media.asMarkdown());
     }
   });
 

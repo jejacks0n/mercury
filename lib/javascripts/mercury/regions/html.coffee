@@ -131,3 +131,6 @@ Mercury.Region.Html.addAction
 
   table: (tableAction) ->
     @replaceSelection(tableAction.asHtml())
+
+  media: (mediaAction) ->
+    @replaceSelection(mediaAction.asHtml())

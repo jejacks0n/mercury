@@ -15,3 +15,10 @@ describe "Mercury.Plugin.Media", ->
     subject = Mercury.Plugin.get('media', true)
 
   it "needs to be tested"
+
+  describe "#insert", ->
+
+    it "triggers an action event", ->
+      spyOn(Mercury, 'trigger')
+      subject.insert('foo', '_value_')
+      expect( Mercury.trigger ).calledWith('action', 'foo', '_value_')

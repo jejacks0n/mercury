@@ -3,8 +3,7 @@ Plugin = Mercury.registerPlugin 'media',
   version: '1.0.0'
 
   actions:
-    image: 'insertImage'
-    html: 'insertHtml'
+    media: 'insert'
 
   events:
     'mercury:edit:media': 'onButtonClick'
@@ -20,18 +19,8 @@ Plugin = Mercury.registerPlugin 'media',
   bindTo: (view) ->
     view.on('form:submitted', (value) => @triggerAction(value))
 
-
-  insertImage: (name, value) ->
-    return @insertHtml(name, value) unless value.type == 'image'
+  insert: (name, value) ->
     Mercury.trigger('action', name, value)
-
-
-  insertHtml: (name, value) ->
-    if value.type == 'image'
-      value = """<img src="#{value.src}"/>"""
-    else
-      value = """<iframe src="#{value.src}" width="#{value.width}" height="#{value.height}" frameborder="0" allowFullScreen></iframe>"""
-    Mercury.trigger('action', 'html', value)
 
 
 class Plugin.Modal extends Mercury.Modal
@@ -102,6 +91,8 @@ class Plugin.Modal extends Mercury.Modal
           protocol: if /^https:/.test(url) then 'https' else 'http'
           src: url
           url: url
+          width: parseInt(@$('#media_image_width').val(), 10) || ""
+          height: parseInt(@$('#media_image_height').val(), 10) || ""
           align: @$('#media_image_alignment').val()
           float: @$('#media_image_float').val()
 
@@ -149,6 +140,18 @@ JST['/mercury/templates/media'] ||= ->
       <legend>Options</legend>
 
       <div class="media-options" id="image_url_options">
+        <div class="control-group number optional">
+          <label class="number optional control-label" for="media_image_width">Width</label>
+          <div class="controls">
+            <input class="number optional" id="media_image_width" name="media[image_width]" size="50" type="number" value="" tabindex="1">
+          </div>
+        </div>
+        <div class="control-group number optional">
+          <label class="number optional control-label" for="media_image_height">Height</label>
+          <div class="controls">
+            <input class="number optional" id="media_image_height" name="media[image_height]" size="50" type="number" value="" tabindex="1">
+          </div>
+        </div>
         <div class="control-group select optional">
           <label class="select optional control-label" for="media_image_alignment">Alignment</label>
           <div class="controls">

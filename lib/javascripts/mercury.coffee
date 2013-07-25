@@ -48,13 +48,11 @@ Mercury.Region.Markdown.addToolbar 'block', block: ['Block', plugin: 'blocks']
 
 # todo:
 #   html region doesn't init?
-#   markdown / text doesn't wrap properly (the same as other elements).
 #   seems to be a bug with undo when setting data?
-#   toolbar doesn't switch back to caman region.
 #   remove snippet contents per snippet or let them be serialized as direct content / make sure that works.
 #   do snippet regions work better if they serialize their entire element structure in the history (or does this cause massive memory leaks/lingering events that might be bad?)
 #   better strategy for snippet management/removal -- focusable with toolbar buttons would be nice, combined with a lesser toolbar in line? (drag handle on hover, etc?)
-#   make table/media/link plugins use custom actions.
+#   make media plugins use custom actions.
 #   ask/invite translators to revisit their translations.
 # todo regions:
 #   html: when using the iframe, rangy isn't behaving the same (doesn't work because it doesn't understand the context).
@@ -65,7 +63,9 @@ Mercury.Region.Markdown.addToolbar 'block', block: ['Block', plugin: 'blocks']
 #   table: add table region -- sort of like a spreadsheet, but with no math -- maybe math?
 #   canvas: add canvas region -- save/load as base64 image.
 #   markdown: polish it a bit more -- mostly selections when wrapping is off.
+#   caman: toolbar doesn't switch back to caman region (the canvas doesn't properly trigger the focus event? -- even after some work it's like caman changes the canvas element out from under us -- the easy fix is to just wrap it in a div instead of assigning it directly to an img tag, but this is lame.)
 # todo ideas:
 #   port jQuery.extend into module so we can use that within instances (which is where it's mostly used).
 #   port the jQuery form -> object code to coffeescript and make that part of the form_handler module.
 #   add better touch support to various aspects (draggable module specifically).
+#   markdown doesn't wrap the same as other elements -- though this is probably just noteworthy.

@@ -14,6 +14,6 @@ class Mercury.Action.Media extends Mercury.Action
 
   asHtml: ->
     if @get('type') == 'image'
-      """<img src="#{@get('src')}" align="#{@get('align')}" width="#{@get('width')}" height="#{@get('height')}"></img>"""
+      """<img src="#{@get('src')}" align="#{@get('align')}" width="#{@get('width')}" height="#{@get('height')}"/>"""
     else
       """<iframe src="#{@get('src')}" width="#{@get('width')}" height="#{@get('height')}" frameborder="0" allowFullScreen></iframe>"""

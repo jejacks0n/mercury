@@ -16,7 +16,7 @@ Gem::Specification.new do |s|
   s.licenses    = ['MIT']
 
   # Runtime Dependencies
-  s.add_dependency 'railties', '>= 3.2'
+  s.add_dependency 'railties', '>= 3.0'
   s.add_dependency 'coffee-rails', '>= 3.2.2'
 
   # Gem Files

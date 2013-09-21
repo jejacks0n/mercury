@@ -980,14 +980,15 @@ Copyright (c) 2013 Jeremy Jackson
       if (attrsOrOther == null) {
         attrsOrOther = {};
       }
-      if (attrsOrOther instanceof Mercury.Model) {
+      if ($.isPlainObject(attrsOrOther)) {
+        klass = name.toCamelCase(true);
+        if (Mercury.Action[klass]) {
+          return new Mercury.Action[klass](attrsOrOther);
+        }
+        return new Mercury.Action(name, attrsOrOther);
+      } else {
         return attrsOrOther;
       }
-      klass = name.toCamelCase(true);
-      if (Mercury.Action[klass]) {
-        return new Mercury.Action[klass](attrsOrOther);
-      }
-      return new Mercury.Action(name, attrsOrOther);
     };
 
     function Action() {
@@ -5900,30 +5901,6 @@ Copyright (c) 2013 Jeremy Jackson
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  Mercury.Action.Image = (function(_super) {
-    __extends(Image, _super);
-
-    function Image() {
-      _ref = Image.__super__.constructor.apply(this, arguments);
-      return _ref;
-    }
-
-    Image.prototype.name = 'image';
-
-    Image.prototype.asHtml = function() {
-      return "<img src=\"" + (this.get('url')) + "\">";
-    };
-
-    return Image;
-
-  })(Mercury.Action);
-
-}).call(this);
-(function() {
-  var _ref,
-    __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
-
   Mercury.Action.Link = (function(_super) {
     __extends(Link, _super);
 
@@ -5955,33 +5932,6 @@ Copyright (c) 2013 Jeremy Jackson
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  Mercury.Action.Table = (function(_super) {
-    __extends(Table, _super);
-
-    function Table() {
-      _ref = Table.__super__.constructor.apply(this, arguments);
-      return _ref;
-    }
-
-    Table.prototype.name = 'table';
-
-    Table.prototype.asHtml = function() {
-      var editor;
-
-      editor = this.attributes;
-      return editor.asHtml('<br />');
-    };
-
-    return Table;
-
-  })(Mercury.Action);
-
-}).call(this);
-(function() {
-  var _ref,
-    __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
-
   Mercury.Action.Media = (function(_super) {
     __extends(Media, _super);
 
@@ -5994,7 +5944,6 @@ Copyright (c) 2013 Jeremy Jackson
 
     Media.prototype.asMarkdown = function() {
       if (!!this.get('width') || !!this.get('height') || this.get('type') !== 'image') {
-        console.log(this.get('width'));
         return this.asHtml();
       } else {
         return "![](" + (this.get('src')) + ")";
@@ -6002,9 +5951,8 @@ Copyright (c) 2013 Jeremy Jackson
     };
 
     Media.prototype.asHtml = function() {
-      debugger;      console.log("asHTML", this);
       if (this.get('type') === 'image') {
-        return "<img src=\"" + (this.get('src')) + "\" align=\"" + (this.get('align')) + "\" width=\"" + (this.get('width')) + "\" height=\"" + (this.get('height')) + "\"></img>";
+        return "<img src=\"" + (this.get('src')) + "\" align=\"" + (this.get('align')) + "\" width=\"" + (this.get('width')) + "\" height=\"" + (this.get('height')) + "\"/>";
       } else {
         return "<iframe src=\"" + (this.get('src')) + "\" width=\"" + (this.get('width')) + "\" height=\"" + (this.get('height')) + "\" frameborder=\"0\" allowFullScreen></iframe>";
       }
@@ -6295,14 +6243,33 @@ Copyright (c) 2013 Jeremy Jackson
 }).call(this);
 (function() {
   Mercury.Region.Modules.HtmlSelection = {
+    elementFromValue: function(val) {
+      if (val.is) {
+        return val.get(0);
+      } else {
+        return $(val).get(0);
+      }
+    },
     getSelection: function() {
-      return rangy.getSelection();
+      return rangy.getSelection(this.document);
     },
     getSerializedSelection: function() {
-      return rangy.serializeSelection();
+      return rangy.serializeSelection(this.getSelection(), false);
     },
-    setSerializedSelection: function(sel) {
-      return rangy.deserializeSelection(sel);
+    getSelectedNode: function() {
+      var parent, range, sel;
+
+      sel = this.getSelection();
+      if (!(sel.rangeCount > 0)) {
+        return this.document.body;
+      }
+      range = sel.getRangeAt(0);
+      parent = range.commonAncestorContainer;
+      if (parent.nodeType === 3) {
+        return parent.parentNode;
+      } else {
+        return parent;
+      }
     },
     toggleWrapSelectedWordsInClass: function(className, options) {
       var classApplier;
@@ -6319,12 +6286,13 @@ Copyright (c) 2013 Jeremy Jackson
       return classApplier.toggleSelection();
     },
     replaceSelection: function(val) {
-      var range, _i, _len, _ref, _results;
+      var range, select, _i, _len, _ref, _results;
 
+      select = this.selection ? this.restoreSelection() : this.getSelection();
       if (typeof val === 'string' || val.is) {
         val = this.elementFromValue(val);
       }
-      _ref = this.getSelection().getAllRanges();
+      _ref = selection.getAllRanges();
       _results = [];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         range = _ref[_i];
@@ -6333,12 +6301,17 @@ Copyright (c) 2013 Jeremy Jackson
       }
       return _results;
     },
-    elementFromValue: function(val) {
-      if (val.is) {
-        return val.get(0);
-      } else {
-        return $(val).get(0);
+    restoreSelection: function() {
+      this.setSerializedSelection(this.selection);
+      return this.selection = null;
+    },
+    setSerializedSelection: function(sel) {
+      if (rangy.canDeserializeSelection(sel)) {
+        return rangy.deserializeSelection(sel, null, Mercury["interface"].window);
       }
+    },
+    saveSelection: function() {
+      return this.selection = this.getSerializedSelection();
     }
   };
 

@@ -53,6 +53,11 @@ Configuration:
       Html.__super__.constructor.apply(this, arguments);
     }
 
+    Html.prototype.blur = function() {
+      this.saveSelection();
+      return Html.__super__.blur.apply(this, arguments);
+    };
+
     Html.prototype.onDropFile = function(files) {
       var uploader,
         _this = this;
@@ -242,7 +247,7 @@ Configuration:
     },
     style: function() {},
     link: function(linkAction) {
-      return this.html(linkAction.asHtml());
+      return this.replaceSelection(linkAction.asHtml());
     },
     table: function(tableAction) {
       return this.replaceSelection(tableAction.asHtml());

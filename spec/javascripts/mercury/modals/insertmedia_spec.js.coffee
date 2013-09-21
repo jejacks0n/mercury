@@ -52,7 +52,7 @@ describe "Mercury.modalHandlers.insertMedia", ->
 
       beforeEach ->
         @focusSpy = spyOn($.fn, 'focus').andCallThrough()
-        @selection = {is: -> $('<img>', {src: '/foo.gif', align: 'right', style: 'float: left;'})}
+        @selection = {is: -> $('<img>', {src: '/foo.gif', align: 'right', style: 'float: left; width: 170px; height: 220px;'})}
         Mercury.region = selection: => @selection
         @insertMedia.initialize()
 
@@ -68,6 +68,12 @@ describe "Mercury.modalHandlers.insertMedia", ->
 
       it "sets the image float option", ->
         expect($('#media_image_float').val()).toEqual('left')
+
+      it "sets the image width option", ->
+        expect($('#media_image_width').val()).toEqual('170')
+
+      it "sets the image height option", ->
+        expect($('#media_image_height').val()).toEqual('220')
 
     describe "an existing youtube video", ->
 
@@ -179,13 +185,21 @@ describe "Mercury.modalHandlers.insertMedia", ->
         $('#media_image_url').val('http://domain/foo.gif')
         $('#media_image_alignment').val('right')
         $('#media_image_float').val('left')
+        $('#media_image_width').val('170')
+        $('#media_image_height').val('220')
 
       it "triggers an action with the proper values", ->
         jasmine.simulate.click($('input[type=submit]').get(0))
         expect(@triggerSpy.callCount).toEqual(1)
         expect(@triggerSpy.argsForCall[0][0]).toEqual('action')
         expect(@triggerSpy.argsForCall[0][1]['action']).toEqual('insertImage')
-        expect(@triggerSpy.argsForCall[0][1]['value']).toEqual({src: 'http://domain/foo.gif', align: 'right', style: 'float: left;'})
+        expect(@triggerSpy.argsForCall[0][1]['value']).toEqual({src: 'http://domain/foo.gif', align: 'right', style: 'float: left; width: 170px; height: 220px;'})
+
+      it "does not include width and height values if none are set", ->
+        $('#media_image_width').val('')
+        $('#media_image_height').val('')
+        jasmine.simulate.click($('input[type=submit]').get(0))
+        expect(@triggerSpy.argsForCall[0][1]['value']).toEqual({src: 'http://domain/foo.gif', align: 'right', style: 'float: left; '})
 
     describe "a youtube video", ->
 

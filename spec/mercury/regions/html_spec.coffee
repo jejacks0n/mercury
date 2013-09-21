@@ -21,5 +21,13 @@ describe "Mercury.Region.Html", ->
     expect( Klass.klass ).to.eq('Mercury.Region.Html')
     expect( Klass.type ).to.eq('html')
     expect( Klass.supported ).to.be.true
+  
+  describe "#constructor", ->
 
+    it "notifies if rangy can't init", ->
+      spyOn(window.rangy, 'init').throws('foo')
+      spyOn(Klass::, 'notify')
+      subject = new Klass('<div id="foo">')
+      expect( Klass::notify ).calledWith('requires Rangy')
+  
   it "needs to be tested"

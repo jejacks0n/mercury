@@ -8,9 +8,6 @@ temp
 # Misc Ruby
 .rbenv-gemsets
 .rbenv-version
-.rvmrc
 .irbrc
 .bundle
 .gems
-
-Gemfile.lock

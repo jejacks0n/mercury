@@ -34,12 +34,13 @@ class Mercury.Region.Html extends Mercury.Region
 
     super
 
-  # When the region is blurred save the selection, that way 
-  # it can be restored later.
+
+  # Save the selection on blur so it can be restored later.
   #
   blur: ->
     @saveSelection()
     super
+
 
   onDropFile: (files) ->
     uploader = new Mercury[@config('interface:uploader')](files, mimeTypes: @options.mimeTypes)
@@ -55,7 +56,7 @@ class Mercury.Region.Html extends Mercury.Region
   onPaste: (e) ->
     console.debug('pasted', e)
 
-  
+
   onKeyEvent: (e) ->
     return if e.keyCode >= 37 && e.keyCode <= 40 # arrows
     return if e.metaKey && e.keyCode == 90 # undo / redo
@@ -133,7 +134,7 @@ Mercury.Region.Html.addAction
   style:         ->
 
   link: (linkAction) ->
-    @replaceSelection(linkAction.asHtml())  
+    @replaceSelection(linkAction.asHtml())
 
   table: (tableAction) ->
     @replaceSelection(tableAction.asHtml())

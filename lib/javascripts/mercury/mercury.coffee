@@ -58,7 +58,6 @@
 # Actions.
 #------------------------------------------------------------------------------
 #= require mercury/actions/link
-#= require mercury/actions/table
 #= require mercury/actions/media
 #
 # Region modules.

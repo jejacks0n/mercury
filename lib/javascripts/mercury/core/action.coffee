@@ -13,11 +13,12 @@ class Mercury.Action extends Mercury.Module
   # may be.
   #
   @create: (name, attrsOrOther = {}) ->
-    return attrsOrOther if attrsOrOther instanceof Mercury.Model
-
-    klass = name.toCamelCase(true)
-    return new Mercury.Action[klass](attrsOrOther) if Mercury.Action[klass]
-    new Mercury.Action(name, attrsOrOther)
+    if $.isPlainObject(attrsOrOther)
+      klass = name.toCamelCase(true)
+      return new Mercury.Action[klass](attrsOrOther) if Mercury.Action[klass]
+      new Mercury.Action(name, attrsOrOther)
+    else
+      attrsOrOther
 
 
   # The constructor accepts attributes and will set them to @attributes, which can be retrieved using the #get method.

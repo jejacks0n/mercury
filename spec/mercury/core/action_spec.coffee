@@ -7,9 +7,36 @@ describe "Mercury.Action", ->
   subject = null
 
   beforeEach ->
-    class @Model extends Mercury.Model
+    class @Model
     class Klass extends Mercury.Action
     subject = new Klass('unknown', foo: 'bar')
+
+  describe ".create", ->
+
+    describe "when plain object", ->
+
+      beforeEach ->
+        Mercury.Action.Foo = null
+
+      it "instantiates a matching action", ->
+        Mercury.Action.Foo = spy()
+        Klass.create('foo', bar: 'baz')
+        expect( Mercury.Action.Foo ).calledWith(bar: 'baz')
+        Klass.create('foo')
+        expect( Mercury.Action.Foo ).calledWith({})
+
+      it "falls back to the base action", ->
+        spyOn(Mercury, 'Action')
+        Klass.create('foo', bar: 'baz')
+        expect( Mercury.Action ).calledWith('foo', bar: 'baz')
+
+
+    describe "when instance", ->
+
+      it "returns the instance", ->
+        model = new @Model()
+        expect( Klass.create('foo', model) ).to.eq(model)
+
 
   describe ".create", ->
 
@@ -25,11 +52,11 @@ describe "Mercury.Action", ->
         Klass.create('foo')
         expect( Mercury.Action.Foo ).calledWith({})
 
-
       it "falls back to the base action", ->
         spyOn(Mercury, 'Action')
         Klass.create('foo', bar: 'baz')
         expect( Mercury.Action ).calledWith('foo', bar: 'baz')
+
 
     describe "model instance", ->
 
@@ -37,7 +64,6 @@ describe "Mercury.Action", ->
         Mercury.Action.Foo = spy()
         model = new @Model()
         expect( Klass.create('foo', model) ).to.eq(model)
-
 
       it "falls back to the base action", ->
         model = new @Model()

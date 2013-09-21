@@ -28,25 +28,24 @@
     -# -----------------------------------------------------------------------------------------------------------------
     %h2#new_regions New Regions
 
-    %hr
-    -# -----------------------------------------------------------------------------------------------------------------
-    %h2 Caman Image Regions
 
-    %img#caman1(data-mercury="caman-image" src="/assets/advanced/caman-example.jpg")
+    -#%hr
+    -#-# -----------------------------------------------------------------------------------------------------------------
+    -#%h2 Caman Image Regions
+    -#
+    -#%img#caman1(data-mercury="caman-image" src="/assets/advanced/caman-example.jpg")
 
 
     %hr
     -# -----------------------------------------------------------------------------------------------------------------
     %h2 Snippet Regions
-
     #snippet1(data-mercury="snippet" data-region-options='{"placeholder": "Drop a snippet on me"}' style="float:left;width:49%")
-
     %section#snippet2(data-mercury="snippet" style="position:relative;float:right;width:49%")
+
 
     %hr
     -# -----------------------------------------------------------------------------------------------------------------
     %h2 Markdown Regions
-
     #markdown1(data-mercury="markdown" data-region-options='{"name": "markdown_region_1", "allowDirection": true, "placeholder": "This is a placeholder"}')
       :preserve
         1
@@ -59,67 +58,54 @@
         paragraph2
 
         paragraph3
-
     #markdown2(data-mercury="markdown") Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-
     #markdown_empty(data-mercury="markdown")
+
 
     %hr
     -# -----------------------------------------------------------------------------------------------------------------
     %h2 HTML Regions
-
     #html1(data-mercury="html") Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy
-
     %section#html2(data-mercury="html") section
-
     %p#html3(data-mercury="html" style="width:200px;float:right") paragraph
-
     %span#html4(data-mercury="html" data-region-options='{"placeholder": "Drop a snippet on me"}') span
-
     %ul
       %li#html5(data-mercury="html") list item
-
     %table
       %tr
         %td#html6(data-mercury="html") table cell
         %td another table cell
-
     %span#html_empty(data-mercury="html")
 
     %h3 Plain HTML Regions
-
     %h2#plain(data-mercury="plain") Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy
-
     #plain_empty(data-mercury="plain" data-region-options='{"newlines": true}')
+
 
     %hr
     -# -----------------------------------------------------------------------------------------------------------------
     %h2 Text Regions
-
     %h3#text1(data-mercury="text" data-region-options='{"wrapping": false}') Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy
-
     #text2(data-mercury="text" data-region-options='{"height": 100, "autoSize": false}') Lorem<br/><br/>Testing
-
     #text_empty(data-mercury="text")
+
 
     %hr
     -# -----------------------------------------------------------------------------------------------------------------
     %h2 Image Regions
-
     %img#image1(data-mercury="image" src="http://goo.gl/CgyJj" width="200")
-
     %img#image2(data-mercury="image" src="http://goo.gl/CgyJj" width="200")
+
 
     %hr
     -# -----------------------------------------------------------------------------------------------------------------
     %h2#new_regions Custom Regions
-
     #button1.button(data-mercury="button") Text Value
+
 
     %hr
     -# -----------------------------------------------------------------------------------------------------------------
     %h2 Gallery Region
-
     #gallery1(data-mercury="gallery")
       .slides
         .slide= image_tag('http://goo.gl/yBRji')

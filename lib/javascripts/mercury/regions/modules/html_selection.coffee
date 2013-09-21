@@ -36,19 +36,36 @@ Mercury.Region.Modules.HtmlSelection =
     classApplier = rangy.createCssClassApplier(className, options)
     classApplier.toggleSelection()
   
+
   # Replace the current selection
   #
   replaceSelection: (val) ->
+    select = if @selection then @restoreSelection() else @getSelection()
     val = @elementFromValue(val) if typeof(val) == 'string' || val.is
-    for range in @getSelection().getAllRanges()
+    for range in selection.getAllRanges()
       range.deleteContents()
       range.insertNode(val)
-  
+
+
+  # Restore the saved selection
+  #
+  restoreSelection: ->
+    @setSerializedSelection(@selection)
+    @selection = null
+
+
   # Restores a selection from a serialized string. 
   # Passing null as the second arg fixes issues with hash mis-matches
   # The selection should also be scoped to the window in which the region lives.
   #
-  # TODO: Is there a better way to handle finding the window here? 
+  # TODO: Is there a better way to handle finding the window here? We also need to fix/add .window for Shadow DOM. 
   #
   setSerializedSelection: (sel) ->
-    rangy.deserializeSelection(sel, null, Mercury.interface.window)
+    if rangy.canDeserializeSelection(sel)
+      rangy.deserializeSelection(sel, null, Mercury.interface.window)
+
+
+  # Store the current selection
+  #
+  saveSelection: ->
+    @selection = @getSerializedSelection()

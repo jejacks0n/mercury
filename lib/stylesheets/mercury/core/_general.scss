@@ -75,3 +75,20 @@
     color: $color;
   }
 }
+
+@mixin mercury-transition-visibility {
+  -webkit-transition: opacity 250ms ease 0s, visibility 0s ease 250ms;
+  transition: opacity 250ms ease 0s, visibility 0s ease 250ms;
+}
+
+@mixin mercury-transition-hide {
+  opacity: 0;
+  visibility: hidden;
+}
+
+@mixin mercury-transition-show {
+  -webkit-transition-delay: 0s;
+  transition-delay: 0s;
+  visibility: visible;
+  opacity: 1;
+}

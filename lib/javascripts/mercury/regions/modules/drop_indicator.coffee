@@ -27,20 +27,14 @@ Mercury.Region.Modules.DropIndicator =
 
 
   showDropIndicator: ->
-    clearTimeout(@dropIndicatorTimeout)
-    return if @previewing || @dropIndicatorVisible
+    return if @previewing
     return if Mercury.dragHack && !@onDropSnippet
     return if !Mercury.dragHack && !@onDropItem && !@onDropFile
-    @dropIndicatorVisible = true
     @$dropIndicator.css(@dropIndicatorPosition())
     @$dropIndicator.removeClass('mercury-region-snippet-drop-indicator')
     @$dropIndicator.addClass('mercury-region-snippet-drop-indicator') if Mercury.dragHack
-    @delay(50, => @$dropIndicator.css(opacity: 1))
+    @$dropIndicator.addClass('mercury-shown')
 
 
   hideDropIndicator: ->
-    clearTimeout(@dropIndicatorTimeout)
-    @dropIndicatorTimeout = @delay 250, ->
-      @dropIndicatorVisible = false
-      @$dropIndicator.css(opacity: 0)
-      @dropIndicatorTimeout = @delay(251, => @$dropIndicator.hide())
+    @$dropIndicator.removeClass('mercury-shown')

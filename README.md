@@ -49,20 +49,15 @@ Start by loading the general dependencies (changing paths as needed). The only r
 
 It's worth noting that if you don't use the css bundle, you'll need to update the css to point to the correct font path and have those servable as well.
 
-Mercury2 Regions are broken out from the main javascript file which allows you to use whatever you want and not have regions you don't want cluttering things up. Each region can have it's own dependencies which are documented at the top of each region javascript.
+Mercury2 Regions are broken out from the main javascript file, which allows you to have whatever you want while not having regions you don't want. Each region can have it's own dependencies which are documented at the top of each region javascript. Regions include their own dependencies as well, so if you don't want a region you don't have to worry about it's dependencies.
 
-Let's say we want to use the HTML and Markdown regions. The Markdown region depends on marked (a javascript markdown parser), and the HTML region depends on Rangy (a selection library), so we'll add the dependencies and the region javascripts.
+Let's say we want to use the HTML and Markdown regions.
 
 ```html
-<script src="dependencies/marked-0.2.8.js" type="text/javascript"></script>
 <script src="regions/markdown.min.js" type="text/javascript"></script>
-<script src="dependencies/rangy-core.js" type="text/javascript"></script>
 <script src="regions/html.min.js" type="text/javascript"></script>
 ```
 
-Check that the files are loading.
-
-The configuration is a good place to start. The configuration is at the top of the main `mercury.js` or `mercury.min.js` file -- you can [read more about the configuration options here](https://github.com/jejacks0n/mercury/blob/mercury2/lib/javascripts/mercury/config.coffee).
 
 ### Initializing
 
@@ -77,6 +72,8 @@ jQuery(function() {
 
 ## Examples
 
+The configuration is a good place to start reading about various options and other useful tidbits. The configuration is at the top of the main `mercury.js` or `mercury.min.js` file, and has default configurations for all the standard regions as well -- you can [read more about the configuration options here](https://github.com/jejacks0n/mercury/blob/mercury2/lib/javascripts/mercury/config.coffee).
+
 There's [several examples](https://github.com/jejacks0n/mercury/tree/mercury2/examples) of how to integrate more complex features directly in the project, and the [gallery region](https://github.com/jejacks0n/mercury/blob/mercury2/lib/javascripts/mercury/regions/gallery.coffee) is a good place to start reading if you're planning on writing custom regions.
 
 There's an example for how to [sandbox using an iframe](https://github.com/jejacks0n/mercury/blob/mercury2/examples/frame.haml) and for more complex integrations check the [developer interface example](https://github.com/jejacks0n/mercury/blob/mercury2/examples/assets/developer_interface.coffee) which outlines many of the events and API, and if you're planning on adding functionality there's some examples of [how to add your own toolbars and actions, or write simple plugins](https://github.com/jejacks0n/mercury/blob/mercury2/examples/assets/functionality_adding.coffee).
@@ -88,7 +85,7 @@ An example of server integration is available in the [mercury-rails](https://git
 
 Since Mercury2 has a basic framework this list only includes the core events. Additional events could be added by plugins, custom regions, and views.
 
-To bind to global events use `Mercury.on` or `Mercury.one`, eg. `Mercury.on('focus', function() { alert('Mercury was focused') })`. If you're binding to view, model, or snippet events you should use the `instance.on` method to bind to events. All region events are triggered both on the region instance, but also globally as `region:[eventname]` with the first argument being the region instance -- this allows you to bind to all region events should you need to.
+To bind to global events use `Mercury.on` or `Mercury.one`, eg. `Mercury.on('focus', function() { alert('Mercury was focused') })`. If you're binding to view, model, or snippet events you should use the `instance.on` method to bind to events. All region events are triggered both on the region instance, and globally as `region:[eventname]` with the first argument being the region instance -- this allows you to bind to region events for all regions should you need to.
 
 ### Public Events
 - **focus** - focuses mercury, which will refocus the last region to have focus
@@ -138,11 +135,13 @@ Mercury2 also now has support for moving it's interface into a [Shadow DOM](http
 
 ## Fonts & Graphics
 
-Mercury2 uses two custom fonts for all graphic elements in the interface. This allows for retina support, makes it easier to package, and allows you to modify it for your own needs.
+Mercury2 uses two custom fonts for all graphic elements in the interface. This allows for retina support, makes it easier to package, and allows it to be more customizable long term.
 
-The primary toolbar icons and general interface elements are in mercury.ttf, which is generated using the awesome [IcoMoon project](http://icomoon.io/app/) (by [Keyamoon](https://twitter.com/keyamoon)). You can upload/import the mercury.dev.svg file that can be found in the project and add new icons for your custom buttons. If you're making a plugin you probably want to bundle these separately.
+The primary toolbar icons and general interface graphics are in the `mercury-icons` font, which is generated using fontcustom and svg images -- several of the glyphs came from the awesome [IcoMoon project](http://icomoon.io/app/) (by [Keyamoon](https://twitter.com/keyamoon)).
 
-The toolbar icons (bold, italics, etc.) are in toolbars.ttf, and was built using [fontstruct.com](http://fontstruct.com/). [The original font](http://fontstruct.com/fontstructions/show/797530) can be cloned and edited as needed. Fontstruct is used here because it allows for small pixel fonts but also allows for more advanced shapes that scale nicely.
+The toolbar icons (bold, italics, etc.) are in the `mercury-toolbars` font, which was built using [fontstruct.com](http://fontstruct.com/). [The original font](http://fontstruct.com/fontstructions/show/797530) can be cloned and edited as needed. Fontstruct is used for this font because it allows for small pixel fonts but also allows for more advanced shapes that scale nicely.
+
+Other graphics (there are only a few) are small images that have been base64 encoded and embedded into the css to simplify installation. You can change these images by overriding the classes where they're used and providing your own.
 
 
 ## I18n / Translations
@@ -168,7 +167,7 @@ Translations and contributors:
 
 ## Dependencies
 
-Mercury2 was built using jQuery 1.9.1/2.0, but attempts to minimize reliance on jQuery as much as is feasible. Selections in HTML regions are handled using Rangy. Each region can also have it's own dependencies, which is entirely up to the author. If you're writing a custom region it's expected to document the dependencies and version information. You can also check the [full list of dependencies](https://github.com/jejacks0n/mercury/blob/mercury2/lib/javascripts/mercury/dependencies.coffee).
+Mercury2 was built using jQuery 1.9.1/2.0, but attempts to minimize reliance on jQuery as much as is feasible. Selections in HTML regions are handled using Rangy. Each region can also have it's own dependencies, which is entirely up to the author. If you're writing a custom region it's expected to document the dependencies and version information. You can also check the [full list of dependencies](https://github.com/jejacks0n/mercury/blob/mercury2/lib/javascripts/mercury/dependencies.coffee) for the standard library and regions.
 
 
 ## Contributing
@@ -200,7 +199,7 @@ Awesome! Please [check here](https://github.com/jejacks0n/mercury/blob/mercury2/
 
 ## Consulting
 
-I'm available for hire. If you need help implementing, enhancing, or integrating Mercury Editor this might be a worth while option. I don't always have time for freelance work, so I recommend [Mode Set](http://modeset.com), a small consultancy with amazing folks where I work -- many of the developers there are familiar with Mercury, and it's easier for me to dedicate my days to your issues rather than my evenings.
+I'm available for hire. If you need help implementing, enhancing, or integrating Mercury Editor this might be a worth while option. I don't always have time for freelance/consulting work, so I recommend [Mode Set](http://modeset.com), a small consultancy with amazing folks where I work -- many of the developers there are familiar with Mercury, and it's easier for me to dedicate my days to your issues rather than my evenings.
 
 
 ## License

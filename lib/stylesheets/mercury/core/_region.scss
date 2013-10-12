@@ -9,7 +9,8 @@
 }
 
 @mixin mercury-region-drop-indicator {
-  @include mercury-transition(opacity);
+  @include mercury-transition-visibility;
+  @include mercury-transition-hide;
   @include mercury-border-radius(10px);
   @include mercury-icon-base(32px, 60px, 60px);
   @extend .mercury-icon-upload;
@@ -28,6 +29,8 @@
   &.mercury-region-snippet-drop-indicator {
     @extend .mercury-icon-snippet;
   }
+  &.mercury-shown {
+    @include mercury-transition-show;
   }
 }
 

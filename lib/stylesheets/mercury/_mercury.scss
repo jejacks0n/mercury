@@ -1,18 +1,3 @@
-// Glyph / Webfonts.
-//-----------------------------------------------------------------------------
-@font-face {
-  font-family: 'mercury';
-  src: font-url('mercury/mercury.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
-}
-@font-face {
-  font-family: 'mercury-toolbars';
-  src: font-url('mercury/toolbars.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
-}
-
 // Keyframes for animations.
 //-----------------------------------------------------------------------------
 @-webkit-keyframes mercury-uploader-indicator { from { background-position: -45px 0 } to { background-position: 0 0 } }

@@ -12,6 +12,7 @@
   @include mercury-transition(opacity);
   @include mercury-border-radius(10px);
   @include mercury-icon-base(32px, 60px, 60px);
+  @extend .mercury-icon-upload;
   display: none;
   opacity: 0;
   position: absolute;
@@ -24,13 +25,9 @@
   background: $region_drop_indicator_bg;
   color: $region_drop_indicator_color;
   pointer-events: none;
-  &:before {
-    content: 'X';
-  }
   &.mercury-region-snippet-drop-indicator {
-    &:before {
-      content: 'N';
-    }
+    @extend .mercury-icon-snippet;
+  }
   }
 }
 

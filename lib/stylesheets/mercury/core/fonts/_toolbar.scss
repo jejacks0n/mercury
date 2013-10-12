@@ -1,0 +1,83 @@
+@font-face {
+  font-family: "mercury-toolbars";
+  src: font-url("mercury-toolbars.eot");
+  src: font-url("mercury-toolbars.eot?#iefix") format("embedded-opentype"),
+       font-url("mercury-toolbars.woff") format("woff"),
+       font-url("mercury-toolbars.ttf") format("truetype"),
+       font-url("mercury-toolbars.svg#mercury-toolbars") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+.mercury-toolbar-secondary-container {
+  .mercury-icon-save:before { content: "\0041" }
+  .mercury-icon-preview:before { content: "\0042" }
+  .mercury-icon-undo:before { content: "\0043" }
+  .mercury-icon-redo:before { content: "\0044" }
+  .mercury-icon-link:before { content: "\004a" }
+  .mercury-icon-media:before { content: "\004b" }
+  .mercury-icon-table:before { content: "\004c" }
+  .mercury-icon-character:before { content: "\004d" }
+  .mercury-icon-snippet:before { content: "\004e" }
+  .mercury-icon-history:before { content: "\004f" }
+  .mercury-icon-notes:before { content: "\0050" }
+  .mercury-icon-bold:before { content: "\0062" }
+  .mercury-icon-italic:before { content: "\0063" }
+  .mercury-icon-strike:before { content: "\0064" }
+  .mercury-icon-underline:before { content: "\0065" }
+  .mercury-icon-subscript:before { content: "\0066" }
+  .mercury-icon-superscript:before { content: "\0067" }
+  .mercury-icon-justify-left:before { content: "\0068" }
+  .mercury-icon-justify-center:before { content: "\0069" }
+  .mercury-icon-justify-right:before { content: "\006a" }
+  .mercury-icon-justify-full:before { content: "\006b" }
+  .mercury-icon-unordered-list:before { content: "\006c" }
+  .mercury-icon-ordered-list:before { content: "\006d" }
+  .mercury-icon-outdent:before { content: "\006e" }
+  .mercury-icon-indent:before { content: "\006f" }
+  .mercury-icon-rule:before { content: "\0070" }
+  .mercury-icon-h1:before { content: "\0071" }
+  .mercury-icon-h2:before { content: "\0072" }
+  .mercury-icon-h3:before { content: "\0073" }
+  .mercury-icon-h4:before { content: "\0074" }
+  .mercury-icon-h5:before { content: "\0075" }
+  .mercury-icon-h6:before { content: "\0076" }
+  .mercury-icon-remove-heading:before { content: "\0077" }
+  .mercury-icon-blockquote:before { content: "\0078" }
+  .mercury-icon-remove:before { content: "\0079" }
+  .mercury-icon-edit:before { content: "\007a" }
+  .mercury-icon-pre:before { content: "\007a" }
+  .mercury-icon-row-before:before { content: "\0030" }
+  .mercury-icon-row-after:before { content: "\0031" }
+  .mercury-icon-row-delete:before { content: "\0032" }
+  .mercury-icon-col-before:before { content: "\0033" }
+  .mercury-icon-col-after:before { content: "\0034" }
+  .mercury-icon-col-delete:before { content: "\0035" }
+  .mercury-icon-row-increase:before { content: "\0036" }
+  .mercury-icon-row-decrease:before { content: "\0037" }
+  .mercury-icon-col-increase:before { content: "\0038" }
+  .mercury-icon-col-decrease:before { content: "\0039" }
+  .mercury-icon-resize:before { content: "\002a" }
+  .mercury-icon-crop:before { content: "\0023" }
+  .mercury-icon-align-left:before { content: "\0022" }
+  .mercury-icon-align-right:before { content: "\0027" }
+  .mercury-icon-align-top:before { content: "\003f" }
+  .mercury-icon-align-middle:before { content: "\0021" }
+  .mercury-icon-align-bottom:before { content: "\0040" }
+  .mercury-icon-align-none:before { content: "\005f" }
+  .mercury-icon-prev:before { content: "\0024" }
+  .mercury-icon-next:before { content: "\0025" }
+  .mercury-icon-toggle-play:before { content: "\0026" }
+
+  .mercury-icon-fav:before { content: "\005e" }
+  .mercury-icon-soft-wrap:before { content: "\0060" }
+  .mercury-icon-direction:before { content: "\007b" }
+  .mercury-icon-calculate:before { content: "\007c" }
+  .mercury-icon-user:before { content: "\007d" }
+  .mercury-icon-brightness:before { content: "\007e" }
+
+  .mercury-icon-expander:before { content: "\0057" }
+  .mercury-icon-upload:before { content: "\0058" }
+  .mercury-icon-search:before { content: "\0059" }
+  .mercury-icon-palette:before { content: "\002e" }
+  .mercury-icon-dropdown:before { content: "\002c" }
+}

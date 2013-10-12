@@ -27,6 +27,7 @@ class Mercury.ToolbarButton extends Mercury.View
   constructor: (@name, @label, @options = {}) ->
     @determineAction()
     @determineTypes()
+    @icon ||= @name.toDash()
     super(@options)
 
     @handleSpecial()
@@ -49,9 +50,8 @@ class Mercury.ToolbarButton extends Mercury.View
   build: ->
     @registerPlugin()
     @attr('data-type', @type)
-    @attr('data-icon', Mercury.Toolbar.icons[@icon || @name] || @icon)
     @attr('title', @t(@options.title)) if @options.title
-    @addClass("mercury-toolbar-#{@name.toDash()}-button")
+    @addClass("mercury-icon-#{@icon}")
     @html("<em>#{@t(@label)}</em>")
     @buildSubview()?.appendTo(@)
 
@@ -125,7 +125,7 @@ class Mercury.ToolbarButton extends Mercury.View
 
 
   onRegionUpdate: (region) ->
-    return if region != Mercury.interface.region
+    return if region != Mercury.interface?.region
     @deactivate() unless @subview?.visible
     if @global || @regionSupported(region)
       @enable()

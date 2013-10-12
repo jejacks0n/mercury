@@ -66,12 +66,12 @@
 
 @mixin mercury-loading-indicator($size: 32px, $color: #666) {
   @include mercury-icon-base($size, $size, $size);
+  @extend .mercury-icon-spinner;
   text-align: center;
   &:before {
     -webkit-animation: mercury-loading-indicator 1s linear infinite;
     -moz-animation: mercury-loading-indicator 1s linear infinite;
     animation: mercury-loading-indicator 1s linear infinite;
     color: $color;
-    content: "Z";
   }
 }

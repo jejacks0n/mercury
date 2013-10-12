@@ -8,6 +8,7 @@ gem 'sass-rails'
 # Build process dependencies
 gem 'uglifier'                  # javascript compression
 gem 'yui-compressor'            # css compression
+gem 'fontcustom'
 
 # Test dependencies
 gem 'teaspoon'

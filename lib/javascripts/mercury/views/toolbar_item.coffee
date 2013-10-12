@@ -43,5 +43,5 @@ class Mercury.ToolbarItem extends Mercury.View
       el = $(button)
       top = el.position().top
       if top >= height
-        buttons.push(title: el.find('em').html(), icon: el.data('icon'), el: el)
+        buttons.push(title: el.find('em').html(), class: el.attr('class').replace(/\s?mercury-toolbar-button\s?/, ''), el: el)
     buttons

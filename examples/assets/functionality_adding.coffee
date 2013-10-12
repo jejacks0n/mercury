@@ -31,7 +31,7 @@ Mercury.Region.Html.addToolbar('links', toolbar)
 #
 # A more complex example of functionality is adding a soft wrap toggle for the markdown region. Like above, we need to
 # add a toolbar button, but in this case we want a more complex method that will handle the action.
-Mercury.Region.Markdown.addToolbar 'settings', wrap: ['Soft Wrap', icon: 'softWrap']
+Mercury.Region.Markdown.addToolbar 'settings', wrap: ['Soft Wrap', icon: 'soft-wrap']
 
 # The action handler simply toggles the wrap attribute on the focusable element (which is the common name for text
 # based regions.) If you want the button to work like a toggle button check out the next example -- adding context.

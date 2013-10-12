@@ -40,7 +40,7 @@ class Mercury.ToolbarExpander extends Mercury.View
     @select.html('<ul>')
     ul = @select.$('ul')
     for button in @parent.hiddenButtons()
-      ul.append($("<li data-icon='#{button.icon}'>#{button.title}</li>").data(button: button.el))
+      ul.append($("<li class='#{button.class}'>#{button.title}</li>").data(button: button.el))
 
 
   onClickForButton: (e) ->

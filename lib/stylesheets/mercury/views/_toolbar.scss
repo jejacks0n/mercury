@@ -64,18 +64,19 @@ mercury .mercury-toolbar {
       text-shadow: #eee 0 1px 0;
     }
     .mercury-dialog {
-      width: 100px;
+      width: 120px;
       li {
-        @include mercury-toolbar-button-base;
-        padding: 6px 10px 2px 0;
+        @include mercury-icon-base(16px, auto, auto);
+        padding: 2px 5px;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
-        &[data-icon]:before {
-          content: attr(data-icon);
-          float: left;
-          top: -5px;
-          line-height: 22px;
+        line-height: 16px;
+        &:before {
+          margin-right: 4px;
+        }
+        &.mercury-button-disabled {
+          opacity: .5;
         }
       }
     }
@@ -116,16 +117,13 @@ mercury .mercury-toolbar {
     > em {
       display: none;
     }
-    &[data-icon]:before {
-      content: attr(data-icon);
-    }
     &.mercury-loading-indicator {
       @include mercury-loading-indicator;
     }
     &[data-type="select"] {
       width: auto;
       &:before {
-        content: ',';
+        content: '\002c';
         float: right;
         width: 18px;
       }
@@ -202,7 +200,7 @@ mercury .mercury-toolbar {
       border-right: 1px solid $toolbar_primary_line_separator_right_color;
     }
     .mercury-toolbar-button {
-      @include mercury-icon-base(32px, 50px, 46px);
+      @include mercury-icon-base(32px, 46px, 50px);
       height: 58px;
       min-width: 55px;
       border: 0;

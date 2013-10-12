@@ -1,0 +1,24 @@
+@font-face {
+  font-family: "mercury-icons";
+  src: font-url("mercury-icons.eot");
+  src: font-url("mercury-icons.eot?#iefix") format("embedded-opentype"),
+       font-url("mercury-icons.woff") format("woff"),
+       font-url("mercury-icons.ttf") format("truetype"),
+       font-url("mercury-icons.svg#mercury-icons") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+.mercury-icon-character:before { content: "\f100" }
+.mercury-icon-file:before { content: "\f101" }
+.mercury-icon-history:before { content: "\f102" }
+.mercury-icon-link:before { content: "\f103" }
+.mercury-icon-notes:before { content: "\f104" }
+.mercury-icon-preview-alt:before { content: "\f105" }
+.mercury-icon-preview:before { content: "\f106" }
+.mercury-icon-redo:before { content: "\f107" }
+.mercury-icon-save:before { content: "\f108" }
+.mercury-icon-snippets:before { content: "\f109" }
+.mercury-icon-spinner:before { content: "\f10a" }
+.mercury-icon-table:before { content: "\f10b" }
+.mercury-icon-undo:before { content: "\f10c" }
+.mercury-icon-upload:before { content: "\f10d" }

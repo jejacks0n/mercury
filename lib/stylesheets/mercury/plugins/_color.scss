@@ -3,7 +3,7 @@ mercury .mercury-toolbar {
     @include mercury-border-radius(0);
     color: #eee;
     &:before {
-      content: '.';
+      content: '\002e';
       color: inherit;
       text-shadow: none;
     }

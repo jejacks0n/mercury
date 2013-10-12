@@ -12,6 +12,12 @@ Configuration:
   regions:html:
     mimeTypes: false                                     # file types - overrides general uploading to allow anything
 ###
+#= require_self
+#= require rangy/rangy-core
+#= require rangy/rangy-serializer
+#= require rangy/rangy-cssclassapplier
+# require htmlbeautify-1.0
+# require htmlclean-1.3.0
 class Mercury.Region.Html extends Mercury.Region
   @define 'Mercury.Region.Html', 'html'
   @include Mercury.Region.Modules.DropIndicator

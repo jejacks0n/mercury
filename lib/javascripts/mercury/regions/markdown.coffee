@@ -20,6 +20,8 @@ Configuration:
     sanitize : false                                     # sanitize the output - ignore any html that has been input
     breaks   : true                                      # enable line breaks - new lines will become line breaks
 ###
+#= require_self
+#= require marked-0.2.9
 class Mercury.Region.Markdown extends Mercury.Region
   @define 'Mercury.Region.Markdown', 'markdown'
   @include Mercury.Region.Modules.DropIndicator
@@ -62,8 +64,8 @@ class Mercury.Region.Markdown extends Mercury.Region
       @notify(@t('requires a markdown converter'))
       return false
 
-    @setupConverter()
     super
+    @setupConverter()
 
 
   setupConverter: ->

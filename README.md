@@ -190,9 +190,9 @@ class Dog extends Animal
   mixins: [qux: ->]
 ```
 
-Dog will have the same `foo` and `bar` methods as Animal, but it will also have the `baz` method.. and so will anything inheriting from Animal because the prototype is shared. This is where the mixins array comes in. Dog will have an instance method `qux`, but it won't make it onto the prototype, and so, restricted to any instance of the Dog class.
+Dog will have the same `foo` and `bar` methods as Animal, but it will also have the `baz` method.. and so will anything inheriting from Animal because the prototype is shared. This is where the mixins array comes in. Dog will have an instance method `qux`, but it won't make it onto the prototype, and so, is restricted to any instance of the Dog class.
 
-Check module.coffee for more comments and some code. And the various modules in lib/mercury/views/modules, for several examples of how modules can be defined and used.
+Check [module.coffee](https://github.com/jejacks0n/mercury/blob/mercury2/lib/javascripts/mercury/core/module.coffee) for more comments and some code. And the various modules in [lib/mercury/views/modules](https://github.com/jejacks0n/mercury/tree/mercury2/lib/javascripts/mercury/views/modules), for several examples of how modules can be defined and used.
 
 
 ## Dependencies

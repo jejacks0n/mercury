@@ -289,20 +289,28 @@ describe "Mercury.FrameInterface", ->
   describe "#release", ->
 
     beforeEach ->
-      spyOn(subject, 'frameLocation', -> false)
       spyOn(Klass.__super__, 'release')
       @mock = off: spy(), css: spy()
       spyOn(window, '$', => @mock)
 
     it "calls super", ->
+      spyOn(subject, 'frameLocation', -> false)
       subject.release()
       expect( Klass.__super__.release ).called
 
     it "unbinds the window scroll event", ->
+      spyOn(subject, 'frameLocation', -> false)
       subject.window = '_window_'
       subject.release()
       expect( $ ).calledWith('_window_')
       expect( @mock.off ).calledWith('scroll', subject.onScroll)
+
+    it "redirects to the frames location", ->
+      spyOn(subject, 'frameLocation', -> '/foo')
+      spyOn(Mercury, 'redirect')
+      subject.release()
+      expect( subject.frameLocation ).called
+      expect( Mercury.redirect ).calledWith('/foo')
 
 
   describe "#onScroll", ->

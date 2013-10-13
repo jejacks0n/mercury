@@ -108,8 +108,7 @@ class Mercury.FrameInterface extends Mercury.BaseInterface
     @$frame.css(top: 0)
     $(@window).off('scroll', @onScroll)
     super
-    try
-      window.location.href = frameLocation if frameLocation = @frameLocation()
+    try Mercury.redirect(frameLocation) if frameLocation = @frameLocation()
 
 
   onScroll: =>

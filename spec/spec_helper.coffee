@@ -8,6 +8,7 @@
 Mercury.on ||= ->
 Mercury.off ||= ->
 Mercury.trigger ||= ->
+Mercury.redirect ||= ->
 Mercury.support = webkit: true
 beforeEach ->
   Mercury.__handlers__ = {}

@@ -43,6 +43,11 @@ describe "Mercury.Toolbar", ->
       expect( Mercury.ToolbarItem ).calledWith('foo', 'collection', foo: 'bar')
       expect( subject.appendView ).calledWith(subject.$toolbar, inst: '_toolbar_item_')
 
+    it "hides the toolbar if there's no buttons (or configuration)", ->
+      subject.$toolbar = hide: spy()
+      subject.buildToolbar('bar')
+      expect( subject.$toolbar.hide ).called
+
 
   describe "#show", ->
 

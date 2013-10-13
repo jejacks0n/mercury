@@ -48,6 +48,13 @@ initialize = ->
     delete(@interface)
     @off()
 
+  # Provides a more consistent way to redirect / set the url.
+  #
+  # This is because it's impossible to mock location.assign etc. and allows for better testing. Note: untestable.
+  #
+  @redirect = (url) ->
+    window.location.assign(url)
+
   # Add global configuration methods.
   #
   # Mercury.configure

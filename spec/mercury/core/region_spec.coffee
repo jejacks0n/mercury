@@ -92,6 +92,8 @@ describe "Mercury.Region", ->
       spyOn(Klass, 'addToolbar')
 
     it "calls addAction if there's an action", ->
+      Klass.addBehavior('name')
+      expect( Klass.addAction ).not.called
       Klass.addBehavior('name', action: '_action_')
       expect( Klass.addAction ).calledWith('name', '_action_')
 

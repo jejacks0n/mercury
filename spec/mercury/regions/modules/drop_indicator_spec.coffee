@@ -90,11 +90,6 @@ describe "Mercury.Region.Modules.DropIndicator", ->
       subject.$el.trigger('dragenter')
       expect( subject.delay ).not.called
 
-    it "does nothing if it's already visible", ->
-      subject.dropIndicatorVisible = true
-      subject.$el.trigger('dragover')
-      expect( subject.delay ).not.called
-
     it "does nothing if we're dragging a snippet and we don't have an onDropSnippet handler", ->
       Mercury.dragHack = true
       subject.onDropSnippet = false

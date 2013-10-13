@@ -54,6 +54,16 @@ class Mercury.Module
     module.included?.apply(@::)
 
 
+  # Shortcut for "include" and "extende". If the object contains a klass property they will be passed to @extend, all
+  # other methods will be passed to @include.
+  #
+  @mixin: (object) ->
+    if object.klass
+      @extend(object.klass)
+      delete(object.klass)
+    @include(object)
+
+
   # Provides a way to call a method within the scope of an object.
   #
   @proxy: (callback) ->

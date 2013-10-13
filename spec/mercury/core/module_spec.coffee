@@ -62,6 +62,17 @@ describe "Mercury.Module", ->
       expect( obj.included ).called
 
 
+  describe ".mixin", ->
+
+    it "calls .include with the object, and .extend with object.klass", ->
+      spyOn(subject, 'extend')
+      spyOn(subject, 'include')
+      subject.mixin(klass: {foo: 'bar'}, bar: 'foo')
+      expect( subject.extend ).calledWith(foo: 'bar')
+      expect( subject.include ).calledWith(bar: 'foo')
+
+
+
   describe ".proxy", ->
 
     it "calls the function", ->

@@ -44,6 +44,7 @@ Start by loading the general dependencies (changing paths as needed). The only r
 ```html
 <link href="mercury.bundle.css" media="screen" rel="stylesheet" type="text/css">
 <script src="dependencies/jquery-2.0.0.js" type="text/javascript"></script>
+<script src="dependencies/liquidmetal-1.2.1.js" type="text/javascript"></script> <!-- optional, used for filtering lists -->
 <script src="mercury.min.js" type="text/javascript"></script>
 ```
 
@@ -165,9 +166,40 @@ Translations and contributors:
 - Russian ([ilyacherevkov](https://github.com/ilyacherevkov))
 
 
+## Modules
+
+A little complex, but worth documenting so it can be utilized well. Mercury ships with the concept of modules, and the first time I saw this concept was in Spine.js. Modules are bits of code (an object), that can be mixed into another object, class, the prototype of an object/class, or can be included in a single instance.
+
+Any class that inherits from (aka extends) Mercury.Module will get a few methods/properties. The `extend`, `include` methods, and the ability to specify a `mixins` array.
+
+When you `extend` a class it will add class level methods, and when you `include` a module it will add it to the classes prototype (so every instance of that class ever) and this may or may not be desired so you can also specify the `mixins` array as a class or instance property. If you use the mixins array, the modules will be "included" during instantiation, and will not be added to the object prototype.
+
+Note: The objects that you pass to these methods are usually defined elsewhere, but for brevity this example just shows a simple object.
+
+```coffeescript
+class Animal extends Mercury.Module
+  @extend foo: ->
+  @include bar: ->
+```
+
+The Animal class will have a `foo` class method, and a `bar` "instance" method. Anything inheriting from Animal will also have these methods.
+
+```coffeescript
+class Dog extends Animal
+  @include baz: ->
+  mixins: [qux: ->]
+```
+
+Dog will have the same `foo` and `bar` methods as Animal, but it will also have the `baz` method.. and so will anything inheriting from Animal because the prototype is shared. This is where the mixins array comes in. Dog will have an instance method `qux`, but it won't make it onto the prototype, and so, restricted to any instance of the Dog class.
+
+Check module.coffee for more comments and some code. And the various modules in lib/mercury/views/modules, for several examples of how modules can be defined and used.
+
+
 ## Dependencies
 
-Mercury2 was built using jQuery 1.9.1/2.0, but attempts to minimize reliance on jQuery as much as is feasible. Selections in HTML regions are handled using Rangy. Each region can also have it's own dependencies, which is entirely up to the author. If you're writing a custom region it's expected to document the dependencies and version information. You can also check the [full list of dependencies](https://github.com/jejacks0n/mercury/blob/mercury2/lib/javascripts/mercury/dependencies.coffee) for the standard library and regions.
+Mercury2 was built using jQuery 1.9.1/2.0, but attempts to minimize reliance on jQuery as much as is feasible.
+
+Each region can also have it's own dependencies, which is entirely up to the author. If you're writing a custom region it's expected to document the dependencies and version information.
 
 
 ## Contributing

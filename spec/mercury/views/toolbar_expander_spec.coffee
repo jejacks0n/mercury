@@ -100,7 +100,7 @@ describe "Mercury.ToolbarExpander", ->
       expect( subject.select.html ).calledWith('<ul>')
 
     it "adds all of the buttons that are hidden as list items", ->
-      @buttons = [icon: '_icon_', title: '_title_', el: '_el_']
+      @buttons = [class: '_class_', title: '_title_', el: '_el_']
       ul = append: spy()
       li = data: spy(-> '_li_')
       spyOn(window, '$', -> li)
@@ -108,7 +108,7 @@ describe "Mercury.ToolbarExpander", ->
       subject.updateSelect()
       expect( subject.parent.hiddenButtons ).called
       expect( ul.append ).calledWith('_li_')
-      expect( $ ).calledWith("<li data-icon='_icon_'>_title_</li>")
+      expect( $ ).calledWith("<li class='_class_'>_title_</li>")
       expect( li.data ).calledWith(button: '_el_')
 
 

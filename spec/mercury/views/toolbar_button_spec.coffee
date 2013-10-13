@@ -53,6 +53,10 @@ describe "Mercury.ToolbarButton", ->
       subject = new Klass()
       expect( subject.determineTypes ).called
 
+    it "sets @icon from name", ->
+      subject = new Klass('fooBar')
+      expect( subject.icon ).to.eq('foo-bar')
+
     it "calls super", ->
       subject = new Klass()
       expect( Klass.__super__.constructor ).called
@@ -110,28 +114,15 @@ describe "Mercury.ToolbarButton", ->
       subject.build()
       expect( subject.$el.data('type') ).to.eq('_type_')
 
-    it "sets the data-icon attribute by checking in Mercury.Toolbar.icons and falling back", ->
-      subject.name = 'table'
-      subject.build()
-      expect( subject.$el.attr('data-icon') ).to.eq('L')
-      subject.name = 'foo'
+    it "adds the right icon class", ->
       subject.icon = 'table'
       subject.build()
-      expect( subject.$el.attr('data-icon') ).to.eq('L')
-      subject.name = 'foo'
-      subject.icon = 'foo'
-      subject.build()
-      expect( subject.$el.attr('data-icon') ).to.eq('foo')
+      expect( subject.$el.is('.mercury-icon-table') ).to.be.true
 
     it "sets the title", ->
       subject.options.title = '_title_'
       subject.build()
       expect( subject.$el.attr('title') ).to.eq('_title_')
-
-    it "adds a class based on the name", ->
-      subject.name = 'someLongName'
-      subject.build()
-      expect( subject.$el.is('.mercury-toolbar-some-long-name-button') ).to.be.true
 
     it "sets the html to include the label", ->
       subject.label = '_label_'

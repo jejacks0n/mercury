@@ -27,7 +27,7 @@ class Mercury.ToolbarButton extends Mercury.View
   constructor: (@name, @label, @options = {}) ->
     @determineAction()
     @determineTypes()
-    @icon ||= @name.toDash()
+    @icon ||= (@name || '').toDash()
     super(@options)
 
     @handleSpecial()

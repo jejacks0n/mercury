@@ -134,4 +134,4 @@ namespace :build do
   end
 end
 
-task :default => [:teaspoon, 'mercury:build']
+task :default => [:teaspoon, 'build']

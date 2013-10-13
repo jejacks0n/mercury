@@ -4777,7 +4777,7 @@ Copyright (c) 2013 Jeremy Jackson
       this.options = options != null ? options : {};
       this.determineAction();
       this.determineTypes();
-      this.icon || (this.icon = this.name.toDash());
+      this.icon || (this.icon = (this.name || '').toDash());
       ToolbarButton.__super__.constructor.call(this, this.options);
       this.handleSpecial();
     }
@@ -5230,7 +5230,7 @@ Copyright (c) 2013 Jeremy Jackson
     };
 
     ToolbarItem.prototype.hiddenButtons = function() {
-      var button, buttons, el, height, top, _i, _len, _ref;
+      var button, buttons, el, height, top, _i, _len, _ref, _ref1;
       height = this.$el.height();
       buttons = [];
       _ref = this.$('.mercury-toolbar-button');
@@ -5241,7 +5241,7 @@ Copyright (c) 2013 Jeremy Jackson
         if (top >= height) {
           buttons.push({
             title: el.find('em').html(),
-            "class": el.attr('class').replace(/\s?mercury-toolbar-button\s?/, ''),
+            "class": (_ref1 = el.attr('class')) != null ? _ref1.replace(/\s?mercury-toolbar-button\s?/, '') : void 0,
             el: el
           });
         }

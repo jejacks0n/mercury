@@ -104,7 +104,7 @@ describe "Mercury.ToolbarItem", ->
 
     beforeEach ->
       spyOn(subject.$el, 'height', -> 2)
-      spyOn(subject, '$', -> ['<em>', '<div><em>_title_</em></div>', '<em data-icon="_icon_">'])
+      spyOn(subject, '$', -> ['<em>', '<div><em>_title_</em></div>', '<em class="mercury-toolbar-button foo">'])
       @callCount = 0
       spyOn($.fn, 'position', => top: 1 + @callCount++) # increase for each one
 
@@ -113,11 +113,11 @@ describe "Mercury.ToolbarItem", ->
       expect( res.length ).to.eq(2)
       expect( res[0] ).to.eql
         title: '_title_'
-        icon: undefined
+        class: undefined
         el: res[0].el
       expect( res[1] ).to.eql
         title: undefined
-        icon: '_icon_'
+        class: 'foo'
         el: res[1].el
 
 

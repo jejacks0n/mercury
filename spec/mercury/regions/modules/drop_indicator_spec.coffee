@@ -62,17 +62,6 @@ describe "Mercury.Region.Modules.DropIndicator", ->
       subject.onDropFile = true
       spyOn(subject, 'delay').yieldsOn(subject)
 
-    it "clears the timeout", ->
-      spyOn(window, 'clearTimeout')
-      subject.dropIndicatorTimeout = '_timer_'
-      subject.$el.trigger('dragenter')
-      expect( clearTimeout ).calledWith('_timer_')
-
-    it "tracks that it's visible", ->
-      subject.dropIndicatorVisible = false
-      subject.$el.trigger('dragenter')
-      expect( subject.dropIndicatorVisible ).to.be.true
-
     it "positions the indicator", ->
       spyOn(subject, 'dropIndicatorPosition', -> '_css_')
       spyOn(subject.$dropIndicator, 'css')
@@ -91,10 +80,10 @@ describe "Mercury.Region.Modules.DropIndicator", ->
       subject.$el.trigger('dragover')
       expect( subject.$dropIndicator.addClass ).calledWith('mercury-region-snippet-drop-indicator')
 
-    it "delays setting the opacity", ->
+    it "adds the mercury-shown classame", ->
+      spyOn(subject.$dropIndicator, 'addClass')
       subject.$el.trigger('dragenter')
-      expect( subject.delay ).calledWith(50, sinon.match.func)
-      expect( subject.$dropIndicator.css('opacity') ).to.eq('1')
+      expect( subject.$dropIndicator.addClass ).calledWith('mercury-shown')
 
     it "does nothing if we're previewing", ->
       subject.previewing = true
@@ -124,28 +113,7 @@ describe "Mercury.Region.Modules.DropIndicator", ->
     beforeEach ->
       spyOn(subject, 'delay').yieldsOn(subject)
 
-    it "clears the timeout", ->
-      spyOn(window, 'clearTimeout')
-      subject.dropIndicatorTimeout = '_timer_'
-      subject.$el.trigger('dragleave')
-      expect( clearTimeout ).calledWith('_timer_')
-
-    it "delays hiding the indicator", ->
-      subject.$el.trigger('dragleave')
-      expect( subject.delay ).calledWith(250, sinon.match.func)
-
-    it "tracks that it's not visible", ->
-      subject.dropIndicatorVisible = true
-      subject.$el.trigger('dragleave')
-      expect( subject.dropIndicatorVisible ).to.be.false
-
-    it "sets the opacity to 0", ->
-      subject.$dropIndicator.css(opacity: 1)
+    it "adds the mercury-shown classame", ->
+      spyOn(subject.$dropIndicator, 'removeClass')
       subject.$el.trigger('drop')
-      expect( subject.$dropIndicator.css('opacity') ).to.eq('0')
-
-    it "sets a timer to fully hide the indicator", ->
-      spyOn(subject.$dropIndicator, 'hide')
-      subject.$el.trigger('drop')
-      expect( subject.delay ).calledWith(251, sinon.match.func)
-      expect( subject.$dropIndicator.hide ).called
+      expect( subject.$dropIndicator.removeClass ).calledWith('mercury-shown')

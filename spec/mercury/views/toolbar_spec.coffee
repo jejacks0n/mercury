@@ -38,10 +38,10 @@ describe "Mercury.Toolbar", ->
 
     it "appends a collection ToolbarItem based on the name", ->
       spyOn(subject, 'appendView')
-      subject.$toolbar = '_toolbar_'
+      subject.$toolbar = show: -> subject.$toolbar
       subject.buildToolbar('foo')
       expect( Mercury.ToolbarItem ).calledWith('foo', 'collection', foo: 'bar')
-      expect( subject.appendView ).calledWith('_toolbar_', inst: '_toolbar_item_')
+      expect( subject.appendView ).calledWith(subject.$toolbar, inst: '_toolbar_item_')
 
 
   describe "#show", ->

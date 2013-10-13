@@ -28,14 +28,15 @@
 #
 # View modules, and views.
 #------------------------------------------------------------------------------
-#= require mercury/views/modules/draggable.coffee
-#= require mercury/views/modules/form_handler.coffee
-#= require mercury/views/modules/interface_focusable.coffee
-#= require mercury/views/modules/interface_maskable.coffee
-#= require mercury/views/modules/interface_shadowed.coffee
-#= require mercury/views/modules/scroll_propagation.coffee
-#= require mercury/views/modules/toolbar_dialog.coffee
-#= require mercury/views/modules/visibility_toggleable.coffee
+#= require mercury/views/modules/draggable
+#= require mercury/views/modules/filterable_list
+#= require mercury/views/modules/form_handler
+#= require mercury/views/modules/interface_focusable
+#= require mercury/views/modules/interface_maskable
+#= require mercury/views/modules/interface_shadowed
+#= require mercury/views/modules/scroll_propagation
+#= require mercury/views/modules/toolbar_dialog
+#= require mercury/views/modules/visibility_toggleable
 #= require mercury/views/base_interface
 #= require mercury/views/frame_interface
 #= require mercury/views/lightview

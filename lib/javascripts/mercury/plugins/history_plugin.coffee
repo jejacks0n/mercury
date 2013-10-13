@@ -7,16 +7,9 @@ Plugin = Mercury.registerPlugin 'history',
 
 
 class Plugin.Panel extends Mercury.Panel
+  mixins:    [Mercury.View.Modules.FilterableList]
   template:  'history'
   className: 'mercury-history-panel'
   title:     'Page Version History'
-  width:     250
+  width:     300
   hidden:    true
-
-
-JST['/mercury/templates/history'] ||= ->
-  """
-  <input type="text" class="search-input"/>
-  <p>The History Plugin expects a server implementation.</p>
-  <p>Since this is a demo, it wasn't included, but you can check the <a href="https://github.com/jejacks0n/mercury-rails">mercury-rails project</a> on github for examples of how to integrate it with your server technology.</p>
-  """

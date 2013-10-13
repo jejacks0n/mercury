@@ -126,6 +126,10 @@ $dialog_input_color: #555555;
     width: auto;
   }
 
+  input[type="search"] {
+    border-radius: 20px;
+  }
+
   select,
   input[type="file"] {
     width: auto;

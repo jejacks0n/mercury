@@ -39,6 +39,7 @@ Plugin = Mercury.registerPlugin 'snippets',
 
 
 class Plugin.Panel extends Mercury.Panel
+  mixins:    [Mercury.View.Modules.FilterableList]
   template:  'snippets'
   className: 'mercury-snippets-panel'
   title:     'Snippets Panel'
@@ -46,10 +47,7 @@ class Plugin.Panel extends Mercury.Panel
   hidden:    true
 
   events:
-    'click input': (e) -> @trigger('insert:snippet', $(e.target).closest('[data-value]').data('value'))
-    'mousedown': ->
-      @revertInterfaceFocus()
-      Mercury.trigger('dialogs:hide')
+    'click input.btn': (e) -> @trigger('insert:snippet', $(e.target).closest('[data-value]').data('value'))
 
   update: ->
     super
@@ -61,7 +59,7 @@ class Plugin.Panel extends Mercury.Panel
 
 JST['/mercury/templates/snippets'] = ->
   controls = """<div class="mercury-snippet-actions">Drag or <input type="button" value="Insert" class="btn"></div>"""
-  ret = '<ul>'
+  ret = '<input type="search" class="mercury-filter"><ul>'
   for name, snippet of Mercury.Snippet.all()
-    ret += """<li data-value="#{name}">#{snippet.title}<em>#{snippet.description}</em>#{controls}</li>"""
+    ret += """<li data-filter="#{name}" data-value="#{name}">#{snippet.title}<em>#{snippet.description}</em>#{controls}</li>"""
   ret + '</ul>'

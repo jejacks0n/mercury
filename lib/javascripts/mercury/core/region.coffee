@@ -56,6 +56,19 @@ class Mercury.Region extends Mercury.View
     new (Mercury.Region[type] || Mercury.Region)(el)
 
 
+  # Exposes the ability to do add actions, contexts, data, and toolbars by passing a single option with each of the
+  # available add methods. A shortcut for using each one separately if you will.
+  #
+  @addBehavior: (name, options = {}) ->
+    @addAction(name, options.action) if options.action
+    @addContext(name, options.context) if options.context
+    @addData(name, options.data) if options.data
+    if options.toolbar
+      toolbar = {}
+      toolbar[name] = options.toolbar
+      @addToolbar(name, toolbar)
+
+
   # Exposes the ability to add actions to the region type. This allows you to provide your own custom actions that may
   # be tied to a button, or something else.
   #

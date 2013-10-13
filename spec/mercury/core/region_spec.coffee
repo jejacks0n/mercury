@@ -83,6 +83,32 @@ describe "Mercury.Region", ->
       expect( Klass.notify ).calledWith('Unknown Bar region type, falling back to base region')
 
 
+  describe ".addBehavior", ->
+
+    beforeEach ->
+      spyOn(Klass, 'addAction')
+      spyOn(Klass, 'addContext')
+      spyOn(Klass, 'addData')
+      spyOn(Klass, 'addToolbar')
+
+    it "calls addAction if there's an action", ->
+      Klass.addBehavior('name', action: '_action_')
+      expect( Klass.addAction ).calledWith('name', '_action_')
+
+    it "calls addContext if there's a context", ->
+      Klass.addBehavior('name', context: '_context_')
+      expect( Klass.addContext ).calledWith('name', '_context_')
+
+    it "calls addData if there's data", ->
+      Klass.addBehavior('name', data: '_data_')
+      expect( Klass.addData ).calledWith('name', '_data_')
+
+    it "calls addToolbar if there's a toolbar", ->
+      Klass.addBehavior('name', toolbar: '_toolbar_')
+      expect( Klass.addToolbar ).calledWith('name', name: '_toolbar_')
+
+
+
   describe ".addAction", ->
 
     it "adds the action with a handler", ->

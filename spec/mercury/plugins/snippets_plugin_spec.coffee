@@ -1,7 +1,7 @@
 #= require mercury/core/plugin
 #= require_self
 #= require mercury/views/panel
-#= require mercury/views/modules/filterable
+#= require mercury/views/modules/filterable_list
 #= require mercury/plugins/snippets_plugin
 
 Mercury.registerPlugin ||= Mercury.Plugin.register if Mercury.Plugin

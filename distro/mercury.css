@@ -381,6 +381,8 @@ This file contains all of the required css for the Mercury interface as well as 
 .mercury-dialog input[type="radio"],
 .mercury-dialog input[type="checkbox"] {
   width: auto; }
+.mercury-dialog input[type="search"] {
+  border-radius: 20px; }
 .mercury-dialog select,
 .mercury-dialog input[type="file"] {
   width: auto;
@@ -2005,8 +2007,25 @@ mercury .mercury-toolbar .mercury-color-palette {
       color: #fff;
       margin: 1px 0 -1px -1px; }
 
-mercury .mercury-snippets-panel ul {
+mercury .mercury-history-panel ul {
   margin: 0;
+  padding: 0;
+  list-style: none; }
+  mercury .mercury-history-panel ul li {
+    padding: 5px 0;
+    border-bottom: 1px solid #666;
+    font-size: 80%;
+    color: #ccc; }
+    mercury .mercury-history-panel ul li h4 {
+      margin: 0;
+      font-size: 120%;
+      text-shadow: 1px 1px #000;
+      color: #eee; }
+      mercury .mercury-history-panel ul li h4 a {
+        color: #ddd !important; }
+
+mercury .mercury-snippets-panel ul {
+  margin: 15px 0 0;
   padding: 0;
   list-style: none; }
   mercury .mercury-snippets-panel ul li {

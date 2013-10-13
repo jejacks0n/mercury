@@ -868,8 +868,11 @@ Copyright (c) 2013 Jeremy Jackson
 
     moduleKeywords = ['included', 'extended', 'private'];
 
-    Module.extend = function(object) {
+    Module.extend = function(object, apply) {
       var method, module, name, _ref;
+      if (apply == null) {
+        apply = 'extended';
+      }
       if (!object) {
         throw new Error('extend expects an object');
       }
@@ -881,11 +884,14 @@ Copyright (c) 2013 Jeremy Jackson
         }
         this[name] = method;
       }
-      return (_ref = module.extended) != null ? _ref.apply(this) : void 0;
+      return (_ref = module[apply]) != null ? _ref.apply(this) : void 0;
     };
 
-    Module.include = function(object) {
+    Module.include = function(object, apply) {
       var method, module, name, _ref;
+      if (apply == null) {
+        apply = 'included';
+      }
       if (!object) {
         throw new Error('include expects an object');
       }
@@ -897,7 +903,15 @@ Copyright (c) 2013 Jeremy Jackson
         }
         this.prototype[name] = method;
       }
-      return (_ref = module.included) != null ? _ref.apply(this.prototype) : void 0;
+      return (_ref = module[apply]) != null ? _ref.apply(this.prototype) : void 0;
+    };
+
+    Module.mixin = function(object) {
+      if (object.klass) {
+        this.extend(object.klass);
+        delete object.klass;
+      }
+      return this.include(object);
     };
 
     Module.proxy = function(callback) {
@@ -908,7 +922,13 @@ Copyright (c) 2013 Jeremy Jackson
     };
 
     function Module() {
+      var mixin, _i, _len, _ref;
       this.__handlers__ = $.extend(true, {}, this.__handlers__);
+      _ref = (this.mixins || []).concat(this.constructor.mixins || []);
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        mixin = _ref[_i];
+        Mercury.Module.extend.call(this, mixin, 'included');
+      }
       if (typeof this.init === "function") {
         this.init.apply(this, arguments);
       }
@@ -2966,6 +2986,27 @@ Copyright (c) 2013 Jeremy Jackson
       return new (Mercury.Region[type] || Mercury.Region)(el);
     };
 
+    Region.addBehavior = function(name, options) {
+      var toolbar;
+      if (options == null) {
+        options = {};
+      }
+      if (options.action) {
+        this.addAction(name, options.action);
+      }
+      if (options.context) {
+        this.addContext(name, options.context);
+      }
+      if (options.data) {
+        this.addData(name, options.data);
+      }
+      if (options.toolbar) {
+        toolbar = {};
+        toolbar[name] = options.toolbar;
+        return this.addToolbar(name, toolbar);
+      }
+    };
+
     Region.addAction = function(action, handler) {
       var actions;
       if (typeof action === 'object') {
@@ -3543,6 +3584,39 @@ Copyright (c) 2013 Jeremy Jackson
         top: y,
         left: x
       });
+    }
+  };
+
+}).call(this);
+(function() {
+  Mercury.View.Modules.FilterableList = {
+    included: function() {
+      return this.on('show', this.buildFilterable);
+    },
+    buildFilterable: function() {
+      if (!LiquidMetal) {
+        return this.$('input.mercury-filter').hide();
+      }
+      console.debug('testing');
+      return this.delegateEvents({
+        'keyup input.mercury-filter': this.onFilter,
+        'search input.mercury-filter': this.onFilter
+      });
+    },
+    onFilter: function(e) {
+      var item, value, _i, _len, _ref, _results;
+      value = $(e.target).val();
+      _ref = this.$('li[data-filter]');
+      _results = [];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        item = _ref[_i];
+        if (LiquidMetal.score((item = $(item)).data('filter'), value) <= 0.5) {
+          _results.push(item.hide());
+        } else {
+          _results.push(item.show());
+        }
+      }
+      return _results;
     }
   };
 
@@ -7072,23 +7146,21 @@ Copyright (c) 2013 Jeremy Jackson
       return _ref;
     }
 
+    Panel.prototype.mixins = [Mercury.View.Modules.FilterableList];
+
     Panel.prototype.template = 'history';
 
     Panel.prototype.className = 'mercury-history-panel';
 
     Panel.prototype.title = 'Page Version History';
 
-    Panel.prototype.width = 250;
+    Panel.prototype.width = 300;
 
     Panel.prototype.hidden = true;
 
     return Panel;
 
   })(Mercury.Panel);
-
-  JST['/mercury/templates/history'] || (JST['/mercury/templates/history'] = function() {
-    return "<input type=\"text\" class=\"search-input\"/>\n<p>The History Plugin expects a server implementation.</p>\n<p>Since this is a demo, it wasn't included, but you can check the <a href=\"https://github.com/jejacks0n/mercury-rails\">mercury-rails project</a> on github for examples of how to integrate it with your server technology.</p>";
-  });
 
 }).call(this);
 (function() {
@@ -7499,6 +7571,8 @@ Copyright (c) 2013 Jeremy Jackson
       return _ref;
     }
 
+    Panel.prototype.mixins = [Mercury.View.Modules.FilterableList];
+
     Panel.prototype.template = 'snippets';
 
     Panel.prototype.className = 'mercury-snippets-panel';
@@ -7510,12 +7584,8 @@ Copyright (c) 2013 Jeremy Jackson
     Panel.prototype.hidden = true;
 
     Panel.prototype.events = {
-      'click input': function(e) {
+      'click input.btn': function(e) {
         return this.trigger('insert:snippet', $(e.target).closest('[data-value]').data('value'));
-      },
-      'mousedown': function() {
-        this.revertInterfaceFocus();
-        return Mercury.trigger('dialogs:hide');
       }
     };
 
@@ -7538,11 +7608,11 @@ Copyright (c) 2013 Jeremy Jackson
   JST['/mercury/templates/snippets'] = function() {
     var controls, name, ret, snippet, _ref1;
     controls = "<div class=\"mercury-snippet-actions\">Drag or <input type=\"button\" value=\"Insert\" class=\"btn\"></div>";
-    ret = '<ul>';
+    ret = '<input type="search" class="mercury-filter"><ul>';
     _ref1 = Mercury.Snippet.all();
     for (name in _ref1) {
       snippet = _ref1[name];
-      ret += "<li data-value=\"" + name + "\">" + snippet.title + "<em>" + snippet.description + "</em>" + controls + "</li>";
+      ret += "<li data-filter=\"" + name + "\" data-value=\"" + name + "\">" + snippet.title + "<em>" + snippet.description + "</em>" + controls + "</li>";
     }
     return ret + '</ul>';
   };

@@ -6,7 +6,6 @@ Mercury.View.Modules.FilterableList =
 
   buildFilterable: ->
     return @$('input.mercury-filter').hide() unless LiquidMetal
-    console.debug('testing')
     @delegateEvents
       'keyup input.mercury-filter': @onFilter # todo: this could go away eventually
       'search input.mercury-filter': @onFilter

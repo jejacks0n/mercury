@@ -19,13 +19,13 @@ class Mercury.Module
   #
   # Klass.method2                                => function() { }
   #
-  @extend: (object) ->
+  @extend: (object, apply = 'extended') ->
     throw new Error('extend expects an object') unless object
     module = object.Module || object
     for name, method of module
       continue if moduleKeywords.indexOf(name) > -1
       @[name] = method
-    module.extended?.apply(@)
+    module[apply]?.apply(@)
 
 
   # Include methods from one object onto self (add to prototype). If the passed object has a Module property that's
@@ -45,13 +45,13 @@ class Mercury.Module
   #
   # Klass.prototype.method2                      => function() { }
   #
-  @include: (object) ->
+  @include: (object, apply = 'included') ->
     throw new Error('include expects an object') unless object
     module = object.Module || object
     for name, method of module
       continue if moduleKeywords.indexOf(name) > -1
       @::[name] = method
-    module.included?.apply(@::)
+    module[apply]?.apply(@::)
 
 
   # Shortcut for "include" and "extende". If the object contains a klass property they will be passed to @extend, all
@@ -73,7 +73,9 @@ class Mercury.Module
   # Default constructor for subclasses. Calls #init if it's defined.
   #
   constructor: ->
-    @__handlers__ = $.extend(true, {}, @__handlers__)
+    @__handlers__ = $.extend(true, {}, @__handlers__) # todo: this could be removed now?
+    for mixin in (@mixins || []).concat(@constructor.mixins || [])
+      Mercury.Module.extend.call(@, mixin, 'included')
     @init?(arguments...)
     @trigger?('init')
 

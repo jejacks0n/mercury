@@ -35,6 +35,11 @@ describe "Mercury.Module", ->
       subject.extend(obj)
       expect( obj.extended ).called
 
+    it "calls an apply method if it exists", ->
+      obj = apply: spy()
+      subject.extend(obj, 'apply')
+      expect( obj.apply ).called
+
 
   describe ".include", ->
 
@@ -60,6 +65,11 @@ describe "Mercury.Module", ->
       obj = included: spy()
       subject.include(obj)
       expect( obj.included ).called
+
+    it "calls an apply method if it exists", ->
+      obj = apply: spy()
+      subject.include(obj, 'apply')
+      expect( obj.apply ).called
 
 
   describe ".mixin", ->
@@ -93,6 +103,13 @@ describe "Mercury.Module", ->
       spyOn($, 'extend')
       new subject()
       expect( $.extend ).calledWith(true, {}, subject::__handlers__)
+
+    it "calls all the mixin include methods", ->
+      mixins = [{included: spy()}, {included: spy()}]
+      subject::mixins = mixins
+      new subject()
+      expect( mixins[0].included ).called
+      expect( mixins[1].included ).called
 
     it "doesn't call init if it's not a function", ->
       subject::init = 'foo'

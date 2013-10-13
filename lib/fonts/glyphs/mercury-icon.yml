@@ -1,0 +1,17 @@
+# Learn more about these options by running `fontcustom help` or visit <http://fontcustom.com>.
+
+font_name: mercury-icons
+css_prefix: mercury-icon-
+no_hash: true
+data_cache: lib/fonts/glyphs/icon/.fontcustom-data
+
+input:
+  vectors: lib/fonts/glyphs/icon
+  templates: lib/stylesheets/mercury/core/fonts/templates
+
+output:
+  fonts: lib/fonts
+  css: lib/stylesheets/mercury/core/fonts
+
+templates:
+  - _icon.scss

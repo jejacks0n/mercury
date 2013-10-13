@@ -72,7 +72,6 @@ Configuration:
 
     function Markdown(el, options) {
       var _ref;
-
       this.el = el;
       this.options = options != null ? options : {};
       this.converter = (_ref = this.options.converter) != null ? _ref : window.marked;
@@ -80,8 +79,8 @@ Configuration:
         this.notify(this.t('requires a markdown converter'));
         return false;
       }
-      this.setupConverter();
       Markdown.__super__.constructor.apply(this, arguments);
+      this.setupConverter();
     }
 
     Markdown.prototype.setupConverter = function() {
@@ -94,7 +93,6 @@ Configuration:
 
     Markdown.prototype.toJSON = function(forSave) {
       var obj;
-
       if (forSave == null) {
         forSave = false;
       }
@@ -109,7 +107,6 @@ Configuration:
     Markdown.prototype.onDropFile = function(files) {
       var uploader,
         _this = this;
-
       uploader = new Mercury[this.config('interface:uploader')](files, {
         mimeTypes: this.options.mimeTypes
       });
@@ -121,7 +118,6 @@ Configuration:
 
     Markdown.prototype.onReturnKey = function(e) {
       var exp, match, next, val;
-
       exp = this.expandSelectionToLines(this.getSelection());
       val = exp.text;
       if (val.match(/^- /)) {
@@ -273,7 +269,6 @@ Configuration:
     },
     orderedList: function() {
       var wrapper, _i, _len, _ref;
-
       _ref = ['blockquote', 'unorderedList'];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         wrapper = _ref[_i];
@@ -285,7 +280,6 @@ Configuration:
     },
     unorderedList: function() {
       var wrapper, _i, _len, _ref;
-
       _ref = ['blockquote', 'orderedList'];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         wrapper = _ref[_i];
@@ -297,7 +291,6 @@ Configuration:
     },
     style: function(value) {
       var wrapper;
-
       wrapper = (value || '').indexOf(':') > -1 ? 'style' : 'class';
       this.unwrapSelectedWords(wrapper === 'style' ? 'class' : 'style');
       return this.toggleWrapSelectedWords(this.processWrapper(wrapper, [value]));
@@ -307,7 +300,6 @@ Configuration:
     },
     block: function(format) {
       var wrapper, _i, _j, _len, _len1, _ref, _ref1;
-
       if (format === 'blockquote') {
         _ref = ['orderedList', 'unorderedList'];
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -346,7 +338,6 @@ Configuration:
     },
     file: function(file) {
       var action;
-
       action = file.isImage() ? 'image' : 'link';
       return this.handleAction(action, {
         url: file.get('url'),

@@ -1,0 +1,6 @@
+The toolbar icons (bold, italics, etc.) are in the `mercury-toolbars` font,
+which was built using fontstruct.com (http://fontstruct.com/).
+
+The original font (http://fontstruct.com/fontstructions/show/797530) can be
+cloned and edited as needed. Fontstruct is used for this font because it allows
+for small pixel fonts but also allows for more advanced shapes that scale nicely.

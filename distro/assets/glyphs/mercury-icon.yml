@@ -3,10 +3,10 @@
 font_name: mercury-icons
 css_prefix: mercury-icon-
 no_hash: true
-data_cache: lib/images/svg/icon/.fontcustom-data
+data_cache: lib/fonts/glyphs/icon/.fontcustom-data
 
 input:
-  vectors: lib/images/svg/icon
+  vectors: lib/fonts/glyphs/icon
   templates: lib/stylesheets/mercury/core/fonts/templates
 
 output:

@@ -52,7 +52,6 @@ Configuration:
     Image.prototype.onDropFile = function(files) {
       var uploader,
         _this = this;
-
       uploader = new Mercury[this.config('interface:uploader')](files, {
         mimeTypes: this.options.mimeTypes
       });

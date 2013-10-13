@@ -22,7 +22,10 @@ class Mercury.Toolbar extends Mercury.View
 
 
   buildToolbar: (name) ->
-    @appendView(@$toolbar, new Mercury.ToolbarItem(name, 'collection', @config("toolbars:#{name}")))
+    if @config("toolbars:#{name}")
+      @appendView(@$toolbar.show(), new Mercury.ToolbarItem(name, 'collection', @config("toolbars:#{name}")))
+    else
+      @$toolbar.hide()
 
 
   show: ->

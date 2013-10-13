@@ -30,7 +30,6 @@ providing complex elements that might need more tailoring than regular html allo
 
     Snippet.prototype.onDropSnippet = function(snippet) {
       var _this = this;
-
       return snippet.on('rendered', function(view) {
         _this.focus();
         return _this.handleAction('snippet', snippet, view);

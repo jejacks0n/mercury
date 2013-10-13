@@ -50,11 +50,9 @@ also takes into account undo/redo support using the keyboard or buttons.
     Gallery.prototype.skipHistoryOn = ['undo', 'redo', 'next', 'prev', 'togglePlay'];
 
     Gallery.prototype.init = function() {
-      var _ref1;
-
       this.speed || (this.speed = 3000);
       this.index = 0;
-      if ((_ref1 = this.playing) == null) {
+      if (this.playing == null) {
         this.playing = true;
       }
       return this.refresh(true);
@@ -71,7 +69,6 @@ also takes into account undo/redo support using the keyboard or buttons.
 
     Gallery.prototype.value = function(value) {
       var el;
-
       if (value === null || typeof value === 'undefined') {
         el = $('<div>').html(this.html());
         el.find('.mercury-gallery-region-controls').remove();
@@ -84,7 +81,6 @@ also takes into account undo/redo support using the keyboard or buttons.
 
     Gallery.prototype.refresh = function(controls) {
       var _this = this;
-
       if (controls == null) {
         controls = false;
       }
@@ -115,7 +111,6 @@ also takes into account undo/redo support using the keyboard or buttons.
 
     Gallery.prototype.refreshControls = function() {
       var slide, src, _i, _len, _ref1;
-
       this.$controls.remove();
       this.append('<ul class="mercury-gallery-region-controls"></ul>');
       _ref1 = this.images;
@@ -160,7 +155,6 @@ also takes into account undo/redo support using the keyboard or buttons.
     Gallery.prototype.onDropFile = function(files) {
       var uploader,
         _this = this;
-
       uploader = new Mercury[this.config('interface:uploader')](files, {
         mimeTypes: this.options.mimeTypes
       });

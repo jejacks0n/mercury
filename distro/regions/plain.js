@@ -40,7 +40,6 @@ Configuration:
 
     function Plain() {
       var e;
-
       try {
         window.rangy.init();
       } catch (_error) {

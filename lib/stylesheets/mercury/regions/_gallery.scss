@@ -17,7 +17,7 @@
     z-index: 20;
     top: 0;
     left: 0;
-    width: 100px;
+    width: 126px;
     margin: 10px;
     max-height: 560px;
     overflow-y: auto;
@@ -28,8 +28,11 @@
     text-align: center;
     font-size: 0;
     li {
+      @include mercury-border-box;
       position: relative;
-      height: 60px;
+      width: 100%;
+      height: 68px;
+      padding: 4px;
       margin-bottom: 5px;
       background: rgba(255, 255, 255, .4);
       text-align: center;

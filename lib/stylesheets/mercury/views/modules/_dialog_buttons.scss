@@ -3,6 +3,7 @@ mercury .mercury-dialog {
     display: inline-block;
     padding: 4px 10px 4px;
     margin-bottom: 0;
+    margin-top: 0;
     font-size: 13px;
     line-height: 18px;
     color: #333333;
@@ -314,7 +315,9 @@ mercury .mercury-dialog {
   }
 
   .btn-group {
+    display: block;
     position: relative;
+    margin-bottom: 4px;
     *margin-left: .3em;
     *zoom: 1;
     &:first-child {

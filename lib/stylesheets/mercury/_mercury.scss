@@ -78,6 +78,16 @@ mercury {
     transition: none !important;
   }
 
+  *, *:before, *:after {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+  }
+
+  li {
+    line-height: normal;
+  }
+
   a {
     color: $primary_color !important;
     text-decoration: none;

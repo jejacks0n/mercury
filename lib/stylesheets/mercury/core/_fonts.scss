@@ -3,6 +3,7 @@
 
 @mixin mercury-icon-base($size: 16px, $width: 1px, $height: 1px, $font: 'mercury-icons') {
   &:before {
+    @include mercury-border-box;
     position: relative;
     display: inline-block;
     font-family: $font;

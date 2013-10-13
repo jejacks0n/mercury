@@ -10,6 +10,7 @@ mercury .mercury-panel {
   display: none;
   opacity: 0;
   background: $panel_bg;
+  line-height: normal;
   .mercury-panel-loading-indicator {
     @include mercury-loading-indicator(28px, $panel_loading_indicator_color);
     display: none;

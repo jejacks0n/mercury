@@ -1,7 +1,7 @@
 mercury {
   .mercury-toolbar {
     .mercury-character-palette {
-      width: 278px;
+      width: 283px;
       font-size: 15px;
       padding: 2px;
       li {
@@ -28,7 +28,7 @@ mercury {
   .mercury-character-modal {
     ul {
       @extend .mercury-clearfix;
-      max-width: 464px;
+      max-width: 432px;
       list-style: none;
       margin: 0 -2px 0 0;
       padding: 5px 0 0;

@@ -1,7 +1,10 @@
 mercury {
   .mercury-snippets-panel {
+    input.mercury-filter {
+      margin-bottom: 15px;
+    }
     ul {
-      margin: 15px 0 0;
+      margin: 0;
       padding: 0;
       list-style: none;
       li {

@@ -26,8 +26,8 @@
   background: $region_drop_indicator_bg;
   color: $region_drop_indicator_color;
   pointer-events: none;
-  &.mercury-region-snippet-drop-indicator {
-    @extend .mercury-icon-snippet;
+  &.mercury-region-snippet-drop-indicator:before {
+    content: "\f109"; // this can break easily
   }
   &.mercury-shown {
     @include mercury-transition-show;

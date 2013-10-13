@@ -21,6 +21,7 @@ $dialog_input_color: #555555;
   legend {
     @include mercury-font(10pt);
     display: block;
+    width: auto;
     margin: 0 0 -17px 0;
     padding: 0;
     border: 0;
@@ -74,6 +75,7 @@ $dialog_input_color: #555555;
   .uneditable-input {
     @include mercury-font(10pt);
     display: inline-block;
+    height: 28px;
     padding: 4px;
     margin: 2px 0;
     color: $dialog_input_color;
@@ -128,6 +130,7 @@ $dialog_input_color: #555555;
 
   input[type="search"] {
     border-radius: 20px;
+    height: auto;
   }
 
   select,
@@ -209,6 +212,10 @@ $dialog_input_color: #555555;
   textarea,
   .uneditable-input {
     margin-left: 0;
+  }
+
+  textarea {
+    height: auto;
   }
 
   input[disabled],
@@ -607,7 +614,7 @@ $dialog_input_color: #555555;
 
   .form-horizontal {
     hr {
-      margin-left: 150px;
+      margin: 5px 0 5px 150px;
       border: 0;
       border-top: 1px solid #ccc;
     }

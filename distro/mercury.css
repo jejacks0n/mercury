@@ -34,14 +34,6 @@ This file contains all of the required css for the Mercury interface as well as 
   to {
     -moz-transform: rotate(360deg); } }
 
-/*!!
-Mercury Editor is a Coffeescript and jQuery based WYSIWYG editor released under the MIT License.
-Documentation and other useful information can be found at https://github.com/jejacks0n/mercury
-
-Copyright (c) 2013 Jeremy Jackson
-
-This file contains all of the required css for the Mercury interface as well as the region css.
-*/
 @font-face {
   font-family: "mercury-icons";
   src: url(/assets/mercury-icons.eot);
@@ -114,7 +106,7 @@ This file contains all of the required css for the Mercury interface as well as 
   content: "\004c"; }
 .mercury-toolbar-secondary-container .mercury-icon-character:before {
   content: "\004d"; }
-.mercury-toolbar-secondary-container .mercury-icon-snippet:before, .mercury-toolbar-secondary-container .mercury-gallery-region + .mercury-region-drop-indicator.mercury-region-snippet-drop-indicator:before, .mercury-toolbar-secondary-container .mercury-html-region + .mercury-region-drop-indicator.mercury-region-snippet-drop-indicator:before, .mercury-toolbar-secondary-container .mercury-image-region + .mercury-region-drop-indicator.mercury-region-snippet-drop-indicator:before, .mercury-toolbar-secondary-container .mercury-markdown-region + .mercury-region-drop-indicator.mercury-region-snippet-drop-indicator:before, .mercury-toolbar-secondary-container .mercury-snippet-region + .mercury-region-drop-indicator.mercury-region-snippet-drop-indicator:before {
+.mercury-toolbar-secondary-container .mercury-icon-snippet:before {
   content: "\004e"; }
 .mercury-toolbar-secondary-container .mercury-icon-history:before {
   content: "\004f"; }
@@ -262,6 +254,7 @@ This file contains all of the required css for the Mercury interface as well as 
   font-family: Helvetica, Tahoma, Arial, sans-serif;
   font-size: 10pt;
   display: block;
+  width: auto;
   margin: 0 0 -17px 0;
   padding: 0;
   border: 0;
@@ -309,6 +302,7 @@ This file contains all of the required css for the Mercury interface as well as 
   font-family: Helvetica, Tahoma, Arial, sans-serif;
   font-size: 10pt;
   display: inline-block;
+  height: 28px;
   padding: 4px;
   margin: 2px 0;
   color: #555555; }
@@ -382,7 +376,8 @@ This file contains all of the required css for the Mercury interface as well as 
 .mercury-dialog input[type="checkbox"] {
   width: auto; }
 .mercury-dialog input[type="search"] {
-  border-radius: 20px; }
+  border-radius: 20px;
+  height: auto; }
 .mercury-dialog select,
 .mercury-dialog input[type="file"] {
   width: auto;
@@ -439,6 +434,8 @@ This file contains all of the required css for the Mercury interface as well as 
 .mercury-dialog textarea,
 .mercury-dialog .uneditable-input {
   margin-left: 0; }
+.mercury-dialog textarea {
+  height: auto; }
 .mercury-dialog input[disabled],
 .mercury-dialog select[disabled],
 .mercury-dialog textarea[disabled],
@@ -542,7 +539,7 @@ This file contains all of the required css for the Mercury interface as well as 
   .mercury-dialog .form-actions:after {
     clear: both; }
 .mercury-dialog .form-horizontal hr {
-  margin-left: 150px;
+  margin: 5px 0 5px 150px;
   border: 0;
   border-top: 1px solid #ccc; }
 .mercury-dialog .form-horizontal .control-group {
@@ -558,6 +555,8 @@ This file contains all of the required css for the Mercury interface as well as 
   width: 140px;
   padding-top: 5px;
   text-align: right; }
+.mercury-dialog .form-horizontal .control-label.checkbox {
+  width: auto; }
 .mercury-dialog .form-horizontal .controls {
   margin-left: 150px; }
 .mercury-dialog .form-horizontal .help-block {
@@ -568,6 +567,7 @@ mercury .mercury-dialog .btn {
   display: inline-block;
   padding: 4px 10px 4px;
   margin-bottom: 0;
+  margin-top: 0;
   font-size: 13px;
   line-height: 18px;
   color: #333333;
@@ -811,7 +811,9 @@ mercury .mercury-dialog input[type="submit"].btn.btn-mini {
   *padding-top: 1px;
   *padding-bottom: 1px; }
 mercury .mercury-dialog .btn-group {
+  display: block;
   position: relative;
+  margin-bottom: 4px;
   *margin-left: .3em;
   *zoom: 1; }
   mercury .mercury-dialog .btn-group:first-child {
@@ -1026,6 +1028,9 @@ mercury .mercury-lightview {
     display: none;
     padding: 10px 20px; }
     mercury .mercury-lightview .mercury-lightview-loading-indicator:before {
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box;
       position: relative;
       display: inline-block;
       font-family: "mercury-icons";
@@ -1159,6 +1164,9 @@ mercury .mercury-modal {
     display: none;
     padding: 10px 20px; }
     mercury .mercury-modal .mercury-modal-loading-indicator:before {
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box;
       position: relative;
       display: inline-block;
       font-family: "mercury-icons";
@@ -1287,12 +1295,16 @@ mercury .mercury-panel {
   width: 30px;
   display: none;
   opacity: 0;
-  background: rgba(0, 0, 0, 0.8); }
+  background: rgba(0, 0, 0, 0.8);
+  line-height: normal; }
   mercury .mercury-panel .mercury-panel-loading-indicator {
     text-align: center;
     display: none;
     padding: 10px 20px; }
     mercury .mercury-panel .mercury-panel-loading-indicator:before {
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box;
       position: relative;
       display: inline-block;
       font-family: "mercury-icons";
@@ -1439,8 +1451,12 @@ mercury .mercury-toolbar {
   top: 0;
   left: 0;
   width: 100%;
-  cursor: default; }
+  cursor: default;
+  font-size: 15px; }
   mercury .mercury-toolbar .mercury-toolbar-container {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
     background: #d2d2d2;
     background: -moz-linear-gradient(top, #d2d2d2 1%, #c6c6c6 100%);
     background: -webkit-gradient(linear, left top, left bottom, color-stop(1%, #d2d2d2), color-stop(100%, #c6c6c6));
@@ -1448,7 +1464,7 @@ mercury .mercury-toolbar {
     background: -o-linear-gradient(top, #d2d2d2 1%, #c6c6c6 100%);
     background: -ms-linear-gradient(top, #d2d2d2 1%, #c6c6c6 100%);
     background: linear-gradient(to bottom, #d2d2d2 1%, #c6c6c6 100%);
-    min-height: 21px;
+    min-height: 24px;
     padding: 3px 3px 0px 10px;
     border-top: 1px solid #e5e5e5;
     border-bottom: 1px solid #727272; }
@@ -1484,6 +1500,9 @@ mercury .mercury-toolbar {
     background: #d2d2d2;
     border-left: 1px solid #707070; }
     mercury .mercury-toolbar .mercury-toolbar-expander:before {
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box;
       position: relative;
       display: inline-block;
       font-family: mercury-toolbars;
@@ -1520,6 +1539,9 @@ mercury .mercury-toolbar {
         text-overflow: ellipsis;
         line-height: 16px; }
         mercury .mercury-toolbar .mercury-toolbar-expander .mercury-dialog li:before {
+          -webkit-box-sizing: border-box;
+          -moz-box-sizing: border-box;
+          box-sizing: border-box;
           position: relative;
           display: inline-block;
           font-family: "mercury-icons";
@@ -1539,6 +1561,9 @@ mercury .mercury-toolbar {
         mercury .mercury-toolbar .mercury-toolbar-expander .mercury-dialog li.mercury-button-disabled {
           opacity: .5; }
   mercury .mercury-toolbar .mercury-toolbar-button {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
     -webkit-border-radius: 2px;
     -moz-border-radius: 2px;
     border-radius: 2px;
@@ -1550,11 +1575,14 @@ mercury .mercury-toolbar {
     background: -ms-linear-gradient(top, #e8e8e8 1%, #cbcbcb 100%);
     background: linear-gradient(to bottom, #e8e8e8 1%, #cbcbcb 100%);
     position: relative;
-    width: 22px;
-    height: 15px;
+    width: 24px;
+    height: 17px;
     border: 1px solid #707070;
     cursor: pointer; }
     mercury .mercury-toolbar .mercury-toolbar-button:before {
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box;
       position: relative;
       display: inline-block;
       font-family: mercury-toolbars;
@@ -1603,6 +1631,9 @@ mercury .mercury-toolbar {
     mercury .mercury-toolbar .mercury-toolbar-button.mercury-loading-indicator {
       text-align: center; }
       mercury .mercury-toolbar .mercury-toolbar-button.mercury-loading-indicator:before {
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
         position: relative;
         display: inline-block;
         font-family: "mercury-icons";
@@ -1693,7 +1724,10 @@ mercury .mercury-toolbar {
       height: 15px;
       margin: 0 1px 1px 0;
       text-align: center;
-      line-height: 15px; }
+      line-height: 15px;
+      -webkit-box-sizing: content-box;
+      -moz-box-sizing: content-box;
+      box-sizing: content-box; }
       mercury .mercury-toolbar .mercury-toolbar-palette li:hover {
         margin: -1px 0 0 -1px;
         border: 1px solid #333333; }
@@ -1729,6 +1763,9 @@ mercury .mercury-toolbar {
       white-space: nowrap;
       color: #555555; }
       mercury .mercury-toolbar .mercury-toolbar-primary-container .mercury-toolbar-button:before {
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
         position: relative;
         display: inline-block;
         font-family: "mercury-icons";
@@ -1919,7 +1956,7 @@ mercury .mercury-toolbar .mercury-blocks-select {
     margin: 3px 0; }
 
 mercury .mercury-toolbar .mercury-character-palette {
-  width: 278px;
+  width: 283px;
   font-size: 15px;
   padding: 2px; }
   mercury .mercury-toolbar .mercury-character-palette li {
@@ -1950,7 +1987,7 @@ mercury .mercury-toolbar .mercury-character-palette {
       background: #e2e1e2;
       font-size: 180%; }
 mercury .mercury-character-modal ul {
-  max-width: 464px;
+  max-width: 432px;
   list-style: none;
   margin: 0 -2px 0 0;
   padding: 5px 0 0; }
@@ -1996,7 +2033,7 @@ mercury .mercury-toolbar .mercury-toolbar-button[data-type="color"] {
   mercury .mercury-toolbar .mercury-toolbar-button[data-type="color"].mercury-button-pressed:before {
     top: 0; }
 mercury .mercury-toolbar .mercury-color-palette {
-  width: 167px; }
+  width: 171px; }
   mercury .mercury-toolbar .mercury-color-palette li.last-picked {
     width: 159px;
     text-align: center;
@@ -2007,6 +2044,8 @@ mercury .mercury-toolbar .mercury-color-palette {
       color: #fff;
       margin: 1px 0 -1px -1px; }
 
+mercury .mercury-history-panel input.mercury-filter {
+  margin-bottom: 15px; }
 mercury .mercury-history-panel ul {
   margin: 0;
   padding: 0;
@@ -2024,8 +2063,10 @@ mercury .mercury-history-panel ul {
       mercury .mercury-history-panel ul li h4 a {
         color: #ddd !important; }
 
+mercury .mercury-snippets-panel input.mercury-filter {
+  margin-bottom: 15px; }
 mercury .mercury-snippets-panel ul {
-  margin: 15px 0 0;
+  margin: 0;
   padding: 0;
   list-style: none; }
   mercury .mercury-snippets-panel ul li {
@@ -2073,8 +2114,8 @@ mercury .mercury-table-modal fieldset {
   float: left;
   width: 350px; }
   mercury .mercury-table-modal fieldset.table-control {
-    width: 146px;
-    height: 219px;
+    width: 190px;
+    height: 247px;
     margin-right: 20px;
     overflow: auto; }
 mercury .mercury-table-modal table {
@@ -2111,6 +2152,9 @@ mercury.small .mercury-toolbar .mercury-toolbar-primary-container {
     min-width: 37px;
     margin-bottom: 0; }
     mercury.small .mercury-toolbar .mercury-toolbar-primary-container .mercury-toolbar-button:before {
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box;
       position: relative;
       display: inline-block;
       font-family: "mercury-icons";
@@ -2194,6 +2238,12 @@ mercury {
     -webkit-transition: none !important;
     -o-transition: none !important;
     transition: none !important; }
+  mercury *, mercury *:before, mercury *:after {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box; }
+  mercury li {
+    line-height: normal; }
   mercury a {
     color: #00bce5 !important;
     text-decoration: none; }
@@ -2244,6 +2294,9 @@ body.mercury-transitions {
     color: rgba(255, 255, 255, 0.85);
     pointer-events: none; }
     .mercury-gallery-region + .mercury-region-drop-indicator:before {
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box;
       position: relative;
       display: inline-block;
       font-family: "mercury-icons";
@@ -2258,6 +2311,8 @@ body.mercury-transitions {
       speak: none;
       vertical-align: top;
       -webkit-font-smoothing: antialiased; }
+    .mercury-gallery-region + .mercury-region-drop-indicator.mercury-region-snippet-drop-indicator:before {
+      content: "\f109"; }
     .mercury-gallery-region + .mercury-region-drop-indicator.mercury-shown {
       -webkit-transition-delay: 0s;
       transition-delay: 0s;
@@ -2273,7 +2328,7 @@ body.mercury-transitions {
     z-index: 20;
     top: 0;
     left: 0;
-    width: 100px;
+    width: 126px;
     margin: 10px;
     max-height: 560px;
     overflow-y: auto;
@@ -2284,8 +2339,13 @@ body.mercury-transitions {
     text-align: center;
     font-size: 0; }
     .mercury-gallery-region .mercury-gallery-region-controls li {
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box;
       position: relative;
-      height: 60px;
+      width: 100%;
+      height: 68px;
+      padding: 4px;
       margin-bottom: 5px;
       background: rgba(255, 255, 255, 0.4);
       text-align: center; }
@@ -2366,6 +2426,9 @@ body.mercury-transitions {
   color: rgba(255, 255, 255, 0.85);
   pointer-events: none; }
   .mercury-html-region + .mercury-region-drop-indicator:before {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
     position: relative;
     display: inline-block;
     font-family: "mercury-icons";
@@ -2380,6 +2443,8 @@ body.mercury-transitions {
     speak: none;
     vertical-align: top;
     -webkit-font-smoothing: antialiased; }
+  .mercury-html-region + .mercury-region-drop-indicator.mercury-region-snippet-drop-indicator:before {
+    content: "\f109"; }
   .mercury-html-region + .mercury-region-drop-indicator.mercury-shown {
     -webkit-transition-delay: 0s;
     transition-delay: 0s;
@@ -2422,6 +2487,9 @@ body.mercury-transitions {
   color: rgba(255, 255, 255, 0.85);
   pointer-events: none; }
   .mercury-image-region + .mercury-region-drop-indicator:before {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
     position: relative;
     display: inline-block;
     font-family: "mercury-icons";
@@ -2436,6 +2504,8 @@ body.mercury-transitions {
     speak: none;
     vertical-align: top;
     -webkit-font-smoothing: antialiased; }
+  .mercury-image-region + .mercury-region-drop-indicator.mercury-region-snippet-drop-indicator:before {
+    content: "\f109"; }
   .mercury-image-region + .mercury-region-drop-indicator.mercury-shown {
     -webkit-transition-delay: 0s;
     transition-delay: 0s;
@@ -2466,6 +2536,9 @@ body.mercury-transitions {
   color: rgba(255, 255, 255, 0.85);
   pointer-events: none; }
   .mercury-markdown-region + .mercury-region-drop-indicator:before {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
     position: relative;
     display: inline-block;
     font-family: "mercury-icons";
@@ -2480,6 +2553,8 @@ body.mercury-transitions {
     speak: none;
     vertical-align: top;
     -webkit-font-smoothing: antialiased; }
+  .mercury-markdown-region + .mercury-region-drop-indicator.mercury-region-snippet-drop-indicator:before {
+    content: "\f109"; }
   .mercury-markdown-region + .mercury-region-drop-indicator.mercury-shown {
     -webkit-transition-delay: 0s;
     transition-delay: 0s;
@@ -2552,6 +2627,9 @@ body.mercury-transitions {
   color: rgba(255, 255, 255, 0.85);
   pointer-events: none; }
   .mercury-snippet-region + .mercury-region-drop-indicator:before {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
     position: relative;
     display: inline-block;
     font-family: "mercury-icons";
@@ -2566,6 +2644,8 @@ body.mercury-transitions {
     speak: none;
     vertical-align: top;
     -webkit-font-smoothing: antialiased; }
+  .mercury-snippet-region + .mercury-region-drop-indicator.mercury-region-snippet-drop-indicator:before {
+    content: "\f109"; }
   .mercury-snippet-region + .mercury-region-drop-indicator.mercury-shown {
     -webkit-transition-delay: 0s;
     transition-delay: 0s;

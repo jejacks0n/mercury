@@ -29,6 +29,8 @@ namespace :build do
     config = env.find_asset(javascripts[:config])
     base = env.find_asset(javascripts[:base])
 
+    FileUtils.mkdir_p(output_path)
+
     # base javascripts and configuration
     puts "  base: mercury.js"
     File.open(output_path.join('mercury.js'), 'w') do |file|
@@ -62,11 +64,13 @@ namespace :build do
     end
 
     # write regions
+    regions = []
     env.find_asset(javascripts[:regions]).send(:required_assets).each do |asset|
       filename = File.basename(asset.logical_path)
       next if filename == 'regions.js'
       next unless asset.logical_path =~ /^mercury/
       puts "  region: #{filename}"
+      regions << asset
 
       Rails.application.config.assets.debug = false
       asset = env.find_asset(asset.logical_path)
@@ -77,6 +81,16 @@ namespace :build do
         file.write(Uglifier.compile(asset.source, squeeze: true))
       end
     end
+
+    # bundled javascript (base, config, and regions without dependencies)
+    #puts "  base: mercury.bundle.js"
+    #File.open(output_path.join('mercury.bundle.js'), 'w') do |file|
+    #  file.write(config.source)
+    #  file.write(base.source)
+    #  for region in regions
+    #    file.write(region.source)
+    #  end
+    #end
   end
 
   desc "Compile sass files into css"

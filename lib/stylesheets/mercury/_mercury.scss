@@ -1,3 +1,7 @@
+// Configuration.
+//-----------------------------------------------------------------------------
+@import "mercury/config";
+
 // Keyframes for animations.
 //-----------------------------------------------------------------------------
 @-webkit-keyframes mercury-uploader-indicator { from { background-position: -45px 0 } to { background-position: 0 0 } }
@@ -5,12 +9,10 @@
 @-webkit-keyframes mercury-loading-indicator { from { -webkit-transform: rotate(0deg) } to { -webkit-transform: rotate(360deg) } }
 @-moz-keyframes mercury-loading-indicator { from { -moz-transform: rotate(0deg) } to { -moz-transform: rotate(360deg) } }
 
-// Configuration.
-//-----------------------------------------------------------------------------
-@import "mercury/config";
-
 // Core css and utility.
 //-----------------------------------------------------------------------------
+@import "mercury/core/fonts/icon";
+@import "mercury/core/fonts/toolbar";
 @import "mercury/core/fonts";
 @import "mercury/core/general";
 @import "mercury/core/region";

@@ -635,6 +635,9 @@ $dialog_input_color: #555555;
       padding-top: 5px;
       text-align: right;
     }
+    .control-label.checkbox {
+      width: auto
+    }
     .controls {
       margin-left: 150px;
     }

@@ -71,6 +71,7 @@ TwitterSnippet = Mercury.registerSnippet 'twitter',
 
   defaults:
     username: 'modeset_'
+    checkbox: true
 
   validate: -> @addError('username', "can't be blank") unless @get('username')
 
@@ -107,7 +108,7 @@ class TwitterSnippet.View extends Mercury.Snippet.View
 
 Mercury.JST['/mercury/templates/snippets/twitter/form'] = ->
   """
-  <h3>This snippet allows specifying a twitter username and when inserted will display tweets from that user. Note that it has to be an active twitter account and only tweets within the past 5 days will be displayed (this is due to how twitter exposes search).</h3>
+  <strong>This snippet allows specifying a twitter username and when inserted will display tweets from that user. Note that it has to be an active twitter account and only tweets within the past 5 days will be displayed (this is due to how twitter exposes search).</strong>
   <hr/>
   <form class="form-horizontal">
     <fieldset>
@@ -115,6 +116,11 @@ Mercury.JST['/mercury/templates/snippets/twitter/form'] = ->
         <label class="string required control-label" for="username">Twitter Username</label>
         <div class="controls">
           <input class="string required" id="username" name="username" size="50" type="text" tabindex="1">
+        </div>
+      </div>
+      <div class="control-group boolean">
+        <div class="controls">
+          <label class="checkbox required control-label" for="Checkbox"><input class="checkbox" id="checkbox" name="checkbox" type="checkbox" value="1">Foo</label>
         </div>
       </div>
     </fieldset>

@@ -1,6 +1,3 @@
-@import "mercury/core/fonts/icon";
-@import "mercury/core/fonts/toolbar";
-
 @mixin mercury-icon-base($size: 16px, $width: 1px, $height: 1px, $font: 'mercury-icons') {
   &:before {
     @include mercury-border-box;

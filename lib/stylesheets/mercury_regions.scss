@@ -1,18 +1,10 @@
-/*!!
-Mercury Editor is a Coffeescript and jQuery based WYSIWYG editor released under the MIT License.
-Documentation and other useful information can be found at https://github.com/jejacks0n/mercury
-
-Copyright (c) 2013 Jeremy Jackson
-
-This file contains only the css required for regions, and is useful if you're sandboxing Mercury using an iframe.
-*/
-
 // Configuration.
 //-----------------------------------------------------------------------------
 @import "mercury/config";
 
 // Core css and utility.
 //-----------------------------------------------------------------------------
+@import "mercury/core/fonts/icon";
 @import "mercury/core/fonts";
 @import "mercury/core/general";
 @import "mercury/core/region";

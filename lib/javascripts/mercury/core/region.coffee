@@ -128,6 +128,7 @@ class Mercury.Region extends Mercury.View
     @actions ||= {}
     @context = $.extend({}, @constructor.context, @context)
     @dataAttrs = $.extend({}, @constructor.dataAttrs, @dataAttrs)
+    @defaultData = $.extend({}, @constructor.defaultData, @defaultData)
     @options = $.extend({}, @options, @config("regions:#{@type()}"))
     @options = $.extend(@options, JSON.parse($(@el).attr(attr) || '{}')) if @el && attr = @config('regions:options')
 
@@ -163,7 +164,7 @@ class Mercury.Region extends Mercury.View
   setInitialData: ->
     for attr, handler of @dataAttrs
       obj = {}
-      obj[attr] = @$el.data(attr) || null
+      obj[attr] = @$el.data(attr) || @defaultData[attr] || null
       @data(obj)
 
 

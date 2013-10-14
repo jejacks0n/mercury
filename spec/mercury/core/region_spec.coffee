@@ -212,6 +212,12 @@ describe "Mercury.Region", ->
       subject = new Klass('<div>')
       expect( subject.dataAttrs ).to.eql(foo: 'bar', bar: 'baz')
 
+    it "merges defaultData with constructor.defaultData", ->
+      Klass.defaultData = foo: 'bar'
+      Klass::defaultData = bar: 'baz'
+      subject = new Klass('<div>')
+      expect( subject.defaultData ).to.eql(foo: 'bar', bar: 'baz')
+
     it "sets @placeholder", ->
       subject = new Klass($("""<div data-mercury-options='{"placeholder":"Test placeholder"}'">"""), foo: 'bar')
       expect( subject.placeholder ).to.eq('Test placeholder')
@@ -302,7 +308,20 @@ describe "Mercury.Region", ->
       expect( subject.bindDefaultEvents ).called
 
 
-  describe "#addRegionAttrs", ->
+  describe "#setInitialData", ->
+
+    it "assigns data based on the element data, or defaults", ->
+      spyOn(subject, 'data')
+      subject.defaultData = foo: 'bar'
+      subject.$el.data('bar', 'baz')
+      subject.dataAttrs = {foo: spy(), bar: spy(), baz: spy()}
+      subject.setInitialData()
+      expect( subject.data ).calledWith(foo: 'bar')
+      expect( subject.data ).calledWith(bar: 'baz')
+      expect( subject.data ).calledWith(baz: null)
+
+
+    describe "#addRegionAttrs", ->
 
     it "adds a class to the element", ->
       subject.$el.removeAttr('class')

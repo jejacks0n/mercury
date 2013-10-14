@@ -32,6 +32,12 @@ class Mercury.Region.Button extends Mercury.Region.Plain
   #
   @supported: true
 
+  # This example uses data to store and restore css attributes, which you may want to specify a default for. You can do
+  # this by setting the defaultData property. It will make more sense as you read below.
+  @defaultData:
+    color: '#666'
+    bgcolor: '#00bce5'
+
 
 # Each region is responsibile for adding an initial toolbar. This allows others to modify the toolbar to add/remove
 # buttons based on functionality that they may have added to the region externally. Refer to the
@@ -60,6 +66,8 @@ Mercury.Region.Button.addAction
 # name 'bgcolor', it will first be handled by our action, and then will make it through to our data handler -- where we
 # can then style the element as needed. In this case just color and background. You could be more specific and set
 # backgroundColor, but meh, all that is up to you.
+#
+# Note: If the value is null then the defaults in @defaultData will be used if they were provided.
 #
 Mercury.Region.Button.addData
 

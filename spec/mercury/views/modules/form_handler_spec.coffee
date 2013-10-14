@@ -1,6 +1,9 @@
 #= require spec_helper
+#= require mercury/core/extensions/object
 #= require mercury/core/view
 #= require mercury/views/modules/form_handler
+
+fixture.preload('form.html')
 
 describe "Mercury.View.Modules.FormHandler", ->
 
@@ -32,6 +35,12 @@ describe "Mercury.View.Modules.FormHandler", ->
       subject.buildFormHandler()
       expect( subject.delegateEvents ).calledWith('submit': subject.onFormSubmit)
 
+    it "calls #applySerializedModel on update if there's a model", ->
+      subject.model = {}
+      spyOn(subject, 'on')
+      subject.buildFormHandler()
+      expect( subject.on ).calledWith('update', subject.applySerializedModel)
+
 
   describe "#validate", ->
 
@@ -39,6 +48,19 @@ describe "Mercury.View.Modules.FormHandler", ->
       spyOn(subject, 'clearInputErrors')
       subject.validate()
       expect( subject.clearInputErrors ).called
+
+
+  describe "#displayInputErrors", ->
+
+    beforeEach ->
+      subject.model = errors: {_error_: ['_message1_', '_message2_']}
+
+    it "calls @addInputErrors for each of the errors in @model.error", ->
+      spyOn(subject, '$', -> '_input_')
+      spyOn(subject, 'addInputError')
+      subject.displayInputErrors()
+      expect( subject.$ ).calledWith('[name=_error_]')
+      expect( subject.addInputError ).calledWith('_input_', '_message1_, _message2_')
 
 
   describe "#addInputError", ->
@@ -80,6 +102,81 @@ describe "Mercury.View.Modules.FormHandler", ->
       expect( subject.valid ).to.be.true
 
 
+  describe "#applySerializedModel", ->
+
+    fixture.load('form.html')
+
+    beforeEach ->
+      subject.$el = fixture.$el
+      subject.model = toJSON: ->
+        text: '_text_'
+        checkbox1: true
+        checkbox2: 'foo'
+        radio: 'b'
+        select: '_val2_'
+        textarea: '_textarea_'
+
+    it "fills out a form from the model", ->
+      subject.applySerializedModel()
+      expect( subject.$('[name="text"]').val() ).to.eq('_text_')
+      expect( subject.$('[name="checkbox1"]').prop('checked') ).to.be.true
+      expect( subject.$('[name="checkbox2"]').prop('checked') ).to.be.false
+      expect( subject.$('[name="radio"]:checked').val() ).to.eq('b')
+      expect( subject.$('[name="select"]').val() ).to.eq('_val2_')
+      expect( subject.$('[name="textarea"]').val() ).to.eq('_textarea_')
+
+
+  describe "#serializeModel", ->
+
+    beforeEach ->
+      subject.model = set: spy(), isValid: spy(-> true)
+      subject.hide = spy()
+      spyOn(subject, 'clearInputErrors')
+
+    it "calls #clearInputErrors", ->
+      subject.serializeModel()
+      expect( subject.clearInputErrors ).called
+
+    it "sets the attributes of the model", ->
+      spyOn(subject, 'serializeForm', -> '_form_')
+      subject.serializeModel()
+      expect( subject.model.set ).calledWith('_form_')
+
+    describe "when the model is valid", ->
+
+      it "triggers a form:success event", ->
+        spyOn(subject, 'trigger')
+        subject.serializeModel()
+        expect( subject.trigger ).calledWith('form:success')
+
+      it "hides if @hideOnValidSubmit", ->
+        subject.hideOnValidSubmit = true
+        subject.serializeModel()
+        expect( subject.hide ).called
+
+    describe "when the model isn't valid", ->
+
+      beforeEach ->
+        subject.model.isValid = spy(-> false)
+
+      it "calls @displayInputErrors", ->
+        spyOn(subject, 'displayInputErrors')
+        subject.serializeModel()
+        expect( subject.displayInputErrors ).called
+
+
+  describe "#serializeForm", ->
+
+    it "serializes the array, and deserialized the object", ->
+      mock = serializeArray: spy(-> '_array_')
+      spyOn(subject, '$', -> mock)
+      spyOn(Object, 'deserialize')
+      subject.serializeForm()
+      expect( subject.$ ).calledWith('form')
+      expect( mock.serializeArray ).called
+      expect( Object.deserialize ).calledWith('_array_')
+
+
   describe "#onFormSubmit", ->
 
     beforeEach ->
@@ -93,6 +190,12 @@ describe "Mercury.View.Modules.FormHandler", ->
     it "calls #validate", ->
       subject.onFormSubmit(@e)
       expect( subject.validate ).called
+
+    it "calls #serializeModel if there's a model", ->
+      spyOn(subject, 'serializeModel')
+      subject.model = {}
+      subject.onFormSubmit(@e)
+      expect( subject.serializeModel ).called
 
     it "calls #onSubmit if it's defined and we're valid", ->
       subject.onSubmit = spy()

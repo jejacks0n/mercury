@@ -67,6 +67,5 @@ Mercury.Region.Markdown.addToolbar 'block', block: ['Block', plugin: 'blocks']
 #   caman: toolbar doesn't switch back to caman region (the canvas doesn't properly trigger the focus event? -- even after some work it's like caman changes the canvas element out from under us -- the easy fix is to just wrap it in a div instead of assigning it directly to an img tag, but this is lame.)
 # todo ideas:
 #   port jQuery.extend into module so we can use that within instances (which is where it's mostly used).
-#   port the jQuery form -> object code to coffeescript and make that part of the form_handler module.
 #   add better touch support to various aspects (draggable module specifically).
 #   markdown doesn't wrap the same as other elements -- though this is probably just noteworthy.

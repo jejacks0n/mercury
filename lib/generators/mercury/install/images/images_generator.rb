@@ -16,12 +16,13 @@ module Mercury
             copy_file 'mongoid_paperclip_image.rb', 'app/models/mercury/image.rb'
           else
             copy_file 'ar_paperclip_image.rb', 'app/models/mercury/image.rb'
+            template 'ar_paperclip_image.rb.erb', 'app/models/mercury/image.rb'
             migration_template 'ar_paperclip_image_migration.rb', 'db/migrate/create_mercury_images.rb'
           end
         end
 
         def copy_controller
-          copy_file 'images_controller.rb', 'app/controllers/mercury/images_controller.rb'
+          template 'images_controller.rb.erb', 'app/controllers/mercury/images_controller.rb'
         end
 
         def add_routes

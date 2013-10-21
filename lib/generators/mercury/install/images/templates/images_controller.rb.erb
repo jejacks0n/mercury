@@ -4,7 +4,11 @@ class Mercury::ImagesController < MercuryController
 
   # POST /images.json
   def create
-    @image = Mercury::Image.new(params[:image])
+    <% if Gem::Version.new(::Rails::VERSION::STRING) >= Gem::Version.new("4.0.0") %>
+      @image = Mercury::Image.new(params.require(:image).permit(:image))
+    <% else %>
+      @image = Mercury::Image.new(params[:image])
+    <% end %>
     @image.save
     respond_with @image
   end

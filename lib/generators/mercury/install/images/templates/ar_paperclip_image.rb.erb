@@ -1,8 +1,9 @@
 class Mercury::Image < ActiveRecord::Base
 
   self.table_name = :mercury_images
-
-  attr_accessible :image
+  <% unless Gem::Version.new(::Rails::VERSION::STRING) >= Gem::Version.new("4.0.0") %>
+    attr_accessible :image
+  <% end %>
 
   has_attached_file :image, :styles => { :medium => "300x300>", :thumb => "100x100>" },
         :path => ":rails_root/public/system/:attachment/:id/:style/:filename",

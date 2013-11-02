@@ -167,14 +167,17 @@ describe "Mercury.View.Modules.FormHandler", ->
 
   describe "#serializeForm", ->
 
+    fixture.load('form.html')
+
     it "serializes the array, and deserialized the object", ->
-      mock = serializeArray: spy(-> '_array_')
-      spyOn(subject, '$', -> mock)
+      spyOn(subject, '$', -> fixture.$el)
+      spyOn(fixture.$el, 'serializeArray', -> ['_array_'])
+      spyOn(fixture.$el, 'find', -> ['<div name="foo">'])
       spyOn(Object, 'deserialize')
       subject.serializeForm()
       expect( subject.$ ).calledWith('form')
-      expect( mock.serializeArray ).called
-      expect( Object.deserialize ).calledWith('_array_')
+      expect( fixture.$el.find ).calledWith('input[type="checkbox"]:not(:checked)')
+      expect( Object.deserialize ).calledWith(['_array_', {name: 'foo', value: false}])
 
 
   describe "#onFormSubmit", ->

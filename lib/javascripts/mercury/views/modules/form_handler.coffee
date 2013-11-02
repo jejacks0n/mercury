@@ -30,7 +30,7 @@ Mercury.View.Modules.FormHandler =
 
 
   applySerializedModel: ->
-    $form = @$('form').find('input,select,textarea')
+    $form = @$('form').find('input, select, textarea')
     check = (el, checked) -> el.prop('checked', checked)
     check($form.filter(':checked'), false)
 
@@ -55,7 +55,11 @@ Mercury.View.Modules.FormHandler =
 
 
   serializeForm: ->
-    Object.deserialize(@$('form').serializeArray())
+    $form = @$('form')
+    arr = $form.serializeArray()
+    for item in $form.find('input[type="checkbox"]:not(:checked)')
+      arr.push(name: $(item).attr('name'), value: false)
+    Object.deserialize(arr)
 
 
   onFormSubmit: (e) ->

@@ -58,75 +58,73 @@ Mercury.registerSnippet 'plugins',
 
 # Full view snippet example.
 #
-# This example might be considered a green or blue run. It includes a form to collect a twitter username, has validation
-# and default values, but it doesn't rely on a server implementation. It also has a custom view that will be used when
-# the snippet is rendered -- which could do all sorts of complex view things if you needed it to.
+# This example might be considered a green or blue run. It includes a form to collect a count of NYTimes articles to
+# display, has validation and default values, but it doesn't rely on a server implementation. It also has a custom view
+# that will be used when the snippet is rendered -- which could do all sorts of complex view things if you wanted it to.
 #
-TwitterSnippet = Mercury.registerSnippet 'twitter',
-  title: 'Twitter Snippet'
-  description: 'Twitter feed example (client side only, no server implementation needed).'
+# This example is light on the comments, because it's easier to read without someone droning on about how it works. The
+# example after this one covers some of the elements that are used here, but yeah, just code here.
+#
+NYTimesSnippet = Mercury.registerSnippet 'nytimes',
+  title: 'New York Times Snippet'
+  description: 'NYTimes feed example (client side only, no server implementation needed).'
   version: '1.0.0'
 
-  form: 'snippets/twitter/form'
+  form: 'snippets/nytimes/form'
 
   defaults:
-    username: 'modeset_'
-    checkbox: true
+    count: 4
+    links: true
+    articles: []
 
-  validate: -> @addError('username', "can't be blank") unless @get('username')
+  validate: -> @addError('count', "must be between 2 and 10") unless @get('count') >= 2 || @get('count') <= 10
 
-  view: -> new TwitterSnippet.View(snippet: @)
+  view: -> new NYTimesSnippet.View(snippet: @)
+
+  beforeRender: -> @fetchArticles()
+
+  fetchArticles: ->
+    feed = new google.feeds.Feed('http://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml')
+    feed.setNumEntries(@get('count'))
+    feed.load (result) =>
+      return alert('There was a problem loading articles!') if result.error
+      @set(articles: result.feed.entries)
+      @rerenderView()
 
 
-class TwitterSnippet.View extends Mercury.Snippet.View
+class NYTimesSnippet.View extends Mercury.Snippet.View
   className: 'mercury-example-snippet'
+
   template: ->
-    """
-    <div id="#{"twitter_feed_#{@snippet.cid}"}"></div>
-    <script>
-    new TWTR.Widget({
-      search: 'from:#{@snippet.get('username')}',
-      id: '#{"twitter_feed_#{@snippet.cid}"}',
-      loop: false,
-      width: 250,
-      height: 300,
-      theme: {
-        shell: {
-          background: '#fff',
-          color: '#000'
-        },
-        tweets: {
-          background: '#fff',
-          color: '#000',
-          links: '#00bce5'
-        }
-      }
-    }).render().start();
-    </script>
-    """
+    links = @snippet.get('links')
+    ret = "<h3>New York Times</h3>"
+    for article in @snippet.get('articles') || []
+      ret += "<h4>#{article.title}</h4><small><em>#{article.author}</em></small>"
+      ret += "<p>#{article.contentSnippet}#{if links then " &raquo; <a target='_blank' href='#{article.link}'>more</a>" else ''}</p>"
+    ret
 
 
-Mercury.JST['/mercury/templates/snippets/twitter/form'] = ->
+Mercury.JST['/mercury/templates/snippets/nytimes/form'] = ->
   """
-  <strong>This snippet allows specifying a twitter username and when inserted will display tweets from that user. Note that it has to be an active twitter account and only tweets within the past 5 days will be displayed (this is due to how twitter exposes search).</strong>
+  <strong>This snippet allows specifying an article count and if details should be show, and when inserted will display the specified number of New York Times articles (with or without details).</strong>
   <hr/>
   <form class="form-horizontal">
     <fieldset>
       <div class="control-group string required">
-        <label class="string required control-label" for="username">Twitter Username</label>
+        <label class="number required control-label" for="username">Article Count</label>
         <div class="controls">
-          <input class="string required" id="username" name="username" size="50" type="text" tabindex="1">
+          <input class="number required" id="count" name="count" size="10" type="number" tabindex="1" min="2" max="10">
         </div>
       </div>
       <div class="control-group boolean">
         <div class="controls">
-          <label class="checkbox required control-label" for="Checkbox"><input class="checkbox" id="checkbox" name="checkbox" type="checkbox" value="1">Foo</label>
+          <label class="checkbox required control-label" for="links"><input id="links" name="links" type="checkbox" value="1">Include links to full articles?</label>
         </div>
       </div>
     </fieldset>
 
     <div class="form-actions">
-      <input class="btn btn-primary" name="commit" type="submit" value="Insert Twitter Snippet" tabindex="2">
+      <input class="btn btn-primary" name="commit" type="submit" value="Insert NYTimes Snippet" tabindex="2">
     </div>
   </form>
   """
@@ -193,6 +191,10 @@ Mercury.registerSnippet 'beer',
 # the sub regions. Markdown and other "textarea" types of regions can't support nested regions because they're textareas
 # and thus don't support nested elements.
 #
+# Important: The way regions serialize, it's important that they have unique names, and since these regions can show up
+# dynamically based on snippets being dropped in various places, note the id of the regions is being set based on the
+# snippet cid (client id).
+#
 Mercury.registerSnippet 'editable',
   title: 'Editable Snippet'
   description: "Example snippet with editable regions within it. This isn't a good idea, so use it wisely."
@@ -209,8 +211,8 @@ Mercury.registerSnippet 'editable',
     """
     Lorem ipsum dolor sit amet, consectetur adipisicing elit.
     <blockquote>
-      <div data-mercury="markdown">Markdown Region</div>
-      <div data-mercury="plain">Plain Region</div>
+      <div data-mercury="markdown" id="snippet_markdown#{@cid}">Markdown Region</div>
+      <div data-mercury="plain" id="snippet_plain#{@cid}">Plain Region</div>
     </blockquote>
     Ad amet architecto eius eligendi eos inventore minus, necessitatibus nobis nulla officiis optio quam quas qui quis quos repellat, sapiente tempore veritatis?
     """

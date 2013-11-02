@@ -72,8 +72,8 @@ mercury {
   // disable animations while initializing/loading
   &.loading,
   &.loading *,
-  .mercury-no-animation {
-  //.mercury-no-animation * {
+  .mercury-no-animation,
+  .mercury-no-animation * {
     -moz-transition: none !important;
     -webkit-transition: none !important;
     -o-transition: none !important;

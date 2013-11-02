@@ -48,13 +48,11 @@ Mercury.Region.Markdown.addToolbar 'block', block: ['Block', plugin: 'blocks']
 
 # todo:
 #   html region doesn't init?
-#   seems to be a bug with undo when setting data?
+#   !!! when I add a snippet to the second snippet region, the first snippet region loses it's snippets.
 #   remove snippet contents per snippet or let them be serialized as direct content / make sure that works.
 #   do snippet regions work better if they serialize their entire element structure in the history (or does this cause massive memory leaks/lingering events that might be bad?)
 #   better strategy for snippet management/removal -- focusable with toolbar buttons would be nice, combined with a lesser toolbar in line? (drag handle on hover, etc?)
-#   make media plugins use custom actions.
 #   ask/invite translators to revisit their translations.
-#   twitter snippet is busted again (*sigh*).
 # todo regions:
 #   html: when using the iframe, rangy isn't behaving the same (doesn't work because it doesn't understand the context).
 #   html: selections are a little wonky on undo/redo still, and sometimes in firefox they're not applying because the checksum doesn't validate.
@@ -68,4 +66,4 @@ Mercury.Region.Markdown.addToolbar 'block', block: ['Block', plugin: 'blocks']
 # todo ideas:
 #   port jQuery.extend into module so we can use that within instances (which is where it's mostly used).
 #   add better touch support to various aspects (draggable module specifically).
-#   markdown doesn't wrap the same as other elements -- though this is probably just noteworthy.
+#   noteworthy: markdown doesn't wrap the same as other elements.

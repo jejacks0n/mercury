@@ -100,7 +100,7 @@ class Mercury.Snippet extends Mercury.Model
   #
   displayForm: (form) ->
     view = new (@Modal || Mercury.Modal)
-      title: @get('title')
+      title: @title
       template: @templateClosure(form || @form)
       width: 600
       model: @
@@ -113,6 +113,7 @@ class Mercury.Snippet extends Mercury.Model
   #
   render: (options = {}) ->
     options = $.extend({}, @renderOptions, options)
+    @beforeRender?()
     return @save(options) if @url() && !@renderedView
     @renderView(options.template)
 
@@ -121,6 +122,15 @@ class Mercury.Snippet extends Mercury.Model
   #
   renderView: (template) ->
     @renderedView = @view(@templateClosure(template || @template))
+    @trigger('rendered', @renderedView)
+    @delay(1, @afterRender)
+
+
+  # Rerenders the view with the assumption that view has a template method defined, either by instantiation through the
+  # snippet #view method, or already having it's own template method.
+  #
+  rerenderView: ->
+    @renderedView.render()
     @trigger('rendered', @renderedView)
     @delay(1, @afterRender)
 
@@ -150,7 +160,7 @@ class Mercury.Snippet extends Mercury.Model
   # Binds the template that will be passed to the views to the snippet instance.
   #
   templateClosure: (template) ->
-    closure = (=> template(arguments...)) if typeof(template) == 'function'
+    closure = (=> template.apply(@, arguments...)) if typeof(template) == 'function'
     closure || template
 
 

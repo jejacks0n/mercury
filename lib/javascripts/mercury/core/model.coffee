@@ -202,6 +202,7 @@ class Mercury.Model extends Mercury.Module
     if typeof(key) == 'object' then attrs = key else attrs[key] = value
     @pushStack(@toJSON())
     @attributes[key] = value for key, value of attrs
+    @trigger('updated', attrs)
 
 
   # Checks existence. Which is if there's an id and that id exists in the records.

@@ -55,6 +55,10 @@ class Mercury.View extends Mercury.Module
     @attr(@attributes)
     @addClass(@constructor.className)
     @addClass(@className)
+    @render()
+
+
+  render: ->
     @html(@renderTemplate(@template || @constructor.template)) if @template || @constructor.template
 
 

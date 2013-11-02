@@ -3,6 +3,7 @@
   &[data-mercury-region] {
     min-width: 20px;
     min-height: 20px;
+    //resize image: iVBORw0KGgoAAAANSUhEUgAAAAgAAAAIAQMAAAD+wSzIAAAABlBMVEUAAABmZmZ+SwYRAAAAAXRSTlMAQObYZgAAABZJREFUCB1jYAICFiYOJiEmJSYXBgYAAxwAlWyApXEAAAAASUVORK5CYII=
   }
   &+ .mercury-region-drop-indicator {
     @include mercury-region-drop-indicator;

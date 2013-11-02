@@ -172,7 +172,7 @@ Mercury.Region.Image.addToolbar 'filters', brightness: ['Brightness', icon: 'bri
 # can define this in the JST namespace, or we can have our server respond -- which is configurable. But for the demo
 # we're just going to define a simple string with a slider input.
 #
-Mercury.JST['/mercury/templates/brightness_slider'] = -> '<input type="range"/>'
+Mercury.JST['/mercury/templates/brightness_slider'] = -> '<input type="range" value="100" min="0" max="100"/>'
 
 # At this point we have the button, the subview and everything we need. If you were to check, the button would still
 # be disabled -- because the image region doesn't know what to do with brightness yet. Now we just need to tie it all
@@ -180,7 +180,13 @@ Mercury.JST['/mercury/templates/brightness_slider'] = -> '<input type="range"/>'
 # calling @pushHistory after setting it -- though this is a bad example for that since change triggers as the slider
 # is moved.
 #
-Mercury.Region.Image.addAction 'brightness', (val) -> console.debug("brightness set to #{val}")
+Mercury.Region.Image.addAction 'brightness', (val) ->
+  @$el.css
+    'filter': "brightness(#{val}%)",
+    '-webkit-filter': "brightness(#{val}%)",
+    '-moz-filter': "brightness(#{val}%)",
+    '-o-filter': "brightness(#{val}%)",
+    '-ms-filter': "brightness(#{val}%)"
 
 
 # Toolbar Interfaces - Customized Buttons
@@ -202,7 +208,8 @@ class Mercury.ToolbarSliderButton extends Mercury.View
   revertFocusOn: 'input'                                         # selector for focus events that revert to mercury.
   events: 'change input': ->                                     # when the input is changed.
     Mercury.trigger('action', 'brightness', @$('input').val())   # trigger action.
-  build: -> @append('<input type="range"/>')                     # append the input element.
+  build: ->                                                      # append the input element.
+    @append('<input type="range" value="100" min="0" max="100"/>')
 
 # Now we need to expose this view by adding it to the toolbar. Notice here how we define the button property, which is
 # used to determine which view should be used in place of the button.

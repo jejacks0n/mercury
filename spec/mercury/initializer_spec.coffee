@@ -45,7 +45,7 @@ describe "Mercury", ->
     beforeEach ->
       Klass.interface = false
       spyOn(Klass, 'Interface')
-      spyOn(Klass, 'load')
+      spyOn(Klass, 'loadScript')
       Klass.config = stub().returns('Interface')
 
     it "sets @initialized", ->
@@ -61,10 +61,9 @@ describe "Mercury", ->
       Klass.init(foo: 'bar')
       expect( Klass.Interface ).calledWith(foo: 'bar')
 
-    it "calls #load", ->
-      Klass.loadedJSON = foo: 'bar'
+    it "calls #loadScript", ->
       Klass.init()
-      expect( Klass.load ).calledWith(foo: 'bar')
+      expect( Klass.loadScript ).called
 
     it "does nothing if already initialized", ->
       Klass.interface = {}
@@ -76,15 +75,47 @@ describe "Mercury", ->
 
     it "sets @loadedJSON to the passed argument", ->
       Klass.load()
-      expect( Klass.loadedJSON ).to.eql({})
+      expect( Klass.loadedJSON ).to.be.undefined
       Klass.load(foo: 'bar')
       expect( Klass.loadedJSON ).to.eql(foo: 'bar')
 
-    it "calls load on the interface if we have one (and removes the loadedJSON)", ->
+    it "calls load on the interface if we have one", ->
       Klass.interface = load: spy()
       Klass.load(foo: 'bar')
       expect( Klass.interface.load ).calledWith(foo: 'bar')
-      expect( Klass.loadedJSON ).to.be.undefined
+
+
+  describe ".loadUrl", ->
+
+    beforeEach ->
+      @server = sinon.fakeServer.create()
+      @server.respondWith('GET', '/foo/bar/baz', [200, {'Content-Type': 'application/json'}, '{"foo": "bar"}'])
+
+    it "makes an ajax request for the json data", ->
+      spyOn($, 'ajax')
+      Klass.loadUrl('/foo/bar/baz')
+      expect( $.ajax ).calledWith('/foo/bar/baz', async: false, type: 'get', dataType: 'json', success: sinon.match.func)
+
+    it "call #load with the parsed json", ->
+      spyOn(Klass, 'load')
+      Klass.loadUrl('/foo/bar/baz')
+      expect( Klass.load ).calledWith(foo: 'bar')
+
+
+  describe ".loadScript", ->
+
+    beforeEach ->
+      spyOn(Klass, 'load')
+
+    it "calls #load with the json within a json/mercury script", ->
+      spyOn(window, '$', -> text: -> '{"foo": "bar"}')
+      Klass.loadScript()
+      expect( $ ).calledWith('script[type="json/mercury"]')
+      expect( Klass.load ).calledWith(foo: "bar")
+
+    it "calls #load with null if there was no json/mercury script found", ->
+      Klass.loadScript()
+      expect( Klass.load ).calledWith(null)
 
 
   describe ".release", ->

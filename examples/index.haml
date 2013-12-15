@@ -127,57 +127,46 @@
   // will be exposed to us after it's been initialized.
   new Mercury.DeveloperInterface();
 
-  // To load snippet options and potentially other information back into mercury for editing you can simply provide the
-  // JSON that the server saved. This can be wordy, so you may want to filter some things out of it, but it should work
-  // if you don't sanitize the data before loading it back in. This can happen before or after calling Mercury.init and
-  // is expected to only happen once.
+  // To load content and snippet options (and potentially other information) back into Mercury when editing, you can
+  // provide the JSON that the server saved in a script tag with the type set to "json/mercury". Mercury will look for
+  // this script tag and will load the JSON within it.
   //
-  // This example shows what can be loaded back into Mercury. Value doesn't need to be provided if you're already
-  // rendering it into the page on the server.
+  // We use this approach because there are ECMA Script utf-8 characters that can be within the content, and can break
+  // javascript parsing -- U+2028 & U+2029 (http://goo.gl/u67t6B) specifically.
   //
-  // You'll notice the data-mercury-snippet attribute directly correlates to the snippet cid in the snippets object.
-  Mercury.load({
-    snippet2: {                                             // the region identifier
-      data: {},                                             // you can provide data back to regions
-      snippets: {                                           // snippets that this region serialized on save
-        c1: {
-          cid: 'c1',                                        // cid for the snippet when serialized (same as key)
-          name: 'beer',                                     // name of the snippet (type)
-          attributes: {                                     // serialized snippet attributes
-            name: 'jejacks0n',
-            beer: 'French & Belgian-Style Saison'
+  // This example shows what can be loaded back into Mercury. You'll notice the data-mercury-snippet attribute directly
+  // correlates to the snippet cid in the snippets object.
+  //
+  // Alternatly, you can tell Mercury to load content via ajax. To do this, just use: Mercury.loadUrl('url')
+  // The server is expected to respond with the JSON that has been saved for the specific page, and how this is
+  // accomplished is left to you. Worth noting is that any json/mercury script tag that's on the page will override
+  // anything that you may have loaded via ajax.
+:plain
+  <script type="json/mercury">
+  {
+    "snippet1": {
+      "snippets": {
+        "c1": {
+          "cid": "c1",
+          "name": "plugins"
+        }
+      },
+      "value": "<div class=\"mercury-plugin-snippet\" data-mercury-snippet=\"c1\"></div>"
+    },
+
+    "snippet2": {
+      "data": {},
+      "snippets": {
+        "c2": {
+          "cid": "c2",
+          "name": "beer",
+          "attributes": {
+            "name": "jejacks0n",
+            "beer": "French & Belgian-Style Saison"
           }
         }
       },
-      value: '<div class="mercury-beer-snippet" data-mercury-snippet="c1"></div><div class="mercury-plugin-snippet" data-mercury-snippet="c2"></div>'
-    },
-
-    snippet1: {
-      snippets: {
-        c2: {
-          cid: 'c2',
-          name: 'plugins'
-        }
-        //c4: {
-        //  cid: 'c4',
-        //  name: 'nytimes',
-        //  attributes: {
-        //    count: 4,
-        //    links: true
-        //  }
-        //}
-      },
-      value: '<div class="mercury-plugin-snippet" data-mercury-snippet="c2"></div>'
-      //value: '<div class="mercury-plugin-snippet" data-mercury-snippet="c2"></div><div class="mercury-example-snippet mercury-nytimes-snippet" data-mercury-snippet="c4"></div>'
-    },
-
-    //html1: {
-    //  snippets: {
-    //    c3: {
-    //      cid: 'c3',
-    //      name: 'plugins'
-    //    }
-    //  },
-    //  value: '<div class="mercury-plugin-snippet" data-mercury-snippet="c3"></div>'
-    //}
-  });
+      "value": "<div class=\"mercury-beer-snippet\" data-mercury-snippet=\"c2\"></div>"
+    }
+  }
+  </script>

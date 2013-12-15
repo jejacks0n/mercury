@@ -23,7 +23,7 @@ initialize = ->
     return if @interface
     @trigger('configure')
     @interface = new @[@config('interface:class')](options)
-    @load(@loadedJSON || {})
+    @loadScript()
     @interface
 
   # Provides global way to load snippets and other data back into Mercury.
@@ -31,11 +31,23 @@ initialize = ->
   # This allows you to load snippet options back into snippets/the regions they're in, as well as providing an API to
   # load other data. Pass it the JSON hash that was saved and it should be able to handle the rest.
   #
-  @load = (json = {}) ->
-    @loadedJSON = json
-    return unless @interface
-    @interface.load(@loadedJSON)
-    delete(@loadedJSON)
+  @load = (json) ->
+    @loadedJSON = json if json
+    @interface?.load(@loadedJSON)
+
+  # Provides global method to load snippets and other data back into Mercury via Ajax.
+  #
+  # This allows you to create a server response with the data for the current page being edited.
+  #
+  @loadUrl = (url) ->
+    $.ajax(url, async: false, type: 'get', dataType: 'json', success: (json) => @load(json))
+
+  # Provides global method to load snippets and other data back into Mercury from a json/mercury script tag.
+  #
+  # This allows you to put the data for the current page within a <script type="json/mercury"> tag.
+  #
+  @loadScript = ->
+    @load(JSON.parse($('script[type="json/mercury"]').text() || 'null'))
 
   # Provides global method to release.
   #

@@ -1441,7 +1441,7 @@ Copyright (c) 2013 Jeremy Jackson
     };
 
     Model.prototype.set = function(key, value) {
-      var attrs, _results;
+      var attrs;
       attrs = {};
       if (typeof key === 'object') {
         attrs = key;
@@ -1449,12 +1449,11 @@ Copyright (c) 2013 Jeremy Jackson
         attrs[key] = value;
       }
       this.pushStack(this.toJSON());
-      _results = [];
       for (key in attrs) {
         value = attrs[key];
-        _results.push(this.attributes[key] = value);
+        this.attributes[key] = value;
       }
-      return _results;
+      return this.trigger('updated', attrs);
     };
 
     Model.prototype.exists = function() {
@@ -1870,6 +1869,10 @@ Copyright (c) 2013 Jeremy Jackson
       this.attr(this.attributes);
       this.addClass(this.constructor.className);
       this.addClass(this.className);
+      return this.render();
+    };
+
+    View.prototype.render = function() {
       if (this.template || this.constructor.template) {
         return this.html(this.renderTemplate(this.template || this.constructor.template));
       }
@@ -2204,7 +2207,7 @@ Copyright (c) 2013 Jeremy Jackson
     },
     applySerializedModel: function() {
       var $el, $form, check, item, _i, _len, _ref, _results;
-      $form = this.$('form').find('input,select,textarea');
+      $form = this.$('form').find('input, select, textarea');
       check = function(el, checked) {
         return el.prop('checked', checked);
       };
@@ -2241,7 +2244,18 @@ Copyright (c) 2013 Jeremy Jackson
       }
     },
     serializeForm: function() {
-      return Object.deserialize(this.$('form').serializeArray());
+      var $form, arr, item, _i, _len, _ref;
+      $form = this.$('form');
+      arr = $form.serializeArray();
+      _ref = $form.find('input[type="checkbox"]:not(:checked)');
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        item = _ref[_i];
+        arr.push({
+          name: $(item).attr('name'),
+          value: false
+        });
+      }
+      return Object.deserialize(arr);
     },
     onFormSubmit: function(e) {
       this.prevent(e);
@@ -2780,6 +2794,9 @@ Copyright (c) 2013 Jeremy Jackson
         options = {};
       }
       options = $.extend({}, this.renderOptions, options);
+      if (typeof this.beforeRender === "function") {
+        this.beforeRender();
+      }
       if (this.url() && !this.renderedView) {
         return this.save(options);
       }
@@ -2788,6 +2805,12 @@ Copyright (c) 2013 Jeremy Jackson
 
     Snippet.prototype.renderView = function(template) {
       this.renderedView = this.view(this.templateClosure(template || this.template));
+      this.trigger('rendered', this.renderedView);
+      return this.delay(1, this.afterRender);
+    };
+
+    Snippet.prototype.rerenderView = function() {
+      this.renderedView.render();
       this.trigger('rendered', this.renderedView);
       return this.delay(1, this.afterRender);
     };
@@ -2813,7 +2836,7 @@ Copyright (c) 2013 Jeremy Jackson
         _this = this;
       if (typeof template === 'function') {
         closure = (function() {
-          return template.apply(null, arguments);
+          return template.apply(_this, arguments);
         });
       }
       return closure || template;
@@ -3048,6 +3071,7 @@ Copyright (c) 2013 Jeremy Jackson
       this.actions || (this.actions = {});
       this.context = $.extend({}, this.constructor.context, this.context);
       this.dataAttrs = $.extend({}, this.constructor.dataAttrs, this.dataAttrs);
+      this.defaultData = $.extend({}, this.constructor.defaultData, this.defaultData);
       this.options = $.extend({}, this.options, this.config("regions:" + (this.type())));
       if (this.el && (attr = this.config('regions:options'))) {
         this.options = $.extend(this.options, JSON.parse($(this.el).attr(attr) || '{}'));
@@ -3098,7 +3122,7 @@ Copyright (c) 2013 Jeremy Jackson
       for (attr in _ref) {
         handler = _ref[attr];
         obj = {};
-        obj[attr] = this.$el.data(attr) || null;
+        obj[attr] = this.$el.data(attr) || this.defaultData[attr] || null;
         _results.push(this.data(obj));
       }
       return _results;
@@ -6757,19 +6781,29 @@ Copyright (c) 2013 Jeremy Jackson
       }
       this.trigger('configure');
       this["interface"] = new this[this.config('interface:class')](options);
-      this.load(this.loadedJSON || {});
+      this.loadScript();
       return this["interface"];
     };
     this.load = function(json) {
-      if (json == null) {
-        json = {};
+      var _ref;
+      if (json) {
+        this.loadedJSON = json;
       }
-      this.loadedJSON = json;
-      if (!this["interface"]) {
-        return;
-      }
-      this["interface"].load(this.loadedJSON);
-      return delete this.loadedJSON;
+      return (_ref = this["interface"]) != null ? _ref.load(this.loadedJSON) : void 0;
+    };
+    this.loadUrl = function(url) {
+      var _this = this;
+      return $.ajax(url, {
+        async: false,
+        type: 'get',
+        dataType: 'json',
+        success: function(json) {
+          return _this.load(json);
+        }
+      });
+    };
+    this.loadScript = function() {
+      return this.load(JSON.parse($('script[type="json/mercury"]').text() || 'null'));
     };
     this.release = function() {
       if (!this["interface"]) {

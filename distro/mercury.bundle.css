@@ -294,7 +294,7 @@ mercury .mercury-toolbar .mercury-toolbar-group,mercury .mercury-toolbar .mercur
 mercury .mercury-toolbar .mercury-toolbar-separator,mercury .mercury-toolbar .mercury-toolbar-line-separator{height:15px;width:6px}
 mercury .mercury-toolbar .mercury-toolbar-line-separator{position:relative;top:-1px;width:0;height:17px;margin:-1px 3px;border-left:1px solid #707070}
 mercury .mercury-toolbar .mercury-toolbar-collection:last-child .mercury-toolbar-group:last-child .mercury-toolbar-separator:last-child,mercury .mercury-toolbar .mercury-toolbar-collection:last-child .mercury-toolbar-group:last-child .mercury-toolbar-line-separator:last-child{display:none}
-mercury .mercury-toolbar .mercury-toolbar-expander{display:none;position:absolute;top:0;right:0;z-index:1;width:11px;height:58px;background:#d2d2d2;border-left:1px solid #707070}
+mercury .mercury-toolbar .mercury-toolbar-expander{display:none;position:absolute;top:0;right:0;z-index:1;width:11px;height:57px;background:#d2d2d2;border-left:1px solid #707070}
 mercury .mercury-toolbar .mercury-toolbar-expander:before{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;position:relative;display:inline-block;font-family:mercury-toolbars;width:22px;height:12px;font-size:16px;line-height:16px;font-weight:normal;font-variant:normal;text-transform:none;text-align:center;speak:none;vertical-align:top;-webkit-font-smoothing:antialiased}
 mercury .mercury-toolbar .mercury-toolbar-expander:before{vertical-align:baseline;position:relative;left:-1px;text-align:left;line-height:15px}
 mercury .mercury-toolbar .mercury-toolbar-expander:hover{background:#c6c6c6}
@@ -384,7 +384,7 @@ mercury .mercury-table-modal table th,mercury .mercury-table-modal table td{bord
 mercury .mercury-table-modal table .selected{background:#00bce5}
 mercury.small.mercury-floating{border:1px solid #555}
 mercury.small.mercury-floating .mercury-drag-handle{top:4px;width:9px;height:23px}
-mercury.small .mercury-toolbar .mercury-toolbar-expander{height:30px}
+mercury.small .mercury-toolbar .mercury-toolbar-expander{height:29px}
 mercury.small .mercury-toolbar .mercury-toolbar-expander:before{top:13px}
 mercury.small .mercury-toolbar .mercury-toolbar-primary-container{height:30px}
 mercury.small .mercury-toolbar .mercury-toolbar-primary-container .mercury-toolbar-separator,mercury.small .mercury-toolbar .mercury-toolbar-primary-container .mercury-toolbar-line-separator{width:15px;height:30px}
@@ -410,7 +410,7 @@ mercury.flat .mercury-toolbar .mercury-toolbar-primary-container .mercury-toolba
 mercury.flat .mercury-toolbar .mercury-toolbar-primary-container .mercury-toolbar-button.mercury-button-toggled{background:#00bce5}
 mercury{-webkit-text-size-adjust:none;position:absolute;z-index:10000;-webkit-tap-highlight-color:rgba(0,0,0,0)}
 mercury.mercury-no-animation{-moz-transition:none;-webkit-transition:none;-o-transition:none;transition:none}
-mercury.loading,mercury.loading *,mercury .mercury-no-animation{-moz-transition:none !important;-webkit-transition:none !important;-o-transition:none !important;transition:none !important}
+mercury.loading,mercury.loading *,mercury .mercury-no-animation,mercury .mercury-no-animation *{-moz-transition:none !important;-webkit-transition:none !important;-o-transition:none !important;transition:none !important}
 mercury *,mercury *:before,mercury *:after{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}
 mercury li{line-height:normal}
 mercury a{color:#00bce5 !important;text-decoration:none}

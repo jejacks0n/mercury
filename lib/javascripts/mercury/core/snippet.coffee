@@ -100,7 +100,7 @@ class Mercury.Snippet extends Mercury.Model
   #
   displayForm: (form) ->
     view = new (@Modal || Mercury.Modal)
-      title: @title
+      title: @get('title')
       template: @templateClosure(form || @form)
       width: 600
       model: @
@@ -160,7 +160,7 @@ class Mercury.Snippet extends Mercury.Model
   # Binds the template that will be passed to the views to the snippet instance.
   #
   templateClosure: (template) ->
-    closure = (=> template.apply(@, arguments...)) if typeof(template) == 'function'
+    closure = (=> template.apply(@, arguments)) if typeof(template) == 'function'
     closure || template
 
 

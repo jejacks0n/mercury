@@ -1496,7 +1496,7 @@ mercury .mercury-toolbar {
     right: 0;
     z-index: 1;
     width: 11px;
-    height: 58px;
+    height: 57px;
     background: #d2d2d2;
     border-left: 1px solid #707070; }
     mercury .mercury-toolbar .mercury-toolbar-expander:before {
@@ -2134,7 +2134,7 @@ mercury.small.mercury-floating {
     width: 9px;
     height: 23px; }
 mercury.small .mercury-toolbar .mercury-toolbar-expander {
-  height: 30px; }
+  height: 29px; }
   mercury.small .mercury-toolbar .mercury-toolbar-expander:before {
     top: 13px; }
 mercury.small .mercury-toolbar .mercury-toolbar-primary-container {
@@ -2233,7 +2233,8 @@ mercury {
     -o-transition: none;
     transition: none; }
   mercury.loading, mercury.loading *,
-  mercury .mercury-no-animation {
+  mercury .mercury-no-animation,
+  mercury .mercury-no-animation * {
     -moz-transition: none !important;
     -webkit-transition: none !important;
     -o-transition: none !important;

@@ -100,7 +100,6 @@ jQuery.extend @Mercury,
   locale: ->
     return Mercury.determinedLocale if Mercury.determinedLocale
     if Mercury.config.localization.enabled
-      debugger
       locale = []
       if navigator.language && (locale = navigator.language.toString().split('-')).length
         topLocale = Mercury.I18n[locale[0]] || {}

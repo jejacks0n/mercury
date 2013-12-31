@@ -98,7 +98,7 @@ class Mercury.Modal extends Mercury.View
       @showContentTimeout = @delay(300, @showContent)
     else
       @showContent(false)
-    @delay(250, -> @removeClass('mercury-no-animation'))
+    @removeClass('mercury-no-animation')
 
 
   contentFromOptions: ->

@@ -18,7 +18,7 @@ mercury.flat {
     .mercury-toolbar-button {
       @include mercury-border-radius(0);
       background: transparent;
-      border: 0;
+      border-color: transparent;
       &+ .mercury-toolbar-button {
         @include mercury-border-radius(0);
         margin-left: 0;
@@ -30,7 +30,7 @@ mercury.flat {
         background: #eee;
       }
       &[data-type="color"] {
-        background: #333;
+        background: #666;
       }
       &:before, em {
         text-shadow: none !important;

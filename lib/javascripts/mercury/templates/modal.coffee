@@ -6,8 +6,7 @@ JST['/mercury/templates/modal'] = ->
       <div class="mercury-modal-dialog-title"><em>&times;</em><span></span></div>
       <div class="mercury-modal-loading-indicator"></div>
       <div class="mercury-modal-dialog-content-container">
-        <div class="mercury-modal-dialog-content">
-        </div>
+        <div class="mercury-modal-dialog-content"></div>
       </div>
     </div>
   </div>

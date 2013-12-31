@@ -12,14 +12,13 @@ mercury {
         border-bottom: 1px solid #666;
         font-size: 80%;
         color: #ccc;
-        h4 {
+        a {
+          display: block;
+          font-weight: bold;
           margin: 0;
           font-size: 120%;
           text-shadow: 1px 1px #000;
-          color: #eee;
-          a {
-            color: #ddd !important;
-          }
+          color: #eee !important;
         }
       }
     }

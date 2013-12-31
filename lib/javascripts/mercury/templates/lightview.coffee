@@ -6,8 +6,7 @@ JST['/mercury/templates/lightview'] = ->
       <div class="mercury-lightview-dialog-title"><em>&times;</em><span></span></div>
       <div class="mercury-lightview-loading-indicator"></div>
       <div class="mercury-lightview-dialog-content-container">
-        <div class="mercury-lightview-dialog-content">
-        </div>
+        <div class="mercury-lightview-dialog-content"></div>
       </div>
     </div>
   </div>

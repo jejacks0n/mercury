@@ -12,6 +12,7 @@ group :assets do
   gem 'sass-rails'
   gem 'uglifier'
   gem 'sprockets-rails'
+  gem 'therubyracer', platforms: :ruby
 end
 
 group :development, :test do

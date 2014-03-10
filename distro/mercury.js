@@ -164,19 +164,19 @@ Copyright (c) 2013 Jeremy Jackson
 }).call(this);
 (function() {
   JST['/mercury/templates/lightview'] = function() {
-    return "<div class=\"mercury-lightview-overlay\"></div>\n<div class=\"mercury-lightview-dialog\">\n  <div class=\"mercury-lightview-dialog-positioner\">\n    <div class=\"mercury-lightview-dialog-title\"><em>&times;</em><span></span></div>\n    <div class=\"mercury-lightview-loading-indicator\"></div>\n    <div class=\"mercury-lightview-dialog-content-container\">\n      <div class=\"mercury-lightview-dialog-content\">\n      </div>\n    </div>\n  </div>\n</div>";
+    return "<div class=\"mercury-lightview-overlay\"></div>\n<div class=\"mercury-lightview-dialog\">\n  <div class=\"mercury-lightview-dialog-positioner\">\n    <div class=\"mercury-lightview-dialog-title\"><em>&times;</em><span></span></div>\n    <div class=\"mercury-lightview-loading-indicator\"></div>\n    <div class=\"mercury-lightview-dialog-content-container\">\n      <div class=\"mercury-lightview-dialog-content\"></div>\n    </div>\n  </div>\n</div>";
   };
 
 }).call(this);
 (function() {
   JST['/mercury/templates/modal'] = function() {
-    return "<div class=\"mercury-modal-overlay\"></div>\n<div class=\"mercury-modal-dialog\">\n  <div class=\"mercury-modal-dialog-positioner\">\n    <div class=\"mercury-modal-dialog-title\"><em>&times;</em><span></span></div>\n    <div class=\"mercury-modal-loading-indicator\"></div>\n    <div class=\"mercury-modal-dialog-content-container\">\n      <div class=\"mercury-modal-dialog-content\">\n      </div>\n    </div>\n  </div>\n</div>";
+    return "<div class=\"mercury-modal-overlay\"></div>\n<div class=\"mercury-modal-dialog\">\n  <div class=\"mercury-modal-dialog-positioner\">\n    <div class=\"mercury-modal-dialog-title\"><em>&times;</em><span></span></div>\n    <div class=\"mercury-modal-loading-indicator\"></div>\n    <div class=\"mercury-modal-dialog-content-container\">\n      <div class=\"mercury-modal-dialog-content\"></div>\n    </div>\n  </div>\n</div>";
   };
 
 }).call(this);
 (function() {
   JST['/mercury/templates/panel'] = function() {
-    return "<div class=\"mercury-panel-title\"><em>&times;</em><span>Test Panel</span></div>\n<div class=\"mercury-panel-loading-indicator\"></div>\n  <div class=\"mercury-panel-content-container\">\n    <div class=\"mercury-panel-content\">\n      content\n    </div>\n  </div>\n</div>";
+    return "<div class=\"mercury-panel-title\"><em>&times;</em><span>Test Panel</span></div>\n<div class=\"mercury-panel-loading-indicator\"></div>\n  <div class=\"mercury-panel-content-container\">\n    <div class=\"mercury-panel-content\"></div>\n  </div>\n</div>";
   };
 
 }).call(this);
@@ -2604,9 +2604,7 @@ Copyright (c) 2013 Jeremy Jackson
       } else {
         this.showContent(false);
       }
-      return this.delay(250, function() {
-        return this.removeClass('mercury-no-animation');
-      });
+      return this.removeClass('mercury-no-animation');
     };
 
     Modal.prototype.contentFromOptions = function() {
@@ -6803,7 +6801,7 @@ Copyright (c) 2013 Jeremy Jackson
       });
     };
     this.loadScript = function() {
-      return this.load(JSON.parse($('script[type="json/mercury"]').text() || 'null'));
+      return this.load(JSON.parse($('script[type="json/mercury"]').text() || '{}'));
     };
     this.release = function() {
       if (!this["interface"]) {

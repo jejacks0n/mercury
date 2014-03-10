@@ -65,6 +65,7 @@ to{-moz-transform:rotate(360deg)}}
 .mercury-toolbar-secondary-container .mercury-icon-remove-heading:before{content:"\0077"}
 .mercury-toolbar-secondary-container .mercury-icon-blockquote:before{content:"\0078"}
 .mercury-toolbar-secondary-container .mercury-icon-remove:before{content:"\0079"}
+.mercury-toolbar-secondary-container .mercury-icon-clean:before{content:"\0079"}
 .mercury-toolbar-secondary-container .mercury-icon-edit:before{content:"\007a"}
 .mercury-toolbar-secondary-container .mercury-icon-pre:before{content:"\007a"}
 .mercury-toolbar-secondary-container .mercury-icon-row-before:before{content:"\0030"}
@@ -364,8 +365,7 @@ mercury .mercury-toolbar .mercury-color-palette li.last-picked:hover{color:#fff;
 mercury .mercury-history-panel input.mercury-filter{margin-bottom:15px}
 mercury .mercury-history-panel ul{margin:0;padding:0;list-style:none}
 mercury .mercury-history-panel ul li{padding:5px 0;border-bottom:1px solid #666;font-size:80%;color:#ccc}
-mercury .mercury-history-panel ul li h4{margin:0;font-size:120%;text-shadow:1px 1px #000;color:#eee}
-mercury .mercury-history-panel ul li h4 a{color:#ddd !important}
+mercury .mercury-history-panel ul li a{display:block;font-weight:bold;margin:0;font-size:120%;text-shadow:1px 1px #000;color:#eee !important}
 mercury .mercury-snippets-panel input.mercury-filter{margin-bottom:15px}
 mercury .mercury-snippets-panel ul{margin:0;padding:0;list-style:none}
 mercury .mercury-snippets-panel ul li{-webkit-border-radius:4px;-moz-border-radius:4px;border-radius:4px;-webkit-user-drag:element;-webkit-user-select:none;padding:15px;background:rgba(80,80,80,0.5);margin-bottom:10px;text-shadow:1px 1px #000;color:#fff;cursor:move;cursor:drag}
@@ -398,11 +398,11 @@ mercury.flat .mercury-toolbar{-webkit-box-shadow:0 1px 5px rgba(0,0,0,0.6);-moz-
 mercury.flat .mercury-toolbar .mercury-toolbar-container{background:#ddd;border:0;padding-left:4px}
 mercury.flat .mercury-toolbar .mercury-toolbar-line-separator{border:0}
 mercury.flat .mercury-toolbar .mercury-toolbar-expander{border-bottom:1px solid #707070}
-mercury.flat .mercury-toolbar .mercury-toolbar-button{-webkit-border-radius:0;-moz-border-radius:0;border-radius:0;background:transparent;border:0}
+mercury.flat .mercury-toolbar .mercury-toolbar-button{-webkit-border-radius:0;-moz-border-radius:0;border-radius:0;background:transparent;border-color:transparent}
 mercury.flat .mercury-toolbar .mercury-toolbar-button+.mercury-toolbar-button{-webkit-border-radius:0;-moz-border-radius:0;border-radius:0;margin-left:0}
 mercury.flat .mercury-toolbar .mercury-toolbar-button:hover{background:#eee}
 mercury.flat .mercury-toolbar .mercury-toolbar-button[data-type="select"]{background:#eee}
-mercury.flat .mercury-toolbar .mercury-toolbar-button[data-type="color"]{background:#333}
+mercury.flat .mercury-toolbar .mercury-toolbar-button[data-type="color"]{background:#666}
 mercury.flat .mercury-toolbar .mercury-toolbar-button:before,mercury.flat .mercury-toolbar .mercury-toolbar-button em{text-shadow:none !important}
 mercury.flat .mercury-toolbar .mercury-toolbar-button.mercury-button-active,mercury.flat .mercury-toolbar .mercury-toolbar-button.mercury-button-pressed{background:#00bce5}
 mercury.flat .mercury-toolbar .mercury-toolbar-primary-container .mercury-toolbar-button{-webkit-border-radius:0 0 4px 4px;-moz-border-radius:0 0 4px 4px;border-radius:0 0 4px 4px;border:0;background:transparent}

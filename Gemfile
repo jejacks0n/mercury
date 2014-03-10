@@ -11,4 +11,4 @@ gem 'yui-compressor'            # css compression
 gem 'fontcustom'
 
 # Test dependencies
-gem 'teaspoon'
+gem 'teaspoon', github: 'modeset/teaspoon'

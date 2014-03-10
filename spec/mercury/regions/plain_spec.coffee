@@ -34,7 +34,7 @@ describe "Mercury.Region.Plain", ->
     it "clears the actions if we don't allow actions", ->
       Mercury.configure 'regions:plain:allowActs', false
       subject = new Klass('<div id="foo">')
-      expect( subject.actions ).to.eql({})
+      expect( subject.actions ).to.eql(false)
 
 
   describe "onDropItem", ->

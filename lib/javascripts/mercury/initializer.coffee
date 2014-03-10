@@ -47,7 +47,7 @@ initialize = ->
   # This allows you to put the data for the current page within a <script type="json/mercury"> tag.
   #
   @loadScript = ->
-    @load(JSON.parse($('script[type="json/mercury"]').text() || 'null'))
+    @load(JSON.parse($('script[type="json/mercury"]').text() || '{}'))
 
   # Provides global method to release.
   #

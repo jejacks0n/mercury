@@ -333,8 +333,7 @@ describe "Mercury.View", ->
 
     beforeEach ->
       Mercury.configure 'templates:prefixUrl', '/foo/bar'
-      @server = sinon.fakeServer.create()
-      @server.respondWith('GET', '/foo/bar/baz', [200, {'Content-Type': 'text/html'}, '_ajax_template_'])
+      spyOn($, 'ajax').yieldsTo('success', '_ajax_template_')
 
     it "makes an ajax call for the template", ->
       result = subject.fetchTemplate('baz')

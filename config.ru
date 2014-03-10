@@ -28,19 +28,6 @@ module Mercury
     config.assets.paths << 'distro'
     config.assets.paths << 'examples/assets'
   end
-
-  Teaspoon.setup do |config|
-    config.asset_paths      = ['spec']
-    config.fixture_path     = 'spec/fixtures'
-    config.coverage_reports = 'text,html,cobertura'
-
-    config.suite do |suite|
-      suite.matcher      = 'spec/**/*_spec.{js,js.coffee,coffee}'
-      suite.helper       = 'spec_helper'
-      suite.javascripts  = ['teaspoon-mocha', 'support/chai', 'support/sinon', 'support/sinon-chai']
-      suite.no_coverage << %r(/dependencies|/templates)
-    end
-  end
 end
 
 # ----------------------------------------------------------------------------------------------------

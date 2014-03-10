@@ -236,16 +236,9 @@ describe "Mercury.Modal", ->
       expect( subject.showContent ).called
 
     it "removes the mercury-no-animation class with a delay", ->
-      spyOn(subject, 'delay').yieldsOn(subject)
       spyOn(subject, 'removeClass')
       subject.resize()
-      expect( subject.delay ).calledWith(250, sinon.match.func)
       expect( subject.removeClass ).calledWith('mercury-no-animation')
-
-    it "sets animate to false if you pass an object for the first arg", ->
-      spyOn(subject, 'delay')
-      subject.resize({})
-      expect( subject.delay ).calledOnce
 
 
   describe "#contentFromOptions", ->

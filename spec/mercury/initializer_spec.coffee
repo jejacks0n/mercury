@@ -88,11 +88,9 @@ describe "Mercury", ->
   describe ".loadUrl", ->
 
     beforeEach ->
-      @server = sinon.fakeServer.create()
-      @server.respondWith('GET', '/foo/bar/baz', [200, {'Content-Type': 'application/json'}, '{"foo": "bar"}'])
+      spyOn($, 'ajax').yieldsTo('success', {foo: "bar"})
 
     it "makes an ajax request for the json data", ->
-      spyOn($, 'ajax')
       Klass.loadUrl('/foo/bar/baz')
       expect( $.ajax ).calledWith('/foo/bar/baz', async: false, type: 'get', dataType: 'json', success: sinon.match.func)
 
@@ -115,7 +113,7 @@ describe "Mercury", ->
 
     it "calls #load with null if there was no json/mercury script found", ->
       Klass.loadScript()
-      expect( Klass.load ).calledWith(null)
+      expect( Klass.load ).calledWith({})
 
 
   describe ".release", ->

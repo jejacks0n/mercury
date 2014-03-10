@@ -160,6 +160,8 @@ This file contains all of the required css for the Mercury interface as well as 
   content: "\0078"; }
 .mercury-toolbar-secondary-container .mercury-icon-remove:before {
   content: "\0079"; }
+.mercury-toolbar-secondary-container .mercury-icon-clean:before {
+  content: "\0079"; }
 .mercury-toolbar-secondary-container .mercury-icon-edit:before {
   content: "\007a"; }
 .mercury-toolbar-secondary-container .mercury-icon-pre:before {
@@ -2055,13 +2057,13 @@ mercury .mercury-history-panel ul {
     border-bottom: 1px solid #666;
     font-size: 80%;
     color: #ccc; }
-    mercury .mercury-history-panel ul li h4 {
+    mercury .mercury-history-panel ul li a {
+      display: block;
+      font-weight: bold;
       margin: 0;
       font-size: 120%;
       text-shadow: 1px 1px #000;
-      color: #eee; }
-      mercury .mercury-history-panel ul li h4 a {
-        color: #ddd !important; }
+      color: #eee !important; }
 
 mercury .mercury-snippets-panel input.mercury-filter {
   margin-bottom: 15px; }
@@ -2195,7 +2197,7 @@ mercury.flat .mercury-toolbar {
     -moz-border-radius: 0;
     border-radius: 0;
     background: transparent;
-    border: 0; }
+    border-color: transparent; }
     mercury.flat .mercury-toolbar .mercury-toolbar-button + .mercury-toolbar-button {
       -webkit-border-radius: 0;
       -moz-border-radius: 0;
@@ -2206,7 +2208,7 @@ mercury.flat .mercury-toolbar {
     mercury.flat .mercury-toolbar .mercury-toolbar-button[data-type="select"] {
       background: #eee; }
     mercury.flat .mercury-toolbar .mercury-toolbar-button[data-type="color"] {
-      background: #333; }
+      background: #666; }
     mercury.flat .mercury-toolbar .mercury-toolbar-button:before, mercury.flat .mercury-toolbar .mercury-toolbar-button em {
       text-shadow: none !important; }
     mercury.flat .mercury-toolbar .mercury-toolbar-button.mercury-button-active, mercury.flat .mercury-toolbar .mercury-toolbar-button.mercury-button-pressed {

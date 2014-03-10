@@ -1,10 +1,10 @@
+
 /*!
 Mercury Editor is a Coffeescript and jQuery based WYSIWYG editor released under the MIT License.
 Documentation and other useful information can be found at https://github.com/jejacks0n/mercury
 
 Copyright (c) 2013 Jeremy Jackson
-*/
-
+ */
 
 (function() {
   this.Mercury || (this.Mercury = {});
@@ -981,10 +981,11 @@ Copyright (c) 2013 Jeremy Jackson
     };
 
     Module.proxy = function(callback) {
-      var _this = this;
-      return function() {
-        return callback.apply(_this, arguments);
-      };
+      return (function(_this) {
+        return function() {
+          return callback.apply(_this, arguments);
+        };
+      })(this);
     };
 
     function Module() {
@@ -1004,10 +1005,11 @@ Copyright (c) 2013 Jeremy Jackson
     }
 
     Module.prototype.proxy = function(callback) {
-      var _this = this;
-      return function() {
-        return callback.apply(_this, arguments);
-      };
+      return (function(_this) {
+        return function() {
+          return callback.apply(_this, arguments);
+        };
+      })(this);
     };
 
     return Module;
@@ -1358,8 +1360,7 @@ Copyright (c) 2013 Jeremy Jackson
     Model.prototype.validate = function() {};
 
     Model.prototype.save = function(options) {
-      var defaultOptions,
-        _this = this;
+      var defaultOptions;
       if (options == null) {
         options = {};
       }
@@ -1373,22 +1374,26 @@ Copyright (c) 2013 Jeremy Jackson
         contentType: 'application/json; charset=utf-8',
         cache: false,
         data: this.toJSON(),
-        success: function(json) {
-          if (typeof json === 'object') {
-            _this.id = json.id;
-            if (_this.id) {
-              _this.constructor.records[_this.id] = _this;
+        success: (function(_this) {
+          return function(json) {
+            if (typeof json === 'object') {
+              _this.id = json.id;
+              if (_this.id) {
+                _this.constructor.records[_this.id] = _this;
+              }
+              _this.set(json);
+              _this.trigger('save', json);
             }
-            _this.set(json);
-            _this.trigger('save', json);
-          }
-          return typeof _this.saveSuccess === "function" ? _this.saveSuccess(json) : void 0;
-        },
-        error: function(xhr) {
-          _this.trigger('error', xhr, options);
-          _this.notify(_this.t('Unable to process response: %s', xhr.status));
-          return typeof _this.saveError === "function" ? _this.saveError.apply(_this, arguments) : void 0;
-        }
+            return typeof _this.saveSuccess === "function" ? _this.saveSuccess(json) : void 0;
+          };
+        })(this),
+        error: (function(_this) {
+          return function(xhr) {
+            _this.trigger('error', xhr, options);
+            _this.notify(_this.t('Unable to process response: %s', xhr.status));
+            return typeof _this.saveError === "function" ? _this.saveError.apply(_this, arguments) : void 0;
+          };
+        })(this)
       };
       options = $.extend(defaultOptions, options);
       if (options.dataType && typeof options.data !== 'string') {
@@ -1547,12 +1552,13 @@ Copyright (c) 2013 Jeremy Jackson
     }
 
     Plugin.prototype.buttonRegistered = function(button) {
-      var _this = this;
       this.button = button;
       this.configuration = $.extend({}, this.configuration, this.button.get('settings'));
-      this.button.on('click', function() {
-        return _this.onButtonClick();
-      });
+      this.button.on('click', (function(_this) {
+        return function() {
+          return _this.onButtonClick();
+        };
+      })(this));
       if (this.prependButtonAction) {
         this.context = this.button.get('actionName');
         this.prependAction(this.context, this.prependButtonAction);
@@ -1683,29 +1689,32 @@ Copyright (c) 2013 Jeremy Jackson
     };
 
     Plugin.prototype.delegateEvents = function(events) {
-      var key, method, _results,
-        _this = this;
+      var key, method, _results;
       this.__global_handlers__ || (this.__global_handlers__ = {});
       _results = [];
       for (key in events) {
         method = events[key];
         if (typeof method === 'function') {
-          method = (function(method) {
-            return function() {
-              method.apply(_this, arguments);
-              return true;
+          method = (function(_this) {
+            return function(method) {
+              return function() {
+                method.apply(_this, arguments);
+                return true;
+              };
             };
-          })(method);
+          })(this)(method);
         } else {
           if (!this[method]) {
             throw new Error("" + method + " doesn't exist");
           } else {
-            method = (function(method) {
-              return function() {
-                _this[method].apply(_this, arguments);
-                return true;
+            method = (function(_this) {
+              return function(method) {
+                return function() {
+                  _this[method].apply(_this, arguments);
+                  return true;
+                };
               };
-            })(method);
+            })(this)(method);
           }
         }
         if (key.indexOf('mercury:') === 0) {
@@ -1959,10 +1968,11 @@ Copyright (c) 2013 Jeremy Jackson
     };
 
     View.prototype.delay = function(ms, callback) {
-      var _this = this;
-      return setTimeout((function() {
-        return callback.call(_this);
-      }), ms);
+      return setTimeout(((function(_this) {
+        return function() {
+          return callback.call(_this);
+        };
+      })(this)), ms);
     };
 
     View.prototype.refreshElements = function() {
@@ -2117,8 +2127,7 @@ Copyright (c) 2013 Jeremy Jackson
     };
 
     View.prototype.delegateEvents = function(el, events) {
-      var event, key, match, method, selector, _ref, _results,
-        _this = this;
+      var event, key, match, method, selector, _ref, _results;
       if (arguments.length === 1) {
         events = el;
         el = this.$el;
@@ -2128,30 +2137,36 @@ Copyright (c) 2013 Jeremy Jackson
       for (key in events) {
         method = events[key];
         if (typeof method === 'function') {
-          method = (function(method) {
-            return function() {
-              method.apply(_this, arguments);
-              return true;
+          method = (function(_this) {
+            return function(method) {
+              return function() {
+                method.apply(_this, arguments);
+                return true;
+              };
             };
-          })(method);
+          })(this)(method);
         } else {
           if (method.indexOf('mercury:') === 0) {
             method = method.replace(/^mercury:/, '');
-            method = (function(method) {
-              return function() {
-                Mercury.trigger(method, _this);
-                return true;
+            method = (function(_this) {
+              return function(method) {
+                return function() {
+                  Mercury.trigger(method, _this);
+                  return true;
+                };
               };
-            })(method);
+            })(this)(method);
           } else if (!this[method]) {
             throw new Error("" + method + " doesn't exist");
           } else {
-            method = (function(method) {
-              return function() {
-                _this[method].apply(_this, arguments);
-                return true;
+            method = (function(_this) {
+              return function(method) {
+                return function() {
+                  _this[method].apply(_this, arguments);
+                  return true;
+                };
               };
-            })(method);
+            })(this)(method);
           }
         }
         if (key.indexOf('mercury:') === 0) {
@@ -2305,48 +2320,58 @@ Copyright (c) 2013 Jeremy Jackson
       });
     },
     preventFocusout: function($constrain) {
-      var $focus,
-        _this = this;
+      var $focus;
       $focus = $(this.createFocusableKeeper().appendTo(this.$el)[0]);
-      this.on('release', function() {
-        return _this.clearFocusout($focus, $constrain);
-      });
-      this.on('hide', function() {
-        return _this.clearFocusout($focus, $constrain);
-      });
-      $focus.on('blur', function() {
-        return _this.keepFocusConstrained($focus, $constrain);
-      });
-      $constrain.off('focusout').on('focusout', function() {
-        return _this.keepFocusConstrained($focus, $constrain);
-      });
-      return $constrain.on('keydown', function(e) {
-        var first, focusables, last;
-        if (e.keyCode !== 9) {
-          return;
-        }
-        focusables = $constrain.find(':input[tabindex != "-1"]');
-        if (!focusables.length) {
-          return;
-        }
-        first = focusables[0];
-        last = focusables[focusables.length - 1];
-        if ((e.shiftKey && e.target === first) || (!e.shiftKey && e.target === last)) {
-          return _this.prevent(e, true);
-        }
-      });
+      this.on('release', (function(_this) {
+        return function() {
+          return _this.clearFocusout($focus, $constrain);
+        };
+      })(this));
+      this.on('hide', (function(_this) {
+        return function() {
+          return _this.clearFocusout($focus, $constrain);
+        };
+      })(this));
+      $focus.on('blur', (function(_this) {
+        return function() {
+          return _this.keepFocusConstrained($focus, $constrain);
+        };
+      })(this));
+      $constrain.off('focusout').on('focusout', (function(_this) {
+        return function() {
+          return _this.keepFocusConstrained($focus, $constrain);
+        };
+      })(this));
+      return $constrain.on('keydown', (function(_this) {
+        return function(e) {
+          var first, focusables, last;
+          if (e.keyCode !== 9) {
+            return;
+          }
+          focusables = $constrain.find(':input[tabindex != "-1"]');
+          if (!focusables.length) {
+            return;
+          }
+          first = focusables[0];
+          last = focusables[focusables.length - 1];
+          if ((e.shiftKey && e.target === first) || (!e.shiftKey && e.target === last)) {
+            return _this.prevent(e, true);
+          }
+        };
+      })(this));
     },
     createFocusableKeeper: function() {
       return $('<input style="position:fixed;left:100%;top:20px" tabindex="-1"/><input style="position:fixed;left:100%;top:20px"/>');
     },
     keepFocusConstrained: function($focus, $constrain) {
-      var _this = this;
-      return this.preventFocusoutTimeout = this.delay(1, function() {
-        if ($.contains($constrain[0], document.activeElement)) {
-          return;
-        }
-        return $focus.focus();
-      });
+      return this.preventFocusoutTimeout = this.delay(1, (function(_this) {
+        return function() {
+          if ($.contains($constrain[0], document.activeElement)) {
+            return;
+          }
+          return $focus.focus();
+        };
+      })(this));
     },
     clearFocusout: function($focus, $constrain) {
       clearTimeout(this.preventFocusoutTimeout);
@@ -2450,16 +2475,14 @@ Copyright (c) 2013 Jeremy Jackson
 
 }).call(this);
 (function() {
-  var _ref,
-    __hasProp = {}.hasOwnProperty,
+  var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
   Mercury.Modal = (function(_super) {
     __extends(Modal, _super);
 
     function Modal() {
-      _ref = Modal.__super__.constructor.apply(this, arguments);
-      return _ref;
+      return Modal.__super__.constructor.apply(this, arguments);
     }
 
     Modal.include(Mercury.View.Modules.FormHandler);
@@ -2525,11 +2548,11 @@ Copyright (c) 2013 Jeremy Jackson
     };
 
     Modal.prototype.updateForOptions = function(options) {
-      var content, key, value, _ref1;
+      var content, key, value, _ref;
       this.options = $.extend({}, this.options, options || {});
-      _ref1 = this.options;
-      for (key in _ref1) {
-        value = _ref1[key];
+      _ref = this.options;
+      for (key in _ref) {
+        value = _ref[key];
         this[key] = value;
       }
       this.negotiateTemplate();
@@ -2675,7 +2698,7 @@ Copyright (c) 2013 Jeremy Jackson
 
 }).call(this);
 (function() {
-  var registered, _ref,
+  var registered,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -2766,15 +2789,15 @@ Copyright (c) 2013 Jeremy Jackson
     };
 
     Snippet.prototype.delay = function(ms, callback) {
-      var _this = this;
-      return setTimeout((function() {
-        return callback.call(_this);
-      }), ms);
+      return setTimeout(((function(_this) {
+        return function() {
+          return callback.call(_this);
+        };
+      })(this)), ms);
     };
 
     Snippet.prototype.displayForm = function(form) {
-      var view,
-        _this = this;
+      var view;
       view = new (this.Modal || Mercury.Modal)({
         title: this.get('title'),
         template: this.templateClosure(form || this.form),
@@ -2782,9 +2805,11 @@ Copyright (c) 2013 Jeremy Jackson
         model: this,
         hideOnValidSubmit: true
       });
-      return view.on('form:success', function() {
-        return _this.render();
-      });
+      return view.on('form:success', (function(_this) {
+        return function() {
+          return _this.render();
+        };
+      })(this));
     };
 
     Snippet.prototype.render = function(options) {
@@ -2823,19 +2848,21 @@ Copyright (c) 2013 Jeremy Jackson
     };
 
     Snippet.prototype.saveSuccess = function(content) {
-      var _this = this;
-      return this.renderView(function() {
-        return _this.get('preview') || content;
-      });
+      return this.renderView((function(_this) {
+        return function() {
+          return _this.get('preview') || content;
+        };
+      })(this));
     };
 
     Snippet.prototype.templateClosure = function(template) {
-      var closure,
-        _this = this;
+      var closure;
       if (typeof template === 'function') {
-        closure = (function() {
-          return template.apply(_this, arguments);
-        });
+        closure = ((function(_this) {
+          return function() {
+            return template.apply(_this, arguments);
+          };
+        })(this));
       }
       return closure || template;
     };
@@ -2910,8 +2937,7 @@ Copyright (c) 2013 Jeremy Jackson
     __extends(View, _super);
 
     function View() {
-      _ref = View.__super__.constructor.apply(this, arguments);
-      return _ref;
+      return View.__super__.constructor.apply(this, arguments);
     }
 
     View.prototype.build = function() {
@@ -3201,8 +3227,7 @@ Copyright (c) 2013 Jeremy Jackson
     };
 
     Region.prototype.pushHistory = function(keyCode) {
-      var knownKeyCode, pushNow,
-        _this = this;
+      var knownKeyCode, pushNow;
       if (keyCode == null) {
         keyCode = null;
       }
@@ -3217,9 +3242,11 @@ Copyright (c) 2013 Jeremy Jackson
       if (pushNow) {
         return this.pushStack(this.toStack());
       } else {
-        return this.historyTimeout = this.delay(2500, function() {
-          return _this.pushStack(_this.toStack());
-        });
+        return this.historyTimeout = this.delay(2500, (function(_this) {
+          return function() {
+            return _this.pushStack(_this.toStack());
+          };
+        })(this));
       }
     };
 
@@ -3410,66 +3437,76 @@ Copyright (c) 2013 Jeremy Jackson
     };
 
     Region.prototype.bindFocusEvents = function() {
-      var _this = this;
       return this.delegateEvents(this.$focusable, {
-        focus: function() {
-          _this.focused = true;
-          _this.trigger('focus');
-          return typeof _this.onFocus === "function" ? _this.onFocus() : void 0;
-        },
-        blur: function() {
-          _this.focused = false;
-          _this.trigger('blur');
-          return typeof _this.onBlur === "function" ? _this.onBlur() : void 0;
-        }
+        focus: (function(_this) {
+          return function() {
+            _this.focused = true;
+            _this.trigger('focus');
+            return typeof _this.onFocus === "function" ? _this.onFocus() : void 0;
+          };
+        })(this),
+        blur: (function(_this) {
+          return function() {
+            _this.focused = false;
+            _this.trigger('blur');
+            return typeof _this.onBlur === "function" ? _this.onBlur() : void 0;
+          };
+        })(this)
       });
     };
 
     Region.prototype.bindKeyEvents = function() {
-      var _this = this;
       return this.delegateEvents(this.$focusable, {
-        keyup: function() {
-          return _this.trigger('update');
-        },
-        keydown: function(e) {
-          if (!(e.metaKey && e.keyCode === 90)) {
-            return;
-          }
-          _this.prevent(e);
-          if (e.shiftKey) {
-            return _this.handleAction('redo');
-          } else {
-            return _this.handleAction('undo');
-          }
-        }
+        keyup: (function(_this) {
+          return function() {
+            return _this.trigger('update');
+          };
+        })(this),
+        keydown: (function(_this) {
+          return function(e) {
+            if (!(e.metaKey && e.keyCode === 90)) {
+              return;
+            }
+            _this.prevent(e);
+            if (e.shiftKey) {
+              return _this.handleAction('redo');
+            } else {
+              return _this.handleAction('undo');
+            }
+          };
+        })(this)
       });
     };
 
     Region.prototype.bindMouseEvents = function() {
-      var _this = this;
       return this.delegateEvents(this.$focusable, {
-        mouseup: function() {
-          return _this.trigger('update');
-        }
+        mouseup: (function(_this) {
+          return function() {
+            return _this.trigger('update');
+          };
+        })(this)
       });
     };
 
     Region.prototype.bindDropEvents = function() {
-      var _this = this;
       if (!(this.onDropFile || this.onDropItem || this.onDropSnippet)) {
         return;
       }
       return this.delegateEvents(this.$el, {
-        dragenter: function(e) {
-          if (!_this.previewing) {
-            return _this.prevent(e);
-          }
-        },
-        dragover: function(e) {
-          if (!(_this.previewing || (_this.editableDropBehavior && Mercury.support.webkit && !Mercury.dragHack))) {
-            return _this.prevent(e);
-          }
-        },
+        dragenter: (function(_this) {
+          return function(e) {
+            if (!_this.previewing) {
+              return _this.prevent(e);
+            }
+          };
+        })(this),
+        dragover: (function(_this) {
+          return function(e) {
+            if (!(_this.previewing || (_this.editableDropBehavior && Mercury.support.webkit && !Mercury.dragHack))) {
+              return _this.prevent(e);
+            }
+          };
+        })(this),
         drop: 'onItemDropped'
       });
     };
@@ -3572,12 +3609,15 @@ Copyright (c) 2013 Jeremy Jackson
       });
     },
     bindDocumentDragEvents: function(el) {
-      var _this = this;
-      return $(el).on('mousemove', this.onDragHandler = function(e) {
-        return _this.onDrag(e);
-      }).on('mouseup', this.onEndDraggingHandler = function(e) {
-        return _this.onEndDragging(e);
-      });
+      return $(el).on('mousemove', this.onDragHandler = (function(_this) {
+        return function(e) {
+          return _this.onDrag(e);
+        };
+      })(this)).on('mouseup', this.onEndDraggingHandler = (function(_this) {
+        return function(e) {
+          return _this.onEndDragging(e);
+        };
+      })(this));
     },
     unbindDocumentDragEvents: function(el) {
       return $(el).off('mousemove', this.onDragHandler).off('mouseup', this.onEndDraggingHandler);
@@ -3752,16 +3792,14 @@ Copyright (c) 2013 Jeremy Jackson
 
 }).call(this);
 (function() {
-  var _ref,
-    __hasProp = {}.hasOwnProperty,
+  var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
   Mercury.Model.Page = (function(_super) {
     __extends(Page, _super);
 
     function Page() {
-      _ref = Page.__super__.constructor.apply(this, arguments);
-      return _ref;
+      return Page.__super__.constructor.apply(this, arguments);
     }
 
     Page.define('Mercury.Model.Page');
@@ -4038,7 +4076,6 @@ Copyright (c) 2013 Jeremy Jackson
     };
 
     BaseInterface.prototype.hide = function() {
-      var _this = this;
       if (!this.visible) {
         return;
       }
@@ -4057,10 +4094,12 @@ Copyright (c) 2013 Jeremy Jackson
         opacity: 0
       }, {
         duration: 250,
-        complete: function() {
-          _this.$el.hide();
-          return _this.hiding = false;
-        }
+        complete: (function(_this) {
+          return function() {
+            _this.$el.hide();
+            return _this.hiding = false;
+          };
+        })(this)
       });
     };
 
@@ -4124,19 +4163,22 @@ Copyright (c) 2013 Jeremy Jackson
     };
 
     BaseInterface.prototype.save = function() {
-      var _this = this;
       this.page.set({
         content: this.serialize(),
         location: location.pathname
       });
-      this.page.on('error', function(xhr, options) {
-        return alert(_this.t('Unable to save to the url: %s', options.url));
-      });
-      return this.page.save().always = function() {
-        return _this.delay(250, function() {
-          return Mercury.trigger('save:complete');
-        });
-      };
+      this.page.on('error', (function(_this) {
+        return function(xhr, options) {
+          return alert(_this.t('Unable to save to the url: %s', options.url));
+        };
+      })(this));
+      return this.page.save().always = (function(_this) {
+        return function() {
+          return _this.delay(250, function() {
+            return Mercury.trigger('save:complete');
+          });
+        };
+      })(this);
     };
 
     BaseInterface.prototype.heightForWidth = function(width) {
@@ -4297,8 +4339,7 @@ Copyright (c) 2013 Jeremy Jackson
 
 }).call(this);
 (function() {
-  var _ref,
-    __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -4308,8 +4349,7 @@ Copyright (c) 2013 Jeremy Jackson
     function FrameInterface() {
       this.onResize = __bind(this.onResize, this);
       this.onScroll = __bind(this.onScroll, this);
-      _ref = FrameInterface.__super__.constructor.apply(this, arguments);
-      return _ref;
+      return FrameInterface.__super__.constructor.apply(this, arguments);
     }
 
     FrameInterface.logPrefix = 'Mercury.FrameInterface:';
@@ -4342,14 +4382,15 @@ Copyright (c) 2013 Jeremy Jackson
     };
 
     FrameInterface.prototype.bindDefaultEvents = function() {
-      var _this = this;
-      this.$frame.on('load', function() {
-        _this.initializeFrame();
-        _this.load(_this.loadedJSON);
-        return _this.$frame.off('load').on('load', function() {
-          return _this.reinitializeFrame();
-        });
-      });
+      this.$frame.on('load', (function(_this) {
+        return function() {
+          _this.initializeFrame();
+          _this.load(_this.loadedJSON);
+          return _this.$frame.off('load').on('load', function() {
+            return _this.reinitializeFrame();
+          });
+        };
+      })(this));
       this.delegateEvents({
         'mercury:initialize': function() {
           return this.initializeFrame();
@@ -4391,8 +4432,8 @@ Copyright (c) 2013 Jeremy Jackson
     };
 
     FrameInterface.prototype.frameLocation = function() {
-      var _ref1, _ref2;
-      return (_ref1 = this.$frame.get(0)) != null ? (_ref2 = _ref1.contentWindow) != null ? _ref2.location.href : void 0 : void 0;
+      var _ref, _ref1;
+      return (_ref = this.$frame.get(0)) != null ? (_ref1 = _ref.contentWindow) != null ? _ref1.location.href : void 0 : void 0;
     };
 
     FrameInterface.prototype.setupDocument = function() {
@@ -4423,13 +4464,13 @@ Copyright (c) 2013 Jeremy Jackson
     };
 
     FrameInterface.prototype.hijackLinksAndForms = function() {
-      var $el, classname, el, ignored, nonHijackableClasses, regionSelector, _i, _j, _len, _len1, _ref1, _results;
+      var $el, classname, el, ignored, nonHijackableClasses, regionSelector, _i, _j, _len, _len1, _ref, _results;
       nonHijackableClasses = this.config('interface:nohijack') || [];
       regionSelector = "[" + (this.config('regions:attribute')) + "]";
-      _ref1 = $('a, form', this.document);
+      _ref = $('a, form', this.document);
       _results = [];
-      for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
-        el = _ref1[_i];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        el = _ref[_i];
         $el = $(el);
         ignored = false;
         for (_j = 0, _len1 = nonHijackableClasses.length; _j < _len1; _j++) {
@@ -4483,16 +4524,14 @@ Copyright (c) 2013 Jeremy Jackson
 
 }).call(this);
 (function() {
-  var _ref,
-    __hasProp = {}.hasOwnProperty,
+  var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
   Mercury.Lightview = (function(_super) {
     __extends(Lightview, _super);
 
     function Lightview() {
-      _ref = Lightview.__super__.constructor.apply(this, arguments);
-      return _ref;
+      return Lightview.__super__.constructor.apply(this, arguments);
     }
 
     Lightview.logPrefix = 'Mercury.Lightview:';
@@ -4584,8 +4623,7 @@ Copyright (c) 2013 Jeremy Jackson
 
 }).call(this);
 (function() {
-  var _ref,
-    __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -4594,8 +4632,7 @@ Copyright (c) 2013 Jeremy Jackson
 
     function Panel() {
       this.resize = __bind(this.resize, this);
-      _ref = Panel.__super__.constructor.apply(this, arguments);
-      return _ref;
+      return Panel.__super__.constructor.apply(this, arguments);
     }
 
     Panel.include(Mercury.View.Modules.Draggable);
@@ -4630,7 +4667,7 @@ Copyright (c) 2013 Jeremy Jackson
     };
 
     Panel.prototype.resize = function(animate, dimensions) {
-      var height, titleHeight, _ref1;
+      var height, titleHeight, _ref;
       if (animate == null) {
         animate = true;
       }
@@ -4648,7 +4685,7 @@ Copyright (c) 2013 Jeremy Jackson
       if (!animate) {
         this.addClass('mercury-no-animation');
       }
-      if (dimensions || (dimensions = (_ref1 = Mercury["interface"]) != null ? typeof _ref1.dimensions === "function" ? _ref1.dimensions() : void 0 : void 0)) {
+      if (dimensions || (dimensions = (_ref = Mercury["interface"]) != null ? typeof _ref.dimensions === "function" ? _ref.dimensions() : void 0 : void 0)) {
         this.css({
           top: dimensions.top + 10,
           bottom: dimensions.bottom + 10
@@ -4705,16 +4742,14 @@ Copyright (c) 2013 Jeremy Jackson
 
 }).call(this);
 (function() {
-  var _ref,
-    __hasProp = {}.hasOwnProperty,
+  var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
   Mercury.Statusbar = (function(_super) {
     __extends(Statusbar, _super);
 
     function Statusbar() {
-      _ref = Statusbar.__super__.constructor.apply(this, arguments);
-      return _ref;
+      return Statusbar.__super__.constructor.apply(this, arguments);
     }
 
     Statusbar.logPrefix = 'Mercury.Statusbar:';
@@ -4758,22 +4793,22 @@ Copyright (c) 2013 Jeremy Jackson
     };
 
     Statusbar.prototype.show = function() {
-      var _this = this;
       if (Mercury["interface"].floating && this.visible) {
         return;
       }
       clearTimeout(this.visibilityTimeout);
       this.visible = true;
       this.$el.show();
-      return this.visibilityTimeout = this.delay(50, function() {
-        return _this.css({
-          bottom: 0
-        });
-      });
+      return this.visibilityTimeout = this.delay(50, (function(_this) {
+        return function() {
+          return _this.css({
+            bottom: 0
+          });
+        };
+      })(this));
     };
 
     Statusbar.prototype.hide = function() {
-      var _this = this;
       if (Mercury["interface"].floating) {
         return;
       }
@@ -4782,9 +4817,11 @@ Copyright (c) 2013 Jeremy Jackson
       this.css({
         bottom: -this.$el.height()
       });
-      return this.visibilityTimeout = this.delay(250, function() {
-        return _this.$el.hide();
-      });
+      return this.visibilityTimeout = this.delay(250, (function(_this) {
+        return function() {
+          return _this.$el.hide();
+        };
+      })(this));
     };
 
     Statusbar.prototype.height = function() {
@@ -4938,19 +4975,22 @@ Copyright (c) 2013 Jeremy Jackson
     };
 
     ToolbarButton.prototype.buildSubview = function() {
-      var Klass, options,
-        _this = this;
+      var Klass, options;
       if (this.subview) {
-        this.subview.on('show', function() {
-          if (_this.toggle) {
-            _this.toggled();
-          }
-          return _this.activate();
-        });
-        this.subview.on('hide', function() {
-          _this.untoggled();
-          return _this.deactivate();
-        });
+        this.subview.on('show', (function(_this) {
+          return function() {
+            if (_this.toggle) {
+              _this.toggled();
+            }
+            return _this.activate();
+          };
+        })(this));
+        this.subview.on('hide', (function(_this) {
+          return function() {
+            _this.untoggled();
+            return _this.deactivate();
+          };
+        })(this));
         return this.subview;
       }
       if (Klass = Mercury[("toolbar_" + this.type).toCamelCase(true)]) {
@@ -5012,10 +5052,11 @@ Copyright (c) 2013 Jeremy Jackson
     };
 
     ToolbarButton.prototype.onRegionFocus = function(region) {
-      var _this = this;
-      return this.delay(100, function() {
-        return _this.onRegionUpdate(region);
-      });
+      return this.delay(100, (function(_this) {
+        return function() {
+          return _this.onRegionUpdate(region);
+        };
+      })(this));
     };
 
     ToolbarButton.prototype.onRegionUpdate = function(region) {
@@ -5114,16 +5155,14 @@ Copyright (c) 2013 Jeremy Jackson
 
 }).call(this);
 (function() {
-  var _ref,
-    __hasProp = {}.hasOwnProperty,
+  var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
   Mercury.ToolbarSelect = (function(_super) {
     __extends(ToolbarSelect, _super);
 
     function ToolbarSelect() {
-      _ref = ToolbarSelect.__super__.constructor.apply(this, arguments);
-      return _ref;
+      return ToolbarSelect.__super__.constructor.apply(this, arguments);
     }
 
     ToolbarSelect.include(Mercury.View.Modules.InterfaceFocusable);
@@ -5144,16 +5183,14 @@ Copyright (c) 2013 Jeremy Jackson
 
 }).call(this);
 (function() {
-  var _ref,
-    __hasProp = {}.hasOwnProperty,
+  var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
   Mercury.ToolbarExpander = (function(_super) {
     __extends(ToolbarExpander, _super);
 
     function ToolbarExpander() {
-      _ref = ToolbarExpander.__super__.constructor.apply(this, arguments);
-      return _ref;
+      return ToolbarExpander.__super__.constructor.apply(this, arguments);
     }
 
     ToolbarExpander.logPrefix = 'Mercury.ToolbarExpander:';
@@ -5200,13 +5237,13 @@ Copyright (c) 2013 Jeremy Jackson
     };
 
     ToolbarExpander.prototype.updateSelect = function() {
-      var button, ul, _i, _len, _ref1, _results;
+      var button, ul, _i, _len, _ref, _results;
       this.select.html('<ul>');
       ul = this.select.$('ul');
-      _ref1 = this.parent.hiddenButtons();
+      _ref = this.parent.hiddenButtons();
       _results = [];
-      for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
-        button = _ref1[_i];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        button = _ref[_i];
         _results.push(ul.append($("<li class='" + button["class"] + "'>" + button.title + "</li>").data({
           button: button.el
         })));
@@ -5331,16 +5368,14 @@ Copyright (c) 2013 Jeremy Jackson
 
 }).call(this);
 (function() {
-  var _ref,
-    __hasProp = {}.hasOwnProperty,
+  var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
   Mercury.Toolbar = (function(_super) {
     __extends(Toolbar, _super);
 
     function Toolbar() {
-      _ref = Toolbar.__super__.constructor.apply(this, arguments);
-      return _ref;
+      return Toolbar.__super__.constructor.apply(this, arguments);
     }
 
     Toolbar.logPrefix = 'Mercury.Toolbar:';
@@ -5373,22 +5408,22 @@ Copyright (c) 2013 Jeremy Jackson
     };
 
     Toolbar.prototype.show = function() {
-      var _this = this;
       if (Mercury["interface"].floating && this.visible) {
         return;
       }
       clearTimeout(this.visibilityTimeout);
       this.visible = true;
       this.$el.show();
-      return this.visibilityTimeout = this.delay(50, function() {
-        return _this.css({
-          top: 0
-        });
-      });
+      return this.visibilityTimeout = this.delay(50, (function(_this) {
+        return function() {
+          return _this.css({
+            top: 0
+          });
+        };
+      })(this));
     };
 
     Toolbar.prototype.hide = function() {
-      var _this = this;
       if (Mercury["interface"].floating) {
         return;
       }
@@ -5397,9 +5432,11 @@ Copyright (c) 2013 Jeremy Jackson
       this.css({
         top: -this.$el.height()
       });
-      return this.visibilityTimeout = this.delay(250, function() {
-        return _this.$el.hide();
-      });
+      return this.visibilityTimeout = this.delay(250, (function(_this) {
+        return function() {
+          return _this.$el.hide();
+        };
+      })(this));
     };
 
     Toolbar.prototype.height = function() {
@@ -5417,16 +5454,16 @@ Copyright (c) 2013 Jeremy Jackson
     };
 
     Toolbar.prototype.onRegionFocus = function(region) {
-      var name, _i, _len, _ref1;
+      var name, _i, _len, _ref;
       if (this.region === region) {
         return;
       }
       this.region = region;
       this.$('.mercury-toolbar-collection').remove();
       this.releaseSubviews();
-      _ref1 = region.toolbars || [];
-      for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
-        name = _ref1[_i];
+      _ref = region.toolbars || [];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        name = _ref[_i];
         this.buildToolbar(name);
       }
       return Mercury.trigger('region:update', region);
@@ -5438,16 +5475,14 @@ Copyright (c) 2013 Jeremy Jackson
 
 }).call(this);
 (function() {
-  var _ref,
-    __hasProp = {}.hasOwnProperty,
+  var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
   Mercury.ToolbarPalette = (function(_super) {
     __extends(ToolbarPalette, _super);
 
     function ToolbarPalette() {
-      _ref = ToolbarPalette.__super__.constructor.apply(this, arguments);
-      return _ref;
+      return ToolbarPalette.__super__.constructor.apply(this, arguments);
     }
 
     ToolbarPalette.include(Mercury.View.Modules.InterfaceFocusable);
@@ -5634,13 +5669,14 @@ Copyright (c) 2013 Jeremy Jackson
     };
 
     Uploader.prototype.show = function() {
-      var _this = this;
       this.update(this.t('Processing...'));
-      return this.delay(50, function() {
-        return _this.css({
-          opacity: 1
-        });
-      });
+      return this.delay(50, (function(_this) {
+        return function() {
+          return _this.css({
+            opacity: 1
+          });
+        };
+      })(this));
     };
 
     Uploader.prototype.release = function(ms) {
@@ -5658,8 +5694,7 @@ Copyright (c) 2013 Jeremy Jackson
     };
 
     Uploader.prototype.upload = function() {
-      var xhr,
-        _this = this;
+      var xhr;
       if (!this.files.length) {
         return this.release(500);
       }
@@ -5669,12 +5704,16 @@ Copyright (c) 2013 Jeremy Jackson
       if (xhr = this.file.save({
         uploadEvents: this.uploadEvents()
       })) {
-        xhr.success(function() {
-          return _this.success();
-        });
-        return xhr.error(function() {
-          return _this.error();
-        });
+        xhr.success((function(_this) {
+          return function() {
+            return _this.success();
+          };
+        })(this));
+        return xhr.error((function(_this) {
+          return function() {
+            return _this.error();
+          };
+        })(this));
       }
     };
 
@@ -5694,16 +5733,17 @@ Copyright (c) 2013 Jeremy Jackson
     };
 
     Uploader.prototype.loadDetails = function() {
-      var _this = this;
       this.$details.html([this.t('Name: %s', this.file.get('name')), this.t('Type: %s', this.file.get('type')), this.t('Size: %s', this.file.readableSize())].join('<br/>'));
       if (!this.file.isImage()) {
         return;
       }
-      return this.file.readAsDataURL(function(result) {
-        return _this.$preview.html($('<img>', {
-          src: result
-        }));
-      });
+      return this.file.readAsDataURL((function(_this) {
+        return function(result) {
+          return _this.$preview.html($('<img>', {
+            src: result
+          }));
+        };
+      })(this));
     };
 
     Uploader.prototype.success = function() {
@@ -5719,12 +5759,13 @@ Copyright (c) 2013 Jeremy Jackson
     };
 
     Uploader.prototype.uploadEvents = function() {
-      var _this = this;
       return {
-        progress: function(e) {
-          _this.update(_this.t('Uploading...'), e.loaded);
-          return _this.$percent.show();
-        }
+        progress: (function(_this) {
+          return function(e) {
+            _this.update(_this.t('Uploading...'), e.loaded);
+            return _this.$percent.show();
+          };
+        })(this)
       };
     };
 
@@ -5734,16 +5775,14 @@ Copyright (c) 2013 Jeremy Jackson
 
 }).call(this);
 (function() {
-  var _ref,
-    __hasProp = {}.hasOwnProperty,
+  var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
   Mercury.Action.Link = (function(_super) {
     __extends(Link, _super);
 
     function Link() {
-      _ref = Link.__super__.constructor.apply(this, arguments);
-      return _ref;
+      return Link.__super__.constructor.apply(this, arguments);
     }
 
     Link.prototype.name = 'link';
@@ -5764,16 +5803,14 @@ Copyright (c) 2013 Jeremy Jackson
 
 }).call(this);
 (function() {
-  var _ref,
-    __hasProp = {}.hasOwnProperty,
+  var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
   Mercury.Action.Media = (function(_super) {
     __extends(Media, _super);
 
     function Media() {
-      _ref = Media.__super__.constructor.apply(this, arguments);
-      return _ref;
+      return Media.__super__.constructor.apply(this, arguments);
     }
 
     Media.prototype.name = 'media';
@@ -6183,14 +6220,15 @@ Copyright (c) 2013 Jeremy Jackson
       return _results;
     },
     loadSnippet: function(cid, data) {
-      var _this = this;
-      return Mercury.Snippet.fromSerializedJSON(data).renderAndReplaceWithView(this.$("[data-mercury-snippet=" + cid + "]"), function() {
-        try {
-          _this.initialValue = JSON.stringify(_this.toJSON());
-          _this.pushHistory();
-          return typeof _this.onLoadSnippet === "function" ? _this.onLoadSnippet() : void 0;
-        } catch (_error) {}
-      });
+      return Mercury.Snippet.fromSerializedJSON(data).renderAndReplaceWithView(this.$("[data-mercury-snippet=" + cid + "]"), (function(_this) {
+        return function() {
+          try {
+            _this.initialValue = JSON.stringify(_this.toJSON());
+            _this.pushHistory();
+            return typeof _this.onLoadSnippet === "function" ? _this.onLoadSnippet() : void 0;
+          } catch (_error) {}
+        };
+      })(this));
     }
   };
 
@@ -6766,8 +6804,7 @@ Copyright (c) 2013 Jeremy Jackson
     __slice = [].slice;
 
   initialize = function() {
-    var e, map, _fn, _i, _len,
-      _this = this;
+    var e, map, _fn, _i, _len;
     this.version = '2.0.1 pre alpha';
     this.JST = window.JST || {};
     this.init = function(options) {
@@ -6790,14 +6827,15 @@ Copyright (c) 2013 Jeremy Jackson
       return (_ref = this["interface"]) != null ? _ref.load(this.loadedJSON) : void 0;
     };
     this.loadUrl = function(url) {
-      var _this = this;
       return $.ajax(url, {
         async: false,
         type: 'get',
         dataType: 'json',
-        success: function(json) {
-          return _this.load(json);
-        }
+        success: (function(_this) {
+          return function(json) {
+            return _this.load(json);
+          };
+        })(this)
       });
     };
     this.loadScript = function() {
@@ -6828,11 +6866,13 @@ Copyright (c) 2013 Jeremy Jackson
       });
     };
     map = ['focus', 'blur', 'save', 'initialize', 'reinitialize', 'interface:toggle', 'interface:show', 'interface:hide'];
-    _fn = function(e) {
-      return _this[e.replace('interface:', '')] = function() {
-        return this.trigger(e);
+    _fn = (function(_this) {
+      return function(e) {
+        return _this[e.replace('interface:', '')] = function() {
+          return this.trigger(e);
+        };
       };
-    };
+    })(this);
     for (_i = 0, _len = map.length; _i < _len; _i++) {
       e = map[_i];
       _fn(e);
@@ -6860,7 +6900,7 @@ Copyright (c) 2013 Jeremy Jackson
 
 }).call(this);
 (function() {
-  var Plugin, _ref,
+  var Plugin,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -6891,10 +6931,11 @@ Copyright (c) 2013 Jeremy Jackson
       });
     },
     bindTo: function(view) {
-      var _this = this;
-      return view.on('block:picked', function(value) {
-        return _this.triggerAction(value);
-      });
+      return view.on('block:picked', (function(_this) {
+        return function(value) {
+          return _this.triggerAction(value);
+        };
+      })(this));
     },
     insert: function(name, value) {
       return Mercury.trigger('action', name, value);
@@ -6905,8 +6946,7 @@ Copyright (c) 2013 Jeremy Jackson
     __extends(Select, _super);
 
     function Select() {
-      _ref = Select.__super__.constructor.apply(this, arguments);
-      return _ref;
+      return Select.__super__.constructor.apply(this, arguments);
     }
 
     Select.prototype.template = 'blocks';
@@ -6926,11 +6966,11 @@ Copyright (c) 2013 Jeremy Jackson
   JST['/mercury/templates/blocks'] = function() {
     var block, text;
     return "<ul>" + (((function() {
-      var _ref1, _results;
-      _ref1 = Plugin.config('blocks');
+      var _ref, _results;
+      _ref = Plugin.config('blocks');
       _results = [];
-      for (block in _ref1) {
-        text = _ref1[block];
+      for (block in _ref) {
+        text = _ref[block];
         _results.push("<li data-value='" + block + "'><" + block + ">" + text + "</" + block + "></li>");
       }
       return _results;
@@ -6939,7 +6979,7 @@ Copyright (c) 2013 Jeremy Jackson
 
 }).call(this);
 (function() {
-  var Plugin, _ref, _ref1,
+  var Plugin,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -6968,10 +7008,11 @@ Copyright (c) 2013 Jeremy Jackson
       }
     },
     bindTo: function(view) {
-      var _this = this;
-      return view.on('character:picked', function(char) {
-        return _this.triggerAction(char);
-      });
+      return view.on('character:picked', (function(_this) {
+        return function(char) {
+          return _this.triggerAction(char);
+        };
+      })(this));
     },
     insertHtml: function(name, value) {
       return Mercury.trigger('action', 'html', "&#" + value + ";");
@@ -6985,8 +7026,7 @@ Copyright (c) 2013 Jeremy Jackson
     __extends(Modal, _super);
 
     function Modal() {
-      _ref = Modal.__super__.constructor.apply(this, arguments);
-      return _ref;
+      return Modal.__super__.constructor.apply(this, arguments);
     }
 
     Modal.prototype.template = 'character';
@@ -7011,8 +7051,7 @@ Copyright (c) 2013 Jeremy Jackson
     __extends(Palette, _super);
 
     function Palette() {
-      _ref1 = Palette.__super__.constructor.apply(this, arguments);
-      return _ref1;
+      return Palette.__super__.constructor.apply(this, arguments);
     }
 
     Palette.prototype.template = 'character';
@@ -7034,11 +7073,11 @@ Copyright (c) 2013 Jeremy Jackson
   JST['/mercury/templates/character'] = function() {
     var char;
     return "<ul>" + (((function() {
-      var _i, _len, _ref2, _results;
-      _ref2 = Plugin.config('characters').split(' ');
+      var _i, _len, _ref, _results;
+      _ref = Plugin.config('characters').split(' ');
       _results = [];
-      for (_i = 0, _len = _ref2.length; _i < _len; _i++) {
-        char = _ref2[_i];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        char = _ref[_i];
         _results.push("<li data-value='" + char + "'>&#" + char + ";</li>");
       }
       return _results;
@@ -7047,7 +7086,7 @@ Copyright (c) 2013 Jeremy Jackson
 
 }).call(this);
 (function() {
-  var Plugin, _ref,
+  var Plugin,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -7070,13 +7109,14 @@ Copyright (c) 2013 Jeremy Jackson
       });
     },
     bindTo: function(view) {
-      var _this = this;
-      return view.on('color:picked', function(value) {
-        _this.triggerAction(value);
-        return _this.button.css({
-          color: "#" + value
-        });
-      });
+      return view.on('color:picked', (function(_this) {
+        return function(value) {
+          _this.triggerAction(value);
+          return _this.button.css({
+            color: "#" + value
+          });
+        };
+      })(this));
     },
     regionContext: function() {
       var color;
@@ -7095,8 +7135,7 @@ Copyright (c) 2013 Jeremy Jackson
     __extends(Palette, _super);
 
     function Palette() {
-      _ref = Palette.__super__.constructor.apply(this, arguments);
-      return _ref;
+      return Palette.__super__.constructor.apply(this, arguments);
     }
 
     Palette.prototype.template = 'color';
@@ -7123,11 +7162,11 @@ Copyright (c) 2013 Jeremy Jackson
   JST['/mercury/templates/color'] = function() {
     var color;
     return "<ul>\n  " + (((function() {
-      var _i, _len, _ref1, _results;
-      _ref1 = Plugin.config('colors').split(' ');
+      var _i, _len, _ref, _results;
+      _ref = Plugin.config('colors').split(' ');
       _results = [];
-      for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
-        color = _ref1[_i];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        color = _ref[_i];
         _results.push("<li data-value='" + color + "' style='background:#" + color + "'></li>");
       }
       return _results;
@@ -7136,7 +7175,7 @@ Copyright (c) 2013 Jeremy Jackson
 
 }).call(this);
 (function() {
-  var Plugin, _ref,
+  var Plugin,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -7157,8 +7196,7 @@ Copyright (c) 2013 Jeremy Jackson
     __extends(Panel, _super);
 
     function Panel() {
-      _ref = Panel.__super__.constructor.apply(this, arguments);
-      return _ref;
+      return Panel.__super__.constructor.apply(this, arguments);
     }
 
     Panel.prototype.mixins = [Mercury.View.Modules.FilterableList];
@@ -7179,7 +7217,7 @@ Copyright (c) 2013 Jeremy Jackson
 
 }).call(this);
 (function() {
-  var Plugin, _ref,
+  var Plugin,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -7201,10 +7239,11 @@ Copyright (c) 2013 Jeremy Jackson
       return this.bindTo(new Plugin.Modal());
     },
     bindTo: function(view) {
-      var _this = this;
-      return view.on('form:submitted', function(value) {
-        return _this.triggerAction(value);
-      });
+      return view.on('form:submitted', (function(_this) {
+        return function(value) {
+          return _this.triggerAction(value);
+        };
+      })(this));
     },
     insert: function(name, value) {
       return Mercury.trigger('action', name, value);
@@ -7215,8 +7254,7 @@ Copyright (c) 2013 Jeremy Jackson
     __extends(Modal, _super);
 
     function Modal() {
-      _ref = Modal.__super__.constructor.apply(this, arguments);
-      return _ref;
+      return Modal.__super__.constructor.apply(this, arguments);
     }
 
     Modal.prototype.template = 'link';
@@ -7322,7 +7360,7 @@ Copyright (c) 2013 Jeremy Jackson
 
 }).call(this);
 (function() {
-  var Plugin, _ref,
+  var Plugin,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -7344,10 +7382,11 @@ Copyright (c) 2013 Jeremy Jackson
       return this.bindTo(new Plugin.Modal());
     },
     bindTo: function(view) {
-      var _this = this;
-      return view.on('form:submitted', function(value) {
-        return _this.triggerAction(value);
-      });
+      return view.on('form:submitted', (function(_this) {
+        return function(value) {
+          return _this.triggerAction(value);
+        };
+      })(this));
     },
     insert: function(name, value) {
       return Mercury.trigger('action', name, value);
@@ -7358,8 +7397,7 @@ Copyright (c) 2013 Jeremy Jackson
     __extends(Modal, _super);
 
     function Modal() {
-      _ref = Modal.__super__.constructor.apply(this, arguments);
-      return _ref;
+      return Modal.__super__.constructor.apply(this, arguments);
     }
 
     Modal.prototype.template = 'media';
@@ -7472,7 +7510,7 @@ Copyright (c) 2013 Jeremy Jackson
 
 }).call(this);
 (function() {
-  var Plugin, _ref,
+  var Plugin,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -7493,8 +7531,7 @@ Copyright (c) 2013 Jeremy Jackson
     __extends(Panel, _super);
 
     function Panel() {
-      _ref = Panel.__super__.constructor.apply(this, arguments);
-      return _ref;
+      return Panel.__super__.constructor.apply(this, arguments);
     }
 
     Panel.prototype.template = 'notes';
@@ -7517,7 +7554,7 @@ Copyright (c) 2013 Jeremy Jackson
 
 }).call(this);
 (function() {
-  var Plugin, _ref,
+  var Plugin,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -7539,10 +7576,11 @@ Copyright (c) 2013 Jeremy Jackson
       });
     },
     bindTo: function(view) {
-      var _this = this;
-      return view.on('insert:snippet', function(value) {
-        return _this.triggerAction(value);
-      });
+      return view.on('insert:snippet', (function(_this) {
+        return function(value) {
+          return _this.triggerAction(value);
+        };
+      })(this));
     },
     insert: function(name, snippetName) {
       var snippet;
@@ -7582,8 +7620,7 @@ Copyright (c) 2013 Jeremy Jackson
     __extends(Panel, _super);
 
     function Panel() {
-      _ref = Panel.__super__.constructor.apply(this, arguments);
-      return _ref;
+      return Panel.__super__.constructor.apply(this, arguments);
     }
 
     Panel.prototype.mixins = [Mercury.View.Modules.FilterableList];
@@ -7621,12 +7658,12 @@ Copyright (c) 2013 Jeremy Jackson
   })(Mercury.Panel);
 
   JST['/mercury/templates/snippets'] = function() {
-    var controls, name, ret, snippet, _ref1;
+    var controls, name, ret, snippet, _ref;
     controls = "<div class=\"mercury-snippet-actions\">Drag or <input type=\"button\" value=\"Insert\" class=\"btn\"></div>";
     ret = '<input type="search" class="mercury-filter"><ul>';
-    _ref1 = Mercury.Snippet.all();
-    for (name in _ref1) {
-      snippet = _ref1[name];
+    _ref = Mercury.Snippet.all();
+    for (name in _ref) {
+      snippet = _ref[name];
       ret += "<li data-filter=\"" + name + "\" data-value=\"" + name + "\">" + snippet.title + "<em>" + snippet.description + "</em>" + controls + "</li>";
     }
     return ret + '</ul>';
@@ -7634,7 +7671,7 @@ Copyright (c) 2013 Jeremy Jackson
 
 }).call(this);
 (function() {
-  var Plugin, _ref,
+  var Plugin,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -7660,10 +7697,11 @@ Copyright (c) 2013 Jeremy Jackson
       });
     },
     bindTo: function(view) {
-      var _this = this;
-      return view.on('style:picked', function(value) {
-        return _this.triggerAction(value);
-      });
+      return view.on('style:picked', (function(_this) {
+        return function(value) {
+          return _this.triggerAction(value);
+        };
+      })(this));
     },
     insert: function(name, value) {
       return Mercury.trigger('action', name, "" + value);
@@ -7674,8 +7712,7 @@ Copyright (c) 2013 Jeremy Jackson
     __extends(Select, _super);
 
     function Select() {
-      _ref = Select.__super__.constructor.apply(this, arguments);
-      return _ref;
+      return Select.__super__.constructor.apply(this, arguments);
     }
 
     Select.prototype.template = 'styles';
@@ -7695,11 +7732,11 @@ Copyright (c) 2013 Jeremy Jackson
   JST['/mercury/templates/styles'] = function() {
     var style, text;
     return "<ul>" + (((function() {
-      var _ref1, _results;
-      _ref1 = Plugin.config('styles');
+      var _ref, _results;
+      _ref = Plugin.config('styles');
       _results = [];
-      for (style in _ref1) {
-        text = _ref1[style];
+      for (style in _ref) {
+        text = _ref[style];
         _results.push("<li data-value='" + style + "' class='" + style + "'>" + text + "</li>");
       }
       return _results;
@@ -7708,7 +7745,7 @@ Copyright (c) 2013 Jeremy Jackson
 
 }).call(this);
 (function() {
-  var Plugin, _ref,
+  var Plugin,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -7730,10 +7767,11 @@ Copyright (c) 2013 Jeremy Jackson
       return this.bindTo(new Plugin.Modal());
     },
     bindTo: function(view) {
-      var _this = this;
-      return view.on('form:submitted', function(value) {
-        return _this.triggerAction(value);
-      });
+      return view.on('form:submitted', (function(_this) {
+        return function(value) {
+          return _this.triggerAction(value);
+        };
+      })(this));
     },
     insert: function(name, editor) {
       return Mercury.trigger('action', name, editor);
@@ -7744,8 +7782,7 @@ Copyright (c) 2013 Jeremy Jackson
     __extends(Modal, _super);
 
     function Modal() {
-      _ref = Modal.__super__.constructor.apply(this, arguments);
-      return _ref;
+      return Modal.__super__.constructor.apply(this, arguments);
     }
 
     Modal.prototype.template = 'table';

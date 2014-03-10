@@ -1,3 +1,4 @@
+
 /*!
 The HTML region is a full HTML5 Content Editable region -- a true WYSIWYG experience. Effort has been made to normalize,
 and keep things consistent, but the nature of it is complex and should be treated as such. There's an expectation that
@@ -11,8 +12,7 @@ Dependencies:
 Configuration:
   regions:html:
     mimeTypes: false                                     # file types - overrides general uploading to allow anything
-*/
-
+ */
 
 (function() {
   var __hasProp = {}.hasOwnProperty,
@@ -58,15 +58,16 @@ Configuration:
     };
 
     Html.prototype.onDropFile = function(files) {
-      var uploader,
-        _this = this;
+      var uploader;
       uploader = new Mercury[this.config('interface:uploader')](files, {
         mimeTypes: this.options.mimeTypes
       });
-      return uploader.on('uploaded', function(file) {
-        _this.focus();
-        return _this.handleAction('file', file);
-      });
+      return uploader.on('uploaded', (function(_this) {
+        return function(file) {
+          _this.focus();
+          return _this.handleAction('file', file);
+        };
+      })(this));
     };
 
     Html.prototype.onDropItem = function() {

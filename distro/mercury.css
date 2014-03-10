@@ -12,35 +12,30 @@ This file contains all of the required css for the Mercury interface as well as 
 
   to {
     background-position: 0 0; } }
-
 @-moz-keyframes mercury-uploader-indicator {
   from {
     background-position: -45px 0; }
 
   to {
     background-position: 0 0; } }
-
 @-webkit-keyframes mercury-loading-indicator {
   from {
     -webkit-transform: rotate(0deg); }
 
   to {
     -webkit-transform: rotate(360deg); } }
-
 @-moz-keyframes mercury-loading-indicator {
   from {
     -moz-transform: rotate(0deg); }
 
   to {
     -moz-transform: rotate(360deg); } }
-
 @font-face {
   font-family: "mercury-icons";
   src: url(/assets/mercury-icons.eot);
   src: url(/assets/mercury-icons.eot?#iefix) format("embedded-opentype"), url(/assets/mercury-icons.woff) format("woff"), url(/assets/mercury-icons.ttf) format("truetype"), url(/assets/mercury-icons.svg#mercury-icons) format("svg");
   font-weight: normal;
   font-style: normal; }
-
 .mercury-icon-character:before {
   content: "\f100"; }
 
@@ -89,7 +84,6 @@ This file contains all of the required css for the Mercury interface as well as 
   src: url(/assets/mercury-toolbars.eot?#iefix) format("embedded-opentype"), url(/assets/mercury-toolbars.woff) format("woff"), url(/assets/mercury-toolbars.ttf) format("truetype"), url(/assets/mercury-toolbars.svg#mercury-toolbars) format("svg");
   font-weight: normal;
   font-style: normal; }
-
 .mercury-toolbar-secondary-container .mercury-icon-save:before {
   content: "\0041"; }
 .mercury-toolbar-secondary-container .mercury-icon-preview:before {
@@ -2228,7 +2222,7 @@ mercury {
   -webkit-text-size-adjust: none;
   position: absolute;
   z-index: 10000;
-  -webkit-tap-highlight-color: rgba(0, 0, 0, 0); }
+  -webkit-tap-highlight-color: transparent; }
   mercury.mercury-no-animation {
     -moz-transition: none;
     -webkit-transition: none;

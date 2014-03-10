@@ -1,3 +1,4 @@
+
 /*!
 The image region is typically an image tag and what's sent back to the server on serialization is the source of that
 image. It allows draging/dropping images onto itself, and maintains a history so you can undo/redo your changes. Also
@@ -6,20 +7,17 @@ allows setting the image alignment.
 Configuration:
   regions:image:
     mimeTypes: ['image/jpeg']                            # file types - overrides general uploading configuration
-*/
-
+ */
 
 (function() {
-  var _ref,
-    __hasProp = {}.hasOwnProperty,
+  var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
   Mercury.Region.Image = (function(_super) {
     __extends(Image, _super);
 
     function Image() {
-      _ref = Image.__super__.constructor.apply(this, arguments);
-      return _ref;
+      return Image.__super__.constructor.apply(this, arguments);
     }
 
     Image.define('Mercury.Region.Image', 'image');
@@ -50,15 +48,16 @@ Configuration:
     };
 
     Image.prototype.onDropFile = function(files) {
-      var uploader,
-        _this = this;
+      var uploader;
       uploader = new Mercury[this.config('interface:uploader')](files, {
         mimeTypes: this.options.mimeTypes
       });
-      return uploader.on('uploaded', function(file) {
-        _this.focus();
-        return _this.handleAction('file', file);
-      });
+      return uploader.on('uploaded', (function(_this) {
+        return function(file) {
+          _this.focus();
+          return _this.handleAction('file', file);
+        };
+      })(this));
     };
 
     return Image;

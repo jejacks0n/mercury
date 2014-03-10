@@ -12,7 +12,6 @@ This file contains all of the required css for the Mercury interface as well as 
   src: url(/assets/mercury-icons.eot?#iefix) format("embedded-opentype"), url(/assets/mercury-icons.woff) format("woff"), url(/assets/mercury-icons.ttf) format("truetype"), url(/assets/mercury-icons.svg#mercury-icons) format("svg");
   font-weight: normal;
   font-style: normal; }
-
 .mercury-icon-character:before {
   content: "\f100"; }
 

@@ -1,3 +1,4 @@
+
 /*!
 Markdown provides an easy way to provide some markup abilities without the exposing the ability to edit complex HTML.
 Use the markdown sent to the server on save to render the content when not editing, and render the markdown when
@@ -19,8 +20,7 @@ Configuration:
     wrapping : true                                      # enables/disables soft line wrapping
     sanitize : false                                     # sanitize the output - ignore any html that has been input
     breaks   : true                                      # enable line breaks - new lines will become line breaks
-*/
-
+ */
 
 (function() {
   var __hasProp = {}.hasOwnProperty,
@@ -105,15 +105,16 @@ Configuration:
     };
 
     Markdown.prototype.onDropFile = function(files) {
-      var uploader,
-        _this = this;
+      var uploader;
       uploader = new Mercury[this.config('interface:uploader')](files, {
         mimeTypes: this.options.mimeTypes
       });
-      return uploader.on('uploaded', function(file) {
-        _this.focus();
-        return _this.handleAction('file', file);
-      });
+      return uploader.on('uploaded', (function(_this) {
+        return function(file) {
+          _this.focus();
+          return _this.handleAction('file', file);
+        };
+      })(this));
     };
 
     Markdown.prototype.onReturnKey = function(e) {

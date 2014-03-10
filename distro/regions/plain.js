@@ -1,3 +1,4 @@
+
 /*!
 The Plain region is a simplified single line HTML5 Content Editable region. It restricts drag/drop, can restrict paste
 and line feeds and only provides the ability to do some common actions like bold, italics, and underline. This is a
@@ -13,8 +14,7 @@ Configuration:
     actions  : true                                      # allow the common actions (bold/italic/underline)
     pasting  : true                                      # allow pasting -- always sanitized to text
     newlines : false                                     # allow line feeds (on enter and paste)
-*/
-
+ */
 
 (function() {
   var __hasProp = {}.hasOwnProperty,

@@ -2,23 +2,19 @@
 #= require mercury/models/page
 #= require mercury/views/modules/draggable
 #= require mercury/views/modules/interface_maskable
+#= require mercury/views/modules/interface_page_manager
 #= require mercury/views/modules/interface_shadowed
 
 class Mercury.BaseInterface extends Mercury.View
   @include Mercury.Module
+  @include Mercury.View.Modules.InterfacePageManager
   @include Mercury.View.Modules.Draggable
 
   @logPrefix: 'Mercury.BaseInterface:'
   @tag: 'mercury'
 
   @events:
-    'mercury:save': 'save'
-    'mercury:focus': 'focusActiveRegion'
-    'mercury:blur': 'blurActiveRegion'
     'mercury:resize': 'onResize'
-    'mercury:action': 'focusActiveRegion'
-    'mercury:region:focus': 'onRegionFocus'
-    'mercury:region:release': 'onRegionRelease'
     'mercury:reinitialize': 'reinitialize'
     'mercury:interface:toggle': 'toggle'
     'mousedown .mercury-drag-handle': 'startDrag'
@@ -37,13 +33,11 @@ class Mercury.BaseInterface extends Mercury.View
 
     super
 
-    @page = new Mercury.Model.Page()
-    @regions ||= []
     $(window).on('beforeunload', @onUnload)
     $(window).on('resize', @onResize)
 
-    @initialize()
     @buildInterface()
+    @bindDocumentEvents()
     @bindDefaultEvents()
     Mercury.trigger('initialized')
 
@@ -57,30 +51,6 @@ class Mercury.BaseInterface extends Mercury.View
 
   init: ->
     $('body').before(@$el)
-
-
-  initialize: ->
-    @addAllRegions()
-    @bindDocumentEvents()
-
-
-  load: (json) ->
-    @findRegionByName(name)?.load(data) for name, data of json.contents || json
-
-
-  findRegionByName: (name) ->
-    for region in @regions || []
-      return region if region.name == name
-    null
-
-
-  addAllRegions: ->
-    @addRegion(el) for el in @regionElements()
-    @region ||= @regions[0]
-
-
-  bindDocumentEvents: ->
-    $('body', @document).on('mousedown', @hideDialogs) unless @config('interface:mask')
 
 
   buildInterface: ->
@@ -105,15 +75,15 @@ class Mercury.BaseInterface extends Mercury.View
     @addClass("locale-#{Mercury.I18n.detectLocale().join('-').toLowerCase()}")
 
 
+  bindDocumentEvents: ->
+    $('body', @document).on('mousedown', @hideDialogs) unless @config('interface:mask')
+
+
   bindDefaultEvents: ->
+    # todo: why here?
     @delegateEvents
       'mercury:mode': (mode) -> @setMode(mode)
       'mercury:action': -> @focusActiveRegion()
-
-
-  reinitialize: ->
-    @addAllRegions()
-    @focusDefaultRegion()
 
 
   setInterface: (type) ->
@@ -140,32 +110,14 @@ class Mercury.BaseInterface extends Mercury.View
     @onResize()
 
 
-  focusDefaultRegion: ->
-    @delay(100, @focusActiveRegion)
-
-
-  regionElements: ->
-    $("[#{@config('regions:attribute')}]", @document)
-
-
-  addRegion: (el) ->
-    return if $(el).data('region')
-    region = Mercury.Region.create(el)
-    @regions.push(region)
-
-
-  focusActiveRegion: ->
-    @region?.focus(false, true)
-
-
-  blurActiveRegion: ->
-    @region?.blur()
-
-
   setMode: (mode) ->
     @["#{mode}Mode"] = !@["#{mode}Mode"]
     @focusActiveRegion()
     @delay(50, -> @position()) if mode == 'preview'
+
+
+  reinitialize: ->
+    @focusDefaultRegion()
 
 
   toggle: ->
@@ -211,34 +163,8 @@ class Mercury.BaseInterface extends Mercury.View
     height: $(window).height() - toolbarHeight - statusbarHeight
 
 
-  hasChanges: ->
-    (return true if region.hasChanges()) for region in @regions
-    false
-
-
   hideDialogs: =>
     Mercury.trigger('dialogs:hide')
-
-
-  release: ->
-    $(window).off('resize', @resize)
-    $('body').css(position: '', top: '')
-    $('body', @document).off('mousedown', @hideDialogs)
-    @regions.shift().release() while @regions.length
-    super
-
-
-  serialize: ->
-    data = {}
-    for region in @regions
-      data[region.name] = region.toJSON(true)
-    data
-
-
-  save: ->
-    @page.set(content: @serialize(), location: location.pathname)
-    @page.on('error', (xhr, options) => alert(@t('Unable to save to the url: %s', options.url)))
-    @page.save().always = => @delay(250, -> Mercury.trigger('save:complete'))
 
 
   heightForWidth: (width) ->
@@ -251,12 +177,12 @@ class Mercury.BaseInterface extends Mercury.View
 
   position: (animate = false) ->
     return unless @floating
-    return unless @region
+    return unless @page.region
     return if @placed
     return if @hiding
     @addClass('mercury-no-animation')
     pos = @positionForRegion()
-    @width = width = Math.max(@config('interface:floatWidth') || @region.$el.width(), 300)
+    @width = width = Math.max(@config('interface:floatWidth') || @page.region.$el.width(), 300)
     height = @heightForWidth(width)
     left = pos.left
     viewport = $(window).width()
@@ -272,7 +198,15 @@ class Mercury.BaseInterface extends Mercury.View
 
 
   positionForRegion: ->
-    @region.$el.offset()
+    @page.region.$el.offset()
+
+
+  release: ->
+    $(window).off('resize', @resize)
+    $('body').css(position: '', top: '')
+    $('body', @document).off('mousedown', @hideDialogs)
+    delete(Mercury.interface)
+    super
 
 
   onDragStart: ->
@@ -296,14 +230,9 @@ class Mercury.BaseInterface extends Mercury.View
     @onResize() unless @width
 
 
-  onRegionFocus: (@region) ->
+  onRegionFocus: (region) ->
+    @page.region = region
     @delay(50, -> if @floating then @position(true) else @onResize())
-
-
-  onRegionRelease: (region) ->
-    @region = @regions[0] if region == @region
-    index = @regions.indexOf(region)
-    @regions.splice(index, 1) if index > -1
 
 
   onResize: =>
@@ -316,6 +245,6 @@ class Mercury.BaseInterface extends Mercury.View
 
 
   onUnload: =>
-    return if @config('interface:silent') || !@hasChanges()
+    return if @config('interface:silent') || !@page.hasChanges()
     return @t('You have unsaved changes.  Are you sure you want to leave without saving them first?')
 

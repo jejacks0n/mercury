@@ -72,7 +72,7 @@ Mercury.configuration =
   #
   interface:
     enabled    : true                                      # initial visible state - trigger 'interface:show' to show
-    class      : 'FrameInterface'                          # interface class - used on Mercury.init()
+    class      : 'BaseInterface'                           # interface class - used on Mercury.init()
     toolbar    : 'Toolbar'                                 # toolbar class to use within the interface
     statusbar  : 'Statusbar'                               # statusbar class to use within the interface
     uploader   : 'Uploader'                                # uploader class to use within the interface

@@ -35,7 +35,7 @@ jQuery ->
   # focused, how you can use the Mercury Core library as a framework to build a custom interface, and more. There are
   # other useful examples in there as well -- for all development levels.
   #
-  Mercury.init(frame: '#mercury_frame')
+  Mercury.init()
 
   # If you wanted to do some custom behaviors (this is limited, and configuration is recommended), you can provide many
   # of the options to the interface. Here we're making it a fixed floating interface that has a set width and location.

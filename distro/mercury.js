@@ -37,7 +37,7 @@ Copyright (c) 2013 Jeremy Jackson
     },
     "interface": {
       enabled: true,
-      "class": 'FrameInterface',
+      "class": 'BaseInterface',
       toolbar: 'Toolbar',
       statusbar: 'Statusbar',
       uploader: 'Uploader',
@@ -3798,11 +3798,82 @@ Copyright (c) 2013 Jeremy Jackson
   Mercury.Model.Page = (function(_super) {
     __extends(Page, _super);
 
+    Page.define('Mercury.Model.Page');
+
     function Page() {
-      return Page.__super__.constructor.apply(this, arguments);
+      Page.__super__.constructor.apply(this, arguments);
+      this.regions = [];
     }
 
-    Page.define('Mercury.Model.Page');
+    Page.prototype.createRegions = function(elements) {
+      var el, _i, _len;
+      for (_i = 0, _len = elements.length; _i < _len; _i++) {
+        el = elements[_i];
+        this.createRegion(el);
+      }
+      return this.region || (this.region = this.regions[0]);
+    };
+
+    Page.prototype.createRegion = function(el) {
+      if ($(el).data('region')) {
+        return;
+      }
+      return this.regions.push(Mercury.Region.create(el));
+    };
+
+    Page.prototype.loadRegionContent = function(json) {
+      var data, name, _ref, _ref1, _results;
+      _ref = json.contents || json;
+      _results = [];
+      for (name in _ref) {
+        data = _ref[name];
+        _results.push((_ref1 = this.findRegionByName(name)) != null ? _ref1.load(data) : void 0);
+      }
+      return _results;
+    };
+
+    Page.prototype.findRegionByName = function(name) {
+      var region, _i, _len, _ref;
+      _ref = this.regions || [];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        region = _ref[_i];
+        if (region.name === name) {
+          return region;
+        }
+      }
+      return null;
+    };
+
+    Page.prototype.hasChanges = function() {
+      var region, _i, _len, _ref;
+      _ref = this.regions;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        region = _ref[_i];
+        if (region.hasChanges()) {
+          return true;
+        }
+      }
+      return false;
+    };
+
+    Page.prototype.serialize = function() {
+      var data, region, _i, _len, _ref;
+      data = {};
+      _ref = this.regions;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        region = _ref[_i];
+        data[region.name] = region.toJSON(true);
+      }
+      return data;
+    };
+
+    Page.prototype.isValid = function() {
+      this.set({
+        content: this.serialize(),
+        location: location.pathname
+      });
+      return Page.__super__.isValid.apply(this, arguments);
+    };
 
     Page.prototype.save = function(options) {
       if (options == null) {
@@ -3811,9 +3882,98 @@ Copyright (c) 2013 Jeremy Jackson
       return Page.__super__.save.call(this, $.extend(this.config('saving'), options));
     };
 
+    Page.prototype.release = function() {
+      var _results;
+      _results = [];
+      while (this.regions.length) {
+        _results.push(this.regions.shift().release());
+      }
+      return _results;
+    };
+
+    Page.prototype.releaseRegion = function(region) {
+      var index;
+      if (region === this.region) {
+        this.region = this.regions[0];
+      }
+      region.release();
+      index = this.regions.indexOf(region);
+      if (index > -1) {
+        return this.regions.splice(index, 1);
+      }
+    };
+
     return Page;
 
   })(Mercury.Model);
+
+}).call(this);
+(function() {
+  Mercury.View.Modules.InterfacePageManager = {
+    included: function() {
+      return this.on('build', this.initInterfaceManager);
+    },
+    initInterfaceManager: function() {
+      this.initPage();
+      this.on('release', this.releasePage);
+      return this.delegateEvents({
+        'mercury:save': 'save',
+        'mercury:action': 'focusActiveRegion',
+        'mercury:focus': 'focusActiveRegion',
+        'mercury:blur': 'blurActiveRegion',
+        'mercury:region:focus': 'onRegionFocus',
+        'mercury:region:release': 'onRegionRelease',
+        'mercury:reinitialize': 'reinitializeRegions'
+      });
+    },
+    initPage: function() {
+      this.page = new Mercury.Model.Page();
+      return this.page.createRegions(this.regionElements());
+    },
+    regionElements: function() {
+      return $("[" + (this.config('regions:attribute')) + "]", this.document);
+    },
+    load: function(json) {
+      return this.page.loadRegionContent(json);
+    },
+    reinitializeRegions: function() {
+      return this.page.createRegions(this.regionElements());
+    },
+    save: function() {
+      this.page.on('error', (function(_this) {
+        return function(xhr, options) {
+          return alert(_this.t('Unable to save to the url: %s', options.url));
+        };
+      })(this));
+      return this.page.save().always = (function(_this) {
+        return function() {
+          return _this.delay(250, function() {
+            return Mercury.trigger('save:complete');
+          });
+        };
+      })(this);
+    },
+    focusDefaultRegion: function() {
+      return this.delay(100, this.focusActiveRegion);
+    },
+    focusActiveRegion: function() {
+      var _ref;
+      return (_ref = this.page.region) != null ? _ref.focus(false, true) : void 0;
+    },
+    blurActiveRegion: function() {
+      var _ref;
+      return (_ref = this.page.region) != null ? _ref.blur() : void 0;
+    },
+    releasePage: function() {
+      return this.page.release();
+    },
+    onRegionFocus: function(region) {
+      return this.page.region = region;
+    },
+    onRegionRelease: function(region) {
+      return this.page.releaseRegion(region);
+    }
+  };
 
 }).call(this);
 (function() {
@@ -3826,6 +3986,8 @@ Copyright (c) 2013 Jeremy Jackson
 
     BaseInterface.include(Mercury.Module);
 
+    BaseInterface.include(Mercury.View.Modules.InterfacePageManager);
+
     BaseInterface.include(Mercury.View.Modules.Draggable);
 
     BaseInterface.logPrefix = 'Mercury.BaseInterface:';
@@ -3833,13 +3995,7 @@ Copyright (c) 2013 Jeremy Jackson
     BaseInterface.tag = 'mercury';
 
     BaseInterface.events = {
-      'mercury:save': 'save',
-      'mercury:focus': 'focusActiveRegion',
-      'mercury:blur': 'blurActiveRegion',
       'mercury:resize': 'onResize',
-      'mercury:action': 'focusActiveRegion',
-      'mercury:region:focus': 'onRegionFocus',
-      'mercury:region:release': 'onRegionRelease',
       'mercury:reinitialize': 'reinitialize',
       'mercury:interface:toggle': 'toggle',
       'mousedown .mercury-drag-handle': 'startDrag'
@@ -3863,12 +4019,10 @@ Copyright (c) 2013 Jeremy Jackson
       this.floating || (this.floating = this.config('interface:floating'));
       this.visible = true;
       BaseInterface.__super__.constructor.apply(this, arguments);
-      this.page = new Mercury.Model.Page();
-      this.regions || (this.regions = []);
       $(window).on('beforeunload', this.onUnload);
       $(window).on('resize', this.onResize);
-      this.initialize();
       this.buildInterface();
+      this.bindDocumentEvents();
       this.bindDefaultEvents();
       Mercury.trigger('initialized');
     }
@@ -3886,50 +4040,6 @@ Copyright (c) 2013 Jeremy Jackson
 
     BaseInterface.prototype.init = function() {
       return $('body').before(this.$el);
-    };
-
-    BaseInterface.prototype.initialize = function() {
-      this.addAllRegions();
-      return this.bindDocumentEvents();
-    };
-
-    BaseInterface.prototype.load = function(json) {
-      var data, name, _ref, _ref1, _results;
-      _ref = json.contents || json;
-      _results = [];
-      for (name in _ref) {
-        data = _ref[name];
-        _results.push((_ref1 = this.findRegionByName(name)) != null ? _ref1.load(data) : void 0);
-      }
-      return _results;
-    };
-
-    BaseInterface.prototype.findRegionByName = function(name) {
-      var region, _i, _len, _ref;
-      _ref = this.regions || [];
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        region = _ref[_i];
-        if (region.name === name) {
-          return region;
-        }
-      }
-      return null;
-    };
-
-    BaseInterface.prototype.addAllRegions = function() {
-      var el, _i, _len, _ref;
-      _ref = this.regionElements();
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        el = _ref[_i];
-        this.addRegion(el);
-      }
-      return this.region || (this.region = this.regions[0]);
-    };
-
-    BaseInterface.prototype.bindDocumentEvents = function() {
-      if (!this.config('interface:mask')) {
-        return $('body', this.document).on('mousedown', this.hideDialogs);
-      }
     };
 
     BaseInterface.prototype.buildInterface = function() {
@@ -3965,6 +4075,12 @@ Copyright (c) 2013 Jeremy Jackson
       return this.addClass("locale-" + (Mercury.I18n.detectLocale().join('-').toLowerCase()));
     };
 
+    BaseInterface.prototype.bindDocumentEvents = function() {
+      if (!this.config('interface:mask')) {
+        return $('body', this.document).on('mousedown', this.hideDialogs);
+      }
+    };
+
     BaseInterface.prototype.bindDefaultEvents = function() {
       return this.delegateEvents({
         'mercury:mode': function(mode) {
@@ -3974,11 +4090,6 @@ Copyright (c) 2013 Jeremy Jackson
           return this.focusActiveRegion();
         }
       });
-    };
-
-    BaseInterface.prototype.reinitialize = function() {
-      this.addAllRegions();
-      return this.focusDefaultRegion();
     };
 
     BaseInterface.prototype.setInterface = function(type) {
@@ -4011,33 +4122,6 @@ Copyright (c) 2013 Jeremy Jackson
       return this.onResize();
     };
 
-    BaseInterface.prototype.focusDefaultRegion = function() {
-      return this.delay(100, this.focusActiveRegion);
-    };
-
-    BaseInterface.prototype.regionElements = function() {
-      return $("[" + (this.config('regions:attribute')) + "]", this.document);
-    };
-
-    BaseInterface.prototype.addRegion = function(el) {
-      var region;
-      if ($(el).data('region')) {
-        return;
-      }
-      region = Mercury.Region.create(el);
-      return this.regions.push(region);
-    };
-
-    BaseInterface.prototype.focusActiveRegion = function() {
-      var _ref;
-      return (_ref = this.region) != null ? _ref.focus(false, true) : void 0;
-    };
-
-    BaseInterface.prototype.blurActiveRegion = function() {
-      var _ref;
-      return (_ref = this.region) != null ? _ref.blur() : void 0;
-    };
-
     BaseInterface.prototype.setMode = function(mode) {
       this["" + mode + "Mode"] = !this["" + mode + "Mode"];
       this.focusActiveRegion();
@@ -4046,6 +4130,10 @@ Copyright (c) 2013 Jeremy Jackson
           return this.position();
         });
       }
+    };
+
+    BaseInterface.prototype.reinitialize = function() {
+      return this.focusDefaultRegion();
     };
 
     BaseInterface.prototype.toggle = function() {
@@ -4122,63 +4210,8 @@ Copyright (c) 2013 Jeremy Jackson
       };
     };
 
-    BaseInterface.prototype.hasChanges = function() {
-      var region, _i, _len, _ref;
-      _ref = this.regions;
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        region = _ref[_i];
-        if (region.hasChanges()) {
-          return true;
-        }
-      }
-      return false;
-    };
-
     BaseInterface.prototype.hideDialogs = function() {
       return Mercury.trigger('dialogs:hide');
-    };
-
-    BaseInterface.prototype.release = function() {
-      $(window).off('resize', this.resize);
-      $('body').css({
-        position: '',
-        top: ''
-      });
-      $('body', this.document).off('mousedown', this.hideDialogs);
-      while (this.regions.length) {
-        this.regions.shift().release();
-      }
-      return BaseInterface.__super__.release.apply(this, arguments);
-    };
-
-    BaseInterface.prototype.serialize = function() {
-      var data, region, _i, _len, _ref;
-      data = {};
-      _ref = this.regions;
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        region = _ref[_i];
-        data[region.name] = region.toJSON(true);
-      }
-      return data;
-    };
-
-    BaseInterface.prototype.save = function() {
-      this.page.set({
-        content: this.serialize(),
-        location: location.pathname
-      });
-      this.page.on('error', (function(_this) {
-        return function(xhr, options) {
-          return alert(_this.t('Unable to save to the url: %s', options.url));
-        };
-      })(this));
-      return this.page.save().always = (function(_this) {
-        return function() {
-          return _this.delay(250, function() {
-            return Mercury.trigger('save:complete');
-          });
-        };
-      })(this);
     };
 
     BaseInterface.prototype.heightForWidth = function(width) {
@@ -4205,7 +4238,7 @@ Copyright (c) 2013 Jeremy Jackson
       if (!this.floating) {
         return;
       }
-      if (!this.region) {
+      if (!this.page.region) {
         return;
       }
       if (this.placed) {
@@ -4216,7 +4249,7 @@ Copyright (c) 2013 Jeremy Jackson
       }
       this.addClass('mercury-no-animation');
       pos = this.positionForRegion();
-      this.width = width = Math.max(this.config('interface:floatWidth') || this.region.$el.width(), 300);
+      this.width = width = Math.max(this.config('interface:floatWidth') || this.page.region.$el.width(), 300);
       height = this.heightForWidth(width);
       left = pos.left;
       viewport = $(window).width();
@@ -4244,7 +4277,18 @@ Copyright (c) 2013 Jeremy Jackson
     };
 
     BaseInterface.prototype.positionForRegion = function() {
-      return this.region.$el.offset();
+      return this.page.region.$el.offset();
+    };
+
+    BaseInterface.prototype.release = function() {
+      $(window).off('resize', this.resize);
+      $('body').css({
+        position: '',
+        top: ''
+      });
+      $('body', this.document).off('mousedown', this.hideDialogs);
+      delete Mercury["interface"];
+      return BaseInterface.__super__.release.apply(this, arguments);
     };
 
     BaseInterface.prototype.onDragStart = function() {
@@ -4290,7 +4334,7 @@ Copyright (c) 2013 Jeremy Jackson
     };
 
     BaseInterface.prototype.onRegionFocus = function(region) {
-      this.region = region;
+      this.page.region = region;
       return this.delay(50, function() {
         if (this.floating) {
           return this.position(true);
@@ -4298,17 +4342,6 @@ Copyright (c) 2013 Jeremy Jackson
           return this.onResize();
         }
       });
-    };
-
-    BaseInterface.prototype.onRegionRelease = function(region) {
-      var index;
-      if (region === this.region) {
-        this.region = this.regions[0];
-      }
-      index = this.regions.indexOf(region);
-      if (index > -1) {
-        return this.regions.splice(index, 1);
-      }
     };
 
     BaseInterface.prototype.onResize = function() {
@@ -4327,7 +4360,7 @@ Copyright (c) 2013 Jeremy Jackson
     };
 
     BaseInterface.prototype.onUnload = function() {
-      if (this.config('interface:silent') || !this.hasChanges()) {
+      if (this.config('interface:silent') || !this.page.hasChanges()) {
         return;
       }
       return this.t('You have unsaved changes.  Are you sure you want to leave without saving them first?');

@@ -63,7 +63,7 @@
   trigger: (args...) ->
     event = args.shift()
     @log?(event, args)
-    return false unless list = @__handlers__?[event]
+    return unless list = @__handlers__?[event]
     for handler in list
       break if handler.apply(@, args) == false
     true

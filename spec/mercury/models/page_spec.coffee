@@ -86,11 +86,11 @@ describe "Mercury.Model.Page", ->
 
     it "returns true if any regions have changes tracked", ->
       subject.regions = [{hasChanges: -> true}, {hasChanges: -> false}]
-      expect( subject.hasChanges() ).to.eq(true)
+      expect( subject.hasChanges() ).to.be.true
 
     it "returns false if there aren't any changes", ->
       subject.regions = [{hasChanges: -> false}, {hasChanges: -> false}]
-      expect( subject.hasChanges() ).to.eq(false)
+      expect( subject.hasChanges() ).to.be.false
 
 
   describe "#serialize", ->

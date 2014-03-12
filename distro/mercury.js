@@ -1193,7 +1193,7 @@ Copyright (c) 2013 Jeremy Jackson
         this.log(event, args);
       }
       if (!(list = (_ref = this.__handlers__) != null ? _ref[event] : void 0)) {
-        return false;
+        return;
       }
       for (_i = 0, _len = list.length; _i < _len; _i++) {
         handler = list[_i];
@@ -3882,6 +3882,35 @@ Copyright (c) 2013 Jeremy Jackson
       return Page.__super__.save.call(this, $.extend(this.config('saving'), options));
     };
 
+    Page.prototype.activeRegion = function() {
+      return this.region;
+    };
+
+    Page.prototype.setActiveRegion = function(region) {
+      return this.region = region;
+    };
+
+    Page.prototype.focusActiveRegion = function() {
+      var _ref;
+      return (_ref = this.region) != null ? _ref.focus(false, true) : void 0;
+    };
+
+    Page.prototype.blurActiveRegion = function() {
+      var _ref;
+      return (_ref = this.region) != null ? _ref.blur() : void 0;
+    };
+
+    Page.prototype.removeRegion = function(region) {
+      var index;
+      if (region === this.region) {
+        this.region = this.regions[0];
+      }
+      index = this.regions.indexOf(region);
+      if (index > -1) {
+        return this.regions.splice(index, 1);
+      }
+    };
+
     Page.prototype.release = function() {
       var _results;
       _results = [];
@@ -3889,18 +3918,6 @@ Copyright (c) 2013 Jeremy Jackson
         _results.push(this.regions.shift().release());
       }
       return _results;
-    };
-
-    Page.prototype.releaseRegion = function(region) {
-      var index;
-      if (region === this.region) {
-        this.region = this.regions[0];
-      }
-      region.release();
-      index = this.regions.indexOf(region);
-      if (index > -1) {
-        return this.regions.splice(index, 1);
-      }
     };
 
     return Page;
@@ -3956,22 +3973,23 @@ Copyright (c) 2013 Jeremy Jackson
     focusDefaultRegion: function() {
       return this.delay(100, this.focusActiveRegion);
     },
+    activeRegion: function() {
+      return this.page.activeRegion();
+    },
     focusActiveRegion: function() {
-      var _ref;
-      return (_ref = this.page.region) != null ? _ref.focus(false, true) : void 0;
+      return this.page.focusActiveRegion();
     },
     blurActiveRegion: function() {
-      var _ref;
-      return (_ref = this.page.region) != null ? _ref.blur() : void 0;
+      return this.page.blurActiveRegion();
     },
     releasePage: function() {
       return this.page.release();
     },
     onRegionFocus: function(region) {
-      return this.page.region = region;
+      return this.page.setActiveRegion(region);
     },
     onRegionRelease: function(region) {
-      return this.page.releaseRegion(region);
+      return this.page.removeRegion(region);
     }
   };
 
@@ -5094,7 +5112,7 @@ Copyright (c) 2013 Jeremy Jackson
 
     ToolbarButton.prototype.onRegionUpdate = function(region) {
       var _ref, _ref1;
-      if (region !== ((_ref = Mercury["interface"]) != null ? _ref.region : void 0)) {
+      if (region !== ((_ref = Mercury["interface"]) != null ? _ref.activeRegion() : void 0)) {
         return;
       }
       if (!((_ref1 = this.subview) != null ? _ref1.visible : void 0)) {
@@ -5428,7 +5446,9 @@ Copyright (c) 2013 Jeremy Jackson
     };
 
     Toolbar.prototype.build = function() {
-      this.append(new Mercury.ToolbarItem('primary', 'container', this.config('toolbars:primary'), true));
+      if (this.config('toolbars:primary')) {
+        this.append(new Mercury.ToolbarItem('primary', 'container', this.config('toolbars:primary'), true));
+      }
       return this.append(new Mercury.ToolbarItem('secondary', 'container', {}));
     };
 

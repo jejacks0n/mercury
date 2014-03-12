@@ -121,4 +121,4 @@ describe "Mercury.Events", ->
       result = subject.trigger('foo', 1, 2)
       expect( @handler1 ).not.called
       expect( @handler2 ).not.called
-      expect( result ).to.be.false
+      expect( result ).to.be.undefined

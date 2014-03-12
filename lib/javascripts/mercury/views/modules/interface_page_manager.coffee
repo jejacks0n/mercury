@@ -26,6 +26,10 @@ Mercury.View.Modules.InterfacePageManager =
     $("[#{@config('regions:attribute')}]", @document)
 
 
+  activeRegion: ->
+    @page.region
+
+
   load: (json) ->
     @page.loadRegionContent(json)
 

@@ -125,7 +125,7 @@ class Mercury.ToolbarButton extends Mercury.View
 
 
   onRegionUpdate: (region) ->
-    return if region != Mercury.interface?.region
+    return if region != Mercury.interface?.activeRegion()
     @deactivate() unless @subview?.visible
     if @global || @regionSupported(region)
       @enable()

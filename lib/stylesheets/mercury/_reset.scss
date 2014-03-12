@@ -3,3 +3,10 @@
 // form, fieldset, legend, label, button, input, select (how do we handle the complex forms in modals??)
 // table, tbody, tr, td (for the table modal)
 // ul, li - input[type="button"].btn, p, input[type="search"] (default panel views)
+
+// Keyframes for animations.
+//-----------------------------------------------------------------------------
+@-webkit-keyframes mercury-uploader-indicator { from { background-position: -45px 0 } to { background-position: 0 0 } }
+@-moz-keyframes mercury-uploader-indicator { from { background-position: -45px 0 } to { background-position: 0 0 } }
+@-webkit-keyframes mercury-loading-indicator { from { -webkit-transform: rotate(0deg) } to { -webkit-transform: rotate(360deg) } }
+@-moz-keyframes mercury-loading-indicator { from { -moz-transform: rotate(0deg) } to { -moz-transform: rotate(360deg) } }

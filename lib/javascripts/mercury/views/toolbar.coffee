@@ -17,7 +17,7 @@ class Mercury.Toolbar extends Mercury.View
     'click': 'preventStop'
 
   build: ->
-    @append(new Mercury.ToolbarItem('primary', 'container', @config('toolbars:primary'), true))
+    @append(new Mercury.ToolbarItem('primary', 'container', @config('toolbars:primary'), true)) if @config('toolbars:primary')
     @append(new Mercury.ToolbarItem('secondary', 'container', {}))
 
 

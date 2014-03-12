@@ -23,6 +23,12 @@ describe "Mercury.Toolbar", ->
       subject.build()
       expect( Mercury.ToolbarItem ).calledWith('primary', 'container', primary: '_toolbar_')
       expect( subject.append ).calledWith(result: '_primary_container_')
+      expect( subject.append ).calledTwice
+
+    it "only appends the primary container if configured to do so", ->
+      Mercury.configure 'toolbars:primary', null
+      subject.build()
+      expect( subject.append ).calledOnce
 
     it "appends a secondary container ToolbarItem", ->
       subject.build()

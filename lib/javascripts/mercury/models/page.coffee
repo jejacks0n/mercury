@@ -50,12 +50,27 @@ class Mercury.Model.Page extends Mercury.Model
     super($.extend(@config('saving'), options))
 
 
-  release: ->
-    @regions.shift().release() while @regions.length
+  activeRegion: ->
+    @region
 
 
-  releaseRegion: (region) ->
+  setActiveRegion: (region) ->
+    @region = region
+
+
+  focusActiveRegion: ->
+    @region?.focus(false, true)
+
+
+  blurActiveRegion: ->
+    @region?.blur()
+
+
+  removeRegion: (region) ->
     @region = @regions[0] if region == @region
-    region.release()
     index = @regions.indexOf(region)
     @regions.splice(index, 1) if index > -1
+
+
+  release: ->
+    @regions.shift().release() while @regions.length

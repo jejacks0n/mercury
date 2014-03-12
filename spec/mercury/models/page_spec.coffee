@@ -117,7 +117,6 @@ describe "Mercury.Model.Page", ->
       expect( Klass.__super__.isValid ).called
 
 
-
   describe "#save", ->
 
     it "merges the configuration with the options and calls super", ->
@@ -126,6 +125,58 @@ describe "Mercury.Model.Page", ->
       expect( Klass.__super__.save ).calledWith(foo: 'bar')
       subject.save(bar: 'baz')
       expect( Klass.__super__.save ).calledWith(foo: 'bar', bar: 'baz')
+
+
+  describe "#activeRegion", ->
+
+    it "returns the active region", ->
+      subject.region = '_region_'
+      expect( subject.activeRegion() ).to.eql('_region_')
+
+
+  describe "#setActiveRegion", ->
+
+    it "sets the @region so we can track the active region", ->
+      subject.setActiveRegion('_region_')
+      expect( subject.region ).to.eql('_region_')
+
+
+  describe "#focusActiveRegion", ->
+
+    it "calls focus on the region", ->
+      subject.region = null
+      subject.focusActiveRegion()
+      subject.region = focus: spy()
+      subject.focusActiveRegion()
+      expect( subject.region.focus ).calledWith(false, true)
+
+
+  describe "#blurActiveRegion", ->
+
+    it "calls blur on the region", ->
+      subject.region = null
+      subject.blurActiveRegion()
+      subject.region = blur: spy()
+      subject.blurActiveRegion()
+      expect( subject.region.blur ).called
+
+
+  describe "#removeRegion", ->
+
+    beforeEach ->
+      @mock = {}
+
+    it "updates the active region if releasing the currently active region", ->
+      subject.regions = [{foo: '_foo_'}, @mock]
+      subject.region = @mock
+      subject.removeRegion(@mock)
+      expect( subject.region ).to.eql(foo: '_foo_')
+
+    it "removes it from the array", ->
+      subject.regions = [{foo: '_foo_'}, @mock, {bar: '_bar_'}]
+      subject.region = @mock
+      subject.removeRegion(@mock)
+      expect( subject.regions ).to.eql([{foo: '_foo_'}, {bar: '_bar_'}])
 
 
   describe "#release", ->
@@ -138,27 +189,3 @@ describe "Mercury.Model.Page", ->
       subject.release()
       expect( @mock.release ).calledTwice
       expect( subject.regions ).to.eql([])
-
-
-  describe "#releaseRegion", ->
-
-    beforeEach ->
-      @mock = release: spy()
-
-    it "updates the active region if releasing the currently active region", ->
-      subject.regions = [{foo: '_foo_'}, @mock]
-      subject.region = @mock
-      subject.releaseRegion(@mock)
-      expect( subject.region ).to.eql(foo: '_foo_')
-
-    it "releases the region", ->
-      subject.regions = [@mock]
-      subject.region = @mock
-      subject.releaseRegion(@mock)
-      expect( @mock.release ).called
-
-    it "removes it from the array", ->
-      subject.regions = [{foo: '_foo_'}, @mock, {bar: '_bar_'}]
-      subject.region = @mock
-      subject.releaseRegion(@mock)
-      expect( subject.regions ).to.eql([{foo: '_foo_'}, {bar: '_bar_'}])

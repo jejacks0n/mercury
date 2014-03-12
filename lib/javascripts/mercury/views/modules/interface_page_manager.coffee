@@ -26,10 +26,6 @@ Mercury.View.Modules.InterfacePageManager =
     $("[#{@config('regions:attribute')}]", @document)
 
 
-  activeRegion: ->
-    @page.region
-
-
   load: (json) ->
     @page.loadRegionContent(json)
 
@@ -47,12 +43,16 @@ Mercury.View.Modules.InterfacePageManager =
     @delay(100, @focusActiveRegion)
 
 
+  activeRegion: ->
+    @page.activeRegion()
+
+
   focusActiveRegion: ->
-    @page.region?.focus(false, true)
+    @page.focusActiveRegion()
 
 
   blurActiveRegion: ->
-    @page.region?.blur()
+    @page.blurActiveRegion()
 
 
   releasePage: ->
@@ -60,8 +60,8 @@ Mercury.View.Modules.InterfacePageManager =
 
 
   onRegionFocus: (region) ->
-    @page.region = region
+    @page.setActiveRegion(region)
 
 
   onRegionRelease: (region) ->
-    @page.releaseRegion(region)
+    @page.removeRegion(region)

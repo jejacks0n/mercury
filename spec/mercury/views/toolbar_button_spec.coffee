@@ -375,7 +375,7 @@ describe "Mercury.ToolbarButton", ->
 
     beforeEach ->
       @region = hasContext: ->
-      Mercury.interface.activeRegion = -> @region
+      Mercury.interface.activeRegion = => @region
 
     it "calls #deactivate unless the subview is visible", ->
       spyOn(subject, 'regionSupported')

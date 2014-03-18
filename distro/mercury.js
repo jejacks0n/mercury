@@ -3137,6 +3137,7 @@ Copyright (c) 2013 Jeremy Jackson
       }
       this.bindDefaultEvents();
       this.initialValue = JSON.stringify(this.toJSON());
+      this.handleAction();
     }
 
     Region.prototype.setInitialData = function() {
@@ -3355,13 +3356,16 @@ Copyright (c) 2013 Jeremy Jackson
       this.focus();
       if (data.files.length && this.onDropFile) {
         this.prevent(e);
-        return this.onDropFile(data.files);
+        this.onDropFile(data.files);
       } else if (this.onDropSnippet && (snippetName = data.getData('snippet'))) {
         this.onDropSnippet(snippet = Mercury.Snippet.get(snippetName, true));
-        return snippet.initialize(this);
+        snippet.initialize(this);
       } else {
-        return typeof this.onDropItem === "function" ? this.onDropItem(e, data) : void 0;
+        if (typeof this.onDropItem === "function") {
+          this.onDropItem(e, data);
+        }
       }
+      return this.handleAction('dropped');
     };
 
     Region.prototype.toStack = function() {
@@ -3401,7 +3405,10 @@ Copyright (c) 2013 Jeremy Jackson
 
     Region.prototype.load = function(json) {
       this.fromJSON(json);
-      return typeof this.loadSnippets === "function" ? this.loadSnippets(json.snippets || {}) : void 0;
+      if (typeof this.loadSnippets === "function") {
+        this.loadSnippets(json.snippets || {});
+      }
+      return this.handleAction('load');
     };
 
     Region.prototype.release = function() {

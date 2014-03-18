@@ -307,6 +307,12 @@ describe "Mercury.Region", ->
       subject = new Klass('<div id="name">')
       expect( subject.bindDefaultEvents ).called
 
+    it "calls #handleAction", ->
+      spyOn(Klass::, 'handleAction')
+      subject = new Klass('<div id="name">')
+      expect( subject.handleAction ).called
+
+
 
   describe "#setInitialData", ->
 
@@ -694,6 +700,11 @@ describe "Mercury.Region", ->
       subject.onItemDropped(@e)
       expect( subject.focus ).not.called
 
+    it "calls #handleAction", ->
+      spyOn(subject, 'handleAction')
+      subject.onItemDropped(@e)
+      expect( subject.handleAction ).calledWith('dropped')
+
 
   describe "#onRedo", ->
 
@@ -783,6 +794,11 @@ describe "Mercury.Region", ->
       expect( subject.loadSnippets ).calledWith(bar: 'baz')
       subject.load({})
       expect( subject.loadSnippets ).calledWith({})
+
+    it "calls #handleAction", ->
+      spyOn(subject, 'handleAction')
+      subject.load({})
+      expect( subject.handleAction ).calledWith('loaded')
 
 
   describe "#release", ->

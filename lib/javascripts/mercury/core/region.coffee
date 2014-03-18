@@ -156,6 +156,7 @@ class Mercury.Region extends Mercury.View
     @pushHistory() unless @skipHistoryOnInitialize
     @bindDefaultEvents()
     @initialValue = JSON.stringify(@toJSON())
+    @handleAction()
 
 
   # Sets up initial data from the element. This is used to generate the correct data attributes for serializing for the
@@ -373,6 +374,7 @@ class Mercury.Region extends Mercury.View
       snippet.initialize(@)
     else
       @onDropItem?(e, data)
+    @handleAction('dropped')
 
 
   # Provides a mechinism for overriding what goes into the stack. By default this just returns the region serialized
@@ -414,6 +416,7 @@ class Mercury.Region extends Mercury.View
   load: (json) ->
     @fromJSON(json)
     @loadSnippets?(json.snippets || {})
+    @handleAction('loaded')
 
 
   # Releases the instance and triggers a release event. Releasing a region doesn't remove the element, but does remove

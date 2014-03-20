@@ -1283,7 +1283,11 @@ Copyright (c) 2013 Jeremy Jackson
     };
 
     Model.url = function(record) {
-      return this.urlPrefix;
+      if (record.isNew()) {
+        return this.urlPrefix;
+      } else {
+        return [this.urlPrefix, record.id].join('/');
+      }
     };
 
     Model.find = function(id) {
@@ -3408,7 +3412,7 @@ Copyright (c) 2013 Jeremy Jackson
       if (typeof this.loadSnippets === "function") {
         this.loadSnippets(json.snippets || {});
       }
-      return this.handleAction('load');
+      return this.handleAction('loaded');
     };
 
     Region.prototype.release = function() {

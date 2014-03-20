@@ -33,7 +33,10 @@ class Mercury.Model extends Mercury.Module
   # Returns the url.
   #
   @url: (record) ->
-    @urlPrefix
+    if record.isNew()
+      @urlPrefix
+    else
+      [@urlPrefix, record.id].join('/')
 
 
   # Finds a record by id (falling back to cid if not found) in the collection. Throws an exception if the record isn't

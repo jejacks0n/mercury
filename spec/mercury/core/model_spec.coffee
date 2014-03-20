@@ -50,7 +50,11 @@ describe "Mercury.Model", ->
 
     it "returns the expected url", ->
       Klass.urlPrefix = "/base/path"
-      expect( Klass.url() ).to.eq('/base/path')
+      expect( Klass.url(isNew: -> true) ).to.eq('/base/path')
+
+    it "returns the expected url", ->
+      Klass.urlPrefix = "/base/path"
+      expect( Klass.url(id: 42, isNew: -> false) ).to.eq('/base/path/42')
 
 
   describe ".find", ->

@@ -134,8 +134,6 @@ class Mercury.Model extends Mercury.Module
       data: @toJSON()
       success: (json) =>
         if typeof(json) == 'object'
-          @id = json.id
-          @constructor.records[@id] = @ if @id
           @set(json)
           @trigger('save', json)
         @saveSuccess?(json)
@@ -204,8 +202,15 @@ class Mercury.Model extends Mercury.Module
     attrs = {}
     if typeof(key) == 'object' then attrs = key else attrs[key] = value
     @pushStack(@toJSON())
+    @setId(attrs.id) if attrs.id
     @attributes[key] = value for key, value of attrs
     @trigger('updated', attrs)
+
+
+  # Allows setting the id, which also updates the collection.
+  #
+  setId: (@id) ->
+    @constructor.records[@id] = @ if @id
 
 
   # Checks existence. Which is if there's an id and that id exists in the records.

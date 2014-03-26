@@ -204,18 +204,6 @@ describe "Mercury.Model", ->
         @server.respondWith('POST', '/bar', [200, {'Content-Type': 'application/json'}, '{"url": "/some/url/file.ext"}'])
         @server.respondWith('POST', '/raw', [200, {'Content-Type': 'application/html'}, '_html_'])
 
-      it "sets the id and adds it to the collection", ->
-        subject.save(url: '/foo', method: 'POST')
-        @server.respond()
-        expect( subject.id ).to.eq(42)
-        expect( Klass.records[42] ).to.eq(subject)
-
-      it "doesn't set the id/add to the collection if there's no id in the JSON", ->
-        subject.save(url: '/bar', method: 'POST')
-        @server.respond()
-        expect( subject.id ).to.be.undefined
-        expect( Klass.count() ).to.eq(3)
-
       it "calls set with the JSON", ->
         subject.save(url: '/foo')
         spyOn(subject, 'set')
@@ -342,6 +330,27 @@ describe "Mercury.Model", ->
       subject.set(foo: 'baz')
       expect( subject.stack[0] ).to.eql({})
       expect( subject.stack[1] ).to.eql(foo: 'bar')
+
+    it "calls #setId if an id was passed", ->
+      spyOn(subject, 'setId')
+      subject.set('id', 42)
+      expect( subject.setId ).calledWith(42)
+
+    it "doesn't call #setId if no id", ->
+      spyOn(subject, 'setId')
+      subject.set('foo', 'bar')
+      expect( subject.setId ).not.called
+
+
+  describe "#setId", ->
+
+    it "assigns @id", ->
+      subject.setId(42)
+      expect( subject.id ).to.eql(42)
+
+    it "keeps track of it in the collection", ->
+      subject.setId(42)
+      expect( Klass.records[42] ).to.eql(subject)
 
 
   describe "#exists", ->

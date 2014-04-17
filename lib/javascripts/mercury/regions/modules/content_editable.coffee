@@ -49,6 +49,6 @@ Mercury.Region.Modules.ContentEditable =
 
 
   stackEquality: (value) ->
-    if @stackPosition == 0 && @stack[@stackPosition]
+    if @stackPosition == 0 && @stack[@stackPosition] && @stack[@stackPosition].val
       return JSON.stringify(@stack[@stackPosition].val) == JSON.stringify(value.val)
     JSON.stringify(@stack[@stackPosition]) == JSON.stringify(value)

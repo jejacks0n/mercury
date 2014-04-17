@@ -60,6 +60,7 @@ Mercury.View.Modules.InterfacePageManager =
 
 
   onRegionFocus: (region) ->
+    @page.blurActiveRegion() unless @page.region == region
     @page.setActiveRegion(region)
 
 

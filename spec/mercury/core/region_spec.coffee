@@ -481,9 +481,10 @@ describe "Mercury.Region", ->
         subject.previewing = true
 
       it "adds a tabindex attribute", ->
+        subject.tabindex = 42
         subject.$focusable.removeAttr('tabindex')
         subject.togglePreview()
-        expect( subject.$focusable.attr('tabindex') ).to.eq('0')
+        expect( subject.$focusable.attr('tabindex') ).to.eq('42')
 
       it "adds the data attribute used for styling", ->
         subject.$focusable.removeAttr('data-mercury-region')
@@ -534,9 +535,16 @@ describe "Mercury.Region", ->
       subject.focus()
       expect( subject.$el.focus ).called
 
-    it "sets the scrollTop back to what it was before focus", ->
-      subject.focus(true)
+    it "triggers a focus event if the tabindex is blank", ->
+      subject.tabindex = ''
+      spyOn(subject, 'trigger')
       subject.focus()
+      expect( subject.trigger ).calledWith('focus')
+
+    it "sets the scrollTop back to what it was before focus", ->
+      spyOn(window, 'scrollTo')
+      subject.focus(true)
+      expect( window.scrollTo ).called
 
     it "calls @onFocus if it's defined", ->
       subject.onFocus = spy()
@@ -554,6 +562,12 @@ describe "Mercury.Region", ->
       spyOn(subject.$el, 'blur')
       subject.blur()
       expect( subject.$el.blur ).called
+
+    it "triggers a blur event if the tabindex is blank", ->
+      subject.tabindex = ''
+      spyOn(subject, 'trigger')
+      subject.blur()
+      expect( subject.trigger ).calledWith('blur')
 
     it "calls @onBlur if it's defined", ->
       subject.onBlur = spy()
@@ -788,9 +802,24 @@ describe "Mercury.Region", ->
     beforeEach ->
       spyOn(subject, 'fromJSON')
 
+    it "calls #clearStack", ->
+      spyOn(subject, 'clearStack')
+      subject.load(foo: 'bar')
+      expect( subject.clearStack ).called
+
     it "calls #fromJSON", ->
       subject.load(foo: 'bar')
       expect( subject.fromJSON ).calledWith(foo: 'bar')
+
+    it "sets @initialValue", ->
+      spyOn(subject, 'toJSON', -> foo: 'bar')
+      subject.load(foo: 'bar')
+      expect( subject.initialValue ).to.eq('{"foo":"bar"}')
+
+    it "calls #pushHistory", ->
+      spyOn(subject, 'pushHistory')
+      subject.load(foo: 'bar')
+      expect( subject.pushHistory ).called
 
     it "calls #loadSnippets if it's available", ->
       subject.loadSnippets = spy()

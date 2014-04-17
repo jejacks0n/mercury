@@ -139,7 +139,7 @@ class Mercury.Region extends Mercury.View
     @name ||= @$el.attr(@config('regions:identifier'))     # get the name from the element
     @previewing ||= false                                  # assume previewing is false
     @focused ||= false                                     # assume focused is false
-    @$focusable ||= @$el                                   # define @focusable unless it's already defined
+    @$focusable ||= @$el                                   # define @$focusable unless it's already defined
     @skipHistoryOn ||= ['redo']                            # we skip pushing to the history on redo by default
     @changed ||= false                                     # you can track changes in subclasses
     @setInitialData()                                      # setup the initial data attributes from dataAttrs
@@ -235,7 +235,7 @@ class Mercury.Region extends Mercury.View
       @blur()
       @$focusable.removeAttr('tabindex').removeAttr('data-mercury-region')
     else
-      @$focusable.attr(tabindex: 0).attr('data-mercury-region', true)
+      @$focusable.attr(tabindex: @tabindex || 0).attr('data-mercury-region', true)
     @onTogglePreview?()
 
 
@@ -264,8 +264,11 @@ class Mercury.Region extends Mercury.View
     @focused = true
     x = window.scrollX
     y = window.scrollY
-    @$focusable.focus() if force || !@$focusable.is(':focus')
-    window.scrollTo(x, y) unless scroll
+    if @tabindex == ''
+      @trigger('focus')
+    else
+      @$focusable.focus() if force || !@$focusable.is(':focus')
+    window.scrollTo(x, y) if scroll
     @onFocus?()
 
 
@@ -274,7 +277,10 @@ class Mercury.Region extends Mercury.View
   #
   blur: ->
     @focused = false
-    @$focusable.blur()
+    if @tabindex == ''
+      @trigger('blur')
+    else
+      @$focusable.blur()
     @onBlur?()
 
 
@@ -414,7 +420,10 @@ class Mercury.Region extends Mercury.View
   # initialization process and can blow away the undo history.
   #
   load: (json) ->
+    @clearStack()
     @fromJSON(json)
+    @initialValue = JSON.stringify(@toJSON())
+    @pushHistory()
     @loadSnippets?(json.snippets || {})
     @handleAction('loaded')
 

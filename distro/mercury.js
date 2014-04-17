@@ -3231,7 +3231,7 @@ Copyright (c) 2013 Jeremy Jackson
         this.$focusable.removeAttr('tabindex').removeAttr('data-mercury-region');
       } else {
         this.$focusable.attr({
-          tabindex: 0
+          tabindex: this.tabindex || 0
         }).attr('data-mercury-region', true);
       }
       return typeof this.onTogglePreview === "function" ? this.onTogglePreview() : void 0;
@@ -3272,10 +3272,14 @@ Copyright (c) 2013 Jeremy Jackson
       this.focused = true;
       x = window.scrollX;
       y = window.scrollY;
-      if (force || !this.$focusable.is(':focus')) {
-        this.$focusable.focus();
+      if (this.tabindex === '') {
+        this.trigger('focus');
+      } else {
+        if (force || !this.$focusable.is(':focus')) {
+          this.$focusable.focus();
+        }
       }
-      if (!scroll) {
+      if (scroll) {
         window.scrollTo(x, y);
       }
       return typeof this.onFocus === "function" ? this.onFocus() : void 0;
@@ -3283,7 +3287,11 @@ Copyright (c) 2013 Jeremy Jackson
 
     Region.prototype.blur = function() {
       this.focused = false;
-      this.$focusable.blur();
+      if (this.tabindex === '') {
+        this.trigger('blur');
+      } else {
+        this.$focusable.blur();
+      }
       return typeof this.onBlur === "function" ? this.onBlur() : void 0;
     };
 
@@ -3414,7 +3422,10 @@ Copyright (c) 2013 Jeremy Jackson
     };
 
     Region.prototype.load = function(json) {
+      this.clearStack();
       this.fromJSON(json);
+      this.initialValue = JSON.stringify(this.toJSON());
+      this.pushHistory();
       if (typeof this.loadSnippets === "function") {
         this.loadSnippets(json.snippets || {});
       }
@@ -4003,6 +4014,9 @@ Copyright (c) 2013 Jeremy Jackson
       return this.page.release();
     },
     onRegionFocus: function(region) {
+      if (this.page.region !== region) {
+        this.page.blurActiveRegion();
+      }
       return this.page.setActiveRegion(region);
     },
     onRegionRelease: function(region) {
@@ -5966,7 +5980,7 @@ Copyright (c) 2013 Jeremy Jackson
       } catch (_error) {}
     },
     stackEquality: function(value) {
-      if (this.stackPosition === 0 && this.stack[this.stackPosition]) {
+      if (this.stackPosition === 0 && this.stack[this.stackPosition] && this.stack[this.stackPosition].val) {
         return JSON.stringify(this.stack[this.stackPosition].val) === JSON.stringify(value.val);
       }
       return JSON.stringify(this.stack[this.stackPosition]) === JSON.stringify(value);

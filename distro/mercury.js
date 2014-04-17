@@ -3117,7 +3117,7 @@ Copyright (c) 2013 Jeremy Jackson
       Region.__super__.constructor.call(this, this.options);
       if (!this.$focusable) {
         this.attr({
-          tabindex: 0
+          tabindex: this.tabindex != null ? this.tabindex : this.tabindex = 0
         });
       }
       this.name || (this.name = this.$el.attr(this.config('regions:identifier')));

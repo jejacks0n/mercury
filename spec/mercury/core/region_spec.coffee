@@ -233,6 +233,10 @@ describe "Mercury.Region", ->
       subject = new Klass('<div id="_name_">', $focusable: $('<div>'))
       expect( subject.attr('tabindex') ).to.be.undefined
 
+    it "sets the tabindex to whatever I've told it to be", ->
+      subject = new Klass('<div id="_name_">', tabindex: 42)
+      expect( subject.attr('tabindex') ).to.eq('42')
+
     it "sets the name from the configurable attribute", ->
       subject = new Klass('<div id="_name_">')
       expect( subject.name ).to.eq('_name_')

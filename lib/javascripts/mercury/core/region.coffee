@@ -135,7 +135,7 @@ class Mercury.Region extends Mercury.View
     @placeholder ||= @options.placeholder || ''            # sets the default placeholder to an empty string
     @beforeBuild?()                                        # call the beforeBuild method if it's defined
     super(@options)                                        # let the view do it's thing
-    @attr(tabindex: 0) unless @$focusable                  # make the element focusable (unless we've set one ourselves)
+    @attr(tabindex: @tabindex ?= 0) unless @$focusable     # make the element focusable (unless we've set one ourselves)
     @name ||= @$el.attr(@config('regions:identifier'))     # get the name from the element
     @previewing ||= false                                  # assume previewing is false
     @focused ||= false                                     # assume focused is false

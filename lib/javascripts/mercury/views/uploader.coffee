@@ -33,7 +33,7 @@ class Mercury.Uploader extends Mercury.View
 
   calculate: (files) ->
     for file in files
-      file = new Mercury.Model.File(file, mimeTypes: @mimeTypes)
+      file = new Mercury.Model.File(file, mimeTypes: @mimeTypes, params: @params)
       unless file.isValid()
         alert(@t('Error uploading %s: %s', file.get('name'), file.errorMessages()))
         continue

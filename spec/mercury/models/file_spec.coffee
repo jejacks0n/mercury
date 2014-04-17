@@ -149,6 +149,11 @@ describe "Mercury.Model.File", ->
       subject.toFormData()
       expect( FormData::append ).calledWith('_input_', @file, '_name_')
 
+    it "appends any additional params passed in the options", ->
+      subject.options['params'] = {foo: 'bar'}
+      subject.toFormData()
+      expect( FormData::append ).calledWith('foo', 'bar')
+
 
   describe "#saveSuccess", ->
 

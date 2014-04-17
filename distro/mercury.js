@@ -5658,12 +5658,17 @@ Copyright (c) 2013 Jeremy Jackson
     };
 
     File.prototype.toFormData = function() {
-      var formData;
+      var formData, k, v, _ref;
       if (!window.FormData) {
         return;
       }
       formData = new FormData();
       formData.append(this.config('uploading:saveName'), this.file, this.get('name'));
+      _ref = this.options['params'] || {};
+      for (k in _ref) {
+        v = _ref[k];
+        formData.append(k, v);
+      }
       return formData;
     };
 
@@ -5722,7 +5727,8 @@ Copyright (c) 2013 Jeremy Jackson
       for (_i = 0, _len = files.length; _i < _len; _i++) {
         file = files[_i];
         file = new Mercury.Model.File(file, {
-          mimeTypes: this.mimeTypes
+          mimeTypes: this.mimeTypes,
+          params: this.params
         });
         if (!file.isValid()) {
           alert(this.t('Error uploading %s: %s', file.get('name'), file.errorMessages()));

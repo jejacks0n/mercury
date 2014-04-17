@@ -96,6 +96,10 @@ describe "Mercury.Uploader", ->
       subject.calculate(@files)
       expect( subject.files[0].options.mimeTypes ).to.eql(subject.mimeTypes)
 
+    it "passes additional params for the file upload", ->
+      subject.params = foo: 'bar'
+      subject.calculate(@files)
+      expect( subject.files[0].options.params ).to.eql(foo: 'bar')
 
   describe "#build", ->
 

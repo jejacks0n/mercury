@@ -58,6 +58,7 @@ class Mercury.Model.File extends Mercury.Model
     return unless window.FormData
     formData = new FormData()
     formData.append(@config('uploading:saveName'), @file, @get('name'))
+    formData.append(k, v) for k, v of @options['params'] || {}
     formData
 
 

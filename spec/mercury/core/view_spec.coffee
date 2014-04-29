@@ -276,6 +276,14 @@ describe "Mercury.View", ->
       expect( subject.appendView(@subview) ).to.eq(@subview)
 
 
+  describe "#defer", ->
+
+    it "calls #delay with 1ms and the callback", ->
+      spyOn(subject, 'delay')
+      subject.defer(callback = spy())
+      expect( subject.delay ).calledWith(1, callback)
+
+
   describe "#delay", ->
 
     it "delays and then calls the method", ->

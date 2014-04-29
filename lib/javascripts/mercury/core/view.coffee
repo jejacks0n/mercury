@@ -140,6 +140,13 @@ class Mercury.View extends Mercury.Module
     view
 
 
+  # Defers a method call so the browser can handle an event before continuing code execution. Simply calls #delay with a
+  # 1ms delay.
+  #
+  defer: (callback) ->
+    @delay(1, callback)
+
+
   # Delegates to setTimeout swapping the argument order, and calling the callback within our scope.
   # Returns the setTimeout so it can be cancelled.
   #

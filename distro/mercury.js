@@ -1977,6 +1977,10 @@ Copyright (c) 2013 Jeremy Jackson
       return view;
     };
 
+    View.prototype.defer = function(callback) {
+      return this.delay(1, callback);
+    };
+
     View.prototype.delay = function(ms, callback) {
       return setTimeout(((function(_this) {
         return function() {
@@ -4970,10 +4974,12 @@ Copyright (c) 2013 Jeremy Jackson
       this.name = name;
       this.label = label;
       this.options = options != null ? options : {};
+      this.icon || (this.icon = (this.name || '').toDash());
       this.determineAction();
       this.determineTypes();
-      this.icon || (this.icon = (this.name || '').toDash());
       ToolbarButton.__super__.constructor.call(this, this.options);
+      this.determineAction();
+      this.determineTypes();
       this.handleSpecial();
     }
 
@@ -5728,16 +5734,18 @@ Copyright (c) 2013 Jeremy Jackson
       Uploader.__super__.constructor.call(this, this.options);
       this.loaded = 0;
       this.total = 0;
-      this.files = [];
-      if (!this.calculate(files || []).length) {
-        return;
+      this.files = this.calculate(files || []);
+      if (this.files.length) {
+        this.show();
+        this.delay(500, this.upload);
+      } else {
+        this.release();
       }
-      this.show();
-      this.delay(500, this.upload);
     }
 
     Uploader.prototype.calculate = function(files) {
       var file, _i, _len;
+      this.files = [];
       for (_i = 0, _len = files.length; _i < _len; _i++) {
         file = files[_i];
         file = new Mercury.Model.File(file, {

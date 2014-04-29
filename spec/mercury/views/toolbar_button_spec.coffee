@@ -47,11 +47,11 @@ describe "Mercury.ToolbarButton", ->
 
     it "calls #determineAction", ->
       subject = new Klass()
-      expect( subject.determineAction ).called
+      expect( subject.determineAction ).calledTwice
 
     it "calls #determineTypes", ->
       subject = new Klass()
-      expect( subject.determineTypes ).called
+      expect( subject.determineTypes ).calledTwice
 
     it "sets @icon from name", ->
       subject = new Klass('fooBar')

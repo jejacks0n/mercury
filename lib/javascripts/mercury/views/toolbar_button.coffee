@@ -29,6 +29,8 @@ class Mercury.ToolbarButton extends Mercury.View
     @determineTypes()
     @icon ||= (@name || '').toDash()
     super(@options)
+    @determineAction()
+    @determineTypes()
 
     @handleSpecial()
 

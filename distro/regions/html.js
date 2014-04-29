@@ -233,18 +233,39 @@ Configuration:
 
   Mercury.Region.Html.addAction({
     bold: function() {
-      return this.toggleWrapSelectedWordsInClass('red');
+      return this.toggleWrapSelectedWordsInClass('red', {
+        elementTagName: "strong"
+      });
     },
     italic: function() {
-      return this.toggleWrapSelectedWordsInClass('highlight');
+      return this.toggleWrapSelectedWordsInClass('highlight', {
+        elementTagName: "em"
+      });
+    },
+    strike: function() {
+      return this.toggleWrapSelectedWordsInClass('highlight', {
+        elementTagName: "strike"
+      });
     },
     underline: function() {
-      return this.toggleWrapSelectedWordsInClass('blue');
+      return this.toggleWrapSelectedWordsInClass('blue', {
+        elementTagName: "u"
+      });
     },
     rule: function() {
       return this.replaceSelection('<hr/>');
     },
     style: function() {},
+    subscript: function() {
+      return this.toggleWrapSelectedWordsInClass('blue', {
+        elementTagName: "sub"
+      });
+    },
+    superscript: function() {
+      return this.toggleWrapSelectedWordsInClass('blue', {
+        elementTagName: "sup"
+      });
+    },
     link: function(linkAction) {
       return this.replaceSelection(linkAction.asHtml());
     },
@@ -1899,7 +1920,7 @@ rangy.createModule("DomRange", function(api, module) {
         isValid: function() {
             return isRangeValid(this);
         },
-        
+
         inspect: function() {
             return inspect(this);
         }
@@ -2038,7 +2059,7 @@ rangy.createModule("DomRange", function(api, module) {
 
                 boundaryUpdater(this, sc, so, ec, eo);
             },
-            
+
             setBoundary: function(node, offset, isStart) {
                 this["set" + (isStart ? "Start" : "End")](node, offset);
             },

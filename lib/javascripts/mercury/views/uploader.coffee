@@ -23,15 +23,17 @@ class Mercury.Uploader extends Mercury.View
 
     @loaded = 0
     @total = 0
-    @files = []
+    @files = @calculate(files || [])
 
-    return unless @calculate(files || []).length
-
-    @show()
-    @delay(500, @upload)
+    if @files.length
+      @show()
+      @delay(500, @upload)
+    else
+      @release()
 
 
   calculate: (files) ->
+    @files = []
     for file in files
       file = new Mercury.Model.File(file, mimeTypes: @mimeTypes, params: @params)
       unless file.isValid()

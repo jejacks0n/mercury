@@ -53,11 +53,16 @@ describe "Mercury.Uploader", ->
       subject = new Klass()
       expect( subject.delay ).calledWith(500, Klass::upload)
 
-    it "returns without calling show unless there are files", ->
+    it "calls release without calling show unless there are files", ->
       Klass::calculate.restore()
       spyOn(Klass::, 'calculate', -> [])
+      spyOn(Klass::, 'release')
       subject = new Klass()
+      expect( subject.release ).called
       expect( subject.show ).not.called
+
+      Klass::release.restore()
+      subject.release()
 
 
   describe "#calculate", ->

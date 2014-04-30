@@ -297,11 +297,10 @@ describe "Mercury.Model", ->
   describe "#errorMessages", ->
 
     it "returns false if it's valid", ->
-      spyOn(subject, 'isValid', -> true)
+      subject.errors = {}
       expect( subject.errorMessages() ).to.be.false
 
     it "generates a readable error message", ->
-      spyOn(subject, 'isValid', -> false)
       subject.errors = {size: ['is too large', "can't be blank"], type: ["isn't good"]}
       expect( subject.errorMessages() ).to.eq("is too large, can't be blank\nisn't good")
 

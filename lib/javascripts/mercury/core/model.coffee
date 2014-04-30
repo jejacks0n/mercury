@@ -180,10 +180,12 @@ class Mercury.Model extends Mercury.Module
   # Returns false if there are no errors, otherwise collects the errors into a more readable string.
   #
   errorMessages: ->
-    return false if @isValid()
     errors = []
     errors.push("#{value.join(', ')}") for attr, value of @errors
-    errors.join('\n')
+    if errors.length
+      errors.join('\n')
+    else
+      false
 
 
   # Getter for attributes. It's advised to use this method when getting attributes, but you're encouraged to provide

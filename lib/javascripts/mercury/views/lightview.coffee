@@ -27,7 +27,7 @@ class Mercury.Lightview extends Mercury.Modal
 
 
   defaultPosition: ->
-    @$dialog.css(marginTop: ($(window).height() - 75) / 2)
+    @$dialog.css(marginTop: ($(document).height() - 75) / 2)
 
 
   resize: (animate = true, dimensions = null) ->
@@ -38,10 +38,10 @@ class Mercury.Lightview extends Mercury.Modal
       animate = false
     @addClass('mercury-no-animation') unless animate
     @$contentContainer.css(height: 'auto')
-    @$content.css(width: Math.min(@$content.outerWidth(), $(window).width()))
+    @$content.css(width: Math.min(@$content.outerWidth(), $(document).width()))
     titleHeight = @$titleContainer.outerHeight()
-    height = Math.min(@$content.outerHeight() + titleHeight, $(window).height())
-    @$dialog.css(marginTop: ($(window).height() - height) / 2, height: height)
+    height = Math.min(@$content.outerHeight() + titleHeight, $(document).height())
+    @$dialog.css(marginTop: ($(document).height() - height) / 2, height: height)
     @$content.css(width: 'auto')
     @$contentContainer.css(height: height - titleHeight)
     if animate

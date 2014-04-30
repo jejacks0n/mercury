@@ -426,6 +426,7 @@ class Mercury.Region extends Mercury.View
     @pushHistory()
     @loadSnippets?(json.snippets || {})
     @handleAction('loaded')
+    @trigger('update')
 
 
   # Releases the instance and triggers a release event. Releasing a region doesn't remove the element, but does remove

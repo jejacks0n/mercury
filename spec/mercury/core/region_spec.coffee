@@ -833,6 +833,11 @@ describe "Mercury.Region", ->
       subject.load({})
       expect( subject.handleAction ).calledWith('loaded')
 
+    it "triggers an update event", ->
+      spyOn(subject, 'trigger')
+      subject.load({})
+      expect( subject.trigger ).calledWith('update')
+
 
   describe "#release", ->
 

@@ -15,6 +15,10 @@ class Mercury.Model.File extends Mercury.Model
       url  : @file.url || null
 
 
+  isUploadable: (deferred) ->
+    if @isValid() then deferred.resolve() else deferred.reject()
+
+
   validate: ->
     if @get('size') >= @config('uploading:maxSize')
       @addError('size', @t('Too large (max %s)', @config('uploading:maxSize').toBytes()))

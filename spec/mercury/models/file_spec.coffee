@@ -31,6 +31,18 @@ describe "Mercury.Model.File", ->
       subject = new Klass(url: '_url_')
       expect( subject.get('url') ).to.eq('_url_')
 
+  describe "#isUploadable", ->
+
+    it "resolves a deferrable if valid", ->
+      spyOn(subject, 'isValid', -> true)
+      subject.isUploadable(deferred = resolve: spy())
+      expect( deferred.resolve ).called
+
+    it "reject a deferrable if valid", ->
+      spyOn(subject, 'isValid', -> false)
+      subject.isUploadable(deferred = reject: spy())
+      expect( deferred.reject ).called
+
 
   describe "#validate", ->
 

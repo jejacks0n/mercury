@@ -358,6 +358,11 @@ describe "Mercury.Region", ->
       subject.trigger('foo')
       expect( Mercury.trigger ).calledWith('region:foo', subject)
 
+    it "triggers an event on the element", ->
+      spyOn(subject.$el, 'trigger')
+      subject.trigger('foo')
+      expect( subject.$el.trigger ).calledWith('region:foo', subject)
+
 
   describe "#hasAction", ->
 

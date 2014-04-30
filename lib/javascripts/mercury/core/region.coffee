@@ -187,6 +187,7 @@ class Mercury.Region extends Mercury.View
   trigger: (event) ->
     super
     Mercury.trigger("region:#{event}", @)
+    @$el.trigger("region:#{event}", @)
 
 
   # Allows buttons and other things to ask if a region handles a given action.

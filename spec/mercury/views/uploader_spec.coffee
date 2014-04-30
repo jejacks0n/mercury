@@ -215,16 +215,15 @@ describe "Mercury.Uploader", ->
           return '_type_' if attr == 'type'
         readableSize: -> '42.00 kb'
         isImage: -> false
+        previewSrc: (callback) -> callback('/teaspoon/fixtures/image.gif')
         readAsDataURL: spy()
 
     it "it updates the details element with the file details", ->
       subject.loadDetails()
       expect( subject.$details.html() ).to.eq('Name: _name_<br>Type: _type_<br>Size: 42.00 kb')
 
-    it "loads a preview if the file is an image", ->
-      subject.file.isImage = -> true
+    it "loads a preview image", ->
       subject.loadDetails()
-      subject.file.readAsDataURL.callArg(0, '/teaspoon/fixtures/image.gif')
       expect( subject.$preview.html() ).to.eq('<img src="/teaspoon/fixtures/image.gif">')
 
 

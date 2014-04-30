@@ -83,8 +83,11 @@ class Mercury.Uploader extends Mercury.View
       @t('Size: %s', @file.readableSize())
     ].join('<br/>')
 
-    return unless @file.isImage()
-    @file.readAsDataURL (result) => @$preview.html($('<img>', src: result))
+    @file.previewSrc (result) => @displayPreview(result)
+
+
+  displayPreview: (src) ->
+    @$preview.html($('<img>', src: src))
 
 
   success: ->

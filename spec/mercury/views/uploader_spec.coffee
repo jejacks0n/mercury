@@ -26,7 +26,7 @@ describe "Mercury.Uploader", ->
 
     beforeEach ->
       spyOn(Klass::, 'build')
-      spyOn(Klass::, 'calculate', -> [1])
+      spyOn(Klass::, 'calculate', (_, callback) -> callback([1]))
       spyOn(Klass::, 'upload')
       spyOn(Klass::, 'notify')
 
@@ -43,68 +43,80 @@ describe "Mercury.Uploader", ->
 
     it "calls #calculate", ->
       subject = new Klass([1, 2])
-      expect( subject.calculate ).calledWith([1, 2])
+      expect( subject.calculate ).calledWith([1, 2], sinon.match.func)
 
-    it "calls #show", ->
-      subject = new Klass()
-      expect( subject.show ).called
+    describe "#calculate on success", ->
 
-    it "delays calling #upload for half a second", ->
-      subject = new Klass()
-      expect( subject.delay ).calledWith(500, Klass::upload)
+      beforeEach ->
+        Klass::calculate.restore()
+        spyOn(Klass::, 'calculate', (files, callback) -> callback([1]) )
 
-    it "calls release without calling show unless there are files", ->
-      Klass::calculate.restore()
-      spyOn(Klass::, 'calculate', -> [])
-      spyOn(Klass::, 'release')
-      subject = new Klass()
-      expect( subject.release ).called
-      expect( subject.show ).not.called
+      it "calls #show", ->
+        subject = new Klass()
+        expect( subject.show ).called
 
-      Klass::release.restore()
-      subject.release()
+      it "delays calling #upload for half a second", ->
+        subject = new Klass()
+        expect( subject.delay ).calledWith(500, Klass::upload)
+
+    describe "#calculate on failure", ->
+
+      beforeEach ->
+        Klass::calculate.restore()
+        spyOn(Klass::, 'release')
+        spyOn(Klass::, 'calculate', (files, callback) -> callback([]) )
+
+      it "calls release without calling show unless there are files", ->
+        subject = new Klass()
+        expect( subject.release ).called
+        expect( subject.show ).not.called
+
+        Klass::release.restore()
+        subject.release()
 
 
   describe "#calculate", ->
 
     beforeEach ->
       spyOn(subject, 'upload')
-      @valid = true
-      spyOn(Mercury.Model.File::, 'isValid', => @valid)
+      spyOn(Mercury.Model.File::, 'isUploadable', (deferred) => deferred.resolve() )
 
-    it "creates an array of @files", ->
-      subject.calculate(@files)
-      expect( subject.files.length ).to.eq(2)
+    it "creates an array of file models", (done) ->
+      subject.calculate @files, (files) ->
+        expect( files.length ).to.eq(2)
+        done()
 
-    it "calculates the total size of all files", ->
-      subject.calculate(@files)
-      expect( subject.total ).to.eq(3072)
+    it "passes @options to the file model for validation", (done) ->
+      subject.options = mimeTypes: ['bar/baz']
+      subject.calculate @files, (files) ->
+        expect( files[0].options.mimeTypes ).to.eql(subject.options.mimeTypes)
+        done()
 
-    it "alerts the user if the file isn't valid", ->
-      @valid = false
-      spyOn(window, 'alert')
-      subject.calculate(@files)
-      expect( window.alert ).calledWith('Error uploading _file1_: ')
-      expect( window.alert ).calledWith('Error uploading _file2_: ')
+    it "calculates the total size of all files", (done) ->
+      subject.calculate @files, (files) ->
+        expect( subject.total ).to.eq(3072)
+        done()
 
-    it "skips files that aren't valid", ->
-      @valid = false
-      spyOn(window, 'alert')
-      subject.calculate(@files)
-      expect( subject.total ).to.eq(0)
+    describe "failure", ->
 
-    it "returns @files", ->
-      expect( subject.calculate([]) ).to.eq(subject.files)
+      beforeEach ->
+        Mercury.Model.File::isUploadable.restore()
+        spyOn(Mercury.Model.File::, 'isUploadable', (deferred) => deferred.reject() )
 
-    it "passes @mimeTypes for validation", ->
-      subject.mimeTypes = ['bar/baz']
-      subject.calculate(@files)
-      expect( subject.files[0].options.mimeTypes ).to.eql(subject.mimeTypes)
+      it "skips files that aren't valid", (done) ->
+        @valid = false
+        spyOn(window, 'alert')
+        subject.calculate @files, ->
+          expect( subject.total ).to.eq(0)
+          done()
 
-    it "passes additional params for the file upload", ->
-      subject.params = foo: 'bar'
-      subject.calculate(@files)
-      expect( subject.files[0].options.params ).to.eql(foo: 'bar')
+      it "alerts the user if the file isn't valid", (done) ->
+        spyOn(window, 'alert')
+        subject.calculate @files, ->
+          expect( window.alert ).calledWith('Error uploading _file1_: ')
+          expect( window.alert ).calledWith('Error uploading _file2_: ')
+          done()
+
 
   describe "#build", ->
 

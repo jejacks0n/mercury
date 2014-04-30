@@ -23,25 +23,31 @@ class Mercury.Uploader extends Mercury.View
 
     @loaded = 0
     @total = 0
-    @files = @calculate(files || [])
+    @calculate files || [], (@files) =>
+      if @files.length
+        @show()
+        @delay(500, @upload)
+      else
+        @release()
 
-    if @files.length
-      @show()
-      @delay(500, @upload)
-    else
-      @release()
 
+  calculate: (files, callback) ->
+    allowedFiles = []
+    steps = []
 
-  calculate: (files) ->
-    @files = []
     for file in files
-      file = new Mercury.Model.File(file, mimeTypes: @mimeTypes, params: @params)
-      unless file.isValid()
-        alert(@t('Error uploading %s: %s', file.get('name'), file.errorMessages()))
-        continue
-      @files.push(file)
-      @total += file.get('size')
-    @files
+      file = new Mercury.Model.File(file, @options)
+      steps.push(deferred = new $.Deferred())
+      deferred
+        .fail =>
+          errors = file.errorMessages() || ''
+          alert(@t('Error uploading %s: %s', file.get('name'), errors))
+        .done =>
+          allowedFiles.push(file)
+          @total += file.get('size')
+      file.isUploadable(deferred)
+
+    $.when(steps...).always -> callback(allowedFiles)
 
 
   build: ->

@@ -81,6 +81,34 @@ describe "Mercury.Model.File", ->
       window.FileReader = original
 
 
+  describe "#localSrc", ->
+
+    beforeEach ->
+      @originalURL = window.URL
+      window.URL = createObjectURL: -> 'some/url'
+
+    afterEach ->
+      window.URL = @originalURL
+
+    it "attempts to get the url through URL.createObjectURL", ->
+      subject.localSrc(callback = spy())
+      expect( callback ).calledWith('some/url')
+
+    it "falls back to calling #readAsDataURL", ->
+      window.URL = {}
+      spyOn(subject, 'readAsDataURL')
+      subject.localSrc(callback = spy())
+      expect( subject.readAsDataURL ).calledWith(callback)
+
+
+  describe "#previewSrc", ->
+
+    it "calls #localSrc with the callback", ->
+      spyOn(subject, 'localSrc')
+      subject.previewSrc(callback = spy())
+      expect( subject.localSrc ).calledWith(callback)
+
+
   describe "#readableSize", ->
 
     it "returns the readable file size", ->

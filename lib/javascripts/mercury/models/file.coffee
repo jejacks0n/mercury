@@ -25,11 +25,22 @@ class Mercury.Model.File extends Mercury.Model
 
 
   readAsDataURL: (callback) ->
-    # todo: this could generate a nice placeholder image when we can't read the file
     return unless window.FileReader
     reader = new FileReader()
     reader.onload = -> callback(reader.result) if callback
     reader.readAsDataURL(@file)
+
+
+  localSrc: (callback) ->
+    url = (URL || webkitURL)
+    if method = url && url.createObjectURL
+      callback(method(@file))
+    else
+      @readAsDataURL(callback)
+
+
+  previewSrc: (callback) ->
+    @localSrc(callback)
 
 
   readableSize: ->

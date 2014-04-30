@@ -1429,16 +1429,17 @@ Copyright (c) 2013 Jeremy Jackson
 
     Model.prototype.errorMessages = function() {
       var attr, errors, value, _ref;
-      if (this.isValid()) {
-        return false;
-      }
       errors = [];
       _ref = this.errors;
       for (attr in _ref) {
         value = _ref[attr];
         errors.push("" + (value.join(', ')));
       }
-      return errors.join('\n');
+      if (errors.length) {
+        return errors.join('\n');
+      } else {
+        return false;
+      }
     };
 
     Model.prototype.get = function(key) {
@@ -3178,7 +3179,8 @@ Copyright (c) 2013 Jeremy Jackson
 
     Region.prototype.trigger = function(event) {
       Region.__super__.trigger.apply(this, arguments);
-      return Mercury.trigger("region:" + event, this);
+      Mercury.trigger("region:" + event, this);
+      return this.$el.trigger("region:" + event, this);
     };
 
     Region.prototype.hasAction = function(action) {
@@ -3433,7 +3435,8 @@ Copyright (c) 2013 Jeremy Jackson
       if (typeof this.loadSnippets === "function") {
         this.loadSnippets(json.snippets || {});
       }
-      return this.handleAction('loaded');
+      this.handleAction('loaded');
+      return this.trigger('update');
     };
 
     Region.prototype.release = function() {
@@ -4649,7 +4652,7 @@ Copyright (c) 2013 Jeremy Jackson
 
     Lightview.prototype.defaultPosition = function() {
       return this.$dialog.css({
-        marginTop: ($(window).height() - 75) / 2
+        marginTop: ($(document).height() - 75) / 2
       });
     };
 
@@ -4676,12 +4679,12 @@ Copyright (c) 2013 Jeremy Jackson
         height: 'auto'
       });
       this.$content.css({
-        width: Math.min(this.$content.outerWidth(), $(window).width())
+        width: Math.min(this.$content.outerWidth(), $(document).width())
       });
       titleHeight = this.$titleContainer.outerHeight();
-      height = Math.min(this.$content.outerHeight() + titleHeight, $(window).height());
+      height = Math.min(this.$content.outerHeight() + titleHeight, $(document).height());
       this.$dialog.css({
-        marginTop: ($(window).height() - height) / 2,
+        marginTop: ($(document).height() - height) / 2,
         height: height
       });
       this.$content.css({
@@ -4974,9 +4977,9 @@ Copyright (c) 2013 Jeremy Jackson
       this.name = name;
       this.label = label;
       this.options = options != null ? options : {};
-      this.icon || (this.icon = (this.name || '').toDash());
       this.determineAction();
       this.determineTypes();
+      this.icon || (this.icon = (this.name || '').toDash());
       ToolbarButton.__super__.constructor.call(this, this.options);
       this.determineAction();
       this.determineTypes();
@@ -5616,6 +5619,14 @@ Copyright (c) 2013 Jeremy Jackson
       });
     }
 
+    File.prototype.isUploadable = function(deferred) {
+      if (this.isValid()) {
+        return deferred.resolve();
+      } else {
+        return deferred.reject();
+      }
+    };
+
     File.prototype.validate = function() {
       var mimeTypes, _ref;
       if (this.get('size') >= this.config('uploading:maxSize')) {
@@ -5640,6 +5651,20 @@ Copyright (c) 2013 Jeremy Jackson
         }
       };
       return reader.readAsDataURL(this.file);
+    };
+
+    File.prototype.localSrc = function(callback) {
+      var method, url;
+      url = URL || webkitURL;
+      if (method = url && url.createObjectURL) {
+        return callback(method(this.file));
+      } else {
+        return this.readAsDataURL(callback);
+      }
+    };
+
+    File.prototype.previewSrc = function(callback) {
+      return this.localSrc(callback);
     };
 
     File.prototype.readableSize = function() {
@@ -5734,32 +5759,44 @@ Copyright (c) 2013 Jeremy Jackson
       Uploader.__super__.constructor.call(this, this.options);
       this.loaded = 0;
       this.total = 0;
-      this.files = this.calculate(files || []);
-      if (this.files.length) {
-        this.show();
-        this.delay(500, this.upload);
-      } else {
-        this.release();
-      }
+      this.calculate(files || [], (function(_this) {
+        return function(files) {
+          _this.files = files;
+          if (_this.files.length) {
+            _this.show();
+            return _this.delay(500, _this.upload);
+          } else {
+            return _this.release();
+          }
+        };
+      })(this));
     }
 
-    Uploader.prototype.calculate = function(files) {
-      var file, _i, _len;
-      this.files = [];
+    Uploader.prototype.calculate = function(files, callback) {
+      var allowedFiles, deferred, file, steps, _i, _len;
+      allowedFiles = [];
+      steps = [];
       for (_i = 0, _len = files.length; _i < _len; _i++) {
         file = files[_i];
-        file = new Mercury.Model.File(file, {
-          mimeTypes: this.mimeTypes,
-          params: this.params
-        });
-        if (!file.isValid()) {
-          alert(this.t('Error uploading %s: %s', file.get('name'), file.errorMessages()));
-          continue;
-        }
-        this.files.push(file);
-        this.total += file.get('size');
+        file = new Mercury.Model.File(file, this.options);
+        steps.push(deferred = new $.Deferred());
+        deferred.fail((function(_this) {
+          return function() {
+            var errors;
+            errors = file.errorMessages() || '';
+            return alert(_this.t('Error uploading %s: %s', file.get('name'), errors));
+          };
+        })(this)).done((function(_this) {
+          return function() {
+            allowedFiles.push(file);
+            return _this.total += file.get('size');
+          };
+        })(this));
+        file.isUploadable(deferred);
       }
-      return this.files;
+      return $.when.apply($, steps).always(function() {
+        return callback(allowedFiles);
+      });
     };
 
     Uploader.prototype.build = function() {
@@ -5832,16 +5869,17 @@ Copyright (c) 2013 Jeremy Jackson
 
     Uploader.prototype.loadDetails = function() {
       this.$details.html([this.t('Name: %s', this.file.get('name')), this.t('Type: %s', this.file.get('type')), this.t('Size: %s', this.file.readableSize())].join('<br/>'));
-      if (!this.file.isImage()) {
-        return;
-      }
-      return this.file.readAsDataURL((function(_this) {
+      return this.file.previewSrc((function(_this) {
         return function(result) {
-          return _this.$preview.html($('<img>', {
-            src: result
-          }));
+          return _this.displayPreview(result);
         };
       })(this));
+    };
+
+    Uploader.prototype.displayPreview = function(src) {
+      return this.$preview.html($('<img>', {
+        src: src
+      }));
     };
 
     Uploader.prototype.success = function() {

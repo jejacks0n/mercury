@@ -105,6 +105,17 @@ class Mercury.View extends Mercury.Module
     @$el
 
 
+  # Prepend an element, elements, or view(s). Accepts a list of elements or views, and re-finds any elements we're
+  # actively tracking after appending them.
+  # Returns el for chaining.
+  #
+  prepend: (elements...) ->
+    elements = (e.$el || e.el || e for e in elements)
+    @$el.prepend(elements...)
+    @refreshElements()
+    @$el
+
+
   # Append an element, elements, or view(s). Accepts a list of elements or views, and re-finds any elements we're
   # actively tracking after appending them.
   # Returns el for chaining.

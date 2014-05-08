@@ -201,6 +201,25 @@ describe "Mercury.View", ->
       expect( subject.html() ).to.eq('foo')
 
 
+  describe "#prepend", ->
+
+    it "prepends the elements (or [elements].el/[elements].$el)", ->
+      els = ['<section id="test"></section>', '<section id="test2"></section>', '<section id="test3"></section>']
+      subject.prepend(els[0], {el: els[1]}, {$el: els[2]})
+      expect( subject.$el.find('#test').is('section') ).to.be.true
+      expect( subject.$el.find('#test2').is('section') ).to.be.true
+      expect( subject.$el.find('#test3').is('section') ).to.be.true
+      expect( subject.html() ).to.eql('<section id="test"></section><section id="test2"></section><section id="test3"></section>')
+
+    it "calls #refreshElements", ->
+      spyOn(subject, 'refreshElements')
+      subject.prepend('')
+      expect( subject.refreshElements ).called
+
+    it "returns @$el for chaining", ->
+      expect( subject.prepend('') ).to.eq(subject.$el)
+
+
   describe "#append", ->
 
     it "appends the elements (or [elements].el/[elements].$el)", ->

@@ -74,3 +74,7 @@ class Mercury.Model.Page extends Mercury.Model
 
   release: ->
     @regions.shift().release() while @regions.length
+
+
+  saveError: (xhr, options) ->
+    alert(@t('Unable to save to the url: %s', options.url))

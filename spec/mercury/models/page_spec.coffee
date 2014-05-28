@@ -189,3 +189,11 @@ describe "Mercury.Model.Page", ->
       subject.release()
       expect( @mock.release ).calledTwice
       expect( subject.regions ).to.eql([])
+
+
+  describe "#saveError", ->
+
+    it "alerts that it was unable to save", ->
+      spyOn(window, 'alert')
+      subject.saveError({}, url: 'path/to')
+      expect( window.alert ).calledWith('Unable to save to the url: path/to')

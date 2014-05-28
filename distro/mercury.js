@@ -1388,10 +1388,10 @@ Copyright (c) 2013 Jeremy Jackson
           };
         })(this),
         error: (function(_this) {
-          return function(xhr) {
+          return function(xhr, errType, message) {
             _this.trigger('error', xhr, options);
             _this.notify(_this.t('Unable to process response: %s', xhr.status));
-            return typeof _this.saveError === "function" ? _this.saveError.apply(_this, arguments) : void 0;
+            return typeof _this.saveError === "function" ? _this.saveError(xhr, options, errType, message) : void 0;
           };
         })(this)
       };
@@ -1930,6 +1930,23 @@ Copyright (c) 2013 Jeremy Jackson
       }
       this.$el.html((element != null ? element.$el : void 0) || (element != null ? element.el : void 0) || element);
       this.localize(this.$el);
+      this.refreshElements();
+      return this.$el;
+    };
+
+    View.prototype.prepend = function() {
+      var e, elements, _ref;
+      elements = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+      elements = (function() {
+        var _i, _len, _results;
+        _results = [];
+        for (_i = 0, _len = elements.length; _i < _len; _i++) {
+          e = elements[_i];
+          _results.push(e.$el || e.el || e);
+        }
+        return _results;
+      })();
+      (_ref = this.$el).prepend.apply(_ref, elements);
       this.refreshElements();
       return this.$el;
     };
@@ -3955,6 +3972,10 @@ Copyright (c) 2013 Jeremy Jackson
       return _results;
     };
 
+    Page.prototype.saveError = function(xhr, options) {
+      return alert(this.t('Unable to save to the url: %s', options.url));
+    };
+
     return Page;
 
   })(Mercury.Model);
@@ -3992,11 +4013,6 @@ Copyright (c) 2013 Jeremy Jackson
       return this.page.createRegions(this.regionElements());
     },
     save: function() {
-      this.page.on('error', (function(_this) {
-        return function(xhr, options) {
-          return alert(_this.t('Unable to save to the url: %s', options.url));
-        };
-      })(this));
       return this.page.save().always = (function(_this) {
         return function() {
           return _this.delay(250, function() {

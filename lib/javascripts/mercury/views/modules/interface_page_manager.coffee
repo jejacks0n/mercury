@@ -35,7 +35,6 @@ Mercury.View.Modules.InterfacePageManager =
 
 
   save: ->
-    @page.one('error', (xhr, options) => alert(@t('Unable to save to the url: %s', options.url)))
     @page.save().always = => @delay(250, -> Mercury.trigger('save:complete'))
 
 

@@ -76,10 +76,11 @@ class Mercury.Uploader extends Mercury.View
 
 
   update: (message, loaded = 0) ->
-    percent = Math.floor((@loaded + loaded) * 100 / @total) + '%'
+    percent = Math.floor((@loaded + loaded) * 100 / @total)
+    percent = 100 if percent < 100
     @$status.html(message) if message
-    @$indicator.css(width: percent)
-    @$percent.html(percent)
+    @$indicator.css(width: "#{percent}%")
+    @$percent.html("#{percent}%")
 
 
   loadDetails: ->

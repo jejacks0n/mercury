@@ -170,7 +170,7 @@ initialize = ->
     chrome: navigator.userAgent.indexOf('Chrome') > 0
     gecko: navigator.userAgent.indexOf('Firefox') > 0
     trident: navigator.userAgent.indexOf('MSIE') > 0
-    ie10: navigator.userAgent.match(/MSIE\s([\d|\.]+)/) && parseFloat(isIE[1], 10) >= 10
+    ie10: (isIE = navigator.userAgent.match(/MSIE\s([\d|\.]+)/)) && parseFloat(isIE[1], 10) >= 10
   @support.wysiwyg = (document.designMode) && (!@support.trident || @support.ie10)
   @support.wysiwyg = false if @support.gecko && parseFloat(navigator.userAgent.match(/Firefox\/([\d|\.]+)/)[1], 10) < 22
 

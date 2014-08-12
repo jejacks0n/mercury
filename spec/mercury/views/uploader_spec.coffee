@@ -144,6 +144,21 @@ describe "Mercury.Uploader", ->
       expect( subject.$el.css('opacity') ).to.eq('1')
 
 
+  describe "#cancel", ->
+
+    beforeEach ->
+      spyOn(subject, 'release')
+
+    it "calls #release", ->
+      subject.cancel()
+      expect( subject.release ).called
+
+    it "calls abort on the xhr", ->
+      subject.xhr = {abort: spy()}
+      subject.cancel()
+      expect( subject.xhr.abort ).called
+
+
   describe "#release", ->
 
     it "delays a given number of milliseconds", ->

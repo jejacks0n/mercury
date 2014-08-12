@@ -9,6 +9,27 @@ mercury .mercury-uploader {
   background: $uploader_overlay_bg;
   opacity: 0;
 
+  .mercury-uploader-close {
+    position: absolute;
+    z-index: 1;
+    top: 12px;
+    right: 9px;
+    text-align: center;
+    em {
+      display: block;
+      width: 20px;
+      border-radius: 20px;
+      background: $uploader_dialog_bg;
+      font-size: 20px;
+      font-style: normal;
+      color: $uploader_close_color;
+      cursor: pointer;
+      &:hover {
+        color: $uploader_close_hover_color;
+      }
+    }
+  }
+
   .mercury-uploader-dialog {
     @include mercury-border-radius(10px);
     @include mercury-border-box();

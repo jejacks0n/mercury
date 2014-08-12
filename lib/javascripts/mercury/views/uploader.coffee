@@ -17,6 +17,9 @@ class Mercury.Uploader extends Mercury.View
     indicator: '.mercury-uploader-indicator div'
     percent: '.mercury-uploader-indicator b'
 
+  @events:
+    'click .mercury-uploader-close': 'cancel'
+
   constructor: (files, @options = {}) ->
     return @notify(@t('Is unsupported in this browser')) unless @constructor.supported
     super(@options)
@@ -59,6 +62,11 @@ class Mercury.Uploader extends Mercury.View
     @delay(50, => @css(opacity: 1))
 
 
+  cancel: ->
+    @release()
+    try @xhr.abort()
+
+
   release: (ms = 0) ->
     @delay ms, ->
       @css(opacity: 0)
@@ -70,9 +78,9 @@ class Mercury.Uploader extends Mercury.View
     @file = @files.shift()
     @update(@t('Uploading...'))
     @loadDetails()
-    if xhr = @file.save(uploadEvents: @uploadEvents())
-      xhr.success => @success()
-      xhr.error => @error()
+    if @xhr = @file.save(uploadEvents: @uploadEvents())
+      @xhr.success => @success()
+      @xhr.error => @error()
 
 
   update: (message, loaded = 0) ->

@@ -1,6 +1,7 @@
 JST['/mercury/templates/uploader'] = ->
   """
   <div class="mercury-uploader-dialog">
+    <div class="mercury-uploader-close"><em>&times;</em></div>
     <div class="mercury-uploader-preview"><b><img/></b></div>
     <div class="mercury-uploader-details"></div>
     <div class="mercury-uploader-progress">

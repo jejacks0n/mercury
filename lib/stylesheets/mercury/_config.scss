@@ -26,6 +26,8 @@ $uploader_preview_border_color:              $dialog_border_color !default;
 $uploader_preview_bg:                        #fff !default;
 $uploader_progress_bg:                       $primary_color !default;
 $uploader_progress_color:                    rgba(255, 255, 255, .8) !default;
+$uploader_close_color:                       #333 !default;
+$uploader_close_hover_color:                 #000 !default;
 
 // _lightview
 $lightview_overlay_bg:                       $overlay_bg !default;

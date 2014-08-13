@@ -133,11 +133,15 @@ Mercury.Region.Html.addToolbar
 
 Mercury.Region.Html.addAction
 
-  bold:          -> @toggleWrapSelectedWordsInClass('red')
-  italic:        -> @toggleWrapSelectedWordsInClass('highlight')
-  underline:     -> @toggleWrapSelectedWordsInClass('blue')
+  bold:          -> @toggleWrapSelectedWordsInClass('red', {elementTagName: "strong"})
+  italic:        -> @toggleWrapSelectedWordsInClass('highlight', {elementTagName: "em"})
+  strike:        -> @toggleWrapSelectedWordsInClass('highlight', {elementTagName: "strike"})
+  underline:     -> @toggleWrapSelectedWordsInClass('blue', {elementTagName: "u"})
   rule:          -> @replaceSelection('<hr/>')
   style:         ->
+
+  subscript:     -> @toggleWrapSelectedWordsInClass('blue', {elementTagName: "sub"})
+  superscript:   -> @toggleWrapSelectedWordsInClass('blue', {elementTagName: "sup"})
 
   link: (linkAction) ->
     @replaceSelection(linkAction.asHtml())

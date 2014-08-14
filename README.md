@@ -349,7 +349,7 @@ Translations and contributors:
 - Korean ([dorajistyle](https://github.com/dorajistyle))
 - Dutch ([kieranklaassen](https://github.com/kieranklaassen))
 - Polish ([cintrzyk](https://github.com/cintrzyk))
-- Portuguese ([yakko](https://github.com/yakko))
+- Portuguese ([thejamespinto](https://github.com/thejamespinto))
 - Swedish ([stefanm](https://github.com/stefanm))
 - Simplified Chinese ([董劭田 DONG Shaotian](https://github.com/richarddong))
 - Hungarian ([egivandor](https://github.com/egivandor))

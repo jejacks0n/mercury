@@ -54,6 +54,11 @@ describe "Mercury.Model.File", ->
       subject.validate()
       expect( subject.errors.size ).to.include('Too large (max 0 bytes)')
 
+    it "allows maxSize configuration to be overridden", ->
+      subject.options.maxSize = 512
+      subject.validate()
+      expect( subject.errors.size ).to.include('Too large (max 512 bytes)')
+
     it "ensures it's an allowed mimetype", ->
       subject.validate()
       expect( subject.errors.type ).to.include('Unsupported format (image/jpeg)')

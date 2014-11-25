@@ -20,8 +20,9 @@ class Mercury.Model.File extends Mercury.Model
 
 
   validate: ->
-    if @get('size') >= @config('uploading:maxSize')
-      @addError('size', @t('Too large (max %s)', @config('uploading:maxSize').toBytes()))
+    maxSize = @options['maxSize'] ? @config('uploading:maxSize')
+    if @get('size') >= maxSize
+      @addError('size', @t('Too large (max %s)', maxSize.toBytes()))
       return
     mimeTypes = @options['mimeTypes'] ? @config('uploading:mimeTypes')
     if mimeTypes && mimeTypes.indexOf(@get('type')) <= -1

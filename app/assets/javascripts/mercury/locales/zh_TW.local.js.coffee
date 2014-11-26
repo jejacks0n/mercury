@@ -1,4 +1,4 @@
-Mercury.I18n['zh'] =
+Mercury.I18n['zh_TW'] =
 
   _CN_:
     # ## Javascript Strings

@@ -62,11 +62,11 @@ Mercury.I18n['zh'] =
     "Horizontal Rule": "分割线"
     "Insert a horizontal rule": "插入分割线"
     "Remove Formatting": "清除格式"
-    "Remove formatting for the selection": "清楚选中部分格式"
+    "Remove formatting for the selection": "清除选中部分格式"
     "Edit HTML": "编辑源代码（HTML）"
     "Edit the HTML content": "编辑源代码 HTML 内容"
-    "Edit Snippet Settings": "编辑小片段设置"
-    "Remove Snippet": "删除小片段"
+    "Edit Snippet Settings": "编辑代码设置"
+    "Remove Snippet": "删除代码"
 
     # ### General
     # Error Messages
@@ -94,13 +94,13 @@ Mercury.I18n['zh'] =
 
     # ### Snippets
     # Error Messages
-    "Error loading the preview for the \"%s\" snippet.": "载入“%s”小片段预览时出错。"
+    "Error loading the preview for the \"%s\" snippet.": "载入“%s”代码预览时出错。"
     # Misc
-    "Snippet Options": "小片段选项"
+    "Snippet Options": "代码选项"
 
     # ### Uploader
     # Error Messages
-    "Unable to process response: %s": "无法处理相应：%s"
+    "Unable to process response: %s": "无法处理回馈：%s"
     "Error: Unable to upload the file": "错误：无法上传文件"
     "Malformed response from server": "服务器响应格式有误"
     "Too large": "上传文件过大"
@@ -194,10 +194,10 @@ Mercury.I18n['zh'] =
 
     "The notes panel is expected to be implemented with a server back end.  Since this is a demo, we didn't include it.": "本备忘面板需要与服务器后端共同实现。因为这是一个演示，所以我们没有加入这一功能。"
 
-    "Snippet Name": "小片段名称"
-    "A one or two line long description of what this snippet does.": "用一两行描述一下这个小片段的功能"
+    "Snippet Name": "代码名称"
+    "A one or two line long description of what this snippet does.": "用一两行描述一下这个代码的功能"
 
     "First Name": "名字"
     "Favorite Beer": "最喜欢的啤酒"
-    "Insert Snippet": "插入小片段"
+    "Insert Snippet": "插入代码"
 

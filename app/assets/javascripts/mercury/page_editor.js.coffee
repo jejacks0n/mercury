@@ -3,7 +3,7 @@ class @Mercury.PageEditor
   # options
   # saveStyle: 'form', or 'json' (defaults to json)
   # saveDataType: 'xml', 'json', 'jsonp', 'script', 'text', 'html' (defaults to json)
-  # saveMethod: 'POST', or 'PUT', create or update actions on save (defaults to PUT)
+  # saveMethod: 'POST', 'PUT', or 'PATCH' create or update actions on save (defaults to PUT)
   # visible: boolean, if the interface should start visible or not (defaults to true)
   constructor: (@saveUrl = null, @options = {}) ->
     throw Mercury.I18n('Mercury.PageEditor can only be instantiated once.') if window.mercuryInstance
@@ -224,6 +224,9 @@ class @Mercury.PageEditor
 
     if @options.saveMethod == 'POST'
       method = 'POST'
+    else if @options.saveMethod == 'PATCH'
+      method = 'POST'
+      data['_method'] = 'patch'
     else
       method = 'PUT'
       data['_method'] = method

@@ -4584,13 +4584,16 @@ Showdown.converter = function() {
       data = this.serialize();
       data = {
         content: data
-      };
+      };  
       if (this.options.saveMethod === 'POST') {
         method = 'POST';
+      } else if (this.options.saveMethod === 'PATCH') {
+        method = 'POST';
+        data['_method'] = 'PATCH';
       } else {
         method = 'PUT';
         data['_method'] = method;
-      }
+      } 
       Mercury.log('saving', data);
       options = {
         headers: Mercury.ajaxHeaders(),

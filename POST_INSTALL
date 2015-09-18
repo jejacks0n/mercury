@@ -6,6 +6,8 @@ Here's a post install checklist:
 
 * Add and ENV Variable IMAGE_STORAGE_ENGINE with "fog" or "file"
 
+* add //= require mercury # to your application.js
+
 * DONT FORGET TO MIGRATE THE TB
 
 * Adjust your application.js & css files to not `require_tree .`

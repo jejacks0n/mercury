@@ -19,8 +19,10 @@ Gem::Specification.new do |s|
   s.add_dependency 'railties', '>= 3.0'
   s.add_dependency 'coffee-rails', '>= 3.2.2'
   s.add_dependency 'mini_magick', '>= 4.2.4'
+  s.add_dependency 'dropzonejs-rails'
   s.add_dependency 'carrierwave', '>= 0.10.0'
-  s.add_dependency 'dropzonejs-rails', '>= 0.7.1'
+  s.add_dependency 'fog'
+  s.add_dependency 'carrierwave-ftp'
 
   # Gem Files
   s.extra_rdoc_files  = %w(LICENSE POST_INSTALL)
@@ -30,6 +32,6 @@ Gem::Specification.new do |s|
   s.test_files        = `git ls-files -- {test,spec,features}/*`.split("\n")
   s.executables       = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   # = MANIFEST =
-  s.require_paths     = %w(lib)
+  s.require_paths     = %w(lib app)
 
 end

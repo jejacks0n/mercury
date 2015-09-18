@@ -1,5 +1,13 @@
 module MercuryHelper
 
+  # parses given parameters and adds
+  # javascript method addSnippet
+  # to provide a counter for new snippets
+
+  def mercury_add_snippet(params)
+    javascript_tag "addSnippet(#{params.to_json.html_safe});"
+  end
+
   # Renders a mercury dynamic content
   # type can be :full, :simple, :markdown, :snippets, :image
   # by default i18n: false, wrapper: :div

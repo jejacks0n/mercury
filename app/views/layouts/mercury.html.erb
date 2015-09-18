@@ -19,7 +19,11 @@
         visible: true  // boolean - if the interface should start visible or not
     });
 
-    Mercury.on('saved', function(){alert("Saving complete!")});
+    function addSnippet(snippet) {
+        customSnippets.push(snippet);
+    }
+
+    Mercury.on('saved', function(){alert("saved!")});
 
     // for mercury images in snippets
     Mercury.Snippet.displayOptionsFor = function (name) {

@@ -1,4 +1,6 @@
 <strong>
   <%= params[:options][:first_name] %>
 </strong> likes <%= params[:options][:favorite_beer] %>
+
+<!-- add current snippet to counter -->
 <%= javascript_tag "addSnippet(#{params.to_json.html_safe});"  %>

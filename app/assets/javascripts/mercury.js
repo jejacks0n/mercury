@@ -43,6 +43,8 @@ function resetUrlWhenSaved() {
 // inform the user when document is saved
 
 $(window).on('mercury:ready', function () {
+    Mercury.saveUrl = '/mercury/update';
+
     // find all data-snippet attributes on page
     snippet_data_attributes = $('*').filter(function () {
         return $(this).data('snippet') !== undefined;

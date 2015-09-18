@@ -1,0 +1,45 @@
+<%= form_for 'options', {url: '', html: {multipart: true, class: 'form-horizontal dropzone', style: 'width:615px'}} do |f| %>
+
+    <div class="form-inputs mercury-display-pane-container">
+
+      <fieldset>
+        <div class="control-group string optional">
+          <label class="string optional control-label" for="options_title">Title</label>
+
+          <div class="controls">
+            <input class="span6 string optional" id="options_title" name="options[title]" size="50" type="text" value="<%= @options[:title] %>" autofocus>
+          </div>
+        </div>
+
+      </fieldset>
+
+      <fieldset>
+        <legend>Options</legend>
+
+        <div class="control-group string optional">
+          <label class="string optional control-label" for="options_image_id">Image ID</label>
+
+          <div class="controls">
+            <!-- define here the width and height for resizing carrierwave -->
+
+            <input class="span6 string optional"
+                   id="options_image_id"
+                   name="options[image_id]"
+                   size="50"
+                   type="text"
+                   data-width="1024"
+                   data-height="768"
+                   value="<%= @options[:image_id] %>">
+
+            <div id="dropzone-preview-container"></div>
+          </div>
+        </div>
+      </fieldset>
+
+    </div>
+
+    <div class="form-actions mercury-display-controls">
+      <input class="btn btn-primary" name="commit" type="submit" value="Insert Snippet"/>
+    </div>
+
+<% end %>

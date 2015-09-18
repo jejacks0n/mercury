@@ -1,0 +1,6 @@
+<strong>
+  <h1><%= params[:options][:title] %></h1>
+  <%= image_tag MercuryImage.find(params[:options][:image_id]).image.url(:mercury), height: "200", width: "100%" %>
+</strong>
+<!-- add current snippet to counter -->
+<%= mercury_add_snippet params %>

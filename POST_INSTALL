@@ -1,14 +1,20 @@
 +============================================================================+
 Congratulations, Mercury was successfully installed in your app. Documentation
-and other useful info can be found at: https://github.com/jejacks0n/mercury
+and other useful info can be found at: https://github.com/mediatainment/mercury
 
 Here's a post install checklist:
+
+* Add and ENV Variable IMAGE_STORAGE_ENGINE with "fog" or "file"
+
+* DONT FORGET TO MIGRATE THE TB
 
 * Adjust your application.js & css files to not `require_tree .`
 
 * Learn about, and change configurations in app/assets/javascripts/mercury.js.
 
 * If installed, you can make changes to the provided layout and css files too.
+
+# mediatainment branch is not supporting paperclip out of the box (only carrierwave)
 
 * If you want image processing and uploading (using paperclip by default):
 

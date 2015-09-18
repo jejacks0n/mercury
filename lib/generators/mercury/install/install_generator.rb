@@ -13,6 +13,20 @@ module Mercury
       class_option :template_engine, :type => :string,
                    :desc => 'Set preferred template engine for layout instead of ERB (haml or slim)'
 
+      def create_mercury_database
+        generate(:model, "MercuryContents mercury_contents name:string:uniq value:text type:string data:text slug:string settings:text width:string height:string")
+        remove_file 'app/models/mercury_contents.rb'
+        remove_file 'spec/models/mercury_contents_spec.rb'
+
+        generate(:model, "MercuryImages mercury_images image:string width:string height:string")
+        remove_file 'app/models/mercury_images.rb'
+        remove_file 'spec/models/mercury_images_spec.rb'
+
+        generate(:model, "MercurySnippets mercury_snippets snippet:text name:string:uniq")
+        remove_file 'app/models/mercury_snippets.rb'
+        remove_file 'spec/models/mercury_snippets_spec.rb'
+      end
+
       def copy_config
         copy_file 'app/assets/javascripts/mercury.js'
       end
@@ -22,11 +36,9 @@ module Mercury
       end
 
       def copy_layout_and_css_overrides
-        if options[:full] || yes?("Install the layout file and CSS? [yN]")
-          layout_ext = options[:template_engine] || 'erb'
-          copy_file "app/views/layouts/mercury.html.#{layout_ext}"
-          copy_file 'app/assets/stylesheets/mercury.css'
-        end
+        layout_ext = options[:template_engine] || 'erb'
+        copy_file "app/views/layouts/mercury.html.#{layout_ext}"
+        copy_file 'app/assets/stylesheets/mercury.css'
       end
 
       def display_readme

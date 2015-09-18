@@ -1,1 +1,4 @@
-<strong><%= params[:options][:first_name] %></strong> likes <%= params[:options][:favorite_beer] %>
+<strong>
+  <%= params[:options][:first_name] %>
+</strong> likes <%= params[:options][:favorite_beer] %>
+<%= javascript_tag "addSnippet(#{params.to_json.html_safe});"  %>

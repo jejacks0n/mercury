@@ -1,0 +1,54 @@
+// place scripts which should get loaded by your desired snippets
+
+$.getScript("/assets/dropzone.js", function () {
+
+    $('.dropzone').dropzone({
+        url: "/mercury/images",
+        previewsContainer: '#dropzone-preview-container',
+        init: function () {
+            // fired immediately after files is added
+            this.on("addedfile", function (file) {
+            });
+
+            // fired when sending file
+            this.on('sending', function (file, xhr, formData) {
+                var width = $('#options_image_id').data("width");
+                var height = $('#options_image_id').data("height");
+
+                // append with or inform user to add some
+                if (width != null && height != null) {
+                    formData.append('width', width);
+                    formData.append('height', height);
+                } else {
+                    alert('Please define width and height in options.html.erb');
+                }
+
+            });
+
+            // fired after file is uploaded successfully
+            this.on("success", function (file, response) {
+
+                // dropzone selector
+                var imageField = $('input#options_image_id');
+
+                // add the ID from the response of the ImagesController to the form field
+                imageField.val(response['image']['id']);
+
+                // release the submit button
+                $('form.dropzone input:submit').removeAttr('disabled');
+
+                // check if valid
+                /*
+
+                 imageField.on('change', function () {
+                 if ($.isNumeric(imageField.val())) {
+                 $('form.dropzone input:submit').removeAttr('disabled');
+                 } else {
+                 $('form.dropzone input:submit').attr('disabled', 'disabled');
+                 }
+                 })
+                 */
+            });
+        }
+    });
+});

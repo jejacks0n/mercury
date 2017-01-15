@@ -30,3 +30,5 @@ capybara*
 .sass-cache
 public/system
 public/assets
+
+.idea/

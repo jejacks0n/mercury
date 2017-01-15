@@ -1,6 +1,10 @@
 /*
  * Modal
  *----------------------------------------------------------------------------*/
+.img-border {
+    border: 3px solid blue !important;
+}
+
 .mercury-modal-overlay {
   position: fixed;
   z-index: 10040;

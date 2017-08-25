@@ -6,7 +6,7 @@ Gem::Specification.new do |s|
 
   # General Gem Information
   s.name        = 'mercury-rails'
-  s.date        = '2012-10-19'
+  s.date        = '2017-08-25'
   s.version     = Mercury::VERSION
   s.authors     = ['Jeremy Jackson']
   s.email       = ['jejacks0n@gmail.com']
@@ -16,8 +16,8 @@ Gem::Specification.new do |s|
   s.licenses    = ['MIT']
 
   # Runtime Dependencies
-  s.add_dependency 'railties', '>= 3.0'
-  s.add_dependency 'coffee-rails', '>= 3.2.2'
+  s.add_dependency 'railties', '>= 4.1.0'
+  s.add_dependency 'coffee-rails', '>= 4.2.2'
 
   # Gem Files
   s.extra_rdoc_files  = %w(LICENSE POST_INSTALL)

@@ -1,1 +1,1 @@
-rvm use --create 1.9.3@mercury-rails
+rvm use --create 2.1.10@mercury-rails

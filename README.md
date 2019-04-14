@@ -1,9 +1,5 @@
 # Mercury Editor
 
-[![Build Status](https://secure.travis-ci.org/jejacks0n/mercury.png?branch=master)](http://travis-ci.org/jejacks0n/mercury)
-[![Dependency Status](https://gemnasium.com/jejacks0n/mercury.png)](https://gemnasium.com/jejacks0n/mercury)
-[![Code Climate](https://codeclimate.com/badge.png)](https://codeclimate.com/github/jejacks0n/mercury)
-
 Mercury Editor is a fully featured editor much like TinyMCE or CKEditor, but with a different usage paradigm.  It
 expects that an entire page is something that can be editable, and allows different types of editable regions to be
 specified.  It displays a single toolbar for every region on the page, and uses the HTML5 contentEditable features on

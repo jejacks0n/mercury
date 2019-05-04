@@ -8,8 +8,12 @@
     @initializeForm()
 
     # build the image or embed/iframe on form submission
+    @element.find('#media_youtube_url').on 'change', (event) =>
+      @checkYoutube()
+
     @element.find('form').on 'submit', (event) =>
       event.preventDefault()
+      @checkYoutube()
       @validateForm()
       unless @valid
         @resize()
@@ -76,6 +80,14 @@
     @element.find('.control-group.error').removeClass('error').find('.error-message').remove()
     @valid = true
 
+  checkYoutube: ->
+    input = @element.find('#media_youtube_url')
+    url = input.val()
+    if /^https?:\/\/(www.)?youtube.com\//.test(url)
+      video = url.match(/(\?|&)v=\w+/)[0].substring(3)
+      time = url.match(/(\?|&)t=[\d|m|s]+/)
+      time = if time then '?' + time[0].substring(1) else ''
+      input.val('http://youtu.be/' + video + time)
 
   validateForm: ->
     @clearInputErrors()

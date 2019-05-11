@@ -337,6 +337,7 @@ and there's more on the [wiki page](https://github.com/jejacks0n/mercury/wiki/Lo
 
 Translations and contributors:
 - Arabic ([mohamagdy](https://github.com/mohamagdy))
+- Czech ([paulslaby](https://github.com/paulslaby))
 - Danish ([martinjlowm](https://github.com/martinjlowm))
 - German ([poke](https://github.com/poke))
 - Spanish ([javiercr](https://github.com/javiercr))

@@ -1,9 +1,8 @@
 rvm:
-  - 1.9.3
+  - 2.1.10
 #before_script:
 #  - 'sh -e /etc/init.d/xvfb start'
 #env:
+
 #  - DISPLAY=':99.0' CUCUMBER_OPTS='-f progress'
 script: bundle exec rake --trace
-
-

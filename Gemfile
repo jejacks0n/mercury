@@ -11,6 +11,7 @@ gem 'teabag'
 group :assets do
   gem 'sass-rails'
   gem 'uglifier'
+  
   gem 'sprockets-rails'
 end
 

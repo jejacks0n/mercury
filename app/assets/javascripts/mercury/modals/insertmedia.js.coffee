@@ -7,6 +7,8 @@
     @focus('#media_image_url')
     @initializeForm()
 
+    Mercury.trigger('mediaModalReady')
+
     # build the image or embed/iframe on form submission
     @element.find('form').on 'submit', (event) =>
       event.preventDefault()

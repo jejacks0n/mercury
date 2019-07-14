@@ -348,6 +348,7 @@ Translations and contributors:
 - Portuguese ([yakko](https://github.com/yakko))
 - Swedish ([stefanm](https://github.com/stefanm))
 - Simplified Chinese ([董劭田 DONG Shaotian](https://github.com/richarddong))
+- Traditional Chinese ([Arthur CHAN](https://github.com/arthurtalkgoal))
 - Hungarian ([egivandor](https://github.com/egivandor))
 - Russian ([ilyacherevkov](https://github.com/ilyacherevkov))
 

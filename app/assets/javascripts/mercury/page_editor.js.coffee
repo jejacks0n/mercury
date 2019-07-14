@@ -110,7 +110,7 @@ class @Mercury.PageEditor
         Mercury.trigger('unfocus:regions') unless jQuery(event.target).closest("[#{Mercury.config.regions.attribute}]").get(0) == Mercury.region.element.get(0)
 
     jQuery(@document).bind 'keydown', (event) =>
-      return unless event.ctrlKey || event.metaKey
+      return unless (event.ctrlKey && !event.altKey) || event.metaKey
       if (event.keyCode == 83) # meta+S
         Mercury.trigger('action', {action: 'save'})
         event.preventDefault()

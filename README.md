@@ -231,7 +231,7 @@ Awesome! Please [check here](https://github.com/jejacks0n/mercury/blob/mercury2/
 
 ## Consulting
 
-I'm available for hire. If you need help implementing, enhancing, or integrating Mercury Editor this might be a worth while option. I don't always have time for freelance/consulting work, so I recommend [Mode Set](http://modeset.com), a small consultancy with amazing folks where I work -- many of the developers there are familiar with Mercury, and it's easier for me to dedicate my days to your issues rather than my evenings.
+I'm available for hire. If you need help implementing, enhancing, or integrating Mercury Editor this might be a worth while option. I don't always have time for freelance/consulting work.
 
 
 ## License

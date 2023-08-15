@@ -2,7 +2,7 @@ class MercuryController < ActionController::Base
   include ::Mercury::Authentication
 
   protect_from_forgery
-  before_filter :authenticate, :only => :edit
+  before_action :authenticate, :only => :edit
   layout false
 
   def edit

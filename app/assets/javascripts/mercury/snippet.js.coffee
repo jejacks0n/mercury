@@ -53,7 +53,10 @@ class @Mercury.Snippet
   @load: (snippets) ->
     for own identity, details of snippets
       instance = new Mercury.Snippet(details.name, identity, details)
-      @all.push(instance)
+      if existing = @find(identity)
+        @all[@all.indexOf(existing)] = instance
+      else
+        @all.push(instance)
 
 
   @clearAll = ->
